@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "registry:dev": "tsx cli/server.ts",
+    "build:registry": "tsx --tsconfig ./tsconfig.scripts.json ./scripts/build-registry.mts && tsx scripts/clean-registry.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",

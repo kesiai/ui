@@ -1,23 +1,2452 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "shadcn",
-  "homepage": "https://ui.shadcn.com",
+  "name": "Airiot UI Library",
+  "homepage": "https://airiot.cn/ui",
   "items": [
     {
-      "name": "my-button",
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "标签页组件 - 选项卡切换组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/tabs/tabs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "iframe",
+      "type": "registry:component",
+      "title": "Iframe",
+      "description": "Iframe窗口组件 - 嵌入式窗口组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/iframe/iframe.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "radio",
+      "type": "registry:component",
+      "title": "Radio",
+      "description": "单选框组件 - 单选按钮UI组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/radio/radio.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "card",
+      "type": "registry:component",
+      "title": "Card",
+      "description": "卡片组件 - 用于内容展示的卡片容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/card/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "panel",
+      "type": "registry:component",
+      "title": "Panel",
+      "description": "折叠面板组件 - 可折叠的内容面板",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/panel/panel.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "input",
+      "type": "registry:component",
+      "title": "Input",
+      "description": "输入框组件 - 基础的文本输入框",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/input/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "date",
+      "type": "registry:component",
+      "title": "Date",
+      "description": "日期选择器组件 - 日期时间选择UI组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/date/date.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "text-area",
+      "type": "registry:component",
+      "title": "TextArea",
+      "description": "多行文本组件 - 用于显示多行文本内容",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/text-area/text-area.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "checkbox",
+      "type": "registry:component",
+      "title": "Checkbox",
+      "description": "多选框组件 - 复选框UI组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/checkbox/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "slider",
+      "type": "registry:component",
+      "title": "Slider",
+      "description": "轮播组件 - 图片轮播组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/slider/slider.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "html",
+      "type": "registry:component",
+      "title": "Html",
+      "description": "HTML组件 - 渲染HTML内容的组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/html/html.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "image",
+      "type": "registry:component",
+      "title": "Image",
+      "description": "图片组件 - 图片展示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/image/image.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "popover",
+      "type": "registry:component",
+      "title": "Popover",
+      "description": "气泡卡片组件 - 弹出式气泡卡片",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/popover/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "button",
+      "type": "registry:component",
+      "title": "Button",
+      "description": "按钮组件 - 通用的按钮UI组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/button/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "表格组件 - 数据表格展示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/table/table.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "switch",
+      "type": "registry:component",
+      "title": "Switch",
+      "description": "开关组件 - 切换开关UI组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/switch/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "text",
+      "type": "registry:component",
+      "title": "Text",
+      "description": "单行文本组件 - 用于显示单行文本内容",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/text/text.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "select",
+      "type": "registry:component",
+      "title": "Select",
+      "description": "下拉框组件 - 下拉选择器UI组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/select/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "my-card",
       "type": "registry:ui",
-      "title": "Airiot Button",
-      "description": "A button hello world component.",
-      "registryDependencies": [
-        "button"
-      ],
+      "title": "Airiot Card",
+      "description": "A card hello world component.",
       "dependencies": [
         "@airiot/client"
       ],
       "files": [
         {
-          "path": "src/registry/components/ui/my-button.tsx",
+          "path": "src/registry/components/ui/my-card/index.tsx",
           "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "modal",
+      "type": "registry:component",
+      "title": "Modal",
+      "description": "弹窗组件 - 模态对话框组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/components/ui/modal/modal.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "svg",
+      "type": "registry:component",
+      "title": "SVG",
+      "description": "设备管线 - SVG设备管线组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/svg/svg.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "led-number",
+      "type": "registry:component",
+      "title": "LedNumber",
+      "description": "LED数字 - LED数字显示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/led-number/led-number.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "svg-editor",
+      "type": "registry:component",
+      "title": "SvgEditor",
+      "description": "绘图软件 - SVG绘图编辑器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/svg-editor/svg-editor.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "text-editor",
+      "type": "registry:component",
+      "title": "TextEditor",
+      "description": "富文本 - 富文本编辑器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/text-editor/text-editor.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "widgets-media",
+      "type": "registry:component",
+      "title": "WidgetsMedia",
+      "description": "媒体库 - 媒体库组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/widgets-media/widgets-media.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "qrcode",
+      "type": "registry:component",
+      "title": "QRCode",
+      "description": "二维码 - 二维码生成组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/qrcode/qrcode.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "time",
+      "type": "registry:component",
+      "title": "Time",
+      "description": "时间 - 时间显示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/time/time.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "show-attachment",
+      "type": "registry:component",
+      "title": "ShowAttachment",
+      "description": "附件展示 - 附件展示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/show-attachment/show-attachment.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "upload-attachment",
+      "type": "registry:component",
+      "title": "UploadAttachment",
+      "description": "附件上传 - 附件上传组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/upload-attachment/upload-attachment.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "flop-number",
+      "type": "registry:component",
+      "title": "FlopNumber",
+      "description": "翻牌器 - 数字翻牌器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/flop-number/flop-number.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "widget-pdf-preivew",
+      "type": "registry:component",
+      "title": "WidgetPdfPerview",
+      "description": "PDF预览 - PDF预览组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/widget-pdf-preivew/widget-pdf-preivew.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "custom-pagination",
+      "type": "registry:component",
+      "title": "CustomPagination",
+      "description": "通用分页器 - 通用分页器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/custom-pagination/custom-pagination.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "player",
+      "type": "registry:component",
+      "title": "Player",
+      "description": "音频播放器 - 音频播放器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/player/player.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-geometry-cylinder",
+      "type": "registry:component",
+      "title": "Model.3d.geometry.cylinder",
+      "description": "圆柱体 - 圆柱体几何组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-cylinder/model-3d-geometry-cylinder.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-card",
+      "type": "registry:component",
+      "title": "Model.3d.card",
+      "description": "三维数据卡片 - 三维数据卡片组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-card/model-3d-card.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-geometry-sphere",
+      "type": "registry:component",
+      "title": "Model.3d.geometry.sphere",
+      "description": "球体 - 球体几何组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-sphere/model-3d-geometry-sphere.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-mesh",
+      "type": "registry:component",
+      "title": "Model.3d.mesh",
+      "description": "三维模型 - 三维模型组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-mesh/model-3d-mesh.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-points",
+      "type": "registry:component",
+      "title": "Model.3d.points",
+      "description": "粒子 - 粒子系统组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-points/model-3d-points.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-layout-3d",
+      "type": "registry:component",
+      "title": "Model.3d.layout3d",
+      "description": "三维组件组 - 三维组件布局容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-layout-3d/model-3d-layout-3d.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-geometry-plane",
+      "type": "registry:component",
+      "title": "Model.3d.geometry.plane",
+      "description": "平面 - 平面几何组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-plane/model-3d-geometry-plane.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-geometry-cone",
+      "type": "registry:component",
+      "title": "Model.3d.geometry.cone",
+      "description": "圆锥体 - 圆锥体几何组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-cone/model-3d-geometry-cone.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-geometry-box",
+      "type": "registry:component",
+      "title": "Model.3d.geometry.box",
+      "description": "正方体 - 正方体几何组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-box/model-3d-geometry-box.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-geometry-circle",
+      "type": "registry:component",
+      "title": "Model.3d.geometry.circle",
+      "description": "圆 - 圆形几何组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-circle/model-3d-geometry-circle.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d",
+      "type": "registry:component",
+      "title": "Model.3d",
+      "description": "三维空间容器 - 三维空间容器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d/model-3d.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "model-3d-geometry-tube",
+      "type": "registry:component",
+      "title": "Model.3d.geometry.tube",
+      "description": "管 - 管状几何组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-tube/model-3d-geometry-tube.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "video-widget",
+      "type": "registry:component",
+      "title": "VideoWidget",
+      "description": "视频 - 视频播放组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/video-widget/video-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "button-widget",
+      "type": "registry:component",
+      "title": "ButtonWidget",
+      "description": "云台控制按钮 - 云台控制按钮组件",
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/button-widget/button-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "video-periods-widget",
+      "type": "registry:component",
+      "title": "VideoPeriodsWidget",
+      "description": "录制计划 - 视频录制计划组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/video-periods-widget/video-periods-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "time-axis",
+      "type": "registry:component",
+      "title": "TimeAxis",
+      "description": "视频时间轴 - 视频时间轴组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/time-axis/time-axis.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "isc-video",
+      "type": "registry:component",
+      "title": "ISCVideo",
+      "description": "ISC视频组件 - ISC视频播放组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/isc-video/isc-video.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "review-view-components",
+      "type": "registry:component",
+      "title": "ReviewViewComponents",
+      "description": "视频回放 - 视频回放组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/review-view-components/review-view-components.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-widget",
+      "type": "registry:component",
+      "title": "Form.Widget",
+      "description": "表字段映射 - 表单字段映射组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-widget/form-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form",
+      "type": "registry:component",
+      "title": "Form",
+      "description": "表单容器 - 表单容器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form/form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "time-widget",
+      "type": "registry:component",
+      "title": "TimeWidget",
+      "description": "日历组件 - 日历时间组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/time-widget/time-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "schema-form",
+      "type": "registry:component",
+      "title": "SchemaForm",
+      "description": "代码表单 - 基于代码的表单组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/schema-form/schema-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-date-range",
+      "type": "registry:component",
+      "title": "Form.DateRange",
+      "description": "日期范围 - 日期范围选择器组件",
+      "registryDependencies": [
+        "date"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-date-range/form-date-range.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-date",
+      "type": "registry:component",
+      "title": "Form.Date",
+      "description": "日期选择器 - 表单日期选择器组件",
+      "registryDependencies": [
+        "date"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-date/form-date.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-slider",
+      "type": "registry:component",
+      "title": "Form.Slider",
+      "description": "滑动输入条 - 表单滑动条组件",
+      "registryDependencies": [
+        "slider"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-slider/form-slider.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "user-form-widget",
+      "type": "registry:component",
+      "title": "UserFormWidget",
+      "description": "用户表单 - 用户表单组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/user-form-widget/user-form-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-area",
+      "type": "registry:component",
+      "title": "Form.Area",
+      "description": "区域 - 表单区域选择组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-area/form-area.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-rate",
+      "type": "registry:component",
+      "title": "Form.Rate",
+      "description": "星级评价 - 星级评价组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-rate/form-rate.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "table-schema-form",
+      "type": "registry:component",
+      "title": "TableSchemaForm",
+      "description": "数据表表单 - 数据表表单组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/table-schema-form/table-schema-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-switch",
+      "type": "registry:component",
+      "title": "Form.Switch",
+      "description": "开关 - 表单开关组件",
+      "registryDependencies": [
+        "switch"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-switch/form-switch.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-checkbox",
+      "type": "registry:component",
+      "title": "Form.Checkbox",
+      "description": "多选框 - 表单多选框组件",
+      "registryDependencies": [
+        "checkbox"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-checkbox/form-checkbox.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-input",
+      "type": "registry:component",
+      "title": "Form.Input",
+      "description": "输入框 - 表单输入框组件",
+      "registryDependencies": [
+        "input"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-input/form-input.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-input-number",
+      "type": "registry:component",
+      "title": "Form.InputNumber",
+      "description": "数字输入框 - 数字输入框组件",
+      "registryDependencies": [
+        "input"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-input-number/form-input-number.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-upload",
+      "type": "registry:component",
+      "title": "Form.Upload",
+      "description": "附件 - 表单附件上传组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-upload/form-upload.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-radio",
+      "type": "registry:component",
+      "title": "Form.Radio",
+      "description": "单选框 - 表单单选框组件",
+      "registryDependencies": [
+        "radio"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-radio/form-radio.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-map",
+      "type": "registry:component",
+      "title": "Form.Map",
+      "description": "定位 - 表单定位组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-map/form-map.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-select",
+      "type": "registry:component",
+      "title": "Form.Select",
+      "description": "下拉框 - 表单下拉框组件",
+      "registryDependencies": [
+        "select"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-select/form-select.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "warning-button",
+      "type": "registry:component",
+      "title": "WarningButton",
+      "description": "报警铃铛 - 报警通知铃铛组件",
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/warning-button/warning-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "reg-widget-component",
+      "type": "registry:component",
+      "title": "RegWidgetComponent",
+      "description": "注册组件 - 用户注册页面组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/reg-widget-component/reg-widget-component.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "logout-component",
+      "type": "registry:component",
+      "title": "LogoutComponent",
+      "description": "退出页面组件 - 用户退出页面组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/logout-component/logout-component.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "warning-audio",
+      "type": "registry:component",
+      "title": "WarningAudio",
+      "description": "报警声音 - 报警音频播放组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/warning-audio/warning-audio.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "new-menu",
+      "type": "registry:component",
+      "title": "NewMenu",
+      "description": "整体菜单 - 完整菜单组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/new-menu/new-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "warning-bar",
+      "type": "registry:component",
+      "title": "WarningBar",
+      "description": "报警卡片 - 报警信息卡片组件",
+      "registryDependencies": [
+        "card"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/warning-bar/warning-bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "auth-info-cards",
+      "type": "registry:component",
+      "title": "AuthInfoCards",
+      "description": "授权信息 - 授权信息展示卡片组件",
+      "registryDependencies": [
+        "card"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/auth-info-cards/auth-info-cards.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "scale-button",
+      "type": "registry:component",
+      "title": "ScaleButton",
+      "description": "画面缩放按钮 - 画面缩放控制按钮组件",
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/scale-button/scale-button.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "service-time",
+      "type": "registry:component",
+      "title": "ServiceTime",
+      "description": "系统时间 - 系统时间显示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/service-time/service-time.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "log-out",
+      "type": "registry:component",
+      "title": "LogOut",
+      "description": "退出登录 - 用户登出组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/log-out/log-out.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "message",
+      "type": "registry:component",
+      "title": "Message",
+      "description": "消息 - 消息组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/message/message.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "front-menu",
+      "type": "registry:component",
+      "title": "FrontMenu",
+      "description": "菜单 - 前端导航菜单组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/front-menu/front-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "nav-tabs",
+      "type": "registry:component",
+      "title": "NavTabs",
+      "description": "标签导航 - 导航标签组件",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/nav-tabs/nav-tabs.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "profile",
+      "type": "registry:component",
+      "title": "Profile",
+      "description": "个人设置 - 用户个人设置页面组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/profile/profile.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "warning-notification",
+      "type": "registry:component",
+      "title": "WarningNotification",
+      "description": "报警弹窗 - 报警通知弹窗组件",
+      "registryDependencies": [
+        "modal"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/warning-notification/warning-notification.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "user-menu",
+      "type": "registry:component",
+      "title": "UserMenu",
+      "description": "用户组 - 用户菜单组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/user-menu/user-menu.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "user-name",
+      "type": "registry:component",
+      "title": "UserName",
+      "description": "用户名称 - 显示用户名称的组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/user-name/user-name.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "load-component",
+      "type": "registry:component",
+      "title": "LoadComponent",
+      "description": "登录组件 - 用户登录页面组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/load-component/load-component.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "language-change-widget",
+      "type": "registry:component",
+      "title": "LanguageChangeWidget",
+      "description": "切换语言 - 语言切换器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/language-change-widget/language-change-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "change-password",
+      "type": "registry:component",
+      "title": "ChangePassword",
+      "description": "修改密码 - 密码修改组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/change-password/change-password.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "log-table-widget",
+      "type": "registry:component",
+      "title": "LogTableWidget",
+      "description": "操作日志记录表 - 操作日志表格组件",
+      "registryDependencies": [
+        "table"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/blocks/page-elements/log-table-widget/log-table-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-radar",
+      "type": "registry:component",
+      "title": "ChartRadar",
+      "description": "雷达图 - 雷达图组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-radar/chart-radar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-bar",
+      "type": "registry:component",
+      "title": "ChartBar",
+      "description": "柱状图 - 柱状图表组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-bar/chart-bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "data-view-chart",
+      "type": "registry:component",
+      "title": "DataViewChart",
+      "description": "数据视图展示图表 - 数据视图图表组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/data-view-chart/data-view-chart.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-map",
+      "type": "registry:component",
+      "title": "ChartMap",
+      "description": "地图 - 地图图表组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-map/chart-map.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-line",
+      "type": "registry:component",
+      "title": "ChartLine",
+      "description": "折线图 - 折线图表组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-line/chart-line.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-gauge",
+      "type": "registry:component",
+      "title": "ChartGauge",
+      "description": "仪表盘 - 仪表盘组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-gauge/chart-gauge.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-pie",
+      "type": "registry:component",
+      "title": "ChartPie",
+      "description": "饼图 - 饼图组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-pie/chart-pie.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "report-reportwidget",
+      "type": "registry:component",
+      "title": "Report.Reportwidget",
+      "description": "报表组件 - 报表展示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/report-reportwidget/report-reportwidget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-pictorial-bar",
+      "type": "registry:component",
+      "title": "ChartPictorialBar",
+      "description": "象形柱图 - 象形柱状图组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-pictorial-bar/chart-pictorial-bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-mix",
+      "type": "registry:component",
+      "title": "ChartMix",
+      "description": "混合图 - 混合图表组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-mix/chart-mix.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-scatter",
+      "type": "registry:component",
+      "title": "ChartScatter",
+      "description": "散点图 - 散点图组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-scatter/chart-scatter.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "chart-liquid-fill",
+      "type": "registry:component",
+      "title": "ChartLiquidFill",
+      "description": "水球图 - 水球图组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-liquid-fill/chart-liquid-fill.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "sankey-chart",
+      "type": "registry:component",
+      "title": "SankeyChart",
+      "description": "能流图 - 桑基图组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/sankey-chart/sankey-chart.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "data-point",
+      "type": "registry:component",
+      "title": "DataPoint",
+      "description": "设备数据点 - 设备数据点展示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point/data-point.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "point-table",
+      "type": "registry:component",
+      "title": "PointTable",
+      "description": "数据点选择器 - 数据点选择器组件",
+      "registryDependencies": [
+        "table"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/point-table/point-table.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "table-select",
+      "type": "registry:component",
+      "title": "TableSelect",
+      "description": "表选择器 - 数据表选择器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/table-select/table-select.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "liquid-level",
+      "type": "registry:component",
+      "title": "LiquidLevel",
+      "description": "液位 - 液位显示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/liquid-level/liquid-level.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "node-tree-select",
+      "type": "registry:component",
+      "title": "NodeTreeSelect",
+      "description": "表记录选择树 - 表记录树形选择器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/node-tree-select/node-tree-select.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "ruler-comp",
+      "type": "registry:component",
+      "title": "RulerComp",
+      "description": "标尺 - 标尺组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/ruler-comp/ruler-comp.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "network-graph",
+      "type": "registry:component",
+      "title": "NetworkGraph",
+      "description": "网络拓扑图 - 网络拓扑图可视化组件",
+      "registryDependencies": [
+        "table"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/network-graph/network-graph.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "compute-statuses",
+      "type": "registry:component",
+      "title": "ComputeStatuses",
+      "description": "状态组件组 - 多状态显示组件组",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/compute-statuses/compute-statuses.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "data-point-panel",
+      "type": "registry:component",
+      "title": "DataPointPanel",
+      "description": "表数据点集 - 表数据点集合组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point-panel/data-point-panel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "table-data-select",
+      "type": "registry:component",
+      "title": "TableDataSelect",
+      "description": "表记录选择器 - 表数据记录选择器组件",
+      "registryDependencies": [
+        "table"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/table-data-select/table-data-select.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "bar",
+      "type": "registry:component",
+      "title": "Bar",
+      "description": "进度条 - 进度条组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/bar/bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "compute-status",
+      "type": "registry:component",
+      "title": "ComputeStatus",
+      "description": "状态组件 - 状态显示组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/compute-status/compute-status.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "data-point-input",
+      "type": "registry:component",
+      "title": "DataPointInput",
+      "description": "写入数据点 - 数据点写入组件",
+      "registryDependencies": [
+        "input"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point-input/data-point-input.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-picker",
+      "type": "registry:component",
+      "title": "MobilePicker",
+      "description": "选择器 - 移动端选择器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-picker/mobile-picker.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-scan-qr",
+      "type": "registry:component",
+      "title": "MobileScanQR",
+      "description": "二维码扫描 - 移动端二维码扫描",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-scan-qr/mobile-scan-qr.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-list",
+      "type": "registry:component",
+      "title": "MobileList",
+      "description": "列表 - 移动端列表组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-list/mobile-list.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-calendar",
+      "type": "registry:component",
+      "title": "MobileCalendar",
+      "description": "日历 - 移动端日历组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-calendar/mobile-calendar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-nav-bar",
+      "type": "registry:component",
+      "title": "MobileNavBar",
+      "description": "标题栏 - 移动端标题栏组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-nav-bar/mobile-nav-bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-date-picker",
+      "type": "registry:component",
+      "title": "MobileDatePicker",
+      "description": "时间选择器 - 移动端时间选择器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-date-picker/mobile-date-picker.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-location",
+      "type": "registry:component",
+      "title": "MobileLocation",
+      "description": "定位 - 移动端定位组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-location/mobile-location.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-popup",
+      "type": "registry:component",
+      "title": "MobilePopup",
+      "description": "弹出框 - 移动端弹出框组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-popup/mobile-popup.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mobile-tab-bar",
+      "type": "registry:component",
+      "title": "MobileTabBar",
+      "description": "标签栏 - 移动端标签栏组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-tab-bar/mobile-tab-bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-warning",
+      "type": "registry:component",
+      "title": "View.Warning",
+      "description": "报警视图容器 - 报警视图容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-warning/view-warning.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-data-aggregate",
+      "type": "registry:component",
+      "title": "View.dataAggregate",
+      "description": "数据聚合 - 数据聚合组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-data-aggregate/view-data-aggregate.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-filter",
+      "type": "registry:component",
+      "title": "View.Filter",
+      "description": "过滤器 - 数据过滤器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-filter/view-filter.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-report",
+      "type": "registry:component",
+      "title": "View.Report",
+      "description": "报表视图容器 - 报表视图容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-report/view-report.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-actions",
+      "type": "registry:component",
+      "title": "View.Actions",
+      "description": "表按钮 - 表格操作按钮",
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-actions/view-actions.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-advanced-filter",
+      "type": "registry:component",
+      "title": "View.AdvancedFilter",
+      "description": "高级过滤器 - 高级数据过滤器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-advanced-filter/view-advanced-filter.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-pagination",
+      "type": "registry:component",
+      "title": "View.Pagination",
+      "description": "分页器 - 数据分页器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-pagination/view-pagination.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-batch-command",
+      "type": "registry:component",
+      "title": "View.BatchCommand",
+      "description": "批量指令 - 批量指令操作",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-batch-command/view-batch-command.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-batch-operation",
+      "type": "registry:component",
+      "title": "View.BatchOperation",
+      "description": "批量按钮组 - 批量操作按钮组",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-batch-operation/view-batch-operation.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-detail",
+      "type": "registry:component",
+      "title": "View.Detail",
+      "description": "查看视图 - 详情查看视图",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-detail/view-detail.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-log",
+      "type": "registry:component",
+      "title": "View.Log",
+      "description": "日志视图容器 - 日志视图容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-log/view-log.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-operation",
+      "type": "registry:component",
+      "title": "View.Operation",
+      "description": "批量按钮 - 批量操作按钮",
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-operation/view-operation.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-data-table",
+      "type": "registry:component",
+      "title": "View.DataTable",
+      "description": "表数据 - 表数据视图",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-data-table/view-data-table.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-user",
+      "type": "registry:component",
+      "title": "View.User",
+      "description": "用户视图容器 - 用户视图容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-user/view-user.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "view-model",
+      "type": "registry:component",
+      "title": "View.Model",
+      "description": "表视图容器 - 表数据视图容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-model/view-model.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "react-widget",
+      "type": "registry:component",
+      "title": "ReactWidget",
+      "description": "React组件 - React组件容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/react-widget/react-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "connect-widget",
+      "type": "registry:component",
+      "title": "ConnectWidget",
+      "description": "连线 - 连线组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/connect-widget/connect-widget.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "slot-container",
+      "type": "registry:component",
+      "title": "Slot_Container",
+      "description": "组件内容区域容器 - 插槽容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/slot-container/slot-container.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "resource-container",
+      "type": "registry:component",
+      "title": "Resource_Container",
+      "description": "自定义组件容器 - 自定义组件容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/resource-container/resource-container.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "layout-container",
+      "type": "registry:component",
+      "title": "LayoutContainer",
+      "description": "组件组 - 组件布局容器",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/layout-container/layout-container.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "link",
+      "type": "registry:component",
+      "title": "Link",
+      "description": "引用 - 引用链接组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/link/link.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "app-page",
+      "type": "registry:component",
+      "title": "AppPage",
+      "description": "内容区域 - 页面内容区域组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/app-page/app-page.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "iteration",
+      "type": "registry:component",
+      "title": "Iteration",
+      "description": "迭代 - 迭代容器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/iteration/iteration.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "slot",
+      "type": "registry:component",
+      "title": "Slot",
+      "description": "组件内容区域 - 插槽内容区域",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/slot/slot.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "resource",
+      "type": "registry:component",
+      "title": "Resource",
+      "description": "自定义组件 - 自定义资源组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/resource/resource.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "map-container",
+      "type": "registry:component",
+      "title": "MapContainer",
+      "description": "地图容器 - 地图容器组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/map-container/map-container.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "warn-views",
+      "type": "registry:component",
+      "title": "WarnViews",
+      "description": "报警层 - GIS报警层",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/warn-views/warn-views.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "playback-view",
+      "type": "registry:component",
+      "title": "PlaybackView",
+      "description": "数据回放层 - GIS数据回放层",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/playback-view/playback-view.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polygon-views",
+      "type": "registry:component",
+      "title": "PolygonViews",
+      "description": "区域层 - GIS区域层",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/polygon-views/polygon-views.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polygon-split",
+      "type": "registry:component",
+      "title": "Polygonsplit",
+      "description": "区域划分 - 区域划分组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/polygon-split/polygon-split.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "table-views",
+      "type": "registry:component",
+      "title": "TableViews",
+      "description": "数据表层 - GIS数据表层",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/table-views/table-views.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "custom-views",
+      "type": "registry:component",
+      "title": "CustomViews",
+      "description": "自定义层 - GIS自定义层",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/custom-views/custom-views.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "code-editor-views",
+      "type": "registry:component",
+      "title": "CodeEditorViews",
+      "description": "代码层 - GIS代码层",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/code-editor-views/code-editor-views.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "tool-views",
+      "type": "registry:component",
+      "title": "ToolViews",
+      "description": "工具箱 - GIS工具箱",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/tool-views/tool-views.tsx",
+          "type": "registry:component"
         }
       ]
     }

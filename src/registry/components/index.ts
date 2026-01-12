@@ -14,7 +14,7 @@ import image from './ui/image/registry-item.json' with { type: 'json' }
 import popover from './ui/popover/registry-item.json' with { type: 'json' }
 import button from './ui/button/registry-item.json' with { type: 'json' }
 import table from './ui/table/registry-item.json' with { type: 'json' }
-import switch from './ui/switch/registry-item.json' with { type: 'json' }
+import switch_component from './ui/switch/registry-item.json' with { type: 'json' }
 import text from './ui/text/registry-item.json' with { type: 'json' }
 import select from './ui/select/registry-item.json' with { type: 'json' }
 import my_card from './ui/my-card/registry-item.json' with { type: 'json' }
@@ -36,7 +36,7 @@ export const components = [
     popover as RegistryItem,
     button as RegistryItem,
     table as RegistryItem,
-    switch as RegistryItem,
+    switch_component as RegistryItem,
     text as RegistryItem,
     select as RegistryItem,
     my_card as RegistryItem,

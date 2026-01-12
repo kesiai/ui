@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-3d-geometry-tube",
+  "type": "registry:component",
+  "title": "Model.3d.geometry.tube",
+  "description": "管 - 管状几何组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-tube/model-3d-geometry-tube.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

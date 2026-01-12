@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "map-container",
+  "type": "registry:component",
+  "title": "MapContainer",
+  "description": "地图容器 - 地图容器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/map-container/map-container.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

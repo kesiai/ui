@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-switch",
+  "type": "registry:component",
+  "title": "Form.Switch",
+  "description": "开关 - 表单开关组件",
+  "registryDependencies": [
+    "switch"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-switch/form-switch.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

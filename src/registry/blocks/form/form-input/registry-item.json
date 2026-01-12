@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-input",
+  "type": "registry:component",
+  "title": "Form.Input",
+  "description": "输入框 - 表单输入框组件",
+  "registryDependencies": [
+    "input"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-input/form-input.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

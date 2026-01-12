@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "custom-views",
+  "type": "registry:component",
+  "title": "CustomViews",
+  "description": "自定义层 - GIS自定义层",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/custom-views/custom-views.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

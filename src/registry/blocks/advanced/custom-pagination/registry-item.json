@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "custom-pagination",
+  "type": "registry:component",
+  "title": "CustomPagination",
+  "description": "通用分页器 - 通用分页器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/custom-pagination/custom-pagination.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

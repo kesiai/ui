@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "connect-widget",
+  "type": "registry:component",
+  "title": "ConnectWidget",
+  "description": "连线 - 连线组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/connect-widget/connect-widget.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

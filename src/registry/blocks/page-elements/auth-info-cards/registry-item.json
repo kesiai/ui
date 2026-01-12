@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "auth-info-cards",
+  "type": "registry:component",
+  "title": "AuthInfoCards",
+  "description": "授权信息 - 授权信息展示卡片组件",
+  "registryDependencies": ["card"],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/auth-info-cards/auth-info-cards.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

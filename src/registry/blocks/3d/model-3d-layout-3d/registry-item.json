@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-3d-layout-3d",
+  "type": "registry:component",
+  "title": "Model.3d.layout3d",
+  "description": "三维组件组 - 三维组件布局容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-layout-3d/model-3d-layout-3d.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mobile-tab-bar",
+  "type": "registry:component",
+  "title": "MobileTabBar",
+  "description": "标签栏 - 移动端标签栏组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-tab-bar/mobile-tab-bar.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

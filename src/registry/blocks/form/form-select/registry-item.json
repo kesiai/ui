@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-select",
+  "type": "registry:component",
+  "title": "Form.Select",
+  "description": "下拉框 - 表单下拉框组件",
+  "registryDependencies": [
+    "select"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-select/form-select.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

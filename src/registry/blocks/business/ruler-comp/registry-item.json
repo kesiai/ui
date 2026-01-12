@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ruler-comp",
+  "type": "registry:component",
+  "title": "RulerComp",
+  "description": "标尺 - 标尺组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/ruler-comp/ruler-comp.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

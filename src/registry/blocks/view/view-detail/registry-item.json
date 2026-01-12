@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-detail",
+  "type": "registry:component",
+  "title": "View.Detail",
+  "description": "查看视图 - 详情查看视图",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-detail/view-detail.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

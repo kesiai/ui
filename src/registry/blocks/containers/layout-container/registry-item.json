@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "layout-container",
+  "type": "registry:component",
+  "title": "LayoutContainer",
+  "description": "组件组 - 组件布局容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/layout-container/layout-container.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

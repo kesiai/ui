@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bar",
+  "type": "registry:component",
+  "title": "Bar",
+  "description": "进度条 - 进度条组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/bar/bar.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-3d",
+  "type": "registry:component",
+  "title": "Model.3d",
+  "description": "三维空间容器 - 三维空间容器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d/model-3d.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "network-graph",
+  "type": "registry:component",
+  "title": "NetworkGraph",
+  "description": "网络拓扑图 - 网络拓扑图可视化组件",
+  "registryDependencies": [
+    "table"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/network-graph/network-graph.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

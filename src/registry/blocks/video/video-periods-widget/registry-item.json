@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "video-periods-widget",
+  "type": "registry:component",
+  "title": "VideoPeriodsWidget",
+  "description": "录制计划 - 视频录制计划组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/video-periods-widget/video-periods-widget.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

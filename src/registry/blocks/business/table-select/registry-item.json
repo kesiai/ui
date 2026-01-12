@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-select",
+  "type": "registry:component",
+  "title": "TableSelect",
+  "description": "表选择器 - 数据表选择器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/table-select/table-select.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

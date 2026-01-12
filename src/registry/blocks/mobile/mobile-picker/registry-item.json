@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mobile-picker",
+  "type": "registry:component",
+  "title": "MobilePicker",
+  "description": "选择器 - 移动端选择器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-picker/mobile-picker.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

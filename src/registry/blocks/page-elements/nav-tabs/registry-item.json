@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "nav-tabs",
+  "type": "registry:component",
+  "title": "NavTabs",
+  "description": "标签导航 - 导航标签组件",
+  "registryDependencies": ["tabs"],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/nav-tabs/nav-tabs.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

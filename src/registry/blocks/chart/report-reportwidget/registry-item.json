@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "report-reportwidget",
+  "type": "registry:component",
+  "title": "Report.Reportwidget",
+  "description": "报表组件 - 报表展示组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/report-reportwidget/report-reportwidget.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

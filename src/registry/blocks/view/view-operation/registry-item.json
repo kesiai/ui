@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-operation",
+  "type": "registry:component",
+  "title": "View.Operation",
+  "description": "批量按钮 - 批量操作按钮",
+  "registryDependencies": [
+    "button"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-operation/view-operation.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

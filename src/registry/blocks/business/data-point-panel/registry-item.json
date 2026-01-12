@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-point-panel",
+  "type": "registry:component",
+  "title": "DataPointPanel",
+  "description": "表数据点集 - 表数据点集合组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point-panel/data-point-panel.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

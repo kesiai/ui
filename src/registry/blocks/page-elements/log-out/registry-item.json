@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "log-out",
+  "type": "registry:component",
+  "title": "LogOut",
+  "description": "退出登录 - 用户登出组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/log-out/log-out.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

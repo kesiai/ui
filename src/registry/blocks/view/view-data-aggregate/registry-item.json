@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-data-aggregate",
+  "type": "registry:component",
+  "title": "View.dataAggregate",
+  "description": "数据聚合 - 数据聚合组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-data-aggregate/view-data-aggregate.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

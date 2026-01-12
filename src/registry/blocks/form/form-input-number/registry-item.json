@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-input-number",
+  "type": "registry:component",
+  "title": "Form.InputNumber",
+  "description": "数字输入框 - 数字输入框组件",
+  "registryDependencies": [
+    "input"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-input-number/form-input-number.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

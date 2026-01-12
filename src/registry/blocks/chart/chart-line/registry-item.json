@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-line",
+  "type": "registry:component",
+  "title": "ChartLine",
+  "description": "折线图 - 折线图表组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-line/chart-line.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

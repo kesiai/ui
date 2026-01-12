@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "widgets-media",
+  "type": "registry:component",
+  "title": "WidgetsMedia",
+  "description": "媒体库 - 媒体库组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/widgets-media/widgets-media.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

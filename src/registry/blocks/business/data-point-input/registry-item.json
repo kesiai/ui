@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-point-input",
+  "type": "registry:component",
+  "title": "DataPointInput",
+  "description": "写入数据点 - 数据点写入组件",
+  "registryDependencies": [
+    "input"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point-input/data-point-input.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

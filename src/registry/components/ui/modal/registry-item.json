@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal",
+  "type": "registry:component",
+  "title": "Modal",
+  "description": "弹窗组件 - 模态对话框组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/components/ui/modal/modal.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

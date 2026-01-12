@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-upload",
+  "type": "registry:component",
+  "title": "Form.Upload",
+  "description": "附件 - 表单附件上传组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-upload/form-upload.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

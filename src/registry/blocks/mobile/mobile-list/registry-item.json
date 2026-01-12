@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mobile-list",
+  "type": "registry:component",
+  "title": "MobileList",
+  "description": "列表 - 移动端列表组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-list/mobile-list.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date",
+  "type": "registry:component",
+  "title": "Date",
+  "description": "日期选择器组件 - 日期时间选择UI组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/components/ui/date/date.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

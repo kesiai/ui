@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "new-menu",
+  "type": "registry:component",
+  "title": "NewMenu",
+  "description": "整体菜单 - 完整菜单组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/new-menu/new-menu.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "front-menu",
+  "type": "registry:component",
+  "title": "FrontMenu",
+  "description": "菜单 - 前端导航菜单组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/front-menu/front-menu.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

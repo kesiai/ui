@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "warn-views",
+  "type": "registry:component",
+  "title": "WarnViews",
+  "description": "报警层 - GIS报警层",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/warn-views/warn-views.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

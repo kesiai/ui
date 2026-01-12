@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "user-form-widget",
+  "type": "registry:component",
+  "title": "UserFormWidget",
+  "description": "用户表单 - 用户表单组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/user-form-widget/user-form-widget.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

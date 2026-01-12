@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-log",
+  "type": "registry:component",
+  "title": "View.Log",
+  "description": "日志视图容器 - 日志视图容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-log/view-log.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

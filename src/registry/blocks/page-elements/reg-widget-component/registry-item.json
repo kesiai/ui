@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reg-widget-component",
+  "type": "registry:component",
+  "title": "RegWidgetComponent",
+  "description": "注册组件 - 用户注册页面组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/reg-widget-component/reg-widget-component.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

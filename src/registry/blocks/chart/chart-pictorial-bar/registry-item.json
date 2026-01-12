@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-pictorial-bar",
+  "type": "registry:component",
+  "title": "ChartPictorialBar",
+  "description": "象形柱图 - 象形柱状图组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-pictorial-bar/chart-pictorial-bar.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

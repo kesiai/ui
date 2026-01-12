@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-slider",
+  "type": "registry:component",
+  "title": "Form.Slider",
+  "description": "滑动输入条 - 表单滑动条组件",
+  "registryDependencies": [
+    "slider"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-slider/form-slider.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

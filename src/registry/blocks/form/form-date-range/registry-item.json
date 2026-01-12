@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-date-range",
+  "type": "registry:component",
+  "title": "Form.DateRange",
+  "description": "日期范围 - 日期范围选择器组件",
+  "registryDependencies": [
+    "date"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-date-range/form-date-range.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

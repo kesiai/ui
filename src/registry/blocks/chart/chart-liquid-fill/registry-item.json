@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-liquid-fill",
+  "type": "registry:component",
+  "title": "ChartLiquidFill",
+  "description": "水球图 - 水球图组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-liquid-fill/chart-liquid-fill.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

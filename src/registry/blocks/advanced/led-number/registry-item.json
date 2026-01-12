@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "led-number",
+  "type": "registry:component",
+  "title": "LedNumber",
+  "description": "LED数字 - LED数字显示组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/led-number/led-number.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

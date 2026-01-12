@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "schema-form",
+  "type": "registry:component",
+  "title": "SchemaForm",
+  "description": "代码表单 - 基于代码的表单组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/schema-form/schema-form.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

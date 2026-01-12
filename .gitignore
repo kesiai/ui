@@ -48,3 +48,4 @@ lerna-debug.log*
 .docs-map
 .docs-final
 .helper-files
+package-lock.json

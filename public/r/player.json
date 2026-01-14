@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "player",
+  "type": "registry:component",
+  "title": "Player",
+  "description": "音频播放器 - 音频播放器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/player/player.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

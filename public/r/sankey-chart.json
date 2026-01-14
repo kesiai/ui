@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sankey-chart",
+  "type": "registry:component",
+  "title": "SankeyChart",
+  "description": "能流图 - 桑基图组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/sankey-chart/sankey-chart.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

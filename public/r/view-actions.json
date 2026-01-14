@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-actions",
+  "type": "registry:component",
+  "title": "View.Actions",
+  "description": "表按钮 - 表格操作按钮",
+  "registryDependencies": [
+    "button"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-actions/view-actions.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

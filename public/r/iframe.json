@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "iframe",
+  "type": "registry:component",
+  "title": "Iframe",
+  "description": "Iframe窗口组件 - 嵌入式窗口组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/components/ui/iframe/iframe.tsx",
+      "type": "registry:ui",
+      "content": ""
+    }
+  ]
+}

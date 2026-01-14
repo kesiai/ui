@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-batch-command",
+  "type": "registry:component",
+  "title": "View.BatchCommand",
+  "description": "批量指令 - 批量指令操作",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-batch-command/view-batch-command.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

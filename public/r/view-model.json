@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-model",
+  "type": "registry:component",
+  "title": "View.Model",
+  "description": "表视图容器 - 表数据视图容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-model/view-model.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

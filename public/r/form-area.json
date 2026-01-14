@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-area",
+  "type": "registry:component",
+  "title": "Form.Area",
+  "description": "区域 - 表单区域选择组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-area/form-area.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-point",
+  "type": "registry:component",
+  "title": "DataPoint",
+  "description": "设备数据点 - 设备数据点展示组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point/data-point.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

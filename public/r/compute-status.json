@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "compute-status",
+  "type": "registry:component",
+  "title": "ComputeStatus",
+  "description": "状态组件 - 状态显示组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/compute-status/compute-status.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

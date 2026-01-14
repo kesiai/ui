@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "flop-number",
+  "type": "registry:component",
+  "title": "FlopNumber",
+  "description": "翻牌器 - 数字翻牌器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/flop-number/flop-number.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

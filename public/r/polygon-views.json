@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "polygon-views",
+  "type": "registry:component",
+  "title": "PolygonViews",
+  "description": "区域层 - GIS区域层",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/polygon-views/polygon-views.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

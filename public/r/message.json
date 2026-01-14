@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message",
+  "type": "registry:component",
+  "title": "Message",
+  "description": "消息 - 消息组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/message/message.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

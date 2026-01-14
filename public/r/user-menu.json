@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "user-menu",
+  "type": "registry:component",
+  "title": "UserMenu",
+  "description": "用户组 - 用户菜单组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/user-menu/user-menu.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slot",
+  "type": "registry:component",
+  "title": "Slot",
+  "description": "组件内容区域 - 插槽内容区域",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/slot/slot.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

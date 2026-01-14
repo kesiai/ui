@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-date",
+  "type": "registry:component",
+  "title": "Form.Date",
+  "description": "日期选择器 - 表单日期选择器组件",
+  "registryDependencies": [
+    "date"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-date/form-date.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

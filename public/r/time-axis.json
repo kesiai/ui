@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "time-axis",
+  "type": "registry:component",
+  "title": "TimeAxis",
+  "description": "视频时间轴 - 视频时间轴组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/time-axis/time-axis.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

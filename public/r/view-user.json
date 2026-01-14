@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-user",
+  "type": "registry:component",
+  "title": "View.User",
+  "description": "用户视图容器 - 用户视图容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-user/view-user.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

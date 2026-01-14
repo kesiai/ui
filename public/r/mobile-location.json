@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mobile-location",
+  "type": "registry:component",
+  "title": "MobileLocation",
+  "description": "定位 - 移动端定位组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-location/mobile-location.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

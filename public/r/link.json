@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "link",
+  "type": "registry:component",
+  "title": "Link",
+  "description": "引用 - 引用链接组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/link/link.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

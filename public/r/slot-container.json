@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slot-container",
+  "type": "registry:component",
+  "title": "Slot_Container",
+  "description": "组件内容区域容器 - 插槽容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/slot-container/slot-container.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

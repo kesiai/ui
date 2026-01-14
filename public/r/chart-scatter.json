@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-scatter",
+  "type": "registry:component",
+  "title": "ChartScatter",
+  "description": "散点图 - 散点图组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-scatter/chart-scatter.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

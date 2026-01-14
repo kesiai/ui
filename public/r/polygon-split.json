@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "polygon-split",
+  "type": "registry:component",
+  "title": "Polygonsplit",
+  "description": "区域划分 - 区域划分组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/polygon-split/polygon-split.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

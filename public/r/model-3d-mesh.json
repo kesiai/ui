@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-3d-mesh",
+  "type": "registry:component",
+  "title": "Model.3d.mesh",
+  "description": "三维模型 - 三维模型组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-mesh/model-3d-mesh.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "html",
+  "type": "registry:component",
+  "title": "Html",
+  "description": "HTML组件 - 渲染HTML内容的组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/components/ui/html/html.tsx",
+      "type": "registry:ui",
+      "content": ""
+    }
+  ]
+}

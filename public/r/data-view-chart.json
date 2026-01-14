@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-view-chart",
+  "type": "registry:component",
+  "title": "DataViewChart",
+  "description": "数据视图展示图表 - 数据视图图表组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/data-view-chart/data-view-chart.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

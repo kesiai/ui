@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "svg-editor",
+  "type": "registry:component",
+  "title": "SvgEditor",
+  "description": "绘图软件 - SVG绘图编辑器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/svg-editor/svg-editor.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

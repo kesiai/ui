@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-pagination",
+  "type": "registry:component",
+  "title": "View.Pagination",
+  "description": "分页器 - 数据分页器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-pagination/view-pagination.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

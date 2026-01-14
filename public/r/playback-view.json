@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "playback-view",
+  "type": "registry:component",
+  "title": "PlaybackView",
+  "description": "数据回放层 - GIS数据回放层",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/playback-view/playback-view.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

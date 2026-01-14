@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-advanced-filter",
+  "type": "registry:component",
+  "title": "View.AdvancedFilter",
+  "description": "高级过滤器 - 高级数据过滤器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-advanced-filter/view-advanced-filter.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

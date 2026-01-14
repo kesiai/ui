@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "widget-pdf-preivew",
+  "type": "registry:component",
+  "title": "WidgetPdfPerview",
+  "description": "PDF预览 - PDF预览组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/widget-pdf-preivew/widget-pdf-preivew.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

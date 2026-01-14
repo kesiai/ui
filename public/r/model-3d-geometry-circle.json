@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "model-3d-geometry-circle",
+  "type": "registry:component",
+  "title": "Model.3d.geometry.circle",
+  "description": "圆 - 圆形几何组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-circle/model-3d-geometry-circle.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

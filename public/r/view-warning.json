@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-warning",
+  "type": "registry:component",
+  "title": "View.Warning",
+  "description": "报警视图容器 - 报警视图容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-warning/view-warning.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

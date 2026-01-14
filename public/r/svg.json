@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "svg",
+  "type": "registry:component",
+  "title": "SVG",
+  "description": "设备管线 - SVG设备管线组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/svg/svg.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

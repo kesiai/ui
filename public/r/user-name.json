@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "user-name",
+  "type": "registry:component",
+  "title": "UserName",
+  "description": "用户名称 - 显示用户名称的组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/page-elements/user-name/user-name.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

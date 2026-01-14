@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-batch-operation",
+  "type": "registry:component",
+  "title": "View.BatchOperation",
+  "description": "批量按钮组 - 批量操作按钮组",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-batch-operation/view-batch-operation.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

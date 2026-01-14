@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "iteration",
+  "type": "registry:component",
+  "title": "Iteration",
+  "description": "迭代 - 迭代容器组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/iteration/iteration.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

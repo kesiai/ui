@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "point-table",
+  "type": "registry:component",
+  "title": "PointTable",
+  "description": "数据点选择器 - 数据点选择器组件",
+  "registryDependencies": [
+    "table"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/point-table/point-table.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

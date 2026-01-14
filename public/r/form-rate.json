@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-rate",
+  "type": "registry:component",
+  "title": "Form.Rate",
+  "description": "星级评价 - 星级评价组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-rate/form-rate.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

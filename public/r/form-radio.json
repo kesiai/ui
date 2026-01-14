@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-radio",
+  "type": "registry:component",
+  "title": "Form.Radio",
+  "description": "单选框 - 表单单选框组件",
+  "registryDependencies": [
+    "radio"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-radio/form-radio.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

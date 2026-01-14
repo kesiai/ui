@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-map",
+  "type": "registry:component",
+  "title": "Form.Map",
+  "description": "定位 - 表单定位组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-map/form-map.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

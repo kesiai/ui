@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "isc-video",
+  "type": "registry:component",
+  "title": "ISCVideo",
+  "description": "ISC视频组件 - ISC视频播放组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/isc-video/isc-video.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

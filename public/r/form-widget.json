@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-widget",
+  "type": "registry:component",
+  "title": "Form.Widget",
+  "description": "表字段映射 - 表单字段映射组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-widget/form-widget.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

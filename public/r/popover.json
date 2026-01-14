@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover",
+  "type": "registry:component",
+  "title": "Popover",
+  "description": "气泡卡片组件 - 弹出式气泡卡片",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/components/ui/popover/popover.tsx",
+      "type": "registry:ui",
+      "content": ""
+    }
+  ]
+}

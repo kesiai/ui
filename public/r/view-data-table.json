@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "view-data-table",
+  "type": "registry:component",
+  "title": "View.DataTable",
+  "description": "表数据 - 表数据视图",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-data-table/view-data-table.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

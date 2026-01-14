@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "time-widget",
+  "type": "registry:component",
+  "title": "TimeWidget",
+  "description": "日历组件 - 日历时间组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/time-widget/time-widget.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

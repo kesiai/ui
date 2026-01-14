@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "qrcode",
+  "type": "registry:component",
+  "title": "QRCode",
+  "description": "二维码 - 二维码生成组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/qrcode/qrcode.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

@@ -21,10 +21,43 @@ if (!fs.existsSync(publicDir)) {
 }
 fs.mkdirSync(registryDir, { recursive: true })
 
+// Process registry items to add file contents
+const processedItems = registry.items
+  .filter((item) => item.type !== 'registry:example')
+  .map((item) => {
+    const processedFiles = item.files.map((file: any) => {
+      const filePath = path.join(__dirname, '..', 'src', 'registry', file.path)
+
+      // Read file content
+      let content = ''
+      if (fs.existsSync(filePath)) {
+        content = fs.readFileSync(filePath, 'utf-8')
+      }
+
+      return {
+        ...file,
+        content,
+      }
+    })
+
+    // Create individual component JSON file
+    const componentJson = {
+      ...item,
+      files: processedFiles,
+    }
+    const componentJsonPath = path.join(registryDir, `${item.name}.json`)
+    fs.writeFileSync(componentJsonPath, JSON.stringify(componentJson, null, 2))
+
+    return {
+      ...item,
+      files: processedFiles,
+    }
+  })
+
 const cleanedRegistry = {
   $schema: 'https://ui.shadcn.com/schema/registry.json',
   ...registry,
-  items: registry.items.filter((item) => item.type !== 'registry:example'),
+  items: processedItems,
 }
 
 fs.writeFileSync(registryPath, JSON.stringify(cleanedRegistry, null, 2))

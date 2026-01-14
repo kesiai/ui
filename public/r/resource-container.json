@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resource-container",
+  "type": "registry:component",
+  "title": "Resource_Container",
+  "description": "自定义组件容器 - 自定义组件容器",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/resource-container/resource-container.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

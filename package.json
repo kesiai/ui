@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup",
-    "preview": "vite preview",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "build:registry": "tsx --tsconfig ./tsconfig.scripts.json ./scripts/build-registry.mts && tsx scripts/clean-registry.ts",

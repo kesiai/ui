@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -15,9 +15,7 @@ const componentCategories = [
       { id: 'textarea', config: textareaConfig },
       { id: 'iframe', config: iframeConfig },
       { id: 'button', config: buttonConfig },
-      { id: 'image', config: imageConfig },
-      { id: 'card', config: cardConfig },
-      { id: 'modal', config: modalConfig }
+      { id: 'image', config: imageConfig }
     ]
   },
   {
@@ -60,7 +58,11 @@ const componentCategories = [
     id: 'containers',
     name: '容器组件',
     icon: '📦',
-    components: []
+    components: [
+      { id: 'card', config: cardConfig },
+      { id: 'modal', config: modalConfig },
+      { id: 'popover', config: popoverConfig }
+    ]
   }
 ]
 
@@ -73,7 +75,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   button: buttonConfig,
   image: imageConfig,
   card: cardConfig,
-  modal: modalConfig
+  modal: modalConfig,
+  popover: popoverConfig
 }
 
 function App() {
@@ -89,7 +92,8 @@ function App() {
     button: buttonConfig.defaultProps,
     image: imageConfig.defaultProps,
     card: cardConfig.defaultProps,
-    modal: modalConfig.defaultProps
+    modal: modalConfig.defaultProps,
+    popover: popoverConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

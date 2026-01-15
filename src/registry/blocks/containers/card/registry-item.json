@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "blocks/components/card/card.tsx",
+      "path": "blocks/containers/card/card.tsx",
       "type": "registry:component"
     }
   ]

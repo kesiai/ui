@@ -293,23 +293,6 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "my-card",
-      "type": "registry:ui",
-      "title": "Airiot Card",
-      "description": "A card hello world component.",
-      "dependencies": [
-        "@airiot/client"
-      ],
-      "files": [
-        {
-          "path": "src/registry/components/ui/my-card/index.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "modal",
       "type": "registry:component",
       "title": "Modal",

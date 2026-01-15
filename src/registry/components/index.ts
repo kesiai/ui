@@ -17,7 +17,6 @@ import table from './ui/table/registry-item.json' with { type: 'json' }
 import switch_component from './ui/switch/registry-item.json' with { type: 'json' }
 import text from './ui/text/registry-item.json' with { type: 'json' }
 import select from './ui/select/registry-item.json' with { type: 'json' }
-import my_card from './ui/my-card/registry-item.json' with { type: 'json' }
 import modal from './ui/modal/registry-item.json' with { type: 'json' }
 
 export const components = [
@@ -39,6 +38,5 @@ export const components = [
     switch_component as RegistryItem,
     text as RegistryItem,
     select as RegistryItem,
-    my_card as RegistryItem,
     modal as RegistryItem,
 ] as RegistryItem[]

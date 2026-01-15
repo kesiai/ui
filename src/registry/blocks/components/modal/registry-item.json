@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal",
+  "type": "registry:component",
+  "title": "Modal",
+  "description": "弹窗容器组件 - 用于显示弹窗内容",
+  "registryDependencies": ["dialog", "button"],
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "lucide-react",
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "blocks/components/modal/modal.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/lib/modal-context.tsx",
+      "type": "registry:lib"
+    }
+  ]
+}

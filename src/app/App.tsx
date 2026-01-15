@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -14,7 +14,10 @@ const componentCategories = [
       { id: 'text', config: textConfig },
       { id: 'textarea', config: textareaConfig },
       { id: 'iframe', config: iframeConfig },
-      { id: 'button', config: buttonConfig }
+      { id: 'button', config: buttonConfig },
+      { id: 'image', config: imageConfig },
+      { id: 'card', config: cardConfig },
+      { id: 'modal', config: modalConfig }
     ]
   },
   {
@@ -67,7 +70,10 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   text: textConfig,
   textarea: textareaConfig,
   iframe: iframeConfig,
-  button: buttonConfig
+  button: buttonConfig,
+  image: imageConfig,
+  card: cardConfig,
+  modal: modalConfig
 }
 
 function App() {
@@ -80,7 +86,10 @@ function App() {
     text: textConfig.defaultProps,
     textarea: textareaConfig.defaultProps,
     iframe: iframeConfig.defaultProps,
-    button: buttonConfig.defaultProps
+    button: buttonConfig.defaultProps,
+    image: imageConfig.defaultProps,
+    card: cardConfig.defaultProps,
+    modal: modalConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

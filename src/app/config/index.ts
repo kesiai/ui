@@ -1,2 +1,6 @@
 export type { ComponentConfig, PropConfig, PropConfigOption, PropConfigType } from './types'
 export { barConfig } from './components/bar.config'
+export { textConfig } from './components/text.config'
+export { textareaConfig } from './components/textarea.config'
+export { iframeConfig } from './components/iframe.config'
+export { buttonConfig } from './components/button.config'

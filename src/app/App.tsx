@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -10,7 +10,11 @@ const componentCategories = [
     name: '业务组件',
     icon: '💼',
     components: [
-      { id: 'bar', config: barConfig }
+      { id: 'bar', config: barConfig },
+      { id: 'text', config: textConfig },
+      { id: 'textarea', config: textareaConfig },
+      { id: 'iframe', config: iframeConfig },
+      { id: 'button', config: buttonConfig }
     ]
   },
   {
@@ -59,7 +63,11 @@ const componentCategories = [
 
 // 组件配置映射
 const componentConfigMap: Record<string, ComponentConfig> = {
-  bar: barConfig
+  bar: barConfig,
+  text: textConfig,
+  textarea: textareaConfig,
+  iframe: iframeConfig,
+  button: buttonConfig
 }
 
 function App() {
@@ -68,7 +76,11 @@ function App() {
 
   // 为每个组件维护独立的状态
   const [componentProps, setComponentProps] = useState<Record<string, Record<string, any>>>({
-    bar: barConfig.defaultProps
+    bar: barConfig.defaultProps,
+    text: textConfig.defaultProps,
+    textarea: textareaConfig.defaultProps,
+    iframe: iframeConfig.defaultProps,
+    button: buttonConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

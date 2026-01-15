@@ -1,11 +1,13 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "button",
-  "type": "registry:component",
+  "type": "registry:ui",
   "title": "Button",
-  "description": "按钮组件 - 通用的按钮UI组件",
+  "description": "基础按钮组件 - 支持多种变体和尺寸",
   "registryDependencies": [],
-  "dependencies": [],
+  "dependencies": [
+    "class-variance-authority"
+  ],
   "files": [
     {
       "path": "registry/components/ui/button/button.tsx",

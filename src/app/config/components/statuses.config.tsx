@@ -220,7 +220,7 @@ export const statusesPropsConfig = [
   {
     name: 'flex',
     label: '布局配置',
-    type: 'text' as const,
+    type: 'select' as const,
     default: JSON.stringify({
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -228,7 +228,69 @@ export const statusesPropsConfig = [
       alignItems: 'flex-start',
       alignContent: 'flex-start'
     }, null, 2),
-    description: 'Flex布局配置，JSON格式'
+    options: [
+      {
+        value: JSON.stringify({
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          alignContent: 'flex-start'
+        }, null, 2),
+        label: '水平排列-换行-左对齐'
+      },
+      {
+        value: JSON.stringify({
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignContent: 'center'
+        }, null, 2),
+        label: '水平排列-换行-居中'
+      },
+      {
+        value: JSON.stringify({
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          alignContent: 'center'
+        }, null, 2),
+        label: '水平排列-换行-两端对齐'
+      },
+      {
+        value: JSON.stringify({
+          flexDirection: 'column',
+          flexWrap: 'nowrap',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          alignContent: 'flex-start'
+        }, null, 2),
+        label: '垂直排列-不换行'
+      },
+      {
+        value: JSON.stringify({
+          flexDirection: 'column',
+          flexWrap: 'nowrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignContent: 'center'
+        }, null, 2),
+        label: '垂直排列-居中'
+      },
+      {
+        value: JSON.stringify({
+          flexDirection: 'row',
+          flexWrap: 'nowrap',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          alignContent: 'center'
+        }, null, 2),
+        label: '水平排列-不换行'
+      }
+    ],
+    description: '选择预设的Flex布局配置'
   },
   {
     name: 'width',

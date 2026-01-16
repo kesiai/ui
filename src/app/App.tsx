@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, statusesConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, statusesConfig, playerConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -36,7 +36,9 @@ const componentCategories = [
     id: 'advanced',
     name: '高级组件',
     icon: '⚡',
-    components: []
+    components: [
+      { id: 'player', config: playerConfig }
+    ]
   },
   {
     id: '3d',
@@ -84,7 +86,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   panel: panelConfig,
   tabs: tabsConfig,
   status: statusConfig,
-  statuses: statusesConfig
+  statuses: statusesConfig,
+  player: playerConfig
 }
 
 function App() {
@@ -105,7 +108,8 @@ function App() {
     panel: panelConfig.defaultProps,
     tabs: tabsConfig.defaultProps,
     status: statusConfig.defaultProps,
-    statuses: statusesConfig.defaultProps
+    statuses: statusesConfig.defaultProps,
+    player: playerConfig.defaultProps
   })
 
   // 获取当前选中的组件配置
@@ -198,11 +202,10 @@ function App() {
                 <div key={category.id}>
                   <button
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                      selectedCategory === category.id
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-slate-700 hover:bg-slate-100'
-                    }`}
+                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${selectedCategory === category.id
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-slate-700 hover:bg-slate-100'
+                      }`}
                   >
                     <span>{category.icon}</span>
                     <span>{category.name}</span>
@@ -218,11 +221,10 @@ function App() {
                         <button
                           key={component.id}
                           onClick={() => setSelectedComponent(component.id)}
-                          className={`w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                            selectedComponent === component.id
-                              ? 'bg-blue-100 text-blue-700 font-medium'
-                              : 'text-slate-600 hover:bg-slate-100'
-                          }`}
+                          className={`w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors ${selectedComponent === component.id
+                            ? 'bg-blue-100 text-blue-700 font-medium'
+                            : 'text-slate-600 hover:bg-slate-100'
+                            }`}
                         >
                           {component.config?.name || component.id}
                         </button>

@@ -1,14 +1,14 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "app-page",
+  "name": "status",
   "type": "registry:component",
-  "title": "AppPage",
-  "description": "内容区域 - 页面内容区域组件",
+  "title": "Status",
+  "description": "状态指示器组件 - 根据值显示不同状态",
   "registryDependencies": [],
   "dependencies": [],
   "files": [
     {
-      "path": "blocks/containers/app-page/app-page.tsx",
+      "path": "blocks/components/status/status.tsx",
       "type": "registry:component"
     }
   ]

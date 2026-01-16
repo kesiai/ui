@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, statusesConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -16,7 +16,8 @@ const componentCategories = [
       { id: 'iframe', config: iframeConfig },
       { id: 'button', config: buttonConfig },
       { id: 'image', config: imageConfig },
-      { id: 'status', config: statusConfig }
+      { id: 'status', config: statusConfig },
+      { id: 'statuses', config: statusesConfig }
     ]
   },
   {
@@ -82,7 +83,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   popover: popoverConfig,
   panel: panelConfig,
   tabs: tabsConfig,
-  status: statusConfig
+  status: statusConfig,
+  statuses: statusesConfig
 }
 
 function App() {
@@ -102,7 +104,8 @@ function App() {
     popover: popoverConfig.defaultProps,
     panel: panelConfig.defaultProps,
     tabs: tabsConfig.defaultProps,
-    status: statusConfig.defaultProps
+    status: statusConfig.defaultProps,
+    statuses: statusesConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

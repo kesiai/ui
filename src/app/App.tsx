@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -41,7 +41,9 @@ const componentCategories = [
     id: '3d',
     name: '3D 组件',
     icon: '🎮',
-    components: []
+    components: [
+      { id: 'model-3d', config: model3dConfig }
+    ]
   },
   {
     id: 'video',
@@ -82,7 +84,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   popover: popoverConfig,
   panel: panelConfig,
   tabs: tabsConfig,
-  status: statusConfig
+  status: statusConfig,
+  'model-3d': model3dConfig
 }
 
 function App() {
@@ -102,7 +105,8 @@ function App() {
     popover: popoverConfig.defaultProps,
     panel: panelConfig.defaultProps,
     tabs: tabsConfig.defaultProps,
-    status: statusConfig.defaultProps
+    status: statusConfig.defaultProps,
+    'model-3d': model3dConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

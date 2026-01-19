@@ -1,2 +1,5 @@
 export type { ComponentConfig, PropConfig, PropConfigOption, PropConfigType } from './types'
 export { barConfig } from './components/bar.config'
+export { qrcodeConfig } from './components/qrcode.config'
+export { chartLineConfig } from './components/chart-line.config'
+export { chartBarConfig } from './components/chart-bar.config'

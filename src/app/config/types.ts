@@ -3,7 +3,7 @@ export interface PropConfigOption {
   label: string
 }
 
-export type PropConfigType = 'number' | 'color' | 'select' | 'boolean' | 'text' | 'range'
+export type PropConfigType = 'number' | 'color' | 'select' | 'boolean' | 'text' | 'range' | 'code'
 
 export interface PropConfig {
   name: string

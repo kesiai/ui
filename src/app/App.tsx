@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig } from './config'
+import { barConfig, qrcodeConfig, chartLineConfig, chartBarConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -23,13 +23,18 @@ const componentCategories = [
     id: 'chart',
     name: '图表组件',
     icon: '📊',
-    components: []
+    components: [
+      { id: 'chart-line', config: chartLineConfig },
+      { id: 'chart-bar', config: chartBarConfig }
+    ]
   },
   {
     id: 'advanced',
     name: '高级组件',
     icon: '⚡',
-    components: []
+    components: [
+      { id: 'qrcode', config: qrcodeConfig }
+    ]
   },
   {
     id: '3d',
@@ -59,7 +64,10 @@ const componentCategories = [
 
 // 组件配置映射
 const componentConfigMap: Record<string, ComponentConfig> = {
-  bar: barConfig
+  bar: barConfig,
+  qrcode: qrcodeConfig,
+  'chart-line': chartLineConfig,
+  'chart-bar': chartBarConfig
 }
 
 function App() {
@@ -68,7 +76,10 @@ function App() {
 
   // 为每个组件维护独立的状态
   const [componentProps, setComponentProps] = useState<Record<string, Record<string, any>>>({
-    bar: barConfig.defaultProps
+    bar: barConfig.defaultProps,
+    qrcode: qrcodeConfig.defaultProps,
+    'chart-line': chartLineConfig.defaultProps,
+    'chart-bar': chartBarConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

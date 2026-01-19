@@ -1,0 +1,12 @@
+.status-blink {
+  animation: blink-animation 0.5s ease-in-out 3;
+}
+
+@keyframes blink-animation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

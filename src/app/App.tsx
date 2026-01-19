@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, qrcodeConfig, chartLineConfig, chartBarConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -10,7 +10,14 @@ const componentCategories = [
     name: '业务组件',
     icon: '💼',
     components: [
-      { id: 'bar', config: barConfig }
+      { id: 'bar', config: barConfig },
+      { id: 'text', config: textConfig },
+      { id: 'textarea', config: textareaConfig },
+      { id: 'iframe', config: iframeConfig },
+      { id: 'button', config: buttonConfig },
+      { id: 'image', config: imageConfig },
+      { id: 'status', config: statusConfig },
+      { id: 'statuses', config: statusesConfig }
     ]
   },
   {
@@ -33,14 +40,17 @@ const componentCategories = [
     name: '高级组件',
     icon: '⚡',
     components: [
-      { id: 'qrcode', config: qrcodeConfig }
+      { id: 'qrcode', config: qrcodeConfig },
+      { id: 'player', config: playerConfig }
     ]
   },
   {
     id: '3d',
     name: '3D 组件',
     icon: '🎮',
-    components: []
+    components: [
+      { id: 'model-3d', config: model3dConfig }
+    ]
   },
   {
     id: 'video',
@@ -58,7 +68,13 @@ const componentCategories = [
     id: 'containers',
     name: '容器组件',
     icon: '📦',
-    components: []
+    components: [
+      { id: 'card', config: cardConfig },
+      { id: 'modal', config: modalConfig },
+      { id: 'popover', config: popoverConfig },
+      { id: 'panel', config: panelConfig },
+      { id: 'tabs', config: tabsConfig }
+    ]
   }
 ]
 
@@ -67,7 +83,21 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   bar: barConfig,
   qrcode: qrcodeConfig,
   'chart-line': chartLineConfig,
-  'chart-bar': chartBarConfig
+  'chart-bar': chartBarConfig,
+  text: textConfig,
+  textarea: textareaConfig,
+  iframe: iframeConfig,
+  button: buttonConfig,
+  image: imageConfig,
+  card: cardConfig,
+  modal: modalConfig,
+  popover: popoverConfig,
+  panel: panelConfig,
+  tabs: tabsConfig,
+  status: statusConfig,
+  'model-3d': model3dConfig,
+  statuses: statusesConfig,
+  player: playerConfig
 }
 
 function App() {
@@ -79,7 +109,21 @@ function App() {
     bar: barConfig.defaultProps,
     qrcode: qrcodeConfig.defaultProps,
     'chart-line': chartLineConfig.defaultProps,
-    'chart-bar': chartBarConfig.defaultProps
+    'chart-bar': chartBarConfig.defaultProps,
+    text: textConfig.defaultProps,
+    textarea: textareaConfig.defaultProps,
+    iframe: iframeConfig.defaultProps,
+    button: buttonConfig.defaultProps,
+    image: imageConfig.defaultProps,
+    card: cardConfig.defaultProps,
+    modal: modalConfig.defaultProps,
+    popover: popoverConfig.defaultProps,
+    panel: panelConfig.defaultProps,
+    tabs: tabsConfig.defaultProps,
+    status: statusConfig.defaultProps,
+    'model-3d': model3dConfig.defaultProps,
+    statuses: statusesConfig.defaultProps,
+    player: playerConfig.defaultProps
   })
 
   // 获取当前选中的组件配置
@@ -172,11 +216,10 @@ function App() {
                 <div key={category.id}>
                   <button
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                      selectedCategory === category.id
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-slate-700 hover:bg-slate-100'
-                    }`}
+                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${selectedCategory === category.id
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-slate-700 hover:bg-slate-100'
+                      }`}
                   >
                     <span>{category.icon}</span>
                     <span>{category.name}</span>
@@ -192,11 +235,10 @@ function App() {
                         <button
                           key={component.id}
                           onClick={() => setSelectedComponent(component.id)}
-                          className={`w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                            selectedComponent === component.id
-                              ? 'bg-blue-100 text-blue-700 font-medium'
-                              : 'text-slate-600 hover:bg-slate-100'
-                          }`}
+                          className={`w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors ${selectedComponent === component.id
+                            ? 'bg-blue-100 text-blue-700 font-medium'
+                            : 'text-slate-600 hover:bg-slate-100'
+                            }`}
                         >
                           {component.config?.name || component.id}
                         </button>

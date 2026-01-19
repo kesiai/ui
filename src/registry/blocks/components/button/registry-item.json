@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "type": "registry:component",
+  "title": "Button",
+  "description": "按钮组件 - 支持表单提交、重置和自定义事件",
+  "registryDependencies": [
+    "button"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "blocks/components/button/button.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/lib/form-context.tsx",
+      "type": "registry:lib"
+    }
+  ]
+}

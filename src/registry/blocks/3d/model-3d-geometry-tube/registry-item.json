@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-tube/model-3d-geometry-tube.tsx",
+      "path": "blocks/3d/model-3d-geometry-tube/model-3d-geometry-tube.tsx",
       "type": "registry:component"
     }
   ]

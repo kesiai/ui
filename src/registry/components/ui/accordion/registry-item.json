@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "type": "registry:ui",
+  "title": "Accordion",
+  "description": "基础手风琴组件 - 基于 Radix UI",
+  "registryDependencies": [],
+  "dependencies": [
+    "@radix-ui/react-accordion"
+  ],
+  "files": [
+    {
+      "path": "registry/components/ui/accordion/accordion.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -49,3 +49,4 @@ lerna-debug.log*
 .docs-final
 .helper-files
 package-lock.json
+yarn.lock

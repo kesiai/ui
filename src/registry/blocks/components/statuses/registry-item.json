@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "statuses",
+  "type": "registry:component",
+  "title": "Statuses",
+  "description": "状态指示器组件组 - 根据不同设备不同数据点的值显示不同状态",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "blocks/components/statuses/statuses.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

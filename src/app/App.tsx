@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -26,7 +26,8 @@ const componentCategories = [
     icon: '📝',
     components: [
       { id: 'form-date-range', config: dateRangeConfig },
-      { id: 'form-area', config: areaConfig }
+      { id: 'form-area', config: areaConfig },
+      { id: 'form-rate', config: rateConfig }
     ]
   },
   {
@@ -102,7 +103,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   statuses: statusesConfig,
   player: playerConfig,
   'form-date-range': dateRangeConfig,
-  'form-area': areaConfig
+  'form-area': areaConfig,
+  'form-rate': rateConfig
 }
 
 function App() {
@@ -129,7 +131,9 @@ function App() {
     'model-3d': model3dConfig.defaultProps,
     statuses: statusesConfig.defaultProps,
     player: playerConfig.defaultProps,
-    'form-date-range': dateRangeConfig.defaultProps
+    'form-date-range': dateRangeConfig.defaultProps,
+    'form-area': areaConfig.defaultProps,
+    'form-rate': rateConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

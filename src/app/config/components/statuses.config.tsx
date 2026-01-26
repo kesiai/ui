@@ -224,9 +224,9 @@ export const statusesPropsConfig = [
     default: JSON.stringify({
       flexDirection: 'row',
       flexWrap: 'wrap',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      alignContent: 'flex-start'
+      justifyContent: 'center',
+      alignItems: 'center',
+      alignContent: 'center'
     }, null, 2),
     options: [
       {
@@ -364,7 +364,7 @@ const renderStatusesPreview = (props: Record<string, any>) => {
           </p>
           <div className="grid grid-cols-4 gap-2 text-xs text-slate-600 mb-4">
             <button
-              onClick={() => {/* 预览中不允许交互，需要在表单中切换 */}}
+              onClick={() => {/* 预览中不允许交互，需要在表单中切换 */ }}
               className="px-2 py-1 bg-white rounded border"
               title="在右侧表单中切换"
             >
@@ -390,7 +390,7 @@ const renderStatusesPreview = (props: Record<string, any>) => {
             </button>
           </div>
         </div>
-        <div className="flex items-center justify-center flex-wrap gap-2">
+        <div className="flex items-center justify-center flex-wrap gap-2 w-full">
           <Statuses
             table={table}
             nodes={nodes}
@@ -468,7 +468,7 @@ const renderStatusesCustomForm = (_props: Record<string, any>, _onChange: (name:
         <div className="mt-3 p-3 bg-white rounded border border-blue-100">
           <p className="font-medium mb-2">配置示例：</p>
           <pre className="text-xs overflow-x-auto">
-{`// 设备配置
+            {`// 设备配置
 devices: [
   { id: 'device1', name: '温度传感器', dataPoints: ['temp'] },
   { id: 'device2', name: '湿度传感器', dataPoints: ['humidity'] }

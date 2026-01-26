@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -79,6 +79,14 @@ const componentCategories = [
       { id: 'panel', config: panelConfig },
       { id: 'tabs', config: tabsConfig }
     ]
+  },
+  {
+    id: 'mobile',
+    name: '移动端组件',
+    icon: '📱',
+    components: [
+      { id: 'mobile-picker', config: mobilePickerConfig }
+    ]
   }
 ]
 
@@ -104,7 +112,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   player: playerConfig,
   'form-date-range': dateRangeConfig,
   'form-area': areaConfig,
-  'form-rate': rateConfig
+  'form-rate': rateConfig,
+  'mobile-picker': mobilePickerConfig
 }
 
 function App() {
@@ -133,7 +142,8 @@ function App() {
     player: playerConfig.defaultProps,
     'form-date-range': dateRangeConfig.defaultProps,
     'form-area': areaConfig.defaultProps,
-    'form-rate': rateConfig.defaultProps
+    'form-rate': rateConfig.defaultProps,
+    'mobile-picker': mobilePickerConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

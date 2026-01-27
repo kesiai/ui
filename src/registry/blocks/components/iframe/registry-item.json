@@ -5,11 +5,17 @@
   "title": "Iframe",
   "description": "Iframe 组件 - 用于嵌入外部网页内容",
   "registryDependencies": [],
-  "dependencies": [],
+  "dependencies": [
+    "@airiot/client"
+  ],
   "files": [
     {
       "path": "blocks/components/iframe/iframe.tsx",
       "type": "registry:component"
+    },
+    {
+      "path": "lib/airiot/client.ts",
+      "type": "registry:lib"
     }
   ]
 }

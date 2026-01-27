@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { useUser } from "@/registry/lib/airiot/client"
 
 export interface IframeProps extends React.IframeHTMLAttributes<HTMLIFrameElement> {
   /**
@@ -10,10 +11,6 @@ export interface IframeProps extends React.IframeHTMLAttributes<HTMLIFrameElemen
    * 携带 token
    */
   hasToken?: boolean
-  /**
-   * 获取 token 的 hook
-   */
-  useToken?: () => string
 }
 
 const Iframe = React.forwardRef<HTMLIFrameElement, IframeProps>(
@@ -22,13 +19,12 @@ const Iframe = React.forwardRef<HTMLIFrameElement, IframeProps>(
       className,
       iframeSrc = '',
       hasToken = false,
-      useToken,
       ...props
     },
     ref
   ) => {
     // 获取 token
-    const token = useToken ? useToken() : ''
+    const token = useUser().user?.token || ''
 
     // 构建 URL
     const buildSrc = React.useMemo(() => {

@@ -512,7 +512,7 @@ const MobilePicker = React.forwardRef<HTMLDivElement, MobilePickerProps>(
                   onSelect={handleCascadeSelect}
                   disabled={disabled}
                   level={onCascadeSelect ? cascadeLevel : internalLevel}
-                  currentPath={onCascadeSelect ? cascadePath : internalPath.map(p => p.value || p.label || '')}
+                  currentPath={onCascadeSelect ? cascadePath : internalPath.map(p => String(p.value || p.label || ''))}
                   onBack={handleCascadeBack}
                   loading={loading}
                   multiple={multiple}

@@ -14,7 +14,7 @@
       "type": "registry:component"
     },
     {
-      "path": "registry/lib/form-context.tsx",
+      "path": "lib/form-context.tsx",
       "type": "registry:lib"
     }
   ]

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
@@ -115,6 +115,7 @@ const componentCategories = [
     icon: '📦',
     components: [
       { id: 'card', config: cardConfig },
+      { id: 'carousel', config: carouselConfig },
       { id: 'modal', config: modalConfig },
       { id: 'popover', config: popoverConfig },
       { id: 'panel', config: panelConfig },
@@ -135,6 +136,7 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   button: buttonConfig,
   image: imageConfig,
   card: cardConfig,
+  carousel: carouselConfig,
   modal: modalConfig,
   popover: popoverConfig,
   panel: panelConfig,
@@ -255,6 +257,7 @@ function App() {
     button: buttonConfig.defaultProps,
     image: imageConfig.defaultProps,
     card: cardConfig.defaultProps,
+    carousel: carouselConfig.defaultProps,
     modal: modalConfig.defaultProps,
     popover: popoverConfig.defaultProps,
     panel: panelConfig.defaultProps,

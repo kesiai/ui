@@ -8,7 +8,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/registry/components/ui/select/select"
+} from "@/components/ui/select"
+import { X } from "lucide-react"
 
 const selectVariants = cva(
   "relative border transition-colors",
@@ -35,7 +36,7 @@ const selectVariants = cva(
 
 export interface FormSelectProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus">,
-    VariantProps<typeof selectVariants> {
+  VariantProps<typeof selectVariants> {
   /**
    * 当前值
    */
@@ -153,6 +154,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     }
 
     const currentValue = value !== undefined ? value : internalValue
+    const showClear = allowClear && currentValue && !disabled && !readOnly
 
     // 过滤选项
     const filteredOptions = React.useMemo(() => {
@@ -193,17 +195,25 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
             }
           }}
         >
-          <SelectTrigger
-            ref={selectRef}
-            className={cn(
-              "w-full border-0 bg-transparent h-full px-3"
+          <div className="relative">
+            <SelectTrigger
+              ref={selectRef}
+              className={cn(
+                "w-full border-0 bg-transparent h-full px-3"
+              )}
+            >
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            {showClear && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors bg-gray-200 rounded-full"
+              >
+                <X className="h-4 w-4" />
+              </button>
             )}
-            showArrow={showArrow && (!allowClear || !currentValue || disabled || readOnly)}
-            showClear={allowClear && currentValue && !disabled && !readOnly}
-            onClear={handleClear}
-          >
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
+          </div>
           <SelectContent
             className={cn(
               dropdownMatchSelectWidth && "w-[var(--radix-select-trigger-width)]"

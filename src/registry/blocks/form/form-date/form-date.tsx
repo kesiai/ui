@@ -2,14 +2,13 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Calendar } from "@/registry/components/ui/calendar/calendar"
-import { Input } from "@/registry/components/ui/input/input"
+import { Calendar } from "@/components/ui/calendar"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/registry/components/ui/input-group/input-group"
+} from "@/components/ui/input-group"
 import {
   Popover,
   PopoverContent,
@@ -268,7 +267,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             disabled={disabled}
-            className={bordered ? "" : "!border-0"}
+            className={cn(bordered ? "" : "!border-0", "focus-visible:ring-ring focus-visible:ring-offset-0")}
           />
           <InputGroupAddon align="inline-end">
             {allowClear && inputValue && (
@@ -305,7 +304,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
         </InputGroup>
         }
         {
-          (picker == 'time' || picker == 'dateTime') && <Input
+          (picker == 'time' || picker == 'dateTime') && <InputGroupInput
             type="time"
             id="time-picker-optional"
             step="1"

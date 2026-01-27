@@ -2,7 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
-import { RadioGroup, RadioGroupItem } from "@/registry/components/ui/radio-group/radio-group"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const radioVariants = cva(
   "",

@@ -5,9 +5,8 @@ import { cn } from "@/lib/utils"
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
-} from "@/registry/components/ui/input-group/input-group"
+} from "@/components/ui/input-group"
 
 const inputNumberVariants = cva(
   "relative border transition-colors",
@@ -274,7 +273,8 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
         max={max}
         step={step}
         className={cn(
-          !bordered && "border-0"
+          !bordered && "border-0",
+          "focus-visible:ring-ring focus-visible:ring-offset-0"
         )}
       />
     )

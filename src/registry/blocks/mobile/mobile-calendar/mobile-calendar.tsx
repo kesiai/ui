@@ -3,7 +3,7 @@ import type { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
-import { Calendar } from "@/registry/components/ui/calendar/calendar"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Drawer,
   DrawerContent,

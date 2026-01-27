@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-import { Checkbox } from "@/registry/components/ui/checkbox/checkbox"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export interface CheckboxOption {
   /**

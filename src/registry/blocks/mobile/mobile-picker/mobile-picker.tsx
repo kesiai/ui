@@ -121,10 +121,21 @@ const PickerList: React.FC<PickerListProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-6 py-4 border-b bg-white">
-        <Button variant="ghost" size="sm" text="关闭" onClick={onClose} className="flex-1 justify-start" />
-        <div className="text-sm font-medium text-gray-900">{placeholder}</div>
-        <Button variant="ghost" size="sm" text="完成" onClick={() => onConfirm(selectedValue)} className="flex-1 justify-end" />
+      <div className="flex justify-between items-center px-4 py-2 border-b">
+        <button
+          type="button"
+          className="text-primary px-3 py-1"
+          onClick={onClose}
+        >
+          取消
+        </button>
+        <button
+          type="button"
+          className="text-primary px-3 py-1"
+          onClick={() => onConfirm(selectedValue)}
+        >
+          确定
+        </button>
       </div>
       <div className="flex-1 overflow-auto">
         {data.map((item) => {
@@ -252,18 +263,32 @@ const CascadePickerList: React.FC<CascadePickerListProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex justify-between items-center p-4 border-b">
+      <div className="flex justify-between items-center px-4 py-2 border-b">
         <div className="flex items-center gap-2">
           {level > 0 && (
-            <Button variant="ghost" text={<ArrowLeft className="h-4 w-4" />} size="sm" onClick={onBack}>
-              
-            </Button>
+            <button
+              type="button"
+              className="text-primary px-3 py-1 flex items-center"
+              onClick={onBack}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </button>
           )}
-          <Button variant="ghost" size="sm" text="关闭" onClick={onClose}>
-          </Button>
+          <button
+            type="button"
+            className="text-primary px-3 py-1"
+            onClick={onClose}
+          >
+            取消
+          </button>
         </div>
-        <Button variant="ghost" size="sm" text="完成" onClick={() => onConfirm(selectedValue)}>
-        </Button>
+        <button
+          type="button"
+          className="text-primary px-3 py-1"
+          onClick={() => onConfirm(selectedValue)}
+        >
+          确定
+        </button>
       </div>
       {loading ? (
         <div className="flex items-center justify-center h-40">

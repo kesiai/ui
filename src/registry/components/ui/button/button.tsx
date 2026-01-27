@@ -40,6 +40,7 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, loading, disabled, children, ...props }, ref) => {
+    console.log(1111,props)
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}

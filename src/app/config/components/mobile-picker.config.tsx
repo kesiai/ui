@@ -3,7 +3,7 @@ import { MobilePicker, PickerOption } from '@/registry/blocks/mobile/mobile-pick
 import { ComponentConfig } from '../types'
 
 export const MobilePickerPreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {
-  const [value, setValue] = React.useState<string>('')
+  const [value, setValue] = React.useState<string | string[]>(props.multiple ? [] : '')
   const [visible, setVisible] = React.useState(false)
 
   // 示例数据
@@ -54,11 +54,17 @@ export const MobilePickerPreview: React.FC<{ props: Record<string, any> }> = ({ 
           placeholder={props.placeholder || '请选择'}
           disabled={props.disabled}
           selectModel={props.selectModel || 'normal'}
+          multiple={props.multiple}
           loading={props.loading}
         />
         <div className="mt-4 p-4 bg-slate-50 rounded-lg text-sm text-slate-600">
-          <p className="font-medium mb-2">当前选择: <span className="text-blue-600">{value || '无'}</span></p>
-          <p>选择模式: {props.selectModel === 'tableData' ? '级联选择' : '普通选择'}</p>
+          <p className="font-medium mb-2">当前选择: <span className="text-blue-600">
+            {props.multiple
+              ? (Array.isArray(value) ? JSON.stringify(value) : '无')
+              : (value || '无')
+            }
+          </span></p>
+          <p>选择模式: {props.selectModel === 'tableData' ? '级联选择' : '普通选择'} | {props.multiple ? '多选' : '单选'}</p>
         </div>
       </div>
     </div>
@@ -76,6 +82,13 @@ export const mobilePickerPropsConfig = [
       { value: 'table', label: '表格选择' },
       { value: 'tableData', label: '表记录级联选择' }
     ]
+  },
+  {
+    name: 'multiple',
+    label: '多选',
+    type: 'boolean' as const,
+    default: false,
+    description: '启用多选模式'
   },
   {
     name: 'placeholder',
@@ -108,6 +121,7 @@ export const mobilePickerPropsConfig = [
 
 export const mobilePickerDefaultProps = {
   selectModel: 'normal',
+  multiple: false,
   placeholder: '请选择',
   disabled: false,
   loading: false,
@@ -122,6 +136,9 @@ const renderMobilePickerCodePreview = (props: Record<string, any>) => {
   let code = `<MobilePicker`
   if (props.selectModel !== 'normal') {
     code += `\n  selectModel="${props.selectModel}"`
+  }
+  if (props.multiple) {
+    code += `\n  multiple`
   }
   if (props.placeholder !== '请选择') {
     code += `\n  placeholder="${props.placeholder}"`

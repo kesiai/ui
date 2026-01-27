@@ -7,7 +7,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   /**
    * 按钮文字
    */
-  text?: string
+  text?: React.ReactNode
   /**
    * 隐藏边框
    */
@@ -70,14 +70,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     // 处理按钮文字
     const buttonText = React.useMemo(() => {
-      if (typeof text === 'string' && text) {
-        return text
-      }
-      try {
-        return String(text || '按钮')
-      } catch {
-        return '按钮'
-      }
+      return text || '按钮'
     }, [text])
 
     // 处理点击事件

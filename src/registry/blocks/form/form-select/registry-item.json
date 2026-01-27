@@ -3,14 +3,14 @@
   "name": "form-select",
   "type": "registry:component",
   "title": "Form.Select",
-  "description": "下拉框 - 表单下拉框组件",
+  "description": "表单下拉选择组件，支持多种样式变体、尺寸和状态配置",
   "registryDependencies": [
     "select"
   ],
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-select/form-select.tsx",
+      "path": "src/registry/blocks/form/form-select/form-select.tsx",
       "type": "registry:component"
     }
   ]

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group",
+  "type": "registry:ui",
+  "title": "Radio Group",
+  "description": "单选组组件 - 单选按钮组UI组件",
+  "registryDependencies": [],
+  "dependencies": [
+    "@radix-ui/react-radio-group",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/components/ui/radio-group/radio-group.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

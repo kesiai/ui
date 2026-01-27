@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
@@ -50,7 +50,15 @@ const componentCategories = [
     components: [
       { id: 'form-date-range', config: dateRangeConfig },
       { id: 'form-area', config: areaConfig },
-      { id: 'form-rate', config: rateConfig }
+      { id: 'form-rate', config: rateConfig },
+      { id: 'form-input', config: formInputConfig },
+      { id: 'form-input-number', config: formInputNumberConfig },
+      { id: 'form-select', config: formSelectConfig },
+      { id: 'form-slider', config: formSliderConfig },
+      { id: 'form-radio', config: formRadioConfig },
+      { id: 'form-switch', config: formSwitchConfig },
+      { id: 'form-checkbox', config: formCheckboxConfig },
+      { id: 'form-date', config: formDateConfig }
     ]
   },
   {
@@ -92,6 +100,16 @@ const componentCategories = [
     components: []
   },
   {
+    id: 'mobile',
+    name: '移动端组件',
+    icon: '📱',
+    components: [
+      { id: 'mobile-popup', config: mobilePopupConfig },
+      { id: 'mobile-calendar', config: mobileCalendarConfig },
+      { id: 'mobile-picker', config: mobilePickerConfig }
+    ]
+  },
+  {
     id: 'containers',
     name: '容器组件',
     icon: '📦',
@@ -101,14 +119,6 @@ const componentCategories = [
       { id: 'popover', config: popoverConfig },
       { id: 'panel', config: panelConfig },
       { id: 'tabs', config: tabsConfig }
-    ]
-  },
-  {
-    id: 'mobile',
-    name: '移动端组件',
-    icon: '📱',
-    components: [
-      { id: 'mobile-picker', config: mobilePickerConfig }
     ]
   }
 ]
@@ -137,7 +147,17 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   'form-area': areaConfig,
   'form-rate': rateConfig,
   'mobile-picker': mobilePickerConfig,
-  'data-point': dataPointConfig
+  'data-point': dataPointConfig,
+  'form-input': formInputConfig,
+  'form-select': formSelectConfig,
+  'form-input-number': formInputNumberConfig,
+  'form-slider': formSliderConfig,
+  'form-radio': formRadioConfig,
+  'form-switch': formSwitchConfig,
+  'form-checkbox': formCheckboxConfig,
+  'form-date': formDateConfig,
+  'mobile-popup': mobilePopupConfig,
+  'mobile-calendar': mobileCalendarConfig
 }
 
 function App() {
@@ -247,7 +267,17 @@ function App() {
     'form-area': areaConfig.defaultProps,
     'form-rate': rateConfig.defaultProps,
     'mobile-picker': mobilePickerConfig.defaultProps,
-    'data-point': dataPointConfig.defaultProps
+    'data-point': dataPointConfig.defaultProps,
+    'form-input': formInputConfig.defaultProps,
+    'form-select': formSelectConfig.defaultProps,
+    'form-input-number': formInputNumberConfig.defaultProps,
+    'form-slider': formSliderConfig.defaultProps,
+    'form-radio': formRadioConfig.defaultProps,
+    'form-switch': formSwitchConfig.defaultProps,
+    'form-checkbox': formCheckboxConfig.defaultProps,
+    'form-date': formDateConfig.defaultProps,
+    'mobile-popup': mobilePopupConfig.defaultProps,
+    'mobile-calendar': mobileCalendarConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

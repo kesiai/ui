@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider",
+  "type": "registry:ui",
+  "title": "Slider",
+  "description": "滑块组件 - 支持数值范围选择和拖拽交互",
+  "registryDependencies": [],
+  "dependencies": [
+    "@radix-ui/react-slider"
+  ],
+  "files": [
+    {
+      "path": "registry/components/ui/slider/slider.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

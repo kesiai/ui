@@ -1,0 +1,18 @@
+
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "description": "基础输入组件 - 支持多种变体和尺寸",
+  "registryDependencies": [],
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "files": [
+    {
+      "path": "registry/components/ui/input/input.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

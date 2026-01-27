@@ -1,10 +1,10 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import {
-  Dialog,
-  DialogContent,
-  DialogPortal,
-} from "@/registry/components/ui/dialog/dialog"
+  Drawer,
+  DrawerContent,
+  DrawerPortal,
+} from "@/registry/components/ui/drawer/drawer"
 import { Button } from "@/registry/blocks/components/button/button"
 import { ChevronsUpDown, Loader2, ArrowLeft, Check } from "lucide-react"
 
@@ -463,10 +463,10 @@ const MobilePicker = React.forwardRef<HTMLDivElement, MobilePickerProps>(
           {!disabled && <ChevronsUpDown className="h-4 w-4 text-gray-400 ml-2 shrink-0" />}
         </div>
 
-        <Dialog open={visible} onOpenChange={setVisible}>
-          <DialogPortal container={containerDOM || document.querySelector('.dashboard-cell-root') as HTMLElement}>
-            <DialogContent
-              className="w-full max-w-md p-0 h-[50vh] left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2"
+        <Drawer open={visible} onOpenChange={setVisible} direction="bottom">
+          <DrawerPortal container={containerDOM || document.querySelector('.dashboard-cell-root') as HTMLElement}>
+            <DrawerContent
+              className="max-h-[50vh]"
             >
               {selectModel !== 'tableData' ? (
                 <PickerList
@@ -493,9 +493,9 @@ const MobilePicker = React.forwardRef<HTMLDivElement, MobilePickerProps>(
                   multiple={multiple}
                 />
               )}
-            </DialogContent>
-          </DialogPortal>
-        </Dialog>
+            </DrawerContent>
+          </DrawerPortal>
+        </Drawer>
       </div>
     )
   }

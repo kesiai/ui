@@ -1,0 +1,58 @@
+.mutual-rules-tag {
+  font-size: 12px !important;
+  line-height: 20px !important;
+  border: 0 !important;
+}
+
+.mutual-rules-tag.mb10 {
+  margin-bottom: 10px;
+}
+
+.mutual-rules-tag.mt10 {
+  margin-top: 10px;
+}
+
+.notice-card {
+  margin-top: 10px;
+  border: 1px #bbb solid;
+  border-radius: 8px;
+  padding: 0 10px;
+}
+
+.field-rule-content {
+  display: flex;
+  margin-top: -16px;
+  height: 670px;
+}
+
+.field-rule-content .ant-tabs-nav {
+  width: 250px;
+}
+
+.field-rule-content .ant-tabs-tab {
+  justify-content: center;
+  margin: 0 !important;
+}
+
+.field-rule-content .ant-tabs-tab-active {
+  background-color: #E7ECFC;
+}
+
+.field-rule-content .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #4F71FF;
+}
+
+.field-rule-content .ant-tabs-ink-bar.ant-tabs-ink-bar-animated {
+  width: 0;
+}
+
+.field-rule-content .ant-tabs-content-holder {
+  background-color: #F5F6F9;
+}
+
+.field-rule-content button:not(.ant-btn-primary) {
+  border: 1px solid #4F71FF !important;
+  border-radius: 4px !important;
+  background: #E5EAFD !important;
+  color: #4F71FF !important;
+}

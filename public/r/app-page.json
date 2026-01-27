@@ -8,9 +8,9 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/app-page/app-page.tsx",
+      "path": "blocks/containers/app-page/app-page.tsx",
       "type": "registry:component",
-      "content": ""
+      "content": "import * as React from \"react\"\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nexport interface AppPageProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  children?: React.ReactNode\r\n}\r\n\r\nconst AppPage = React.forwardRef<HTMLDivElement, AppPageProps>(\r\n  ({ className, children, ...props }, ref) => {\r\n    return (\r\n      <div\r\n        ref={ref}\r\n        className={cn(\"app-page w-full h-full\", className)}\r\n        {...props}\r\n      >\r\n        {children}\r\n      </div>\r\n    )\r\n  }\r\n)\r\n\r\nAppPage.displayName = \"AppPage\"\r\n\r\nexport { AppPage }\r\n"
     }
   ]
 }

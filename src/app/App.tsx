@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, formTableFieldConfig, mobilePickerConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
 
@@ -27,7 +27,8 @@ const componentCategories = [
     components: [
       { id: 'form-date-range', config: dateRangeConfig },
       { id: 'form-area', config: areaConfig },
-      { id: 'form-rate', config: rateConfig }
+      { id: 'form-rate', config: rateConfig },
+      { id: 'form-tableField', config: formTableFieldConfig }
     ]
   },
   {
@@ -113,6 +114,7 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   'form-date-range': dateRangeConfig,
   'form-area': areaConfig,
   'form-rate': rateConfig,
+  'form-tableField': formTableFieldConfig,
   'mobile-picker': mobilePickerConfig
 }
 
@@ -143,6 +145,7 @@ function App() {
     'form-date-range': dateRangeConfig.defaultProps,
     'form-area': areaConfig.defaultProps,
     'form-rate': rateConfig.defaultProps,
+    'form-tableField': formTableFieldConfig.defaultProps,
     'mobile-picker': mobilePickerConfig.defaultProps
   })
 

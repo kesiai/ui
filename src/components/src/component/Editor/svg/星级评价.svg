@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="34px" viewBox="0 0 32 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="86.7775662%" y1="86.7330077%" x2="14.0452829%" y2="13.3263298%" id="linearGradient-8">
+            <stop stop-color="#C3CAEA" offset="0%"></stop>
+            <stop stop-color="#FDFDFD" offset="100%"></stop>
+        </linearGradient>
+        <path d="M18.0837443,6.43294076 C17.9845918,6.13267711 17.7197501,5.91372152 17.4020705,5.86890605 L12.1632932,5.12176812 L9.82016186,0.462239573 C9.67795622,0.179261884 9.38441248,0 9.06281901,0 C8.74122553,0 8.44768179,0.179261884 8.30547616,0.462239573 L5.96234479,5.12176812 L0.722915177,5.86890605 C0.404583299,5.91436174 0.140393932,6.13267711 0.0412413798,6.43294076 C-0.0579111725,6.73320442 0.0249333942,7.06227802 0.255202151,7.28251405 L4.04648264,10.9093661 L3.15150039,16.030494 C3.09735788,16.3416414 3.22716944,16.6559899 3.48744489,16.841654 C3.74772034,17.0273181 4.092145,17.0516465 4.37720859,16.9043957 L9.06347133,14.4862809 L13.7490817,16.9043957 C13.8723701,16.9677776 14.0074002,16.9997886 14.141778,16.9997886 C14.3165996,16.9997886 14.4914212,16.9466503 14.6381931,16.841654 C14.8984686,16.6559899 15.0282801,16.3416414 14.9741376,16.030494 L14.0791554,10.9093661 L17.8704359,7.28251405 C18.1000523,7.06227802 18.1828969,6.73320442 18.0837443,6.43294076 Z" id="path-8"></path>
+        <filter x="-57.9%" y="-44.1%" width="215.9%" height="223.5%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.21684124   0 0 0 0 0.325918763   0 0 0 0 0.804181749  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="设备台账表" transform="translate(-146.000000, -758.000000)">
+            <g id="星级评价" transform="translate(146.000000, 758.000000)">
+                <rect id="关闭系统‘" fill="#637DEF" x="0" y="0" width="32" height="32" rx="7"></rect>
+                <g id="xingxing" transform="translate(7.000000, 8.000000)" fill-rule="nonzero">
+                    <g id="路径">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-8"></use>
+                        <use fill="url(#linearGradient-8)" xlink:href="#path-8"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

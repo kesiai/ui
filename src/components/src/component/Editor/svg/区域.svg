@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="34px" viewBox="0 0 32 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="86.7775662%" y1="91.7555951%" x2="14.0452829%" y2="8.31185571%" id="linearGradient-2">
+            <stop stop-color="#C3CAEA" offset="0%"></stop>
+            <stop stop-color="#FDFDFD" offset="100%"></stop>
+        </linearGradient>
+        <path d="M17.5,0 L17.34,0.03 L12,2.1 L6,0 L0.36,1.9 C0.15,1.97 0,2.15 0,2.38 L0,17.5 C0,17.78 0.22,18 0.5,18 L0.66,17.97 L6,15.9 L12,18 L17.64,16.1 C17.85,16.03 18,15.85 18,15.62 L18,0.5 C18,0.22 17.78,0 17.5,0 Z M12,16 L6,13.89 L6,2 L12,4.11 L12,16 Z" id="path-2"></path>
+        <filter x="-58.3%" y="-41.7%" width="216.7%" height="216.7%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.21684124   0 0 0 0 0.325918763   0 0 0 0 0.804181749  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="设备台账表" transform="translate(-246.000000, -678.000000)">
+            <g id="区域" transform="translate(246.000000, 678.000000)">
+                <rect id="矩形备份-30" fill="#637DEF" x="0" y="0" width="32" height="32" rx="7"></rect>
+                <g id="quyu" transform="translate(7.000000, 7.000000)" fill-rule="nonzero">
+                    <g id="形状">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                        <use fill="url(#linearGradient-2)" xlink:href="#path-2"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

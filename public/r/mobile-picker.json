@@ -3,12 +3,17 @@
   "name": "mobile-picker",
   "type": "registry:component",
   "title": "MobilePicker",
-  "description": "选择器 - 移动端选择器组件",
-  "registryDependencies": [],
-  "dependencies": [],
+  "description": "移动端选择器 - 支持普通选择、表格选择和级联选择",
+  "registryDependencies": [
+    "dialog",
+    "button"
+  ],
+  "dependencies": [
+    "lucide-react"
+  ],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-picker/mobile-picker.tsx",
+      "path": "registry/blocks/mobile/mobile-picker/mobile-picker.tsx",
       "type": "registry:component",
       "content": ""
     }

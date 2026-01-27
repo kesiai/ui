@@ -1,0 +1,46 @@
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_n.ck-balloon-panel_visible.ck-balloon-panel_with-arrow, .ck.ck-balloon-panel, .ck.ck-toolbar .ck-dropdown__panel {
+  z-index: 1031;
+}
+
+.custom-text-editor .ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred {
+  border: 1px solid #d9d9d9;
+}
+
+.custom-text-editor .ck-editor__editable_inline {
+  max-height: 260px;
+  min-height: 100px;
+}
+
+.custom-text-editor .ck.ck-color-grid {
+  height: 123px;
+  overflow: hidden auto;
+}
+.custom-text-editor-view {
+  overflow: auto;
+}
+.custom-text-editor-view .image img {
+  width: 100%;
+}
+.custom-text-editor-view table tr:first-child th, .custom-text-editor-view table tr:first-child td {
+  border-top: 1px solid #bfbfbf;
+}
+.custom-text-editor-view table tr:last-child td {
+  border-bottom: 1px solid #bfbfbf;
+}
+.custom-text-editor-view table th:first-child, .custom-text-editor-view table td:first-child {
+  border-left: 1px solid #bfbfbf;
+}
+.custom-text-editor-view table th:last-child, .custom-text-editor-view table td:last-child {
+  border-right: 1px solid #bfbfbf;
+}
+.custom-text-editor-view table th, .custom-text-editor-view table td {
+  border-right: 1px solid #bfbfbf;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.ant-popover-inner-content .custom-text-editor {
+  max-width: 600px;
+}
+.ck-content ul li {
+  list-style: unset;
+}

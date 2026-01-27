@@ -1,0 +1,41 @@
+.permission-title {
+  float: right;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.permission-card {
+  cursor: move;
+}
+
+.table-permission .permission-card {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.table-permission .permission-limit .ant-checkbox-group-item {
+  display: block;
+}
+
+.table-permission .permission-limit .ant-checkbox-group-item .ant-checkbox {
+  display: inline-block;
+}
+
+.table-permission .ant-form-item {
+  margin-bottom: 8px;
+}
+
+.table-permission .error-text {
+  color: red;
+  margin-left: 40px;
+}
+
+.table-permission .permission-container {
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: scroll;
+}

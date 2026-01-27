@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="34px" viewBox="0 0 32 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="86.7775662%" y1="91.7555951%" x2="14.0452829%" y2="8.31185571%" id="linearGradient-7">
+            <stop stop-color="#C3CAEA" offset="0%"></stop>
+            <stop stop-color="#FDFDFD" offset="100%"></stop>
+        </linearGradient>
+        <path d="M9,18 C13.970475,18 18,13.970475 18,9 C18,4.02952499 13.970475,0 9,0 C4.02952501,0 0,4.02952501 0,9 C0,13.970475 4.02952499,18 9,18 Z M5.147775,11.897775 L8.325,8.72032499 L8.325,4.95 C8.325,4.5772078 8.62720779,4.275 9,4.275 C9.37279221,4.275 9.675,4.5772078 9.675,4.95 L9.675,9 C9.675,9.1790065 9.60382083,9.35066741 9.477225,9.477225 L6.102225,12.852225 C5.93274973,13.0276957 5.68178243,13.0980685 5.44578256,13.0362956 C5.20978269,12.9745227 5.02547734,12.7902173 4.96370442,12.5542174 C4.9019315,12.3182176 4.97230431,12.0672503 5.147775,11.897775 L5.147775,11.897775 Z" id="path-7"></path>
+        <filter x="-58.3%" y="-41.7%" width="216.7%" height="216.7%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.21684124   0 0 0 0 0.325918763   0 0 0 0 0.804181749  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="设备台账表" transform="translate(-46.000000, -215.000000)">
+            <g id="时间" transform="translate(46.000000, 215.000000)">
+                <rect id="关闭系统‘" fill="#637DEF" x="0" y="0" width="32" height="32" rx="7"></rect>
+                <g id="shijian" transform="translate(6.666667, 6.666667)" fill-rule="nonzero">
+                    <g id="形状">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-7"></use>
+                        <use fill="url(#linearGradient-7)" xlink:href="#path-7"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -5,310 +5,6 @@
   "items": [
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "tabs",
-      "type": "registry:component",
-      "title": "Tabs",
-      "description": "标签页组件 - 选项卡切换组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/tabs/tabs.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "iframe",
-      "type": "registry:component",
-      "title": "Iframe",
-      "description": "Iframe窗口组件 - 嵌入式窗口组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/iframe/iframe.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "radio",
-      "type": "registry:component",
-      "title": "Radio",
-      "description": "单选框组件 - 单选按钮UI组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/radio/radio.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "card",
-      "type": "registry:component",
-      "title": "Card",
-      "description": "卡片组件 - 用于内容展示的卡片容器",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/card/card.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "panel",
-      "type": "registry:component",
-      "title": "Panel",
-      "description": "折叠面板组件 - 可折叠的内容面板",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/panel/panel.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "input",
-      "type": "registry:component",
-      "title": "Input",
-      "description": "输入框组件 - 基础的文本输入框",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/input/input.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "date",
-      "type": "registry:component",
-      "title": "Date",
-      "description": "日期选择器组件 - 日期时间选择UI组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/date/date.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "text-area",
-      "type": "registry:component",
-      "title": "TextArea",
-      "description": "多行文本组件 - 用于显示多行文本内容",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/text-area/text-area.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "checkbox",
-      "type": "registry:component",
-      "title": "Checkbox",
-      "description": "多选框组件 - 复选框UI组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/checkbox/checkbox.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "slider",
-      "type": "registry:component",
-      "title": "Slider",
-      "description": "轮播组件 - 图片轮播组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/slider/slider.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "html",
-      "type": "registry:component",
-      "title": "Html",
-      "description": "HTML组件 - 渲染HTML内容的组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/html/html.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "image",
-      "type": "registry:component",
-      "title": "Image",
-      "description": "图片组件 - 图片展示组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/image/image.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "popover",
-      "type": "registry:component",
-      "title": "Popover",
-      "description": "气泡卡片组件 - 弹出式气泡卡片",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/popover/popover.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "button",
-      "type": "registry:component",
-      "title": "Button",
-      "description": "按钮组件 - 通用的按钮UI组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/button/button.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "table",
-      "type": "registry:component",
-      "title": "Table",
-      "description": "表格组件 - 数据表格展示组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/table/table.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "switch",
-      "type": "registry:component",
-      "title": "Switch",
-      "description": "开关组件 - 切换开关UI组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/switch/switch.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "text",
-      "type": "registry:component",
-      "title": "Text",
-      "description": "单行文本组件 - 用于显示单行文本内容",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/text/text.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "select",
-      "type": "registry:component",
-      "title": "Select",
-      "description": "下拉框组件 - 下拉选择器UI组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/select/select.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "modal",
-      "type": "registry:component",
-      "title": "Modal",
-      "description": "弹窗组件 - 模态对话框组件",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/components/ui/modal/modal.tsx",
-          "type": "registry:ui",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "svg",
       "type": "registry:component",
       "title": "SVG",
@@ -506,12 +202,14 @@
       "title": "Player",
       "description": "音频播放器 - 音频播放器组件",
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/player/player.tsx",
+          "path": "blocks/advanced/player/player.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport { cn } from \"@/lib/utils\"\r\nimport {\r\n  Play,\r\n  Pause,\r\n  SkipBack,\r\n  SkipForward,\r\n  Volume2,\r\n  VolumeX,\r\n  RotateCcw,\r\n  Settings,\r\n  X,\r\n} from \"lucide-react\"\r\n\r\nexport interface AudioTrack {\r\n  /**\r\n   * 音频文件 URL\r\n   */\r\n  src: string\r\n  /**\r\n   * 音频标题\r\n   */\r\n  title?: string\r\n  /**\r\n   * 音频类型 (mp3, wav, ogg, etc.)\r\n   */\r\n  type?: string\r\n}\r\n\r\nexport interface PlayerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onProgress' | 'onVolumeChange'> {\r\n  /**\r\n   * 音频列表\r\n   */\r\n  playlist?: AudioTrack[] | string\r\n  /**\r\n   * 初始音频索引\r\n   * @default 0\r\n   */\r\n  initialIndex?: number\r\n  /**\r\n   * 是否显示控制按钮\r\n   * @default true\r\n   */\r\n  showControls?: boolean\r\n  /**\r\n   * 是否显示进度条\r\n   * @default true\r\n   */\r\n  showProgress?: boolean\r\n  /**\r\n   * 是否显示音量控制\r\n   * @default true\r\n   */\r\n  showVolume?: boolean\r\n  /**\r\n   * 是否显示播放列表\r\n   * @default false\r\n   */\r\n  showPlaylist?: boolean\r\n  /**\r\n   * 单曲循环\r\n   * @default false\r\n   */\r\n  loop?: boolean\r\n  /**\r\n   * 列表循环\r\n   * @default false\r\n   */\r\n  loopAll?: boolean\r\n  /**\r\n   * 自动播放下一首\r\n   * @default false\r\n   */\r\n  autoNext?: boolean\r\n  /**\r\n   * 自动播放\r\n   * @default false\r\n   */\r\n  autoplay?: boolean\r\n  /**\r\n   * 初始音量 (0-1)\r\n   * @default 1\r\n   */\r\n  initialVolume?: number\r\n  /**\r\n   * 宽度\r\n   */\r\n  width?: string | number\r\n  /**\r\n   * 高度\r\n   * @default 40\r\n   */\r\n  height?: string | number\r\n  /**\r\n   * 进度变化回调\r\n   */\r\n  onProgress?: (progress: { played: number; playedSeconds: number; loadedSeconds: number }) => void\r\n  /**\r\n   * 播放状态变化回调\r\n   */\r\n  onPlayerStateChange?: (playing: boolean) => void\r\n  /**\r\n   * 音轨变化回调\r\n   */\r\n  onTrackChange?: (index: number, track: AudioTrack) => void\r\n  /**\r\n   * 音量变化回调\r\n   */\r\n  onVolumeChange?: (volume: number) => void\r\n}\r\n\r\n// 播放列表组件\r\nconst PlayList: React.FC<{\r\n  playlist: AudioTrack[]\r\n  currentIndex: number\r\n  isPlaying: boolean\r\n  onPlayTrack: (index: number) => void\r\n  onClose: () => void\r\n}> = ({ playlist, currentIndex, isPlaying, onPlayTrack, onClose }) => {\r\n  return (\r\n    <div className=\"absolute bottom-full left-0 mb-2 w-64 max-h-80 overflow-y-auto bg-white border border-slate-200 rounded-lg shadow-lg z-50\">\r\n      <div className=\"flex items-center justify-between p-3 border-b border-slate-200\">\r\n        <span className=\"text-sm font-medium text-slate-700\">播放列表</span>\r\n        <button\r\n          onClick={onClose}\r\n          className=\"inline-flex items-center justify-center w-6 h-6 p-0 border-0 bg-transparent rounded cursor-pointer text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-all\"\r\n        >\r\n          <X size={14} />\r\n        </button>\r\n      </div>\r\n      <div className=\"p-2 space-y-1\">\r\n        {playlist.map((track, index) => {\r\n          const isActive = index === currentIndex && isPlaying\r\n          return (\r\n            <button\r\n              key={index}\r\n              onClick={() => onPlayTrack(index)}\r\n              className={cn(\r\n                \"w-full flex items-center gap-3 p-2 rounded-md text-left transition-all duration-200\",\r\n                isActive\r\n                  ? \"bg-blue-50 text-blue-700\"\r\n                  : \"bg-white text-slate-700 hover:bg-slate-100\"\r\n              )}\r\n            >\r\n              <div className={cn(\r\n                \"w-6 h-6 flex items-center justify-center rounded text-xs font-medium\",\r\n                isActive ? \"bg-blue-500 text-white\" : \"bg-slate-200 text-slate-600\"\r\n              )}>\r\n                {index + 1}\r\n              </div>\r\n              <div className=\"flex-1 min-w-0\">\r\n                <p className=\"truncate text-sm font-medium\">{track.title || `音频 ${index + 1}`}</p>\r\n                {isActive && isPlaying && (\r\n                  <div className=\"flex items-center gap-1 mt-0.5\">\r\n                    <div className=\"w-1 h-3 bg-blue-500 rounded-full animate-pulse\"></div>\r\n                    <div className=\"w-1 h-3 bg-blue-500 rounded-full animate-pulse\" style={{ animationDelay: '0.2s' }}></div>\r\n                    <div className=\"w-1 h-3 bg-blue-500 rounded-full animate-pulse\" style={{ animationDelay: '0.4s' }}></div>\r\n                  </div>\r\n                )}\r\n              </div>\r\n              {isActive ? (\r\n                <Play size={14} className=\"text-blue-500\" />\r\n              ) : null}\r\n            </button>\r\n          )\r\n        })}\r\n      </div>\r\n    </div>\r\n  )\r\n}\r\n\r\nconst Player = React.forwardRef<HTMLDivElement, PlayerProps>(\r\n  (\r\n    {\r\n      className,\r\n      playlist = [],\r\n      initialIndex = 0,\r\n      showControls = true,\r\n      showProgress = true,\r\n      showVolume = true,\r\n      showPlaylist = false,\r\n      loop = false,\r\n      loopAll = false,\r\n      autoNext = false,\r\n      autoplay = false,\r\n      initialVolume = 1,\r\n      width,\r\n      height = 40,\r\n      onProgress,\r\n      onPlayerStateChange,\r\n      onTrackChange,\r\n      onVolumeChange,\r\n      ...props\r\n    },\r\n    ref\r\n  ) => {\r\n    const audioRef = React.useRef<HTMLAudioElement>(null)\r\n    const progressBarRef = React.useRef<HTMLInputElement>(null)\r\n    const [showPlaylistPanel, setShowPlaylistPanel] = React.useState(false)\r\n    const playlistButtonRef = React.useRef<HTMLButtonElement>(null)\r\n\r\n    // 解析播放列表\r\n    const audioList = React.useMemo<AudioTrack[]>(() => {\r\n      if (!playlist) return []\r\n      if (typeof playlist === 'string') {\r\n        return [{ src: playlist, title: playlist }]\r\n      }\r\n      if (Array.isArray(playlist)) {\r\n        return playlist.map((item) => {\r\n          if (typeof item === 'string') {\r\n            return { src: item, title: item }\r\n          }\r\n          return item\r\n        })\r\n      }\r\n      return []\r\n    }, [playlist])\r\n\r\n    // 播放状态\r\n    const [playing, setPlaying] = React.useState(false)\r\n    const [currentIndex, setCurrentIndex] = React.useState(initialIndex)\r\n    const [volume, setVolume] = React.useState(initialVolume)\r\n    const [muted, setMuted] = React.useState(false)\r\n    const [progress, setProgress] = React.useState(0)\r\n    const [duration, setDuration] = React.useState(0)\r\n    const [currentTime, setCurrentTime] = React.useState(0)\r\n\r\n    // 当前音频\r\n    const currentAudio = audioList[currentIndex] || null\r\n\r\n    // 播放/暂停\r\n    const togglePlay = () => {\r\n      if (!audioRef.current) return\r\n\r\n      if (playing) {\r\n        audioRef.current.pause()\r\n      } else {\r\n        audioRef.current.play().catch((error) => {\r\n          console.warn('播放失败:', error)\r\n        })\r\n      }\r\n    }\r\n\r\n    // 上一首\r\n    const playPrevious = () => {\r\n      if (audioList.length === 0) return\r\n\r\n      const newIndex = currentIndex === 0 ? audioList.length - 1 : currentIndex - 1\r\n      setCurrentIndex(newIndex)\r\n      setPlaying(true)\r\n    }\r\n\r\n    // 下一首\r\n    const playNext = () => {\r\n      if (audioList.length === 0) return\r\n\r\n      let newIndex: number\r\n\r\n      if (loopAll) {\r\n        newIndex = currentIndex === audioList.length - 1 ? 0 : currentIndex + 1\r\n      } else {\r\n        if (currentIndex === audioList.length - 1) {\r\n          setPlaying(false)\r\n          return\r\n        }\r\n        newIndex = currentIndex + 1\r\n      }\r\n\r\n      setCurrentIndex(newIndex)\r\n      setPlaying(true)\r\n    }\r\n\r\n    // 静音切换\r\n    const toggleMute = () => {\r\n      setMuted(!muted)\r\n    }\r\n\r\n    // 音量变化\r\n    const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {\r\n      const newVolume = parseFloat(e.target.value)\r\n      setVolume(newVolume)\r\n      setMuted(newVolume === 0)\r\n    }\r\n\r\n    // 进度条拖动\r\n    const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {\r\n      if (!audioRef.current) return\r\n\r\n      const newProgress = parseFloat(e.target.value)\r\n      audioRef.current.currentTime = (newProgress / 100) * duration\r\n    }\r\n\r\n    // 跳转到指定音轨\r\n    const playTrack = (index: number) => {\r\n      if (index < 0 || index >= audioList.length) return\r\n      setCurrentIndex(index)\r\n      setPlaying(true)\r\n      setShowPlaylistPanel(false)\r\n    }\r\n\r\n    // 格式化时间\r\n    const formatTime = (seconds: number) => {\r\n      const mins = Math.floor(seconds / 60)\r\n      const secs = Math.floor(seconds % 60)\r\n      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`\r\n    }\r\n\r\n    // 点击外部关闭播放列表\r\n    React.useEffect(() => {\r\n      const handleClickOutside = (event: MouseEvent) => {\r\n        if (showPlaylistPanel &&\r\n            playlistButtonRef.current &&\r\n            !playlistButtonRef.current.contains(event.target as Node) &&\r\n            !(event.target as HTMLElement).closest('.player-list-panel')) {\r\n          setShowPlaylistPanel(false)\r\n        }\r\n      }\r\n\r\n      document.addEventListener('mousedown', handleClickOutside)\r\n      return () => {\r\n        document.removeEventListener('mousedown', handleClickOutside)\r\n      }\r\n    }, [showPlaylistPanel])\r\n\r\n    // 自动播放\r\n    React.useEffect(() => {\r\n      if (autoplay && audioRef.current && audioList.length > 0) {\r\n        audioRef.current.play().catch((error) => {\r\n          console.warn('自动播放失败:', error)\r\n        })\r\n      }\r\n    }, [autoplay, audioList])\r\n\r\n    // 播放状态变化回调\r\n    React.useEffect(() => {\r\n      onPlayerStateChange?.(playing)\r\n    }, [playing, onPlayerStateChange])\r\n\r\n    // 音轨索引变化时自动播放\r\n    React.useEffect(() => {\r\n      if (audioRef.current && audioList.length > 0) {\r\n        audioRef.current.play().catch((error) => {\r\n          console.warn('播放失败:', error)\r\n        })\r\n      }\r\n    }, [currentIndex])\r\n\r\n    // 音轨变化回调\r\n    React.useEffect(() => {\r\n      if (currentAudio) {\r\n        onTrackChange?.(currentIndex, currentAudio)\r\n      }\r\n    }, [currentIndex, currentAudio, onTrackChange])\r\n\r\n    // 音量变化回调\r\n    React.useEffect(() => {\r\n      onVolumeChange?.(volume)\r\n    }, [volume, onVolumeChange])\r\n\r\n    // 设置音频音量\r\n    React.useEffect(() => {\r\n      if (audioRef.current) {\r\n        audioRef.current.volume = muted ? 0 : volume\r\n      }\r\n    }, [volume, muted])\r\n\r\n    // 音频事件处理\r\n    React.useEffect(() => {\r\n      const audio = audioRef.current\r\n      if (!audio) return\r\n\r\n      const handlePlay = () => setPlaying(true)\r\n      const handlePause = () => setPlaying(false)\r\n      const handleTimeUpdate = () => {\r\n        const current = audio.currentTime\r\n        const dur = audio.duration\r\n        setCurrentTime(current)\r\n        if (dur > 0) {\r\n          const prog = (current / dur) * 100\r\n          setProgress(prog)\r\n          onProgress?.({\r\n            played: prog / 100,\r\n            playedSeconds: current,\r\n            loadedSeconds: dur,\r\n          })\r\n        }\r\n      }\r\n      const handleLoadedMetadata = () => {\r\n        setDuration(audio.duration)\r\n      }\r\n      const handleEnded = () => {\r\n        if (loop) {\r\n          audio.currentTime = 0\r\n          audio.play()\r\n        } else if (autoNext) {\r\n          playNext()\r\n        } else {\r\n          setPlaying(false)\r\n        }\r\n      }\r\n\r\n      audio.addEventListener('play', handlePlay)\r\n      audio.addEventListener('pause', handlePause)\r\n      audio.addEventListener('timeupdate', handleTimeUpdate)\r\n      audio.addEventListener('loadedmetadata', handleLoadedMetadata)\r\n      audio.addEventListener('ended', handleEnded)\r\n\r\n      return () => {\r\n        audio.removeEventListener('play', handlePlay)\r\n        audio.removeEventListener('pause', handlePause)\r\n        audio.removeEventListener('timeupdate', handleTimeUpdate)\r\n        audio.removeEventListener('loadedmetadata', handleLoadedMetadata)\r\n        audio.removeEventListener('ended', handleEnded)\r\n      }\r\n    }, [loop, autoNext, onProgress])\r\n\r\n    // 容器样式\r\n    const containerStyle = React.useMemo(() => {\r\n      const style: React.CSSProperties = {\r\n        display: 'flex',\r\n        alignItems: 'center',\r\n        gap: '8px',\r\n      }\r\n\r\n      if (width !== undefined) {\r\n        style.width = typeof width === 'number' ? `${width}px` : width\r\n      }\r\n      if (height !== undefined) {\r\n        style.height = typeof height === 'number' ? `${height}px` : height\r\n      }\r\n\r\n      return style\r\n    }, [width, height])\r\n\r\n    return (\r\n      <div\r\n        ref={ref}\r\n        className={cn(\r\n          \"flex items-center gap-2 p-2 bg-white border border-slate-200 rounded-lg transition-colors duration-200 hover:border-slate-300 relative\",\r\n          className\r\n        )}\r\n        style={containerStyle}\r\n        {...props}\r\n      >\r\n        <audio\r\n          ref={audioRef}\r\n          src={currentAudio?.src}\r\n          loop={loop}\r\n        />\r\n\r\n        {/* 播放列表 */}\r\n        {showPlaylist && audioList.length > 1 && (\r\n          <div className=\"relative\">\r\n            <button\r\n              ref={playlistButtonRef}\r\n              className={cn(\r\n                \"inline-flex items-center justify-center w-8 h-8 p-0 border-0 bg-transparent rounded-md cursor-pointer transition-all duration-200\",\r\n                showPlaylistPanel\r\n                  ? \"text-blue-500 bg-blue-50\"\r\n                  : \"text-slate-500 hover:bg-slate-100 hover:text-slate-700\"\r\n              )}\r\n              onClick={() => setShowPlaylistPanel(!showPlaylistPanel)}\r\n              title=\"播放列表\"\r\n            >\r\n              <Settings size={16} />\r\n            </button>\r\n            {showPlaylistPanel && (\r\n              <div className=\"player-list-panel\">\r\n                <PlayList\r\n                  playlist={audioList}\r\n                  currentIndex={currentIndex}\r\n                  isPlaying={playing}\r\n                  onPlayTrack={playTrack}\r\n                  onClose={() => setShowPlaylistPanel(false)}\r\n                />\r\n              </div>\r\n            )}\r\n          </div>\r\n        )}\r\n\r\n        {/* 上一首 */}\r\n        {audioList.length > 1 && showControls && (\r\n          <button\r\n            className=\"inline-flex items-center justify-center w-8 h-8 p-0 border-0 bg-transparent rounded-md cursor-pointer text-slate-500 hover:bg-slate-100 hover:text-slate-700 active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2\"\r\n            onClick={playPrevious}\r\n            title=\"上一首\"\r\n          >\r\n            <SkipBack size={16} />\r\n          </button>\r\n        )}\r\n\r\n        {/* 播放/暂停 */}\r\n        {showControls && (\r\n          <button\r\n            className={cn(\r\n              \"inline-flex items-center justify-center w-10 h-10 p-0 border-0 rounded-md cursor-pointer bg-blue-500 text-white hover:bg-blue-600 hover:scale-105 active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2\",\r\n              \"hover:text-white\"\r\n            )}\r\n            onClick={togglePlay}\r\n            title={playing ? \"暂停\" : \"播放\"}\r\n          >\r\n            {playing ? <Pause size={18} /> : <Play size={18} />}\r\n          </button>\r\n        )}\r\n\r\n        {/* 下一首 */}\r\n        {audioList.length > 1 && showControls && (\r\n          <button\r\n            className=\"inline-flex items-center justify-center w-8 h-8 p-0 border-0 bg-transparent rounded-md cursor-pointer text-slate-500 hover:bg-slate-100 hover:text-slate-700 active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2\"\r\n            onClick={playNext}\r\n            title=\"下一首\"\r\n          >\r\n            <SkipForward size={16} />\r\n          </button>\r\n        )}\r\n\r\n        {/* 进度条 */}\r\n        {showProgress && (\r\n          <div className=\"flex items-center gap-2 flex-1 min-w-0\">\r\n            <span className=\"min-w-10 text-center text-xs text-slate-500 tabular-nums\">{formatTime(currentTime)}</span>\r\n            <input\r\n              ref={progressBarRef}\r\n              type=\"range\"\r\n              min=\"0\"\r\n              max=\"100\"\r\n              value={progress}\r\n              onChange={handleProgressChange}\r\n              className=\"flex-1 h-1.5 appearance-none bg-slate-200 rounded-md outline-none cursor-pointer\"\r\n              style={{\r\n                background: `linear-gradient(to right, #3b82f6 ${progress}%, #e5e7eb ${progress}%)`\r\n              }}\r\n            />\r\n            <span className=\"min-w-10 text-center text-xs text-slate-500 tabular-nums\">{formatTime(duration)}</span>\r\n          </div>\r\n        )}\r\n\r\n        {/* 音量控制 */}\r\n        {showVolume && (\r\n          <div className=\"flex items-center gap-1.5\">\r\n            <button\r\n              className=\"inline-flex items-center justify-center w-8 h-8 p-0 border-0 bg-transparent rounded-md cursor-pointer text-slate-500 hover:bg-slate-100 hover:text-slate-700 active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2\"\r\n              onClick={toggleMute}\r\n              title={muted ? \"取消静音\" : \"静音\"}\r\n            >\r\n              {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}\r\n            </button>\r\n            <input\r\n              type=\"range\"\r\n              min=\"0\"\r\n              max=\"1\"\r\n              step=\"0.01\"\r\n              value={muted ? 0 : volume}\r\n              onChange={handleVolumeChange}\r\n              className=\"w-20 h-1 appearance-none bg-slate-200 rounded-md outline-none cursor-pointer\"\r\n              style={{\r\n                background: `linear-gradient(to right, #3b82f6 ${(muted ? 0 : volume) * 100}%, #e5e7eb ${(muted ? 0 : volume) * 100}%)`\r\n              }}\r\n            />\r\n          </div>\r\n        )}\r\n\r\n        {/* 循环模式 */}\r\n        {(loop || loopAll) && (\r\n          <button\r\n            className=\"inline-flex items-center justify-center w-8 h-8 p-0 border-0 bg-transparent rounded-md cursor-pointer text-blue-500 bg-blue-50 hover:bg-blue-100 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2\"\r\n            title={loop ? \"单曲循环\" : \"列表循环\"}\r\n          >\r\n            <RotateCcw size={16} />\r\n          </button>\r\n        )}\r\n      </div>\r\n    )\r\n  }\r\n)\r\n\r\nPlayer.displayName = \"Player\"\r\n\r\nexport { Player }\r\n"
         }
       ]
     },
@@ -525,9 +223,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-cylinder/model-3d-geometry-cylinder.tsx",
+          "path": "blocks/3d/model-3d-geometry-cylinder/model-3d-geometry-cylinder.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Cylinder } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nexport interface Model3dGeometryCylinderProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 尺寸参数 [顶部半径, 底部半径, 高度, 径向分段] */\r\n  args?: [number, number, number, number]\r\n}\r\n\r\nconst Model3dGeometryCylinder: React.FC<Model3dGeometryCylinderProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  args = [100, 100, 100, 32],\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n\r\n  const meshRef = React.useRef<THREE.Mesh>(null)\r\n  const materialRef = React.useRef<THREE.MeshPhysicalMaterial>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (meshRef.current && materialRef.current) {\r\n      // 原逻辑：将 mesh 和 material 存储到全局对象\r\n      if (!window.model3d) {\r\n        window.model3d = {}\r\n      }\r\n      if (!window.model3d_material) {\r\n        window.model3d_material = {}\r\n      }\r\n      window.model3d[name] = meshRef.current\r\n      window.model3d_material[name] = [materialRef.current]\r\n    }\r\n  }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    receiveShadow: true,\r\n    castShadow: true,\r\n    onClick: (e: any) => {\r\n      e.stopPropagation()\r\n      onClick?.()\r\n      if (editMode) {\r\n        // 编辑模式下的逻辑\r\n        console.log(\"Cylinder clicked in edit mode\", name)\r\n      }\r\n    },\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    alphaTest: opacity,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n  }\r\n\r\n  // 简化：未实现 useMaterials 逻辑\r\n  // 可以在此处根据 materials 配置应用材质\r\n\r\n  return (\r\n    <Cylinder ref={meshRef} name={name} args={args} {...gProps}>\r\n      <meshPhysicalMaterial ref={materialRef} {...mProps} />\r\n    </Cylinder>\r\n  )\r\n}\r\n\r\nModel3dGeometryCylinder.displayName = \"Model3dGeometryCylinder\"\r\n\r\nexport { Model3dGeometryCylinder }"
         }
       ]
     },
@@ -541,9 +239,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-card/model-3d-card.tsx",
+          "path": "blocks/3d/model-3d-card/model-3d-card.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Html } from \"@react-three/drei\"\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nexport interface Model3dCardProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 是否作为精灵图 */\r\n  isSprite?: boolean\r\n  /** 是否固定 */\r\n  isFixd?: boolean\r\n  /** 卡片配置 */\r\n  cardConfig?: {\r\n    cardWidth?: string\r\n    lineWidth?: string\r\n    lineHeight?: string\r\n  }\r\n  /** 数据配置 */\r\n  dataConfig?: {\r\n    lineCount?: number\r\n    dataList?: Array<{\r\n      label: string\r\n      value: any\r\n    }>\r\n  }\r\n  /** 单元格键 */\r\n  cellKey?: string\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 类名 */\r\n  className?: string\r\n}\r\n\r\nconst Model3dCard: React.FC<Model3dCardProps> = ({\r\n  meshConfig = {},\r\n  isSprite = false,\r\n  isFixd = false,\r\n  cardConfig = {},\r\n  dataConfig = {},\r\n  cellKey = \"\",\r\n  editMode = false,\r\n  onClick,\r\n  className,\r\n}) => {\r\n  const { position, scale, rotation } = meshConfig\r\n  const { cardWidth = \"200px\", lineWidth = \"100px\", lineHeight = \"100px\" } = cardConfig\r\n  const { lineCount = 1, dataList = [] } = dataConfig\r\n\r\n  const [isVisible, setIsVisible] = React.useState(false)\r\n\r\n  React.useEffect(() => {\r\n    const timer = setTimeout(() => {\r\n      setIsVisible(true)\r\n    }, 300)\r\n    return () => clearTimeout(timer)\r\n  }, [])\r\n\r\n  const getValue = (value: any) => {\r\n    if (typeof value === \"object\") {\r\n      return \"\"\r\n    } else {\r\n      return value\r\n    }\r\n  }\r\n\r\n  const style = {\r\n    wrap: {\r\n      width: lineWidth ? `calc(${lineWidth} * 2)` : 0,\r\n      height: lineHeight ? `calc(${lineHeight} * 2)` : 0,\r\n    },\r\n    content: {\r\n      width: \"100%\",\r\n      height: \"50%\",\r\n    },\r\n    cardWrap: {\r\n      position: \"absolute\" as const,\r\n      left: `calc(-${cardWidth} / 2)`,\r\n      top: `calc(-24px * ${Math.round(dataList.length / lineCount)} - 20px)`,\r\n      pointerEvents: \"auto\" as const,\r\n    },\r\n    card: {\r\n      width: cardWidth,\r\n    },\r\n    cardItem: {\r\n      width: `calc(100% / ${lineCount})`,\r\n    },\r\n    line: {\r\n      width: lineWidth || 0,\r\n      height: lineHeight || 0,\r\n      overflow: \"hidden\" as const,\r\n    },\r\n    lineTop: {\r\n      width: \"100%\",\r\n      height: \"50%\",\r\n      borderLeft: \"1px solid #FFFFFF\",\r\n      borderBottom: \"1px solid #FFFFFF\",\r\n    },\r\n    lineBottom: {\r\n      width: \"100%\",\r\n      height: \"50%\",\r\n      borderRight: \"1px solid #FFFFFF\",\r\n    },\r\n  }\r\n\r\n  const handleClick = () => {\r\n    onClick?.()\r\n    if (editMode) {\r\n      // 编辑模式下的逻辑\r\n      console.log(\"Card clicked in edit mode\", cellKey)\r\n    }\r\n  }\r\n\r\n  const htmlContent = isVisible ? (\r\n    <div className={cn(\"html_3d\", className)}>\r\n      <div className=\"card_3d\" style={style.wrap} onClick={handleClick}>\r\n        <div style={style.content}>\r\n          <div style={style.cardWrap}>\r\n            <div className=\"card_body\" style={style.card}>\r\n              {dataList.map((item, index) => (\r\n                <div key={index} className=\"card_3d_item\" style={style.cardItem}>\r\n                  <span>{item.label}</span>&ensp;&ensp;\r\n                  <span>{getValue(item.value)}</span>\r\n                </div>\r\n              ))}\r\n            </div>\r\n          </div>\r\n          <div style={style.line}>\r\n            <div style={style.lineTop}></div>\r\n            <div style={style.lineBottom}></div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  ) : null\r\n\r\n  return (\r\n    <Html\r\n      transform={!isFixd}\r\n      sprite={!!isSprite}\r\n      distanceFactor={200}\r\n      scale={[scale?.x || 1, scale?.y || 1, scale?.z || 1]}\r\n      position={[position?.x || 0, position?.y || 0, position?.z || 0]}\r\n      rotation={[\r\n        THREE.MathUtils.degToRad(rotation?.x || 0),\r\n        THREE.MathUtils.degToRad(rotation?.y || 0),\r\n        THREE.MathUtils.degToRad(rotation?.z || 0),\r\n      ]}\r\n    >\r\n      {htmlContent}\r\n    </Html>\r\n  )\r\n}\r\n\r\nModel3dCard.displayName = \"Model3dCard\"\r\n\r\nexport { Model3dCard }"
         }
       ]
     },
@@ -557,9 +255,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-sphere/model-3d-geometry-sphere.tsx",
+          "path": "blocks/3d/model-3d-geometry-sphere/model-3d-geometry-sphere.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Sphere } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nexport interface Model3dGeometrySphereProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 尺寸参数 [半径, 宽度分段, 高度分段] */\r\n  args?: [number, number, number]\r\n}\r\n\r\nconst Model3dGeometrySphere: React.FC<Model3dGeometrySphereProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  args = [100, 32, 32],\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n\r\n  const meshRef = React.useRef<THREE.Mesh>(null)\r\n  const materialRef = React.useRef<THREE.MeshPhysicalMaterial>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (meshRef.current && materialRef.current) {\r\n      // 原逻辑：将 mesh 和 material 存储到全局对象\r\n      if (!window.model3d) {\r\n        window.model3d = {}\r\n      }\r\n      if (!window.model3d_material) {\r\n        window.model3d_material = {}\r\n      }\r\n      window.model3d[name] = meshRef.current\r\n      window.model3d_material[name] = [materialRef.current]\r\n    }\r\n  }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    receiveShadow: true,\r\n    castShadow: true,\r\n    onClick: (e: any) => {\r\n      e.stopPropagation()\r\n      onClick?.()\r\n      if (editMode) {\r\n        // 编辑模式下的逻辑\r\n        console.log(\"Sphere clicked in edit mode\", name)\r\n      }\r\n    },\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    alphaTest: opacity,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n  }\r\n\r\n  // 简化：未实现 useMaterials 逻辑\r\n  // 可以在此处根据 materials 配置应用材质\r\n\r\n  return (\r\n    <Sphere ref={meshRef} name={name} args={args} {...gProps}>\r\n      <meshPhysicalMaterial ref={materialRef} {...mProps} />\r\n    </Sphere>\r\n  )\r\n}\r\n\r\nModel3dGeometrySphere.displayName = \"Model3dGeometrySphere\"\r\n\r\nexport { Model3dGeometrySphere }"
         }
       ]
     },
@@ -573,9 +271,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-mesh/model-3d-mesh.tsx",
+          "path": "blocks/3d/model-3d-mesh/model-3d-mesh.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { useGLTF } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nexport interface Model3dMeshProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 双击回调 */\r\n  onDblClick?: () => void\r\n  /** 鼠标移入回调 */\r\n  onMouseEnter?: () => void\r\n  /** 鼠标移出回调 */\r\n  onMouseLeave?: () => void\r\n  /** 模型源文件 */\r\n  src?: {\r\n    fileList: Array<{\r\n      url: string\r\n      name?: string\r\n      type?: string\r\n    }>\r\n  }\r\n  /** 自适应缩放 */\r\n  adaptive?: boolean\r\n  /** 高亮配置 */\r\n  highlightConfig?: {\r\n    enable?: boolean\r\n    color?: string\r\n  }\r\n  /** 边缘线框配置 */\r\n  edgeConfig?: {\r\n    enable?: boolean\r\n    color?: string\r\n  }\r\n  /** 动画配置 */\r\n  animationConfig?: any\r\n  /** 自定义动画配置 */\r\n  customAnimationConfig?: any\r\n  /** 点云热力图颜色 */\r\n  pointConfig?: {\r\n    hotColor?: boolean\r\n  }\r\n  /** 自动刷新间隔（秒） */\r\n  update?: number\r\n  /** 合并参数函数（占位） */\r\n  mergeParams?: (name: string, path: string, value: any) => void\r\n  /** 触发事件函数（占位） */\r\n  doEvents?: (event: string) => void\r\n  /** 切换选中单元函数（占位） */\r\n  changeSelectCell?: (name: string) => void\r\n}\r\n\r\n// 获取文件后缀\r\nconst getSuffix = (url: string): string | null => {\r\n  if (!url) return null\r\n  const arr = url.split('.')\r\n  return arr[arr.length - 1].toLowerCase()\r\n}\r\n\r\n// 主组件\r\nconst Model3dMesh: React.FC<Model3dMeshProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  onDblClick,\r\n  onMouseEnter,\r\n  onMouseLeave,\r\n  src,\r\n  adaptive = false,\r\n  highlightConfig = {},\r\n  edgeConfig = {},\r\n  pointConfig = {},\r\n  update,\r\n  mergeParams,\r\n  doEvents,\r\n  changeSelectCell,\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n  const { enable: highlightEnable, color: highlightColor = \"red\" } = highlightConfig\r\n  const { enable: edgeEnable, color: edgeColor = \"#FFFFFF\" } = edgeConfig\r\n  const { hotColor: pointHotColor } = pointConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (mergeParams) {\r\n    // 占位\r\n  }\r\n  if (doEvents) {\r\n    // 占位\r\n  }\r\n  if (changeSelectCell) {\r\n    // 占位\r\n  }\r\n  if (materials) {\r\n    // 占位\r\n  }\r\n  if (opacity !== undefined) {\r\n    // 占位\r\n  }\r\n  if (color) {\r\n    // 占位\r\n  }\r\n\r\n  const [refreshKey, setRefreshKey] = React.useState(0)\r\n  const groupRef = React.useRef<THREE.Group>(null)\r\n\r\n  // 自动刷新逻辑\r\n  React.useEffect(() => {\r\n    if (!update || update <= 0) return\r\n    const interval = setInterval(() => {\r\n      setRefreshKey(prev => prev + 1)\r\n    }, update * 1000)\r\n    return () => clearInterval(interval)\r\n  }, [update])\r\n\r\n  // 如果没有源文件，返回 null\r\n  if (!src?.fileList?.length) {\r\n    console.warn(\"Model3dMesh: No fileList provided\")\r\n    return null\r\n  }\r\n\r\n  // 选择第一个支持的文件（优先 gltf/glb）\r\n  const supportedFormats = ['glb', 'gltf', 'obj', 'fbx', 'pcd']\r\n  let selectedFile = src.fileList.find(file => {\r\n    const suffix = getSuffix(file.url)\r\n    return suffix && supportedFormats.includes(suffix)\r\n  })\r\n  if (!selectedFile) {\r\n    selectedFile = src.fileList[0]\r\n  }\r\n\r\n  const suffix = getSuffix(selectedFile.url)\r\n  const refreshUrl = refreshKey ? `${selectedFile.url}?refreshKey=${refreshKey}` : selectedFile.url\r\n\r\n  let model: THREE.Object3D | null = null\r\n  let animations: THREE.AnimationClip[] = []\r\n\r\n  // 目前仅支持 GLTF/GLB 格式（使用 useGLTF）\r\n  if (suffix === 'glb' || suffix === 'gltf') {\r\n    try {\r\n      const gltf = useGLTF(refreshUrl)\r\n      model = gltf.scene\r\n      animations = gltf.animations || []\r\n    } catch (error) {\r\n      console.error(\"Failed to load GLTF model:\", error)\r\n      return null\r\n    }\r\n  } else {\r\n    // 其他格式暂不支持，显示占位符\r\n    console.warn(`Model3dMesh: Format ${suffix} not yet supported, showing placeholder`)\r\n    model = new THREE.Group()\r\n    const box = new THREE.BoxGeometry(10, 10, 10)\r\n    const mat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })\r\n    const mesh = new THREE.Mesh(box, mat)\r\n    model.add(mesh)\r\n  }\r\n\r\n  // 将模型和材质存储到全局对象（兼容原逻辑）\r\n  React.useEffect(() => {\r\n    if (model && groupRef.current) {\r\n      if (!window.model3d) window.model3d = {}\r\n      if (!window.model3d_material) window.model3d_material = {}\r\n      // 查找第一个 Mesh\r\n      let firstMesh: THREE.Mesh | null = null\r\n      model.traverse((child) => {\r\n        if (child instanceof THREE.Mesh && !firstMesh) {\r\n          firstMesh = child\r\n        }\r\n      })\r\n      if (firstMesh) {\r\n        window.model3d[name] = firstMesh\r\n      }\r\n      // 收集材质\r\n      const materialList: THREE.Material[] = []\r\n      model.traverse((child) => {\r\n        if (child instanceof THREE.Mesh && child.material) {\r\n          if (Array.isArray(child.material)) {\r\n            materialList.push(...child.material)\r\n          } else {\r\n            materialList.push(child.material)\r\n          }\r\n        }\r\n      })\r\n      window.model3d_material[name] = materialList\r\n    }\r\n  }, [model, name])\r\n\r\n  // 自适应缩放逻辑（简化）\r\n  React.useEffect(() => {\r\n    if (!adaptive || !model) return\r\n    const box = new THREE.Box3().setFromObject(model)\r\n    const size = box.getSize(new THREE.Vector3())\r\n    const maxSide = Math.max(size.x, size.y, size.z)\r\n    const scaleFactor = 300 / maxSide\r\n    // 这里可以调用 mergeParams 更新 meshConfig，但暂时只记录\r\n    console.log(`Adaptive scaling factor for ${name}: ${scaleFactor}`)\r\n  }, [model, adaptive, name])\r\n\r\n  // 高亮逻辑（简化）\r\n  React.useEffect(() => {\r\n    if (!model || !highlightEnable) return\r\n    const highlightColorObj = new THREE.Color(highlightColor)\r\n    model.traverse((child) => {\r\n      if (child instanceof THREE.Mesh && child.material) {\r\n        const materials = Array.isArray(child.material) ? child.material : [child.material]\r\n        materials.forEach((mat) => {\r\n          mat.color = highlightColorObj\r\n        })\r\n      }\r\n    })\r\n  }, [model, highlightEnable, highlightColor])\r\n\r\n  // 边缘线框逻辑（简化）\r\n  const edgesGeometry = React.useMemo(() => {\r\n    if (!edgeEnable || !model) return null\r\n    const edges: THREE.LineSegments[] = []\r\n    model.traverse((child) => {\r\n      if (child instanceof THREE.Mesh && child.geometry) {\r\n        const edgesGeo = new THREE.EdgesGeometry(child.geometry)\r\n        const edgesMat = new THREE.LineBasicMaterial({ color: edgeColor })\r\n        const line = new THREE.LineSegments(edgesGeo, edgesMat)\r\n        line.position.copy(child.position)\r\n        line.rotation.copy(child.rotation)\r\n        line.scale.copy(child.scale)\r\n        edges.push(line)\r\n      }\r\n    })\r\n    return edges\r\n  }, [model, edgeEnable, edgeColor])\r\n\r\n  // 点云热力图颜色逻辑（简化）\r\n  React.useEffect(() => {\r\n    if (!model || pointHotColor === undefined) return\r\n    model.traverse((child) => {\r\n      if (child instanceof THREE.Points && child.geometry) {\r\n        const geometry = child.geometry\r\n        const positions = geometry.attributes.position.array\r\n        const colors = []\r\n        for (let i = 0; i < positions.length; i += 3) {\r\n          const y = positions[i + 2] // 假设 Y 轴是高度\r\n          const color = new THREE.Color()\r\n          color.setHSL((y + 1) / 2, 1, 0.5) // 简单映射\r\n          colors.push(color.r, color.g, color.b)\r\n        }\r\n        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))\r\n        if (child.material instanceof THREE.PointsMaterial) {\r\n          child.material.vertexColors = true\r\n        }\r\n      }\r\n    })\r\n  }, [model, pointHotColor])\r\n\r\n  // 事件处理\r\n  const handleClick = (e: any) => {\r\n    e.stopPropagation()\r\n    onClick?.()\r\n    if (editMode && changeSelectCell) {\r\n      changeSelectCell(name)\r\n    }\r\n    if (!editMode && doEvents) {\r\n      doEvents('click1')\r\n    }\r\n  }\r\n\r\n  const handleDoubleClick = (e: any) => {\r\n    e.stopPropagation()\r\n    onDblClick?.()\r\n    if (!editMode && doEvents) {\r\n      doEvents('dbclick1')\r\n    }\r\n  }\r\n\r\n  const handlePointerEnter = (e: any) => {\r\n    e.stopPropagation()\r\n    onMouseEnter?.()\r\n    if (!editMode && doEvents) {\r\n      doEvents('mouseover1')\r\n    }\r\n  }\r\n\r\n  const handlePointerLeave = (e: any) => {\r\n    e.stopPropagation()\r\n    onMouseLeave?.()\r\n    if (!editMode && doEvents) {\r\n      doEvents('mouseleave1')\r\n    }\r\n  }\r\n\r\n  // 组合属性\r\n  const groupProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    onClick: handleClick,\r\n    onDoubleClick: handleDoubleClick,\r\n    onPointerEnter: handlePointerEnter,\r\n    onPointerLeave: handlePointerLeave,\r\n    castShadow: true,\r\n    receiveShadow: true,\r\n  }\r\n\r\n  return (\r\n    <group ref={groupRef} name={name} {...groupProps}>\r\n      <primitive object={model} />\r\n      {edgesGeometry &&\r\n        edgesGeometry.map((edge, idx) => (\r\n          <primitive key={idx} object={edge} />\r\n        ))}\r\n    </group>\r\n  )\r\n}\r\n\r\nModel3dMesh.displayName = \"Model3dMesh\"\r\n\r\nexport { Model3dMesh }"
         }
       ]
     },
@@ -589,9 +287,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-points/model-3d-points.tsx",
+          "path": "blocks/3d/model-3d-points/model-3d-points.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Points, Point } from \"@react-three/drei\"\r\n\r\nexport interface Model3dPointsProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 粒子数量 */\r\n  count?: number\r\n}\r\n\r\nconst Model3dPoints: React.FC<Model3dPointsProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  count = 1000,\r\n}) => {\r\n  const { visible, position, scale, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (editMode) {\r\n    // 编辑模式逻辑占位\r\n  }\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n  if (onClick) {\r\n    // 点击事件占位\r\n  }\r\n\r\n  const pointsRef = React.useRef<THREE.Points>(null)\r\n  const materialRef = React.useRef<THREE.PointsMaterial>(null)\r\n\r\n  // 注释掉全局存储逻辑，因为迁移后可能不需要\r\n  // React.useEffect(() => {\r\n  //   if (pointsRef.current && materialRef.current) {\r\n  //     if (!window.model3d) {\r\n  //       window.model3d = {}\r\n  //     }\r\n  //     if (!window.model3d_material) {\r\n  //       window.model3d_material = {}\r\n  //     }\r\n  //     window.model3d[name] = pointsRef.current\r\n  //     window.model3d_material[name] = [materialRef.current]\r\n  //   }\r\n  // }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n    vertexColors: true,\r\n  }\r\n\r\n  // 生成随机点\r\n  const pointsList = React.useMemo(() => {\r\n    return Array.from({ length: count }, (_, i) => [\r\n      Math.random() * 100 - 50,\r\n      Math.random() * 100 - 50,\r\n      Math.random() * 100 - 50,\r\n    ])\r\n  }, [count])\r\n\r\n  return (\r\n    <Points ref={pointsRef} {...gProps}>\r\n      <pointsMaterial ref={materialRef} {...mProps} />\r\n      {pointsList.map((p, idx) => (\r\n        <Point key={idx} position={p as [number, number, number]} color=\"red\" />\r\n      ))}\r\n    </Points>\r\n  )\r\n}\r\n\r\nModel3dPoints.displayName = \"Model3dPoints\"\r\n\r\nexport { Model3dPoints }"
         }
       ]
     },
@@ -605,7 +303,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-layout-3d/model-3d-layout-3d.tsx",
+          "path": "src/registry/blocks/3d/model-3d-layout-3d/model-3d-layout-3d.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -621,9 +319,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-plane/model-3d-geometry-plane.tsx",
+          "path": "blocks/3d/model-3d-geometry-plane/model-3d-geometry-plane.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Plane } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nexport interface Model3dGeometryPlaneProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 尺寸参数 [宽度, 高度, 宽度分段, 高度分段] */\r\n  args?: [number, number, number, number]\r\n}\r\n\r\nconst Model3dGeometryPlane: React.FC<Model3dGeometryPlaneProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  args = [100, 100, 1, 1],\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n\r\n  const meshRef = React.useRef<THREE.Mesh>(null)\r\n  const materialRef = React.useRef<THREE.MeshPhysicalMaterial>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (meshRef.current && materialRef.current) {\r\n      // 原逻辑：将 mesh 和 material 存储到全局对象\r\n      if (!window.model3d) {\r\n        window.model3d = {}\r\n      }\r\n      if (!window.model3d_material) {\r\n        window.model3d_material = {}\r\n      }\r\n      window.model3d[name] = meshRef.current\r\n      window.model3d_material[name] = [materialRef.current]\r\n    }\r\n  }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    receiveShadow: true,\r\n    castShadow: true,\r\n    onClick: (e: any) => {\r\n      e.stopPropagation()\r\n      onClick?.()\r\n      if (editMode) {\r\n        // 编辑模式下的逻辑\r\n        console.log(\"Plane clicked in edit mode\", name)\r\n      }\r\n    },\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    alphaTest: opacity,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n    side: THREE.DoubleSide,\r\n  }\r\n\r\n  // 简化：未实现 useMaterials 逻辑\r\n  // 可以在此处根据 materials 配置应用材质\r\n\r\n  return (\r\n    <Plane ref={meshRef} name={name} args={args} {...gProps}>\r\n      <meshPhysicalMaterial ref={materialRef} {...mProps} />\r\n    </Plane>\r\n  )\r\n}\r\n\r\nModel3dGeometryPlane.displayName = \"Model3dGeometryPlane\"\r\n\r\nexport { Model3dGeometryPlane }"
         }
       ]
     },
@@ -637,9 +335,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-cone/model-3d-geometry-cone.tsx",
+          "path": "blocks/3d/model-3d-geometry-cone/model-3d-geometry-cone.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Cone } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nexport interface Model3dGeometryConeProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 尺寸参数 [半径, 高度, 径向分段] */\r\n  args?: [number, number, number]\r\n}\r\n\r\nconst Model3dGeometryCone: React.FC<Model3dGeometryConeProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  args = [100, 100, 32],\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n\r\n  const meshRef = React.useRef<THREE.Mesh>(null)\r\n  const materialRef = React.useRef<THREE.MeshPhysicalMaterial>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (meshRef.current && materialRef.current) {\r\n      // 原逻辑：将 mesh 和 material 存储到全局对象\r\n      if (!window.model3d) {\r\n        window.model3d = {}\r\n      }\r\n      if (!window.model3d_material) {\r\n        window.model3d_material = {}\r\n      }\r\n      window.model3d[name] = meshRef.current\r\n      window.model3d_material[name] = [materialRef.current]\r\n    }\r\n  }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    receiveShadow: true,\r\n    castShadow: true,\r\n    onClick: (e: any) => {\r\n      e.stopPropagation()\r\n      onClick?.()\r\n      if (editMode) {\r\n        // 编辑模式下的逻辑\r\n        console.log(\"Cone clicked in edit mode\", name)\r\n      }\r\n    },\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    alphaTest: opacity,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n  }\r\n\r\n  // 简化：未实现 useMaterials 逻辑\r\n  // 可以在此处根据 materials 配置应用材质\r\n\r\n  return (\r\n    <Cone ref={meshRef} name={name} args={args} {...gProps}>\r\n      <meshPhysicalMaterial ref={materialRef} {...mProps} />\r\n    </Cone>\r\n  )\r\n}\r\n\r\nModel3dGeometryCone.displayName = \"Model3dGeometryCone\"\r\n\r\nexport { Model3dGeometryCone }"
         }
       ]
     },
@@ -653,9 +351,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-box/model-3d-geometry-box.tsx",
+          "path": "blocks/3d/model-3d-geometry-box/model-3d-geometry-box.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Box } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nexport interface Model3dGeometryBoxProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 尺寸参数 [宽度, 高度, 深度] */\r\n  args?: [number, number, number]\r\n}\r\n\r\nconst Model3dGeometryBox: React.FC<Model3dGeometryBoxProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  args = [100, 100, 100],\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n\r\n  const meshRef = React.useRef<THREE.Mesh>(null)\r\n  const materialRef = React.useRef<THREE.MeshPhysicalMaterial>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (meshRef.current && materialRef.current) {\r\n      // 原逻辑：将 mesh 和 material 存储到全局对象\r\n      if (!window.model3d) {\r\n        window.model3d = {}\r\n      }\r\n      if (!window.model3d_material) {\r\n        window.model3d_material = {}\r\n      }\r\n      window.model3d[name] = meshRef.current\r\n      window.model3d_material[name] = [materialRef.current]\r\n    }\r\n  }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    receiveShadow: true,\r\n    castShadow: true,\r\n    onClick: (e: any) => {\r\n      e.stopPropagation()\r\n      onClick?.()\r\n      if (editMode) {\r\n        // 编辑模式下的逻辑\r\n        console.log(\"Box clicked in edit mode\", name)\r\n      }\r\n    },\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    alphaTest: opacity,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n  }\r\n\r\n  // 简化：未实现 useMaterials 逻辑\r\n  // 可以在此处根据 materials 配置应用材质\r\n\r\n  return (\r\n    <Box ref={meshRef} name={name} args={args} {...gProps}>\r\n      <meshPhysicalMaterial ref={materialRef} {...mProps} />\r\n    </Box>\r\n  )\r\n}\r\n\r\nModel3dGeometryBox.displayName = \"Model3dGeometryBox\"\r\n\r\nexport { Model3dGeometryBox }"
         }
       ]
     },
@@ -669,9 +367,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-circle/model-3d-geometry-circle.tsx",
+          "path": "blocks/3d/model-3d-geometry-circle/model-3d-geometry-circle.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Circle } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nexport interface Model3dGeometryCircleProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 尺寸参数 [半径, 分段] */\r\n  args?: [number, number]\r\n}\r\n\r\nconst Model3dGeometryCircle: React.FC<Model3dGeometryCircleProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  args = [100, 32],\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n\r\n  const meshRef = React.useRef<THREE.Mesh>(null)\r\n  const materialRef = React.useRef<THREE.MeshPhysicalMaterial>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (meshRef.current && materialRef.current) {\r\n      // 原逻辑：将 mesh 和 material 存储到全局对象\r\n      if (!window.model3d) {\r\n        window.model3d = {}\r\n      }\r\n      if (!window.model3d_material) {\r\n        window.model3d_material = {}\r\n      }\r\n      window.model3d[name] = meshRef.current\r\n      window.model3d_material[name] = [materialRef.current]\r\n    }\r\n  }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    receiveShadow: true,\r\n    castShadow: true,\r\n    onClick: (e: any) => {\r\n      e.stopPropagation()\r\n      onClick?.()\r\n      if (editMode) {\r\n        // 编辑模式下的逻辑\r\n        console.log(\"Circle clicked in edit mode\", name)\r\n      }\r\n    },\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    alphaTest: opacity,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n    side: THREE.DoubleSide,\r\n  }\r\n\r\n  // 简化：未实现 useMaterials 逻辑\r\n  // 可以在此处根据 materials 配置应用材质\r\n\r\n  return (\r\n    <Circle ref={meshRef} name={name} args={args} {...gProps}>\r\n      <meshPhysicalMaterial ref={materialRef} {...mProps} />\r\n    </Circle>\r\n  )\r\n}\r\n\r\nModel3dGeometryCircle.displayName = \"Model3dGeometryCircle\"\r\n\r\nexport { Model3dGeometryCircle }"
         }
       ]
     },
@@ -685,9 +383,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d/model-3d.tsx",
+          "path": "blocks/3d/model-3d/model-3d.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport { Canvas, useThree } from \"@react-three/fiber\"\r\nimport * as THREE from \"three\"\r\nimport { OrbitControls, Environment, PerspectiveCamera, TransformControls, PointerLockControls, FlyControls, useProgress } from \"@react-three/drei\"\r\nimport { suspend } from 'suspend-react'\r\nimport { cn } from \"@/lib/utils\"\r\nimport { Suspense } from \"react\"\r\n\r\n// 默认配置，基于 ../3d/src/Space/initParam.js\r\nconst defaultModel3dProps = {\r\n  sceneConfig: {\r\n    fog: {\r\n      enable: false,\r\n      near: 1,\r\n      far: 10000,\r\n      color: '#FFFFFF'\r\n    },\r\n    ground: {\r\n      enable: true,\r\n      width: 1000,\r\n      height: 1000,\r\n      color: '#748FA5'\r\n    }\r\n  },\r\n  cameraConfig: {\r\n    fov: 45,\r\n    near: 1,\r\n    far: 10000,\r\n    position: { x: 0, y: 200, z: 500 }, // 修正 cameraPositon -> position\r\n    lookAt: { x: 0, y: 0, z: 0 }\r\n  },\r\n  controlConfig: {\r\n    controlType: 'orbit',\r\n    orbitConfig: {\r\n      enabled: true,\r\n      enableRotate: true,\r\n      rotateSpeed: 1,\r\n      maxPolarAngle: 3.14,\r\n      minPolarAngle: 0,\r\n      enableZoom: true,\r\n      zoomSpeed: 1,\r\n      minDistance: 0,\r\n      enablePan: true,\r\n      panSpeed: 1,\r\n      enableDamping: false,\r\n      dampingFactor: 0.05,\r\n      autoRotate: false,\r\n      autoRotateSpeed: 2\r\n    },\r\n    pointerLockConfig: {\r\n      enabled: true,\r\n      eyeHeight: 170,\r\n      moveSpeed: 1000,\r\n      fallSpeed: 100,\r\n      jumpHeight: 100\r\n    },\r\n    flyConfig: {\r\n      enabled: true\r\n    }\r\n  },\r\n  snapshotConfig: {\r\n    showBar: true\r\n  },\r\n  environmentConfig: {\r\n    type: 'sky'\r\n  },\r\n  renderConfig: {\r\n    outputEncoding: 'sRGBEncoding'\r\n  },\r\n  lightConfig: {\r\n    ambientIntensity: 1,\r\n    directionalIntensity: 1,\r\n    directionalPosition: [0, 300, 300]\r\n  },\r\n  helperConfig: {\r\n    gridConfig: {\r\n      enable: true,\r\n      size: 1000,\r\n      divisions: 20,\r\n      colorCenterLine: '#FFFFFF',\r\n      colorGrid: '#FFFFFF'\r\n    },\r\n    axesConfig: {\r\n      enable: true,\r\n      size: 500\r\n    }\r\n  },\r\n  loadingConfig: {},\r\n  script: '',\r\n  onFreeze: undefined\r\n}\r\n\r\nexport interface Model3dProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  /** 场景配置 */\r\n  sceneConfig?: any\r\n  /** 相机配置 */\r\n  cameraConfig?: any\r\n  /** 控制配置 */\r\n  controlConfig?: any\r\n  /** 环境配置 */\r\n  environmentConfig?: any\r\n  /** 光照配置 */\r\n  lightConfig?: any\r\n  /** 辅助器配置 */\r\n  helperConfig?: any\r\n  /** 子组件 */\r\n  children?: React.ReactNode\r\n}\r\n\r\n// 获取元素宽高比\r\nconst getAspect = (dom: HTMLElement | null) => {\r\n  if (!dom) return 1\r\n  const { offsetWidth, offsetHeight } = dom\r\n  const aspect = offsetWidth / offsetHeight || 1\r\n  return aspect\r\n}\r\n\r\n// 调整 Canvas 大小的组件\r\nconst ResizeCanvas = () => {\r\n  const { gl } = useThree()\r\n\r\n  React.useEffect(() => {\r\n    const wrap3dElement = document.querySelector('.model-3d-container')\r\n    if (!wrap3dElement) return\r\n\r\n    const resize = () => {\r\n      const computedStyle = window.getComputedStyle(wrap3dElement)\r\n      const transform = computedStyle.transform\r\n      const scaleMatch = transform?.match(/scale\\((.*?)\\)/)\r\n      const scale = scaleMatch ? parseFloat(scaleMatch[1]) : 1\r\n      const width = (wrap3dElement as HTMLElement).offsetWidth * scale\r\n      const height = (wrap3dElement as HTMLElement).offsetHeight * scale\r\n      gl.setSize(width, height)\r\n    }\r\n\r\n    resize()\r\n    const resizeObserver = new ResizeObserver(resize)\r\n    resizeObserver.observe(wrap3dElement)\r\n\r\n    return () => {\r\n      resizeObserver.disconnect()\r\n    }\r\n  }, [gl])\r\n\r\n  return null\r\n}\r\n\r\nconst useBackground = (background: any, backgroundImage: any, environmentConfig: any) => {\r\n  const { imageType, panorama, posX, negX, posY, negY, posZ, negZ } = backgroundImage || {}\r\n  const { scene } = useThree()\r\n\r\n  React.useEffect(() => {\r\n    if (imageType === 'panorama' && panorama) {\r\n      const textureLoader = new THREE.TextureLoader()\r\n      textureLoader.load(panorama, (texture) => {\r\n        texture.mapping = THREE.EquirectangularReflectionMapping\r\n        scene.background = texture\r\n        scene.environment = texture\r\n      })\r\n    } else if (imageType === 'cube' && posX && negX && posY && negY && posZ && negZ) {\r\n      scene.background = new THREE.CubeTextureLoader().load([posX, negX, posY, negY, posZ, negZ])\r\n      scene.environment = new THREE.CubeTextureLoader().load([posX, negX, posY, negY, posZ, negZ])\r\n    } else {\r\n      scene.background = background ? new THREE.Color(background) : null\r\n      if (!environmentConfig?.type) {\r\n        scene.environment = null\r\n      }\r\n    }\r\n  }, [scene, background, backgroundImage, environmentConfig])\r\n}\r\n\r\nconst Ground = ({ ground }: any) => {\r\n  const { materialType = 'MeshBasicMaterial', width = 100, height = 100, color = '#AAAAAA' } = ground || {}\r\n\r\n  return (\r\n    <>\r\n      {ground?.enable ? (\r\n        <mesh name='$nativeGround' receiveShadow castShadow rotation={[Math.PI / 2, 0, 0]}>\r\n          <planeGeometry args={[width, height]} />\r\n          <meshPhongMaterial color={color} side={THREE.DoubleSide} />\r\n        </mesh>\r\n      ) : null}\r\n    </>\r\n  )\r\n}\r\n\r\n// 场景组件\r\nconst Scene = (props: any) => {\r\n  const { sceneConfig, environmentConfig } = props\r\n  const { background, backgroundImage, fog, ground } = sceneConfig || {}\r\n  const { color = '#FFFFFF', near = 1, far = 10000 } = fog || {}\r\n\r\n  useBackground(background, backgroundImage, environmentConfig)\r\n\r\n  return (\r\n    <>\r\n      {fog && fog.enable && <fog attach='fog' args={[color, near, far]} />}\r\n      <Ground ground={ground} />\r\n    </>\r\n  )\r\n}\r\n\r\n// 相机组件\r\nconst Camera = ({ cameraConfig, aspect }: any) => {\r\n  const { fov = 45, near = 1, far = 10000, position: cameraPositon = { x: 0, y: 200, z: 500 }, lookAt: cameraLookAt = { x: 0, y: 0, z: 0 } } = cameraConfig || {}\r\n\r\n  // 简化：移除 store hooks 和 spring 动画，直接使用位置\r\n  const position: [number, number, number] = [cameraPositon.x, cameraPositon.y, cameraPositon.z]\r\n\r\n  return (\r\n    <PerspectiveCamera\r\n      makeDefault\r\n      fov={fov}\r\n      near={near}\r\n      far={far}\r\n      aspect={aspect}\r\n      position={position}\r\n    />\r\n  )\r\n}\r\n\r\nconst setCamera = (shadow: any) => {\r\n  shadow.camera.near = 0.5\r\n  shadow.camera.far = 5000\r\n  shadow.camera.top = 1000\r\n  shadow.camera.bottom = -2000\r\n  shadow.camera.right = 1000\r\n  shadow.camera.left = -2000\r\n  shadow.mapSize.width = 2800\r\n  shadow.mapSize.height = 2800\r\n}\r\n\r\nconst SpotLightComp = (props: any) => {\r\n  const { helper, color = 0xffffff, intensity = 1, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 1, castShadow = false, position = { x: 0, y: 0, z: 0 }, target = { x: 0, y: 0, z: 0 } } = props\r\n\r\n  const ref = React.useRef<any>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (ref.current?.shadow.camera) {\r\n      const shadow = ref.current?.shadow\r\n      setCamera(shadow)\r\n    }\r\n  }, [])\r\n\r\n  return <>\r\n    <spotLight ref={ref} visible={true} color={color} intensity={intensity} distance={distance} angle={angle} penumbra={penumbra} decay={decay} castShadow={castShadow} position={[position.x, position.y, position.z]}>\r\n      {helper ? <Helper type={THREE.SpotLightHelper} args={['black']} /> : null}\r\n    </spotLight>\r\n    {ref?.current?.target ? <primitive object={ref?.current?.target} position={[target?.x, target?.y, target?.z]} /> : null}\r\n  </>\r\n}\r\n\r\nconst DirectionalLightComp = (props: any) => {\r\n  const { helper, color = 0xffffff, intensity = 1, castShadow = false, position = { x: 0, y: 0, z: 0 }, target = { x: 0, y: 0, z: 0 } } = props\r\n\r\n  const ref = React.useRef<any>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (ref.current?.shadow.camera) {\r\n      const shadow = ref.current?.shadow\r\n      setCamera(shadow)\r\n    }\r\n  }, [])\r\n\r\n  return <>\r\n    <directionalLight ref={ref} visible={true} color={color} intensity={intensity} position={[position.x, position.y, position.z]} castShadow={castShadow}>\r\n      {helper ? <Helper type={THREE.DirectionalLightHelper} args={[50, 'black']} /> : null}\r\n    </directionalLight>\r\n    {ref?.current?.target ? <primitive object={ref?.current?.target} position={[target?.x, target?.y, target?.z]} /> : null}\r\n  </>\r\n}\r\n\r\n// 灯光组件\r\nconst Lights = ({ lightConfig }: any) => {\r\n  const { ambientLight, directionalLight, hemisphereLight, pointLight, rectAreaLight, spotLight } = lightConfig || {}\r\n  return (\r\n    <>\r\n      {ambientLight && ambientLight.length && (\r\n        ambientLight.filter((item: any) => item.enable).map((item: any) => {\r\n          const { color = 0xffffff, intensity = 1 } = item\r\n          return <ambientLight key={`ambient-${color}`} color={color} intensity={intensity} />\r\n        })\r\n      )}\r\n      {directionalLight && directionalLight.length && (\r\n        directionalLight.filter((item: any) => item.enable).map((item: any) => (\r\n          <DirectionalLightComp key={`directional-${item.color}`} {...item} />\r\n        ))\r\n      )}\r\n      {hemisphereLight && hemisphereLight.length && (\r\n        hemisphereLight.filter((item: any) => item.enable).map((item: any) => {\r\n          const { skyColor = 0xffffff, groundColor = 0xffffff, intensity = 1, position = { x: 0, y: 0, z: 0 } } = item\r\n          return <hemisphereLight key={`hemisphere-${skyColor}`} color={skyColor} groundColor={groundColor} intensity={intensity} position={[position.x, position.y, position.z]} />\r\n        })\r\n      )}\r\n      {pointLight && pointLight.length && (\r\n        pointLight.filter((item: any) => item.enable).map((item: any) => {\r\n          const { color = 0xffffff, intensity = 1, distance = 0, decay = 1, castShadow = false, position = { x: 0, y: 0, z: 0 } } = item\r\n          return <pointLight key={`point-${color}`} color={color} intensity={intensity} distance={distance} decay={decay} castShadow={castShadow} position={[position.x, position.y, position.z]} />\r\n        })\r\n      )}\r\n      {spotLight && spotLight.length && (\r\n        spotLight.filter((item: any) => item.enable).map((item: any) => (\r\n          <SpotLightComp key={`spot-${item.color}`} {...item} />\r\n        ))\r\n      )}\r\n    </>\r\n  )\r\n}\r\n\r\nconst GridHelper = ({ gridConfig = {} }: any) => {\r\n  const { enable, size = 10, divisions = 10, colorCenterLine = 0x444444, colorGrid = 0x888888 } = gridConfig || {}\r\n  return (\r\n    <>\r\n      {enable && <gridHelper args={[size, divisions, colorCenterLine, colorGrid]} />}\r\n    </>\r\n  )\r\n}\r\n\r\nconst AxesHelper = ({ axesConfig = {} }: any) => {\r\n  const { enable, size = 1 } = axesConfig || {}\r\n  return (\r\n    <>\r\n      {enable && <axesHelper args={[size]} />}\r\n    </>\r\n  )\r\n}\r\n\r\n// 辅助器组件\r\nconst Helper = (props: any) => {\r\n  const { helperConfig } = props\r\n  const { gridConfig = {}, axesConfig = {} } = helperConfig || {}\r\n\r\n  return (\r\n    <>\r\n      <GridHelper gridConfig={gridConfig} />\r\n      <AxesHelper axesConfig={axesConfig} />\r\n    </>\r\n  )\r\n}\r\n\r\n// Create a mapping of all available environment types\r\nconst environmentMap: Record<string, () => Promise<any>> = {\r\n  'apartment': () => import('@pmndrs/assets/hdri/apartment.exr'),\r\n  'bridge': () => import('@pmndrs/assets/hdri/bridge.exr'),\r\n  'city': () => import('@pmndrs/assets/hdri/city.exr'),\r\n  'dawn': () => import('@pmndrs/assets/hdri/dawn.exr'),\r\n  'esplanade': () => import('@pmndrs/assets/hdri/esplanade.exr'),\r\n  'forest': () => import('@pmndrs/assets/hdri/forest.exr'),\r\n  'hall': () => import('@pmndrs/assets/hdri/hall.exr'),\r\n  'lab': () => import('@pmndrs/assets/hdri/lab.exr'),\r\n  'lobby': () => import('@pmndrs/assets/hdri/lobby.exr'),\r\n  'night': () => import('@pmndrs/assets/hdri/night.exr'),\r\n  'park': () => import('@pmndrs/assets/hdri/park.exr'),\r\n  'sky': () => import('@pmndrs/assets/hdri/sky.exr'),\r\n  'studio': () => import('@pmndrs/assets/hdri/studio.exr'),\r\n  'sunrise': () => import('@pmndrs/assets/hdri/sunrise.exr'),\r\n  'sunset': () => import('@pmndrs/assets/hdri/sunset.exr'),\r\n  'venice': () => import('@pmndrs/assets/hdri/venice.exr'),\r\n  'warehouse': () => import('@pmndrs/assets/hdri/warehouse.exr'),\r\n  'workshop': () => import('@pmndrs/assets/hdri/workshop.exr')\r\n}\r\n\r\nconst Environment3D = (props: any) => {\r\n  const { environmentConfig } = props\r\n\r\n  const data = suspend(async () => {\r\n    if (environmentConfig?.type && environmentMap[environmentConfig.type]) {\r\n      const module = await environmentMap[environmentConfig.type]()\r\n      return module.default\r\n    }\r\n    return null\r\n  }, [environmentConfig?.type])\r\n\r\n  return data ? <Environment files={data} /> : null\r\n}\r\n\r\n// 控制组件\r\nconst Controls = (props: any) => {\r\n  const { controlConfig } = props\r\n  const { controlType, orbitConfig, pointerLockConfig, flyConfig } = controlConfig || {}\r\n\r\n  const orbitRef = React.useRef<any>(null)\r\n  const transRef = React.useRef<any>(null)\r\n\r\n  const { scene, camera } = useThree((state) => state)\r\n\r\n  // 简化：移除 store hooks 和 transform 逻辑\r\n\r\n  return (\r\n    <>\r\n      {/* 简化：不渲染 TransformControls，因为 editMode 默认为 false */}\r\n      <OrbitControls\r\n        ref={orbitRef}\r\n        makeDefault\r\n        camera={camera}\r\n        {...orbitConfig}\r\n        enabled={orbitConfig?.enabled && controlType === 'orbit'}\r\n        onEnd={() => {}}\r\n      />\r\n      {pointerLockConfig?.enabled && controlType === 'pointerLock' && (\r\n        <PointerLockControls\r\n          makeDefault\r\n          camera={camera}\r\n          {...pointerLockConfig}\r\n        />\r\n      )}\r\n      {flyConfig?.enabled && controlType === 'fly' && (\r\n        <FlyControls\r\n          makeDefault\r\n          camera={camera}\r\n          {...flyConfig}\r\n        />\r\n      )}\r\n    </>\r\n  )\r\n}\r\n\r\n// 加载组件\r\nconst Loading = (props: any) => {\r\n  const { loadingConfig, script } = props\r\n  const { img, width, height, backgroundColor } = loadingConfig || {}\r\n\r\n  const { progress } = useProgress()\r\n\r\n  const style = {\r\n    spin: {\r\n      position: 'absolute' as const,\r\n      width: '100%',\r\n      height: '100%',\r\n      top: 0,\r\n      left: 0,\r\n      display: 'flex',\r\n      justifyContent: 'center',\r\n      alignItems: 'center',\r\n      backgroundColor: backgroundColor || 'transparent',\r\n      pointerEvents: 'none' as const\r\n    },\r\n    loading: {\r\n      background: img ? `url(${img})` : undefined,\r\n      backgroundRepeat: 'no-repeat' as const,\r\n      backgroundSize: 'contain' as const,\r\n      width: width || '100px',\r\n      height: height || '100px'\r\n    }\r\n  }\r\n\r\n  // 简化：移除 script 事件\r\n\r\n  return (\r\n    <div style={style.spin}>\r\n      {img ? (\r\n        <div style={style.loading} />\r\n      ) : (\r\n        <div className=\"text-white\">加载 3D 场景... {Math.round(progress)}%</div>\r\n      )}\r\n    </div>\r\n  )\r\n}\r\n\r\nconst Model3d = React.forwardRef<HTMLDivElement, Model3dProps>(\r\n  (\r\n    {\r\n      className,\r\n      sceneConfig = defaultModel3dProps.sceneConfig,\r\n      cameraConfig = defaultModel3dProps.cameraConfig,\r\n      controlConfig = defaultModel3dProps.controlConfig,\r\n      environmentConfig = defaultModel3dProps.environmentConfig,\r\n      lightConfig = defaultModel3dProps.lightConfig,\r\n      helperConfig = defaultModel3dProps.helperConfig,\r\n      children,\r\n      ...props\r\n    },\r\n    ref\r\n  ) => {\r\n    const containerRef = React.useRef<HTMLDivElement>(null)\r\n    const [aspect, setAspect] = React.useState(1)\r\n\r\n    React.useEffect(() => {\r\n      if (containerRef.current) {\r\n        const newAspect = getAspect(containerRef.current)\r\n        setAspect(newAspect)\r\n      }\r\n    }, [])\r\n\r\n    const onCreated = ({ gl }: any) => {\r\n      gl.shadowMap.enabled = true\r\n      gl.shadowMap.type = THREE.PCFSoftShadowMap\r\n    }\r\n\r\n    return (\r\n      <div\r\n        ref={ref}\r\n        className={cn(\"model-3d-container w-full h-full relative\", className)}\r\n        {...props}\r\n      >\r\n        <div\r\n          ref={containerRef}\r\n          className=\"w-full h-full\"\r\n          style={{ position: 'relative' }}\r\n        >\r\n          <Suspense fallback={<Loading loadingConfig={{}} script=\"\" />}>\r\n            <Canvas\r\n              frameloop=\"always\"\r\n              onCreated={onCreated}\r\n              shadows\r\n              flat\r\n              gl={{\r\n                outputColorSpace: THREE.LinearSRGBColorSpace,\r\n                preserveDrawingBuffer: true\r\n              }}\r\n            >\r\n              <ResizeCanvas />\r\n              <Lights lightConfig={lightConfig} />\r\n              <Scene sceneConfig={sceneConfig} environmentConfig={environmentConfig} />\r\n              <Camera cameraConfig={cameraConfig} aspect={aspect} />\r\n              <Environment3D environmentConfig={environmentConfig} />\r\n              <Controls controlConfig={controlConfig} editMode={false} />\r\n              <Helper helperConfig={helperConfig} />\r\n              {/* 渲染子组件（3D 对象） */}\r\n              {children}\r\n            </Canvas>\r\n          </Suspense>\r\n        </div>\r\n      </div>\r\n    )\r\n  }\r\n)\r\n\r\nModel3d.displayName = \"Model3d\"\r\n\r\nexport { Model3d }"
         }
       ]
     },
@@ -701,9 +399,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/3d/model-3d-geometry-tube/model-3d-geometry-tube.tsx",
+          "path": "blocks/3d/model-3d-geometry-tube/model-3d-geometry-tube.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport * as THREE from \"three\"\r\nimport { Tube } from \"@react-three/drei\"\r\n\r\ndeclare global {\r\n  interface Window {\r\n    model3d?: Record<string, THREE.Mesh>\r\n    model3d_material?: Record<string, THREE.Material[]>\r\n  }\r\n}\r\n\r\nclass CustomSinCurve extends THREE.Curve<THREE.Vector3> {\r\n  scale: number\r\n\r\n  constructor(scale = 1) {\r\n    super()\r\n    this.scale = scale\r\n  }\r\n\r\n  getPoint(t: number, optionalTarget = new THREE.Vector3()) {\r\n    const tx = t * 3 - 1.5\r\n    const ty = t\r\n    const tz = 0\r\n    return optionalTarget.set(tx, ty, tz).multiplyScalar(this.scale)\r\n  }\r\n}\r\n\r\nexport interface Model3dGeometryTubeProps {\r\n  /** 网格配置 */\r\n  meshConfig?: {\r\n    visible?: boolean\r\n    position?: { x?: number; y?: number; z?: number }\r\n    scale?: { x?: number; y?: number; z?: number }\r\n    rotation?: { x?: number; y?: number; z?: number }\r\n    opacity?: number\r\n    color?: string\r\n  }\r\n  /** 材质配置 */\r\n  materialsConfig?: {\r\n    materials?: any[]\r\n  }\r\n  /** 编辑模式 */\r\n  editMode?: boolean\r\n  /** 名称 */\r\n  name?: string\r\n  /** 点击回调 */\r\n  onClick?: () => void\r\n  /** 曲线参数 [曲线, 管状分段, 半径, 径向分段, 是否闭合] */\r\n  args?: [THREE.Curve<THREE.Vector3>, number, number, number, boolean]\r\n}\r\n\r\nconst Model3dGeometryTube: React.FC<Model3dGeometryTubeProps> = ({\r\n  meshConfig = {},\r\n  materialsConfig = {},\r\n  editMode = false,\r\n  name = \"\",\r\n  onClick,\r\n  args,\r\n}) => {\r\n  const { visible, position, scale, rotation, opacity, color } = meshConfig\r\n  const { materials } = materialsConfig\r\n\r\n  // 避免未使用参数警告\r\n  if (materials) {\r\n    // 材质配置占位\r\n  }\r\n\r\n  const meshRef = React.useRef<THREE.Mesh>(null)\r\n  const materialRef = React.useRef<THREE.MeshPhysicalMaterial>(null)\r\n\r\n  React.useEffect(() => {\r\n    if (meshRef.current && materialRef.current) {\r\n      // 原逻辑：将 mesh 和 material 存储到全局对象\r\n      if (!window.model3d) {\r\n        window.model3d = {}\r\n      }\r\n      if (!window.model3d_material) {\r\n        window.model3d_material = {}\r\n      }\r\n      window.model3d[name] = meshRef.current\r\n      window.model3d_material[name] = [materialRef.current]\r\n    }\r\n  }, [name])\r\n\r\n  const gProps = {\r\n    visible: visible,\r\n    position: [position?.x || 0, position?.y || 0, position?.z || 0] as [number, number, number],\r\n    scale: [scale?.x || 1, scale?.y || 1, scale?.z || 1] as [number, number, number],\r\n    rotation: [\r\n      THREE.MathUtils.degToRad(rotation?.x || 0),\r\n      THREE.MathUtils.degToRad(rotation?.y || 0),\r\n      THREE.MathUtils.degToRad(rotation?.z || 0),\r\n    ] as [number, number, number],\r\n    receiveShadow: true,\r\n    castShadow: true,\r\n    onClick: (e: any) => {\r\n      e.stopPropagation()\r\n      onClick?.()\r\n      if (editMode) {\r\n        // 编辑模式下的逻辑\r\n        console.log(\"Tube clicked in edit mode\", name)\r\n      }\r\n    },\r\n  }\r\n\r\n  const mProps = {\r\n    opacity: opacity,\r\n    transparent: true,\r\n    alphaTest: opacity,\r\n    color: color ? new THREE.Color(color) : undefined,\r\n  }\r\n\r\n  // 默认曲线\r\n  const curve = React.useMemo(() => new CustomSinCurve(10), [])\r\n  const tubeArgs = args || [curve, 20, 2, 8, false]\r\n\r\n  return (\r\n    <Tube ref={meshRef} name={name} args={tubeArgs} {...gProps}>\r\n      <meshPhysicalMaterial ref={materialRef} {...mProps} />\r\n    </Tube>\r\n  )\r\n}\r\n\r\nModel3dGeometryTube.displayName = \"Model3dGeometryTube\"\r\n\r\nexport { Model3dGeometryTube }"
         }
       ]
     },
@@ -783,7 +481,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/isc-video/isc-video.tsx",
+          "path": "src/registry/blocks/video/isc-video/isc-video.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1122,6 +820,22 @@
       "files": [
         {
           "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-select/form-select.tsx",
+          "type": "registry:component",
+          "content": ""
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-tableField",
+      "type": "registry:component",
+      "title": "数据表字段",
+      "description": "数据表字段组件 - 用于显示基于类型的基础输入组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/d:/work/workspace/new-ui/air-ui/src/registry/blocks/form/form-tableField/form-tableField.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1863,7 +1577,7 @@
         {
           "path": "blocks/business/bar/bar.tsx",
           "type": "registry:component",
-          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nconst barVariants = cva(\n  \"relative border transition-colors\",\n  {\n    variants: {\n      variant: {\n        default: \"border-border bg-background\",\n        outline: \"border-2 border-primary\",\n        filled: \"border-primary/20 bg-primary/5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nexport interface VisualMapItem {\n  data: number\n  color: string\n}\n\nexport interface BarProps\n  extends React.HTMLAttributes<HTMLDivElement>,\n    VariantProps<typeof barVariants> {\n  /**\n   * 当前值\n   */\n  value?: number\n  /**\n   * 最大值，默认100\n   */\n  maxValue?: number\n  /**\n   * 进度条填充颜色\n   */\n  color?: string\n  /**\n   * 边框颜色\n   */\n  borderColor?: string\n  /**\n   * 颜色映射配置\n   */\n  visualMap?: VisualMapItem[]\n  /**\n   * 方向：垂直或水平\n   */\n  direction?: \"vertical\" | \"horizontal\"\n  /**\n   * 起始位置\n   */\n  position?: \"start\" | \"end\"\n  /**\n   * 单元格键值\n   */\n  cellKey?: string\n}\n\nconst Bar = React.forwardRef<HTMLDivElement, BarProps>(\n  (\n    {\n      className,\n      value = 0,\n      maxValue = 100,\n      color = \"#000\",\n      borderColor,\n      visualMap = [],\n      direction = \"horizontal\",\n      position = \"start\",\n      variant,\n      cellKey,\n      ...props\n    },\n    ref\n  ) => {\n    // 计算实际值\n    const computValue = React.useMemo(() => {\n      return value\n    }, [value])\n\n    // 计算颜色\n    const fillColor = React.useMemo(() => {\n      // 如果有颜色映射，根据值查找对应颜色\n      if (visualMap && visualMap.length > 0) {\n        const sortedMap = [...visualMap].sort((a, b) => a.data - b.data)\n        let matchedColor: string | null = null\n        sortedMap.forEach((item) => {\n          if (computValue >= item.data) {\n            matchedColor = item.color\n          }\n        })\n        if (matchedColor) {\n          return matchedColor\n        }\n      }\n      return color\n    }, [visualMap, computValue, color])\n\n    // 计算进度百分比\n    const percentage = React.useMemo(() => {\n      const val = computValue !== undefined ? computValue : 0\n      return Math.min(Math.max((val / maxValue) * 100, 0), 100)\n    }, [computValue, maxValue])\n\n    // 垂直进度条样式\n    if (direction === \"vertical\") {\n      const isFromBottom = position === \"start\"\n      const heightStyle = isFromBottom ? { bottom: 0 } : { top: 0 }\n\n      return (\n        <div\n          ref={ref}\n          className={cn(\n            \"bar-component relative w-full h-full overflow-hidden\",\n            barVariants({ variant }),\n            className\n          )}\n          style={{\n            borderColor: borderColor || undefined,\n            ...props.style\n          }}\n          {...props}\n        >\n          <div\n            className=\"absolute left-0 right-0 bg-current transition-all duration-300 ease-in-out\"\n            style={{\n              ...heightStyle,\n              height: `${percentage}%`,\n              backgroundColor: fillColor,\n              color: fillColor,\n            }}\n          />\n        </div>\n      )\n    }\n\n    // 水平进度条\n    const isFromLeft = position === \"start\"\n    const horizontalStyle = isFromLeft ? { left: 0 } : { right: 0 }\n\n    return (\n      <div\n        ref={ref}\n        className={cn(\n          \"bar-component relative w-full h-full overflow-hidden\",\n          barVariants({ variant }),\n          className\n        )}\n        style={{\n          borderColor: borderColor || undefined,\n          ...props.style\n        }}\n        {...props}\n      >\n        <div\n          className=\"absolute top-0 bottom-0 bg-current transition-all duration-300 ease-in-out\"\n          style={{\n            ...horizontalStyle,\n            width: `${percentage}%`,\n            backgroundColor: fillColor,\n            color: fillColor,\n          }}\n        />\n      </div>\n    )\n  }\n)\nBar.displayName = \"Bar\"\n\nexport { Bar, barVariants }\n"
+          "content": "import * as React from \"react\"\r\nimport { cva, type VariantProps } from \"class-variance-authority\"\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nconst barVariants = cva(\r\n  \"relative border transition-colors\",\r\n  {\r\n    variants: {\r\n      variant: {\r\n        default: \"border-border bg-background\",\r\n        outline: \"border-2 border-primary\",\r\n        filled: \"border-primary/20 bg-primary/5\",\r\n      },\r\n    },\r\n    defaultVariants: {\r\n      variant: \"default\",\r\n    },\r\n  }\r\n)\r\n\r\nexport interface VisualMapItem {\r\n  data: number\r\n  color: string\r\n}\r\n\r\nexport interface BarProps\r\n  extends React.HTMLAttributes<HTMLDivElement>,\r\n    VariantProps<typeof barVariants> {\r\n  /**\r\n   * 当前值\r\n   */\r\n  value?: number\r\n  /**\r\n   * 最大值，默认100\r\n   */\r\n  maxValue?: number\r\n  /**\r\n   * 进度条填充颜色\r\n   */\r\n  color?: string\r\n  /**\r\n   * 边框颜色\r\n   */\r\n  borderColor?: string\r\n  /**\r\n   * 颜色映射配置\r\n   */\r\n  visualMap?: VisualMapItem[]\r\n  /**\r\n   * 方向：垂直或水平\r\n   */\r\n  direction?: \"vertical\" | \"horizontal\"\r\n  /**\r\n   * 起始位置\r\n   */\r\n  position?: \"start\" | \"end\"\r\n  /**\r\n   * 单元格键值\r\n   */\r\n  cellKey?: string\r\n}\r\n\r\nconst Bar = React.forwardRef<HTMLDivElement, BarProps>(\r\n  (\r\n    {\r\n      className,\r\n      value = 0,\r\n      maxValue = 100,\r\n      color = \"#000\",\r\n      borderColor,\r\n      visualMap = [],\r\n      direction = \"horizontal\",\r\n      position = \"start\",\r\n      variant,\r\n      cellKey,\r\n      ...props\r\n    },\r\n    ref\r\n  ) => {\r\n    // 计算实际值\r\n    const computValue = React.useMemo(() => {\r\n      return value\r\n    }, [value])\r\n\r\n    // 计算颜色\r\n    const fillColor = React.useMemo(() => {\r\n      // 如果有颜色映射，根据值查找对应颜色\r\n      if (visualMap && visualMap.length > 0) {\r\n        const sortedMap = [...visualMap].sort((a, b) => a.data - b.data)\r\n        let matchedColor: string | null = null\r\n        sortedMap.forEach((item) => {\r\n          if (computValue >= item.data) {\r\n            matchedColor = item.color\r\n          }\r\n        })\r\n        if (matchedColor) {\r\n          return matchedColor\r\n        }\r\n      }\r\n      return color\r\n    }, [visualMap, computValue, color])\r\n\r\n    // 计算进度百分比\r\n    const percentage = React.useMemo(() => {\r\n      const val = computValue !== undefined ? computValue : 0\r\n      return Math.min(Math.max((val / maxValue) * 100, 0), 100)\r\n    }, [computValue, maxValue])\r\n\r\n    // 垂直进度条样式\r\n    if (direction === \"vertical\") {\r\n      const isFromBottom = position === \"start\"\r\n      const heightStyle = isFromBottom ? { bottom: 0 } : { top: 0 }\r\n\r\n      return (\r\n        <div\r\n          ref={ref}\r\n          className={cn(\r\n            \"bar-component relative w-full h-full overflow-hidden\",\r\n            barVariants({ variant }),\r\n            className\r\n          )}\r\n          style={{\r\n            borderColor: borderColor || undefined,\r\n            ...props.style\r\n          }}\r\n          {...props}\r\n        >\r\n          <div\r\n            className=\"absolute left-0 right-0 bg-current transition-all duration-300 ease-in-out\"\r\n            style={{\r\n              ...heightStyle,\r\n              height: `${percentage}%`,\r\n              backgroundColor: fillColor,\r\n              color: fillColor,\r\n            }}\r\n          />\r\n        </div>\r\n      )\r\n    }\r\n\r\n    // 水平进度条\r\n    const isFromLeft = position === \"start\"\r\n    const horizontalStyle = isFromLeft ? { left: 0 } : { right: 0 }\r\n\r\n    return (\r\n      <div\r\n        ref={ref}\r\n        className={cn(\r\n          \"bar-component relative w-full h-full overflow-hidden\",\r\n          barVariants({ variant }),\r\n          className\r\n        )}\r\n        style={{\r\n          borderColor: borderColor || undefined,\r\n          ...props.style\r\n        }}\r\n        {...props}\r\n      >\r\n        <div\r\n          className=\"absolute top-0 bottom-0 bg-current transition-all duration-300 ease-in-out\"\r\n          style={{\r\n            ...horizontalStyle,\r\n            width: `${percentage}%`,\r\n            backgroundColor: fillColor,\r\n            color: fillColor,\r\n          }}\r\n        />\r\n      </div>\r\n    )\r\n  }\r\n)\r\nBar.displayName = \"Bar\"\r\n\r\nexport { Bar, barVariants }\r\n"
         }
       ]
     },
@@ -1906,12 +1620,17 @@
       "name": "mobile-picker",
       "type": "registry:component",
       "title": "MobilePicker",
-      "description": "选择器 - 移动端选择器组件",
-      "registryDependencies": [],
-      "dependencies": [],
+      "description": "移动端选择器 - 支持普通选择、表格选择和级联选择",
+      "registryDependencies": [
+        "dialog",
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-picker/mobile-picker.tsx",
+          "path": "registry/blocks/mobile/mobile-picker/mobile-picker.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2395,9 +2114,9 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/app-page/app-page.tsx",
+          "path": "blocks/containers/app-page/app-page.tsx",
           "type": "registry:component",
-          "content": ""
+          "content": "import * as React from \"react\"\r\nimport { cn } from \"@/lib/utils\"\r\n\r\nexport interface AppPageProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  children?: React.ReactNode\r\n}\r\n\r\nconst AppPage = React.forwardRef<HTMLDivElement, AppPageProps>(\r\n  ({ className, children, ...props }, ref) => {\r\n    return (\r\n      <div\r\n        ref={ref}\r\n        className={cn(\"app-page w-full h-full\", className)}\r\n        {...props}\r\n      >\r\n        {children}\r\n      </div>\r\n    )\r\n  }\r\n)\r\n\r\nAppPage.displayName = \"AppPage\"\r\n\r\nexport { AppPage }\r\n"
         }
       ]
     },

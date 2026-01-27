@@ -7,7 +7,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
   InputGroupTextarea
-} from "@/registry/components/ui/input-group/input-group"
+} from "@/components/ui/input-group"
 
 const inputVariants = cva(
   "relative border transition-colors flex items-center",
@@ -284,6 +284,7 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
           onInput={handleInput}
           autoFocus={autoFocus}
           type="text"
+          className="focus-visible:ring-ring focus-visible:ring-offset-0"
         />
         {allowClear && value && !disabled && !readOnly && (
           <button

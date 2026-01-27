@@ -7,7 +7,7 @@ import {
   DrawerClose,
   DrawerPortal
 } from "@/registry/components/ui/drawer/drawer"
-import { Button } from "@/registry/components/ui/button/button"
+import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 
 export interface MobilePopupProps

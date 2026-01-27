@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-import { Switch } from "@/registry/components/ui/switch/switch"
+import { Switch } from "@/components/ui/switch"
 
 export interface FormSwitchProps
   extends Omit<React.ComponentPropsWithoutRef<typeof Switch>, "onChange"> {

@@ -1,8 +1,7 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, statusesConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, statusesConfig, buttonControlConfig, videoControlConfig, videoPeriodsConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import type { ComponentConfig } from './config/types'
-
 // 组件分类定义
 const componentCategories = [
   {
@@ -48,7 +47,11 @@ const componentCategories = [
     id: 'video',
     name: '视频组件',
     icon: '🎬',
-    components: []
+    components: [
+      { id: 'buttonControl', config: buttonControlConfig },
+      { id: 'videoControl', config: videoControlConfig },
+      { id: 'videoPeriods', config: videoPeriodsConfig },
+    ]
   },
   {
     id: 'view',
@@ -84,7 +87,10 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   panel: panelConfig,
   tabs: tabsConfig,
   status: statusConfig,
-  statuses: statusesConfig
+  statuses: statusesConfig,
+  buttonControl: buttonControlConfig,
+  videoControl: videoControlConfig,
+  videoPeriods: videoPeriodsConfig
 }
 
 function App() {
@@ -105,7 +111,10 @@ function App() {
     panel: panelConfig.defaultProps,
     tabs: tabsConfig.defaultProps,
     status: statusConfig.defaultProps,
-    statuses: statusesConfig.defaultProps
+    statuses: statusesConfig.defaultProps,
+    buttonControl: buttonControlConfig.defaultProps,
+    videoControl: videoControlConfig.defaultProps,
+    videoPeriods: videoPeriodsConfig.defaultProps
   })
 
   // 获取当前选中的组件配置
@@ -129,7 +138,7 @@ function App() {
       }
     }))
   }
-
+  
   // 渲染当前组件的预览
   const renderComponentPreview = () => {
     if (!currentComponentConfig) {

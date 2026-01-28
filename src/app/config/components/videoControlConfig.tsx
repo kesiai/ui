@@ -130,6 +130,7 @@ const renderVideoControlPreview = (props: Record<string, any>) => {
           errorReload={props.errorReload}
           showPlaceholder={props.showPlaceholder}
           defaultImage={props.defaultImage}
+          cellKey="preview"
         />
       </div>
     </div>
@@ -137,81 +138,21 @@ const renderVideoControlPreview = (props: Record<string, any>) => {
 }
 
 const renderVideoControlCodePreview = (props: Record<string, any>) => {
-  let code = `<VideoWidget`
-  if (props.type !== 'mp4') {
-    code += `\n  type="${props.type}"`
-  }
-  if (props.url) {
-    code += `\n  url="${props.url}"`
-  }
-  if (props.autoplay) {
-    code += `\n  autoplay`
-  }
-  if (props.loop) {
-    code += `\n  loop`
-  }
-  if (!props.controls) {
-    code += `\n  controls={false}`
-  }
-  if (props.muted) {
-    code += `\n  muted`
-  }
-  if (props.width !== '100%') {
-    code += `\n  width="${props.width}"`
-  }
-  if (props.height !== '100%') {
-    code += `\n  height="${props.height}"`
-  }
-  if (props.poster) {
-    code += `\n  poster="${props.poster}"`
-  }
-  if (props.errorReload !== 5) {
-    code += `\n  errorReload={${props.errorReload}}`
-  }
-  if (props.showPlaceholder) {
-    code += `\n  showPlaceholder`
-  }
-  if (props.defaultImage) {
-    code += `\n  defaultImage="${props.defaultImage}"`
-  }
-  code += `\n/>`
-
-  return code
-}
-
-const renderVideoControlCustomForm = (props: Record<string, any>, _onChange: (name: string, value: any) => void) => {
-  if (!props.url) {
-    return (
-      <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-        <p className="text-sm font-medium text-yellow-800 mb-2">
-          配置提示
-        </p>
-        <div className="text-sm text-yellow-700">
-          <p>请配置视频地址以预览视频播放效果：</p>
-          <ul className="list-disc list-inside mt-2 space-y-1">
-            <li>• MP4 视频：支持本地和在线 MP4 文件</li>
-            <li>• HLS/M3U8：支持直播流地址</li>
-            <li>• 其他类型：当前仅显示占位提示</li>
-          </ul>
-        </div>
-      </div>
-    )
-  }
-
-  if (props.showPlaceholder && !props.defaultImage) {
-    return (
-      <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-        <p className="text-sm font-medium text-yellow-800 mb-2">
-          占位图配置
-        </p>
-        <div className="text-sm text-yellow-700">
-          <p>已启用占位图显示，建议配置占位图片地址以获得更好的用户体验。</p>
-        </div>
-      </div>
-    )
-  }
-
-  return null
+  return `<VideoWidget
+  type="${props.type}"
+  url="${props.url}"
+  autoplay={${props.autoplay}}
+  loop={${props.loop}}
+  controls={${props.controls}}
+  muted={${props.muted}}
+  width="${props.width}"
+  height="${props.height}"
+  poster="${props.poster}"
+  errorReload={${props.errorReload}}
+  showPlaceholder={${props.showPlaceholder}}
+  defaultImage="${props.defaultImage}"
+  cellKey="your-cell-key"
+/>`
 }
 
 export const videoControlConfig: ComponentConfig = {
@@ -220,6 +161,5 @@ export const videoControlConfig: ComponentConfig = {
   propsConfig: videoControlPropsConfig,
   defaultProps: videoControlDefaultProps,
   renderPreview: renderVideoControlPreview,
-  renderCodePreview: renderVideoControlCodePreview,
-  renderCustomForm: renderVideoControlCustomForm
+  renderCodePreview: renderVideoControlCodePreview
 }

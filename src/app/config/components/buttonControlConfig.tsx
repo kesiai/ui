@@ -59,6 +59,7 @@ const renderbuttonControlPreview = (props: Record<string, any>) => {
           btnColor={props.btnColor}
           controlMode={props.controlMode}
           disable={props.disable}
+          cellKey="preview"
         />
       </div>
     </div>
@@ -66,29 +67,14 @@ const renderbuttonControlPreview = (props: Record<string, any>) => {
 }
 
 const renderbuttonControlCodePreview = (props: Record<string, any>) => {
-  let code = `<ButtonWidget`
-  if (props.size !== 220) {
-    code += `\n  size={${props.size}}`
-  }
-  if (props.bg !== '#222641') {
-    code += `\n  bg="${props.bg}"`
-  }
-  if (props.btnColor !== '#757c99') {
-    code += `\n  btnColor="${props.btnColor}"`
-  }
-  if (props.controlMode !== 'hold') {
-    code += `\n  controlMode="${props.controlMode}"`
-  }
-  if (props.disable) {
-    code += `\n  disable`
-  }
-  code += `\n/>`
-
-  return code
-}
-
-const renderbuttonControlCustomForm = (props: Record<string, any>, _onChange: (name: string, value: any) => void) => {
-  return null
+  return `<ButtonWidget
+  size={${props.size}}
+  bg="${props.bg}"
+  btnColor="${props.btnColor}"
+  controlMode="${props.controlMode}"
+  disable={${props.disable}}
+  cellKey="your-cell-key"
+/>`
 }
 
 export const buttonControlConfig: ComponentConfig = {
@@ -97,6 +83,5 @@ export const buttonControlConfig: ComponentConfig = {
   propsConfig: buttonControlPropsConfig,
   defaultProps: buttonControlDefaultProps,
   renderPreview: renderbuttonControlPreview,
-  renderCodePreview: renderbuttonControlCodePreview,
-  renderCustomForm: renderbuttonControlCustomForm
+  renderCodePreview: renderbuttonControlCodePreview
 }

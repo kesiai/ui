@@ -52,6 +52,10 @@ export interface VideoWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
    * 默认占位图片
    */
   defaultImage?: string
+  /**
+   * 单元格唯一标识
+   */
+  cellKey?: string
 }
 
 const VideoWidget = React.forwardRef<HTMLDivElement, VideoWidgetProps>(

@@ -5,12 +5,12 @@
   "title": "Form.InputNumber",
   "description": "数字输入框 - 数字输入框组件",
   "registryDependencies": [
-    "input"
+    "input-group"
   ],
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-input-number/form-input-number.tsx",
+      "path": "registry/blocks/form/form-input-number/form-input-number.tsx",
       "type": "registry:component"
     }
   ]

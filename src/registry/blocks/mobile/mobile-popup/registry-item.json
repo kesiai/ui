@@ -4,11 +4,14 @@
   "type": "registry:component",
   "title": "MobilePopup",
   "description": "弹出框 - 移动端弹出框组件",
-  "registryDependencies": [],
+  "registryDependencies": [
+    "drawer",
+    "button"
+  ],
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-popup/mobile-popup.tsx",
+      "path": "registry/blocks/mobile/mobile-popup/mobile-popup.tsx",
       "type": "registry:component"
     }
   ]

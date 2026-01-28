@@ -16,7 +16,7 @@
       "type": "registry:component"
     },
     {
-      "path": "registry/lib/modal-context.tsx",
+      "path": "lib/modal-context.tsx",
       "type": "registry:lib"
     }
   ]

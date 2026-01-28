@@ -127,7 +127,7 @@ const Statuses: React.FC<StatusesProps> = (props) => {
 
     return (
         <div
-            className="statuses-container"
+            className="statuses-container w-full"
             style={{
                 display: 'flex',
                 flexWrap: 'wrap',

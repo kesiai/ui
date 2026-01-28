@@ -121,7 +121,7 @@ import view_data_table from './view/view-data-table/registry-item.json' with { t
 import view_user from './view/view-user/registry-item.json' with { type: 'json' }
 import view_model from './view/view-model/registry-item.json' with { type: 'json' }
 import react_widget from './containers/react-widget/registry-item.json' with { type: 'json' }
-import connect_widget from './containers/connect-widget/registry-item.json' with { type: 'json' }
+import connect_widget from './advanced/connect-widget/registry-item.json' with { type: 'json' }
 import slot_container from './containers/slot-container/registry-item.json' with { type: 'json' }
 import resource_container from './containers/resource-container/registry-item.json' with { type: 'json' }
 import layout_container from './containers/layout-container/registry-item.json' with { type: 'json' }

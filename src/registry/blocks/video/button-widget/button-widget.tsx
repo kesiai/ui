@@ -25,6 +25,10 @@ export interface ButtonWidgetProps extends React.HTMLAttributes<HTMLDivElement> 
   onActionClick?: (action: PtzAction) => void
   onActionStart?: (action: PtzAction) => void
   onActionEnd?: (action: PtzAction) => void
+  /**
+   * 单元格唯一标识
+   */
+  cellKey?: string
 }
 
 type ControlItem = {

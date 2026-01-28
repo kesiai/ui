@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, layoutConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
@@ -116,6 +116,8 @@ const componentCategories = [
     components: [
       { id: 'card', config: cardConfig },
       { id: 'carousel', config: carouselConfig },
+      { id: 'context-provider', config: contextProviderConfig },
+      { id: 'layout', config: layoutConfig },
       { id: 'modal', config: modalConfig },
       { id: 'popover', config: popoverConfig },
       { id: 'panel', config: panelConfig },
@@ -137,6 +139,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   image: imageConfig,
   card: cardConfig,
   carousel: carouselConfig,
+  'context-provider': contextProviderConfig,
+  layout: layoutConfig,
   modal: modalConfig,
   popover: popoverConfig,
   panel: panelConfig,
@@ -258,6 +262,8 @@ function App() {
     image: imageConfig.defaultProps,
     card: cardConfig.defaultProps,
     carousel: carouselConfig.defaultProps,
+    'context-provider': contextProviderConfig.defaultProps,
+    layout: layoutConfig.defaultProps,
     modal: modalConfig.defaultProps,
     popover: popoverConfig.defaultProps,
     panel: panelConfig.defaultProps,

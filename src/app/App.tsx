@@ -1,5 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, layoutConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig } from './config'
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, layoutConfig, modalConfig, popoverConfig, panelConfig, 
+  tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, 
+  formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig, 
+  buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
@@ -76,7 +79,8 @@ const componentCategories = [
     icon: '⚡',
     components: [
       { id: 'qrcode', config: qrcodeConfig },
-      { id: 'player', config: playerConfig }
+      { id: 'player', config: playerConfig },
+      { id: 'connectWidget', config: connectWidgetConfig }
     ]
   },
   {
@@ -91,7 +95,13 @@ const componentCategories = [
     id: 'video',
     name: '视频组件',
     icon: '🎬',
-    components: []
+    components: [
+      { id: 'buttonControl', config: buttonControlConfig },
+      { id: 'videoControl', config: videoControlConfig },
+      { id: 'videoPeriods', config: videoPeriodsConfig },
+      { id: 'timeAxis', config: timeAxisConfig },
+      { id: 'videoPlayback', config: videoPlaybackConfig }
+    ]
   },
   {
     id: 'view',
@@ -163,7 +173,13 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   'form-checkbox': formCheckboxConfig,
   'form-date': formDateConfig,
   'mobile-popup': mobilePopupConfig,
-  'mobile-calendar': mobileCalendarConfig
+  'mobile-calendar': mobileCalendarConfig,
+  buttonControl: buttonControlConfig,
+  videoControl: videoControlConfig,
+  videoPeriods: videoPeriodsConfig,
+  timeAxis: timeAxisConfig,
+  videoPlayback: videoPlaybackConfig,
+  connectWidget: connectWidgetConfig
 }
 
 function App() {
@@ -286,7 +302,13 @@ function App() {
     'form-checkbox': formCheckboxConfig.defaultProps,
     'form-date': formDateConfig.defaultProps,
     'mobile-popup': mobilePopupConfig.defaultProps,
-    'mobile-calendar': mobileCalendarConfig.defaultProps
+    'mobile-calendar': mobileCalendarConfig.defaultProps,
+    buttonControl: buttonControlConfig.defaultProps,
+    videoControl: videoControlConfig.defaultProps,
+    videoPeriods: videoPeriodsConfig.defaultProps,
+    timeAxis: timeAxisConfig.defaultProps,
+    videoPlayback: videoPlaybackConfig.defaultProps,
+    connectWidget: connectWidgetConfig.defaultProps
   })
 
   // 获取当前选中的组件配置
@@ -310,7 +332,7 @@ function App() {
       }
     }))
   }
-
+  
   // 渲染当前组件的预览
   const renderComponentPreview = () => {
     if (!currentComponentConfig) {

@@ -30,15 +30,21 @@ export function DataSource({
   className
 }: DataSourceProps) {
   const [selectedType, setSelectedType] = useState(type)
+  const [submit, setSubmit] = useState(() => Date.now().toString())
 
   // 处理数据变化
   const handleDataChange = useCallback((data: any) => {
     onDataChange?.(data)
   }, [onDataChange])
 
+  // 手动刷新
+  const handleRefresh = useCallback(() => {
+    setSubmit(Date.now().toString())
+  }, [])
+
   // 使用 API 数据（只对 'api' 类型启用）
   const { dataset, loading } = useApiData(
-    selectedType === 'api' ? config : (config as any),
+    selectedType === 'api' ? { ...config, submit } : (config as any),
     handleDataChange
   )
 
@@ -93,9 +99,22 @@ export function DataSource({
 
         {/* 配置信息 */}
         <div className="bg-white rounded border border-slate-200 p-4">
-          <p className="text-sm text-slate-600">
-            当前选择: <span className="font-medium text-blue-600">{dataSourceTypes.find(t => t.value === selectedType)?.label}</span>
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-slate-600">
+              当前选择: <span className="font-medium text-blue-600">{dataSourceTypes.find(t => t.value === selectedType)?.label}</span>
+            </p>
+
+            {/* 刷新按钮 */}
+            {(selectedType === 'api' || selectedType === 'interface') && (
+              <button
+                onClick={handleRefresh}
+                disabled={loading}
+                className="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? '加载中...' : '刷新数据'}
+              </button>
+            )}
+          </div>
 
           {/* 平台接口配置显示 */}
           {selectedType === 'api' && config && (

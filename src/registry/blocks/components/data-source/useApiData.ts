@@ -10,8 +10,7 @@ export interface ApiDataConfig {
   table?: any
   appkey?: string
   appsecret?: string
-  script?: string
-  submit?: boolean
+  submit?: string
 }
 
 // 对象转 URL 参数
@@ -104,22 +103,6 @@ function filterResult(json: any): { dimensions: any[]; source: any[] } {
   return { dimensions, source }
 }
 
-// 应用数据转换脚本
-function applyTransformScript(data: any, script: string): any {
-  if (!script) return data
-
-  try {
-    const transformFn = new Function(`return ${script}`)()
-    if (typeof transformFn === 'function' && transformFn.transformData) {
-      return transformFn.transformData(data)
-    }
-    return data
-  } catch (err) {
-    console.warn('应用数据转换脚本失败:', err)
-    return data
-  }
-}
-
 // API 数据 Hook
 export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
   const {
@@ -132,8 +115,7 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
     table,
     appkey,
     appsecret,
-    script = '',
-    submit = false
+    submit = ''
   } = config
 
   const [dataset, setDataset] = useState<any>(null)
@@ -142,18 +124,11 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
 
   // 过滤数据
   const filterData = useCallback((data: any) => {
-    let processedData = data
-
-    // 预处理为图表格式
     if (predata) {
-      processedData = filterResult(data)
+      return filterResult(data)
     }
-
-    // 应用转换脚本
-    processedData = applyTransformScript(processedData, script)
-
-    return processedData
-  }, [predata, script])
+    return data
+  }, [predata])
 
   // 获取数据
   const fetchData = useCallback(async () => {
@@ -248,17 +223,20 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
     } finally {
       setLoading(false)
     }
-  }, [url, method, headers, body, predata, table, appkey, appsecret, script, filterData, onData])
+  }, [url, method, headers, body, predata, table, appkey, appsecret, filterData, onData])
 
   // 保存到 ref
   queryCallback.current = fetchData
 
-  // 手动触发
+  // submit 变化时手动触发
+  const prevSubmitRef = useRef<string>()
+
   useEffect(() => {
-    if (submit) {
-      fetchData()
+    if (submit && submit !== prevSubmitRef.current) {
+      prevSubmitRef.current = submit
+      queryCallback.current?.()
     }
-  }, [submit, fetchData])
+  }, [submit])
 
   // 自动轮询
   useEffect(() => {
@@ -271,13 +249,6 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
     const id = setInterval(tick, interval * 1000)
     return () => clearInterval(id)
   }, [interval])
-
-  // 初始加载
-  useEffect(() => {
-    if (url) {
-      fetchData()
-    }
-  }, [])
 
   return { dataset, loading, fetchData }
 }

@@ -259,6 +259,7 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
       startArrowSize = 2,
       endArrowSize = 2,
       animation,
+      radiusQ = 6,
       editMode = true,
       width = 400,
       height = 300,
@@ -303,7 +304,7 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
     // 拖拽状态
     const [dragState, setDragState] = React.useState<{
       isDragging: boolean
-      type: 'start' | 'end' | 'move' | 'add' | null
+      type: 'start' | 'end' | 'move' | 'add' | 'narrow-s' | null
       index: number
       isNewPoint: boolean
     }>({ isDragging: false, type: null, index: -1, isNewPoint: false })
@@ -314,6 +315,9 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
       segmentIndex: number | null
       point: Point | null
     }>({ segmentIndex: null, point: null })
+    
+    // 折弯线悬停的线段索引
+    const [narrowSHoverIndex, setNarrowSHoverIndex] = React.useState<number | null>(null)
 
     // 记录新添加点的索引（用于拖拽过程中判断是否合并）
     const newPointIndexRef = React.useRef<number | null>(null)
@@ -388,14 +392,30 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
 
     // 当只有起点和终点时，自动生成折弯点（水平→垂直）
     const getFirstPoint = (item: LineSegment): LineSegment[] => {
+      const sx = item.startPoint.x
+      const sy = item.startPoint.y
+      const ex = item.endPoint.x
+      const ey = item.endPoint.y
+      
+      // 如果起点和终点在同一水平线上，直接返回原线段（不需要折弯）
+      if (Math.abs(sy - ey) < 1) {
+        return [item]
+      }
+      
+      // 如果起点和终点在同一垂直线上，直接返回原线段（不需要折弯）
+      if (Math.abs(sx - ex) < 1) {
+        return [item]
+      }
+      
+      // 正常情况：生成水平→垂直的折弯
       return [
         { 
-          startPoint: { x: item.startPoint.x, y: item.startPoint.y }, 
-          endPoint: { x: item.endPoint.x, y: item.startPoint.y } 
+          startPoint: { x: sx, y: sy }, 
+          endPoint: { x: ex, y: sy } 
         },
         { 
-          startPoint: { x: item.endPoint.x, y: item.startPoint.y }, 
-          endPoint: { x: item.endPoint.x, y: item.endPoint.y } 
+          startPoint: { x: ex, y: sy }, 
+          endPoint: { x: ex, y: ey } 
         }
       ]
     }
@@ -463,7 +483,13 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
     const getNarrowSPath = (): string => {
       // 如果只有一条线段，自动生成折弯点
       const segments = pathValue.length === 1 ? getFirstPoint(pathValue[0]) : pathValue
-      const radius = 6 // radiusQ
+      const radius = radiusQ
+
+      // 如果只有一条线段（没有折弯），直接返回直线路径
+      if (segments.length === 1) {
+        const item = segments[0]
+        return `M ${item.startPoint.x} ${item.startPoint.y} L ${item.endPoint.x} ${item.endPoint.y}`
+      }
 
       let path = ''
       segments.forEach((item, index) => {
@@ -477,16 +503,662 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
       return path
     }
 
+    // 获取折弯线的实际线段（用于编辑模式）
+    const getNarrowSSegments = (): LineSegment[] => {
+      if (pathValue.length === 1) {
+        return getFirstPoint(pathValue[0])
+      }
+      return pathValue
+    }
+
+    // 判断线段是水平还是垂直
+    const isHorizontalSegment = (segment: LineSegment): boolean => {
+      return Math.abs(segment.startPoint.y - segment.endPoint.y) < 1
+    }
+
+    const isVerticalSegment = (segment: LineSegment): boolean => {
+      return Math.abs(segment.startPoint.x - segment.endPoint.x) < 1
+    }
+
+    // 折弯线段拖拽状态
+    const narrowSDragRef = React.useRef<{
+      isDragging: boolean
+      segmentIndex: number
+      isHorizontal: boolean
+      dragType: 'move' | 'split'  // move: 移动整条线段, split: 拆分新增线段
+      splitPosition: 'quarter' | 'three-quarter' | null  // 拆分位置
+      segments: LineSegment[]
+      hasSplit: boolean  // 是否已经拆分
+      mergePoint: Point | null  // 合并点位置（用于合并后继续拖动时重新拆分）
+      isMerged: boolean  // 是否已经合并
+    } | null>(null)
+
+    // 折弯线段中点拖拽处理（移动整条线段）
+    const startNarrowSMoveDrag = (segmentIndex: number, segments: LineSegment[], e: React.MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      
+      const segment = segments[segmentIndex]
+      const isHorizontal = isHorizontalSegment(segment)
+      
+      // 记录原始拖拽位置（用于合并后重新拆分）
+      const originalMidPoint: Point = {
+        x: (segment.startPoint.x + segment.endPoint.x) / 2,
+        y: (segment.startPoint.y + segment.endPoint.y) / 2
+      }
+      
+      narrowSDragRef.current = {
+        isDragging: true,
+        segmentIndex,
+        isHorizontal,
+        dragType: 'move',
+        splitPosition: null,
+        segments: [...segments],
+        hasSplit: false,
+        mergePoint: originalMidPoint,
+        isMerged: false
+      }
+      
+      const newDragState = { isDragging: true, type: 'narrow-s' as const, index: segmentIndex, isNewPoint: false }
+      dragStateRef.current = newDragState
+      setDragState(newDragState)
+      
+      const handleMouseMove = (ev: MouseEvent) => {
+        if (!narrowSDragRef.current?.isDragging) return
+        
+        const coord = getSvgCoords(ev.clientX, ev.clientY)
+        let { segmentIndex: idx, isHorizontal: isH, isMerged, mergePoint } = narrowSDragRef.current
+        let newSegments = [...narrowSDragRef.current.segments]
+        
+        // 如果已经合并，检查是否需要重新拆分
+        if (isMerged && mergePoint) {
+          const currentSeg = newSegments[idx]
+          if (isH) {
+            // 水平线段合并后，如果继续上下拖动超过阈值，重新拆分
+            const deltaY = Math.abs(coord.y - mergePoint.y)
+            if (deltaY > 5) {
+              // 重新拆分：在 mergePoint.x 位置拆分
+              const seg1: LineSegment = {
+                startPoint: currentSeg.startPoint,
+                endPoint: { x: mergePoint.x, y: currentSeg.startPoint.y }
+              }
+              const seg2: LineSegment = {
+                startPoint: { x: mergePoint.x, y: currentSeg.startPoint.y },
+                endPoint: { x: mergePoint.x, y: coord.y }
+              }
+              const seg3: LineSegment = {
+                startPoint: { x: mergePoint.x, y: coord.y },
+                endPoint: { x: currentSeg.endPoint.x, y: coord.y }
+              }
+              // 替换当前线段为三条新线段
+              newSegments.splice(idx, 1, seg1, seg2, seg3)
+              // 更新后续线段的起点
+              if (idx + 3 < newSegments.length) {
+                newSegments[idx + 3] = {
+                  ...newSegments[idx + 3],
+                  startPoint: { x: newSegments[idx + 3].startPoint.x, y: coord.y }
+                }
+              }
+              // 更新拖拽状态为新的第三条线段
+              idx = idx + 2
+              narrowSDragRef.current.segmentIndex = idx
+              narrowSDragRef.current.isMerged = false
+              narrowSDragRef.current.mergePoint = null
+            }
+          } else {
+            // 垂直线段合并后，如果继续左右拖动超过阈值，重新拆分
+            const deltaX = Math.abs(coord.x - mergePoint.x)
+            if (deltaX > 5) {
+              // 重新拆分：在 mergePoint.y 位置拆分
+              const seg1: LineSegment = {
+                startPoint: currentSeg.startPoint,
+                endPoint: { x: currentSeg.startPoint.x, y: mergePoint.y }
+              }
+              const seg2: LineSegment = {
+                startPoint: { x: currentSeg.startPoint.x, y: mergePoint.y },
+                endPoint: { x: coord.x, y: mergePoint.y }
+              }
+              const seg3: LineSegment = {
+                startPoint: { x: coord.x, y: mergePoint.y },
+                endPoint: { x: coord.x, y: currentSeg.endPoint.y }
+              }
+              // 替换当前线段为三条新线段
+              newSegments.splice(idx, 1, seg1, seg2, seg3)
+              // 更新后续线段的起点
+              if (idx + 3 < newSegments.length) {
+                newSegments[idx + 3] = {
+                  ...newSegments[idx + 3],
+                  startPoint: { x: coord.x, y: newSegments[idx + 3].startPoint.y }
+                }
+              }
+              // 更新拖拽状态为新的第三条线段
+              idx = idx + 2
+              narrowSDragRef.current.segmentIndex = idx
+              narrowSDragRef.current.isMerged = false
+              narrowSDragRef.current.mergePoint = null
+            }
+          }
+        } else {
+          // 正常移动逻辑
+          if (isH) {
+            // 水平线段：只能上下移动（改变 y 坐标）
+            const newY = coord.y
+            newSegments[idx] = {
+              startPoint: { x: newSegments[idx].startPoint.x, y: newY },
+              endPoint: { x: newSegments[idx].endPoint.x, y: newY }
+            }
+            // 更新前一条线段的终点 y
+            if (idx > 0) {
+              newSegments[idx - 1] = {
+                ...newSegments[idx - 1],
+                endPoint: { x: newSegments[idx - 1].endPoint.x, y: newY }
+              }
+            }
+            // 更新后一条线段的起点 y
+            if (idx < newSegments.length - 1) {
+              newSegments[idx + 1] = {
+                ...newSegments[idx + 1],
+                startPoint: { x: newSegments[idx + 1].startPoint.x, y: newY }
+              }
+            }
+            
+            // 检查是否可以与前面的水平线段合并（idx-2 是前一条水平线段）
+            if (idx >= 2) {
+              const prevHSeg = newSegments[idx - 2]
+              const currentSeg = newSegments[idx]
+              // 如果两条水平线段的 y 坐标相同，可以合并
+              if (Math.abs(prevHSeg.startPoint.y - currentSeg.startPoint.y) < 2) {
+                // 记录合并点位置（原线段的起点 x 坐标）
+                const mergePt: Point = { x: currentSeg.startPoint.x, y: currentSeg.startPoint.y }
+                // 合并：删除 idx-1 和 idx，将 idx-2 的终点连接到 idx+1 的起点
+                newSegments[idx - 2] = {
+                  startPoint: prevHSeg.startPoint,
+                  endPoint: currentSeg.endPoint
+                }
+                // 删除 idx-1 和 idx
+                newSegments.splice(idx - 1, 2)
+                // 更新拖拽索引和合并状态
+                idx = idx - 2
+                narrowSDragRef.current.segmentIndex = idx
+                narrowSDragRef.current.isMerged = true
+                narrowSDragRef.current.mergePoint = mergePt
+              }
+            }
+            
+            // 检查是否可以与后面的水平线段合并（idx+2 是后一条水平线段）
+            if (!narrowSDragRef.current.isMerged && idx + 2 < newSegments.length) {
+              const nextHSeg = newSegments[idx + 2]
+              const currentSeg = newSegments[idx]
+              // 如果两条水平线段的 y 坐标相同，可以合并
+              if (Math.abs(nextHSeg.startPoint.y - currentSeg.startPoint.y) < 2) {
+                // 记录合并点位置（原线段的终点 x 坐标）
+                const mergePt: Point = { x: currentSeg.endPoint.x, y: currentSeg.endPoint.y }
+                // 合并：删除 idx+1 和 idx+2，将 idx 的终点连接到 idx+2 之后的线段
+                newSegments[idx] = {
+                  startPoint: currentSeg.startPoint,
+                  endPoint: nextHSeg.endPoint
+                }
+                // 删除 idx+1 和 idx+2
+                newSegments.splice(idx + 1, 2)
+                // 更新合并状态
+                narrowSDragRef.current.isMerged = true
+                narrowSDragRef.current.mergePoint = mergePt
+              }
+            }
+          } else {
+            // 垂直线段：只能左右移动（改变 x 坐标）
+            const newX = coord.x
+            newSegments[idx] = {
+              startPoint: { x: newX, y: newSegments[idx].startPoint.y },
+              endPoint: { x: newX, y: newSegments[idx].endPoint.y }
+            }
+            // 更新前一条线段的终点 x
+            if (idx > 0) {
+              newSegments[idx - 1] = {
+                ...newSegments[idx - 1],
+                endPoint: { x: newX, y: newSegments[idx - 1].endPoint.y }
+              }
+            }
+            // 更新后一条线段的起点 x
+            if (idx < newSegments.length - 1) {
+              newSegments[idx + 1] = {
+                ...newSegments[idx + 1],
+                startPoint: { x: newX, y: newSegments[idx + 1].startPoint.y }
+              }
+            }
+            
+            // 检查是否可以与前面的垂直线段合并（idx-2 是前一条垂直线段）
+            if (idx >= 2) {
+              const prevVSeg = newSegments[idx - 2]
+              const currentSeg = newSegments[idx]
+              // 如果两条垂直线段的 x 坐标相同，可以合并
+              if (Math.abs(prevVSeg.startPoint.x - currentSeg.startPoint.x) < 2) {
+                // 记录合并点位置（原线段的起点 y 坐标）
+                const mergePt: Point = { x: currentSeg.startPoint.x, y: currentSeg.startPoint.y }
+                // 合并：删除 idx-1 和 idx，将 idx-2 的终点连接到 idx+1 的起点
+                newSegments[idx - 2] = {
+                  startPoint: prevVSeg.startPoint,
+                  endPoint: currentSeg.endPoint
+                }
+                // 删除 idx-1 和 idx
+                newSegments.splice(idx - 1, 2)
+                // 更新拖拽索引和合并状态
+                idx = idx - 2
+                narrowSDragRef.current.segmentIndex = idx
+                narrowSDragRef.current.isMerged = true
+                narrowSDragRef.current.mergePoint = mergePt
+              }
+            }
+            
+            // 检查是否可以与后面的垂直线段合并（idx+2 是后一条垂直线段）
+            if (!narrowSDragRef.current.isMerged && idx + 2 < newSegments.length) {
+              const nextVSeg = newSegments[idx + 2]
+              const currentSeg = newSegments[idx]
+              // 如果两条垂直线段的 x 坐标相同，可以合并
+              if (Math.abs(nextVSeg.startPoint.x - currentSeg.startPoint.x) < 2) {
+                // 记录合并点位置（原线段的终点 y 坐标）
+                const mergePt: Point = { x: currentSeg.endPoint.x, y: currentSeg.endPoint.y }
+                // 合并：删除 idx+1 和 idx+2，将 idx 的终点连接到 idx+2 之后的线段
+                newSegments[idx] = {
+                  startPoint: currentSeg.startPoint,
+                  endPoint: nextVSeg.endPoint
+                }
+                // 删除 idx+1 和 idx+2
+                newSegments.splice(idx + 1, 2)
+                // 更新合并状态
+                narrowSDragRef.current.isMerged = true
+                narrowSDragRef.current.mergePoint = mergePt
+              }
+            }
+          }
+        }
+        
+        narrowSDragRef.current.segments = newSegments
+        pathValueRef.current = newSegments
+        setPathValue(newSegments)
+      }
+      
+      const handleMouseUp = () => {
+        narrowSDragRef.current = null
+        const endState = { isDragging: false, type: null, index: -1, isNewPoint: false } as const
+        dragStateRef.current = endState
+        setDragState(endState)
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+      
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+    }
+
+    // 折弯线段1/4或3/4位置拖拽处理（拆分新增线段）
+    const startNarrowSSplitDrag = (
+      segmentIndex: number, 
+      segments: LineSegment[], 
+      position: 'quarter' | 'three-quarter',
+      e: React.MouseEvent
+    ) => {
+      e.preventDefault()
+      e.stopPropagation()
+      
+      const segment = segments[segmentIndex]
+      const isHorizontal = isHorizontalSegment(segment)
+      
+      narrowSDragRef.current = {
+        isDragging: true,
+        segmentIndex,
+        isHorizontal,
+        dragType: 'split',
+        splitPosition: position,
+        segments: [...segments],
+        hasSplit: false,
+        mergePoint: null,
+        isMerged: false
+      }
+      
+      const newDragState = { isDragging: true, type: 'narrow-s' as const, index: segmentIndex, isNewPoint: true }
+      dragStateRef.current = newDragState
+      setDragState(newDragState)
+      
+      const handleMouseMove = (ev: MouseEvent) => {
+        if (!narrowSDragRef.current?.isDragging) return
+        
+        const coord = getSvgCoords(ev.clientX, ev.clientY)
+        const { segmentIndex: idx, isHorizontal: isH, splitPosition: pos, hasSplit } = narrowSDragRef.current
+        let newSegments = [...narrowSDragRef.current.segments]
+        const seg = newSegments[idx]
+        
+        if (!hasSplit) {
+          // 首次拖拽，拆分线段为3条
+          // 原线段: startPoint -> endPoint
+          // 拆分后:
+          //   seg1: startPoint -> splitPoint1 (水平/垂直)
+          //   seg2: splitPoint1 -> splitPoint2 (垂直/水平，新增的线段)
+          //   seg3: splitPoint2 -> endPoint (水平/垂直)
+          
+          if (isH) {
+            // 水平线段拆分：新增一条垂直线段
+            // 根据拖拽位置决定拆分点
+            const splitX = pos === 'quarter' 
+              ? seg.startPoint.x + (seg.endPoint.x - seg.startPoint.x) * 0.25
+              : seg.startPoint.x + (seg.endPoint.x - seg.startPoint.x) * 0.75
+            
+            const newY = coord.y
+            const seg1: LineSegment = {
+              startPoint: { x: seg.startPoint.x, y: seg.startPoint.y },
+              endPoint: { x: splitX, y: seg.startPoint.y }
+            }
+            const seg2: LineSegment = {
+              startPoint: { x: splitX, y: seg.startPoint.y },
+              endPoint: { x: splitX, y: newY }
+            }
+            const seg3: LineSegment = {
+              startPoint: { x: splitX, y: newY },
+              endPoint: { x: seg.endPoint.x, y: newY }
+            }
+            
+            // 替换原线段
+            newSegments.splice(idx, 1, seg1, seg2, seg3)
+            
+            // 更新后续线段的起点
+            if (idx + 3 < newSegments.length) {
+              newSegments[idx + 3] = {
+                ...newSegments[idx + 3],
+                startPoint: { x: newSegments[idx + 3].startPoint.x, y: newY }
+              }
+            }
+          } else {
+            // 垂直线段拆分：新增一条水平线段
+            const splitY = pos === 'quarter'
+              ? seg.startPoint.y + (seg.endPoint.y - seg.startPoint.y) * 0.25
+              : seg.startPoint.y + (seg.endPoint.y - seg.startPoint.y) * 0.75
+            
+            const newX = coord.x
+            const seg1: LineSegment = {
+              startPoint: { x: seg.startPoint.x, y: seg.startPoint.y },
+              endPoint: { x: seg.startPoint.x, y: splitY }
+            }
+            const seg2: LineSegment = {
+              startPoint: { x: seg.startPoint.x, y: splitY },
+              endPoint: { x: newX, y: splitY }
+            }
+            const seg3: LineSegment = {
+              startPoint: { x: newX, y: splitY },
+              endPoint: { x: newX, y: seg.endPoint.y }
+            }
+            
+            // 替换原线段
+            newSegments.splice(idx, 1, seg1, seg2, seg3)
+            
+            // 更新后续线段的起点
+            if (idx + 3 < newSegments.length) {
+              newSegments[idx + 3] = {
+                ...newSegments[idx + 3],
+                startPoint: { x: newX, y: newSegments[idx + 3].startPoint.y }
+              }
+            }
+          }
+          
+          narrowSDragRef.current.hasSplit = true
+          narrowSDragRef.current.segments = newSegments
+          // 更新拖拽索引为第三条线段（与原线段同方向）
+          narrowSDragRef.current.segmentIndex = idx + 2
+          narrowSDragRef.current.isHorizontal = isH  // 第三条线段与原线段方向相同
+        } else {
+          // 已经拆分，继续移动第三条线段
+          const newIdx = narrowSDragRef.current.segmentIndex
+          const newIsH = narrowSDragRef.current.isHorizontal
+          
+          if (newIsH) {
+            // 水平线段：上下移动
+            const newY = coord.y
+            newSegments[newIdx] = {
+              startPoint: { x: newSegments[newIdx].startPoint.x, y: newY },
+              endPoint: { x: newSegments[newIdx].endPoint.x, y: newY }
+            }
+            // 更新前一条线段（垂直线段）的终点 y
+            if (newIdx > 0) {
+              newSegments[newIdx - 1] = {
+                ...newSegments[newIdx - 1],
+                endPoint: { x: newSegments[newIdx - 1].endPoint.x, y: newY }
+              }
+            }
+            // 更新后一条线段的起点 y
+            if (newIdx < newSegments.length - 1) {
+              newSegments[newIdx + 1] = {
+                ...newSegments[newIdx + 1],
+                startPoint: { x: newSegments[newIdx + 1].startPoint.x, y: newY }
+              }
+            }
+          } else {
+            // 垂直线段：左右移动
+            const newX = coord.x
+            newSegments[newIdx] = {
+              startPoint: { x: newX, y: newSegments[newIdx].startPoint.y },
+              endPoint: { x: newX, y: newSegments[newIdx].endPoint.y }
+            }
+            // 更新前一条线段（水平线段）的终点 x
+            if (newIdx > 0) {
+              newSegments[newIdx - 1] = {
+                ...newSegments[newIdx - 1],
+                endPoint: { x: newX, y: newSegments[newIdx - 1].endPoint.y }
+              }
+            }
+            // 更新后一条线段的起点 x
+            if (newIdx < newSegments.length - 1) {
+              newSegments[newIdx + 1] = {
+                ...newSegments[newIdx + 1],
+                startPoint: { x: newX, y: newSegments[newIdx + 1].startPoint.y }
+              }
+            }
+          }
+          
+          narrowSDragRef.current.segments = newSegments
+        }
+        
+        pathValueRef.current = newSegments
+        setPathValue(newSegments)
+      }
+      
+      const handleMouseUp = () => {
+        narrowSDragRef.current = null
+        const endState = { isDragging: false, type: null, index: -1, isNewPoint: false } as const
+        dragStateRef.current = endState
+        setDragState(endState)
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+      
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+    }
+
+    // 折弯线起点拖拽处理（自由移动，同时更新第一条线段和相邻线段）
+    const startNarrowSStartDrag = (segments: LineSegment[], e: React.MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      
+      const firstSeg = segments[0]
+      const isHorizontal = isHorizontalSegment(firstSeg)
+      
+      narrowSDragRef.current = {
+        isDragging: true,
+        segmentIndex: 0,
+        isHorizontal,
+        dragType: 'move',
+        splitPosition: null,
+        segments: [...segments],
+        hasSplit: false,
+        mergePoint: null,
+        isMerged: false
+      }
+      
+      const newDragState = { isDragging: true, type: 'narrow-s' as const, index: 0, isNewPoint: false }
+      dragStateRef.current = newDragState
+      setDragState(newDragState)
+      
+      const handleMouseMove = (ev: MouseEvent) => {
+        if (!narrowSDragRef.current?.isDragging) return
+        
+        const coord = getSvgCoords(ev.clientX, ev.clientY)
+        const newSegments = [...narrowSDragRef.current.segments]
+        const isH = narrowSDragRef.current.isHorizontal
+        
+        // 起点自由移动
+        newSegments[0] = {
+          ...newSegments[0],
+          startPoint: coord
+        }
+        
+        // 同时更新第一条线段的终点和第二条线段的起点（保持连接）
+        if (isH) {
+          // 第一条是水平线段：起点的 y 坐标变化会影响第一条线段的终点 y 和第二条线段
+          newSegments[0] = {
+            ...newSegments[0],
+            endPoint: { x: newSegments[0].endPoint.x, y: coord.y }
+          }
+          // 更新第二条线段的起点 y
+          if (newSegments.length > 1) {
+            newSegments[1] = {
+              ...newSegments[1],
+              startPoint: { x: newSegments[1].startPoint.x, y: coord.y }
+            }
+          }
+        } else {
+          // 第一条是垂直线段：起点的 x 坐标变化会影响第一条线段的终点 x 和第二条线段
+          newSegments[0] = {
+            ...newSegments[0],
+            endPoint: { x: coord.x, y: newSegments[0].endPoint.y }
+          }
+          // 更新第二条线段的起点 x
+          if (newSegments.length > 1) {
+            newSegments[1] = {
+              ...newSegments[1],
+              startPoint: { x: coord.x, y: newSegments[1].startPoint.y }
+            }
+          }
+        }
+        
+        narrowSDragRef.current.segments = newSegments
+        pathValueRef.current = newSegments
+        setPathValue(newSegments)
+      }
+      
+      const handleMouseUp = () => {
+        narrowSDragRef.current = null
+        const endState = { isDragging: false, type: null, index: -1, isNewPoint: false } as const
+        dragStateRef.current = endState
+        setDragState(endState)
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+      
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+    }
+
+    // 折弯线终点拖拽处理（自由移动，同时更新最后一条线段和相邻线段）
+    const startNarrowSEndDrag = (segments: LineSegment[], e: React.MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      
+      const lastIdx = segments.length - 1
+      const lastSeg = segments[lastIdx]
+      const isHorizontal = isHorizontalSegment(lastSeg)
+      
+      narrowSDragRef.current = {
+        isDragging: true,
+        segmentIndex: lastIdx,
+        isHorizontal,
+        dragType: 'move',
+        splitPosition: null,
+        segments: [...segments],
+        hasSplit: false,
+        mergePoint: null,
+        isMerged: false
+      }
+      
+      const newDragState = { isDragging: true, type: 'narrow-s' as const, index: lastIdx, isNewPoint: false }
+      dragStateRef.current = newDragState
+      setDragState(newDragState)
+      
+      const handleMouseMove = (ev: MouseEvent) => {
+        if (!narrowSDragRef.current?.isDragging) return
+        
+        const coord = getSvgCoords(ev.clientX, ev.clientY)
+        const newSegments = [...narrowSDragRef.current.segments]
+        const idx = narrowSDragRef.current.segmentIndex
+        const isH = narrowSDragRef.current.isHorizontal
+        
+        // 终点自由移动
+        newSegments[idx] = {
+          ...newSegments[idx],
+          endPoint: coord
+        }
+        
+        // 同时更新最后一条线段的起点和倒数第二条线段的终点（保持连接）
+        if (isH) {
+          // 最后一条是水平线段：终点的 y 坐标变化会影响最后一条线段的起点 y 和倒数第二条线段
+          newSegments[idx] = {
+            ...newSegments[idx],
+            startPoint: { x: newSegments[idx].startPoint.x, y: coord.y }
+          }
+          // 更新倒数第二条线段的终点 y
+          if (idx > 0) {
+            newSegments[idx - 1] = {
+              ...newSegments[idx - 1],
+              endPoint: { x: newSegments[idx - 1].endPoint.x, y: coord.y }
+            }
+          }
+        } else {
+          // 最后一条是垂直线段：终点的 x 坐标变化会影响最后一条线段的起点 x 和倒数第二条线段
+          newSegments[idx] = {
+            ...newSegments[idx],
+            startPoint: { x: coord.x, y: newSegments[idx].startPoint.y }
+          }
+          // 更新倒数第二条线段的终点 x
+          if (idx > 0) {
+            newSegments[idx - 1] = {
+              ...newSegments[idx - 1],
+              endPoint: { x: coord.x, y: newSegments[idx - 1].endPoint.y }
+            }
+          }
+        }
+        
+        narrowSDragRef.current.segments = newSegments
+        pathValueRef.current = newSegments
+        setPathValue(newSegments)
+      }
+      
+      const handleMouseUp = () => {
+        narrowSDragRef.current = null
+        const endState = { isDragging: false, type: null, index: -1, isNewPoint: false } as const
+        dragStateRef.current = endState
+        setDragState(endState)
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+      
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+    }
+
     // 获取路径字符串
     const getPath = (): string => {
+      console.log('[ConnectWidget] getPath - shape:', shape, 'pathValue.length:', pathValue.length)
+      let result = ''
       switch (shape) {
         case 'bezier':
-          return getBezierPath()
+          result = getBezierPath()
+          break
         case 'narrow-s':
-          return getNarrowSPath()
+          result = getNarrowSPath()
+          break
         default:
-          return getLinePath()
+          result = getLinePath()
       }
+      console.log('[ConnectWidget] getPath - result:', result)
+      return result
     }
 
     // 通用拖拽处理函数 - 在 mousedown 时立即添加事件监听器
@@ -863,7 +1535,7 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
           )}
 
           {/* 编辑模式下的控制点 */}
-          {editMode && (
+          {editMode && shape !== 'narrow-s' && (
             <g>
               {/* 起点手柄 */}
               <circle
@@ -926,6 +1598,140 @@ const ConnectWidget = React.forwardRef<HTMLDivElement, ConnectWidgetProps>(
                   }}
                 />
               )}
+            </g>
+          )}
+
+          {/* 折弯线模式的控制点 */}
+          {editMode && shape === 'narrow-s' && (
+            <g>
+              {/* 折弯线段的控制点：中点始终显示，1/4和3/4位置只在悬停时显示 */}
+              {(() => {
+                const segments = getNarrowSSegments()
+                return segments.map((segment, index) => {
+                  const isH = isHorizontalSegment(segment)
+                  const isV = isVerticalSegment(segment)
+                  
+                  // 只为水平或垂直线段显示控制点
+                  if (!isH && !isV) return null
+                  
+                  // 计算3个控制点位置
+                  const quarterX = segment.startPoint.x + (segment.endPoint.x - segment.startPoint.x) * 0.25
+                  const quarterY = segment.startPoint.y + (segment.endPoint.y - segment.startPoint.y) * 0.25
+                  const midX = (segment.startPoint.x + segment.endPoint.x) / 2
+                  const midY = (segment.startPoint.y + segment.endPoint.y) / 2
+                  const threeQuarterX = segment.startPoint.x + (segment.endPoint.x - segment.startPoint.x) * 0.75
+                  const threeQuarterY = segment.startPoint.y + (segment.endPoint.y - segment.startPoint.y) * 0.75
+                  
+                  const size = 8
+                  const cursor = isH ? 'ns-resize' : 'ew-resize'
+                  const isHovered = narrowSHoverIndex === index
+                  
+                  // 计算线段的边界框用于悬停检测
+                  const minX = Math.min(segment.startPoint.x, segment.endPoint.x) - 10
+                  const maxX = Math.max(segment.startPoint.x, segment.endPoint.x) + 10
+                  const minY = Math.min(segment.startPoint.y, segment.endPoint.y) - 10
+                  const maxY = Math.max(segment.startPoint.y, segment.endPoint.y) + 10
+                  
+                  return (
+                    <g 
+                      key={`narrow-s-handles-${index}`}
+                      onMouseEnter={() => setNarrowSHoverIndex(index)}
+                      onMouseLeave={() => setNarrowSHoverIndex(null)}
+                    >
+                      {/* 透明的悬停检测区域 */}
+                      <rect
+                        x={minX}
+                        y={minY}
+                        width={maxX - minX}
+                        height={maxY - minY}
+                        fill="transparent"
+                        style={{ pointerEvents: 'all' }}
+                      />
+                      
+                      {/* 1/4位置控制点（只在悬停时显示） */}
+                      {isHovered && (
+                        <rect
+                          x={quarterX - size / 2}
+                          y={quarterY - size / 2}
+                          width={size}
+                          height={size}
+                          fill="#3b82f6"
+                          stroke="white"
+                          strokeWidth={1.5}
+                          style={{ cursor }}
+                          onMouseDown={(e) => startNarrowSSplitDrag(index, segments, 'quarter', e)}
+                        />
+                      )}
+                      
+                      {/* 中点控制点（始终显示） */}
+                      <rect
+                        x={midX - size / 2}
+                        y={midY - size / 2}
+                        width={size}
+                        height={size}
+                        fill="#3b82f6"
+                        stroke="white"
+                        strokeWidth={1.5}
+                        style={{ cursor }}
+                        onMouseDown={(e) => startNarrowSMoveDrag(index, segments, e)}
+                      />
+                      
+                      {/* 3/4位置控制点（只在悬停时显示） */}
+                      {isHovered && (
+                        <rect
+                          x={threeQuarterX - size / 2}
+                          y={threeQuarterY - size / 2}
+                          width={size}
+                          height={size}
+                          fill="#3b82f6"
+                          stroke="white"
+                          strokeWidth={1.5}
+                          style={{ cursor }}
+                          onMouseDown={(e) => startNarrowSSplitDrag(index, segments, 'three-quarter', e)}
+                        />
+                      )}
+                    </g>
+                  )
+                })
+              })()}
+
+              {/* 起点手柄（圆形）- 放在最后渲染以确保在最上层 */}
+              {(() => {
+                const segments = getNarrowSSegments()
+                const firstSeg = segments[0]
+                const isH = isHorizontalSegment(firstSeg)
+                return (
+                  <circle
+                    cx={firstSeg.startPoint.x}
+                    cy={firstSeg.startPoint.y}
+                    r={handleRadius}
+                    fill="#3b82f6"
+                    stroke="white"
+                    strokeWidth={2}
+                    style={{ cursor: isH ? 'ew-resize' : 'ns-resize' }}
+                    onMouseDown={(e) => startNarrowSStartDrag(segments, e)}
+                  />
+                )
+              })()}
+
+              {/* 终点手柄（圆形）- 放在最后渲染以确保在最上层 */}
+              {(() => {
+                const segments = getNarrowSSegments()
+                const lastSeg = segments[segments.length - 1]
+                const isH = isHorizontalSegment(lastSeg)
+                return (
+                  <circle
+                    cx={lastSeg.endPoint.x}
+                    cy={lastSeg.endPoint.y}
+                    r={handleRadius}
+                    fill="#3b82f6"
+                    stroke="white"
+                    strokeWidth={2}
+                    style={{ cursor: isH ? 'ew-resize' : 'ns-resize' }}
+                    onMouseDown={(e) => startNarrowSEndDrag(segments, e)}
+                  />
+                )
+              })()}
             </g>
           )}
         </svg>

@@ -8,7 +8,7 @@ const connectWidgetPropsConfig: PropConfig[] = [
     name: 'pathValue',
     label: '路径数据',
     type: 'text' as const,
-    default: JSON.stringify([{ startPoint: { x: 50, y: 150 }, endPoint: { x: 350, y: 150 } }])
+    default: JSON.stringify([{ startPoint: { x: 50, y: 100 }, endPoint: { x: 350, y: 200 } }])
   },
   {
     name: 'shape',
@@ -146,7 +146,7 @@ const connectWidgetPropsConfig: PropConfig[] = [
 
 // 默认属性值
 const connectWidgetDefaultProps = {
-  pathValue: JSON.stringify([{ startPoint: { x: 50, y: 150 }, endPoint: { x: 350, y: 150 } }]),
+  pathValue: JSON.stringify([{ startPoint: { x: 50, y: 100 }, endPoint: { x: 350, y: 200 } }]),
   shape: 'line',
   stroke: '#000000',
   strokeWidth: 2,
@@ -191,6 +191,8 @@ const ConnectWidgetPreview = ({ props }: { props: Record<string, any> }) => {
     strokeLinejoin: 'round' as const
   }
 
+  console.log('[ConnectWidgetPreview] props.shape:', props.shape, 'pathValue:', pathValue)
+  
   return (
     <div className="w-full border rounded-lg bg-gray-50 p-4">
       <ConnectWidget
@@ -239,7 +241,7 @@ const renderConnectWidgetCodePreview = (props: Record<string, any>) => {
         timing: "linear",
         orientation: "forward"
       }}
-      endArrow="${props.pathValue}"
+      pathValue="${props.pathValue}"
       onPathValueChange={setPathValue}
     />
 `

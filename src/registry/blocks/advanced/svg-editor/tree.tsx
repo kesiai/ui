@@ -96,7 +96,6 @@ const TreeNodeComponent: React.FC<{
           <button
             className="tree-node-expand"
             onClick={handleExpand}
-            disabled={node.disabled}
           >
             {isExpanded ? (
               <ChevronDown size={12} />

@@ -12,6 +12,7 @@ import isNull from 'lodash/isNull'
 import isUndefined from 'lodash/isUndefined'
 import isEmpty from 'lodash/isEmpty'
 import isNaN from 'lodash/isNaN'
+import isNumber from 'lodash/isNumber'
 
 export interface SelectOption {
   value: string | number
@@ -33,8 +34,8 @@ export interface SelectComponentProps {
       dataType?: 'string' | 'number'
       enum1?: string[]
       enum_title1?: string[]
-      enum?: string[]
-      enum_title?: string[]
+      enumList?: string[]
+      enumTitle?: string[]
       enum_color1?: string[]
       size?: 'small' | 'middle' | 'large'
       [key: string]: any
@@ -81,6 +82,7 @@ const CheckboxAll: React.FC<{
           checked={checkAll}
           onCheckedChange={onCheckAllChange}
           disabled={disabled}
+          aria-checked={indeterminate ? 'mixed' : checkAll}
         />
         <label
           htmlFor="select-all"
@@ -118,36 +120,36 @@ const CheckboxAll: React.FC<{
 
 const SelectComponent = React.forwardRef<HTMLButtonElement, SelectComponentProps>(
   (props, ref) => {
-    const { input, field: { schema, filter } = {}, allowClear = true, meta } = props
+    const { input, field, allowClear = true, meta } = props
     const { onChange, value } = input || {}
+    const schema = field?.schema || {}
+    const filter = field?.filter
 
-    const {
-      selectFace = 'select',
-      selectType,
-      defaultVal,
-      disabled: dis = false,
-      dataType = 'string',
-      enum1,
-      enum_title1,
-      enum,
-      enum_title,
-      enum_color1,
-      size = 'middle'
-    } = schema || {}
+    const selectFace = schema.selectFace ?? 'select'
+    const selectType = schema.selectType
+    const defaultVal = schema.defaultVal
+    const dis = schema.disabled ?? false
+    const dataType = schema.dataType ?? 'string'
+    const enum1 = schema.enum1
+    const enum_title1 = schema.enum_title1
+    const enumList = schema.enumList || (schema as any)['enum']
+    const enumTitle = schema.enumTitle || (schema as any)['enum_title']
+    const enum_color1 = schema.enum_color1
+    const size = schema.size ?? 'middle'
 
     const disabled = dis && !filter && !isEmpty(meta)
 
-    const isNullValue = (v: any) =>
+    const isNullValue = (v: any): boolean =>
       isNull(v) || isUndefined(v) || isNaN(v) || (typeof v === 'string' && isEmpty(v))
 
     const defaultValFormat = (): string | number | (string | number)[] | undefined => {
       if (!defaultVal) return undefined
       if (selectType === 'multiple') {
         return dataType === 'number'
-          ? defaultVal.split(',').map(v => parseInt(v))
+          ? defaultVal.split(',').map((v: string) => parseInt(v))
           : defaultVal.split(',')
       } else {
-        return dataType === 'number' ? parseInt(defaultVal) : defaultVal
+        return dataType === 'number' ? parseInt(defaultVal || '') : defaultVal
       }
     }
 
@@ -162,7 +164,7 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectComponentProps
     const optionList: SelectOption[] = React.useMemo(() => {
       if (enum1 && enum1.length > 0) {
         // 工作表特制
-        return enum1.map((item, index) => {
+        return enum1.map((item: string, index: number) => {
           const label = enum_title1?.[index] || item
           return {
             value: dataType === 'number' ? parseInt(item) : item,
@@ -182,15 +184,15 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectComponentProps
             ) : label
           }
         })
-      } else if (enum && enum.length > 0) {
+      } else if (enumList && enumList.length > 0) {
         // 普通
-        return enum.map((item, index) => ({
-          value: dataType === 'number' ? parseInt(item) : item,
-          label: enum_title?.[index] || item
+        return enumList.map((item: string, index: number) => ({
+          value: dataType === 'number' ? parseInt(item as string) : item,
+          label: enumTitle?.[index] || item
         }))
       }
       return []
-    }, [enum1, enum_title1, enum, enum_title, enum_color1, dataType])
+    }, [enum1, enum_title1, enumList, enumTitle, enum_color1, dataType])
 
     const handleChange = (val: string) => {
       const parsedValue = dataType === 'number' ? parseInt(val) : val
@@ -217,7 +219,7 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectComponentProps
         >
           <SelectTrigger
             ref={ref}
-            className={cn(sizeClasses[size], 'w-full')}
+            className={cn(sizeClasses[size as 'small' | 'middle' | 'large'], 'w-full')}
           >
             <SelectValue placeholder="请选择" />
           </SelectTrigger>
@@ -260,7 +262,7 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectComponentProps
       >
         <SelectTrigger
           ref={ref}
-          className={cn(sizeClasses[size], 'w-full')}
+          className={cn(sizeClasses[size as 'small' | 'middle' | 'large'], 'w-full')}
         >
           <SelectValue placeholder="请选择" />
         </SelectTrigger>

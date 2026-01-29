@@ -1,0 +1,374 @@
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import isNil from 'lodash/isNil'
+import isEmpty from 'lodash/isEmpty'
+
+// 导入迁移后的字段组件
+import TextComponent from '@/components/tableField/components/Text'
+import NumberComponent from '@/components/tableField/components/Number'
+import SelectComponent from '@/components/tableField/components/Select'
+import DateComponent from '@/components/tableField/components/Date'
+import DateRangeComponent from '@/components/tableField/components/DateRange'
+import TimeComponent from '@/components/tableField/components/Time'
+import CheckboxComponent from '@/components/tableField/components/Checkbox'
+import RateComponent from '@/components/tableField/components/Rate'
+import RichTextComponent from '@/components/tableField/components/RichText'
+import AreaComponent from '../form-area/form-area'
+
+export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * 字段配置（schema）
+   */
+  config?: Record<string, any>
+  /**
+   * 字段值
+   */
+  value?: any
+  /**
+   * 输入对象
+   */
+  input?: {
+    value?: any
+    onChange?: (value: any) => void
+  }
+  /**
+   * 默认值
+   */
+  defaultValue?: any
+  /**
+   * 单元格键值
+   */
+  cellKey?: string
+  /**
+   * 字段配置项
+   */
+  fieldSchema?: string
+  /**
+   * 是否禁用
+   */
+  disabled?: boolean
+  /**
+   * 字段标签
+   */
+  label?: string
+  /**
+   * 占位符
+   */
+  placeholder?: string
+  /**
+   * 是否必填
+   */
+  required?: boolean
+  /**
+   * 描述文本
+   */
+  description?: string
+  /**
+   * 错误提示
+   */
+  error?: string
+  /**
+   * 大小
+   */
+  size?: 'small' | 'middle' | 'large'
+  /**
+   * 元数据
+   */
+  meta?: any
+  /**
+   * 记录数据
+   */
+  record?: any
+}
+
+/**
+ * 根据字段 schema 选择对应的组件
+ */
+const FieldComponentSelector: React.FC<{
+  schema: Record<string, any>
+  input: {
+    value?: any
+    onChange?: (value: any) => void
+    onBlur?: (e: any) => void
+  }
+  field?: {
+    schema?: Record<string, any>
+    filter?: any
+    meta?: any
+  }
+  meta?: any
+  record?: any
+  cellKey?: string
+}> = ({ schema, input, field, meta, record, cellKey }) => {
+  const config = schema || {}
+
+  // 关联字段（新版）
+  if ((config.relateTo || config.relate) && config.recordSelectType) {
+    // TODO: 实现关联字段组件
+    return <div className="text-sm text-muted-foreground">关联字段（待实现）</div>
+  }
+
+  // 外部工作表关联
+  if (['object', 'array'].includes(config.type) && config.relate?.id) {
+    // TODO: 实现外部工作表关联组件
+    return <div className="text-sm text-muted-foreground">外部工作表关联（待实现）</div>
+  }
+
+  // 附件上传
+  if (config.type === 'object' && config.fieldType === 'attachment') {
+    // TODO: 实现附件上传组件
+    return <div className="text-sm text-muted-foreground">附件上传（待实现）</div>
+  }
+
+  if (config.type === 'array' && config.fieldType === 'attachments') {
+    // TODO: 实现多附件上传组件
+    return <div className="text-sm text-muted-foreground">多附件上传（待实现）</div>
+  }
+
+  // 用户/角色关联
+  if (['User', 'Role'].includes(config.relateTo)) {
+    // TODO: 实现用户角色组件
+    return <div className="text-sm text-muted-foreground">用户角色（待实现）</div>
+  }
+
+  // 关联字段只读
+  if ((config.relateTo || config.relate) && config.disabled) {
+    // TODO: 实现关联字段只读组件
+    return <div className="text-sm text-muted-foreground">关联字段只读（待实现）</div>
+  }
+
+  // 文本输入
+  if (config.type === 'string' && config.fieldType === 'input') {
+    return <TextComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 枚举选择器
+  if (config.enum1 && config.enum1.length > 0) {
+    return <SelectComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 数字输入
+  if (config.type === 'number' && config.fieldType === 'inputNumber') {
+    return <NumberComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 日期选择
+  if (config.type === 'string' && config.fieldType === 'datePicker') {
+    return <DateComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 日期范围
+  if (config.type === 'string' && config.fieldType === 'dateRange') {
+    return <DateRangeComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} cellKey={cellKey} />
+  }
+
+  // 时间选择
+  if (config.type === 'string' && config.fieldType === 'timePicker') {
+    return <TimeComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 地图定位
+  if (config.type === 'object' && config.fieldType === 'map') {
+    // TODO: 实现地图组件
+    return <div className="text-sm text-muted-foreground">地图定位（待实现）</div>
+  }
+
+  // 布尔值/复选框
+  if (config.type === 'boolean' && (config.fieldType === 'checkbox' || config.fieldType === 'boolean')) {
+    return <CheckboxComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
+  }
+
+  // 可编辑表格
+  if (config.fieldType === 'editableTable') {
+    // TODO: 实现可编辑表格组件
+    return <div className="text-sm text-muted-foreground">可编辑表格（待实现）</div>
+  }
+
+  // 只读表格
+  if (config.fieldType === 'showTable') {
+    // TODO: 实现只读表格组件
+    return <div className="text-sm text-muted-foreground">只读表格（待实现）</div>
+  }
+
+  // 编号
+  if (config.fieldType === 'serialNumber') {
+    // TODO: 实现编号组件
+    return <div className="text-sm text-muted-foreground">编号（待实现）</div>
+  }
+
+  // 链接
+  if (config.fieldType === 'link') {
+    // TODO: 实现链接组件
+    return <div className="text-sm text-muted-foreground">链接（待实现）</div>
+  }
+
+  // 区域选择
+  if (config.fieldType === 'area') {
+    return <AreaComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 报警关联
+  if (config.relateTo === 'Warning') {
+    // TODO: 实现报警组件
+    return <div className="text-sm text-muted-foreground">报警（待实现）</div>
+  }
+
+  // 星级评价
+  if (config.fieldType === 'rate') {
+    return <RateComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 富文本编辑器
+  if (config.fieldType === 'textEditor') {
+    return <RichTextComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  // 字节数组
+  if (config.fieldType === 'bytesArray') {
+    // TODO: 实现字节数组组件
+    return <div className="text-sm text-muted-foreground">字节数组（待实现）</div>
+  }
+
+  // 多语言输入
+  if (config.fieldType === 'languageInput') {
+    // TODO: 实现多语言输入组件
+    return <div className="text-sm text-muted-foreground">多语言输入（待实现）</div>
+  }
+
+  // 查找引用
+  if (config.config === '查找引用') {
+    // TODO: 实现查找引用组件
+    return <div className="text-sm text-muted-foreground">查找引用（待实现）</div>
+  }
+
+  // 表单信息
+  if (config.config === '表单信息') {
+    // TODO: 实现表单信息组件
+    return <div className="text-sm text-muted-foreground">表单信息（待实现）</div>
+  }
+
+  // 默认：根据基础类型显示
+  if (config.type === 'string') {
+    return <TextComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  if (config.type === 'number') {
+    return <NumberComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+  }
+
+  if (config.type === 'boolean') {
+    return <CheckboxComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
+  }
+
+  // 未知类型
+  return (
+    <div className="text-sm text-muted-foreground">
+      未知字段类型: {config.type} {config.fieldType}
+    </div>
+  )
+}
+
+/**
+ * FormWidget - 表字段映射组件
+ * 根据字段配置动态渲染对应的表单组件
+ */
+const FormWidget = React.forwardRef<HTMLDivElement, FormWidgetProps>(
+  (
+    {
+      config = {},
+      value,
+      input,
+      defaultValue,
+      cellKey,
+      disabled = false,
+      label,
+      placeholder,
+      required = false,
+      description,
+      error,
+      size = 'middle',
+      meta,
+      record,
+      className,
+      fieldSchema,
+      ...props
+    },
+    ref
+  ) => {
+    let schema
+    try {
+      schema = fieldSchema ? JSON.parse(fieldSchema) : {}
+    } catch (e) {
+      console.error('解析 fieldSchema 出错', e)
+    }
+
+    // 处理输入值
+    const inputValue = React.useMemo(() => {
+      return !isNil(value) ? value : input?.value
+    }, [value, input?.value])
+
+    // 处理值变化
+    const handleChange = React.useCallback((newValue: any) => {
+      if (input?.onChange) {
+        input.onChange(newValue)
+      }
+    }, [input])
+
+    const inputProps = React.useMemo(() => ({
+      value: inputValue,
+      onChange: handleChange
+    }), [inputValue, handleChange])
+
+    // 空配置时的占位显示
+    if (isEmpty(schema)) {
+      return (
+        <div
+          ref={ref}
+          className={cn(
+            "form-widget flex items-center justify-center",
+            "min-h-[130px] w-full text-sm text-muted-foreground",
+            className
+          )}
+          {...props}
+        >
+          能够配置表定义中定义的所有字段
+        </div>
+      )
+    }
+
+    return (
+      <div ref={ref} className={cn("form-widget space-y-2", className)} {...props}>
+        {label && (
+          <label className={cn(
+            "text-sm font-medium leading-none",
+            "peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          )}>
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+        )}
+
+        <FieldComponentSelector
+          schema={schema}
+          input={inputProps}
+          field={{ schema, meta }}
+          meta={meta}
+          record={record}
+          cellKey={cellKey}
+        />
+
+        {description && (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        )}
+
+        {error && (
+          <p className="text-sm text-red-500">{error}</p>
+        )}
+      </div>
+    )
+  }
+)
+
+FormWidget.displayName = "FormWidget"
+
+export default FormWidget

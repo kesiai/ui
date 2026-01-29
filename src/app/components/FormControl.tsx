@@ -24,6 +24,7 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
   }
 
   const handleSaveCode = (code: string) => {
+    console.log('Saving code:', config.name, code)
     onChange(config.name, code)
   }
 

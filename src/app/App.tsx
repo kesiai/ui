@@ -1,5 +1,39 @@
 import { useState, useMemo, useEffect } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig } from './config'
+import { 
+    barConfig,
+    textConfig,
+    textareaConfig,
+    iframeConfig,
+    buttonConfig,
+    imageConfig,
+    cardConfig,
+    modalConfig,
+    popoverConfig,
+    panelConfig,
+    tabsConfig,
+    statusConfig,
+    model3dConfig,
+    statusesConfig,
+    playerConfig,
+    qrcodeConfig,
+    chartLineConfig,
+    chartBarConfig,
+    dateRangeConfig,
+    areaConfig,
+    rateConfig,
+    mobilePickerConfig, 
+    dataPointConfig, 
+    formInputConfig, 
+    formSelectConfig, 
+    formInputNumberConfig, 
+    formSliderConfig, 
+    formRadioConfig, 
+    formSwitchConfig, 
+    formCheckboxConfig, 
+    formDateConfig, 
+    mobilePopupConfig, 
+    mobileCalendarConfig,
+    svgEditorConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
@@ -76,7 +110,8 @@ const componentCategories = [
     icon: '⚡',
     components: [
       { id: 'qrcode', config: qrcodeConfig },
-      { id: 'player', config: playerConfig }
+      { id: 'player', config: playerConfig },
+      { id: 'svg-editor', config: svgEditorConfig }
     ]
   },
   {
@@ -157,7 +192,8 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   'form-checkbox': formCheckboxConfig,
   'form-date': formDateConfig,
   'mobile-popup': mobilePopupConfig,
-  'mobile-calendar': mobileCalendarConfig
+  'mobile-calendar': mobileCalendarConfig,
+  'svg-editor': svgEditorConfig
 }
 
 function App() {
@@ -277,7 +313,8 @@ function App() {
     'form-checkbox': formCheckboxConfig.defaultProps,
     'form-date': formDateConfig.defaultProps,
     'mobile-popup': mobilePopupConfig.defaultProps,
-    'mobile-calendar': mobileCalendarConfig.defaultProps
+    'mobile-calendar': mobileCalendarConfig.defaultProps,
+    'svg-editor': svgEditorConfig.defaultProps
   })
 
   // 获取当前选中的组件配置

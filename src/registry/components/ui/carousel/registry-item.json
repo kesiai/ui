@@ -1,0 +1,14 @@
+{
+  "name": "carousel",
+  "type": "registry:component",
+  "registryDependencies": ["button"],
+  "dependencies": [
+    "embla-carousel-react"
+  ],
+  "files": [
+    {
+      "path": "carousel/carousel.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

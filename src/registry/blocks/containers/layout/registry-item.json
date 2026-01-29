@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "layout",
+  "type": "registry:component",
+  "title": "Layout",
+  "description": "Layout 布局容器组件 - 支持Free、Grid、Flex、Cover四种布局方式",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "blocks/containers/layout/layout.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

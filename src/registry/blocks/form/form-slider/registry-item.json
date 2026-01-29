@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-slider/form-slider.tsx",
+      "path": "registry/blocks/form/form-slider/form-slider.tsx",
       "type": "registry:component"
     }
   ]

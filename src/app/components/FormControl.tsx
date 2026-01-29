@@ -142,6 +142,27 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
           />
         </div>
       )
+    case 'array':
+      return (
+        <div className="space-y-2">
+          <textarea
+            value={value ? JSON.stringify(value, null, 2) : ''}
+            onChange={(e) => {
+              try {
+                const parsed = JSON.parse(e.target.value)
+                handleChange(parsed)
+              } catch (error) {
+              }
+            }}
+            placeholder='请输入JSON数组'
+            rows={6}
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all font-mono text-sm"
+          />
+          <div className="text-xs text-slate-500">
+            {/* {config.description || '支持JSON数组格式'} */}
+          </div>
+        </div>
+      )
 
     default:
       return null

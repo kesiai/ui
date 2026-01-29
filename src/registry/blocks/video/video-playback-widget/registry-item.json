@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "video-playback-widget",
+  "type": "registry:component",
+  "title": "VideoPlaybackWidget",
+  "description": "视频回放组件 - 用于视频录像回放的组件，包含日期选择、时间选择器、播放控制和时间轴",
+  "registryDependencies": [],
+  "dependencies": ["date-fns", "lucide-react"],
+  "files": [
+    {
+      "path": "registry/blocks/video/video-playback-widget/video-playback-widget.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, modalConfig, popoverConfig, panelConfig,
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, iterationConfig, modalConfig, popoverConfig, panelConfig,
   tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig,
   formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig,
   buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig } from './config'
@@ -127,6 +127,7 @@ const componentCategories = [
       { id: 'card', config: cardConfig },
       { id: 'carousel', config: carouselConfig },
       { id: 'context-provider', config: contextProviderConfig },
+      { id: 'iteration', config: iterationConfig },
       { id: 'modal', config: modalConfig },
       { id: 'popover', config: popoverConfig },
       { id: 'panel', config: panelConfig },
@@ -149,6 +150,7 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   card: cardConfig,
   carousel: carouselConfig,
   'context-provider': contextProviderConfig,
+  iteration: iterationConfig,
   modal: modalConfig,
   popover: popoverConfig,
   panel: panelConfig,
@@ -277,6 +279,7 @@ function App() {
     card: cardConfig.defaultProps,
     carousel: carouselConfig.defaultProps,
     'context-provider': contextProviderConfig.defaultProps,
+    iteration: iterationConfig.defaultProps,
     modal: modalConfig.defaultProps,
     popover: popoverConfig.defaultProps,
     panel: panelConfig.defaultProps,

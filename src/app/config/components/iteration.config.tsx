@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import { Iteration } from '@/registry/blocks/containers/iteration/iteration'
+import { IterationContext } from '@airiot/client'
 import { ComponentConfig } from '../types'
 
 export const iterationPropsConfig = [
@@ -23,29 +25,36 @@ export const iterationDefaultProps = {
   ]
 }
 
-// 示例：使用 IterationContext 的子组件
+// 迭代项示例组件
 function IterationItemDemo() {
-  const { IterationContext } = require('@airiot/client')
-  const { value, index } = require('react').useContext(IterationContext)
+  const { value, index } = useContext(IterationContext)
 
   return (
-    <div className="p-4 m-2 bg-blue-50 rounded border border-blue-200">
-      <p className="text-sm font-medium">索引: {index}</p>
-      <p className="text-sm">名称: {value.name}</p>
-      <p className="text-sm">值: {value.value}</p>
+    <div className="p-4 m-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200 shadow-sm">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">
+          索引: {index}
+        </span>
+        <span className="text-xs text-slate-500">ID: {value?.id}</span>
+      </div>
+      <div className="text-lg font-medium text-slate-800 mb-1">
+        {value?.name || '未命名'}
+      </div>
+      <div className="text-sm text-slate-600">
+        值: {value?.value}
+      </div>
     </div>
   )
 }
 
 const renderIterationPreview = (props: Record<string, any>) => {
+  const list = props.iterationList || iterationDefaultProps.iterationList
+
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full h-full bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-4" style={{ minHeight: '400px' }}>
-        <Iteration iterationList={props.iterationList}>
-          <div className="p-4 m-2 bg-blue-50 rounded border border-blue-200">
-            <p className="text-sm font-medium">迭代项内容</p>
-            <p className="text-xs text-slate-500">使用 IterationContext 获取数据</p>
-          </div>
+        <Iteration iterationList={list}>
+          <IterationItemDemo />
         </Iteration>
       </div>
     </div>
@@ -53,7 +62,8 @@ const renderIterationPreview = (props: Record<string, any>) => {
 }
 
 const renderIterationCodePreview = (props: Record<string, any>) => {
-  const listString = JSON.stringify(props.iterationList, null, 2)
+  const list = props.iterationList || iterationDefaultProps.iterationList
+  const listString = JSON.stringify(list, null, 2)
     .split('\n')
     .map(line => '  ' + line)
     .join('\n')

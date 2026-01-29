@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, layoutConfig, modalConfig, popoverConfig, panelConfig, 
-  tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, 
-  formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig, 
+import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, modalConfig, popoverConfig, panelConfig,
+  tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig,
+  formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig,
   buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
@@ -127,7 +127,6 @@ const componentCategories = [
       { id: 'card', config: cardConfig },
       { id: 'carousel', config: carouselConfig },
       { id: 'context-provider', config: contextProviderConfig },
-      { id: 'layout', config: layoutConfig },
       { id: 'modal', config: modalConfig },
       { id: 'popover', config: popoverConfig },
       { id: 'panel', config: panelConfig },
@@ -150,7 +149,6 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   card: cardConfig,
   carousel: carouselConfig,
   'context-provider': contextProviderConfig,
-  layout: layoutConfig,
   modal: modalConfig,
   popover: popoverConfig,
   panel: panelConfig,
@@ -279,7 +277,6 @@ function App() {
     card: cardConfig.defaultProps,
     carousel: carouselConfig.defaultProps,
     'context-provider': contextProviderConfig.defaultProps,
-    layout: layoutConfig.defaultProps,
     modal: modalConfig.defaultProps,
     popover: popoverConfig.defaultProps,
     panel: panelConfig.defaultProps,

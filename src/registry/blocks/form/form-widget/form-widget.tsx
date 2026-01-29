@@ -13,6 +13,7 @@ import TimeComponent from '@/components/tableField/components/Time'
 import CheckboxComponent from '@/components/tableField/components/Checkbox'
 import RateComponent from '@/components/tableField/components/Rate'
 import RichTextComponent from '@/components/tableField/components/RichText'
+import MapComponent from '@/components/tableField/components/MapComponent'
 import AreaComponent from '../form-area/form-area'
 
 export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -99,7 +100,7 @@ const FieldComponentSelector: React.FC<{
   meta?: any
   record?: any
   cellKey?: string
-}> = ({ schema, input, field, meta, record, cellKey }) => {
+}> = ({ schema, input, meta, record, cellKey }) => {
   const config = schema || {}
 
   // 关联字段（新版）
@@ -169,8 +170,7 @@ const FieldComponentSelector: React.FC<{
 
   // 地图定位
   if (config.type === 'object' && config.fieldType === 'map') {
-    // TODO: 实现地图组件
-    return <div className="text-sm text-muted-foreground">地图定位（待实现）</div>
+    return <MapComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 布尔值/复选框
@@ -204,7 +204,11 @@ const FieldComponentSelector: React.FC<{
 
   // 区域选择
   if (config.fieldType === 'area') {
-    return <AreaComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    const areaInput = {
+      value: input.value,
+      onChange: input.onChange || (() => {})
+    }
+    return <AreaComponent input={areaInput} field={{ schema: config }} meta={meta || {}} areaType={config.areaType || 'pca'} />
   }
 
   // 报警关联
@@ -370,5 +374,7 @@ const FormWidget = React.forwardRef<HTMLDivElement, FormWidgetProps>(
 )
 
 FormWidget.displayName = "FormWidget"
+
+export { FieldComponentSelector }
 
 export default FormWidget

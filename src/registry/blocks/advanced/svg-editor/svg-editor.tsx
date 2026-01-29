@@ -125,39 +125,96 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
     const getAllPath = React.useCallback((svg: any) => {
       if (!svg) return []
 
-      const getChildren = (node: Element) => {
-        const children = Array.from(node.children || [])
-        return children
-          .filter((item) => item.tagName !== "title")
-          .map((child) => {
-            const childData: TreeNode = {
-              id: child.id,
-              key: child.id,
-              disabled: ["g", "animate", "animateMotion"].includes(child?.tagName),
-              icon: iconList[child.getAttribute("data-type") ?? child?.tagName],
-              title: `${pathNames[child.getAttribute("data-type") ?? child?.tagName] || child?.tagName}(${child?.id || child.tagName})`,
-              tagName: child.tagName,
-              name: child.getAttribute("data-name"),
-              dataType: child.getAttribute("data-type"),
-              children: getChildren(child),
-            }
-            return childData
+      try {
+        // 查找 id 为 "svgcontent" 的 SVG 元素
+        const svgContentSvg = canvasContainerRef.current?.querySelector('#svgcontent') || svg.svgElem || svg.svgCanvas?.svgContent || svg.getCurrentDrawing?.svgElem_
+
+        if (!svgContentSvg) {
+          console.warn('SVG content element not found, checking all SVGs...')
+          // 先输出所有 SVG 元素用于调试
+          const allSvgs = canvasContainerRef.current?.querySelectorAll('svg')
+          console.log('All SVG elements found:', allSvgs)
+          allSvgs?.forEach((svgElem: any) => {
+            console.log('SVG element:', {
+              tagName: svgElem.tagName,
+              id: svgElem.id,
+              class: svgElem.getAttribute('class')
+            })
           })
+          return []
+        }
+
+        console.log('SVG content found:', svgContentSvg)
+
+        const getChildren = (node: Element) => {
+          const children = Array.from(node.children || [])
+          return children
+            .filter((item) => item.tagName !== "title")
+            .map((child) => {
+              const childData: TreeNode = {
+                id: child.id || `node-${Math.random().toString(36).substring(2, 11)}`,
+                key: child.id || `node-${Math.random().toString(36).substring(2, 11)}`,
+                disabled: ["g", "animate", "animateMotion"].includes(child?.tagName),
+                icon: iconList[child.getAttribute("data-type") ?? child?.tagName],
+                title: `${pathNames[child.getAttribute("data-type") ?? child?.tagName] || child?.tagName}(${child?.id || child.tagName})`,
+                tagName: child.tagName,
+                name: child.getAttribute("data-name") ?? undefined,
+                dataType: child.getAttribute("data-type") ?? undefined,
+                children: getChildren(child),
+              }
+              return childData
+            })
+        }
+
+        // 获取 svgcontent 下所有顶层元素（包括直接的形状元素和分组）
+        const topLevelElements = Array.from(svgContentSvg.children || []).filter((item: any) => {
+          const tagName = item.tagName
+          // 排除 metadata 元素
+          return !["title", "desc", "defs"].includes(tagName)
+        })
+
+        console.log('Top level elements:', topLevelElements)
+
+        // 如果没有 group 元素，直接返回顶层元素
+        const groups = topLevelElements.filter((item: any) => item.tagName === "g")
+        const shapes = topLevelElements.filter((item: any) => item.tagName !== "g")
+
+        const result: TreeNode[] = []
+
+        // 添加分组
+        groups.forEach((group: any) => {
+          result.push({
+            id: group.id || `group-${Math.random().toString(36).substring(2, 11)}`,
+            key: group.id || `group-${Math.random().toString(36).substring(2, 11)}`,
+            disabled: true,
+            tagName: group.tagName || "",
+            title: `分组(${group.id || '未命名'})`,
+            name: group.getAttribute("data-name") ?? undefined,
+            dataType: group.getAttribute("data-type") ?? undefined,
+            children: getChildren(group),
+          })
+        })
+
+        // 添加直接形状元素
+        shapes.forEach((shape: any) => {
+          result.push({
+            id: shape.id || `shape-${Math.random().toString(36).substring(2, 11)}`,
+            key: shape.id || `shape-${Math.random().toString(36).substring(2, 11)}`,
+            disabled: false,
+            tagName: shape.tagName,
+            title: `${pathNames[shape.getAttribute("data-type") ?? shape.tagName] || shape.tagName}(${shape.id || shape.tagName})`,
+            name: shape.getAttribute("data-name") ?? undefined,
+            dataType: shape.getAttribute("data-type") ?? undefined,
+            children: [],
+          })
+        })
+
+        console.log('Tree result:', result)
+        return result
+      } catch (error) {
+        console.error('Error getting tree data:', error)
+        return []
       }
-
-      const svgRoot = svg.getCurrentDrawing?.svgElem_
-      const groupList = svgRoot ? Array.from(svgRoot.children).filter((item) => item.tagName === "g") : []
-
-      return groupList.map((group) => ({
-        id: group.id,
-        key: group.id,
-        disabled: true,
-        tagName: group.tagName || "",
-        title: group.tagName || "",
-        name: group.getAttribute("data-name") || "",
-        dataType: group.getAttribute("data-type"),
-        children: getChildren(group),
-      }) as TreeNode)
     }, [])
 
     // 获取选中元素的属性
@@ -369,6 +426,12 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
             svgCanvas.setSvgString(initialSvg)
           }
 
+          // 初始化树数据
+          setTimeout(() => {
+            const tree = getAllPath(svgCanvas)
+            setTreeData(tree)
+          }, 100)
+
           // 标记画布已就绪
           setIsCanvasReady(true)
 
@@ -387,6 +450,9 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           svgCanvas.bind("changed", () => {
             const svgContent = svgCanvas.getSvgString()
             onSvgChange?.(svgContent)
+            // 更新树数据
+            const tree = getAllPath(svgCanvas)
+            setTreeData(tree)
           })
         })
         .catch((error) => {

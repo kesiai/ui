@@ -1,8 +1,8 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, iterationConfig, modalConfig, popoverConfig, panelConfig,
   tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig,
   formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig,
-  buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig } from './config'
+  buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig, dataSourceConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
@@ -35,6 +35,7 @@ const componentCategories = [
     name: '业务组件',
     icon: '💼',
     components: [
+      { id: 'data-source', config: dataSourceConfig },
       { id: 'bar', config: barConfig },
       { id: 'text', config: textConfig },
       { id: 'textarea', config: textareaConfig },
@@ -138,6 +139,7 @@ const componentCategories = [
 
 // 组件配置映射
 const componentConfigMap: Record<string, ComponentConfig> = {
+  'data-source': dataSourceConfig,
   bar: barConfig,
   qrcode: qrcodeConfig,
   'chart-line': chartLineConfig,
@@ -183,90 +185,27 @@ const componentConfigMap: Record<string, ComponentConfig> = {
 }
 
 function App() {
-  const { user: globalUser, loadUser } = useUser()
+  const { user: globalUser } = useUser()
   const { onLogout } = useLogout()
   const [selectedCategory, setSelectedCategory] = useState('business')
   const [selectedComponent, setSelectedComponent] = useState('bar')
   const [loginDialogOpen, setLoginDialogOpen] = useState(false)
-  const [user, setUserState] = useState<typeof globalUser>(null)
-  const [refreshKey, setRefreshKey] = useState(0)
-
-  // 初始化时加载用户
-  useEffect(() => {
-    loadUser()
-    // 从 localStorage 直接读取用户信息
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      try {
-        setUserState(JSON.parse(storedUser))
-      } catch (e) {
-        console.error('解析用户信息失败:', e)
-      }
-    }
-  }, [])
-
-  // 定期检查用户状态
-  useEffect(() => {
-    const checkUser = () => {
-      const storedUser = localStorage.getItem('user')
-      if (storedUser) {
-        try {
-          const parsedUser = JSON.parse(storedUser)
-          // 检查是否有有效的用户信息（token、username 或 id）
-          const isValidUser = parsedUser?.token || parsedUser?.username || parsedUser?.id
-          const currentUserIsValid = user?.token || user?.username || user?.id
-
-          if (isValidUser && !currentUserIsValid) {
-            setUserState(parsedUser)
-            setRefreshKey(prev => prev + 1)
-          }
-        } catch (e) {
-          // 忽略错误
-        }
-      } else {
-        // localStorage 中没有用户信息，清除 state
-        const currentUserIsValid = user?.token || user?.username || user?.id
-        if (currentUserIsValid) {
-          setUserState(null)
-        }
-      }
-    }
-
-    // 初始检查
-    checkUser()
-
-    // 设置定时检查
-    const interval = setInterval(checkUser, 500)
-
-    return () => clearInterval(interval)
-  }, [user])
 
   // 处理登录成功
   const handleLoginSuccess = () => {
-    // 立即从 localStorage 读取
-    setTimeout(() => {
-      const storedUser = localStorage.getItem('user')
-      if (storedUser) {
-        try {
-          const parsedUser = JSON.parse(storedUser)
-          setUserState(parsedUser)
-          setRefreshKey(prev => prev + 1)
-        } catch (e) {
-          console.error('解析用户信息失败:', e)
-        }
-      }
-    }, 200)
+    // @airiot/client 会自动处理用户状态
+    console.log('登录成功')
   }
 
   // 处理登出
   const handleLogout = () => {
     onLogout()
-    setUserState(null)
     window.location.reload()
   }
 
   // 为每个组件维护独立的状态
   const [componentProps, setComponentProps] = useState<Record<string, Record<string, any>>>({
+    'data-source': dataSourceConfig.defaultProps,
     bar: barConfig.defaultProps,
     qrcode: qrcodeConfig.defaultProps,
     'chart-line': chartLineConfig.defaultProps,
@@ -386,11 +325,11 @@ function App() {
                 {componentCategories.reduce((acc, cat) => acc + cat.components.length, 0)} 个组件
               </span>
               <div className="flex items-center gap-3 border-l border-slate-200 pl-4">
-                {user && (user.token || user.username || user.id) ? (
+                {globalUser && (globalUser.token || globalUser.username || globalUser.id) ? (
                   <>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-slate-900">{user.name || user.username || user.id || '用户'}</p>
-                      <p className="text-xs text-slate-500">{user.projectId || projectId || '未知项目'}</p>
+                      <p className="text-sm font-medium text-slate-900">{globalUser.name || globalUser.username || globalUser.id || '用户'}</p>
+                      <p className="text-xs text-slate-500">{globalUser.projectId || projectId || '未知项目'}</p>
                     </div>
                     <button
                       onClick={handleLogout}

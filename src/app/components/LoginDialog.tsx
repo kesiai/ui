@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLogin, useUser } from '@airiot/client'
+import { useLogin } from '@airiot/client'
 
 interface LoginDialogProps {
   open: boolean
@@ -9,7 +9,6 @@ interface LoginDialogProps {
 
 export function LoginDialog({ open, onOpenChange, onLoginSuccess }: LoginDialogProps) {
   const { onLogin } = useLogin()
-  const { setUser, loadUser, storageKey } = useUser()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -28,22 +27,9 @@ export function LoginDialog({ open, onOpenChange, onLoginSuccess }: LoginDialogP
       })
 
       if (result) {
-        // 保存到 localStorage（包含时间戳）
-        const userWithTime = {
-          ...result,
-          time: Math.floor(Date.now() / 1000)
-        }
-        localStorage.setItem(storageKey, JSON.stringify(userWithTime))
-
-        // 更新全局状态
-        setUser(result)
-
-        // 手动触发 loadUser 以确保状态更新
-        setTimeout(() => {
-          loadUser()
-          // 调用成功回调
-          onLoginSuccess?.()
-        }, 100)
+        // @airiot/client 的 onLogin 会自动处理用户存储和状态管理
+        // 调用成功回调
+        onLoginSuccess?.()
 
         // 关闭弹窗并重置表单
         onOpenChange(false)

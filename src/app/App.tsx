@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, iterationConfig, modalConfig, popoverConfig, panelConfig,
   tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig,
   formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig,
+  mobileNavBarConfig, mobileLocationConfig, mobileScanQRConfig,
   buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig, dataSourceConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
@@ -115,6 +116,9 @@ const componentCategories = [
     name: '移动端组件',
     icon: '📱',
     components: [
+      { id: 'mobile-nav-bar', config: mobileNavBarConfig },
+      { id: 'mobile-location', config: mobileLocationConfig },
+      { id: 'mobile-scan-qr', config: mobileScanQRConfig },
       { id: 'mobile-popup', config: mobilePopupConfig },
       { id: 'mobile-calendar', config: mobileCalendarConfig },
       { id: 'mobile-picker', config: mobilePickerConfig }
@@ -176,6 +180,9 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   'form-date': formDateConfig,
   'mobile-popup': mobilePopupConfig,
   'mobile-calendar': mobileCalendarConfig,
+  'mobile-nav-bar': mobileNavBarConfig,
+  'mobile-location': mobileLocationConfig,
+  'mobile-scan-qr': mobileScanQRConfig,
   buttonControl: buttonControlConfig,
   videoControl: videoControlConfig,
   videoPeriods: videoPeriodsConfig,
@@ -242,6 +249,9 @@ function App() {
     'form-date': formDateConfig.defaultProps,
     'mobile-popup': mobilePopupConfig.defaultProps,
     'mobile-calendar': mobileCalendarConfig.defaultProps,
+    'mobile-nav-bar': mobileNavBarConfig.defaultProps,
+    'mobile-location': mobileLocationConfig.defaultProps,
+    'mobile-scan-qr': mobileScanQRConfig.defaultProps,
     buttonControl: buttonControlConfig.defaultProps,
     videoControl: videoControlConfig.defaultProps,
     videoPeriods: videoPeriodsConfig.defaultProps,

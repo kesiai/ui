@@ -2,7 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
-import { Slider } from "@/registry/components/ui/slider/slider"
+import { Slider } from "@/components/ui/slider"
 
 const sliderVariants = cva(
   "relative",
@@ -163,29 +163,30 @@ const FormSlider = React.forwardRef<HTMLDivElement, SliderProps>(
       [range, onAfterChange]
     )
 
-    // 处理marks - 兼容dashboard的格式
+    // 处理marks - 计算每个刻度的位置百分比
     const processedMarks = React.useMemo(() => {
       if (!marks || marks.length === 0) return undefined
 
-      const marksObj: Record<number, string> = {}
-      marks.forEach(mark => {
-        marksObj[mark.number] = mark.label
-      })
-      return marksObj
-    }, [marks])
+      const range = max - min
+      return marks.map(mark => {
+        const position = ((mark.number - min) / range) * 100
+        return {
+          value: mark.number,
+          label: mark.label,
+          position: Math.max(0, Math.min(100, position)) // 限制在 0-100 之间
+        }
+      }).sort((a, b) => a.value - b.value)
+    }, [marks, min, max])
 
     return (
       <div
         ref={ref}
         className={cn(
           sliderVariants({ variant, size }),
-          vertical && "flex flex-col items-center justify-center",
+          vertical ? "flex flex-row items-center justify-center h-40" : "",
           className
         )}
-        style={{
-          ...style,
-          ...(vertical ? { height: '200px' } : {})
-        }}
+        style={style}
         {...props}
       >
         <Slider
@@ -200,20 +201,25 @@ const FormSlider = React.forwardRef<HTMLDivElement, SliderProps>(
           inverted={reverse}
           key={'slider-' + (range ? 'range' : 'single')}
           className={cn(
-            vertical && "justify-center h-full w-2"
+            vertical ? "justify-center h-full w-2" : ""
           )}
         />
         {processedMarks && (
           <div className={cn(
-            "flex justify-between mt-2 text-xs text-muted-foreground",
-            vertical && "flex-col mt-0 ml-8 h-full justify-start items-start"
+            "relative text-xs text-muted-foreground",
+            vertical ? "ml-4 h-full" : "mt-2 w-full"
           )}>
-            {Object.entries(processedMarks).map(([value, label]) => (
-              <div key={value} className={cn(
-                "text-center",
-                vertical && "text-left mb-2"
-              )}>
-                {label}
+            {processedMarks.map((mark) => (
+              <div
+                key={mark.value}
+                className="absolute"
+                style={{
+                  [vertical ? "bottom" : "left"]: `${mark.position}%`,
+                  [vertical ? "left" : "top"]: vertical ? "0" : "0",
+                  transform: vertical ? "translateY(50%)" : "translateX(-50%)"
+                }}
+              >
+                {mark.label}
               </div>
             ))}
           </div>

@@ -2,25 +2,16 @@ import { useEffect, useRef } from 'react'
 import { DataSource } from '@/registry/blocks/components/data-source/data-source'
 import { defaultApiConfig } from '@/registry/blocks/components/data-source/useApiData'
 import { defaultHistoryConfig } from '@/registry/blocks/components/data-source/useHistoryData'
+import { defaultRealtimeConfig } from '@/registry/blocks/components/data-source/useRealtimeData'
+import { defaultTableConfig } from '@/registry/blocks/components/data-source/useTableData'
 import { ComponentConfig } from '../types'
 
 // 各数据源类型的默认配置
 export const defaultConfigs: Record<string, any> = {
   api: defaultApiConfig,
   history: defaultHistoryConfig,
-  realtime: {
-    tags: [],
-    xFormat: ''
-  },
-  table: {
-    selectType: 'table',
-    table: '',
-    isGroup: false,
-    queryFields: [],
-    fieldOrder: {},
-    limit: 100,
-    interval: 0
-  },
+  realtime: defaultRealtimeConfig,
+  table: defaultTableConfig,
   view: {
     view: '',
     dimension: [],

@@ -298,3 +298,60 @@ export interface UseWSReturn {
   onMessage: (callback: (data: any) => void) => void
   onStatus: (callback: (status: string) => void) => void
 }
+
+// ==================== Table Data 类型 ====================
+
+/**
+ * 字段配置
+ */
+export interface FieldConfig {
+  id?: string
+  key?: string
+  type?: string
+  title?: string
+  name?: string
+  propertyType?: string
+  tableName?: string
+  transform?: (value: any) => any
+  config?: string
+  enum1?: any[]
+  enum_title1?: any[]
+  [key: string]: any
+}
+
+/**
+ * Schema 结构
+ */
+export interface Schema {
+  name?: string
+  properties?: Record<string, FieldConfig>
+  [key: string]: any
+}
+
+/**
+ * 分组项配置
+ */
+export interface GroupItemConfig {
+  field?: string | FieldConfig
+  dateOperator?: '天' | '周' | '月' | '年' | '一小时内的分钟数' | '一天内的小时数' | '一周内的天数' | '一月内的天数' | '一年内的天数' | '一年内的星期数' | '一年内的月数'
+  [key: string]: any
+}
+
+/**
+ * 列项配置
+ */
+export interface ColumnItemConfig {
+  name?: string
+  field?: string | FieldConfig
+  accumulator?: '$count' | '$avg' | '$first' | '$last' | '$max' | '$min' | '$sum'
+  expression?: any
+  [key: string]: any
+}
+
+/**
+ * 字段格式化配置
+ */
+export interface FieldFormatConfig {
+  field: FieldConfig | { id?: string; key?: string; title?: string; type?: string; propertyType?: string; value?: string; name?: string }
+  format?: string | { format?: string; type?: string }
+}

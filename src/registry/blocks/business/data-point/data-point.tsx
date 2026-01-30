@@ -4,8 +4,9 @@ import _ from "lodash"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/registry/components/ui/popover/popover"
 import { convertValue, valueFormat, type DataPointConfig } from "./data-point.utils"
-import { useDataTag, useUser } from "@airiot/client"
+import { useUser } from "@airiot/client"
 
+const useDataTag = () => { }
 // Type definitions
 export interface WarningState {
   className?: string
@@ -262,55 +263,55 @@ const DefaultRender: React.FC<{
   tagClassName = '',
   colors
 }) => {
-  const { errview } = config || {}
-  const { value, warningState = {}, timeoutState = {} } = tag || {}
+    const { errview } = config || {}
+    const { value, warningState = {}, timeoutState = {} } = tag || {}
 
-  const val = convertValue(value, format, config)
+    const val = convertValue(value, format, config)
 
-  const { className: warningClassName, level, recoveryTime } = warningState
-  const { isTimeout, isOffline } = timeoutState
+    const { className: warningClassName, level, recoveryTime } = warningState
+    const { isTimeout, isOffline } = timeoutState
 
-  const _timeoutColor = isTimeout ? timeoutColor || colors?.timeout : undefined
-  const backgroundColor = isOffline
-    ? offlineColor || colors?.offline
-    : _timeoutColor
+    const _timeoutColor = isTimeout ? timeoutColor || colors?.timeout : undefined
+    const backgroundColor = isOffline
+      ? offlineColor || colors?.offline
+      : _timeoutColor
 
-  const tagStyle: React.CSSProperties = {
-    cursor: 'pointer',
-    ...(backgroundColor && { backgroundColor }),
-    userSelect: 'none',
+    const tagStyle: React.CSSProperties = {
+      cursor: 'pointer',
+      ...(backgroundColor && { backgroundColor }),
+      userSelect: 'none',
+    }
+
+    if (level) {
+      const k: Record<string, string> = { '低': 'warning1', '中': 'warning2', '高': 'warning3' }
+      tagStyle.color = warningLevelColor?.[level] || warningColor || colors?.[k[level] as keyof typeof colors]
+    }
+
+    if (recoveryTime) {
+      tagStyle.color = colors?.['warning4']
+    }
+
+    return (
+      <span
+        className={cn(
+          warningClassName || 'normal',
+          tagClassName,
+          'inline-flex items-center'
+        )}
+        style={tagStyle}
+      >
+        {(isTimeout && (errview == '不显示当前值' || !errview)) ? (
+          <span className="text-muted-foreground">-</span>
+        ) : val == 0 ? (
+          val
+        ) : val === undefined || value === '' || _.isNull(val) ? (
+          <span className="text-muted-foreground">-</span>
+        ) : (
+          <>{animated && _.isNumber(val) ? <AnimatedNumber value={val} /> : val}</>
+        )}
+      </span>
+    )
   }
-
-  if (level) {
-    const k: Record<string, string> = { '低': 'warning1', '中': 'warning2', '高': 'warning3' }
-    tagStyle.color = warningLevelColor?.[level] || warningColor || colors?.[k[level] as keyof typeof colors]
-  }
-
-  if (recoveryTime) {
-    tagStyle.color = colors?.['warning4']
-  }
-
-  return (
-    <span
-      className={cn(
-        warningClassName || 'normal',
-        tagClassName,
-        'inline-flex items-center'
-      )}
-      style={tagStyle}
-    >
-      {(isTimeout && (errview == '不显示当前值' || !errview)) ? (
-        <span className="text-muted-foreground">-</span>
-      ) : val == 0 ? (
-        val
-      ) : val === undefined || value === '' || _.isNull(val) ? (
-        <span className="text-muted-foreground">-</span>
-      ) : (
-        <>{animated && _.isNumber(val) ? <AnimatedNumber value={val} /> : val}</>
-      )}
-    </span>
-  )
-}
 
 // Main DataPoint Component
 const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(

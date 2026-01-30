@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import _ from 'lodash'
-import { api } from '@airiot/client'
+import { api,useWS } from '@airiot/client'
 import dayjs from 'dayjs'
 import { toast } from '@/hooks/use-toast'
 import type {
@@ -13,35 +13,6 @@ import type {
   WSMessageData,
   UseWSReturn
 } from './types'
-
-// ==================== 临时 useWS 实现 ====================
-// TODO: 等待 @airiot/client 导出 useWS 后移除此实现
-
-/**
- * 临时 useWS 实现
- * 等待 @airiot/client 导出正式版本后替换
- */
-function useTempWS(): UseWSReturn {
-  const onDataCallback = useCallback((data: WSMessageData) => {
-    console.log('WebSocket data received:', data)
-  }, [])
-
-  const subscribe = useCallback(() => {
-    return () => {
-      // 清理函数
-    }
-  }, [])
-
-  return {
-    subscribe,
-    onData: onDataCallback,
-    onMessage: useCallback(() => {}, []),
-    onStatus: useCallback(() => {}, [])
-  }
-}
-
-// 导出临时的 useWS
-export const useWS = useTempWS
 
 // ==================== Types ====================
 
@@ -58,7 +29,7 @@ export interface RealtimeDataConfig {
   // 重新导出类型，方便外部使用
 export type { TagValue, TagConfig, TimeLineConfig, DataPoint, Dimension, QueryResult, WSMessageData, UseWSReturn }
 
-// 默认配置（包含示例数据用于调试）
+// 默认配置
 export const defaultRealtimeConfig: RealtimeDataConfig = {
   tags: [{
     tableDataTag: {
@@ -215,7 +186,7 @@ const findTagName = (tags: TagConfig[], key: string): string => {
 /**
  * 获取标签项
  */
-const getTagItem = (tags: TagConfig[], key: string): TagConfig => {
+const getTagItem = (tags: TagConfig[], key: string): TagConfig | undefined => {
   return tags.find(d => {
     // 优先使用 tableDataTag.value
     if (d.tableDataTag?.value) {
@@ -230,7 +201,7 @@ const getTagItem = (tags: TagConfig[], key: string): TagConfig => {
     const tagKey = buildTagKey(tagId, tableDataId)
 
     return tagKey === key
-  }) || {}
+  })
 }
 
 // ==================== Main Hook ====================
@@ -354,13 +325,13 @@ export function useRealtimeData(config: RealtimeDataConfig) {
         const source = Object.keys(data).map(key => {
           const item = getTagItem(subTags, key)
           const name = findTagName(subTags, key)
-          const tag = item.tag || {}
+          const tag = item?.tag || {}
           const itemKey = buildTagKey(
-            tag?.origin?.tableData?.id || item?.tableData?.id,
-            tag?.origin?.id
+            tag?.tableData?.id || item?.tableData?.id,
+            tag?.id
           )
           const value = data[key].length > 0
-            ? toFixed(data[key][0][1], !_.isNil(item.fixed) ? item.fixed : 3)
+            ? toFixed(data[key][0][1], !_.isNil(item?.fixed) ? item?.fixed : 3)
             : null
           const time = data?.[key]?.[0]?.[0] || null
 
@@ -377,21 +348,21 @@ export function useRealtimeData(config: RealtimeDataConfig) {
         // 获取历史数据序列
         result = Object.keys(data).map(key => {
           const item = getTagItem(subTags, key)
-          const tag = item.tag || {}
+          const tag = item?.tag || {}
           const node = item?.tableData || {}
-          const name = item.title ||
-            `${node.name || node.title || node.id}-${tag?.origin?.name || tag?.name || item.name}`
+          const name = item?.title ||
+            `${node.name || node.title || node.id}-${tag?.name || item?.name || key}`
 
           return {
             key,
             title: name,
             dimensions: [
               { name: 'time', title: '时间', type: xFormat ? 'ordinal' : 'time' },
-              item ? { name, type: 'number', tag: key } : { key, type: 'number' }
+              { name: name || key, type: 'number', tag: key }
             ],
             source: data[key].map(d => [
               formatTime(d[0], xFormat),
-              toFixed(d[1], !_.isNil(item.fixed) ? item.fixed : 3),
+              toFixed(d[1], !_.isNil(item?.fixed) ? item?.fixed : 3),
               d[2]
             ])
           }

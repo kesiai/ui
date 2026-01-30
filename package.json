@@ -17,7 +17,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@airiot/client": "^1.0.4",
+    "@airiot/client": "^1.0.7",
     "@base-ui/react": "^1.0.0",
     "@pmndrs/assets": "^1.7.0",
     "@radix-ui/react-accordion": "^1.2.12",

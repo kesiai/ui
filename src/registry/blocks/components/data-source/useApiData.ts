@@ -13,6 +13,23 @@ export interface ApiDataConfig {
   submit?: string
 }
 
+// 默认配置（包含示例数据用于调试）
+export const defaultApiConfig: ApiDataConfig = {
+  url: 'core/t/{table}/d',
+  method: 'GET',
+  headers: [],
+  body: [],
+  predata: false,
+  interval: 0,
+  table: {
+    id: '子',
+    title: '子表'
+  },
+  appkey: undefined,
+  appsecret: undefined,
+  submit: ''
+}
+
 // 对象转 URL 参数
 function objToUrlParams(obj: Record<string, any>, url: string): string {
   try {

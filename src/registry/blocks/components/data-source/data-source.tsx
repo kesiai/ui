@@ -1,56 +1,104 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import { useApiData } from './useApiData'
+import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useApiData, defaultApiConfig } from './useApiData'
+import { useHistoryData, defaultHistoryConfig } from './useHistoryData'
 import { cn } from '@/lib/utils'
 
 export interface DataSourceProps {
   type?: 'api' | 'hybrid' | 'report' | 'interface' | 'history' | 'realtime' | 'table' | 'view' | 'message'
   config?: Record<string, any>
   onDataChange?: (data: any) => void
+  onConfigChange?: (config: Record<string, any>) => void
   className?: string
 }
 
-const dataSourceTypes = [
-  { value: 'api', label: '平台接口' },
-  { value: 'hybrid', label: '混合数据' },
-  { value: 'report', label: '报表数据' },
-  { value: 'interface', label: '数据接口' },
-  { value: 'history', label: '历史数据' },
-  { value: 'realtime', label: '实时数据' },
-  { value: 'table', label: '表数据' },
-  { value: 'view', label: '视图数据' },
-  { value: 'message', label: '消息数据' }
-]
+// 为每种数据源类型定义默认配置
+const defaultConfigs: Record<string, Record<string, any>> = {
+  api: defaultApiConfig,
+  history: defaultHistoryConfig,
+  interface: { url: '', method: 'GET', headers: [], body: [], interval: 0 },
+  hybrid: {},
+  report: {},
+  realtime: {},
+  table: {},
+  view: {},
+  message: {}
+}
 
 export function DataSource({
   type = 'api',
-  config = {},
+  config: externalConfig = {},
   onDataChange,
+  onConfigChange,
   className
 }: DataSourceProps) {
-  const [selectedType, setSelectedType] = useState(type)
-  const [submit, setSubmit] = useState(() => Date.now().toString())
+  // 为每种数据源类型维护独立的 submit 状态
+  const [submitStates, setSubmitStates] = useState<Record<string, string>>(() => {
+    const initialSubmits: Record<string, string> = {}
+    Object.keys(defaultConfigs).forEach(key => {
+      initialSubmits[key] = Date.now().toString()
+    })
+    return initialSubmits
+  })
+
+  // 获取当前类型的 config（合并默认配置和外部配置）
+  const currentConfig = useMemo(() => {
+    return {
+      ...(defaultConfigs[type] || {}),
+      ...externalConfig
+    }
+  }, [type, externalConfig])
+
+  // 获取当前类型的 submit
+  const currentSubmit = submitStates[type] || Date.now().toString()
+
+  // 当 type 变化时，通知父组件配置已更改
+  useEffect(() => {
+    if (onConfigChange) {
+      onConfigChange(currentConfig)
+    }
+  }, [type, currentConfig, onConfigChange])
 
   // 处理数据变化
   const handleDataChange = useCallback((data: any) => {
     onDataChange?.(data)
   }, [onDataChange])
 
-  // 手动刷新
+  // 手动刷新（只更新当前类型的 submit）
   const handleRefresh = useCallback(() => {
-    setSubmit(Date.now().toString())
-  }, [])
+    setSubmitStates(prev => ({
+      ...prev,
+      [type]: Date.now().toString()
+    }))
+  }, [type])
 
   // 使用 API 数据（只对 'api' 类型启用）
-  const { dataset, loading } = useApiData(
-    selectedType === 'api' ? { ...config, submit } : (config as any),
+  const { dataset: apiDataset, loading: apiLoading } = useApiData(
+    type === 'api' ? { ...currentConfig, submit: currentSubmit } : ({} as any),
     handleDataChange
   )
 
+  // 使用历史数据（只对 'history' 类型启用）
+  const historyDataResult = useHistoryData(
+    type === 'history' ? { ...currentConfig, submit: currentSubmit } : ({} as any)
+  )
+
+  // 根据类型选择数据源
+  let currentDataset: any = null
+  let currentLoading: boolean = false
+
+  if (type === 'api') {
+    currentDataset = apiDataset
+    currentLoading = apiLoading
+  } else if (type === 'history') {
+    currentDataset = historyDataResult.dataset
+    currentLoading = historyDataResult.loading
+  }
+
   // 显示当前数据
   const renderDataPreview = () => {
-    if (loading) {
+    if (currentLoading) {
       return (
         <div className="text-center py-8 text-slate-400">
           <p className="text-sm">加载中...</p>
@@ -58,7 +106,7 @@ export function DataSource({
       )
     }
 
-    if (!dataset) {
+    if (!currentDataset) {
       return (
         <div className="text-center py-8 text-slate-400">
           <p className="text-sm">等待数据...</p>
@@ -68,84 +116,31 @@ export function DataSource({
 
     return (
       <div className="space-y-2">
-        <p className="text-xs font-medium text-slate-600">数据预览:</p>
         <pre className="bg-slate-800 text-green-400 p-3 rounded text-xs overflow-x-auto">
-          {JSON.stringify(dataset, null, 2)}
+          {JSON.stringify(currentDataset, null, 2)}
         </pre>
       </div>
     )
   }
 
   return (
-    <div className={cn('w-full p-4 bg-slate-50 rounded-lg border border-slate-200', className)}>
-      <div className="space-y-4">
-        {/* 类型选择 */}
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
-            数据源类型
-          </label>
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value as any)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
-          >
-            {dataSourceTypes.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className={cn('w-full', className)}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-medium text-slate-700">
+          数据源: <span className="font-semibold text-blue-600">{type}</span>
+        </h3>
+        <button
+          onClick={handleRefresh}
+          disabled={currentLoading}
+          className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {currentLoading ? '加载中...' : '刷新数据'}
+        </button>
+      </div>
 
-        {/* 配置信息 */}
-        <div className="bg-white rounded border border-slate-200 p-4">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-600">
-              当前选择: <span className="font-medium text-blue-600">{dataSourceTypes.find(t => t.value === selectedType)?.label}</span>
-            </p>
-
-            {/* 刷新按钮 */}
-            {(selectedType === 'api' || selectedType === 'interface') && (
-              <button
-                onClick={handleRefresh}
-                disabled={loading}
-                className="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {loading ? '加载中...' : '刷新数据'}
-              </button>
-            )}
-          </div>
-
-          {/* 平台接口配置显示 */}
-          {selectedType === 'api' && config && (
-            <div className="mt-3 space-y-2 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="text-slate-500">接口地址:</span>
-                <span className="font-medium text-slate-800">{config.url || '未设置'}</span>
-              </div>
-              {config.interval > 0 && (
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-500">轮询:</span>
-                  <span className="font-medium text-green-600">{config.interval}秒</span>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* 数据预览 */}
-        {(selectedType === 'api' || selectedType === 'interface') && (
-          <div className="bg-white rounded border border-slate-200 p-4">
-            {renderDataPreview()}
-          </div>
-        )}
-
-        {/* 提示信息 */}
-        <div className="bg-blue-50 border border-blue-200 rounded p-3">
-          <p className="text-xs text-blue-800">
-            💡 提示: 配置数据源后，数据将通过 onDataChange 回调传递给父组件
-          </p>
-        </div>
+      {/* 数据预览 */}
+      <div className="bg-white rounded border border-slate-200 p-4">
+        {renderDataPreview()}
       </div>
     </div>
   )

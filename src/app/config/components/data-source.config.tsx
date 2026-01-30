@@ -1,52 +1,13 @@
+import { useEffect, useRef } from 'react'
 import { DataSource } from '@/registry/blocks/components/data-source/data-source'
+import { defaultApiConfig } from '@/registry/blocks/components/data-source/useApiData'
+import { defaultHistoryConfig } from '@/registry/blocks/components/data-source/useHistoryData'
 import { ComponentConfig } from '../types'
 
 // 各数据源类型的默认配置
 export const defaultConfigs: Record<string, any> = {
-  api: {
-    url: 'core/t/{table}/d',
-    method: 'GET',
-    headers: [],
-    body: [],
-    predata: false,
-    interval: 0,
-    table: {
-      id: '子',
-      title: '子表'
-    }
-  },
-  hybrid: {
-    selectdatasources: [],
-    script: ''
-  },
-  report: {
-    reportConfig: '',
-    dataSelect: {
-      source1: [],
-      source2: []
-    },
-    script: ''
-  },
-  interface: {
-    ds: '',
-    op: '',
-    params: {},
-    predata: false,
-    interval: 0,
-    script: ''
-  },
-  history: {
-    tags: [],
-    xFormat: '',
-    statisType: 'time',
-    type: 'day',
-    timeRange: {
-      type: 'before',
-      count: 1,
-      unit: 'd'
-    },
-    interval: 0
-  },
+  api: defaultApiConfig,
+  history: defaultHistoryConfig,
   realtime: {
     tags: [],
     xFormat: ''
@@ -161,11 +122,28 @@ const renderDataSourceCodePreview = (props: Record<string, any>) => {
   return code
 }
 
+// 自定义表单：当 type 变化时自动更新 config
+const renderDataSourceCustomForm = (props: Record<string, any>, onChange: (name: string, value: any) => void) => {
+  const { type } = props
+  const prevTypeRef = useRef<string | undefined>(type)
+
+  useEffect(() => {
+    // 只在 type 真正变化时才更新 config
+    if (type && type !== prevTypeRef.current && defaultConfigs[type]) {
+      prevTypeRef.current = type
+      onChange('config', defaultConfigs[type])
+    }
+  }, [type, onChange])
+
+  return null // 不需要渲染额外的表单
+}
+
 export const dataSourceConfig: ComponentConfig = {
   id: 'data-source',
   name: 'DataSource 数据源',
   propsConfig: dataSourcePropsConfig,
   defaultProps: dataSourceDefaultProps,
   renderPreview: renderDataSourcePreview,
-  renderCodePreview: renderDataSourceCodePreview
+  renderCodePreview: renderDataSourceCodePreview,
+  renderCustomForm: renderDataSourceCustomForm
 }

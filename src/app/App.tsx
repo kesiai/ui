@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, layoutConfig, modalConfig, popoverConfig, panelConfig, 
   tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig, 
   formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig, 
-  buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig } from './config'
+  buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig, Container2dConfig, codeEditorViewsConfig, customViewsConfig, polygonViewsConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
@@ -104,6 +104,17 @@ const componentCategories = [
     ]
   },
   {
+    id: 'gis',
+    name: '地图组件',
+    icon: '🗺️',
+    components: [
+      { id: 'Container2d', config: Container2dConfig },
+      { id: 'codeEditorViews', config: codeEditorViewsConfig },
+      { id: 'customViews', config: customViewsConfig },
+      { id: 'polygonViews', config: polygonViewsConfig }
+    ]
+  },
+  {
     id: 'view',
     name: '视图组件',
     icon: '👁️',
@@ -179,7 +190,11 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   videoPeriods: videoPeriodsConfig,
   timeAxis: timeAxisConfig,
   videoPlayback: videoPlaybackConfig,
-  connectWidget: connectWidgetConfig
+  connectWidget: connectWidgetConfig,
+  Container2d: Container2dConfig,
+  codeEditorViews: codeEditorViewsConfig,
+  customViews: customViewsConfig,
+  polygonViews: polygonViewsConfig
 }
 
 function App() {
@@ -308,9 +323,13 @@ function App() {
     videoPeriods: videoPeriodsConfig.defaultProps,
     timeAxis: timeAxisConfig.defaultProps,
     videoPlayback: videoPlaybackConfig.defaultProps,
-    connectWidget: connectWidgetConfig.defaultProps
+    connectWidget: connectWidgetConfig.defaultProps,
+    Container2d: Container2dConfig.defaultProps,
+    codeEditorViews: codeEditorViewsConfig.defaultProps,
+    customViews: customViewsConfig.defaultProps,
+    polygonViews: polygonViewsConfig.defaultProps
   })
-
+  console.log(componentConfigMap, selectedComponent, 'componentConfigMap')
   // 获取当前选中的组件配置
   const currentComponentConfig = useMemo(() => {
     return componentConfigMap[selectedComponent]

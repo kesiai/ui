@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "custom-views",
   "type": "registry:component",
-  "title": "CustomViews",
+  "title": "customViews",
   "description": "自定义层 - GIS自定义层",
   "registryDependencies": [],
   "dependencies": [],

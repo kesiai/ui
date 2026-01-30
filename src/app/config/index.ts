@@ -41,3 +41,8 @@ export { videoPeriodsConfig } from './components/videoPeriodsConfig'
 export { timeAxisConfig } from './components/timeAxisConfig'
 export { videoPlaybackConfig } from './components/videoPlaybackConfig'
 export { connectWidgetConfig } from './components/connectWidgetConfig'
+export { Container2dConfig } from './components/container2dConfig'
+export { codeEditorViewsConfig } from './components/codeEditorViewsConfig'
+export { customViewsConfig } from './components/customViewsConfig'
+export { polygonViewsConfig } from './components/polygonViewsConfig'
+

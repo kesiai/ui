@@ -4,76 +4,15 @@ import { api } from '@airiot/client'
 import dayjs from 'dayjs'
 import { toast } from '@/hooks/use-toast'
 import { timeQuery } from './utils'
+import type {
+  TimeRangeConfig,
+  GroupConfig,
+  DataItemConfig,
+  ColumnConfig,
+  QueryResult
+} from './types'
 
 // ==================== Types ====================
-
-/**
- * 时间范围配置
- */
-export interface TimeRangeConfig {
-  type?: 'forward' | 'backward' | 'custom'
-  range?: {
-    radioType?: number
-    gte?: string
-    lte?: string
-    date?: string
-    record?: {
-      table?: { id?: string }
-      id?: string
-    }
-  }
-  unit?: string
-  count?: number
-  fromNow?: boolean
-  historyTime?: any
-}
-
-/**
- * 分组配置
- */
-export interface GroupConfig {
-  count?: number
-  unit?: string
-  fill?: { value: string }
-  isClassMode?: boolean
-  table?: any
-  record?: any
-}
-
-/**
- * 数据项配置
- */
-export interface DataItemConfig {
-  uid?: string
-  id?: string
-  table?: string
-  model?: { id?: string }
-  fields?: string[]
-  key?: string
-  name?: string
-  fixed?: number
-  title?: string
-  group?: string
-  groupType?: 'id' | 'department' | 'other'
-  query?: Array<Array<{ field?: string; method?: string }>>
-  func?: string
-  tableData?: any
-  tableDataTag?: {
-    origin?: any
-    value?: { tableId?: string }
-  }
-}
-
-/**
- * 列配置
- */
-export interface ColumnConfig {
-  field?: string
-  tableData?: any
-  table?: any
-  groupType?: 'id' | 'department' | 'other'
-  group?: string
-}
 
 /**
  * 历史数据查询配置
@@ -92,16 +31,6 @@ export interface HistoryDataConfig {
   startTime?: any
   sortByTime?: boolean
   submit?: string
-}
-
-/**
- * 查询结果
- */
-export interface QueryResult {
-  dimensions?: Array<{ name: string; title?: string; type: string; tag?: string }>
-  source?: any[]
-  title?: string
-  [key: string]: any
 }
 
 // 默认配置（包含示例数据用于调试）
@@ -125,15 +54,16 @@ export const defaultHistoryConfig: HistoryDataConfig = {
   columns: [{
     table: {
       id: 'A',
-      tableMajorType: 'device',
-      title: 'A'
+      name: 'A',
+      tableMajorType: 'device'
     },
     tableData: {
       id: 'A001',
       name: 'A001',
       table: {
         id: 'A',
-        title: 'A'
+        name: 'A',
+        tableMajorType: 'device'
       }
     },
     field: 'COUNT(\"a\")'
@@ -587,26 +517,47 @@ export function useHistoryData(config: HistoryDataConfig) {
   const queryDataHandler = useCallback(async () => {
     try {
       // 构建查询项
-      const items: DataItemConfig[] = [
+      const itemsWithNull = [
         // 处理 tags
         ...(tags || []).map(item => {
-          const tag = item?.tableDataTag?.origin || item
-          const tagField = (hasGroup(group) || noTime) ? (`${item.func || 'mean'}("${tag.id}")`) : tag.id
-          const node = tag?.tableData || item.tableData || {}
-          const table = node?.table?.id || node?._table || item?.tableDataTag?.value?.tableId
+          // 获取标签信息
+          let tagId: string | undefined
+          let tagName: string | undefined
+          let tableDataId: string | undefined
+          let tableId: string | undefined
+
+          // 优先使用 tableDataTag 格式
+          if (item.tableDataTag?.value) {
+            tagId = item.tableDataTag.value.tagId
+            tableDataId = item.tableDataTag.value.tableDataId
+            tableId = item.tableDataTag.value.tableId
+            tagName = item.tableDataTag.name
+          } else if (item.tag) {
+            // 使用标准格式
+            tagId = item.tag.id
+            tableDataId = item.tableData?.id
+            tableId = item.table?.id || item.tableData?.table?.id
+            tagName = item.tag.name
+          }
+
+          if (!tagId) return null
+
+          const tagField = (hasGroup(group) || noTime) ? (`${item.func || 'mean'}("${tagId}")`) : tagId
 
           return {
-            ...tag,
-            table,
-            key: `${table}-${node?.id}-${tag.id}`,
-            name: `${node?.table?.name || table}-${node.name || node?.id || '全部'}-${tag.name}`,
+            ...item,
+            table: tableId ? { id: tableId } as const : undefined,
+            tableData: tableDataId ? { id: tableDataId, name: tagName, table: { id: tableId } } : undefined,
+            tag: { id: tagId, name: tagName } as const,
+            key: `${tableId}-${tableDataId}-${tagId}`,
+            name: tagName || `${tableId}-${tableDataId}-${tagId}`,
             fields: [tagField],
-            id: node.id,
+            id: tableDataId,
             fixed: item.fixed,
             title: item.title,
             query: item.query
-          }
-        }).filter(Boolean),
+          } as DataItemConfig
+        }),
 
         // 处理 columns
         ...(columns || []).map((col, i) => {
@@ -636,6 +587,8 @@ export function useHistoryData(config: HistoryDataConfig) {
           }
         }).filter(Boolean)
       ]
+
+      const items = itemsWithNull.filter((item): item is DataItemConfig => item !== null)
 
       if (items.length === 0) {
         console.warn('没有有效的查询项')

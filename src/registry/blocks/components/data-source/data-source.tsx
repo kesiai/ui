@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useApiData, defaultApiConfig } from './useApiData'
 import { useHistoryData, defaultHistoryConfig } from './useHistoryData'
+import { useRealtimeData, defaultRealtimeConfig } from './useRealtimeData'
 import { cn } from '@/lib/utils'
 
 export interface DataSourceProps {
@@ -17,10 +18,10 @@ export interface DataSourceProps {
 const defaultConfigs: Record<string, Record<string, any>> = {
   api: defaultApiConfig,
   history: defaultHistoryConfig,
+  realtime: defaultRealtimeConfig,
   interface: { url: '', method: 'GET', headers: [], body: [], interval: 0 },
   hybrid: {},
   report: {},
-  realtime: {},
   table: {},
   view: {},
   message: {}
@@ -84,6 +85,11 @@ export function DataSource({
     type === 'history' ? { ...currentConfig, submit: currentSubmit } : ({} as any)
   )
 
+  // 使用实时数据（只对 'realtime' 类型启用）
+  const realtimeDataResult = useRealtimeData(
+    type === 'realtime' ? { ...currentConfig, submit: currentSubmit } : ({} as any)
+  )
+
   // 根据类型选择数据源
   let currentDataset: any = null
   let currentLoading: boolean = false
@@ -94,6 +100,9 @@ export function DataSource({
   } else if (type === 'history') {
     currentDataset = historyDataResult.dataset
     currentLoading = historyDataResult.loading
+  } else if (type === 'realtime') {
+    currentDataset = realtimeDataResult.dataset
+    currentLoading = realtimeDataResult.loading
   }
 
   // 显示当前数据

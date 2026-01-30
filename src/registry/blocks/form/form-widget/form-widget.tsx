@@ -14,6 +14,7 @@ import CheckboxComponent from '@/components/tableField/components/Checkbox'
 import RateComponent from '@/components/tableField/components/Rate'
 import RichTextComponent from '@/components/tableField/components/RichText'
 import MapComponent from '@/components/tableField/components/MapComponent'
+import UploadAttachment from '@/components/tableField/components/UploadAttachment'
 import AreaComponent from '../form-area/form-area'
 
 export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -117,13 +118,11 @@ const FieldComponentSelector: React.FC<{
 
   // 附件上传
   if (config.type === 'object' && config.fieldType === 'attachment') {
-    // TODO: 实现附件上传组件
-    return <div className="text-sm text-muted-foreground">附件上传（待实现）</div>
+    return <UploadAttachment input={input} field={{ schema: config, meta }} type="upload_attachment" />
   }
 
   if (config.type === 'array' && config.fieldType === 'attachments') {
-    // TODO: 实现多附件上传组件
-    return <div className="text-sm text-muted-foreground">多附件上传（待实现）</div>
+    return <UploadAttachment input={input} field={{ schema: config, meta }} type="upload_attachment_group" />
   }
 
   // 用户/角色关联

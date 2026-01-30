@@ -28,6 +28,7 @@ export function LoginDialog({ open, onOpenChange, onLoginSuccess }: LoginDialogP
       })
 
       if (result) {
+        console.log('登录成功，用户信息：', result)
         // 保存到 localStorage（包含时间戳）
         const userWithTime = {
           ...result,
@@ -36,14 +37,14 @@ export function LoginDialog({ open, onOpenChange, onLoginSuccess }: LoginDialogP
         localStorage.setItem(storageKey, JSON.stringify(userWithTime))
 
         // 更新全局状态
-        setUser(result)
+        // setUser(result)
 
         // 手动触发 loadUser 以确保状态更新
-        setTimeout(() => {
-          loadUser()
-          // 调用成功回调
-          onLoginSuccess?.()
-        }, 100)
+        // setTimeout(() => {
+        //   loadUser()
+        //   // 调用成功回调
+        //   onLoginSuccess?.()
+        // }, 100)
 
         // 关闭弹窗并重置表单
         onOpenChange(false)

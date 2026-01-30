@@ -39,6 +39,16 @@ export const FormWidgetPreview: React.FC<{ props: Record<string, any> }> = ({ pr
       type: 'object',
       fieldType: 'map',
       title: '地图定位'
+    },
+    attachment: {
+      type: 'object',
+      fieldType: 'attachment',
+      title: '附件上传'
+    },
+    attachments: {
+      type: 'array',
+      fieldType: 'attachments',
+      title: '附件组'
     }
   }
 
@@ -77,7 +87,9 @@ export const formWidgetPropsConfig = [
       { value: 'select', label: '选择器' },
       { value: 'date', label: '日期' },
       { value: 'checkbox', label: '布尔值' },
-      { value: 'map', label: '地图定位' }
+      { value: 'map', label: '地图定位' },
+      { value: 'attachment', label: '附件上传' },
+      { value: 'attachments', label: '附件组' }
     ]
   },
   {
@@ -131,7 +143,9 @@ const renderFormWidgetCodePreview = (props: Record<string, any>) => {
     select: 'string',
     date: 'string',
     checkbox: 'boolean',
-    map: 'object'
+    map: 'object',
+    attachment: 'object',
+    attachments: 'array'
   } as const
 
   const fieldTypeMap = {
@@ -140,7 +154,9 @@ const renderFormWidgetCodePreview = (props: Record<string, any>) => {
     select: 'select',
     date: 'datePicker',
     checkbox: 'checkbox',
-    map: 'map'
+    map: 'map',
+    attachment: 'attachment',
+    attachments: 'attachments'
   } as const
 
   const titleMap = {
@@ -149,7 +165,9 @@ const renderFormWidgetCodePreview = (props: Record<string, any>) => {
     select: '选择字段',
     date: '日期字段',
     checkbox: '布尔字段',
-    map: '地图定位'
+    map: '地图定位',
+    attachment: '附件上传',
+    attachments: '附件组'
   } as const
 
   const type = typeMap[props.fieldType as keyof typeof typeMap] || 'string'

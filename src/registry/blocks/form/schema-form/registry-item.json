@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/schema-form/schema-form.tsx",
+      "path": "/registry/blocks/form/schema-form/schema-form.tsx",
       "type": "registry:component"
     }
   ]

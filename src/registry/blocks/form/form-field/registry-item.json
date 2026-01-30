@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-field",
+  "type": "registry:component",
+  "title": "Form Field",
+  "description": "表单字段 - 表单字段组件",
+  "registryDependencies": [
+    "form",
+    "airiot/form"
+  ],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/form/form-field/form-field.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/blocks/form/form-field/field-map.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

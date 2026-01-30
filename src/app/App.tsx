@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, iterationConfig, modalConfig, popoverConfig, panelConfig,
   tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig,
-  formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig,
+  formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, formConfig, formFieldConfig, schemaFormConfig, mobilePopupConfig, mobileCalendarConfig,
   mobileNavBarConfig, mobileLocationConfig, mobileScanQRConfig,
   buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig, dataSourceConfig } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
@@ -53,6 +53,9 @@ const componentCategories = [
     name: '表单组件',
     icon: '📝',
     components: [
+      { id: 'form', config: formConfig },
+      { id: 'form-field', config: formFieldConfig },
+      { id: 'schema-form', config: schemaFormConfig },
       { id: 'form-date-range', config: dateRangeConfig },
       { id: 'form-area', config: areaConfig },
       { id: 'form-rate', config: rateConfig },
@@ -168,6 +171,9 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   'form-date-range': dateRangeConfig,
   'form-area': areaConfig,
   'form-rate': rateConfig,
+  form: formConfig,
+  'form-field': formFieldConfig,
+  'schema-form': schemaFormConfig,
   'mobile-picker': mobilePickerConfig,
   'data-point': dataPointConfig,
   'form-input': formInputConfig,
@@ -237,6 +243,9 @@ function App() {
     'form-date-range': dateRangeConfig.defaultProps,
     'form-area': areaConfig.defaultProps,
     'form-rate': rateConfig.defaultProps,
+    form: formConfig.defaultProps,
+    'form-field': formFieldConfig.defaultProps,
+    'schema-form': schemaFormConfig.defaultProps,
     'mobile-picker': mobilePickerConfig.defaultProps,
     'data-point': dataPointConfig.defaultProps,
     'form-input': formInputConfig.defaultProps,

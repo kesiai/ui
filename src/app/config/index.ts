@@ -1,50 +1,97 @@
+import type { ComponentConfig } from './types'
+
+// 动态导入 registry/blocks 目录下所有的 config.tsx 文件
+const registryModules = import.meta.glob('../../registry/blocks/**/config.tsx', { eager: true })
+
+// 分类配置映射
+const categoryConfig: Record<string, { name: string; icon: string; order: number }> = {
+  'components': { name: '基础组件', icon: '🧩', order: 0 },
+  'business': { name: '业务组件', icon: '💼', order: 1 },
+  'form': { name: '表单组件', icon: '📝', order: 2 },
+  'chart': { name: '图表组件', icon: '📊', order: 3 },
+  'advanced': { name: '高级组件', icon: '⚡', order: 4 },
+  '3d': { name: '3D 组件', icon: '🎮', order: 5 },
+  'video': { name: '视频组件', icon: '🎬', order: 6 },
+  'mobile': { name: '移动端组件', icon: '📱', order: 7 },
+  'containers': { name: '容器组件', icon: '📦', order: 8 },
+}
+
+// 提取 registry 中的所有配置导出
+const registryConfigs: Record<string, ComponentConfig> = {}
+
+// 用于存储分类和组件的关系
+const componentCategories: Array<{
+  id: string
+  name: string
+  icon: string
+  components: Array<{ id: string }>
+}> = []
+
+// 临时分类存储
+const categoriesTemp: Record<string, string[]> = {}
+
+for (const path in registryModules) {
+  const module = registryModules[path] as any
+
+  // 提取分类和组件名
+  // 例如: ../../registry/blocks/form/form-input/config.tsx
+  const match = path.match(/registry\/blocks\/([^/]+)\/([^/]+)\/config\.tsx$/)
+  if (!match) continue
+
+  const [, categoryDir, componentDir] = match
+  const componentId = componentDir
+
+  // 获取组件配置
+  let config: ComponentConfig | null = null
+  if (module.default) {
+    config = module.default as ComponentConfig
+  } else if (module[`${componentId}Config`]) {
+    config = module[`${componentId}Config`] as ComponentConfig
+  } else {
+    // 查找所有以 Config 结尾的导出
+    for (const key in module) {
+      if (key.endsWith('Config') && module[key]?.id) {
+        config = module[key] as ComponentConfig
+        break
+      }
+    }
+  }
+
+  if (config) {
+    registryConfigs[config.id || componentId] = config
+
+    // 添加到临时分类
+    if (!categoriesTemp[categoryDir]) {
+      categoriesTemp[categoryDir] = []
+    }
+    categoriesTemp[categoryDir].push(config.id || componentId)
+  }
+}
+
+// 构建最终的分类数组
+Object.entries(categoriesTemp)
+  .sort(([, a], [, b]) => a.length - b.length) // 按组件数量排序
+  .forEach(([categoryDir, componentIds]) => {
+    const catConfig = categoryConfig[categoryDir]
+    if (catConfig) {
+      componentCategories.push({
+        id: categoryDir,
+        name: catConfig.name,
+        icon: catConfig.icon,
+        components: componentIds.map(id => ({ id }))
+      })
+    }
+  })
+
+// 按配置的顺序排序
+componentCategories.sort((a, b) => {
+  const orderA = categoryConfig[a.id]?.order ?? 999
+  const orderB = categoryConfig[b.id]?.order ?? 999
+  return orderA - orderB
+})
+
+// 导出配置
+export { registryConfigs, componentCategories }
+
+// 导出类型
 export type { ComponentConfig, PropConfig, PropConfigOption, PropConfigType } from './types'
-export { barConfig } from './components/bar.config'
-export { qrcodeConfig } from './components/qrcode.config'
-export { chartLineConfig } from './components/chart-line.config'
-export { chartBarConfig } from './components/chart-bar.config'
-export { textConfig } from './components/text.config'
-export { textareaConfig } from './components/textarea.config'
-export { iframeConfig } from './components/iframe.config'
-export { buttonConfig } from './components/button.config'
-export { imageConfig } from './components/image.config'
-export { cardConfig } from './components/card.config'
-export { carouselConfig } from './components/carousel.config'
-export { contextProviderConfig } from './components/context-provider.config'
-export { iterationConfig } from './components/iteration.config'
-export { modalConfig } from './components/modal.config'
-export { popoverConfig } from './components/popover.config'
-export { panelConfig } from './components/panel.config'
-export { tabsConfig } from './components/tabs.config'
-export { statusConfig } from './components/status.config'
-export { model3dConfig } from './components/model-3d.config'
-export { statusesConfig } from './components/statuses.config'
-export { playerConfig } from './components/player.config'
-export { dateRangeConfig } from './components/form-date-range.config'
-export { areaConfig } from './components/form-area.config'
-export { rateConfig } from './components/form-rate.config'
-export { mobilePickerConfig } from './components/mobile-picker.config'
-export { dataPointConfig } from './data-point.config.tsx'
-export { formInputConfig } from './components/form-input.config'
-export { formInputNumberConfig } from './components/form-input-number.config'
-export { formSelectConfig } from './components/form-select.config'
-export { formSliderConfig } from './components/form-slider.config'
-export { formRadioConfig } from './components/form-radio.config'
-export { formSwitchConfig } from './components/form-switch.config'
-export { formCheckboxConfig } from './components/form-checkbox.config'
-export { formDateConfig } from './components/form-date.config'
-export { mobilePopupConfig } from './components/mobile-popup.config'
-export { mobileCalendarConfig } from './components/mobile-calendar.config'
-export { buttonControlConfig } from './components/buttonControlConfig'
-export { videoControlConfig } from './components/videoControlConfig'
-export { videoPeriodsConfig } from './components/videoPeriodsConfig'
-export { timeAxisConfig } from './components/timeAxisConfig'
-export { videoPlaybackConfig } from './components/videoPlaybackConfig'
-export { connectWidgetConfig } from './components/connectWidgetConfig'
-export { dataSourceConfig } from './components/data-source.config'
-export { mobileNavBarConfig } from './components/mobile-nav-bar.config'
-export { mobileLocationConfig } from './components/mobile-location.config'
-export { mobileScanQRConfig } from './components/mobile-scan-qr.config'
-export { formConfig } from './components/form.config'
-export { formFieldConfig } from './components/form-field.config'
-export { schemaFormConfig } from './components/schema-form.config'

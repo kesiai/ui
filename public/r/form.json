@@ -8,9 +8,9 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form/form.tsx",
+      "path": "blocks/form/form/form.tsx",
       "type": "registry:component",
-      "content": ""
+      "content": "import { FormProvider, useForm, type UseFormPropsExtended } from '@airiot/client'\nimport type { ReactNode } from 'react'\n\ntype FormProps = UseFormPropsExtended & {\n  formId: string\n  children: ReactNode\n  onSubmit: (data: any) => void\n}\n\nconst Form = ({ formId, children, onSubmit, onEffect, ...props } : FormProps ) => {\n  const methods = useForm({ ...props, onEffect })\n  return (\n    <FormProvider {...methods}>\n      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)}>\n        {children}\n      </form>\n    </FormProvider>\n  )\n}\n\nexport default Form"
     }
   ]
 }

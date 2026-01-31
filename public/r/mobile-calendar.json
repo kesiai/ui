@@ -4,11 +4,14 @@
   "type": "registry:component",
   "title": "MobileCalendar",
   "description": "日历 - 移动端日历组件",
-  "registryDependencies": [],
+  "registryDependencies": [
+    "calendar",
+    "drawer"
+  ],
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-calendar/mobile-calendar.tsx",
+      "path": "registry/blocks/mobile/mobile-calendar/mobile-calendar.tsx",
       "type": "registry:component",
       "content": ""
     }

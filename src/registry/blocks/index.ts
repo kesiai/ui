@@ -32,6 +32,7 @@ import isc_video from './video/isc-video/registry-item.json' with { type: 'json'
 import review_view_components from './video/review-view-components/registry-item.json' with { type: 'json' }
 import form_widget from './form/form-widget/registry-item.json' with { type: 'json' }
 import form from './form/form/registry-item.json' with { type: 'json' }
+import form_field from './form/form-field/registry-item.json' with { type: 'json' }
 import time_widget from './form/time-widget/registry-item.json' with { type: 'json' }
 import schema_form from './form/schema-form/registry-item.json' with { type: 'json' }
 import form_date_range from './form/form-date-range/registry-item.json' with { type: 'json' }
@@ -124,7 +125,6 @@ import react_widget from './containers/react-widget/registry-item.json' with { t
 import connect_widget from './advanced/connect-widget/registry-item.json' with { type: 'json' }
 import slot_container from './containers/slot-container/registry-item.json' with { type: 'json' }
 import resource_container from './containers/resource-container/registry-item.json' with { type: 'json' }
-import layout_container from './containers/layout-container/registry-item.json' with { type: 'json' }
 import link from './containers/link/registry-item.json' with { type: 'json' }
 import app_page from './containers/app-page/registry-item.json' with { type: 'json' }
 import iteration from './containers/iteration/registry-item.json' with { type: 'json' }
@@ -174,6 +174,7 @@ export const blocks = [
     review_view_components as RegistryItem,
     form_widget as RegistryItem,
     form as RegistryItem,
+    form_field as RegistryItem,
     time_widget as RegistryItem,
     schema_form as RegistryItem,
     form_date_range as RegistryItem,
@@ -266,7 +267,6 @@ export const blocks = [
     connect_widget as RegistryItem,
     slot_container as RegistryItem,
     resource_container as RegistryItem,
-    layout_container as RegistryItem,
     link as RegistryItem,
     app_page as RegistryItem,
     iteration as RegistryItem,

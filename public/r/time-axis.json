@@ -2,13 +2,13 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "time-axis",
   "type": "registry:component",
-  "title": "TimeAxis",
-  "description": "视频时间轴 - 视频时间轴组件",
+  "title": "TimeAxisWidget",
+  "description": "视频时间轴 - 用于视频回放的时间轴组件，支持拖拽定位、显示视频区域、时间刻度等功能",
   "registryDependencies": [],
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/time-axis/time-axis.tsx",
+      "path": "registry/blocks/video/time-axis/time-axis.tsx",
       "type": "registry:component",
       "content": ""
     }

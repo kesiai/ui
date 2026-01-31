@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-switch/form-switch.tsx",
+      "path": "registry/blocks/form/form-switch/form-switch.tsx",
       "type": "registry:component",
       "content": ""
     }

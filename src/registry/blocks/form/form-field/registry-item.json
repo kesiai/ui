@@ -11,11 +11,11 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-field/form-field.tsx",
+      "path": "blocks/form/form-field/form-field.tsx",
       "type": "registry:component"
     },
     {
-      "path": "registry/blocks/form/form-field/field-map.tsx",
+      "path": "blocks/form/form-field/field-map.tsx",
       "type": "registry:component"
     }
   ]

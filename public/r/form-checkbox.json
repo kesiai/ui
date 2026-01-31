@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-checkbox/form-checkbox.tsx",
+      "path": "registry/blocks/form/form-checkbox/form-checkbox.tsx",
       "type": "registry:component",
       "content": ""
     }

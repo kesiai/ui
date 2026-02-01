@@ -13,6 +13,7 @@ const projectId = import.meta.env.VITE_AIRIOT_PROJECT_ID
 console.log('🔧 配置 @airiot/client:', { apiHost, projectId })
 
 try {
+  const { loadUser } = useUser()
   setConfig({
     language: 'zh-CN',
     rest: apiHost + '/rest/',
@@ -22,6 +23,7 @@ try {
       projectId,
     }
   })
+  loadUser()
 } catch (error) {
   console.warn('Failed to set @airiot/client config:', error)
 }
@@ -82,7 +84,7 @@ function ComponentDetailPage() {
   return (
     <div className="flex w-full">
       {/* 组件预览区 */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-auto">
         <div className="p-6">
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 h-full">
             <div className="border-b border-slate-200 px-6 py-4">
@@ -175,7 +177,7 @@ function HomePage() {
         {/* 主内容区 */}
         <div className="flex-1 flex overflow-hidden">
           {/* 左侧菜单 */}
-          <aside className="w-80 bg-white border-r border-slate-200 overflow-y-auto">
+          <aside className="w-80 min-w-80 bg-white border-r border-slate-200 overflow-y-auto">
             <div className="p-4">
               <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wide mb-4">
                 组件分类

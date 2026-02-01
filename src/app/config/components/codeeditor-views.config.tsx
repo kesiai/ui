@@ -37,12 +37,12 @@ export const codeEditorViewsDefaultProps = {
 
 const renderCodeEditorViewsPreview = (props: Record<string, unknown>) => {
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col">
       {/* 地图容器 */}
-      <div className="flex-1 min-h-[300px] rounded-lg overflow-hidden border border-slate-200">
+      <div className="rounded-lg overflow-hidden border border-slate-200">
         <MapContainer
           width="100%"
-          height="100%"
+          height={300}
           viewOptions={{
             position: { center: [116.391, 39.9042] },
             zoom: 10

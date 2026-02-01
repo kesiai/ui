@@ -81,7 +81,7 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
   (
     {
       className,
-      drawLine = [],
+      drawLine = "",
       featureStyle = {},
       display = true,
       cellKey,
@@ -113,6 +113,7 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
         map.removeLayer(layerRef.current)
         layerRef.current = null
       }
+
 
       if (!drawLine || !Array.isArray(drawLine) || !drawLine.length) return
 
@@ -188,17 +189,17 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
         const data = feature.get('customData') || {}
         const dataStyleRoot = data?.location?.style || data.style || {}
 
-        // 根据几何类型获取样式
-        let featureDataStyle: PointStyle | LineStyle = {}
+        // 根据几何类型获取样式，合并优先级：数据样式 < 图层样式
+        let mergedStyle: PointStyle | LineStyle = {}
         if (geomType === 'Point') {
-          featureDataStyle = dataStyleRoot.point || {}
+          const dataPointStyle = dataStyleRoot.point || {}
+          const layerPointStyle = featureStyle?.point || {}
+          mergedStyle = { ...dataPointStyle, ...layerPointStyle }
         } else {
-          featureDataStyle = dataStyleRoot.line || {}
+          const dataLineStyle = dataStyleRoot.line || {}
+          const layerLineStyle = featureStyle?.line || {}
+          mergedStyle = { ...dataLineStyle, ...layerLineStyle }
         }
-
-        // 合并样式：数据样式 < 图层样式
-        const mergedStyle = { ...featureDataStyle, ...featureStyle }
-
         if (geomType === 'Point') {
           const pointStyle = mergedStyle as PointStyle
           return new style.Style({
@@ -215,7 +216,7 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
         const strokeColor = lineStyle.color || 'rgba(255, 0, 0, 0.8)'
         const strokeWidth = lineStyle.width || 2
         const fillColor = lineStyle.fillColor || 'rgba(255, 0, 0, 0.2)'
-
+      
         return new style.Style({
           stroke: new style.Stroke({
             color: strokeColor,

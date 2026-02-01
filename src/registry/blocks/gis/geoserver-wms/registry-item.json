@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "geoserver-wms",
+  "type": "registry:component",
+  "title": "geoserver-wms",
+  "description": "地图geoserver-wms图层",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/geoserver-wms/geoserver-wms.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

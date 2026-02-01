@@ -1,16 +1,19 @@
 import { useState, useMemo } from 'react'
-import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, iterationConfig, modalConfig, popoverConfig, panelConfig,
+import {
+  barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, carouselConfig, contextProviderConfig, iterationConfig, modalConfig, popoverConfig, panelConfig,
   tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig, dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, dataPointConfig,
   formInputConfig, formSelectConfig, formInputNumberConfig, formSliderConfig, formRadioConfig, formSwitchConfig, formCheckboxConfig, formDateConfig, mobilePopupConfig, mobileCalendarConfig,
   mobileNavBarConfig, mobileLocationConfig, mobileScanQRConfig,
-  buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig, Container2dConfig, codeEditorViewsConfig, customViewsConfig, polygonViewsConfig, dataSourceConfig } from './config'
+  buttonControlConfig, videoControlConfig, videoPeriodsConfig, timeAxisConfig, videoPlaybackConfig, connectWidgetConfig, Container2dConfig, codeEditorViewsConfig, customViewsConfig, polygonViewsConfig, xyzConfig, geoserverWmsConfig,
+  dataSourceConfig
+} from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
 import { setConfig, useUser, useLogout } from '@airiot/client'
 
 // 配置 @airiot/client
-const apiHost = import.meta.env.VITE_AIRIOT_API_URL 
+const apiHost = import.meta.env.VITE_AIRIOT_API_URL
 const projectId = import.meta.env.VITE_AIRIOT_PROJECT_ID
 
 console.log('🔧 配置 @airiot/client:', { apiHost, projectId })
@@ -113,7 +116,9 @@ const componentCategories = [
       { id: 'Container2d', config: Container2dConfig },
       { id: 'codeEditorViews', config: codeEditorViewsConfig },
       { id: 'customViews', config: customViewsConfig },
-      { id: 'polygonViews', config: polygonViewsConfig }
+      { id: 'polygonViews', config: polygonViewsConfig },
+      { id: 'xyz', config: xyzConfig },
+      { id: 'geoserver-wms', config: geoserverWmsConfig }
     ]
   },
   {
@@ -203,7 +208,9 @@ const componentConfigMap: Record<string, ComponentConfig> = {
   Container2d: Container2dConfig,
   codeEditorViews: codeEditorViewsConfig,
   customViews: customViewsConfig,
-  polygonViews: polygonViewsConfig
+  polygonViews: polygonViewsConfig,
+  xyz: xyzConfig,
+  'geoserver-wms': geoserverWmsConfig
 }
 
 function App() {
@@ -276,9 +283,11 @@ function App() {
     Container2d: Container2dConfig.defaultProps,
     codeEditorViews: codeEditorViewsConfig.defaultProps,
     customViews: customViewsConfig.defaultProps,
-    polygonViews: polygonViewsConfig.defaultProps
+    polygonViews: polygonViewsConfig.defaultProps,
+    xyz: xyzConfig.defaultProps,
+    'geoserver-wms': geoserverWmsConfig.defaultProps
   })
-  console.log(componentConfigMap, selectedComponent, 'componentConfigMap')
+
   // 获取当前选中的组件配置
   const currentComponentConfig = useMemo(() => {
     return componentConfigMap[selectedComponent]
@@ -300,7 +309,7 @@ function App() {
       }
     }))
   }
-  
+
   // 渲染当前组件的预览
   const renderComponentPreview = () => {
     if (!currentComponentConfig) {
@@ -380,98 +389,98 @@ function App() {
           </div>
         </header>
 
-      {/* 主内容区 */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* 左侧导航 */}
-        <aside className="w-64 bg-white border-r border-slate-200 overflow-y-auto">
-          <div className="p-4">
-            <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wide mb-4">
-              组件分类
-            </h2>
-            <nav className="space-y-1">
-              {componentCategories.map((category) => (
-                <div key={category.id}>
-                  <button
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${selectedCategory === category.id
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-slate-700 hover:bg-slate-100'
-                      }`}
-                  >
-                    <span>{category.icon}</span>
-                    <span>{category.name}</span>
-                    <span className="ml-auto text-xs text-slate-500">
-                      {category.components.length}
-                    </span>
-                  </button>
+        {/* 主内容区 */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* 左侧导航 */}
+          <aside className="w-64 bg-white border-r border-slate-200 overflow-y-auto">
+            <div className="p-4">
+              <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wide mb-4">
+                组件分类
+              </h2>
+              <nav className="space-y-1">
+                {componentCategories.map((category) => (
+                  <div key={category.id}>
+                    <button
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${selectedCategory === category.id
+                        ? 'bg-blue-50 text-blue-700'
+                        : 'text-slate-700 hover:bg-slate-100'
+                        }`}
+                    >
+                      <span>{category.icon}</span>
+                      <span>{category.name}</span>
+                      <span className="ml-auto text-xs text-slate-500">
+                        {category.components.length}
+                      </span>
+                    </button>
 
-                  {/* 展开显示组件列表 */}
-                  {selectedCategory === category.id && category.components.length > 0 && (
-                    <div className="ml-6 mt-1 space-y-1">
-                      {category.components.map((component) => (
-                        <button
-                          key={component.id}
-                          onClick={() => setSelectedComponent(component.id)}
-                          className={`w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors ${selectedComponent === component.id
-                            ? 'bg-blue-100 text-blue-700 font-medium'
-                            : 'text-slate-600 hover:bg-slate-100'
-                            }`}
-                        >
-                          {component.config?.name || component.id}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                    {/* 展开显示组件列表 */}
+                    {selectedCategory === category.id && category.components.length > 0 && (
+                      <div className="ml-6 mt-1 space-y-1">
+                        {category.components.map((component) => (
+                          <button
+                            key={component.id}
+                            onClick={() => setSelectedComponent(component.id)}
+                            className={`w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors ${selectedComponent === component.id
+                              ? 'bg-blue-100 text-blue-700 font-medium'
+                              : 'text-slate-600 hover:bg-slate-100'
+                              }`}
+                          >
+                            {component.config?.name || component.id}
+                          </button>
+                        ))}
+                      </div>
+                    )}
 
-                  {selectedCategory === category.id && category.components.length === 0 && (
-                    <div className="ml-6 mt-1 text-xs text-slate-500 py-1.5">
-                      暂无组件
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-          </div>
-        </aside>
+                    {selectedCategory === category.id && category.components.length === 0 && (
+                      <div className="ml-6 mt-1 text-xs text-slate-500 py-1.5">
+                        暂无组件
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </nav>
+            </div>
+          </aside>
 
-        {/* 右侧内容区 */}
-        <main className="flex-1 flex overflow-hidden">
-          {/* 组件预览区 */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="p-6">
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 h-full">
-                <div className="border-b border-slate-200 px-6 py-4">
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    {currentComponentInfo?.config?.name || '组件预览'}
-                  </h2>
-                </div>
-                <div className="p-6" style={{ minHeight: '400px' }}>
-                  {renderComponentPreview()}
+          {/* 右侧内容区 */}
+          <main className="flex-1 flex overflow-hidden">
+            {/* 组件预览区 */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 h-full">
+                  <div className="border-b border-slate-200 px-6 py-4">
+                    <h2 className="text-lg font-semibold text-slate-900">
+                      {currentComponentInfo?.config?.name || '组件预览'}
+                    </h2>
+                  </div>
+                  <div className="p-6" style={{ minHeight: '400px' }}>
+                    {renderComponentPreview()}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* 属性配置面板 */}
-          <aside className="w-96 bg-white border-l border-slate-200 overflow-y-auto">
-            <div className="p-6">
-              <h2 className="text-lg font-semibold text-slate-900 mb-6">
-                属性配置
-              </h2>
-              {renderPropsForm()}
-            </div>
-          </aside>
-        </main>
+            {/* 属性配置面板 */}
+            <aside className="w-96 bg-white border-l border-slate-200 overflow-y-auto">
+              <div className="p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-6">
+                  属性配置
+                </h2>
+                {renderPropsForm()}
+              </div>
+            </aside>
+          </main>
+        </div>
       </div>
-    </div>
 
-    {/* 登录弹窗 */}
-    <LoginDialog
-      open={loginDialogOpen}
-      onOpenChange={setLoginDialogOpen}
-      onLoginSuccess={handleLoginSuccess}
-    />
-  </>
+      {/* 登录弹窗 */}
+      <LoginDialog
+        open={loginDialogOpen}
+        onOpenChange={setLoginDialogOpen}
+        onLoginSuccess={handleLoginSuccess}
+      />
+    </>
   )
 }
 

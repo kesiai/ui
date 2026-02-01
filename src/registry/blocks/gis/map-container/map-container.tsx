@@ -155,7 +155,7 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
   ) => {
     const containerRef = React.useRef<HTMLDivElement>(null)
     const mapRef = React.useRef<HTMLDivElement>(null)
-    const mapInstanceRef = React.useRef<Map | null>(null)
+    const [mapInstance, setMapInstance] = React.useState<Map | null>(null)
     const [mapReady, setMapReady] = React.useState(false)
 
     // 合并 ref
@@ -172,7 +172,7 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
 
     // 初始化地图
     React.useEffect(() => {
-      if (!mapRef.current || mapInstanceRef.current) return
+      if (!mapRef.current || mapInstance) return
 
       // 构建视图配置
       const viewConfig: Record<string, unknown> = {
@@ -228,7 +228,7 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
         }))
       }
 
-      mapInstanceRef.current = map
+      setMapInstance(map)
       setMapReady(true)
 
       // 监听容器大小变化
@@ -241,17 +241,17 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
 
       return () => {
         resizeObserver.disconnect()
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.setTarget(undefined)
-          mapInstanceRef.current = null
+        if (map) {
+          map.setTarget(undefined)
+          setMapInstance(null)
         }
       }
     }, [])
 
     // 更新中心位置
     React.useEffect(() => {
-      if (!mapInstanceRef.current || !mapReady) return
-      const view = mapInstanceRef.current.getView()
+      if (!mapInstance || !mapReady) return
+      const view = mapInstance.getView()
       const newCenter = fromLonLat(center)
       
       if (animation) {
@@ -263,8 +263,8 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
 
     // 更新缩放级别
     React.useEffect(() => {
-      if (!mapInstanceRef.current || !mapReady) return
-      const view = mapInstanceRef.current.getView()
+      if (!mapInstance || !mapReady) return
+      const view = mapInstance.getView()
       
       if (animation) {
         view.animate({ zoom, duration })
@@ -275,16 +275,16 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
 
     // 更新最大/最小缩放
     React.useEffect(() => {
-      if (!mapInstanceRef.current || !mapReady) return
-      const view = mapInstanceRef.current.getView()
+      if (!mapInstance || !mapReady) return
+      const view = mapInstance.getView()
       view.setMaxZoom(maxZoom)
       view.setMinZoom(minZoom)
     }, [maxZoom, minZoom, mapReady])
 
     // 更新旋转角度
     React.useEffect(() => {
-      if (!mapInstanceRef.current || !mapReady) return
-      const view = mapInstanceRef.current.getView()
+      if (!mapInstance || !mapReady) return
+      const view = mapInstance.getView()
       const radians = (rotation * Math.PI) / 180
       
       if (animation) {
@@ -296,34 +296,32 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
 
     // 更新缩放控件
     React.useEffect(() => {
-      if (!mapInstanceRef.current || !mapReady) return
-      const map = mapInstanceRef.current
-      const controls = map.getControls().getArray()
-      const zoomControl = controls.find(c => c instanceof Zoom)
+      if (!mapInstance || !mapReady) return
+      const controls = mapInstance.getControls().getArray()
+      const zoomControl = controls.find((c: unknown) => c instanceof Zoom)
 
       if (!zoomOption?.show && zoomControl) {
-        map.removeControl(zoomControl)
+        mapInstance.removeControl(zoomControl)
       } else if (zoomOption?.show && !zoomControl) {
-        map.addControl(new Zoom({
+        mapInstance.addControl(new Zoom({
           zoomInTipLabel: zoomOption.zoomInTipLabel || '放大',
           zoomOutTipLabel: zoomOption.zoomOutTipLabel || '缩小',
         }))
       }
-    }, [zoomOption?.show, mapReady])
+    }, [zoomOption?.show, mapReady, mapInstance])
 
     // 更新比例尺
     React.useEffect(() => {
-      if (!mapInstanceRef.current || !mapReady) return
-      const map = mapInstanceRef.current
-      const controls = map.getControls().getArray()
-      const scaleLineControl = controls.find(c => c instanceof ScaleLine)
+      if (!mapInstance || !mapReady) return
+      const controls = mapInstance.getControls().getArray()
+      const scaleLineControl = controls.find((c: unknown) => c instanceof ScaleLine)
 
       if (scaleLineControl) {
-        map.removeControl(scaleLineControl)
+        mapInstance.removeControl(scaleLineControl)
       }
 
       if (scaleLine?.show) {
-        map.addControl(new ScaleLine({
+        mapInstance.addControl(new ScaleLine({
           units: scaleLine.units || 'metric',
           bar: scaleLine.bar || false,
           text: scaleLine.text || false,
@@ -331,7 +329,7 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
           steps: scaleLine.steps,
         }))
       }
-    }, [scaleLine?.show, scaleLine?.units, scaleLine?.bar, scaleLine?.text, mapReady])
+    }, [scaleLine?.show, scaleLine?.units, scaleLine?.bar, scaleLine?.text, mapReady, mapInstance])
 
     return (
       <div
@@ -356,7 +354,7 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
 
         {/* 子元素容器 - 通过 Context 传递 map 实例 */}
         {children && (
-          <MapContext.Provider value={{ map: mapInstanceRef.current }}>
+          <MapContext.Provider value={{ map: mapInstance }}>
             <div className="absolute inset-0 pointer-events-none z-10">
               <div className="pointer-events-auto">
                 {mapReady ? children : null}

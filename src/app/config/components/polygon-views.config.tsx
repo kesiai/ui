@@ -1,8 +1,15 @@
-import { PolygonViews } from '@/registry/blocks/gis/polygon-views/polygon-views'
+import { PolygonViews, PolygonData } from '@/registry/blocks/gis/polygon-views/polygon-views'
 import { MapContainer } from '@/registry/blocks/gis/map-container/map-container'
 import { ComponentConfig } from '../types'
 
 export const polygonViewsPropsConfig = [
+  {
+    name: 'data',
+    label: '绘制数据',
+    type: 'text' as const,
+    default: '',
+    description: '要素数据'
+  },
   {
     name: 'defaultStyle.line.color',
     label: '线颜色',
@@ -52,18 +59,6 @@ export const polygonViewsPropsConfig = [
     default: false
   },
   {
-    name: 'showToolbar',
-    label: '显示工具栏',
-    type: 'boolean' as const,
-    default: false
-  },
-  {
-    name: 'readonly',
-    label: '只读',
-    type: 'boolean' as const,
-    default: false
-  },
-  {
     name: 'display',
     label: '显示',
     type: 'boolean' as const,
@@ -71,8 +66,26 @@ export const polygonViewsPropsConfig = [
   }
 ]
 
+const defaultPolygonData: PolygonData[] = [
+  {
+    id: '1',
+    type: 'LineString',
+    coordinates: [[117.116, 40.363], [118.116, 40.363]]
+  },
+  {
+    id: '2',
+    type: 'Polygon',
+    coordinates: [[[115.77467929287283, 40.70296009092331], [116.64946001454, 40.36561363397837], [115.80078743704539, 39.864378506529334], [115.77467929287283, 40.70296009092331]]]
+  },
+  {
+    id: '3',
+    type: 'Circle',
+    coordinates: { center: [117.77061242001318, 40.439482340800765], radius: 11800 }
+  }
+]
+
 export const polygonViewsDefaultProps = {
-  data: [],
+  data: JSON.stringify(defaultPolygonData),
   defaultStyle: {
     line: {
       color: 'rgba(255, 0, 0, 0.8)',
@@ -86,19 +99,29 @@ export const polygonViewsDefaultProps = {
       snumber: false
     }
   },
-  showToolbar: false,
-  readonly: false,
   display: true
 }
 
 const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
+  let polygonData: PolygonData[] = defaultPolygonData
+
+  // 如果 drawLine 是字符串，尝试解析
+  if (typeof props.data === 'string') {
+    try {
+      polygonData = JSON.parse(props.data) as PolygonData[]
+    } catch {
+      polygonData = []
+    }
+  } else if (Array.isArray(props.data)) {
+    polygonData = props.data as PolygonData[]
+  }
   return (
-    <div className="h-full flex flex-col">
+   <div className="flex flex-col">
       {/* 地图容器 */}
-      <div className="flex-1 min-h-[300px] rounded-lg overflow-hidden border border-slate-200">
+      <div className="rounded-lg overflow-hidden border border-slate-200">
         <MapContainer
           width="100%"
-          height="100%"
+          height={300}
           viewOptions={{
             position: { center: [116.391, 39.9042] },
             zoom: 10
@@ -106,6 +129,7 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
           cellKey="preview-map"
         >
           <PolygonViews
+            data={polygonData}
             defaultStyle={{
               line: {
                 color: props['defaultStyle.line.color'] as string,
@@ -125,29 +149,6 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
             cellKey="preview"
           />
         </MapContainer>
-      </div>
-      {/* 样式预览 */}
-      <div className="mt-2 flex justify-center gap-4 p-2 bg-slate-50 rounded">
-        <div className="flex items-center gap-2">
-          <div 
-            className="w-4 h-4 rounded-full border-2" 
-            style={{ 
-              borderColor: (props['defaultStyle.polygon.color'] as string) || 'rgba(255, 0, 0, 0.8)',
-              backgroundColor: (props['defaultStyle.polygon.fillColor'] as string) || 'rgba(255, 0, 0, 0.2)'
-            }}
-          />
-          <span className="text-xs text-slate-500">多边形</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div 
-            className="w-8 h-1 rounded" 
-            style={{ backgroundColor: (props['defaultStyle.line.color'] as string) || 'rgba(255, 0, 0, 0.8)' }}
-          />
-          <span className="text-xs text-slate-500">线段</span>
-        </div>
-        {Boolean(props.showToolbar) && (
-          <span className="text-xs text-blue-500">工具栏已启用</span>
-        )}
       </div>
     </div>
   )

@@ -12,18 +12,25 @@ export const PropsFormPanel: React.FC<PropsFormPanelProps> = ({ config, props, o
   return (
     <div className="space-y-4">
       {/* 渲染标准属性表单 */}
-      {config.propsConfig.map(propConfig => (
-        <div key={propConfig.name} className="space-y-2">
-          <label className="block text-sm font-medium text-slate-700">
-            {propConfig.label}
-          </label>
-          <FormControl
-            config={propConfig}
-            value={props[propConfig.name]}
-            onChange={onChange}
-          />
-        </div>
-      ))}
+      {config.propsConfig.map(propConfig => {
+        // 使用默认值当 props 中的值为 undefined
+        const propValue = props[propConfig.name] !== undefined
+          ? props[propConfig.name]
+          : config.defaultProps[propConfig.name]
+
+        return (
+          <div key={propConfig.name} className="space-y-2">
+            <label className="block text-sm font-medium text-slate-700">
+              {propConfig.label}
+            </label>
+            <FormControl
+              config={propConfig}
+              value={propValue}
+              onChange={onChange}
+            />
+          </div>
+        )
+      })}
 
       {/* 渲染自定义表单（如果有） */}
       {config.renderCustomForm && config.renderCustomForm(props, onChange)}
@@ -35,7 +42,14 @@ export const PropsFormPanel: React.FC<PropsFormPanelProps> = ({ config, props, o
         </label>
         <div className="bg-slate-900 rounded-lg p-4 overflow-x-auto">
           <pre className="text-sm text-slate-100">
-            <code>{config.renderCodePreview ? config.renderCodePreview(props) : '// Code preview not available'}</code>
+            <code>{
+              config.renderCodePreview
+                ? config.renderCodePreview({
+                    ...config.defaultProps,
+                    ...props
+                  })
+                : '// Code preview not available'
+            }</code>
           </pre>
         </div>
       </div>

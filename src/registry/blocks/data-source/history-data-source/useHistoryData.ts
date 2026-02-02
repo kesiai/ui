@@ -3,14 +3,14 @@ import _ from 'lodash'
 import { api } from '@airiot/client'
 import dayjs from 'dayjs'
 import { toast } from '@/hooks/use-toast'
-import { timeQuery } from './utils'
+import { timeQuery } from '../utils'
 import type {
   TimeRangeConfig,
   GroupConfig,
   DataItemConfig,
   ColumnConfig,
   QueryResult
-} from './types'
+} from '../types'
 
 // ==================== Types ====================
 

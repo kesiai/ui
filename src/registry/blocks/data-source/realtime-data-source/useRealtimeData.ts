@@ -12,7 +12,7 @@ import type {
   QueryResult,
   WSMessageData,
   UseWSReturn
-} from './types'
+} from '../types'
 
 // ==================== Types ====================
 
@@ -432,7 +432,8 @@ export function useRealtimeData(config: RealtimeDataConfig) {
     if (submit) {
       fetchHistory()
     }
-  }, [submit, fetchHistory])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submit])
 
   /**
    * 订阅实时数据更新
@@ -472,7 +473,8 @@ export function useRealtimeData(config: RealtimeDataConfig) {
     return () => {
       unsubscribe?.()
     }
-  }, [subTags, handleWsData, subscribe, onData])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subTags])
 
   return {
     dataset,

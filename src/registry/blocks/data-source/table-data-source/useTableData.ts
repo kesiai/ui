@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { api } from '@airiot/client'
 import moment from 'moment'
 import { toast } from '@/hooks/use-toast'
-import type { TableInfo } from './types'
+import type { TableInfo } from '../types'
 
 // ==================== Types ====================
 

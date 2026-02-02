@@ -16,6 +16,7 @@ const categoryConfig: Record<string, { name: string; icon: string; order: number
   'video': { name: '视频组件', icon: '🎬', order: 7 },
   'mobile': { name: '移动端组件', icon: '📱', order: 8 },
   'containers': { name: '容器组件', icon: '📦', order: 9 },
+  'data-source': { name: '数据源', icon: '🔌', order: 10 },
 }
 
 // 提取 registry 中的所有配置导出
@@ -36,12 +37,27 @@ for (const path in registryModules) {
   const module = registryModules[path] as any
 
   // 提取分类和组件名
-  // 例如: ../../registry/blocks/form/form-input/config.tsx
-  const match = path.match(/registry\/blocks\/([^/]+)\/([^/]+)\/config\.tsx$/)
-  if (!match) continue
+  // 支持两种格式:
+  // 1. ../../registry/blocks/form/form-input/config.tsx (两层: 分类/组件)
+  // 2. ../../registry/blocks/data-source/config.tsx (一层: 直接是组件)
+  let categoryDir: string
+  let componentId: string
 
-  const [, categoryDir, componentDir] = match
-  const componentId = componentDir
+  // 先尝试匹配两层格式
+  let match = path.match(/registry\/blocks\/([^/]+)\/([^/]+)\/config\.tsx$/)
+  if (match) {
+    const [, cat, comp] = match
+    categoryDir = cat
+    componentId = comp
+  } else {
+    // 尝试匹配一层格式
+    match = path.match(/registry\/blocks\/([^/]+)\/config\.tsx$/)
+    if (!match) continue
+
+    const [, comp] = match
+    categoryDir = comp // 使用组件名作为分类
+    componentId = comp
+  }
 
   // 获取组件配置
   let config: ComponentConfig | null = null

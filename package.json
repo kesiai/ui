@@ -74,6 +74,7 @@
     "sonner": "^2.0.7",
     "suspend-react": "^0.1.3",
     "tailwind-merge": "^3.4.0",
+    "svgedit": "^7.4.1",
     "vaul": "^1.1.2"
   },
   "devDependencies": {

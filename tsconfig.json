@@ -24,7 +24,8 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@svgedit/svgcanvas": ["./node_modules/@svgedit/svgcanvas/svgcanvas.js"]
     }
   },
   "include": ["src", "registry", "config"]

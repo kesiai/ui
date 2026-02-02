@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imageConfig, cardConfig, modalConfig, popoverConfig, 
   panelConfig, tabsConfig, statusConfig, model3dConfig, statusesConfig, playerConfig, qrcodeConfig, chartLineConfig, chartBarConfig,
    dateRangeConfig, areaConfig, rateConfig, mobilePickerConfig, formTableFieldConfig, formWidgetConfig, carouselConfig, 
@@ -8,7 +8,7 @@ import { barConfig, textConfig, textareaConfig, iframeConfig, buttonConfig, imag
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
-import { setConfig, useUser, useLogout } from '@airiot/client'
+import { setConfig, useUser, useLogout, createAPI } from '@airiot/client'
 
 // 配置 @airiot/client
 const apiHost = import.meta.env.VITE_AIRIOT_API_URL 

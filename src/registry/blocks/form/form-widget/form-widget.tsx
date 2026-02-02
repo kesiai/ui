@@ -16,6 +16,13 @@ import RichTextComponent from '@/components/tableField/components/RichText'
 import MapComponent from '@/components/tableField/components/MapComponent'
 import UploadAttachment from '@/components/tableField/components/UploadAttachment'
 import AreaComponent from '../form-area/form-area'
+import {
+  RelateSelect,
+  RelateMultiSelect,
+  RelateModelSelect,
+  RelateComponent,
+  schemaConverter,
+} from '@/components/tableField/components/relate'
 
 export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -104,16 +111,58 @@ const FieldComponentSelector: React.FC<{
 }> = ({ schema, input, meta, record, cellKey }) => {
   const config = schema || {}
 
-  // 关联字段（新版）
+  // 关联字段（新版）- 使用 recordSelectType
   if ((config.relateTo || config.relate) && config.recordSelectType) {
-    // TODO: 实现关联字段组件
-    return <div className="text-sm text-muted-foreground">关联字段（待实现）</div>
+    // TODO: 实现新版关联字段组件（使用 recordSelectType）
+    return <div className="text-sm text-muted-foreground">关联字段（新版 - 待实现）</div>
   }
 
-  // 外部工作表关联
-  if (['object', 'array'].includes(config.type) && config.relate?.id) {
-    // TODO: 实现外部工作表关联组件
-    return <div className="text-sm text-muted-foreground">外部工作表关联（待实现）</div>
+  // 外部工作表关联 - 使用 relate?.id
+  const convertedRelateSchema = React.useMemo(() => {
+    return ['object', 'array'].includes(config.type) && config.relate?.id
+      ? schemaConverter(config, {})
+      : null
+  }, [config])
+
+  if (convertedRelateSchema) {
+    const relateProps = {
+      input,
+      field: {
+        schema: convertedRelateSchema.schema,
+        fieldSchema: convertedRelateSchema.fieldSchema,
+        displayField: convertedRelateSchema.displayField,
+        tableID: convertedRelateSchema.tableID,
+        relateShowFields: convertedRelateSchema.relateShowFields,
+        key: convertedRelateSchema.key,
+        option: {
+          form: {
+            change: (field: string, value: any) => {
+              // TODO: 实现表单字段联动
+              console.log('Relate field change:', field, value)
+            }
+          }
+        }
+      },
+      meta,
+      record,
+      label: config.title || '请选择',
+    }
+
+    // 根据 type 选择对应组件
+    if (convertedRelateSchema.type === 'relate_multi_select') {
+      return <RelateMultiSelect {...relateProps} />
+    }
+    if (convertedRelateSchema.type === 'relate_fkselect') {
+      return <RelateSelect {...relateProps} />
+    }
+    if (convertedRelateSchema.type === 'relate_list_fkselect') {
+      return <RelateModelSelect {...relateProps} />
+    }
+  }
+
+  // 内部表关联（internalTable）
+  if (config.internalTable && config.relate) {
+    return <RelateComponent input={input} field={{ schema: config, ...field, internalTable: true }} meta={meta} record={record} />
   }
 
   // 附件上传
@@ -126,7 +175,7 @@ const FieldComponentSelector: React.FC<{
   }
 
   // 用户/角色关联
-  if (['User', 'Role'].includes(config.relateTo)) {
+  if (['User', 'Role'].includes(config.relateTo || '')) {
     // TODO: 实现用户角色组件
     return <div className="text-sm text-muted-foreground">用户角色（待实现）</div>
   }
@@ -279,7 +328,6 @@ const FormWidget = React.forwardRef<HTMLDivElement, FormWidgetProps>(
   (
     {
       config = {},
-      value,
       input,
       defaultValue,
       cellKey,
@@ -305,15 +353,17 @@ const FormWidget = React.forwardRef<HTMLDivElement, FormWidgetProps>(
       console.error('解析 fieldSchema 出错', e)
     }
 
+    const [insideVal, setInsideVal] = React.useState<any>(defaultValue)
+
     // 处理输入值
-    const inputValue = React.useMemo(() => {
-      return !isNil(value) ? value : input?.value
-    }, [value, input?.value])
+    const inputValue = input?.value || insideVal
 
     // 处理值变化
     const handleChange = React.useCallback((newValue: any) => {
       if (input?.onChange) {
         input.onChange(newValue)
+      } else {
+        setInsideVal(newValue)
       }
     }, [input])
 

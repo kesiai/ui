@@ -4,7 +4,8 @@
       "Bash(npm install:*)",
       "Bash(npx shadcn@latest add:*)",
       "Bash(npm run build:registry:*)",
-      "Bash(npm run type-check:*)"
+      "Bash(npm run type-check:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

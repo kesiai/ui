@@ -10,7 +10,7 @@
   ],
   "files": [
     {
-      "path": "registry/components/ui/accordion/accordion.tsx",
+      "path": "components/ui/accordion/accordion.tsx",
       "type": "registry:ui"
     }
   ]

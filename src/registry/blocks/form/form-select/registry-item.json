@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "src/registry/blocks/form/form-select/form-select.tsx",
+      "path": "blocks/form/form-select/form-select.tsx",
       "type": "registry:component"
     }
   ]

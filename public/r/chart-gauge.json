@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-gauge/chart-gauge.tsx",
+      "path": "registry/blocks/chart/chart-gauge/chart-gauge.tsx",
       "type": "registry:component",
       "content": ""
     }

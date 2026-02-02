@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-rate/form-rate.tsx",
+      "path": "blocks/form/form-rate/form-rate.tsx",
       "type": "registry:component"
     }
   ]

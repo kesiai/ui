@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/d:/work/workspace/new-ui/air-ui/src/registry/blocks/form/form-tableField/form-tableField.tsx",
+      "path": "d:/work/workspace/new-ui/air-ui/src/registry/blocks/form/form-tableField/form-tableField.tsx",
       "type": "registry:component"
     }
   ]

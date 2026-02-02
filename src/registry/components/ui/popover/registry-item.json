@@ -10,7 +10,7 @@
   ],
   "files": [
     {
-      "path": "registry/components/ui/popover/popover.tsx",
+      "path": "components/ui/popover/popover.tsx",
       "type": "registry:ui"
     }
   ]

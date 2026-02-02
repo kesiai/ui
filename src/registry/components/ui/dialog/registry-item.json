@@ -11,7 +11,7 @@
   ],
   "files": [
     {
-      "path": "registry/components/ui/dialog/dialog.tsx",
+      "path": "components/ui/dialog/dialog.tsx",
       "type": "registry:ui"
     }
   ]

@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-checkbox/form-checkbox.tsx",
+      "path": "blocks/form/form-checkbox/form-checkbox.tsx",
       "type": "registry:component"
     }
   ]

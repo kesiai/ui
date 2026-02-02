@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/business/data-point-panel/data-point-panel.tsx",
+      "path": "blocks/business/data-point-panel/data-point-panel.tsx",
       "type": "registry:component"
     }
   ]

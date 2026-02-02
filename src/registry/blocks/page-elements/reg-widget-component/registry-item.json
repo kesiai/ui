@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/reg-widget-component/reg-widget-component.tsx",
+      "path": "blocks/page-elements/reg-widget-component/reg-widget-component.tsx",
       "type": "registry:component"
     }
   ]

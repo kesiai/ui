@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/time-widget/time-widget.tsx",
+      "path": "blocks/form/time-widget/time-widget.tsx",
       "type": "registry:component"
     }
   ]

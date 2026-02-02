@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/user-menu/user-menu.tsx",
+      "path": "blocks/page-elements/user-menu/user-menu.tsx",
       "type": "registry:component"
     }
   ]

@@ -14,7 +14,7 @@
   ],
   "files": [
     {
-      "path": "registry/blocks/form/form-date/form-date.tsx",
+      "path": "blocks/form/form-date/form-date.tsx",
       "type": "registry:component"
     }
   ]

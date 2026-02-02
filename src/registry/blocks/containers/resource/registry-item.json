@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/containers/resource/resource.tsx",
+      "path": "blocks/containers/resource/resource.tsx",
       "type": "registry:component"
     }
   ]

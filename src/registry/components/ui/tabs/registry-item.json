@@ -10,7 +10,7 @@
   ],
   "files": [
     {
-      "path": "registry/components/ui/tabs/tabs.tsx",
+      "path": "components/ui/tabs/tabs.tsx",
       "type": "registry:ui"
     }
   ]

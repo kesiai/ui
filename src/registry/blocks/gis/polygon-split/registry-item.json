@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/gis/polygon-split/polygon-split.tsx",
+      "path": "blocks/gis/polygon-split/polygon-split.tsx",
       "type": "registry:component"
     }
   ]

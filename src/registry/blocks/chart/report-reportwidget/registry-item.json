@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/chart/report-reportwidget/report-reportwidget.tsx",
+      "path": "blocks/chart/report-reportwidget/report-reportwidget.tsx",
       "type": "registry:component"
     }
   ]

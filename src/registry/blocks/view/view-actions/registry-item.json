@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/view/view-actions/view-actions.tsx",
+      "path": "blocks/view/view-actions/view-actions.tsx",
       "type": "registry:component"
     }
   ]

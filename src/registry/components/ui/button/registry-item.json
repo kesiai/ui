@@ -10,7 +10,7 @@
   ],
   "files": [
     {
-      "path": "registry/components/ui/button/button.tsx",
+      "path": "components/ui/button/button.tsx",
       "type": "registry:ui"
     }
   ]

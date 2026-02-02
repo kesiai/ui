@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-upload/form-upload.tsx",
+      "path": "blocks/form/form-upload/form-upload.tsx",
       "type": "registry:component"
     }
   ]

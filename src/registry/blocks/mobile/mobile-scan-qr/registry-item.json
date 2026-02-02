@@ -11,7 +11,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/mobile/mobile-scan-qr/mobile-scan-qr.tsx",
+      "path": "blocks/mobile/mobile-scan-qr/mobile-scan-qr.tsx",
       "type": "registry:component"
     }
   ]

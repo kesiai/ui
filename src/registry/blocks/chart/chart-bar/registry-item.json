@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/chart/chart-bar/chart-bar.tsx",
+      "path": "blocks/chart/chart-bar/chart-bar.tsx",
       "type": "registry:component"
     }
   ]

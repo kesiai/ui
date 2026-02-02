@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/business/node-tree-select/node-tree-select.tsx",
+      "path": "blocks/business/node-tree-select/node-tree-select.tsx",
       "type": "registry:component"
     }
   ]

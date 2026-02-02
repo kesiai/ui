@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-date-range/form-date-range.tsx",
+      "path": "blocks/form/form-date-range/form-date-range.tsx",
       "type": "registry:component"
     }
   ]

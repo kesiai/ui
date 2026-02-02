@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/business/point-table/point-table.tsx",
+      "path": "blocks/business/point-table/point-table.tsx",
       "type": "registry:component"
     }
   ]

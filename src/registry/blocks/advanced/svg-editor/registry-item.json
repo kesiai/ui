@@ -18,27 +18,27 @@
   ],
   "files": [
     {
-      "path": "registry/blocks/advanced/svg-editor/svg-editor.tsx",
+      "path": "blocks/advanced/svg-editor/svg-editor.tsx",
       "type": "registry:component"
     },
     {
-      "path": "src/registry/blocks/advanced/svg-editor/toolbar.tsx",
+      "path": "blocks/advanced/svg-editor/toolbar.tsx",
       "type": "registry:component"
     },
     {
-      "path": "src/registry/blocks/advanced/svg-editor/tree.tsx",
+      "path": "blocks/advanced/svg-editor/tree.tsx",
       "type": "registry:component"
     },
     {
-      "path": "src/registry/blocks/advanced/svg-editor/property-panel.tsx",
+      "path": "blocks/advanced/svg-editor/property-panel.tsx",
       "type": "registry:component"
     },
     {
-      "path": "src/registry/components/ui/label/label.tsx",
+      "path": "components/ui/label/label.tsx",
       "type": "registry:component"
     },
     {
-      "path": "src/registry/blocks/advanced/svg-editor/svg-editor.css",
+      "path": "blocks/advanced/svg-editor/svg-editor.css",
       "type": "registry:style"
     }
   ]

@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/advanced/svg/svg.tsx",
+      "path": "blocks/advanced/svg/svg.tsx",
       "type": "registry:component"
     }
   ]

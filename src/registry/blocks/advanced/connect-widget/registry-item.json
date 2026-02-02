@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/containers/connect-widget/connect-widget.tsx",
+      "path": "blocks/containers/connect-widget/connect-widget.tsx",
       "type": "registry:component"
     }
   ]

@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/business/compute-statuses/compute-statuses.tsx",
+      "path": "blocks/business/compute-statuses/compute-statuses.tsx",
       "type": "registry:component"
     }
   ]

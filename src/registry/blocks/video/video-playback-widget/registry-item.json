@@ -8,7 +8,7 @@
   "dependencies": ["date-fns", "lucide-react"],
   "files": [
     {
-      "path": "registry/blocks/video/video-playback-widget/video-playback-widget.tsx",
+      "path": "blocks/video/video-playback-widget/video-playback-widget.tsx",
       "type": "registry:component"
     }
   ]

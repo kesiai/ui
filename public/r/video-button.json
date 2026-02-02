@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "button-widget",
+  "name": "video-button",
   "type": "registry:component",
   "title": "ButtonWidget",
   "description": "云台控制按钮 - 云台控制按钮组件",
@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/button-widget/button-widget.tsx",
+      "path": "registry/blocks/video/button-widget/video-button.tsx",
       "type": "registry:component",
       "content": ""
     }

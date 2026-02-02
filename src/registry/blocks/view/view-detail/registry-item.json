@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/view/view-detail/view-detail.tsx",
+      "path": "blocks/view/view-detail/view-detail.tsx",
       "type": "registry:component"
     }
   ]

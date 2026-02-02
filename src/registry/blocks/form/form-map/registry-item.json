@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-map/form-map.tsx",
+      "path": "blocks/form/form-map/form-map.tsx",
       "type": "registry:component"
     }
   ]

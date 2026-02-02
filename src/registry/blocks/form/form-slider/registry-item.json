@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-slider/form-slider.tsx",
+      "path": "blocks/form/form-slider/form-slider.tsx",
       "type": "registry:component"
     }
   ]

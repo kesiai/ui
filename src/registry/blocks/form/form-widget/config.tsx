@@ -1,6 +1,6 @@
 import * as React from "react"
 import FormWidget from '@/registry/blocks/form/form-widget/form-widget'
-import { ComponentConfig } from '../types'
+import { ComponentConfig } from '@/app/config/types'
 
 export const FormWidgetPreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {
   const [value, setValue] = React.useState<any>('')
@@ -133,7 +133,13 @@ export const formWidgetDefaultProps = {
 }
 
 const renderFormWidgetPreview = (props: Record<string, any>) => {
-  return <FormWidgetPreview props={props} />
+  return (
+    <div className="h-full flex items-center justify-center p-8">
+      <div className="w-full max-w-md bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
+        <FormWidgetPreview props={props} />
+      </div>
+    </div>
+  )
 }
 
 const renderFormWidgetCodePreview = (props: Record<string, any>) => {
@@ -186,6 +192,7 @@ const renderFormWidgetCodePreview = (props: Record<string, any>) => {
     title: "${title}",
     ${props.fieldType === 'text' || props.fieldType === 'number' ? `placeholder: "请输入${props.fieldType === 'text' ? '文本' : '数字'}"` : ''}
   }}
+  cellKey="your-cell-key"
 />`
 }
 
@@ -197,3 +204,5 @@ export const formWidgetConfig: ComponentConfig = {
   renderPreview: renderFormWidgetPreview,
   renderCodePreview: renderFormWidgetCodePreview
 }
+
+export default formWidgetConfig

@@ -23,6 +23,7 @@ import {
   RelateComponent,
   schemaConverter,
 } from '@/components/tableField/components/relate'
+import RelateComponentPlus from '@/components/tableField/components/RelateComponentPlus'
 
 export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -108,13 +109,13 @@ const FieldComponentSelector: React.FC<{
   meta?: any
   record?: any
   cellKey?: string
-}> = ({ schema, input, meta, record, cellKey }) => {
+}> = ({ schema, input, field, meta, record, cellKey }) => {
   const config = schema || {}
 
   // 关联字段（新版）- 使用 recordSelectType
   if ((config.relateTo || config.relate) && config.recordSelectType) {
-    // TODO: 实现新版关联字段组件（使用 recordSelectType）
-    return <div className="text-sm text-muted-foreground">关联字段（新版 - 待实现）</div>
+    const tableID = config.relate?.id || config.relateTo
+    return <RelateComponentPlus relateSchema={config} tableID={tableID} input={input} field={field ? { schema: config, ...field } : { schema: config }} meta={meta} schema={schema} />
   }
 
   // 外部工作表关联 - 使用 relate?.id

@@ -92,9 +92,9 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
 
   // 获取选项数据
   const loadOptions = React.useCallback(
-    async (inputValue: string = '', pageNum: number = 0) => {
+    async (inputValue: string = '', pageNum: number = 0): Promise<number> => {
       if (currentPageRef.current >= pageNum && pageNum !== 0) {
-        return
+        return 0
       }
       if (pageNum === 0) {
         itemsRef.current = []

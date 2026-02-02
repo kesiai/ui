@@ -16,7 +16,7 @@ import {
   ChevronUp,
   ChevronDown,
 } from "lucide-react"
-import { Button } from "@/registry/components/ui/button/button"
+import { Button } from "@/components/ui/button"
 
 export interface ToolbarProps {
   mode: string

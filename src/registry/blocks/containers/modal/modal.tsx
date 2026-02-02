@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/registry/components/ui/dialog/dialog"
+} from "@/components/ui/dialog"
 import { Button } from "@/registry/blocks/components/button/button"
 import { ModalWigetContext } from "@/registry/lib/modal-context"
 

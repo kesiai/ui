@@ -6,7 +6,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/registry/components/ui/carousel'
+} from '@/components/ui/carousel'
 import elementResizeEvent from 'element-resize-event'
 import { cn } from '@/lib/utils'
 

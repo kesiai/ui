@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-date-picker/mobile-date-picker.tsx",
+      "path": "src/registry/blocks/mobile/mobile-date-picker/mobile-date-picker.tsx",
       "type": "registry:component"
     }
   ]

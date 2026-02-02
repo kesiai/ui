@@ -8,6 +8,7 @@ const categoryConfig: Record<string, { name: string; icon: string; order: number
   'components': { name: '基础组件', icon: '🧩', order: 0 },
   'business': { name: '业务组件', icon: '💼', order: 1 },
   'form': { name: '表单组件', icon: '📝', order: 2 },
+  'view': { name: '视图组件', icon: '✳️', order: 2 },
   'chart': { name: '图表组件', icon: '📊', order: 3 },
   'advanced': { name: '高级组件', icon: '⚡', order: 4 },
   '3d': { name: '3D 组件', icon: '🎮', order: 5 },

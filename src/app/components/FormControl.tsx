@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { PropConfig } from '../config/types'
 import { CodeEditorModal } from './CodeEditorModal'
+import { modelRegistry, useModel } from '@airiot/client'
 
 interface FormControlProps {
   config: PropConfig
@@ -162,7 +163,34 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
           </div>
         </div>
       )
-
+    case 'model-name':
+      const optons = Object.keys(modelRegistry.models).map(key => ({ value: key, label: modelRegistry.models[key].title?.toString() || key }))
+      return (
+        <select
+          value={value as string}
+          onChange={(e) => handleChange(e.target.value)}
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
+        >
+          <option key={""} value={""}>
+            无
+          </option>
+          {optons.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      )
+    case 'table-id':
+      return (
+        <input
+          type="text"
+          value={value as string}
+          onChange={(e) => handleChange(e.target.value)}
+          placeholder={config.placeholder}
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+        />
+      )
     default:
       return null
   }

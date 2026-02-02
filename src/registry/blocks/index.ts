@@ -50,6 +50,7 @@ import form_upload from './form/form-upload/registry-item.json' with { type: 'js
 import form_radio from './form/form-radio/registry-item.json' with { type: 'json' }
 import form_map from './form/form-map/registry-item.json' with { type: 'json' }
 import form_select from './form/form-select/registry-item.json' with { type: 'json' }
+import form_table_field from './form/form-tableField/registry-item.json' with { type: 'json' }
 import warning_button from './page-elements/warning-button/registry-item.json' with { type: 'json' }
 import reg_widget_component from './page-elements/reg-widget-component/registry-item.json' with { type: 'json' }
 import logout_component from './page-elements/logout-component/registry-item.json' with { type: 'json' }
@@ -192,6 +193,7 @@ export const blocks = [
     form_radio as RegistryItem,
     form_map as RegistryItem,
     form_select as RegistryItem,
+    form_table_field as RegistryItem,
     warning_button as RegistryItem,
     reg_widget_component as RegistryItem,
     logout_component as RegistryItem,

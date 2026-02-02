@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-tableField",
+  "type": "registry:component",
+  "title": "数据表字段",
+  "description": "数据表字段组件 - 用于显示基于类型的基础输入组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/d:/work/workspace/new-ui/air-ui/src/registry/blocks/form/form-tableField/form-tableField.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

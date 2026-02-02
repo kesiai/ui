@@ -1,8 +1,5 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Label } from "@/registry/components/ui/label/label"
-import { Input } from "@/registry/components/ui/input/input"
-import { Slider } from "@/registry/components/ui/slider/slider"
 
 export interface Property {
   key: string
@@ -29,23 +26,23 @@ const PropertyItem: React.FC<{
   onChange?: (key: string, value: any) => void
 }> = ({ property, onChange }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange?.(property.key, e.target.value)
+    onChange?.(property.key, property.type === 'number' ? parseFloat(e.target.value) : e.target.value)
   }
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange?.(property.key, e.target.value)
   }
 
-  const handleSliderChange = (value: number) => {
-    onChange?.(property.key, value)
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange?.(property.key, parseFloat(e.target.value))
   }
 
   switch (property.type) {
     case "text":
       return (
         <div className="property-item">
-          <Label className="property-label">{property.label}</Label>
-          <Input
+          <label className="property-label">{property.label}</label>
+          <input
             type="text"
             value={property.value || ""}
             onChange={handleInputChange}
@@ -57,8 +54,8 @@ const PropertyItem: React.FC<{
     case "number":
       return (
         <div className="property-item">
-          <Label className="property-label">{property.label}</Label>
-          <Input
+          <label className="property-label">{property.label}</label>
+          <input
             type="number"
             value={property.value ?? 0}
             onChange={handleInputChange}
@@ -70,7 +67,7 @@ const PropertyItem: React.FC<{
     case "color":
       return (
         <div className="property-item">
-          <Label className="property-label">{property.label}</Label>
+          <label className="property-label">{property.label}</label>
           <div className="flex items-center gap-2">
             <input
               type="color"
@@ -78,7 +75,7 @@ const PropertyItem: React.FC<{
               onChange={handleInputChange}
               className="w-10 h-10 rounded cursor-pointer"
             />
-            <Input
+            <input
               type="text"
               value={property.value || ""}
               onChange={handleInputChange}
@@ -91,7 +88,7 @@ const PropertyItem: React.FC<{
     case "select":
       return (
         <div className="property-item">
-          <Label className="property-label">{property.label}</Label>
+          <label className="property-label">{property.label}</label>
           <select
             value={property.value ?? ""}
             onChange={handleSelectChange}
@@ -109,25 +106,27 @@ const PropertyItem: React.FC<{
     case "slider":
       return (
         <div className="property-item">
-          <Label className="property-label">{property.label}</Label>
+          <label className="property-label">{property.label}</label>
           <div className="flex items-center gap-2 flex-1">
-            <Slider
-              value={[property.value ?? 0]}
-              onValueChange={([value]) => handleSliderChange(value)}
+            <input
+              type="range"
+              value={property.value ?? 0}
+              onChange={handleSliderChange}
               min={property.min}
               max={property.max}
               step={property.step}
               className="flex-1"
+              style={{ flex: 1 }}
             />
-            <Input
+            <input
               type="number"
               value={property.value ?? 0}
               onChange={handleInputChange}
               min={property.min}
               max={property.max}
               step={property.step}
-              className="property-input w-20"
-              style={{ minWidth: "60px" }}
+              className="property-input"
+              style={{ minWidth: "60px", width: "60px" }}
             />
             {property.unit && <span className="text-xs text-slate-500">{property.unit}</span>}
           </div>

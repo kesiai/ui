@@ -21,20 +21,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 0;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .svg-editor-view-only-content :is(svg, div) {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   display: block;
 }
 
 .svg-editor-view-only-content svg {
-  /* 确保 SVG 能够自适应 */
+  /* 确保 SVG 能够填充整个容器 */
   flex-shrink: 0;
 }
 
@@ -116,23 +115,27 @@
   justify-content: space-between;
 }
 
-/* 画布区域 - 居中显示原 SVG 大小 */
+/* 画布区域 - 填充整个容器 */
 .svg-editor-canvas {
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   background: #f5f5f5;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .svg-editor-canvas-inner {
-  /* 宽高通过内联样式设置 */
+  /* 填充整个画布区域 */
+  width: 100%;
+  height: 100%;
   background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
+}
+
+/* 确保 SVG 编辑器内部的 SVG 填充容器 */
+.svg-editor-canvas-inner svg {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* 元素树 */

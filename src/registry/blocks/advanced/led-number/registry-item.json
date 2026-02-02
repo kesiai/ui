@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/led-number/led-number.tsx",
+      "path": "registry/blocks/advanced/led-number/led-number.tsx",
       "type": "registry:component"
     }
   ]

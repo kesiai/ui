@@ -1,14 +1,14 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "view-model",
+  "name": "view-field",
   "type": "registry:component",
-  "title": "View.Model",
-  "description": "表视图容器 - 表数据视图容器",
+  "title": "View.Field",
+  "description": "视图 - 数据字段展示组件",
   "registryDependencies": [],
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/view/view-model/view-model.tsx",
+      "path": "registry/blocks/view/view-field/view-field.tsx",
       "type": "registry:component"
     }
   ]

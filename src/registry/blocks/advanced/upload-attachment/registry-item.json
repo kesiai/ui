@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/upload-attachment/upload-attachment.tsx",
+      "path": "registry/blocks/advanced/upload-attachment/upload-attachment.tsx",
       "type": "registry:component"
     }
   ]

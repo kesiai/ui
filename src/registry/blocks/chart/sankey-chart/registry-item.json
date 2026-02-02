@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/sankey-chart/sankey-chart.tsx",
+      "path": "registry/blocks/chart/sankey-chart/sankey-chart.tsx",
       "type": "registry:component"
     }
   ]

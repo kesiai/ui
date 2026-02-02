@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/table-data-select/table-data-select.tsx",
+      "path": "registry/blocks/business/table-data-select/table-data-select.tsx",
       "type": "registry:component"
     }
   ]

@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-bar/chart-bar.tsx",
+      "path": "registry/blocks/chart/chart-bar/chart-bar.tsx",
       "type": "registry:component"
     }
   ]

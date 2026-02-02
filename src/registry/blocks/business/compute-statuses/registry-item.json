@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/compute-statuses/compute-statuses.tsx",
+      "path": "registry/blocks/business/compute-statuses/compute-statuses.tsx",
       "type": "registry:component"
     }
   ]

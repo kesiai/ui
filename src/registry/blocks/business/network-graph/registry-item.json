@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/network-graph/network-graph.tsx",
+      "path": "registry/blocks/business/network-graph/network-graph.tsx",
       "type": "registry:component"
     }
   ]

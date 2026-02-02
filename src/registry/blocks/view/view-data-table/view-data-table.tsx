@@ -4,8 +4,9 @@ import { DataGrid } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import ViewField from "@/registry/blocks/view/view-field/view-field"
 import {
-  type ColumnDef, type TableOptions,
+  type ColumnDef, type TableOptions, type CellContext,
   getCoreRowModel,
   getSortedRowModel,
   SortingState,
@@ -51,9 +52,11 @@ const getFieldProp = (model: ModelSchema | null | undefined, field: string): any
   }, model)
 }
 
-const DataCell = ({ getValue }: { getValue: () => any }) => {
-  const value = getValue()
-  return <div className="px-2 py-1 overflow-hidden text-ellipsis whitespace-nowrap">{value !== undefined && value !== null ? String(value) : '-'}</div>
+const DataCell = ({ name, type, children, ...restProps }: 
+  {name: string, type?: string, 
+    children?: React.ReactNode | ((props: any) => React.ReactNode), [key: string]: any}) => 
+  ({ getValue, row }: CellContext<IData, any>) => {
+  return <ViewField name={name} type={type} value={getValue()} item={row.original} {...restProps}>{children}</ViewField>
 }
 
 export const DataTable = ({
@@ -160,7 +163,7 @@ export function ViewDataTable({
       size: field.width || undefined,
       fixed: lockedFields.indexOf(fieldName) >= 0,
       header: ({ column }) => <DataGridColumnHeader title={field.title || fieldName} column={column} />,
-      cell: DataCell,
+      cell: DataCell({ name: fieldName, type: field.type as string, ...field.column }),
       ...field.column
     })
 
@@ -222,7 +225,9 @@ interface TableColumnProps {
   fixed?: boolean | 'left' | 'right';
   header?: React.ReactNode;
   cell?: React.ReactNode;
+  type?: string;
   level2?: string;
+  children?: React.ReactNode | ((props: any) => React.ReactNode);
   [key: string]: any;
 }
 
@@ -283,7 +288,9 @@ export const TableColumn: React.FC<TableColumnProps> = ({
   fixed,
   header,
   cell,
+  type,
   level2,
+  children,
   ...columnProps
 }) => {
   const columnContext = React.useContext(ColumnContext);
@@ -298,7 +305,7 @@ export const TableColumn: React.FC<TableColumnProps> = ({
       id: name,
       accessorKey: name,
       header: header ? header as any : (({ column }) => <DataGridColumnHeader title={title || name} column={column as any} />),
-      cell: cell ? cell as any : DataCell,
+      cell: cell ? cell as any : DataCell({ name, type, children }),
       size: width as number | undefined,
       meta: {
         ...columnProps
@@ -306,7 +313,7 @@ export const TableColumn: React.FC<TableColumnProps> = ({
     };
 
     columnContext.setColumn(name, columnDef);
-  }, [name, title, width, fixed, header, cell, level2, columnContext, columnProps]);
+  }, [name, title, type, children, width, fixed, header, cell, level2, columnContext, columnProps]);
 
   return null;
 };

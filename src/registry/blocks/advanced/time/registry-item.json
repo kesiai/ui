@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/time/time.tsx",
+      "path": "registry/blocks/advanced/time/time.tsx",
       "type": "registry:component"
     }
   ]

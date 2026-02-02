@@ -3,6 +3,7 @@ import React from 'react'
 import { ComponentConfig } from '@/app/config/types'
 import ViewDataTable, { TableColumn} from '../view-data-table/view-data-table'
 import ViewPagination from '../view-pagination/view-pagination'
+import Actions from '../view-actions/view-actions'
 
 export const viewDemoPropsConfig = [
   {
@@ -30,7 +31,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
 
   return (
     <div className="h-full flex items-center justify-center p-6 overflow-auto">
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-5xl">
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
         <ViewModel tableId={props.tableId} modelName={props.modelName}>
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
@@ -40,6 +41,9 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
               <TableColumn name="email" title="邮箱" />
               <TableColumn name="role" title="角色" />
               <TableColumn name="createdAt" title="创建时间" />
+              <TableColumn name="__actions__" title="操作" width={280}>
+                <Actions variant="buttons" actions={props.actions || ['view', 'edit', 'delete']} />
+              </TableColumn>
             </ViewDataTable>
             <ViewPagination />
           </div>

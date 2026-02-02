@@ -24,6 +24,12 @@ import {
   schemaConverter,
 } from '@/components/tableField/components/relate'
 import RelateComponentPlus from '@/components/tableField/components/RelateComponentPlus'
+import UserRoleComponent from '@/components/tableField/components/UserRole'
+import SerialNumberComponent from '@/components/tableField/components/SerialNumber'
+import BytesArrayComponent from '@/components/tableField/components/BytesArray'
+import ReferenceComponent from '@/components/tableField/components/Reference'
+import FormInfoComponent from '@/components/tableField/components/FormInfo'
+import LinkComponent from '@/components/tableField/components/Link'
 
 export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -177,8 +183,7 @@ const FieldComponentSelector: React.FC<{
 
   // 用户/角色关联
   if (['User', 'Role'].includes(config.relateTo || '')) {
-    // TODO: 实现用户角色组件
-    return <div className="text-sm text-muted-foreground">用户角色（待实现）</div>
+    return <UserRoleComponent input={input} field={{ schema: config, displayField: config.showField || 'name' }} meta={meta} record={record} />
   }
 
   // 关联字段只读
@@ -241,14 +246,12 @@ const FieldComponentSelector: React.FC<{
 
   // 编号
   if (config.fieldType === 'serialNumber') {
-    // TODO: 实现编号组件
-    return <div className="text-sm text-muted-foreground">编号（待实现）</div>
+    return <SerialNumberComponent input={input} field={{ schema: config }} />
   }
 
   // 链接
   if (config.fieldType === 'link') {
-    // TODO: 实现链接组件
-    return <div className="text-sm text-muted-foreground">链接（待实现）</div>
+    return <LinkComponent input={input} field={{ schema: config }} meta={meta} record={record} />
   }
 
   // 区域选择
@@ -278,8 +281,7 @@ const FieldComponentSelector: React.FC<{
 
   // 字节数组
   if (config.fieldType === 'bytesArray') {
-    // TODO: 实现字节数组组件
-    return <div className="text-sm text-muted-foreground">字节数组（待实现）</div>
+    return <BytesArrayComponent input={input} field={{ schema: config, filter: null }} meta={meta} record={record} />
   }
 
   // 多语言输入
@@ -290,14 +292,12 @@ const FieldComponentSelector: React.FC<{
 
   // 查找引用
   if (config.config === '查找引用') {
-    // TODO: 实现查找引用组件
-    return <div className="text-sm text-muted-foreground">查找引用（待实现）</div>
+    return <ReferenceComponent schema={config} field={{ key: config.key }} option={{ schema: { name: schema?.name } }} tableData={record} />
   }
 
   // 表单信息
   if (config.config === '表单信息') {
-    // TODO: 实现表单信息组件
-    return <div className="text-sm text-muted-foreground">表单信息（待实现）</div>
+    return <FormInfoComponent schema={config} outProps={{ inList: false, viewPage: true }} />
   }
 
   // 默认：根据基础类型显示

@@ -7,6 +7,7 @@ import { PropertyPanel, Property } from "./property-panel"
 import "./svg-editor.css"
 
 export interface SvgEditorProps {
+  className?: string
   /**
    * SVG 内容字符串
    */
@@ -25,15 +26,14 @@ export interface SvgEditorProps {
    */
   backgroundColor?: string
   /**
-   * 是否显示工具栏
-   * @default true
+   * 是否为编辑模式
+   * @default false
    */
-  showToolbar?: boolean
+  dashboardMode?: boolean
   /**
-   * 是否可编辑
-   * @default true
+   * 编辑模式变化回调
    */
-  editable?: boolean
+  onDashboardModeChange?: (isEditMode: boolean) => void
   /**
    * SVG 内容变化回调
    */
@@ -46,6 +46,16 @@ export interface SvgEditorProps {
    * 属性变化回调
    */
   onPropertyChange?: (key: string, value: any) => void
+  /**
+   * 画布宽度（编辑模式）
+   * @default "100%"
+   */
+  canvasWidth?: number | string
+  /**
+   * 画布高度（编辑模式）
+   * @default 800
+   */
+  canvasHeight?: number | string
 }
 
 type DrawingMode =
@@ -98,14 +108,38 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
       width = "100%",
       height = "100%",
       backgroundColor = "transparent",
-      editable = true,
+      dashboardMode: propDashboardMode,
+      onDashboardModeChange,
       onSvgChange,
       onSelectionChange,
       onPropertyChange,
+      canvasWidth = "100%",
+      canvasHeight = 800,
       ...props
     },
     ref
   ) => {
+    // 内部状态管理编辑模式
+    // 只有当 dashboardMode 显式设置为 true 时才强制编辑模式
+    // 否则允许通过双击切换
+    const [internalEditMode, setInternalEditMode] = React.useState(false)
+    const isEditMode = propDashboardMode === true ? true : internalEditMode
+
+    const handleEditModeChange = React.useCallback((newMode: boolean) => {
+      // 如果 propDashboardMode 是 true，不允许退出编辑模式
+      if (propDashboardMode === true && !newMode) {
+        return
+      }
+
+      // 如果 propDashboardMode 不是 true，允许内部状态切换
+      if (propDashboardMode !== true) {
+        setInternalEditMode(newMode)
+      }
+
+      // 通知父组件（如果提供了回调）
+      onDashboardModeChange?.(newMode)
+    }, [propDashboardMode, onDashboardModeChange])
+
     const canvasContainerRef = React.useRef<HTMLDivElement>(null)
     const svgCanvasRef = React.useRef<any>(null)
     const toolbarRef = React.useRef<HTMLDivElement>(null)
@@ -218,10 +252,11 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
     }, [])
 
     // 获取选中元素的属性
-    const getSelectedProperties = React.useCallback((elements: any[]) => {
-      if (elements.length === 0) return []
+    const getSelectedProperties = React.useCallback((elements: any | any[]) => {
+      const elemArray = Array.isArray(elements) ? elements : (elements ? [elements] : [])
+      if (elemArray.length === 0) return []
 
-      const elem = elements[0]
+      const elem = elemArray[0]
       if (!elem) return []
 
       const props: Property[] = []
@@ -391,7 +426,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
 
     // 初始化 svgedit
     React.useEffect(() => {
-      if (!canvasContainerRef.current || !editable) return
+      if (!canvasContainerRef.current || !isEditMode) return
 
       // 动态导入 svgedit
       import("@svgedit/svgcanvas")
@@ -402,9 +437,40 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           // 清空容器
           container.innerHTML = ""
 
-          // 使用固定尺寸，确保与 CSS 一致
-          const w = 800
-          const h = 600
+          // 解析画布宽高参数
+          const parseDimension = (value: number | string): number => {
+            if (typeof value === 'number') return value
+            if (typeof value === 'string') {
+              if (value.endsWith('%')) return parseFloat(value) || 100
+              if (value.endsWith('px')) return parseFloat(value) || 800
+              return parseFloat(value) || 800
+            }
+            return 800
+          }
+
+          // 默认画布尺寸
+          let w = parseDimension(canvasWidth)
+          let h = parseDimension(canvasHeight)
+
+          // 从 SVG 内容中提取原始尺寸（如果存在）
+          if (initialSvg) {
+            const widthMatch = initialSvg.match(/width=["']([^"']+)["']/)
+            const heightMatch = initialSvg.match(/height=["']([^"']+)["']/)
+            const viewBoxMatch = initialSvg.match(/viewBox=["']([^"']+)["']/)
+
+            // 优先使用 SVG 自身的尺寸
+            if (widthMatch) w = parseFloat(widthMatch[1]) || w
+            if (heightMatch) h = parseFloat(heightMatch[1]) || h
+
+            // 如果有 viewBox 但没有 width/height，从 viewBox 获取
+            if (viewBoxMatch && !widthMatch && !heightMatch) {
+              const values = viewBoxMatch[1].split(/\s+|,/).map(Number)
+              if (values.length === 4) {
+                w = values[2] - values[0] || w
+                h = values[3] - values[1] || h
+              }
+            }
+          }
 
           // 创建编辑器配置
           const config = {
@@ -436,14 +502,15 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           setIsCanvasReady(true)
 
           // 监听选择变化
-          svgCanvas.bind("selected", (elems: any[]) => {
-            setSelectedElements(elems)
-            setSelectedKeys(elems.map((e) => e.id))
+          svgCanvas.bind("selected", (elems: any) => {
+            const elemArray = Array.isArray(elems) ? elems : Array.from(elems || [])
+            setSelectedElements(elemArray)
+            setSelectedKeys(elemArray.map((e) => e.id))
             const tree = getAllPath(svgCanvas)
             setTreeData(tree)
-            const props = getSelectedProperties(elems)
+            const props = getSelectedProperties(elemArray)
             setProperties(props)
-            onSelectionChange?.(elems)
+            onSelectionChange?.(elemArray)
           })
 
           // 监听内容变化
@@ -468,7 +535,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           svgCanvasRef.current = null
         }
       }
-    }, [editable, initialSvg, getAllPath, getSelectedProperties, onSvgChange, onSelectionChange])
+    }, [isEditMode, initialSvg, canvasWidth, canvasHeight, getAllPath, getSelectedProperties, onSvgChange, onSelectionChange])
 
     // 工具栏拖拽
     const handleDrag = React.useCallback(
@@ -497,7 +564,6 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
 
     // 切换工具模式
     const handleModeChange = (newMode: DrawingMode) => {
-      if (!editable) return
       setMode(newMode)
       if (svgCanvasRef.current) {
         svgCanvasRef.current.setMode(newMode)
@@ -529,7 +595,8 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
       const tree = getAllPath(svg)
       setTreeData(tree)
       const selected = svg.getSelectedElems()
-      const props = getSelectedProperties(selected)
+      const selectedArray = Array.isArray(selected) ? selected : Array.from(selected || [])
+      const props = getSelectedProperties(selectedArray)
       setProperties(props)
     }
 
@@ -542,14 +609,15 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
       const tree = getAllPath(svg)
       setTreeData(tree)
       const selected = svg.getSelectedElems()
-      const props = getSelectedProperties(selected)
+      const selectedArray = Array.isArray(selected) ? selected : Array.from(selected || [])
+      const props = getSelectedProperties(selectedArray)
       setProperties(props)
     }
 
     // 处理键盘快捷键
     React.useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (!editable) return
+        if (!isEditMode) return
 
         if (e.ctrlKey || e.metaKey) {
           if (e.key === "z") {
@@ -570,7 +638,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
 
       document.addEventListener("keydown", handleKeyDown)
       return () => document.removeEventListener("keydown", handleKeyDown)
-    }, [editable, handleUndo, handleRedo, handleCopy, handleDelete])
+    }, [isEditMode, handleUndo, handleRedo, handleCopy, handleDelete])
 
     // 处理树节点选择
     const handleTreeSelect = (keys: string[]) => {
@@ -604,6 +672,55 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
       onPropertyChange?.(key, value)
     }
 
+    // 非编辑模式：只展示 SVG
+    if (!isEditMode) {
+      console.log('[SvgEditor] 渲染非编辑模式，isEditMode:', isEditMode)
+
+      // 双击进入编辑模式
+      const handleDoubleClick = () => {
+        console.log('[SvgEditor] 双击进入编辑模式')
+        handleEditModeChange(true)
+      }
+
+      // 解析 SVG 字符串，提取实际的 SVG 内容
+      const getSvgContent = (svgString: string) => {
+        if (!svgString) return ""
+
+        // 如果字符串包含 <svg> 标签，提取它
+        const svgMatch = svgString.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i)
+        if (svgMatch) {
+          return svgMatch[0]
+        }
+
+        // 否则返回原字符串
+        return svgString
+      }
+
+      const svgContent = getSvgContent(initialSvg || "")
+      console.log('[SvgEditor] SVG 内容长度:', svgContent.length)
+
+      return (
+        <div
+          ref={ref}
+          className={cn("svg-editor", "svg-editor-view-only", className)}
+          style={{ width, height, backgroundColor }}
+          onDoubleClick={handleDoubleClick}
+          {...props}
+        >
+          {svgContent ? (
+            <div
+              className="svg-editor-view-only-content"
+              dangerouslySetInnerHTML={{ __html: svgContent }}
+            />
+          ) : (
+            <div className="svg-editor-empty">
+              <p>暂无 SVG 内容</p>
+            </div>
+          )}
+        </div>
+      )
+    }
+
     return (
       <div
         ref={ref}
@@ -614,7 +731,17 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         {/* 左侧元素树 */}
         <div className="svg-editor-sidebar svg-editor-sidebar-left">
           <div className="svg-editor-sidebar-header">
-            <h3>元素列表</h3>
+            <div className="flex items-center justify-between">
+              <h3>元素列表</h3>
+              <button
+                type="button"
+                className="svg-editor-exit-btn"
+                onClick={() => handleEditModeChange(false)}
+                title="退出编辑模式"
+              >
+                退出编辑
+              </button>
+            </div>
           </div>
           <div className="svg-editor-tree">
             <Tree
@@ -635,7 +762,11 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           <div
             ref={canvasContainerRef}
             className="svg-editor-canvas-inner"
-            style={{ pointerEvents: isCanvasReady ? 'auto' : 'none' }}
+            style={{
+              pointerEvents: isCanvasReady ? 'auto' : 'none',
+              width: canvasWidth,
+              height: canvasHeight
+            }}
           />
         </div>
 
@@ -654,27 +785,26 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         </div>
 
         {/* 可拖拽工具栏 */}
-        {editable && (
-          <div
-            ref={toolbarRef}
-            className="svg-editor-toolbar"
-            style={{
-              left: `${toolbarPosition.x}px`,
-              top: `${toolbarPosition.y}px`,
-            }}
-          >
-            <Toolbar
-              mode={mode}
-              editable={editable}
-              selectedCount={selectedElements.length}
-              onModeChange={handleModeChange}
-              onCopy={handleCopy}
-              onDelete={handleDelete}
-              onUndo={handleUndo}
-              onRedo={handleRedo}
-            />
-          </div>
-        )}
+        <div
+          ref={toolbarRef}
+          className="svg-editor-toolbar"
+          style={{
+            left: `${toolbarPosition.x}px`,
+            top: `${toolbarPosition.y}px`,
+          }}
+          onMouseDown={handleDrag}
+        >
+          <Toolbar
+            mode={mode}
+            editable={true}
+            selectedCount={selectedElements.length}
+            onModeChange={handleModeChange}
+            onCopy={handleCopy}
+            onDelete={handleDelete}
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+          />
+        </div>
       </div>
     )
   }

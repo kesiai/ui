@@ -1,4 +1,4 @@
-import { SvgEditor, SvgEditorProps } from '@/registry/blocks/advanced/svg-editor/svg-editor'
+import { SvgEditor } from '@/registry/blocks/advanced/svg-editor/svg-editor'
 import { ComponentConfig } from '../types'
 
 // 示例 SVG 内容
@@ -42,18 +42,11 @@ export const svgEditorPropsConfig = [
     description: '设置画布的背景颜色'
   },
   {
-    name: 'showToolbar',
-    label: '显示工具栏',
+    name: 'dashboardMode',
+    label: '直接进入编辑模式',
     type: 'boolean' as const,
-    default: true,
-    description: '是否显示左侧元素列表、右侧属性面板和顶部工具栏'
-  },
-  {
-    name: 'editable',
-    label: '可编辑',
-    type: 'boolean' as const,
-    default: true,
-    description: '是否允许编辑 SVG 内容'
+    default: false,
+    description: 'false=展示模式（双击SVG进入编辑），true=直接进入编辑模式'
   },
 ]
 
@@ -62,8 +55,7 @@ export const svgEditorDefaultProps = {
   width: '100%',
   height: '100%',
   backgroundColor: '#ffffff',
-  showToolbar: true,
-  editable: true,
+  dashboardMode: false,
 }
 
 const renderSvgEditorPreview = (props: Record<string, any>) => {
@@ -73,7 +65,9 @@ const renderSvgEditorPreview = (props: Record<string, any>) => {
         <div className="text-center">
           <p className="text-sm text-slate-600 mb-2">SVG 绘图编辑器</p>
           <p className="text-xs text-slate-500">
-            使用左侧树查看元素 • 右侧面板编辑属性 • 顶部工具栏绘制图形
+            {props.dashboardMode
+              ? '直接进入编辑模式 • 使用左侧树查看元素 • 右侧面板编辑属性 • 顶部工具栏绘制图形'
+              : '展示模式 - 双击 SVG 进入编辑模式'}
           </p>
         </div>
       </div>
@@ -83,8 +77,10 @@ const renderSvgEditorPreview = (props: Record<string, any>) => {
           width={props.width}
           height={props.height}
           backgroundColor={props.backgroundColor}
-          showToolbar={props.showToolbar}
-          editable={props.editable}
+          dashboardMode={props.dashboardMode}
+          onDashboardModeChange={(isEditMode) => {
+            console.log('Edit mode changed:', isEditMode)
+          }}
           onSvgChange={(svg) => {
             console.log('SVG changed:', svg)
           }}
@@ -99,11 +95,12 @@ const renderSvgEditorPreview = (props: Record<string, any>) => {
       <div className="mt-6 text-xs text-slate-500">
         <p className="mb-2"><strong>使用说明：</strong></p>
         <ul className="list-disc list-inside space-y-1">
-          <li>点击画布上的工具按钮切换绘图模式（选择、铅笔、直线、矩形等）</li>
+          <li><strong>展示模式</strong>：只显示 SVG 内容，双击 SVG 进入编辑模式</li>
+          <li><strong>编辑模式</strong>：显示完整编辑器界面，包括左侧元素树、右侧属性面板和顶部工具栏</li>
           <li>点击左侧元素树中的节点选中对应 SVG 元素</li>
           <li>选中元素后，右侧属性面板会显示可编辑的属性</li>
           <li>使用工具栏的复制、删除、撤销/重做按钮进行编辑操作</li>
-          <li>支持键盘快捷键：V(选择)、P(铅笔)、L(直线)、R(矩形)等</li>
+          <li>点击左侧元素列表上方的"退出编辑"按钮返回展示模式</li>
         </ul>
       </div>
     </div>
@@ -116,8 +113,7 @@ const renderSvgEditorCodePreview = (props: Record<string, any>) => {
   if (props.width !== '100%') code += `\n  width="${props.width}"`
   if (props.height !== '100%') code += `\n  height="${props.height}"`
   if (props.backgroundColor !== '#ffffff') code += `\n  backgroundColor="${props.backgroundColor}"`
-  if (!props.showToolbar) code += `\n  showToolbar={false}`
-  if (!props.editable) code += `\n  editable={false}`
+  if (props.dashboardMode) code += `\n  dashboardMode={true}`
 
   code += `\n  width="100%"`
   code += `\n  height={40}`
@@ -139,8 +135,16 @@ const renderSvgEditorCustomForm = () => {
             <li><code>initialSvg</code> - 初始 SVG 内容字符串</li>
             <li><code>width</code> / <code>height</code> - 编辑器尺寸</li>
             <li><code>backgroundColor</code> - 画布背景色</li>
-            <li><code>editable</code> - 是否允许编辑</li>
-            <li><code>showToolbar</code> - 是否显示工具栏和侧边栏</li>
+            <li><code>dashboardMode</code> - false=展示模式（双击进入编辑），true=直接进入编辑模式</li>
+          </ul>
+        </div>
+
+        <div className="text-sm text-slate-600">
+          <p className="font-medium mb-1">模式说明</p>
+          <ul className="list-disc list-inside space-y-1 text-xs">
+            <li><strong>展示模式 (dashboardMode=false，默认)</strong>：仅展示 SVG 内容，双击 SVG 进入编辑模式</li>
+            <li><strong>编辑模式 (dashboardMode=true)</strong>：显示完整编辑器界面，包括左侧元素树、右侧属性面板和顶部工具栏</li>
+            <li>在编辑模式下，点击左侧元素列表上方的"退出编辑"按钮可返回展示模式</li>
           </ul>
         </div>
 
@@ -150,6 +154,7 @@ const renderSvgEditorCustomForm = () => {
             <li><code>onSvgChange(svg)</code> - SVG 内容变化时触发</li>
             <li><code>onSelectionChange(elements)</code> - 选中元素变化时触发</li>
             <li><code>onPropertyChange(key, value)</code> - 元素属性变化时触发</li>
+            <li><code>onDashboardModeChange(isEditMode)</code> - 编辑模式变化时触发</li>
           </ul>
         </div>
 

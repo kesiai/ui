@@ -1,30 +1,73 @@
-/* SVG Editor Styles */
+/* SVG Editor Styles - 编辑模式使用固定定位悬浮面板 */
 
 .svg-editor {
-  display: flex;
-  flex-direction: row;
+  position: relative;
   width: 100%;
   height: 100%;
-  background: #f5f5f5;
-  border: 1px solid #e2e8f0;
+  background: transparent;
 }
 
-/* 侧边栏 */
+/* 非编辑模式（只展示 SVG） */
+.svg-editor-view-only {
+  display: block;
+  background: transparent;
+  border: none;
+  overflow: hidden;
+}
+
+.svg-editor-view-only-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.svg-editor-view-only-content :is(svg, div) {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+.svg-editor-view-only-content svg {
+  /* 确保 SVG 能够自适应 */
+  flex-shrink: 0;
+}
+
+.svg-editor-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* 侧边栏 - 固定定位悬浮 */
 .svg-editor-sidebar {
+  position: fixed;
+  top: 0;
   width: 280px;
+  height: 100vh;
   background: white;
-  border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  z-index: 10;
+  z-index: 1000;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .svg-editor-sidebar-left {
+  left: 0;
   border-right: 1px solid #e2e8f0;
 }
 
 .svg-editor-sidebar-right {
+  right: 0;
   border-left: 1px solid #e2e8f0;
 }
 
@@ -41,9 +84,42 @@
   color: #1e293b;
 }
 
-/* 画布区域 */
+.svg-editor-exit-btn {
+  padding: 4px 12px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.svg-editor-exit-btn:hover {
+  background: #dc2626;
+}
+
+.svg-editor-exit-btn:active {
+  transform: scale(0.95);
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+/* 画布区域 - 居中显示原 SVG 大小 */
 .svg-editor-canvas {
-  flex: 1;
+  width: 100%;
+  height: 100%;
   overflow: auto;
   background: #f5f5f5;
   position: relative;
@@ -53,8 +129,7 @@
 }
 
 .svg-editor-canvas-inner {
-  width: 800px;
-  height: 600px;
+  /* 宽高通过内联样式设置 */
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
@@ -242,7 +317,7 @@
 /* 工具栏 */
 .svg-editor-toolbar {
   position: absolute;
-  z-index: 100;
+  z-index: 1100;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   background: white;

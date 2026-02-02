@@ -3,7 +3,7 @@
   "name": "svg-editor",
   "type": "registry:component",
   "title": "SvgEditor",
-  "description": "SVG 绘图编辑器 - 支持多种绘图工具、元素树和属性面板",
+  "description": "SVG 绘图编辑器 - 支持多种绘图工具、元素树和属性面板。默认展示模式（双击SVG进入编辑），可通过 dashboardMode 参数直接进入编辑模式",
   "registryDependencies": [
     "button",
     "label",

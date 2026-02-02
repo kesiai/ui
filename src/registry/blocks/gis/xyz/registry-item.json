@@ -1,14 +1,14 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "map-container",
+  "name": "xyz",
   "type": "registry:component",
-  "title": "Container2d",
-  "description": "2D地图容器 - 支持视图配置、缩放控件、比例尺等功能",
+  "title": "xyz",
+  "description": "地图xyz图层",
   "registryDependencies": [],
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/gis/map-container/map-container.tsx",
+      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/xyz/xyz.tsx",
       "type": "registry:component"
     }
   ]

@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "code-editor-views",
   "type": "registry:component",
-  "title": "CodeEditorViews",
+  "title": "codeEditorViews",
   "description": "代码层 - GIS代码层",
   "registryDependencies": [],
   "dependencies": [],

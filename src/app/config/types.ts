@@ -1,3 +1,5 @@
+import React from 'react'
+
 export interface PropConfigOption {
   value: string
   label: string

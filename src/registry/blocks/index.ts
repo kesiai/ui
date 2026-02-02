@@ -25,7 +25,7 @@ import model_3d_geometry_circle from './3d/model-3d-geometry-circle/registry-ite
 import model_3d from './3d/model-3d/registry-item.json' with { type: 'json' }
 import model_3d_geometry_tube from './3d/model-3d-geometry-tube/registry-item.json' with { type: 'json' }
 import video_widget from './video/video-widget/registry-item.json' with { type: 'json' }
-import button_widget from './video/button-widget/registry-item.json' with { type: 'json' }
+import button_widget from './video/video-button/registry-item.json' with { type: 'json' }
 import video_periods_widget from './video/video-periods-widget/registry-item.json' with { type: 'json' }
 import time_axis from './video/time-axis/registry-item.json' with { type: 'json' }
 import isc_video from './video/isc-video/registry-item.json' with { type: 'json' }

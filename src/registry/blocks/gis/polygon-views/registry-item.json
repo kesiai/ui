@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "polygon-views",
   "type": "registry:component",
-  "title": "PolygonViews",
+  "title": "polygonViews",
   "description": "区域层 - GIS区域层",
   "registryDependencies": [],
   "dependencies": [],

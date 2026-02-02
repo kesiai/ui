@@ -30,6 +30,7 @@ import BytesArrayComponent from '@/components/tableField/components/BytesArray'
 import ReferenceComponent from '@/components/tableField/components/Reference'
 import FormInfoComponent from '@/components/tableField/components/FormInfo'
 import LinkComponent from '@/components/tableField/components/Link'
+import EditableTable from '@/components/tableField/components/EditableTable'
 
 export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -234,8 +235,7 @@ const FieldComponentSelector: React.FC<{
 
   // 可编辑表格
   if (config.fieldType === 'editableTable') {
-    // TODO: 实现可编辑表格组件
-    return <div className="text-sm text-muted-foreground">可编辑表格（待实现）</div>
+    return <EditableTable input={input} schema={config} meta={meta} record={record} />
   }
 
   // 只读表格

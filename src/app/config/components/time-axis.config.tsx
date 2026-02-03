@@ -89,7 +89,6 @@ const TimeAxisPreview = ({ props }: { props: Record<string, any> }) => {
   const [currentTime, setCurrentTime] = useState(Math.floor(Date.now() / 1000) - 900) // 15分钟前
 
   const handleTimeChange = (time: number, direction?: "left" | "right") => {
-    console.log('Time changed:', time, direction)
     setCurrentTime(time)
   }
 
@@ -155,7 +154,6 @@ export default function TimeAxisDemo() {
       currentTime={currentTime}
       videoRecords={videoRecords}
       onTimeChange={(time, direction) => {
-        console.log('Time changed:', time, direction)
         setCurrentTime(time)
       }}
     />

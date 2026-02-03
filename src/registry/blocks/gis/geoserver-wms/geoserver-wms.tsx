@@ -1,6 +1,9 @@
+
 import * as React from "react"
 import { cn } from "@/lib/utils"
+// @ts-ignore
 import { Image as ImageLayer } from 'ol/layer'
+// @ts-ignore
 import { ImageWMS } from 'ol/source'
 import type Map from 'ol/Map'
 import { useMap } from '../map-container/map-container'
@@ -15,45 +18,15 @@ export interface LayerBase {
 }
 
 export interface GeoserverWmsProps {
-  /**
-   * WMS 服务地址
-   */
   source?: string
-  /**
-   * 坐标系类型
-   */
   coordinateType?: string
-  /**
-   * WMS 版本号
-   */
   VERSION?: string
-  /**
-   * 图层名
-   */
   layers?: string
-  /**
-   * 图层标题
-   */
   title?: string
-  /**
-   * 图层基础配置
-   */
   layerBase?: LayerBase
-  /**
-   * 是否显示
-   */
   display?: boolean
-  /**
-   * CSS 类名
-   */
   className?: string
-  /**
-   * 单元格唯一标识
-   */
   cellKey?: string
-  /**
-   * 地图实例（由父组件传入）
-   */
   map?: Map | null
 }
 
@@ -76,7 +49,7 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
   ) => {
     const contextMap = useMap()
     const map = mapProp || contextMap
-    const layerRef = React.useRef<ImageLayer<ImageWMS> | null>(null)
+    const layerRef = React.useRef<any>(null)
 
     const { opacity, zIndex, maxResolution, minResolution, maxZoom, minZoom } = layerBase || {}
 
@@ -110,21 +83,24 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
       const wmsSource = new ImageWMS(wmsConfig)
 
       const layer = new ImageLayer({
-        source: wmsSource,
+        id: cellKey,
+        title,
+        type: 'geoserver-wms', // Matches source logic of passing custom props in options
         opacity: opacity || 1,
         zIndex,
         maxResolution,
         minResolution,
         maxZoom,
         minZoom,
-        properties: {
+        source: wmsSource,
+        properties: { // Also keep in properties for safety
           id: cellKey,
           title,
           layerType: 'geoserver-wms',
           type: 'geoserver-wms',
           cellKey
         }
-      })
+      } as any)
 
       layer.setVisible(display)
       map.addLayer(layer)

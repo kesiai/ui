@@ -58,7 +58,7 @@ export function DataSourcePreview({ dataSourceId }: DataSourcePreviewProps) {
           <h3 className="text-sm font-semibold text-purple-600 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-purple-500"></span>
             方式2: Jotai Atom (useDatasourceValue)
-            <span className="text-xs text-slate-400 font-normal ml-2">Path: {dataSourceId}.</span>
+            <span className="text-xs text-slate-400 font-normal ml-2">Path: {dataSourceId}</span>
             {jotaiLoading && <span className="text-xs text-yellow-600 ml-2">加载中...</span>}
           </h3>
           {!jotaiData ? (

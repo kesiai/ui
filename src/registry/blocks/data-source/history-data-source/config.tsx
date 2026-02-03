@@ -1,4 +1,5 @@
 import { HistoryDataSource } from './history-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { TimeRangeConfig, GroupConfig } from '../types'
 
@@ -42,6 +43,13 @@ const defaultHistoryConfig = {
 
 export const historyDataSourcePropsConfig = [
   {
+    name: 'id',
+    label: '数据源ID',
+    type: 'input' as const,
+    default: 'history-data-source',
+    description: '数据源唯一标识，用于存储和获取数据'
+  },
+  {
     name: 'timeRange',
     label: '时间范围',
     type: 'object' as const,
@@ -75,22 +83,34 @@ export const historyDataSourcePropsConfig = [
     type: 'input' as const,
     default: 'YYYY-MM-DD HH:mm:ss',
     description: '时间显示格式'
+  },
+  {
+    name: 'submit',
+    label: '提交',
+    type: 'input' as const,
+    default: '',
+    description: '数据更新标识，修改此值触发数据刷新'
   }
 ]
 
 export const historyDataSourceDefaultProps = {
+  id: 'history-data-source',
   timeRange: defaultHistoryConfig.timeRange,
   group: defaultHistoryConfig.group,
   tags: defaultHistoryConfig.tags,
   columns: defaultHistoryConfig.columns,
-  xFormat: defaultHistoryConfig.xFormat
+  xFormat: defaultHistoryConfig.xFormat,
+  submit: ''
 }
 
 const renderHistoryDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <HistoryDataSource {...props} />
+        <HistoryDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </HistoryDataSource>
       </div>
     </div>
   )

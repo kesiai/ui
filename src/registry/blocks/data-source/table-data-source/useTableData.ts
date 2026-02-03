@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import _ from 'lodash'
 import { api } from '@airiot/client'
-import moment from 'moment'
 import { toast } from '@/hooks/use-toast'
+import { numberFormat, dateFormat } from '../utils'
 import type { TableInfo } from '../types'
 
 // ==================== Types ====================
@@ -451,81 +451,6 @@ const isInnerField = (key: string): boolean => {
   return INNER_FIELDS.includes(key)
 }
 
-/**
- * 数字格式化
- */
-const numberFormat = (format: string, value: any): any => {
-  const num = Number(value)
-  if (isNaN(num)) {
-    return null
-  }
-
-  let result: any = num
-  const regex = /^[0-9]$/
-
-  if (format && !regex.test(format)) {
-    // 预定义格式
-    switch (format) {
-      case 'percent':
-        result = _.isNumber(result) ? (_.round(result * 100) + '%') : (result || 'n/a')
-        break
-      case 'percentPoint':
-        result = _.isNumber(result) ? (_.round(result * 100, 2) + '%') : (result || 'n/a')
-        break
-      case 'thousandth':
-        result = _.isNumber(result) ? _.round(result).toLocaleString() : (result || 'n/a')
-        break
-      case 'thousandthPoint':
-        result = _.isNumber(result) ? _.round(result, 2).toLocaleString() : (result || 'n/a')
-        break
-      default:
-        break
-    }
-  } else {
-    // 保留 X 位小数
-    result = result.toFixed(parseInt(format) || 0)
-  }
-
-  if (_.isNaN(result) || result === 'NaN') {
-    result = null
-  }
-
-  return result
-}
-
-/**
- * 日期格式化
- */
-const dateFormat = (format: string, value: any): any => {
-  if (!value) {
-    return null
-  }
-
-  const t = moment(value)
-  let time: any = t
-
-  switch (format) {
-    case '秒级时间戳':
-      time = t.unix().toString()
-      break
-    case '毫秒级时间戳':
-      time = t.valueOf().toString()
-      break
-    case '历史数据时间':
-      time = t.format('UTCYYYY-MM-DDTHH:mm:ss.SSSZ')
-      break
-    default:
-      time = t.format(format)
-      break
-  }
-
-  if (time === 'Invalid date') {
-    time = null
-  }
-
-  return time
-}
-
 // ==================== Main Hook ====================
 
 /**
@@ -549,12 +474,13 @@ export function useTableData(config: TableDataConfig) {
     showInnerField = false,
     feildFormat = [],
     extraSchema,
-    submit
+    submit,
   } = config
 
   const [schema, setSchema] = useState<Schema | null>(null)
   const [dataset, setDataset] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
 
   const queryCallback = useRef<(() => void) | null>(null)
   const lastSubmitRef = useRef<string>()
@@ -781,6 +707,7 @@ export function useTableData(config: TableDataConfig) {
       })
 
       setDataset(transformedData)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (error) {
       console.error('查询表数据失败:', error)
       toast({
@@ -788,6 +715,7 @@ export function useTableData(config: TableDataConfig) {
         title: '数据查询出现错误，请检查数据'
       })
       setDataset([])
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } finally {
       setLoading(false)
     }
@@ -851,6 +779,7 @@ export function useTableData(config: TableDataConfig) {
 
   return {
     dataset,
-    loading
+    loading,
+    requestId
   }
 }

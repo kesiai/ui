@@ -1,4 +1,5 @@
 import { TableDataSource } from './table-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { FieldFormatConfig } from '../types'
 
@@ -32,6 +33,13 @@ const defaultTableConfig = {
 
 export const tableDataSourcePropsConfig = [
   {
+    name: 'id',
+    label: '数据源ID',
+    type: 'input' as const,
+    default: 'table-data-source',
+    description: '数据源唯一标识符'
+  },
+  {
     name: 'selectType',
     label: '选择类型',
     type: 'select' as const,
@@ -62,21 +70,33 @@ export const tableDataSourcePropsConfig = [
     type: 'array' as const,
     default: defaultTableConfig.feildFormat,
     description: '字段格式化配置'
+  },
+  {
+    name: 'submit',
+    label: '提交标识',
+    type: 'input' as const,
+    default: '',
+    description: '用于触发数据刷新的标识符'
   }
 ]
 
 export const tableDataSourceDefaultProps = {
+  id: 'table-data-source',
   selectType: defaultTableConfig.selectType,
   table: defaultTableConfig.table,
   isGroup: defaultTableConfig.isGroup,
-  feildFormat: defaultTableConfig.feildFormat
+  feildFormat: defaultTableConfig.feildFormat,
+  submit: ''
 }
 
 const renderTableDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <TableDataSource {...props} />
+        <TableDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </TableDataSource>
       </div>
     </div>
   )

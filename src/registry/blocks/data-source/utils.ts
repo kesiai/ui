@@ -87,3 +87,78 @@ export const timeQuery = (timeRange: any) => {
 
   return null
 }
+
+/**
+ * 数字格式化
+ */
+export const numberFormat = (format: string, value: any): any => {
+  const num = Number(value)
+  if (isNaN(num)) {
+    return null
+  }
+
+  let result: any = num
+  const regex = /^[0-9]$/
+
+  if (format && !regex.test(format)) {
+    // 预定义格式
+    switch (format) {
+      case 'percent':
+        result = _.isNumber(result) ? (_.round(result * 100) + '%') : (result || 'n/a')
+        break
+      case 'percentPoint':
+        result = _.isNumber(result) ? (_.round(result * 100, 2) + '%') : (result || 'n/a')
+        break
+      case 'thousandth':
+        result = _.isNumber(result) ? _.round(result).toLocaleString() : (result || 'n/a')
+        break
+      case 'thousandthPoint':
+        result = _.isNumber(result) ? _.round(result, 2).toLocaleString() : (result || 'n/a')
+        break
+      default:
+        break
+    }
+  } else {
+    // 保留 X 位小数
+    result = result.toFixed(parseInt(format) || 0)
+  }
+
+  if (_.isNaN(result) || result === 'NaN') {
+    result = null
+  }
+
+  return result
+}
+
+/**
+ * 日期格式化
+ */
+export const dateFormat = (format: string, value: any): any => {
+  if (!value) {
+    return null
+  }
+
+  const t = dayjs(value)
+  let time: any = t
+
+  switch (format) {
+    case '秒级时间戳':
+      time = t.unix().toString()
+      break
+    case '毫秒级时间戳':
+      time = t.valueOf().toString()
+      break
+    case '历史数据时间':
+      time = t.toISOString()
+      break
+    default:
+      time = t.format(format)
+      break
+  }
+
+  if (time === 'Invalid Date') {
+    time = null
+  }
+
+  return time
+}

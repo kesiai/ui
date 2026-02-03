@@ -1,91 +1,67 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { ReactNode, useEffect, useMemo } from 'react'
+import { useDatasetSet } from '@airiot/client'
+import { ContextProvider } from '@/registry/blocks/containers/context-provider/context-provider'
 import { useHistoryData } from './useHistoryData'
-import { cn } from '@/lib/utils'
 import type { TimeRangeConfig, GroupConfig } from '../types'
 
 export interface HistoryDataSourceProps {
+  id?: string
   timeRange?: TimeRangeConfig
   group?: GroupConfig
   tags?: Array<any>
   columns?: Array<any>
   interval?: number
   xFormat?: string
-  onDataChange?: (data: any) => void
-  onConfigChange?: (config: Record<string, any>) => void
-  className?: string
+  submit?: string
+  children?: ReactNode
 }
 
+/**
+ * 历史数据源组件 - 纯容器，不包含任何布局和样式
+ * 内部集成 ContextProvider，子组件通过 useContextProvider 获取数据
+ * 优化：只在查询参数变化时更新数据，避免大数据集的不必要比较
+ */
 export function HistoryDataSource({
+  id = 'history-data-source',
   timeRange,
   group,
   tags = [],
   columns = [],
   interval = 0,
   xFormat = 'YYYY-MM-DD HH:mm:ss',
-  onDataChange,
-  onConfigChange,
-  className
+  submit,
+  children
 }: HistoryDataSourceProps) {
-  const [submit, setSubmit] = useState(Date.now().toString())
-
-  // 手动刷新
-  const handleRefresh = useCallback(() => {
-    setSubmit(Date.now().toString())
-  }, [])
-
   // 使用历史数据
-  const { dataset, loading } = useHistoryData(
-    { timeRange, group, tags, columns, interval, xFormat, submit }
-  )
+  const { dataset, loading, requestId } = useHistoryData({
+    timeRange,
+    group,
+    tags,
+    columns,
+    interval,
+    xFormat,
+    submit
+  })
 
-  // 显示当前数据
-  const renderDataPreview = () => {
-    if (loading) {
-      return (
-        <div className="text-center py-8 text-slate-400">
-          <p className="text-sm">加载中...</p>
-        </div>
-      )
-    }
+  // 使用 useDatasetSet 将数据存储到 jotai atom
+  const setDataset = useDatasetSet(id)
 
-    if (!dataset) {
-      return (
-        <div className="text-center py-8 text-slate-400">
-          <p className="text-sm">等待数据...</p>
-        </div>
-      )
-    }
+  // 只监听 requestId 和 loading，更新 jotai atom
+  useEffect(() => {
+    setDataset({ data: dataset, loading })
+  }, [requestId, loading, setDataset])
 
-    return (
-      <div className="space-y-2">
-        <pre className="bg-slate-800 text-green-400 p-3 rounded text-xs overflow-x-auto">
-          {JSON.stringify(dataset, null, 2)}
-        </pre>
-      </div>
-    )
-  }
+  // 构造 ContextProvider 的 data
+  const contextData = useMemo(() => {
+    return [{ data: dataset, loading }]
+  }, [requestId, loading])
 
+  // 使用 ContextProvider 包裹子组件
   return (
-    <div className={cn('w-full', className)}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-slate-700">
-          历史数据源
-        </h3>
-        <button
-          onClick={handleRefresh}
-          disabled={loading}
-          className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {loading ? '加载中...' : '刷新数据'}
-        </button>
-      </div>
-
-      {/* 数据预览 */}
-      <div className="bg-white rounded border border-slate-200 p-4">
-        {renderDataPreview()}
-      </div>
-    </div>
+    <ContextProvider data={contextData}>
+      {children}
+    </ContextProvider>
   )
 }

@@ -1,4 +1,5 @@
 import { ApiDataSource } from './api-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
@@ -17,6 +18,13 @@ const defaultApiConfig = {
 }
 
 export const apiDataSourcePropsConfig = [
+  {
+    name: 'id',
+    label: '数据源ID',
+    type: 'input' as const,
+    default: 'api-data-source',
+    description: '数据源唯一标识，用于存储和获取数据'
+  },
   {
     name: 'url',
     label: '接口地址',
@@ -65,10 +73,32 @@ export const apiDataSourcePropsConfig = [
     type: 'object' as const,
     default: defaultApiConfig.table,
     description: '数据表信息（用于 URL 中的 {table} 占位符）'
+  },
+  {
+    name: 'appkey',
+    label: 'AppKey',
+    type: 'input' as const,
+    default: defaultApiConfig.appkey,
+    description: '应用 AppKey'
+  },
+  {
+    name: 'appsecret',
+    label: 'AppSecret',
+    type: 'input' as const,
+    default: defaultApiConfig.appsecret,
+    description: '应用 AppSecret'
+  },
+  {
+    name: 'submit',
+    label: '提交',
+    type: 'input' as const,
+    default: '',
+    description: '数据更新标识，修改此值触发数据刷新'
   }
 ]
 
 export const apiDataSourceDefaultProps = {
+  id: 'api-data-source',
   url: defaultApiConfig.url,
   method: defaultApiConfig.method,
   headers: defaultApiConfig.headers,
@@ -76,14 +106,18 @@ export const apiDataSourceDefaultProps = {
   predata: defaultApiConfig.predata,
   table: defaultApiConfig.table,
   appkey: defaultApiConfig.appkey,
-  appsecret: defaultApiConfig.appsecret
+  appsecret: defaultApiConfig.appsecret,
+  submit: ''
 }
 
 const renderApiDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <ApiDataSource {...props} />
+        <ApiDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </ApiDataSource>
       </div>
     </div>
   )

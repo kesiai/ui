@@ -8,7 +8,7 @@ import {
   Drawer,
   DrawerContent,
   DrawerTrigger,
-} from "@/components/ui/drawer"
+} from "@/registry/ui/drawer"
 
 export interface MobileCalendarProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children" | "onChange"> {

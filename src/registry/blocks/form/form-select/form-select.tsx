@@ -201,6 +201,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
               className={cn(
                 "w-full border-0 bg-transparent h-full px-3"
               )}
+              aria-invalid={props['aria-invalid']}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>

@@ -24,18 +24,41 @@ export const formFieldPropsConfig = [
     type: 'select' as const,
     default: 'text',
     options: [
-      { value: 'text', label: '文本输入框' },
-      { value: 'number', label: '数字输入框' },
-      { value: 'textarea', label: '多行文本框' },
-      { value: 'select', label: '下拉选择框' },
-      { value: 'checkbox', label: '复选框' },
-      { value: 'radio', label: '单选框' },
-      { value: 'switch', label: '开关' },
-      { value: 'slider', label: '滑块' },
-      { value: 'date', label: '日期选择器' },
-      { value: 'rate', label: '评分组件' }
+      // 基础组件
+      { value: 'text', label: '📝 文本输入框' },
+      { value: 'number', label: '🔢 数字输入框' },
+      { value: 'textarea', label: '📃 多行文本框' },
+      { value: 'select', label: '📋 下拉选择框' },
+      { value: 'checkbox', label: '☑️ 复选框' },
+      { value: 'radio', label: '⭕ 单选框' },
+      { value: 'switch', label: '🔘 开关' },
+      { value: 'slider', label: '🎚️ 滑块' },
+      { value: 'date', label: '📅 日期选择器' },
+      { value: 'rate', label: '⭐ 评分组件' },
+      // TableField 组件（高级功能）
+      { value: 'table-text', label: '📝 TF-文本输入' },
+      { value: 'table-textarea', label: '📃 TF-多行文本' },
+      { value: 'table-number', label: '🔢 TF-数字输入' },
+      { value: 'table-select', label: '📋 TF-下拉选择' },
+      { value: 'table-checkbox', label: '☑️ TF-复选框' },
+      { value: 'table-date', label: '📅 TF-日期选择' },
+      { value: 'table-date-range', label: '📆 TF-日期范围' },
+      { value: 'table-time', label: '🕐 TF-时间选择' },
+      { value: 'table-rate', label: '⭐ TF-评分组件' },
+      { value: 'table-rich-text', label: '📝 TF-富文本编辑器' },
+      { value: 'table-map', label: '🗺️ TF-地图定位' },
+      { value: 'table-upload', label: '📎 TF-附件上传' },
+      { value: 'table-link', label: '🔗 TF-链接组件' },
+      { value: 'table-serial-number', label: '🔢 TF-序列号' },
+      { value: 'table-user-role', label: '👤 TF-用户角色' },
+      { value: 'table-bytes-array', label: '💾 TF-字节数组' },
+      { value: 'table-reference', label: '🔍 TF-查找引用' },
+      { value: 'table-form-info', label: '📋 TF-表单信息' },
+      { value: 'table-editable-table', label: '📊 TF-可编辑表格' },
+      { value: 'table-relate-plus', label: '🔗 TF-关联字段Plus' },
+      { value: 'table-relate', label: '🔗 TF-关联字段' }
     ],
-    description: '选择字段的输入类型'
+    description: '选择字段的输入类型（TF=TableField）'
   },
   {
     name: 'placeholder',
@@ -91,7 +114,12 @@ export const formFieldPropsConfig = [
 export const formFieldDefaultProps = {
   name: 'username',
   label: '用户名',
-  type: 'text' as 'text' | 'number' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'switch' | 'slider' | 'date' | 'rate',
+  type: 'text' as 'text' | 'number' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'switch' | 'slider' | 'date' | 'rate' |
+    'table-text' | 'table-textarea' | 'table-number' | 'table-select' | 'table-checkbox' |
+    'table-date' | 'table-date-range' | 'table-time' | 'table-rate' | 'table-rich-text' |
+    'table-map' | 'table-upload' | 'table-link' | 'table-serial-number' | 'table-user-role' |
+    'table-bytes-array' | 'table-reference' | 'table-form-info' | 'table-editable-table' |
+    'table-relate-plus' | 'table-relate',
   placeholder: '请输入用户名',
   description: '请输入您的用户名',
   required: true,

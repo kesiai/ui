@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { ReactNode, useEffect, useMemo } from 'react'
+import { useDatasetSet } from '@airiot/client'
+import { ContextProvider } from '@/registry/blocks/containers/context-provider/context-provider'
 import { useApiData } from './useApiData'
-import { cn } from '@/lib/utils'
 
 export interface ApiDataSourceProps {
+  id?: string
   url?: string
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   headers?: Array<{ name: string; value: string }>
@@ -14,12 +16,17 @@ export interface ApiDataSourceProps {
   appkey?: string
   appsecret?: string
   interval?: number
-  onDataChange?: (data: any) => void
-  onConfigChange?: (config: Record<string, any>) => void
-  className?: string
+  submit?: string
+  children?: ReactNode
 }
 
+/**
+ * API 数据源组件 - 纯容器，不包含任何布局和样式
+ * 内部集成 ContextProvider，子组件通过 useContextProvider 获取数据
+ * 优化：只在查询参数变化时更新数据，避免大数据集的不必要比较
+ */
 export function ApiDataSource({
+  id = 'api-data-source',
   url = '',
   method = 'GET',
   headers = [],
@@ -29,74 +36,39 @@ export function ApiDataSource({
   appkey,
   appsecret,
   interval = 0,
-  onDataChange,
-  onConfigChange,
-  className
+  submit,
+  children
 }: ApiDataSourceProps) {
-  const [submit, setSubmit] = useState(Date.now().toString())
-
-  // 手动刷新
-  const handleRefresh = useCallback(() => {
-    setSubmit(Date.now().toString())
-  }, [])
-
-  // 处理数据变化
-  const handleDataChange = useCallback((data: any) => {
-    onDataChange?.(data)
-  }, [onDataChange])
-
   // 使用 API 数据
-  const { dataset, loading } = useApiData(
-    { url, method, headers, body, predata, table, appkey, appsecret, interval, submit },
-    handleDataChange
-  )
+  const { dataset, loading, requestId } = useApiData({
+    url,
+    method,
+    headers,
+    body,
+    predata,
+    table,
+    appkey,
+    appsecret,
+    interval,
+    submit
+  })
+  // 使用 useDatasetSet 将数据存储到 jotai atom
+  const setDataset = useDatasetSet(id)
 
-  // 显示当前数据
-  const renderDataPreview = () => {
-    if (loading) {
-      return (
-        <div className="text-center py-8 text-slate-400">
-          <p className="text-sm">加载中...</p>
-        </div>
-      )
-    }
+  // 只监听 requestId 和 loading，更新 jotai atom
+  useEffect(() => {
+    setDataset({ data: dataset, loading })
+  }, [requestId, loading, setDataset])
 
-    if (!dataset) {
-      return (
-        <div className="text-center py-8 text-slate-400">
-          <p className="text-sm">等待数据...</p>
-        </div>
-      )
-    }
+  // 构造 ContextProvider 的 data
+  const contextData = useMemo(() => {
+    return [{ data: dataset, loading }]
+  }, [requestId, loading])
 
-    return (
-      <div className="space-y-2">
-        <pre className="bg-slate-800 text-green-400 p-3 rounded text-xs overflow-x-auto">
-          {JSON.stringify(dataset, null, 2)}
-        </pre>
-      </div>
-    )
-  }
-
+  // 使用 ContextProvider 包裹子组件
   return (
-    <div className={cn('w-full', className)}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-slate-700">
-          平台接口数据源
-        </h3>
-        <button
-          onClick={handleRefresh}
-          disabled={loading}
-          className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {loading ? '加载中...' : '刷新数据'}
-        </button>
-      </div>
-
-      {/* 数据预览 */}
-      <div className="bg-white rounded border border-slate-200 p-4">
-        {renderDataPreview()}
-      </div>
-    </div>
+    <ContextProvider data={contextData}>
+      {children}
+    </ContextProvider>
   )
 }

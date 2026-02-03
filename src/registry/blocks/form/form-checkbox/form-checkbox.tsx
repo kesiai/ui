@@ -181,6 +181,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
                 checked={currentValues.includes(option.value)}
                 disabled={config?.disabled}
                 onCheckedChange={(checked) => handleCheckboxChange(option.value, checked)}
+                aria-invalid={props['aria-invalid']}
               />
               <span className="text-sm">{option.label}</span>
             </label>

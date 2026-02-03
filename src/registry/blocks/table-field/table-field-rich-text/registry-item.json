@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-rich-text",
+  "type": "registry:component",
+  "title": "TableField.RichText",
+  "description": "表格字段 - 富文本编辑器组件",
+  "registryDependencies": [],
+  "dependencies": [
+    "@ckeditor/ckeditor5-react",
+    "@ckeditor/ckeditor5-build-decoupled-document"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-rich-text/table-field-rich-text.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-rich-text/table-field-rich-text.css",
+      "type": "registry:style"
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-rich-text/RichTextConfig.ts",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-rich-text/RichTextUploadAdapter.ts",
+      "type": "registry:component"
+    }
+  ]
+}

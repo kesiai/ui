@@ -121,7 +121,7 @@ function filterResult(json: any): { dimensions: any[]; source: any[] } {
 }
 
 // API 数据 Hook
-export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
+export function useApiData(config: ApiDataConfig) {
   const {
     url = '',
     method = 'GET',
@@ -132,11 +132,12 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
     table,
     appkey,
     appsecret,
-    submit = ''
+    submit = '',
   } = config
 
   const [dataset, setDataset] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
   const queryCallback = useRef<(() => void) | null>(null)
 
   // 过滤数据
@@ -201,22 +202,6 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
         // 使用 @airiot/client 的 API
         const bodyStr = method !== 'GET' && body.length > 0 ? JSON.stringify(arrayToKv(body)) : undefined
 
-        // 调试：检查用户信息
-        try {
-          const storedUser = localStorage.getItem('user')
-          if (storedUser) {
-            const parsedUser = JSON.parse(storedUser)
-            console.log('🔍 用户信息:', parsedUser)
-            console.log('🔍 Token 位置:', {
-              token: parsedUser.token,
-              accessToken: parsedUser.accessToken,
-              authorization: parsedUser.authorization
-            })
-          }
-        } catch (e) {
-          console.warn('读取用户信息失败:', e)
-        }
-
         const apiRet = api({
           name: path,
         })
@@ -226,31 +211,32 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
           headers: arrayToKv(headers),
           body: bodyStr,
         })
-
         responseData = response.json
       }
 
       // 处理数据
       const processedData = filterData(responseData)
       setDataset(processedData)
-      onData?.(processedData)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (error) {
       console.error('获取数据失败:', error)
       setDataset(null)
     } finally {
       setLoading(false)
     }
-  }, [url, method, headers, body, predata, table, appkey, appsecret, filterData, onData])
+  }, [url, method, headers, body, predata, table, appkey, appsecret, filterData])
 
   // 保存到 ref
   queryCallback.current = fetchData
 
-  // submit 变化时手动触发
-  const prevSubmitRef = useRef<string>()
-
+  // 初始加载
   useEffect(() => {
-    if (submit && submit !== prevSubmitRef.current) {
-      prevSubmitRef.current = submit
+    queryCallback.current?.()
+  }, [])
+
+  // submit 变化时触发查询
+  useEffect(() => {
+    if (submit) {
       queryCallback.current?.()
     }
   }, [submit])
@@ -267,5 +253,5 @@ export function useApiData(config: ApiDataConfig, onData: (data: any) => void) {
     return () => clearInterval(id)
   }, [interval])
 
-  return { dataset, loading, fetchData }
+  return { dataset, loading, requestId, fetchData }
 }

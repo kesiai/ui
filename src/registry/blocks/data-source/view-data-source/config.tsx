@@ -55,6 +55,13 @@ const defaultMeasure = [{
 
 export const viewDataSourcePropsConfig = [
   {
+    name: 'id',
+    label: '数据源ID',
+    type: 'input' as const,
+    default: 'view-data-source',
+    description: '数据源唯一标识符'
+  },
+  {
     name: 'view',
     label: '视图配置',
     type: 'object' as const,
@@ -81,14 +88,23 @@ export const viewDataSourcePropsConfig = [
     type: 'number' as const,
     default: 0,
     description: '设置为 0 表示手动刷新'
+  },
+  {
+    name: 'submit',
+    label: '提交标识',
+    type: 'input' as const,
+    default: '',
+    description: '用于触发数据刷新的标识符'
   }
 ]
 
 export const viewDataSourceDefaultProps = {
+  id: 'view-data-source',
   view: defaultView,
   dimension: defaultDimension,
   measure: defaultMeasure,
-  interval: 0
+  interval: 0,
+  submit: ''
 }
 
 const renderViewDataSourcePreview = (props: Record<string, any>) => {

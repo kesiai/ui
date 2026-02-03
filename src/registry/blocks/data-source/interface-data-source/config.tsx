@@ -3,6 +3,13 @@ import { ComponentConfig } from '@/app/config/types'
 
 export const interfaceDataSourcePropsConfig = [
   {
+    name: 'id',
+    label: '数据源ID',
+    type: 'input' as const,
+    default: 'interface-data-source',
+    description: '数据源唯一标识符'
+  },
+  {
     name: 'ds',
     label: '分组',
     type: 'input' as const,
@@ -37,15 +44,24 @@ export const interfaceDataSourcePropsConfig = [
     default: 0,
     min: 0,
     description: '数据更新间隔时间，不填写数据不更新，单位（秒）'
+  },
+  {
+    name: 'submit',
+    label: '提交标识',
+    type: 'input' as const,
+    default: '',
+    description: '用于触发数据刷新的标识符'
   }
 ]
 
 export const interfaceDataSourceDefaultProps = {
+  id: 'interface-data-source',
   ds: 'ai',
   op: { id: '67da8683f9f8102e30cf0b3b', key: 'device_max_values_Yglzib' },
   params: { value: {} },
   predata: false,
-  interval: 0
+  interval: 0,
+  submit: ''
 }
 
 const renderInterfaceDataSourcePreview = (props: Record<string, any>) => {

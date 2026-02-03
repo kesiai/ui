@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/registry/components/ui/card/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Trash2 } from 'lucide-react'
 import { FieldComponentSelector } from '@/registry/blocks/form/form-widget/form-widget'

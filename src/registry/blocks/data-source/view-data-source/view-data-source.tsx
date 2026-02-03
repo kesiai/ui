@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useRef, useMemo, type ReactNode } from 'react'
+import { useDatasetSet } from '@airiot/client'
 import { useViewData } from './useViewData'
-import { cn } from '@/lib/utils'
+import { ContextProvider } from '@/registry/blocks/containers/context-provider/context-provider'
 
 export interface ViewDataSourceProps {
+  id?: string
   view?: {
     id?: string
     name?: string
@@ -15,84 +17,73 @@ export interface ViewDataSourceProps {
   dimension?: Array<{ id?: string; name?: string }>
   measure?: Array<any>
   interval?: number
-  onDataChange?: (data: any) => void
+  submit?: string
+  onData?: (data: any) => void
   onConfigChange?: (config: Record<string, any>) => void
-  className?: string
+  children?: ReactNode
 }
 
 export function ViewDataSource({
+  id = 'view-data-source',
   view = {},
   dimension = [],
   measure = [],
   interval = 0,
-  onDataChange,
+  submit,
+  onData,
   onConfigChange,
-  className
+  children
 }: ViewDataSourceProps) {
-  const [submit, setSubmit] = useState(Date.now().toString())
+  const datasetSet = useDatasetSet(id)
 
-  // 手动刷新
-  const handleRefresh = useCallback(() => {
-    setSubmit(Date.now().toString())
-  }, [])
+  // 使用 ref 存储最新数据和参数
+  const datasetRef = useRef<any>(null)
+  const prevParamsRef = useRef<string>('')
+
+  // 序列化查询参数用于比较
+  const paramsKey = useMemo(() => {
+    return JSON.stringify({ view, dimension, measure, interval, submit })
+  }, [view, dimension, measure, interval, submit])
 
   // 处理数据变化
-  const handleDataChange = useCallback((data: any) => {
-    onDataChange?.(data)
-  }, [onDataChange])
+  const handleDataChange = useMemo(() => (data: any) => {
+    onData?.(data)
+  }, [onData])
 
   // 使用视图数据
   const { dataset, loading } = useViewData(
-    { view, dimension, measure, interval, submit },
+    { view, dimension, measure, interval, submit: submit || Date.now().toString() },
     handleDataChange
   )
 
-  // 显示当前数据
-  const renderDataPreview = () => {
-    if (loading) {
-      return (
-        <div className="text-center py-8 text-slate-400">
-          <p className="text-sm">加载中...</p>
-        </div>
-      )
-    }
+  // 只在参数变化或数据变化时更新
+  useMemo(() => {
+    // 检查参数是否变化
+    if (prevParamsRef.current !== paramsKey) {
+      prevParamsRef.current = paramsKey
 
-    if (!dataset) {
-      return (
-        <div className="text-center py-8 text-slate-400">
-          <p className="text-sm">等待数据...</p>
-        </div>
-      )
-    }
+      // 存储数据到 jotai atom
+      if (dataset !== undefined) {
+        datasetRef.current = dataset
+        datasetSet(dataset)
 
-    return (
-      <div className="space-y-2">
-        <pre className="bg-slate-800 text-green-400 p-3 rounded text-xs overflow-x-auto">
-          {JSON.stringify(dataset, null, 2)}
-        </pre>
-      </div>
-    )
-  }
+        // 触发 onData 回调
+        onData?.(dataset)
+      }
+    }
+  }, [dataset, paramsKey, datasetSet, onData])
+
+  // 准备 context 数据
+  const contextData = useMemo(() => {
+    if (loading) return undefined
+    if (Array.isArray(datasetRef.current)) return datasetRef.current
+    if (datasetRef.current) return [datasetRef.current]
+    return undefined
+  }, [loading])
 
   return (
-    <div className={cn('w-full', className)}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-slate-700">
-          视图数据源
-        </h3>
-        <button
-          onClick={handleRefresh}
-          disabled={loading}
-          className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {loading ? '加载中...' : '刷新数据'}
-        </button>
-      </div>
-
-      {/* 数据预览 */}
-      <div className="bg-white rounded border border-slate-200 p-4">
-        {renderDataPreview()}
-      </div>
-    </div>
+    <ContextProvider data={contextData}>
+      {children}
+    </ContextProvider>
   )
 }

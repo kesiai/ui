@@ -501,11 +501,12 @@ export function useHistoryData(config: HistoryDataConfig) {
     type,
     startTime,
     sortByTime,
-    submit
+    submit,
   } = config
 
   const [dataset, setDataset] = useState<QueryResult | QueryResult[] | null>(null)
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
   const queryCallback = useRef<(() => void) | null>(null)
 
   // 暂时空实现，后续可以传入实际的 getOtherCondition 方法
@@ -615,6 +616,7 @@ export function useHistoryData(config: HistoryDataConfig) {
       )
 
       setDataset(result || null)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (err) {
       console.error('查询失败:', err)
       toast({
@@ -629,12 +631,17 @@ export function useHistoryData(config: HistoryDataConfig) {
   // 保存到 ref
   queryCallback.current = queryDataHandler
 
+  // 初始加载
+  useEffect(() => {
+    queryCallback.current?.()
+  }, [])
+
   // submit 变化时触发查询
   useEffect(() => {
     if (submit) {
-      queryDataHandler()
+      queryCallback.current?.()
     }
-  }, [submit, queryDataHandler])
+  }, [submit])
 
   // 自动轮询
   useEffect(() => {
@@ -665,8 +672,9 @@ export function useHistoryData(config: HistoryDataConfig) {
     }
   }
 
-  return {  
+  return {
     dataset: filterDataset,
-    loading
+    loading,
+    requestId
   }
 }

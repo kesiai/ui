@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useMemo, useRef } from 'react'
+import { ReactNode, useEffect, useMemo } from 'react'
 import { useDatasetSet } from '@airiot/client'
 import { ContextProvider } from '@/registry/blocks/containers/context-provider/context-provider'
 import { useApiData } from './useApiData'
@@ -17,7 +17,6 @@ export interface ApiDataSourceProps {
   appsecret?: string
   interval?: number
   submit?: string
-  onData?: (data: any) => void
   children?: ReactNode
 }
 
@@ -38,59 +37,33 @@ export function ApiDataSource({
   appsecret,
   interval = 0,
   submit,
-  onData,
   children
 }: ApiDataSourceProps) {
   // 使用 API 数据
-  const { dataset, loading } = useApiData(
-    { url, method, headers, body, predata, table, appkey, appsecret, interval, submit: submit || '' },
-    () => {} // onData callback handled in useEffect
-  )
-
+  const { dataset, loading, requestId } = useApiData({
+    url,
+    method,
+    headers,
+    body,
+    predata,
+    table,
+    appkey,
+    appsecret,
+    interval,
+    submit
+  })
   // 使用 useDatasetSet 将数据存储到 jotai atom
   const setDataset = useDatasetSet(id)
 
-  // 缓存上一次的查询参数字符串和最新的数据
-  const prevParamsRef = useRef<string>('')
-  const datasetRef = useRef<any>(null)
-
-  // 保持 datasetRef 为最新值
+  // 只监听 requestId 和 loading，更新 jotai atom
   useEffect(() => {
-    datasetRef.current = dataset
-  }, [dataset])
-
-  // 将查询参数序列化为字符串，用于比较是否发生变化
-  const paramsString = useMemo(() => {
-    return JSON.stringify({
-      url,
-      method,
-      headers,
-      body,
-      predata,
-      table,
-      appkey,
-      appsecret,
-      interval,
-      submit
-    })
-  }, [url, method, headers, body, predata, table, appkey, appsecret, interval, submit])
-
-  // 将数据存储到 atom，并触发 onData 回调
-  useEffect(() => {
-    // 只有当查询参数变化且数据加载完成时才更新
-    if (!loading && paramsString !== prevParamsRef.current) {
-      prevParamsRef.current = paramsString
-      setDataset(datasetRef.current)
-      if (onData) {
-        onData(datasetRef.current)
-      }
-    }
-  }, [loading, paramsString, setDataset, onData])
+    setDataset({ data: dataset, loading })
+  }, [requestId, loading, setDataset])
 
   // 构造 ContextProvider 的 data
   const contextData = useMemo(() => {
-    return loading ? null : dataset
-  }, [loading, paramsString])
+    return [{ data: dataset, loading }]
+  }, [requestId, loading])
 
   // 使用 ContextProvider 包裹子组件
   return (

@@ -1,4 +1,5 @@
 import { InterfaceDataSource } from './interface-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 
 export const interfaceDataSourcePropsConfig = [
@@ -65,10 +66,13 @@ export const interfaceDataSourceDefaultProps = {
 }
 
 const renderInterfaceDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <InterfaceDataSource {...props} />
+        <InterfaceDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </InterfaceDataSource>
       </div>
     </div>
   )

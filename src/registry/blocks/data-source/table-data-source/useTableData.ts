@@ -474,12 +474,13 @@ export function useTableData(config: TableDataConfig) {
     showInnerField = false,
     feildFormat = [],
     extraSchema,
-    submit
+    submit,
   } = config
 
   const [schema, setSchema] = useState<Schema | null>(null)
   const [dataset, setDataset] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
 
   const queryCallback = useRef<(() => void) | null>(null)
   const lastSubmitRef = useRef<string>()
@@ -706,6 +707,7 @@ export function useTableData(config: TableDataConfig) {
       })
 
       setDataset(transformedData)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (error) {
       console.error('查询表数据失败:', error)
       toast({
@@ -713,6 +715,7 @@ export function useTableData(config: TableDataConfig) {
         title: '数据查询出现错误，请检查数据'
       })
       setDataset([])
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } finally {
       setLoading(false)
     }
@@ -776,6 +779,7 @@ export function useTableData(config: TableDataConfig) {
 
   return {
     dataset,
-    loading
+    loading,
+    requestId
   }
 }

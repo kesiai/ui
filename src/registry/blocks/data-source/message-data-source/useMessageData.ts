@@ -53,6 +53,7 @@ export interface MessageDataConfig {
   interval?: number
   feildFormat?: FieldFormatConfig[]
   submit?: string
+  requestId?: string
 }
 
 // 默认配置
@@ -203,11 +204,12 @@ export function useMessageData(config: MessageDataConfig) {
     limit = 1000,
     interval = 0,
     feildFormat = [],
-    submit = ''
+    submit = '',
   } = config
 
   const [dataset, setDataset] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
 
   const queryCallback = useRef<(() => void) | null>(null)
 
@@ -250,9 +252,11 @@ export function useMessageData(config: MessageDataConfig) {
       // 格式化数据
       const data = filterData(json || [], feildFormat)
       setDataset(data)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (error) {
       console.error('查询消息数据失败:', error)
       setDataset([])
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } finally {
       setLoading(false)
     }
@@ -261,18 +265,10 @@ export function useMessageData(config: MessageDataConfig) {
   // 保存到 ref
   queryCallback.current = fetchData
 
-  // 提交时触发查询
-  useEffect(() => {
-    if (submit) {
-      fetchData()
-    }
-  }, [submit, fetchData])
-
-  // 初始加载
+  // requestId 或关键参数变化时触发查询
   useEffect(() => {
     fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify({ initFilter, fieldOrder, feildFormat })])
+  }, [JSON.stringify({ initFilter, fieldOrder, feildFormat, submit })])
 
   // 自动轮询
   useEffect(() => {
@@ -290,6 +286,7 @@ export function useMessageData(config: MessageDataConfig) {
 
   return {
     dataset,
-    loading
+    loading,
+    requestId
   }
 }

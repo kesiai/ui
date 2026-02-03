@@ -1,4 +1,5 @@
 import { ApiDataSource } from './api-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
@@ -110,10 +111,13 @@ export const apiDataSourceDefaultProps = {
 }
 
 const renderApiDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <ApiDataSource {...props} />
+        <ApiDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </ApiDataSource>
       </div>
     </div>
   )

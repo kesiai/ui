@@ -58,18 +58,19 @@ const filterResult = (json: any): { dimensions: string[]; source: any[][] } => {
 /**
  * 接口数据源 Hook
  */
-export function useInterfaceData(config: InterfaceDataConfig, onData?: (data: any) => void) {
+export function useInterfaceData(config: InterfaceDataConfig) {
   const {
     ds = 'ai',
     op = { id: '67da8683f9f8102e30cf0b3b', key: 'device_max_values_Yglzib' },
     params = { value: {} },
     predata = false,
     interval = 0,
-    submit = ''
+    submit = '',
   } = config
 
   const [dataset, setDataset] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
 
   const queryCallback = useRef<(() => void) | null>(null)
   const submitRef = useRef<string>()
@@ -110,14 +111,15 @@ export function useInterfaceData(config: InterfaceDataConfig, onData?: (data: an
 
       const filteredData = filterData(json)
       setDataset(filteredData)
-      onData?.(filteredData)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (error) {
       console.error('获取接口数据失败:', error)
       setDataset(null)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } finally {
       setLoading(false)
     }
-  }, [op?.key, params, filterData, onData])
+  }, [op?.key, params, filterData])
 
   // 保存到 ref
   queryCallback.current = fetchData
@@ -152,6 +154,7 @@ export function useInterfaceData(config: InterfaceDataConfig, onData?: (data: an
   return {
     dataset,
     loading,
-    fetchData
+    fetchData,
+    requestId
   }
 }

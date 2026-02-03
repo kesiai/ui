@@ -1,4 +1,5 @@
 import { MessageDataSource } from './message-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 
 export const messageDataSourcePropsConfig = [
@@ -90,10 +91,13 @@ export const messageDataSourceDefaultProps = {
 }
 
 const renderMessageDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <MessageDataSource {...props} />
+        <MessageDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </MessageDataSource>
       </div>
     </div>
   )

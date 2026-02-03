@@ -218,6 +218,7 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
             onFocus={onFocus}
             onInput={handleInput}
             autoFocus={autoFocus}
+            aria-invalid={props['aria-invalid']}
           />
           {allowClear && value && (
             <button
@@ -259,7 +260,6 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
         ref={ref}
         className={cn(!bordered && "border-0", inputVariants({ variant, size }), className)}
         style={style}
-        {...props}
       >
         {addonBefore && (
           <InputGroupAddon align="inline-start">
@@ -285,6 +285,7 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
           autoFocus={autoFocus}
           type="text"
           className="focus-visible:ring-ring focus-visible:ring-offset-0"
+          {...props}
         />
         {allowClear && value && !disabled && !readOnly && (
           <button

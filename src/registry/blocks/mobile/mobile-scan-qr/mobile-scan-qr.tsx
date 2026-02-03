@@ -6,7 +6,7 @@ import {
   DrawerContent,
   DrawerClose,
   DrawerPortal
-} from "@/components/ui/drawer"
+} from "@/registry/ui/drawer"
 import { toast } from "sonner"
 import { QrCode } from "lucide-react"
 

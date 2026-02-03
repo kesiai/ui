@@ -699,6 +699,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
               value={date || new Date()}
               onChange={handleTimeChange}
               use12HourFormat={use12Hours}
+              {...props}
             />
           ) : (
             <Popover open={open} onOpenChange={setOpen}>
@@ -713,6 +714,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
                       onKeyDown={handleKeyDown}
                       disabled={disabled}
                       className={cn(bordered ? "" : "!border-0", "focus-visible:ring-ring focus-visible:ring-offset-0")}
+                      {...props}
                     />
                     <InputGroupAddon align="inline-end">
                       {allowClear && inputValue && (
@@ -747,6 +749,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
                             onChange={handleTimeChange}
                             use12HourFormat={use12Hours}
                             inline={true}
+                            {...props}
                           />
                         </div>
 

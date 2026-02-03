@@ -214,11 +214,12 @@ export function useRealtimeData(config: RealtimeDataConfig) {
     tags = [],
     timeLine = { count: 1, unit: 'h' },
     xFormat,
-    submit
+    submit,
   } = config
 
   const [dataset, setDataset] = useState<QueryResult[]>([])
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
 
   // 使用 WebSocket（在顶层调用 hook）
   const { subscribe, onData } = useWS()
@@ -370,9 +371,11 @@ export function useRealtimeData(config: RealtimeDataConfig) {
       }
 
       setDataset(sortByTags(result, subTags))
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (err) {
       console.error('获取历史数据失败:', err)
       setDataset([])
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } finally {
       setLoading(false)
     }
@@ -427,6 +430,12 @@ export function useRealtimeData(config: RealtimeDataConfig) {
     })
   }, [subTags, xFormat])
 
+  // 初始加载
+  useEffect(() => {
+    fetchHistory()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // 提交时重新获取历史数据
   useEffect(() => {
     if (submit) {
@@ -479,6 +488,7 @@ export function useRealtimeData(config: RealtimeDataConfig) {
   return {
     dataset,
     loading,
-    fetchData: fetchHistory
+    fetchData: fetchHistory,
+    requestId
   }
 }

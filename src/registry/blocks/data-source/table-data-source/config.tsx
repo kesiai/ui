@@ -1,4 +1,5 @@
 import { TableDataSource } from './table-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { FieldFormatConfig } from '../types'
 
@@ -89,10 +90,13 @@ export const tableDataSourceDefaultProps = {
 }
 
 const renderTableDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <TableDataSource {...props} />
+        <TableDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </TableDataSource>
       </div>
     </div>
   )

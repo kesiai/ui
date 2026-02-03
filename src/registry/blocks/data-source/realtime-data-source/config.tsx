@@ -1,4 +1,5 @@
 import { RealtimeDataSource } from './realtime-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { TagConfig, TimeLineConfig } from '../types'
 
@@ -65,10 +66,13 @@ export const realtimeDataSourceDefaultProps = {
 }
 
 const renderRealtimeDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <RealtimeDataSource {...props} />
+        <RealtimeDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </RealtimeDataSource>
       </div>
     </div>
   )

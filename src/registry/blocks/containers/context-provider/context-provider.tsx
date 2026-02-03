@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, ReactNode } from 'react'
+import React, { createContext, useContext, ReactNode, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 
 // Types
@@ -44,11 +44,12 @@ export function ContextProvider({
   className,
   style,
 }: ContextProviderProps) {
-  const value: ContextProviderContextValue = {
+  // 使用 useMemo 缓存 value 对象，避免不必要的重新渲染
+  const value = useMemo<ContextProviderContextValue>(() => ({
     table,
     tableData,
     data,
-  }
+  }), [table, tableData, data])
 
   return (
     <ContextProviderContext.Provider value={value}>

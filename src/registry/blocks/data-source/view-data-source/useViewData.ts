@@ -76,18 +76,19 @@ function filterResult(json: any): { dimensions: any[]; source: any[] } {
 }
 
 // 视图数据 Hook
-export function useViewData(config: ViewDataConfig, onData: (data: any) => void) {
+export function useViewData(config: ViewDataConfig) {
   const {
     view = {},
     dimension = [],
     measure = [],
     interval = 0,
-    submit = ''
+    submit = '',
   } = config
 
   const viewId = view?.id || ''
   const [dataset, setDataset] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const [requestId, setRequestId] = useState<string | null>(null)
   const queryCallback = useRef<(() => void) | null>(null)
 
   // 获取数据
@@ -157,17 +158,23 @@ export function useViewData(config: ViewDataConfig, onData: (data: any) => void)
       // 处理数据 - 转换为图表格式
       const processedData = filterResult(responseData)
       setDataset(processedData)
-      onData?.(processedData)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } catch (error) {
       console.error('获取视图数据失败:', error)
       setDataset(null)
+      setRequestId(`${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
     } finally {
       setLoading(false)
     }
-  }, [viewId, view, dimension, measure, onData])
+  }, [viewId, view, dimension, measure])
 
   // 保存到 ref
   queryCallback.current = fetchData
+
+  // 初始加载
+  useEffect(() => {
+    queryCallback.current?.()
+  }, [])
 
   // submit 变化时手动触发
   const prevSubmitRef = useRef<string>()
@@ -191,5 +198,5 @@ export function useViewData(config: ViewDataConfig, onData: (data: any) => void)
     return () => clearInterval(id)
   }, [interval])
 
-  return { dataset, loading, fetchData }
+  return { dataset, loading, fetchData, requestId }
 }

@@ -1,4 +1,5 @@
 import { HistoryDataSource } from './history-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { TimeRangeConfig, GroupConfig } from '../types'
 
@@ -103,10 +104,13 @@ export const historyDataSourceDefaultProps = {
 }
 
 const renderHistoryDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <HistoryDataSource {...props} />
+        <HistoryDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </HistoryDataSource>
       </div>
     </div>
   )

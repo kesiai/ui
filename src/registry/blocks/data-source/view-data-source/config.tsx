@@ -1,4 +1,5 @@
 import { ViewDataSource } from './view-data-source'
+import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 
 const defaultView = {
@@ -108,10 +109,13 @@ export const viewDataSourceDefaultProps = {
 }
 
 const renderViewDataSourcePreview = (props: Record<string, any>) => {
+  const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <ViewDataSource {...props} />
+        <ViewDataSource {...props}>
+          <DataSourcePreview dataSourceId={id} />
+        </ViewDataSource>
       </div>
     </div>
   )

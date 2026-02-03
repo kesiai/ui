@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point/data-point.tsx",
+      "path": "blocks/business/data-point/data-point.tsx",
       "type": "registry:component"
     }
   ]

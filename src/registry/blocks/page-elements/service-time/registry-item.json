@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/service-time/service-time.tsx",
+      "path": "blocks/page-elements/service-time/service-time.tsx",
       "type": "registry:component"
     }
   ]

@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/review-view-components/review-view-components.tsx",
+      "path": "blocks/video/review-view-components/review-view-components.tsx",
       "type": "registry:component"
     }
   ]

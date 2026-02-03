@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/playback-view/playback-view.tsx",
+      "path": "blocks/gis/playback-view/playback-view.tsx",
       "type": "registry:component"
     }
   ]

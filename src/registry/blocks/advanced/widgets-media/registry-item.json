@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/widgets-media/widgets-media.tsx",
+      "path": "blocks/advanced/widgets-media/widgets-media.tsx",
       "type": "registry:component"
     }
   ]

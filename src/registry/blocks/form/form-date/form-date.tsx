@@ -71,17 +71,27 @@ export interface FormDateProps
 }
 
 // 季度选择器
-const QuarterPicker = ({
-  date,
-  onSelect,
-  disabled
-}: {
+interface QuarterPickerRef {
+  handleConfirm: () => void
+}
+
+const QuarterPicker = React.forwardRef<QuarterPickerRef, {
   date?: Date
   onSelect: (date: Date) => void
   disabled?: boolean
-}) => {
+  onConfirm?: () => void
+}>(({ date, onSelect, disabled, onConfirm }, ref) => {
   const currentYear = date?.getFullYear() || new Date().getFullYear()
   const currentQuarter = date ? Math.floor(date.getMonth() / 3) + 1 : 0
+
+  const [displayYear, setDisplayYear] = React.useState(currentYear)
+  const [selectedQuarter, setSelectedQuarter] = React.useState(currentQuarter)
+
+  // 初始化时同步状态
+  React.useEffect(() => {
+    setDisplayYear(currentYear)
+    setSelectedQuarter(currentQuarter)
+  }, [currentYear, currentQuarter])
 
   const quarters = [
     { value: 1, label: 'Q1', months: [0, 1, 2] },
@@ -91,21 +101,55 @@ const QuarterPicker = ({
   ]
 
   const handleQuarterSelect = (quarter: number) => {
-    const month = (quarter - 1) * 3
-    const newDate = new Date(currentYear, month, 1)
-    onSelect(newDate)
+    setSelectedQuarter(quarter)
   }
+
+  const handlePrevYear = () => {
+    setDisplayYear(displayYear - 1)
+  }
+
+  const handleNextYear = () => {
+    setDisplayYear(displayYear + 1)
+  }
+
+  const handleConfirm = () => {
+    if (selectedQuarter > 0) {
+      const month = (selectedQuarter - 1) * 3
+      const newDate = new Date(displayYear, month, 1)
+      onSelect(newDate)
+    }
+    onConfirm?.()
+  }
+
+  // 暴露确认方法供父组件调用
+  React.useImperativeHandle(ref, () => ({ handleConfirm }), [selectedQuarter, displayYear, onSelect, onConfirm])
 
   return (
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
-        <div className="text-lg font-semibold">{currentYear}年</div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handlePrevYear}
+          disabled={disabled}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <div className="text-lg font-semibold">{displayYear}年</div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleNextYear}
+          disabled={disabled}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
       </div>
       <div className="flex gap-2">
         {quarters.map((q) => (
           <Button
             key={q.value}
-            variant={currentQuarter === q.value ? "default" : "outline"}
+            variant={selectedQuarter === q.value ? "default" : "outline"}
             onClick={() => handleQuarterSelect(q.value)}
             disabled={disabled}
             className="h-10 text-lg"
@@ -116,20 +160,30 @@ const QuarterPicker = ({
       </div>
     </div>
   )
-}
+})
 
 // 月份选择器
-const MonthPicker = ({
-  date,
-  onSelect,
-  disabled
-}: {
+interface MonthPickerRef {
+  handleConfirm: () => void
+}
+
+const MonthPicker = React.forwardRef<MonthPickerRef, {
   date?: Date
   onSelect: (date: Date) => void
   disabled?: boolean
-}) => {
+  onConfirm?: () => void
+}>(({ date, onSelect, disabled, onConfirm }, ref) => {
   const currentYear = date?.getFullYear() || new Date().getFullYear()
   const currentMonth = date?.getMonth() ?? -1
+
+  const [displayYear, setDisplayYear] = React.useState(currentYear)
+  const [selectedMonth, setSelectedMonth] = React.useState(currentMonth)
+
+  // 初始化时同步状态
+  React.useEffect(() => {
+    setDisplayYear(currentYear)
+    setSelectedMonth(currentMonth)
+  }, [currentYear, currentMonth])
 
   const months = [
     '1月', '2月', '3月', '4月', '5月', '6月',
@@ -137,20 +191,54 @@ const MonthPicker = ({
   ]
 
   const handleMonthSelect = (month: number) => {
-    const newDate = new Date(currentYear, month, 1)
-    onSelect(newDate)
+    setSelectedMonth(month)
   }
+
+  const handlePrevYear = () => {
+    setDisplayYear(displayYear - 1)
+  }
+
+  const handleNextYear = () => {
+    setDisplayYear(displayYear + 1)
+  }
+
+  const handleConfirm = () => {
+    if (selectedMonth >= 0) {
+      const newDate = new Date(displayYear, selectedMonth, 1)
+      onSelect(newDate)
+    }
+    onConfirm?.()
+  }
+
+  // 暴露确认方法供父组件调用
+  React.useImperativeHandle(ref, () => ({ handleConfirm }), [selectedMonth, displayYear, onSelect, onConfirm])
 
   return (
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
-        <div className="text-lg font-semibold">{currentYear}年</div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handlePrevYear}
+          disabled={disabled}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <div className="text-lg font-semibold">{displayYear}年</div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleNextYear}
+          disabled={disabled}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
       </div>
       <div className="grid grid-cols-3 gap-2">
         {months.map((month, index) => (
           <Button
             key={index}
-            variant={currentMonth === index ? "default" : "outline"}
+            variant={selectedMonth === index ? "default" : "outline"}
             onClick={() => handleMonthSelect(index)}
             disabled={disabled}
             className="h-8"
@@ -161,7 +249,7 @@ const MonthPicker = ({
       </div>
     </div>
   )
-}
+})
 
 // 周选择器
 const WeekPicker = ({
@@ -339,6 +427,8 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
       return initialValue ? formatDate(new Date(initialValue), picker) : ""
     })
     const inputRef = React.useRef<HTMLInputElement>(null)
+    const quarterPickerRef = React.useRef<{ handleConfirm: () => void }>(null)
+    const monthPickerRef = React.useRef<{ handleConfirm: () => void }>(null)
 
     // 当弹窗打开时，初始化 tempDate
     React.useEffect(() => {
@@ -491,14 +581,18 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
 
     // dateTime 模式：点击确定按钮
     const handleConfirm = React.useCallback(() => {
-      if (tempDate) {
+      if (picker === 'quarter') {
+        quarterPickerRef.current?.handleConfirm()
+      } else if (picker === 'month') {
+        monthPickerRef.current?.handleConfirm()
+      } else if (tempDate) {
         setDate(tempDate)
         const formatted = formatDate(tempDate, picker)
         setInputValue(formatted)
         onChange?.(formatted)
       }
       setOpen(false)
-    }, [tempDate, picker, onChange])
+    }, [picker, tempDate, onChange])
 
     const handleClear = () => {
       setDate(undefined)
@@ -560,6 +654,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
         case "quarter":
           return (
             <QuarterPicker
+              ref={quarterPickerRef}
               date={displayDate}
               onSelect={handleDateSelect}
               disabled={disabled}
@@ -568,6 +663,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
         case "month":
           return (
             <MonthPicker
+              ref={monthPickerRef}
               date={displayDate}
               onSelect={handleDateSelect}
               disabled={disabled}

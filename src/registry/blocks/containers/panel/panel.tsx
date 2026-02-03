@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "@/registry/components/ui/accordion/accordion"
+} from "@/components/ui/accordion"
 
 export interface PanelConfig {
   /**

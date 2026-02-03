@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-operation/view-operation.tsx",
+      "path": "registry/blocks/view/view-operation/view-operation.tsx",
       "type": "registry:component",
       "content": ""
     }

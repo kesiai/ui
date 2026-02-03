@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/video/time-axis/time-axis.tsx",
+      "path": "blocks/video/time-axis/time-axis.tsx",
       "type": "registry:component"
     }
   ]

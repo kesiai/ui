@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-liquid-fill/chart-liquid-fill.tsx",
+      "path": "blocks/chart/chart-liquid-fill/chart-liquid-fill.tsx",
       "type": "registry:component"
     }
   ]

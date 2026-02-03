@@ -2,7 +2,7 @@ import * as React from "react"
 import dayjs from "dayjs"
 import _ from "lodash"
 import { cn } from "@/lib/utils"
-import { Popover, PopoverContent, PopoverTrigger } from "@/registry/components/ui/popover/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { convertValue, valueFormat, type DataPointConfig } from "./data-point.utils"
 import { useUser } from "@airiot/client"
 

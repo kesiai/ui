@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/scale-button/scale-button.tsx",
+      "path": "blocks/page-elements/scale-button/scale-button.tsx",
       "type": "registry:component"
     }
   ]

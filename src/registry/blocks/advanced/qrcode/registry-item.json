@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/qrcode/qrcode.tsx",
+      "path": "blocks/advanced/qrcode/qrcode.tsx",
       "type": "registry:component"
     }
   ]

@@ -2,13 +2,13 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "code-editor-views",
   "type": "registry:component",
-  "title": "CodeEditorViews",
+  "title": "codeEditorViews",
   "description": "代码层 - GIS代码层",
   "registryDependencies": [],
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/code-editor-views/code-editor-views.tsx",
+      "path": "registry/blocks/gis/code-editor-views/code-editor-views.tsx",
       "type": "registry:component",
       "content": ""
     }

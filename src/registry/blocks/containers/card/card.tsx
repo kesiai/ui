@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Card as ShadcnCard, CardHeader, CardTitle } from "@/registry/components/ui/card/card"
+import { Card as ShadcnCard, CardHeader, CardTitle } from "@/components/ui/card"
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

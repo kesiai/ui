@@ -13,7 +13,7 @@
   ],
   "files": [
     {
-      "path": "registry/blocks/mobile/mobile-picker/mobile-picker.tsx",
+      "path": "blocks/mobile/mobile-picker/mobile-picker.tsx",
       "type": "registry:component"
     }
   ]

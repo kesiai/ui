@@ -4,33 +4,33 @@ import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
 
 // 导入迁移后的字段组件
-import TextComponent from '@/components/tableField/components/Text'
-import NumberComponent from '@/components/tableField/components/Number'
-import SelectComponent from '@/components/tableField/components/Select'
-import DateComponent from '@/components/tableField/components/Date'
-import DateRangeComponent from '@/components/tableField/components/DateRange'
-import TimeComponent from '@/components/tableField/components/Time'
-import CheckboxComponent from '@/components/tableField/components/Checkbox'
-import RateComponent from '@/components/tableField/components/Rate'
-import RichTextComponent from '@/components/tableField/components/RichText'
-import MapComponent from '@/components/tableField/components/MapComponent'
-import UploadAttachment from '@/components/tableField/components/UploadAttachment'
+import { TableFieldText } from '@/registry/blocks/table-field/table-field-text/table-field-text'
+import { TableFieldNumber } from '@/registry/blocks/table-field/table-field-number/table-field-number'
+import { TableFieldSelect } from '@/registry/blocks/table-field/table-field-select/table-field-select'
+import { TableFieldDate } from '@/registry/blocks/table-field/table-field-date/table-field-date'
+import { TableFieldDateRange } from '@/registry/blocks/table-field/table-field-date-range/table-field-date-range'
+import { TableFieldTime } from '@/registry/blocks/table-field/table-field-time/table-field-time'
+import { TableFieldCheckbox } from '@/registry/blocks/table-field/table-field-checkbox/table-field-checkbox'
+import { TableFieldRate } from '@/registry/blocks/table-field/table-field-rate/table-field-rate'
+import { TableFieldRichText } from '@/registry/blocks/table-field/table-field-rich-text/table-field-rich-text'
+import { TableFieldMap } from '@/registry/blocks/table-field/table-field-map/table-field-map'
+import { TableFieldUpload } from '@/registry/blocks/table-field/table-field-upload/table-field-upload'
 import AreaComponent from '../form-area/form-area'
 import {
   RelateSelect,
   RelateMultiSelect,
   RelateModelSelect,
-  RelateComponent,
+  TableFieldRelate as RelateComponent,
   schemaConverter,
-} from '@/components/tableField/components/relate'
-import RelateComponentPlus from '@/components/tableField/components/RelateComponentPlus'
-import UserRoleComponent from '@/components/tableField/components/UserRole'
-import SerialNumberComponent from '@/components/tableField/components/SerialNumber'
-import BytesArrayComponent from '@/components/tableField/components/BytesArray'
-import ReferenceComponent from '@/components/tableField/components/Reference'
-import FormInfoComponent from '@/components/tableField/components/FormInfo'
-import LinkComponent from '@/components/tableField/components/Link'
-import EditableTable from '@/components/tableField/components/EditableTable'
+} from '@/registry/blocks/table-field/table-field-relate'
+import { TableFieldRelatePlus } from '@/registry/blocks/table-field/table-field-relate-plus/table-field-relate-plus'
+import { TableFieldUserRole } from '@/registry/blocks/table-field/table-field-user-role/table-field-user-role'
+import { TableFieldSerialNumber } from '@/registry/blocks/table-field/table-field-serial-number/table-field-serial-number'
+import { TableFieldBytesArray } from '@/registry/blocks/table-field/table-field-bytes-array/table-field-bytes-array'
+import { TableFieldReference } from '@/registry/blocks/table-field/table-field-reference/table-field-reference'
+import { TableFieldFormInfo } from '@/registry/blocks/table-field/table-field-form-info/table-field-form-info'
+import { TableFieldLink } from '@/registry/blocks/table-field/table-field-link/table-field-link'
+import { TableFieldEditableTable } from '@/registry/blocks/table-field/table-field-editable-table/table-field-editable-table'
 
 export interface FormWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -122,7 +122,7 @@ const FieldComponentSelector: React.FC<{
   // 关联字段（新版）- 使用 recordSelectType
   if ((config.relateTo || config.relate) && config.recordSelectType) {
     const tableID = config.relate?.id || config.relateTo
-    return <RelateComponentPlus relateSchema={config} tableID={tableID} input={input} field={field ? { schema: config, ...field } : { schema: config }} meta={meta} schema={schema} />
+    return <TableFieldRelatePlus relateSchema={config} tableID={tableID} input={input} field={field ? { schema: config, ...field } : { schema: config }} meta={meta} schema={schema} />
   }
 
   // 外部工作表关联 - 使用 relate?.id
@@ -175,16 +175,16 @@ const FieldComponentSelector: React.FC<{
 
   // 附件上传
   if (config.type === 'object' && config.fieldType === 'attachment') {
-    return <UploadAttachment input={input} field={{ schema: config, meta }} type="upload_attachment" />
+    return <TableFieldUpload input={input} field={{ schema: config, meta }} type="upload_attachment" />
   }
 
   if (config.type === 'array' && config.fieldType === 'attachments') {
-    return <UploadAttachment input={input} field={{ schema: config, meta }} type="upload_attachment_group" />
+    return <TableFieldUpload input={input} field={{ schema: config, meta }} type="upload_attachment_group" />
   }
 
   // 用户/角色关联
   if (['User', 'Role'].includes(config.relateTo || '')) {
-    return <UserRoleComponent input={input} field={{ schema: config, displayField: config.showField || 'name' }} meta={meta} record={record} />
+    return <TableFieldUserRole input={input} field={{ schema: config, displayField: config.showField || 'name' }} meta={meta} record={record} />
   }
 
   // 关联字段只读
@@ -195,47 +195,47 @@ const FieldComponentSelector: React.FC<{
 
   // 文本输入
   if (config.type === 'string' && config.fieldType === 'input') {
-    return <TextComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldText input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 枚举选择器
   if (config.enum1 && config.enum1.length > 0) {
-    return <SelectComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldSelect input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 数字输入
   if (config.type === 'number' && config.fieldType === 'inputNumber') {
-    return <NumberComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldNumber input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 日期选择
   if (config.type === 'string' && config.fieldType === 'datePicker') {
-    return <DateComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldDate input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 日期范围
   if (config.type === 'string' && config.fieldType === 'dateRange') {
-    return <DateRangeComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} cellKey={cellKey} />
+    return <TableFieldDateRange input={input} field={{ schema: config, meta }} meta={meta} record={record} cellKey={cellKey} />
   }
 
   // 时间选择
   if (config.type === 'string' && config.fieldType === 'timePicker') {
-    return <TimeComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldTime input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 地图定位
   if (config.type === 'object' && config.fieldType === 'map') {
-    return <MapComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldMap input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 布尔值/复选框
   if (config.type === 'boolean' && (config.fieldType === 'checkbox' || config.fieldType === 'boolean')) {
-    return <CheckboxComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
+    return <TableFieldCheckbox input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
   }
 
   // 可编辑表格
   if (config.fieldType === 'editableTable') {
-    return <EditableTable input={input} schema={config} meta={meta} record={record} />
+    return <TableFieldEditableTable input={input} schema={config} meta={meta} record={record} />
   }
 
   // 只读表格
@@ -246,12 +246,12 @@ const FieldComponentSelector: React.FC<{
 
   // 编号
   if (config.fieldType === 'serialNumber') {
-    return <SerialNumberComponent input={input} field={{ schema: config }} />
+    return <TableFieldSerialNumber input={input} field={{ schema: config }} />
   }
 
   // 链接
   if (config.fieldType === 'link') {
-    return <LinkComponent input={input} field={{ schema: config }} meta={meta} record={record} />
+    return <TableFieldLink input={input} field={{ schema: config }} meta={meta} record={record} />
   }
 
   // 区域选择
@@ -271,17 +271,17 @@ const FieldComponentSelector: React.FC<{
 
   // 星级评价
   if (config.fieldType === 'rate') {
-    return <RateComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldRate input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 富文本编辑器
   if (config.fieldType === 'textEditor') {
-    return <RichTextComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldRichText input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   // 字节数组
   if (config.fieldType === 'bytesArray') {
-    return <BytesArrayComponent input={input} field={{ schema: config, filter: null }} meta={meta} record={record} />
+    return <TableFieldBytesArray input={input} field={{ schema: config, filter: null }} meta={meta} record={record} />
   }
 
   // 多语言输入
@@ -292,25 +292,25 @@ const FieldComponentSelector: React.FC<{
 
   // 查找引用
   if (config.config === '查找引用') {
-    return <ReferenceComponent schema={config} field={{ key: config.key }} option={{ schema: { name: schema?.name } }} tableData={record} />
+    return <TableFieldReference schema={config} field={{ key: config.key }} option={{ schema: { name: schema?.name } }} tableData={record} />
   }
 
   // 表单信息
   if (config.config === '表单信息') {
-    return <FormInfoComponent schema={config} outProps={{ inList: false, viewPage: true }} />
+    return <TableFieldFormInfo schema={config} outProps={{ inList: false, viewPage: true }} />
   }
 
   // 默认：根据基础类型显示
   if (config.type === 'string') {
-    return <TextComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldText input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   if (config.type === 'number') {
-    return <NumberComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <TableFieldNumber input={input} field={{ schema: config, meta }} meta={meta} record={record} />
   }
 
   if (config.type === 'boolean') {
-    return <CheckboxComponent input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
+    return <TableFieldCheckbox input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
   }
 
   // 未知类型

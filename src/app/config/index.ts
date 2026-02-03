@@ -9,13 +9,14 @@ const categoryConfig: Record<string, { name: string; icon: string; order: number
   'business': { name: '业务组件', icon: '💼', order: 1 },
   'form': { name: '表单组件', icon: '📝', order: 2 },
   'view': { name: '视图组件', icon: '✳️', order: 2 },
-  'chart': { name: '图表组件', icon: '📊', order: 3 },
-  'advanced': { name: '高级组件', icon: '⚡', order: 4 },
-  '3d': { name: '3D 组件', icon: '🎮', order: 5 },
-  'gis': { name: '地图组件', icon: '🗺️', order: 6 },
-  'video': { name: '视频组件', icon: '🎬', order: 7 },
-  'mobile': { name: '移动端组件', icon: '📱', order: 8 },
-  'containers': { name: '容器组件', icon: '📦', order: 9 },
+  'table-field': { name: '表格字段组件', icon: '📋', order: 3 },
+  'chart': { name: '图表组件', icon: '📊', order: 4 },
+  'advanced': { name: '高级组件', icon: '⚡', order: 5 },
+  '3d': { name: '3D 组件', icon: '🎮', order: 6 },
+  'gis': { name: '地图组件', icon: '🗺️', order: 7 },
+  'video': { name: '视频组件', icon: '🎬', order: 8 },
+  'mobile': { name: '移动端组件', icon: '📱', order: 9 },
+  'containers': { name: '容器组件', icon: '📦', order: 10 },
 }
 
 // 提取 registry 中的所有配置导出

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-map",
+  "type": "registry:component",
+  "title": "TableField.Map",
+  "description": "表格字段 - 地图定位组件",
+  "registryDependencies": [],
+  "dependencies": [
+    "@amap/amap-jsapi-loader"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-map/table-field-map.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

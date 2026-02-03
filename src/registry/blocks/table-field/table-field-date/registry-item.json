@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-date",
+  "type": "registry:component",
+  "title": "TableField.Date",
+  "description": "表格字段 - 日期选择组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-date/table-field-date.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

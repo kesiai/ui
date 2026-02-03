@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-switch/form-switch.tsx",
+      "path": "blocks/form/form-switch/form-switch.tsx",
       "type": "registry:component"
     }
   ]

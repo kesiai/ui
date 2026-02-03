@@ -6,7 +6,7 @@ import {
   DrawerContent,
   DrawerClose,
   DrawerPortal
-} from "@/components/ui/drawer"
+} from "@/registry/ui/drawer"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 

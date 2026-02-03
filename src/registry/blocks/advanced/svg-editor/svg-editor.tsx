@@ -580,14 +580,14 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
 
     // 复制元素
     const handleCopy = () => {
-      if (!svgCanvasRef.current || selectedElements.length === 0) return
+      if (!svgCanvasRef.current || svgCanvasRef.current?.selectedElements.length === 0) return
       svgCanvasRef.current.copySelectedElements()
       svgCanvasRef.current.pasteElements(10, 10)
     }
 
     // 删除元素
     const handleDelete = () => {
-      if (!svgCanvasRef.current || selectedElements.length === 0) return
+      if (!svgCanvasRef.current || svgCanvasRef.current?.selectedElements.length === 0) return
       svgCanvasRef.current.deleteSelectedElements()
       setSelectedElements([])
       setSelectedKeys([])

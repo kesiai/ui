@@ -5,8 +5,8 @@ export interface PropConfigOption {
   label: string
 }
 
-export type PropConfigType = 
-  'number' | 'color' | 'select' | 'boolean' | 'text' | 'range' | 'code' | 'array' | 'json' | 'object' | 'model-name' | 'table-id'
+export type PropConfigType =
+  'number' | 'color' | 'select' | 'boolean' | 'text' | 'input' | 'range' | 'code' | 'array' | 'json' | 'object' | 'model-name' | 'table-id'
 
 export interface PropConfig {
   name: string
@@ -18,6 +18,7 @@ export interface PropConfig {
   step?: number
   options?: PropConfigOption[]
   placeholder?: string
+  description?: string
 }
 
 export interface ComponentConfig {

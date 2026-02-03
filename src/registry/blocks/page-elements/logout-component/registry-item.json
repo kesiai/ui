@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/logout-component/logout-component.tsx",
+      "path": "blocks/page-elements/logout-component/logout-component.tsx",
       "type": "registry:component"
     }
   ]

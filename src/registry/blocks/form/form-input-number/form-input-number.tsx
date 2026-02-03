@@ -276,6 +276,7 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
           !bordered && "border-0",
           "focus-visible:ring-ring focus-visible:ring-offset-0"
         )}
+        {...props}
       />
     )
 
@@ -291,7 +292,6 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
             className
           )}
           style={style}
-          {...props}
         >
           {addonBefore && <InputGroupAddon align="inline-start">{addonBefore}</InputGroupAddon>}
           <div className="relative flex flex-1">

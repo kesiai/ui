@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { PropConfig } from '../config/types'
 import { CodeEditorModal } from './CodeEditorModal'
-import { modelRegistry, useModel } from '@airiot/client'
 
+const modelRegistry = () => {}
 interface FormControlProps {
   config: PropConfig
   value: any
@@ -163,6 +163,37 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
             {/* {config.description || '支持JSON数组格式'} */}
           </div>
         </div>
+      )
+    case 'object':
+      return (
+        <div className="space-y-2">
+          <textarea
+            value={value ? JSON.stringify(value, null, 2) : ''}
+            onChange={(e) => {
+              try {
+                const parsed = JSON.parse(e.target.value)
+                handleChange(parsed)
+              } catch (error) {
+              }
+            }}
+            placeholder='请输入JSON对象'
+            rows={8}
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all font-mono text-sm"
+          />
+          <div className="text-xs text-slate-500">
+            {config.description || '支持JSON对象格式'}
+          </div>
+        </div>
+      )
+    case 'input':
+      return (
+        <input
+          type="text"
+          value={value as string || ''}
+          onChange={(e) => handleChange(e.target.value)}
+          placeholder={config.placeholder}
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+        />
       )
     case 'model-name':
       const optons = Object.keys(modelRegistry.models).map(key => ({ value: key, label: modelRegistry.models[key].title?.toString() || key }))

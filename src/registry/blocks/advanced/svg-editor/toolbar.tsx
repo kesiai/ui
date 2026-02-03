@@ -16,7 +16,7 @@ import {
   ChevronUp,
   ChevronDown,
 } from "lucide-react"
-import { Button } from "@/registry/components/ui/button/button"
+import { Button } from "@/components/ui/button"
 
 export interface ToolbarProps {
   mode: string
@@ -107,7 +107,7 @@ export const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
               size="icon"
               className="h-8 w-8"
               onClick={onCopy}
-              disabled={!editable || selectedCount === 0}
+              // disabled={!editable || selectedCount === 0}
               title="复制 (Ctrl+C)"
             >
               <Copy size={16} />
@@ -118,7 +118,7 @@ export const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
               size="icon"
               className="h-8 w-8"
               onClick={onDelete}
-              disabled={!editable || selectedCount === 0}
+              // disabled={!editable || selectedCount === 0}
               title="删除 (Delete)"
             >
               <Trash2 size={16} />

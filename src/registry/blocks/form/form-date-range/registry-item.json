@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-date-range/form-date-range.tsx",
+      "path": "blocks/form/form-date-range/form-date-range.tsx",
       "type": "registry:component"
     }
   ]

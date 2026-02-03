@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/liquid-level/liquid-level.tsx",
+      "path": "registry/blocks/business/liquid-level/liquid-level.tsx",
       "type": "registry:component",
       "content": ""
     }

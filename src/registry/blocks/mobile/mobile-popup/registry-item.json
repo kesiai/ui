@@ -11,7 +11,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/mobile/mobile-popup/mobile-popup.tsx",
+      "path": "blocks/mobile/mobile-popup/mobile-popup.tsx",
       "type": "registry:component"
     }
   ]

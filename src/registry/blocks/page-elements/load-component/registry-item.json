@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/load-component/load-component.tsx",
+      "path": "blocks/page-elements/load-component/load-component.tsx",
       "type": "registry:component"
     }
   ]

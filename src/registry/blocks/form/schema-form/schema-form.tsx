@@ -6,13 +6,9 @@ import type { ReactNode } from 'react'
 
 import FormField from "@/registry/blocks/form/form-field/form-field"
 
-type FormProps = UseFormPropsExtended & {
+type SchemaFormProps = UseFormPropsExtended & UseFormSchemaProps & {
   formId: string
-  children: ReactNode
   onSubmit: (data: any) => void
-}
-
-type SchemaFormProps = FormProps & UseFormSchemaProps & {
   children?: ReactNode | ((props: any) => ReactNode)
 }
 

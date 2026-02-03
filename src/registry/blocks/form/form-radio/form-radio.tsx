@@ -106,6 +106,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
           onValueChange={handleValueChange}
           disabled={disabled || readOnly}
           className="flex flex-col space-y-2"
+          aria-invalid
         >
           {options.map((option) => (
             <div key={option.value} className="flex items-center space-x-2">

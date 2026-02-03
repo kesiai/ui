@@ -107,23 +107,24 @@ import mobile_date_picker from './mobile/mobile-date-picker/registry-item.json' 
 import mobile_location from './mobile/mobile-location/registry-item.json' with { type: 'json' }
 import mobile_popup from './mobile/mobile-popup/registry-item.json' with { type: 'json' }
 import mobile_tab_bar from './mobile/mobile-tab-bar/registry-item.json' with { type: 'json' }
-import view_warning from './view/view-warning/registry-item.json' with { type: 'json' }
 import view_data_aggregate from './view/view-data-aggregate/registry-item.json' with { type: 'json' }
 import view_filter from './view/view-filter/registry-item.json' with { type: 'json' }
-import view_report from './view/view-report/registry-item.json' with { type: 'json' }
 import view_actions from './view/view-actions/registry-item.json' with { type: 'json' }
 import view_advanced_filter from './view/view-advanced-filter/registry-item.json' with { type: 'json' }
 import view_pagination from './view/view-pagination/registry-item.json' with { type: 'json' }
 import view_batch_command from './view/view-batch-command/registry-item.json' with { type: 'json' }
 import view_batch_operation from './view/view-batch-operation/registry-item.json' with { type: 'json' }
 import view_detail from './view/view-detail/registry-item.json' with { type: 'json' }
-import view_log from './view/view-log/registry-item.json' with { type: 'json' }
 import view_operation from './view/view-operation/registry-item.json' with { type: 'json' }
 import view_data_table from './view/view-data-table/registry-item.json' with { type: 'json' }
-import view_user from './view/view-user/registry-item.json' with { type: 'json' }
 import view_model from './view/view-model/registry-item.json' with { type: 'json' }
 import react_widget from './containers/react-widget/registry-item.json' with { type: 'json' }
 import connect_widget from './advanced/connect-widget/registry-item.json' with { type: 'json' }
+import api_data_source from './data-source/api-data-source/registry-item.json' with { type: 'json' }
+import history_data_source from './data-source/history-data-source/registry-item.json' with { type: 'json' }
+import realtime_data_source from './data-source/realtime-data-source/registry-item.json' with { type: 'json' }
+import table_data_source from './data-source/table-data-source/registry-item.json' with { type: 'json' }
+import view_data_source from './data-source/view-data-source/registry-item.json' with { type: 'json' }
 import slot_container from './containers/slot-container/registry-item.json' with { type: 'json' }
 import resource_container from './containers/resource-container/registry-item.json' with { type: 'json' }
 import link from './containers/link/registry-item.json' with { type: 'json' }
@@ -250,23 +251,24 @@ export const blocks = [
     mobile_location as RegistryItem,
     mobile_popup as RegistryItem,
     mobile_tab_bar as RegistryItem,
-    view_warning as RegistryItem,
     view_data_aggregate as RegistryItem,
-    view_filter as RegistryItem,
-    view_report as RegistryItem,
+    view_filter as RegistryItem,    
     view_actions as RegistryItem,
     view_advanced_filter as RegistryItem,
     view_pagination as RegistryItem,
     view_batch_command as RegistryItem,
     view_batch_operation as RegistryItem,
     view_detail as RegistryItem,
-    view_log as RegistryItem,
     view_operation as RegistryItem,
     view_data_table as RegistryItem,
-    view_user as RegistryItem,
     view_model as RegistryItem,
     react_widget as RegistryItem,
     connect_widget as RegistryItem,
+    api_data_source as RegistryItem,
+    history_data_source as RegistryItem,
+    realtime_data_source as RegistryItem,
+    table_data_source as RegistryItem,
+    view_data_source as RegistryItem,
     slot_container as RegistryItem,
     resource_container as RegistryItem,
     link as RegistryItem,

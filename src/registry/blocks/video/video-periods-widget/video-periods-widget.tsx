@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/registry/components/ui/button/button"
-import { Popover, PopoverContent, PopoverTrigger } from "@/registry/components/ui/popover/popover"
+import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Copy } from "lucide-react"
 
 export type RecordingMode = "CMR" | "ALARM" | "MANUAL"

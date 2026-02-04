@@ -106,9 +106,9 @@ const BatchChangeContent: React.FC<BatchChangeContentProps> = ({
   const { getItems } = useModelGetItems()
   const { selected } = useModelSelect<{ id: string, [key: string]: any }>()
   const [saving, setSaving] = useState(false)
-  const fields = (model.batchChangeFields || []) as string[]
+  const fields = (model.batchChangeFields || ['name', 'money']) as string[]
   const fs = fields.map(f => f.split('.')[0])
-
+  const formSchema = model.form !== undefined ? fs.map(name => find(model.form, f => f && (f == name || f.key == name || f.name == name)) || name) : ['*']
   const formId = `batch-change-form-${Date.now()}`
 
   const handleSubmit = useModelCallback(async (_get, set, atoms, values: any) => {
@@ -122,7 +122,6 @@ const BatchChangeContent: React.FC<BatchChangeContentProps> = ({
       } else {
         ret.forEach(item => set(atoms.item(item.id), item))
       }
-
       onClose?.()
     } finally {
       setSaving(false)
@@ -146,9 +145,9 @@ const BatchChangeContent: React.FC<BatchChangeContentProps> = ({
             schema={omit({
               ...model,
               properties: pick(model.properties, fs),
-              form: model.form !== undefined ? fs.map(name => find(model.form, f => f && f.key == name) || name) : ['*']
+              form: formSchema
             }, 'required')}
-            formSchema={model.form}
+            formSchema={formSchema}
             onSubmit={handleSubmit}
           />
           <ScrollBar orientation="horizontal" />

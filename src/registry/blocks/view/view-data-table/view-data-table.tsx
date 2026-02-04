@@ -1,19 +1,21 @@
-import React, { useMemo, useState } from 'react';
-import { useModelList, useModelGetItems, useModel, useModelSelect, useModelListOrder, type ModelSchema } from '@airiot/client'
+import React, { useEffect, useMemo, useState } from 'react';
+import { useModelList, useModel, useModelSelect, useModelState, type ModelSchema } from '@airiot/client'
 import { DataGrid } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
-import { DataGridTable } from '@/components/ui/data-grid-table';
+import { DataGridTable,
+  DataGridTableRowSelect,
+  DataGridTableRowSelectAll, } from '@/components/ui/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import ViewField from "@/registry/blocks/view/view-field/view-field"
 import {
-  type ColumnDef, type TableOptions, type CellContext,
+  type ColumnDef, type TableOptions, type CellContext, type SortingState, type RowSelectionState,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
-  createColumnHelper
+  createColumnHelper,
 } from '@tanstack/react-table';
 import { cn } from '@/lib/utils';
+import { set } from 'lodash';
 
 interface IData {
   id: string;
@@ -145,10 +147,13 @@ export function ViewDataTable({
   children?: React.ReactElement[] | undefined
 }) {
   const { items, loading, fields } = useModelList()
-  const { model } = useModel()
-  const { selected, onSelect, onSelectAll } = useModelSelect()
-  const batchActions = [] as any[]
-  const [sorting, setSorting] = useState<SortingState>([{ id: 'name', desc: true }]);
+  const { model, atoms } = useModel()
+
+  const [ rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [ selected, setSelected ] = useModelState<{id: string}[]>(atoms.selected)
+
+  const [ order, setOrder ] = useModelState(atoms.order)
+  const [ sorting, setSorting ] = useState<SortingState>([])
 
   const lockedFields = model.lockedFields || []
   const columnHelper = createColumnHelper<IData>()
@@ -183,21 +188,53 @@ export function ViewDataTable({
     }
   })
 
-  // if(actions && actions.length > 0)
-  //   columns.push({
-  //     title: '',
-  //     key: '__action__',
-  //     fixed: 'right',
-  //     render: (val, item) => <DataTableActionRender key={item.id} fields={fields} id={item.id} />
-  //   })
+  // 配置行选择
+  const onRowSelectionChange = (handler: (state: RowSelectionState) => RowSelectionState) => {
+    const newSelection = handler(rowSelection)
+    setSelected(items.filter(item => newSelection[item.id]));
+  }
 
-  const rowSelection = batchActions && batchActions.length > 0 ? {
-    selectedRowKeys: selected.map(r => r.id),
-    onSelect, onSelectAll
-  } : undefined
+  useEffect(() => {
+    setRowSelection(selected.reduce((obj: Record<string, boolean>, item: any) => {
+      obj[item.id] = true;
+      return obj;
+    }, {}));
+  }, [ selected ]);
+
+  columns.unshift({
+    accessorKey: 'id',
+    header: () => <DataGridTableRowSelectAll />,
+    cell: ({ row }) => <DataGridTableRowSelect row={row} />,
+    enableSorting: false,
+    size: 35,
+    meta: {
+      headerClassName: '',
+      cellClassName: '',
+    },
+  })
+
+  // 配置排序
+  const onSortingChange = (handler: (state: SortingState) => SortingState) => {
+    const newSorting = handler(sorting)
+    // 转换为 order 格式
+    const newOrder: Record<string, 'asc' | 'desc'> = {}
+    newSorting.forEach(sort => {
+      newOrder[sort.id] = sort.desc ? 'desc' : 'asc'
+    })
+    // 更新模型状态
+    setOrder(newOrder)
+  }
+
+  useEffect(() => {
+    setSorting(Object.keys(order || {}).map(key => ({
+      id: key,
+      desc: order ? order[key] === 'desc' : false,
+      asc: order ? order[key] === 'asc' : false
+    })));
+  }, [order]);
 
   const tableProps = model.dataTableProps ? (
-    typeof model.dataTableProps == 'function' ? 
+    typeof model.dataTableProps == 'function' ?
       model.dataTableProps(columns, items) : model.dataTableProps
   ) : {}
 
@@ -212,7 +249,22 @@ export function ViewDataTable({
     }}
     tableOptions={{
       ...tableProps,
-      ...tableOptions
+      ...tableOptions,
+      initialState: {
+        ...tableOptions.initialState,
+        columnPinning: {
+          right: ['__actions__'],
+        },
+      },
+      // 添加行选择配置
+      ...({ onRowSelectionChange, enableRowSelection: true, }),
+      // 添加排序配置
+      state: {
+        ...(tableOptions.state || {}),
+        sorting,
+        rowSelection
+      },
+      onSortingChange
     }}
   >{children}</DataTable>;
 }
@@ -307,9 +359,7 @@ export const TableColumn: React.FC<TableColumnProps> = ({
       header: header ? header as any : (({ column }) => <DataGridColumnHeader title={title || name} column={column as any} />),
       cell: cell ? cell as any : DataCell({ name, type, children }),
       size: width as number | undefined,
-      meta: {
-        ...columnProps
-      }
+      ...columnProps
     };
 
     columnContext.setColumn(name, columnDef);

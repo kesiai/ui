@@ -42,7 +42,7 @@ const FormField =
   const ContorlComponent = type && fieldMap[type] || Input
   const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
   const formClassNames = methods?.classNames
-  console.log('FormField render', formClassNames, classNames)
+  
   return ui.visible ? (
     <Controller
         name={name}

@@ -5,6 +5,7 @@ import ViewDataTable, { TableColumn} from '../view-data-table/view-data-table'
 import ViewPagination from '../view-pagination/view-pagination'
 import Actions, { CreateAction } from '../view-actions/view-actions'
 import Tools from '../view-tools/view-tools'
+import BatchActions from '../view-batch/view-batch'
 
 export const viewDemoPropsConfig = [
   {
@@ -46,11 +47,14 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
               <TableColumn name="email" title="邮箱" />
               <TableColumn name="role" title="角色" />
               <TableColumn name="createdAt" title="创建时间" />
-              <TableColumn name="__actions__" title="操作" width={280}>
+              <TableColumn name="__actions__" title=" " width={65} enableSorting={false} enableHiding={false} enableResizing={false}>
                 <Actions variant="dropdown" actions={props.actions || ['view', 'edit', 'delete']} />
               </TableColumn>
             </ViewDataTable>
-            <ViewPagination />
+            <div className="flex items-center justify-between">
+              <BatchActions actions={[ 'batch-change', 'batch-delete' ]}/>
+              <ViewPagination />
+            </div>
           </div>
         </ViewModel>
       </div>

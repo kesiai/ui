@@ -36,7 +36,6 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
 import ViewField from '../view-field/view-field'
 import SchemaForm from '../../form/schema-form/schema-form'
-import { it } from 'node:test'
 
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
@@ -47,7 +46,7 @@ interface ViewActionContentProps {
 
 const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
   const { data, loading, model } = useModelGet({ id: itemId })
-  const { fields } = useFormSchema({ schema: model })
+  const { fields } = useFormSchema({ schema: model, formSchema: model.form })
 
   return (
     <>
@@ -62,7 +61,7 @@ const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
         <ScrollArea className="max-h-[70vh] pr-3">
           <div className="space-y-4 pr-4">
             {fields.map((field) => (
-              <ViewField schema={field} value={data?.[field.name]} item={data} {...field} />
+              <ViewField schema={field} value={data?.[field.name]} item={data} {...field} key={`formfield-${field.name}`} />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />

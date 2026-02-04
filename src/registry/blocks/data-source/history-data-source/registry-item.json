@@ -10,10 +10,6 @@
     {
       "path": "blocks/data-source/history-data-source/history-data-source.tsx",
       "type": "registry:component"
-    },
-    {
-      "path": "blocks/data-source/useHistoryData.ts",
-      "type": "registry:lib"
     }
   ]
 }

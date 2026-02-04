@@ -12,10 +12,6 @@
     {
       "path": "iteration.tsx",
       "type": "registry:component"
-    },
-    {
-      "path": "index.ts",
-      "type": "registry:component"
     }
   ]
 }

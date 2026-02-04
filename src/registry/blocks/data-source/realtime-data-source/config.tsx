@@ -6,14 +6,8 @@ import type { TagConfig, TimeLineConfig } from '../types'
 // 默认配置
 const defaultRealtimeConfig = {
   tags: [{
-    tableDataTag: {
-      value: {
-        tableId: 'A',
-        tableDataId: '6912cc842e0f29806c78bce5',
-        tagId: 'a'
-      },
-      name: '记录数据点:测试a.a'
-    }
+    tableData: { id: '6912cc842e0f29806c78bce5', table: { id: 'A' } },
+    tag: { id: 'a', name: '测试a' }
   }] as TagConfig[],
   timeLine: { count: 5, unit: 'm' } as TimeLineConfig,
   xFormat: 'YYYY-MM-DD HH:mm:ss'

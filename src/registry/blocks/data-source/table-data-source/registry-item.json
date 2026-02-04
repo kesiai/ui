@@ -10,10 +10,6 @@
     {
       "path": "blocks/data-source/table-data-source/table-data-source.tsx",
       "type": "registry:component"
-    },
-    {
-      "path": "blocks/data-source/useTableData.ts",
-      "type": "registry:lib"
     }
   ]
 }

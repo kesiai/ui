@@ -10,10 +10,6 @@
     {
       "path": "blocks/data-source/view-data-source/view-data-source.tsx",
       "type": "registry:component"
-    },
-    {
-      "path": "blocks/data-source/useViewData.ts",
-      "type": "registry:lib"
     }
   ]
 }

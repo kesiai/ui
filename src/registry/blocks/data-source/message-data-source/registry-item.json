@@ -10,10 +10,6 @@
     {
       "path": "blocks/data-source/message-data-source/message-data-source.tsx",
       "type": "registry:component"
-    },
-    {
-      "path": "blocks/data-source/message-data-source/useMessageData.ts",
-      "type": "registry:lib"
     }
   ]
 }

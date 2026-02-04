@@ -46,10 +46,13 @@ export interface TableDataInfo {
  * 表数据上的某个数据点/字段
  * @example
  * { id: 'temperature', name: '温度' }
+ * @example with tableData
+ * { id: 'temperature', name: '温度', tableData: { id: 'A001', table: { id: 'A' } } }
  */
 export interface TagInfo {
   id: string
   name?: string
+  tableData?: TableDataInfo
 }
 
 // ==================== 标签配置类型 ====================

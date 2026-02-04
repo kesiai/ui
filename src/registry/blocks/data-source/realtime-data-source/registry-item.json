@@ -10,10 +10,6 @@
     {
       "path": "blocks/data-source/realtime-data-source/realtime-data-source.tsx",
       "type": "registry:component"
-    },
-    {
-      "path": "blocks/data-source/useRealtimeData.ts",
-      "type": "registry:lib"
     }
   ]
 }

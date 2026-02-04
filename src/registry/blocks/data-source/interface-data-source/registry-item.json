@@ -10,10 +10,6 @@
     {
       "path": "blocks/data-source/interface-data-source/interface-data-source.tsx",
       "type": "registry:component"
-    },
-    {
-      "path": "blocks/data-source/interface-data-source/useInterfaceData.ts",
-      "type": "registry:lib"
     }
   ]
 }

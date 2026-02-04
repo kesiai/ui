@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { PropConfig } from '../config/types'
 import { CodeEditorModal } from './CodeEditorModal'
-
-const modelRegistry = () => {}
+import { modelRegistry } from '@airiot/client'
 interface FormControlProps {
   config: PropConfig
   value: any

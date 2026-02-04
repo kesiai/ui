@@ -1,16 +1,16 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "view-operation",
+  "name": "view-tools",
   "type": "registry:component",
-  "title": "View.Operation",
-  "description": "批量按钮 - 批量操作按钮",
+  "title": "View.Tools",
+  "description": "表按钮 - 表格操作工具栏",
   "registryDependencies": [
     "button"
   ],
   "dependencies": [],
   "files": [
     {
-      "path": "blocks/view/view-operation/view-operation.tsx",
+      "path": "blocks/view/view-tools/view-tools.tsx",
       "type": "registry:component"
     }
   ]

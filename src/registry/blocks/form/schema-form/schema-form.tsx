@@ -10,18 +10,19 @@ type SchemaFormProps = UseFormPropsExtended & UseFormSchemaProps & {
   formId: string
   onSubmit: (data: any) => void
   children?: ReactNode | ((props: any) => ReactNode)
+  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, ...props }: SchemaFormProps) => {
+const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, ...props }: SchemaFormProps) => {
   const { fields, resolver } = useFormSchema({ schema, formSchema })
   const methods = useForm({
     resolver: resolver, ...props
   } as any)
 
   return (
-    <FormProvider {...methods}>
-      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)}>
-        <FieldGroup className="gap-4">
+    <FormProvider {...methods} classNames={classNames}>
+      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)} className={classNames?.form}>
+        <FieldGroup className={classNames?.group}>
           {fields.map(field => (
             <FormField {...field} key={field.key} />
           ))}

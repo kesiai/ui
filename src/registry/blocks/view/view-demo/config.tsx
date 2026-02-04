@@ -3,7 +3,8 @@ import React from 'react'
 import { ComponentConfig } from '@/app/config/types'
 import ViewDataTable, { TableColumn} from '../view-data-table/view-data-table'
 import ViewPagination from '../view-pagination/view-pagination'
-import Actions from '../view-actions/view-actions'
+import Actions, { CreateAction } from '../view-actions/view-actions'
+import Tools from '../view-tools/view-tools'
 
 export const viewDemoPropsConfig = [
   {
@@ -35,6 +36,10 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
         <ViewModel tableId={props.tableId} modelName={props.modelName}>
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
+            <div className="flex items-center justify-between">
+              <CreateAction />
+              <Tools tools={['count', 'pageSize', 'columns']} />
+            </div>
             <ViewDataTable>
               <TableColumn name="id" title="ID" width={180} />
               <TableColumn name="name" title="任务姓名" />
@@ -42,7 +47,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
               <TableColumn name="role" title="角色" />
               <TableColumn name="createdAt" title="创建时间" />
               <TableColumn name="__actions__" title="操作" width={280}>
-                <Actions variant="buttons" actions={props.actions || ['view', 'edit', 'delete']} />
+                <Actions variant="dropdown" actions={props.actions || ['view', 'edit', 'delete']} />
               </TableColumn>
             </ViewDataTable>
             <ViewPagination />

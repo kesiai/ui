@@ -1,5 +1,6 @@
 import SchemaForm from '@/registry/blocks/form/schema-form/schema-form'
 import { ComponentConfig } from '@/app/config/types'
+import { layoutPresets } from '@/registry/blocks/form/form/config'
 
 export const schemaFormPropsConfig = [
   {
@@ -8,6 +9,24 @@ export const schemaFormPropsConfig = [
     type: 'text' as const,
     default: 'schema-form-demo',
     description: '表单的唯一标识符'
+  },
+  {
+    name: 'layout',
+    label: '布局样式',
+    type: 'select' as const,
+    default: 'default',
+    options: Object.keys(layoutPresets).map(key => ({
+      value: key,
+      label: layoutPresets[key].name
+    })),
+    description: '选择表单的布局样式'
+  },
+  {
+    name: 'classNames',
+    label: '自定义样式类',
+    type: 'json' as const,
+    default: JSON.stringify(layoutPresets.default, null, 2),
+    description: '自定义表单各元素的 className (JSON格式)'
   },
   {
     name: 'mode',
@@ -59,6 +78,8 @@ export const schemaFormPropsConfig = [
 
 export const schemaFormDefaultProps = {
   formId: 'schema-form-demo',
+  layout: 'default' as keyof typeof layoutPresets,
+  classNames: null,
   mode: 'onSubmit' as 'onSubmit' | 'onBlur' | 'onChange' | 'all',
   reValidateMode: 'onChange' as 'onChange' | 'onBlur' | 'onSubmit',
   schema: {
@@ -92,36 +113,9 @@ export const schemaFormDefaultProps = {
     },
     required: ['username', 'email']
   },
-  formSchema: {
-    username: {
-      type: 'text',
-      placeholder: '请输入用户名',
-      description: '3-20个字符'
-    },
-    email: {
-      type: 'text',
-      placeholder: '请输入邮箱地址',
-      description: '用于接收通知'
-    },
-    age: {
-      type: 'number',
-      placeholder: '请输入年龄',
-      description: '必须大于18岁'
-    },
-    bio: {
-      type: 'textarea',
-      placeholder: '请输入个人简介',
-      description: '介绍一下你自己'
-    },
-    subscribe: {
-      type: 'checkbox',
-      description: '是否订阅邮件通知'
-    },
-    rating: {
-      type: 'rate',
-      description: '请为我们的服务评分'
-    }
-  },
+  formSchema: [
+    { name: "name" }, "*"
+  ],
   showExample: true
 }
 
@@ -153,6 +147,18 @@ const renderSchemaFormPreview = (props: Record<string, any>) => {
     formSchema = schemaFormDefaultProps.formSchema
   }
 
+  // 根据 layout 选择对应的预设样式
+  const layoutStyles = layoutPresets[props.layout] || layoutPresets.default
+  const classNames = props.classNames ||
+    {
+      group: layoutStyles.container,
+      field: layoutStyles.field,
+      label: layoutStyles.label,
+      input: layoutStyles.input,
+      description: layoutStyles.descriptionClass,
+      error: layoutStyles.error
+    }
+
   return (
     <div className="h-full flex items-center justify-center p-8 overflow-auto">
       <div className="w-full max-w-2xl">
@@ -166,6 +172,7 @@ const renderSchemaFormPreview = (props: Record<string, any>) => {
               schema={schema}
               formSchema={formSchema}
               onSubmit={handleSubmit}
+              classNames={classNames}
             >
               <div className="mt-6 pt-4 border-t border-slate-200">
                 <button

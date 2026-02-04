@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-radio/form-radio.tsx",
+      "path": "blocks/form/form-radio/form-radio.tsx",
       "type": "registry:component"
     }
   ]

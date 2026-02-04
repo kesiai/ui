@@ -4,7 +4,7 @@ import {
   Popover as ShadcnPopover,
   PopoverTrigger,
   PopoverContent,
-} from "@/registry/components/ui/popover/popover"
+} from "@/components/ui/popover"
 import { Button } from "@/registry/blocks/components/button/button"
 
 export interface PopoverProps extends React.HTMLAttributes<HTMLDivElement> {

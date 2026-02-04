@@ -173,9 +173,9 @@ const ConnectWidgetPreview = ({ props }: { props: Record<string, any> }) => {
       return [{ startPoint: { x: 50, y: 150 }, endPoint: { x: 350, y: 150 } }]
     }
   }
-  
+
   const [pathValue, setPathValue] = useState<LineSegment[]>(() => parsePathValue(props.pathValue))
-  
+
   // 当 props.pathValue 变化时同步更新内部状态
   React.useEffect(() => {
     setPathValue(parsePathValue(props.pathValue))
@@ -191,8 +191,6 @@ const ConnectWidgetPreview = ({ props }: { props: Record<string, any> }) => {
     strokeLinejoin: 'round' as const
   }
 
-  console.log('[ConnectWidgetPreview] props.shape:', props.shape, 'pathValue:', pathValue)
-  
   return (
     <div className="w-full border rounded-lg bg-gray-50 p-4">
       <ConnectWidget

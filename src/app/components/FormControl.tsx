@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { PropConfig } from '../config/types'
 import { CodeEditorModal } from './CodeEditorModal'
-import { modelRegistry, useModel } from '@airiot/client'
 
+const modelRegistry = () => {}
 interface FormControlProps {
   config: PropConfig
   value: any
@@ -25,6 +25,7 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
   }
 
   const handleSaveCode = (code: string) => {
+    console.log('Saving code:', config.name, code)
     onChange(config.name, code)
   }
 
@@ -142,6 +143,40 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
           />
         </div>
       )
+    case 'json':
+      return (
+        <div>
+          <button
+            onClick={handleOpenCodeEditor}
+            className="w-full px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+            {value ? '编辑 JSON' : '添加 JSON'}
+          </button>
+          {value && (
+            <p className="mt-2 text-xs text-slate-500">
+              {typeof value === 'string' ? value : JSON.stringify(value, null, 2).substring(0, 100) + '...'}
+            </p>
+          )}
+          <CodeEditorModal
+            isOpen={isCodeEditorOpen}
+            onClose={handleCloseCodeEditor}
+            code={typeof value === 'string' ? value : JSON.stringify(value, null, 2)}
+            onSave={(code) => {
+              try {
+                const parsed = JSON.parse(code)
+                handleSaveCode(JSON.stringify(parsed, null, 2))
+              } catch (error) {
+                // 如果不是有效 JSON，直接保存字符串
+                handleSaveCode(code)
+              }
+            }}
+            title={config.label || 'JSON 配置'}
+          />
+        </div>
+      )
     case 'array':
       return (
         <div className="space-y-2">
@@ -162,6 +197,37 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
             {/* {config.description || '支持JSON数组格式'} */}
           </div>
         </div>
+      )
+    case 'object':
+      return (
+        <div className="space-y-2">
+          <textarea
+            value={value ? JSON.stringify(value, null, 2) : ''}
+            onChange={(e) => {
+              try {
+                const parsed = JSON.parse(e.target.value)
+                handleChange(parsed)
+              } catch (error) {
+              }
+            }}
+            placeholder='请输入JSON对象'
+            rows={8}
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all font-mono text-sm"
+          />
+          <div className="text-xs text-slate-500">
+            {config.description || '支持JSON对象格式'}
+          </div>
+        </div>
+      )
+    case 'input':
+      return (
+        <input
+          type="text"
+          value={value as string || ''}
+          onChange={(e) => handleChange(e.target.value)}
+          placeholder={config.placeholder}
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+        />
       )
     case 'model-name':
       const optons = Object.keys(modelRegistry.models).map(key => ({ value: key, label: modelRegistry.models[key].title?.toString() || key }))

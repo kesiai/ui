@@ -13,7 +13,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/svg/svg.tsx",
+          "path": "registry/blocks/advanced/svg/svg.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -29,7 +29,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/led-number/led-number.tsx",
+          "path": "registry/blocks/advanced/led-number/led-number.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -40,13 +40,48 @@
       "name": "svg-editor",
       "type": "registry:component",
       "title": "SvgEditor",
-      "description": "绘图软件 - SVG绘图编辑器",
-      "registryDependencies": [],
-      "dependencies": [],
+      "description": "SVG 绘图编辑器 - 支持多种绘图工具、元素树和属性面板。默认展示模式（双击SVG进入编辑），可通过 dashboardMode 参数直接进入编辑模式",
+      "registryDependencies": [
+        "button",
+        "label",
+        "input",
+        "slider"
+      ],
+      "dependencies": [
+        "lucide-react",
+        "clsx",
+        "tailwind-merge",
+        "svgedit"
+      ],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/svg-editor/svg-editor.tsx",
+          "path": "registry/blocks/advanced/svg-editor/svg-editor.tsx",
           "type": "registry:component",
+          "content": ""
+        },
+        {
+          "path": "src/registry/blocks/advanced/svg-editor/toolbar.tsx",
+          "type": "registry:component",
+          "content": ""
+        },
+        {
+          "path": "src/registry/blocks/advanced/svg-editor/tree.tsx",
+          "type": "registry:component",
+          "content": ""
+        },
+        {
+          "path": "src/registry/blocks/advanced/svg-editor/property-panel.tsx",
+          "type": "registry:component",
+          "content": ""
+        },
+        {
+          "path": "src/registry/components/ui/label/label.tsx",
+          "type": "registry:component",
+          "content": ""
+        },
+        {
+          "path": "src/registry/blocks/advanced/svg-editor/svg-editor.css",
+          "type": "registry:style",
           "content": ""
         }
       ]
@@ -61,7 +96,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/text-editor/text-editor.tsx",
+          "path": "registry/blocks/advanced/text-editor/text-editor.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -77,7 +112,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/widgets-media/widgets-media.tsx",
+          "path": "registry/blocks/advanced/widgets-media/widgets-media.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -93,7 +128,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/qrcode/qrcode.tsx",
+          "path": "registry/blocks/advanced/qrcode/qrcode.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -109,7 +144,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/time/time.tsx",
+          "path": "registry/blocks/advanced/time/time.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -125,7 +160,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/show-attachment/show-attachment.tsx",
+          "path": "registry/blocks/advanced/show-attachment/show-attachment.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -141,7 +176,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/upload-attachment/upload-attachment.tsx",
+          "path": "registry/blocks/advanced/upload-attachment/upload-attachment.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -157,7 +192,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/flop-number/flop-number.tsx",
+          "path": "registry/blocks/advanced/flop-number/flop-number.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -173,7 +208,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/widget-pdf-preivew/widget-pdf-preivew.tsx",
+          "path": "registry/blocks/advanced/widget-pdf-preivew/widget-pdf-preivew.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -189,7 +224,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/advanced/custom-pagination/custom-pagination.tsx",
+          "path": "registry/blocks/advanced/custom-pagination/custom-pagination.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -415,7 +450,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/video-widget/video-widget.tsx",
+          "path": "registry/blocks/video/video-widget/video-widget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -423,7 +458,7 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "button-widget",
+      "name": "video-button",
       "type": "registry:component",
       "title": "ButtonWidget",
       "description": "云台控制按钮 - 云台控制按钮组件",
@@ -433,7 +468,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/button-widget/button-widget.tsx",
+          "path": "registry/blocks/video/button-widget/video-button.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -449,7 +484,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/video-periods-widget/video-periods-widget.tsx",
+          "path": "registry/blocks/video/video-periods-widget/video-periods-widget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -497,7 +532,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/video/review-view-components/review-view-components.tsx",
+          "path": "registry/blocks/video/review-view-components/review-view-components.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -513,7 +548,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-widget/form-widget.tsx",
+          "path": "registry/blocks/form/form-widget/form-widget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -555,7 +590,7 @@
         {
           "path": "blocks/form/form-field/field-map.tsx",
           "type": "registry:component",
-          "content": "import React from 'react'\nimport { Textarea } from '@/components/ui/textarea'\nimport { FormInputNumber } from '@/registry/blocks/form/form-input-number/form-input-number'\nimport { FormInput } from '@/registry/blocks/form/form-input/form-input'\nimport { FormSelect } from '@/registry/blocks/form/form-select/form-select'\n\nconst fieldMap: { [key: string]: React.ComponentType<any> } = {\n  'text': FormInput,\n  'select': FormSelect,\n  'textarea': Textarea,\n  'number': FormInputNumber\n}\nexport default fieldMap"
+          "content": "import React from 'react'\nimport { Textarea } from '@/components/ui/textarea'\nimport { FormInputNumber } from '@/registry/blocks/form/form-input-number/form-input-number'\nimport { FormInput } from '@/registry/blocks/form/form-input/form-input'\nimport { FormSelect } from '@/registry/blocks/form/form-select/form-select'\nimport { FormCheckbox } from '@/registry/blocks/form/form-checkbox/form-checkbox'\nimport { FormRadio } from '@/registry/blocks/form/form-radio/form-radio'\nimport { FormSwitch } from '@/registry/blocks/form/form-switch/form-switch'\nimport { FormSlider } from '@/registry/blocks/form/form-slider/form-slider'\nimport { FormDate } from '@/registry/blocks/form/form-date/form-date'\nimport Rate from '@/registry/blocks/form/form-rate/form-rate'\n\nconst fieldMap: { [key: string]: React.ComponentType<any> } = {\n  'text': FormInput,\n  'select': FormSelect,\n  'textarea': Textarea,\n  'number': FormInputNumber,\n  'checkbox': FormCheckbox,\n  'radio': FormRadio,\n  'switch': FormSwitch,\n  'slider': FormSlider,\n  'date': FormDate,\n  'rate': Rate\n}\nexport default fieldMap\n"
         }
       ]
     },
@@ -569,7 +604,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/time-widget/time-widget.tsx",
+          "path": "registry/blocks/form/time-widget/time-widget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -603,7 +638,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-date-range/form-date-range.tsx",
+          "path": "registry/blocks/form/form-date-range/form-date-range.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -659,7 +694,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/user-form-widget/user-form-widget.tsx",
+          "path": "registry/blocks/form/user-form-widget/user-form-widget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -675,7 +710,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-area/form-area.tsx",
+          "path": "registry/blocks/form/form-area/form-area.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -691,7 +726,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-rate/form-rate.tsx",
+          "path": "registry/blocks/form/form-rate/form-rate.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -707,7 +742,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/table-schema-form/table-schema-form.tsx",
+          "path": "registry/blocks/form/table-schema-form/table-schema-form.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -795,7 +830,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-upload/form-upload.tsx",
+          "path": "registry/blocks/form/form-upload/form-upload.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -829,7 +864,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-map/form-map.tsx",
+          "path": "registry/blocks/form/form-map/form-map.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -848,6 +883,22 @@
       "files": [
         {
           "path": "src/registry/blocks/form/form-select/form-select.tsx",
+          "type": "registry:component",
+          "content": ""
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "form-tableField",
+      "type": "registry:component",
+      "title": "数据表字段",
+      "description": "数据表字段组件 - 用于显示基于类型的基础输入组件",
+      "registryDependencies": [],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/d:/work/workspace/new-ui/air-ui/src/registry/blocks/form/form-tableField/form-tableField.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1213,7 +1264,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-radar/chart-radar.tsx",
+          "path": "registry/blocks/chart/chart-radar/chart-radar.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1229,7 +1280,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-bar/chart-bar.tsx",
+          "path": "registry/blocks/chart/chart-bar/chart-bar.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1245,7 +1296,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/data-view-chart/data-view-chart.tsx",
+          "path": "registry/blocks/chart/data-view-chart/data-view-chart.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1261,7 +1312,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-map/chart-map.tsx",
+          "path": "registry/blocks/chart/chart-map/chart-map.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1277,7 +1328,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-line/chart-line.tsx",
+          "path": "registry/blocks/chart/chart-line/chart-line.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1293,7 +1344,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-gauge/chart-gauge.tsx",
+          "path": "registry/blocks/chart/chart-gauge/chart-gauge.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1309,7 +1360,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-pie/chart-pie.tsx",
+          "path": "registry/blocks/chart/chart-pie/chart-pie.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1325,7 +1376,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/report-reportwidget/report-reportwidget.tsx",
+          "path": "registry/blocks/chart/report-reportwidget/report-reportwidget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1341,7 +1392,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-pictorial-bar/chart-pictorial-bar.tsx",
+          "path": "registry/blocks/chart/chart-pictorial-bar/chart-pictorial-bar.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1357,7 +1408,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-mix/chart-mix.tsx",
+          "path": "registry/blocks/chart/chart-mix/chart-mix.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1373,7 +1424,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-scatter/chart-scatter.tsx",
+          "path": "registry/blocks/chart/chart-scatter/chart-scatter.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1389,7 +1440,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/chart-liquid-fill/chart-liquid-fill.tsx",
+          "path": "registry/blocks/chart/chart-liquid-fill/chart-liquid-fill.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1405,7 +1456,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/chart/sankey-chart/sankey-chart.tsx",
+          "path": "registry/blocks/chart/sankey-chart/sankey-chart.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1421,7 +1472,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point/data-point.tsx",
+          "path": "registry/blocks/business/data-point/data-point.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1439,7 +1490,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/point-table/point-table.tsx",
+          "path": "registry/blocks/business/point-table/point-table.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1455,7 +1506,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/table-select/table-select.tsx",
+          "path": "registry/blocks/business/table-select/table-select.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1471,7 +1522,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/liquid-level/liquid-level.tsx",
+          "path": "registry/blocks/business/liquid-level/liquid-level.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1487,7 +1538,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/node-tree-select/node-tree-select.tsx",
+          "path": "registry/blocks/business/node-tree-select/node-tree-select.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1503,7 +1554,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/ruler-comp/ruler-comp.tsx",
+          "path": "registry/blocks/business/ruler-comp/ruler-comp.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1521,7 +1572,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/network-graph/network-graph.tsx",
+          "path": "registry/blocks/business/network-graph/network-graph.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1537,7 +1588,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/compute-statuses/compute-statuses.tsx",
+          "path": "registry/blocks/business/compute-statuses/compute-statuses.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1553,7 +1604,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point-panel/data-point-panel.tsx",
+          "path": "registry/blocks/business/data-point-panel/data-point-panel.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1571,7 +1622,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/table-data-select/table-data-select.tsx",
+          "path": "registry/blocks/business/table-data-select/table-data-select.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1603,7 +1654,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/compute-status/compute-status.tsx",
+          "path": "registry/blocks/business/compute-status/compute-status.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1621,7 +1672,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/data-point-input/data-point-input.tsx",
+          "path": "registry/blocks/business/data-point-input/data-point-input.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1677,7 +1728,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-list/mobile-list.tsx",
+          "path": "registry/blocks/mobile/mobile-list/mobile-list.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1728,7 +1779,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-date-picker/mobile-date-picker.tsx",
+          "path": "registry/blocks/mobile/mobile-date-picker/mobile-date-picker.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1779,23 +1830,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-tab-bar/mobile-tab-bar.tsx",
-          "type": "registry:component",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "view-warning",
-      "type": "registry:component",
-      "title": "View.Warning",
-      "description": "报警视图容器 - 报警视图容器",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-warning/view-warning.tsx",
+          "path": "registry/blocks/mobile/mobile-tab-bar/mobile-tab-bar.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1811,7 +1846,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-data-aggregate/view-data-aggregate.tsx",
+          "path": "registry/blocks/view/view-data-aggregate/view-data-aggregate.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1827,23 +1862,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-filter/view-filter.tsx",
-          "type": "registry:component",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "view-report",
-      "type": "registry:component",
-      "title": "View.Report",
-      "description": "报表视图容器 - 报表视图容器",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-report/view-report.tsx",
+          "path": "registry/blocks/view/view-filter/view-filter.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1861,7 +1880,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-actions/view-actions.tsx",
+          "path": "registry/blocks/view/view-actions/view-actions.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1877,7 +1896,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-advanced-filter/view-advanced-filter.tsx",
+          "path": "registry/blocks/view/view-advanced-filter/view-advanced-filter.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1893,7 +1912,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-pagination/view-pagination.tsx",
+          "path": "registry/blocks/view/view-pagination/view-pagination.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1909,7 +1928,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-batch-command/view-batch-command.tsx",
+          "path": "registry/blocks/view/view-batch-command/view-batch-command.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1925,7 +1944,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-batch-operation/view-batch-operation.tsx",
+          "path": "registry/blocks/view/view-batch-operation/view-batch-operation.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1941,23 +1960,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-detail/view-detail.tsx",
-          "type": "registry:component",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "view-log",
-      "type": "registry:component",
-      "title": "View.Log",
-      "description": "日志视图容器 - 日志视图容器",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-log/view-log.tsx",
+          "path": "registry/blocks/view/view-detail/view-detail.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1975,7 +1978,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-operation/view-operation.tsx",
+          "path": "registry/blocks/view/view-operation/view-operation.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -1991,23 +1994,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-data-table/view-data-table.tsx",
-          "type": "registry:component",
-          "content": ""
-        }
-      ]
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "view-user",
-      "type": "registry:component",
-      "title": "View.User",
-      "description": "用户视图容器 - 用户视图容器",
-      "registryDependencies": [],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-user/view-user.tsx",
+          "path": "registry/blocks/view/view-data-table/view-data-table.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2023,7 +2010,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/view/view-model/view-model.tsx",
+          "path": "registry/blocks/view/view-model/view-model.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2039,7 +2026,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/react-widget/react-widget.tsx",
+          "path": "registry/blocks/containers/react-widget/react-widget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2055,7 +2042,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/connect-widget/connect-widget.tsx",
+          "path": "registry/blocks/containers/connect-widget/connect-widget.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2071,7 +2058,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/slot-container/slot-container.tsx",
+          "path": "registry/blocks/containers/slot-container/slot-container.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2087,7 +2074,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/resource-container/resource-container.tsx",
+          "path": "registry/blocks/containers/resource-container/resource-container.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2103,7 +2090,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/link/link.tsx",
+          "path": "registry/blocks/containers/link/link.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2158,7 +2145,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/slot/slot.tsx",
+          "path": "registry/blocks/containers/slot/slot.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2174,7 +2161,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/containers/resource/resource.tsx",
+          "path": "registry/blocks/containers/resource/resource.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2184,13 +2171,13 @@
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "map-container",
       "type": "registry:component",
-      "title": "MapContainer",
-      "description": "地图容器 - 地图容器组件",
+      "title": "Container2d",
+      "description": "2D地图容器 - 支持视图配置、缩放控件、比例尺等功能",
       "registryDependencies": [],
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/map-container/map-container.tsx",
+          "path": "registry/blocks/gis/map-container/map-container.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2206,7 +2193,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/warn-views/warn-views.tsx",
+          "path": "registry/blocks/gis/warn-views/warn-views.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2222,7 +2209,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/playback-view/playback-view.tsx",
+          "path": "registry/blocks/gis/playback-view/playback-view.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2232,13 +2219,13 @@
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "polygon-views",
       "type": "registry:component",
-      "title": "PolygonViews",
+      "title": "polygonViews",
       "description": "区域层 - GIS区域层",
       "registryDependencies": [],
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/polygon-views/polygon-views.tsx",
+          "path": "registry/blocks/gis/polygon-views/polygon-views.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2254,7 +2241,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/polygon-split/polygon-split.tsx",
+          "path": "registry/blocks/gis/polygon-split/polygon-split.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2270,7 +2257,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/table-views/table-views.tsx",
+          "path": "registry/blocks/gis/table-views/table-views.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2280,13 +2267,13 @@
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "custom-views",
       "type": "registry:component",
-      "title": "CustomViews",
+      "title": "customViews",
       "description": "自定义层 - GIS自定义层",
       "registryDependencies": [],
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/custom-views/custom-views.tsx",
+          "path": "registry/blocks/gis/custom-views/custom-views.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2296,13 +2283,13 @@
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "code-editor-views",
       "type": "registry:component",
-      "title": "CodeEditorViews",
+      "title": "codeEditorViews",
       "description": "代码层 - GIS代码层",
       "registryDependencies": [],
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/code-editor-views/code-editor-views.tsx",
+          "path": "registry/blocks/gis/code-editor-views/code-editor-views.tsx",
           "type": "registry:component",
           "content": ""
         }
@@ -2318,7 +2305,7 @@
       "dependencies": [],
       "files": [
         {
-          "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/tool-views/tool-views.tsx",
+          "path": "registry/blocks/gis/tool-views/tool-views.tsx",
           "type": "registry:component",
           "content": ""
         }

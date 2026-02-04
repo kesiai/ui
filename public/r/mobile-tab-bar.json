@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/mobile/mobile-tab-bar/mobile-tab-bar.tsx",
+      "path": "registry/blocks/mobile/mobile-tab-bar/mobile-tab-bar.tsx",
       "type": "registry:component",
       "content": ""
     }

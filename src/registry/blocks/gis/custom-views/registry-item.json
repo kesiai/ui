@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/custom-views/custom-views.tsx",
+      "path": "blocks/gis/custom-views/custom-views.tsx",
       "type": "registry:component"
     }
   ]

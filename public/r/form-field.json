@@ -18,7 +18,7 @@
     {
       "path": "blocks/form/form-field/field-map.tsx",
       "type": "registry:component",
-      "content": "import React from 'react'\nimport { Textarea } from '@/components/ui/textarea'\nimport { FormInputNumber } from '@/registry/blocks/form/form-input-number/form-input-number'\nimport { FormInput } from '@/registry/blocks/form/form-input/form-input'\nimport { FormSelect } from '@/registry/blocks/form/form-select/form-select'\n\nconst fieldMap: { [key: string]: React.ComponentType<any> } = {\n  'text': FormInput,\n  'select': FormSelect,\n  'textarea': Textarea,\n  'number': FormInputNumber\n}\nexport default fieldMap"
+      "content": "import React from 'react'\nimport { Textarea } from '@/components/ui/textarea'\nimport { FormInputNumber } from '@/registry/blocks/form/form-input-number/form-input-number'\nimport { FormInput } from '@/registry/blocks/form/form-input/form-input'\nimport { FormSelect } from '@/registry/blocks/form/form-select/form-select'\nimport { FormCheckbox } from '@/registry/blocks/form/form-checkbox/form-checkbox'\nimport { FormRadio } from '@/registry/blocks/form/form-radio/form-radio'\nimport { FormSwitch } from '@/registry/blocks/form/form-switch/form-switch'\nimport { FormSlider } from '@/registry/blocks/form/form-slider/form-slider'\nimport { FormDate } from '@/registry/blocks/form/form-date/form-date'\nimport Rate from '@/registry/blocks/form/form-rate/form-rate'\n\nconst fieldMap: { [key: string]: React.ComponentType<any> } = {\n  'text': FormInput,\n  'select': FormSelect,\n  'textarea': Textarea,\n  'number': FormInputNumber,\n  'checkbox': FormCheckbox,\n  'radio': FormRadio,\n  'switch': FormSwitch,\n  'slider': FormSlider,\n  'date': FormDate,\n  'rate': Rate\n}\nexport default fieldMap\n"
     }
   ]
 }

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-data-source",
+  "type": "registry:component",
+  "title": "TableDataSource",
+  "description": "表数据源 - 查询数据表获取数据",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "blocks/data-source/table-data-source/table-data-source.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "blocks/data-source/useTableData.ts",
+      "type": "registry:lib"
+    }
+  ]
+}

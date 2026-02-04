@@ -9,13 +9,15 @@ const categoryConfig: Record<string, { name: string; icon: string; order: number
   'business': { name: '业务组件', icon: '💼', order: 1 },
   'form': { name: '表单组件', icon: '📝', order: 2 },
   'view': { name: '视图组件', icon: '✳️', order: 2 },
-  'chart': { name: '图表组件', icon: '📊', order: 3 },
-  'advanced': { name: '高级组件', icon: '⚡', order: 4 },
-  '3d': { name: '3D 组件', icon: '🎮', order: 5 },
-  'gis': { name: '地图组件', icon: '🗺️', order: 6 },
-  'video': { name: '视频组件', icon: '🎬', order: 7 },
-  'mobile': { name: '移动端组件', icon: '📱', order: 8 },
-  'containers': { name: '容器组件', icon: '📦', order: 9 },
+  'table-field': { name: '表格字段组件', icon: '📋', order: 3 },
+  'chart': { name: '图表组件', icon: '📊', order: 4 },
+  'advanced': { name: '高级组件', icon: '⚡', order: 5 },
+  '3d': { name: '3D 组件', icon: '🎮', order: 6 },
+  'gis': { name: '地图组件', icon: '🗺️', order: 7 },
+  'video': { name: '视频组件', icon: '🎬', order: 8 },
+  'mobile': { name: '移动端组件', icon: '📱', order: 9 },
+  'containers': { name: '容器组件', icon: '📦', order: 10 },
+  'data-source': { name: '数据源', icon: '🔌', order: 11 },
 }
 
 // 提取 registry 中的所有配置导出
@@ -36,12 +38,27 @@ for (const path in registryModules) {
   const module = registryModules[path] as any
 
   // 提取分类和组件名
-  // 例如: ../../registry/blocks/form/form-input/config.tsx
-  const match = path.match(/registry\/blocks\/([^/]+)\/([^/]+)\/config\.tsx$/)
-  if (!match) continue
+  // 支持两种格式:
+  // 1. ../../registry/blocks/form/form-input/config.tsx (两层: 分类/组件)
+  // 2. ../../registry/blocks/data-source/config.tsx (一层: 直接是组件)
+  let categoryDir: string
+  let componentId: string
 
-  const [, categoryDir, componentDir] = match
-  const componentId = componentDir
+  // 先尝试匹配两层格式
+  let match = path.match(/registry\/blocks\/([^/]+)\/([^/]+)\/config\.tsx$/)
+  if (match) {
+    const [, cat, comp] = match
+    categoryDir = cat
+    componentId = comp
+  } else {
+    // 尝试匹配一层格式
+    match = path.match(/registry\/blocks\/([^/]+)\/config\.tsx$/)
+    if (!match) continue
+
+    const [, comp] = match
+    categoryDir = comp // 使用组件名作为分类
+    componentId = comp
+  }
 
   // 获取组件配置
   let config: ComponentConfig | null = null

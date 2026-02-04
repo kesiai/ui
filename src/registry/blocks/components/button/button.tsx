@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Button as ShadcnButton } from "@/registry/components/ui/button/button"
+import { Button as ShadcnButton } from "@/components/ui/button"
 import { FormContext } from "@/registry/lib/form-context"
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

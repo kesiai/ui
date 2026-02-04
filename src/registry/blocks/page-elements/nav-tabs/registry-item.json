@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/nav-tabs/nav-tabs.tsx",
+      "path": "blocks/page-elements/nav-tabs/nav-tabs.tsx",
       "type": "registry:component"
     }
   ]

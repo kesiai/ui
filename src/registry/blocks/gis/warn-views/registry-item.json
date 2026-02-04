@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/warn-views/warn-views.tsx",
+      "path": "blocks/gis/warn-views/warn-views.tsx",
       "type": "registry:component"
     }
   ]

@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/business/table-select/table-select.tsx",
+      "path": "blocks/business/table-select/table-select.tsx",
       "type": "registry:component"
     }
   ]

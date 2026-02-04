@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry//Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/form/form-rate/form-rate.tsx",
+      "path": "registry/blocks/form/form-rate/form-rate.tsx",
       "type": "registry:component",
       "content": ""
     }

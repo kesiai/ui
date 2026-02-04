@@ -5,7 +5,7 @@ import {
   TabsList,
   TabsTrigger,
   TabsContent,
-} from "@/registry/components/ui/tabs/tabs"
+} from "@/components/ui/tabs"
 
 export interface TabConfig {
   /**

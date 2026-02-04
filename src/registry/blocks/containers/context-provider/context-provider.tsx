@@ -1,7 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, ReactNode, useMemo } from 'react'
-import { cn } from '@/lib/utils'
+import { createContext, useContext, ReactNode, useMemo } from 'react'
 
 // Types
 export interface Table {
@@ -31,8 +30,6 @@ export interface ContextProviderProps {
   table?: Table
   tableData?: TableData
   data?: Array<any>
-  className?: string
-  style?: React.CSSProperties
 }
 
 // Provider Component
@@ -41,8 +38,6 @@ export function ContextProvider({
   table = { id: '', name: '' },
   tableData = { id: '', name: '', table: { id: '', name: '' } },
   data = [],
-  className,
-  style,
 }: ContextProviderProps) {
   // 使用 useMemo 缓存 value 对象，避免不必要的重新渲染
   const value = useMemo<ContextProviderContextValue>(() => ({
@@ -53,9 +48,7 @@ export function ContextProvider({
 
   return (
     <ContextProviderContext.Provider value={value}>
-      <div className={cn('w-full h-full', className)} style={style}>
-        {children}
-      </div>
+      {children}
     </ContextProviderContext.Provider>
   )
 }

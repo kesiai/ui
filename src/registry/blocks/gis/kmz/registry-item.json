@@ -1,14 +1,14 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "polygon-split",
+  "name": "kmz",
   "type": "registry:component",
-  "title": "Polygonsplit",
-  "description": "区域划分 - 区域划分组件",
+  "title": "kmz",
+  "description": "地图kmz图层",
   "registryDependencies": [],
   "dependencies": [],
   "files": [
     {
-      "path": "blocks/gis/polygon-split/polygon-split.tsx",
+      "path": "/Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/kmz/kmz.tsx",
       "type": "registry:component"
     }
   ]

@@ -1,9 +1,17 @@
+
 import * as React from "react"
 import { cn } from "@/lib/utils"
+// @ts-ignore
 import { Tile as TileLayer } from 'ol/layer'
+// @ts-ignore
 import { XYZ as XYZSource } from 'ol/source'
+// @ts-ignore
+import * as style from 'ol/style'
 import type Map from 'ol/Map'
 import { useMap } from '../map-container/map-container'
+import _ from 'lodash'
+import { getProjection, getMapCoordinateType } from './utils'
+
 
 export interface CanvasSetting {
   grayscale?: number
@@ -32,51 +40,21 @@ export interface LayerBase {
 }
 
 export interface XYZProps {
-  /**
-   * 瓦片图地址
-   */
   source?: string
-  /**
-   * 坐标系类型
-   */
   coordinateType?: string
-  /**
-   * 坐标系注册配置
-   */
   coorDefs?: CoorDefs
-  /**
-   * 是否启用图层滤镜
-   */
   canvasFilter?: boolean
-  /**
-   * 滤镜设置
-   */
-  canvasSetting?: CanvasSetting
-  /**
-   * 图层基础配置
-   */
+  canvasSetting?: CanvasSetting | CanvasSetting[]
   layerBase?: LayerBase
-  /**
-   * 是否显示
-   */
   display?: boolean
-  /**
-   * CSS 类名
-   */
   className?: string
-  /**
-   * 单元格唯一标识
-   */
   cellKey?: string
-  /**
-   * 地图实例（由父组件传入）
-   */
   map?: Map | null
 }
 
 const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
-  (
-    {
+  (props, ref) => {
+    const {
       className,
       cellKey,
       source: sourceUrl,
@@ -87,27 +65,26 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
       layerBase,
       display = true,
       map: mapProp,
-      ...props
-    },
-    ref
-  ) => {
+      ...otherProps
+    } = props
+
     const contextMap = useMap()
     const map = mapProp || contextMap
-    const layerRef = React.useRef<TileLayer<XYZSource> | null>(null)
+    const layerRef = React.useRef<any>(null)
     const refreshKeyRef = React.useRef(0)
 
     const { opacity, zIndex, maxResolution, minResolution, maxZoom, minZoom } = layerBase || {}
 
-    // 添加缓存破坏参数
+    // Cache Busting
     const appendCacheBust = React.useCallback((url: string | undefined, key: number) => {
       if (!url) return url
       const join = url.indexOf('?') >= 0 ? '&' : '?'
       return `${url}${join}_v=${key}`
     }, [])
 
-    // 瓦片加载函数（支持滤镜）
-    const tileLoadFunction = React.useCallback((imageTile: { getImage: () => HTMLImageElement }, src: string) => {
-      const tileImg = imageTile.getImage()
+    // Tile Load Function
+    const tileLoadFunction = React.useCallback((imageTile: any, src: string) => {
+      const tileImg = imageTile.getImage() as HTMLImageElement
 
       // 未启用滤镜时，走默认加载逻辑
       if (!canvasFilter || !canvasSetting) {
@@ -115,7 +92,6 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
         return
       }
 
-      // 使用滤镜处理
       const img = new Image()
       img.crossOrigin = 'anonymous'
 
@@ -141,70 +117,82 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
           canvas.height = h
           const context = canvas.getContext('2d')
 
-          if (context && canvasSetting) {
-            const { grayscale = 0, invert = 0, sepia = 0, saturate = 100, brightness = 100, contrast = 100 } = canvasSetting
-            const hueRotate = canvasSetting['hue-rotate'] || 0
-            context.filter = `grayscale(${grayscale}%) invert(${invert}%) sepia(${sepia}%) hue-rotate(${hueRotate}deg) saturate(${saturate}%) brightness(${brightness}%) contrast(${contrast}%)`
-            context.drawImage(img, 0, 0, w, h, 0, 0, w, h)
+          // Handle array vs object for canvasSetting
+          let initValue: CanvasSetting | undefined
+          if (Array.isArray(canvasSetting) && !_.isEmpty(canvasSetting)) {
+            initValue = canvasSetting[0]
+          } else if (_.isPlainObject(canvasSetting) && !_.isEmpty(canvasSetting)) {
+            initValue = canvasSetting as CanvasSetting
+          }
 
+          if (context && initValue) {
+            const { grayscale = 0, invert = 0, sepia = 0, saturate = 100, brightness = 100, contrast = 100 } = initValue
+            const hueRotate = initValue['hue-rotate'] || 0
+
+            context.filter = `grayscale(${grayscale}%) invert(${invert}%) sepia(${sepia}%) hue-rotate(${hueRotate}deg) saturate(${saturate}%) brightness(${brightness}%) contrast(${contrast}%)`
+          }
+
+          if (context) {
+            context.drawImage(img, 0, 0, w, h, 0, 0, w, h)
             try {
               tileImg.src = canvas.toDataURL('image/png')
-            } catch {
+            } catch (e) {
               fallbackToSrc(true)
             }
           } else {
             fallbackToSrc()
           }
-        } catch {
+        } catch (e) {
           fallbackToSrc(true)
         }
       }
 
       img.src = src
-    }, [canvasFilter, canvasSetting])
+    }, [JSON.stringify({ canvasFilter, canvasSetting })])
 
-    // 创建图层
+    // Create Layer
     React.useEffect(() => {
-      if (!map || !sourceUrl) return
+      if (!map) return
 
-      // 先移除旧图层
-      if (layerRef.current) {
-        map.removeLayer(layerRef.current)
-        layerRef.current = null
-      }
-
+      const mapCoordinateType = getMapCoordinateType(map)
       const initUrl = appendCacheBust(sourceUrl, refreshKeyRef.current)
 
-      const xyzSource = new XYZSource({
+      // Projection Logic
+      const projection = getProjection(coorDefs, coordinateType, mapCoordinateType)
+
+      const geoSource = new XYZSource({
+        cacheSize: 0,
         url: initUrl,
         crossOrigin: 'anonymous',
-        tileLoadFunction: tileLoadFunction as (tile: unknown, src: string) => void
-      })
+        projection: projection,
+        tileLoadFunction
+      } as any)
 
       const layer = new TileLayer({
-        source: xyzSource,
         opacity,
         zIndex,
         maxResolution,
         minResolution,
         maxZoom,
         minZoom,
-        properties: { layerType: 'xyz', cellKey }
-      })
+        source: geoSource,
+        // rotation: 76,
+        changeSelect: true,
+        style: (_feature: any, _type: any) => new style.Style({ image: new style.Icon({ src: '' }) }),
+        properties: { layerType: 'xyz', cellKey } // Preserve custom props
+      } as any)
 
-      layer.setVisible(display)
-      map.addLayer(layer)
       layerRef.current = layer
+      map.addLayer(layer)
 
       return () => {
-        if (layerRef.current && map) {
-          map.removeLayer(layerRef.current)
-          layerRef.current = null
+        if (map && layer) {
+          map.removeLayer(layer)
         }
       }
-    }, [map, sourceUrl, coordinateType, JSON.stringify(coorDefs), tileLoadFunction, appendCacheBust, opacity, zIndex, maxResolution, minResolution, maxZoom, minZoom, cellKey])
+    }, [map, sourceUrl, coordinateType, JSON.stringify(coorDefs), tileLoadFunction]) // Removed props dependencies that are handled by updates
 
-    // 刷新图层
+    // Update Layer Source/Refresh
     React.useEffect(() => {
       const layer = layerRef.current
       if (!layer) return
@@ -215,18 +203,14 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
 
       refreshKeyRef.current += 1
       if (src.setUrl && sourceUrl) {
-        src.setUrl(appendCacheBust(sourceUrl, refreshKeyRef.current) || '')
+        src.setUrl(appendCacheBust(sourceUrl, refreshKeyRef.current))
       }
-      src.refresh()
-    }, [appendCacheBust, display, sourceUrl, JSON.stringify({ canvasFilter, canvasSetting })])
+      if (src.clear) src.clear()
+      if (src.refresh) src.refresh()
 
-    // display 变化时更新可见性
-    React.useEffect(() => {
-      if (!layerRef.current) return
-      layerRef.current.setVisible(display)
-    }, [display])
+    }, [appendCacheBust, display, sourceUrl, JSON.stringify({ canvasFilter, canvasSetting }), coordinateType, JSON.stringify(coorDefs)])
 
-    // 更新图层属性
+    // Update Layer Properties (useLayerProperties logic equivalent)
     React.useEffect(() => {
       const layer = layerRef.current
       if (!layer) return
@@ -237,7 +221,12 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
       if (minResolution !== undefined) layer.setMinResolution(minResolution)
       if (maxZoom !== undefined) layer.setMaxZoom(maxZoom)
       if (minZoom !== undefined) layer.setMinZoom(minZoom)
-    }, [opacity, zIndex, maxResolution, minResolution, maxZoom, minZoom])
+
+      // Visibility
+      if (display !== undefined) layer.setVisible(display)
+
+    }, [opacity, zIndex, maxResolution, minResolution, maxZoom, minZoom, display])
+
 
     return (
       <div
@@ -245,7 +234,7 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
         className={cn("xyz-layer", className)}
         style={{ display: 'none' }}
         data-cell-key={cellKey}
-        {...props}
+        {...otherProps}
       />
     )
   }

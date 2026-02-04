@@ -61,7 +61,7 @@ function parseJsonStrings(data: any): any {
 
     if (isObject(value)) {
       Object.keys(value).forEach(key => {
-        ;(value as Record<string, any>)[key] = processValue((value as Record<string, any>)[key])
+        ; (value as Record<string, any>)[key] = processValue((value as Record<string, any>)[key])
       })
       return value
     }

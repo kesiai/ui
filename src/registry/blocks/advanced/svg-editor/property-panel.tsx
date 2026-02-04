@@ -148,7 +148,14 @@ export const PropertyPanel = React.forwardRef<HTMLDivElement, PropertyPanelProps
     },
     ref
   ) => {
+    // 添加调试日志
+    React.useEffect(() => {
+      console.log('[PropertyPanel] properties 更新:', properties.length, '个属性')
+      console.log('[PropertyPanel] properties 详情:', properties.map(p => ({ key: p.key, label: p.label, value: p.value })))
+    }, [properties])
+
     const handlePropertyChange = (key: string, value: any) => {
+      console.log('[PropertyPanel] 属性变化:', key, '=', value)
       onChange?.(key, value)
     }
 
@@ -163,6 +170,8 @@ export const PropertyPanel = React.forwardRef<HTMLDivElement, PropertyPanelProps
         }
         groups[group].push(prop)
       })
+
+      console.log('[PropertyPanel] 分组后的属性:', Object.keys(groups), '->', Object.values(groups).map(g => g.length))
 
       return groups
     }, [properties])

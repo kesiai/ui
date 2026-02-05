@@ -1,4 +1,4 @@
-import { Panel } from '@/registry/components/container-panel/panel'
+import { Panel } from '@/registry/components/container-panel/container-panel'
 import { ComponentConfig } from '@/app/config/types'
 
 export const panelPropsConfig = [

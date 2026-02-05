@@ -1,4 +1,4 @@
-import { Carousel } from '@/registry/components/container-carousel/carousel'
+import { Carousel } from '@/registry/components/container-carousel/container-carousel'
 import { ComponentConfig } from '@/app/config/types'
 
 export const carouselPropsConfig = [

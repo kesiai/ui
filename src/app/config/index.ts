@@ -3,21 +3,56 @@ import type { ComponentConfig } from './types'
 // 动态导入 registry 目录下所有的 config.tsx 文件
 const registryModules = import.meta.glob('../../registry/**/config.tsx', { eager: true })
 
-// 分类配置映射
+// 分类配置映射 - 根据组件功能分类，而不是目录结构
 const categoryConfig: Record<string, { name: string; icon: string; order: number }> = {
-  'components': { name: '基础组件', icon: '🧩', order: 0 },
-  'business': { name: '业务组件', icon: '💼', order: 1 },
-  'form': { name: '表单组件', icon: '📝', order: 2 },
-  'view': { name: '视图组件', icon: '✳️', order: 2 },
-  'table-field': { name: '表格字段组件', icon: '📋', order: 3 },
+  'containers': { name: '容器组件', icon: '📦', order: 0 },
+  'data-source': { name: '数据源', icon: '🔌', order: 1 },
+  'basic': { name: '基础组件', icon: '🧩', order: 2 },
+  'form': { name: '表单组件', icon: '📝', order: 3 },
   'chart': { name: '图表组件', icon: '📊', order: 4 },
-  'advanced': { name: '高级组件', icon: '⚡', order: 5 },
-  '3d': { name: '3D 组件', icon: '🎮', order: 6 },
-  'gis': { name: '地图组件', icon: '🗺️', order: 7 },
-  'video': { name: '视频组件', icon: '🎬', order: 8 },
-  'mobile': { name: '移动端组件', icon: '📱', order: 9 },
-  'containers': { name: '容器组件', icon: '📦', order: 10 },
-  'data-source': { name: '数据源', icon: '🔌', order: 11 },
+  'business': { name: '业务组件', icon: '💼', order: 5 },
+}
+
+// 根据组件 ID 判断分类
+function getCategoryByComponentId(componentId: string): string {
+  // 容器组件
+  if (componentId.startsWith('container-')) {
+    return 'containers'
+  }
+
+  // 数据源组件
+  if (componentId.startsWith('datasource-')) {
+    return 'data-source'
+  }
+
+  // 基础组件
+  const basicComponents = [
+    'button', 'text', 'image', 'status', 'statuses',
+    'bar', 'iframe', 'textarea', 'shadcn-button'
+  ]
+  if (basicComponents.includes(componentId)) {
+    return 'basic'
+  }
+
+  // 表单组件
+  const formComponents = [
+    'data-point', 'data-point-input', 'data-point-panel',
+    'table-select', 'table-data-select', 'point-table'
+  ]
+  if (formComponents.includes(componentId)) {
+    return 'form'
+  }
+
+  // 图表组件
+  const chartComponents = [
+    'liquid-level', 'network-graph', 'node-tree-select', 'ruler-comp'
+  ]
+  if (chartComponents.includes(componentId)) {
+    return 'chart'
+  }
+
+  // 默认归为业务组件
+  return 'business'
 }
 
 // 提取 registry 中的所有配置导出
@@ -37,28 +72,15 @@ const categoriesTemp: Record<string, string[]> = {}
 for (const path in registryModules) {
   const module = registryModules[path] as any
 
-  // 提取分类和组件名
-  // 支持两种格式:
-  // 1. ../../registry/form/form-input/config.tsx (两层: 分类/组件)
-  // 2. ../../registry/data-source/config.tsx (一层: 直接是组件)
-  let categoryDir: string
-  let componentId: string
+  // 提取组件名（从路径中提取，不再依赖目录结构作为分类）
+  // 支持:
+  // 1. ../../registry/components/button/config.tsx
+  // 2. ../../registry/components/container-tabs/config.tsx
+  const match = path.match(/registry\/components\/([^/]+)\/config\.tsx$/)
+  if (!match) continue
 
-  // 先尝试匹配两层格式
-  let match = path.match(/registry\/([^/]+)\/([^/]+)\/config\.tsx$/)
-  if (match) {
-    const [, cat, comp] = match
-    categoryDir = cat
-    componentId = comp
-  } else {
-    // 尝试匹配一层格式
-    match = path.match(/registry\/([^/]+)\/config\.tsx$/)
-    if (!match) continue
-
-    const [, comp] = match
-    categoryDir = comp // 使用组件名作为分类
-    componentId = comp
-  }
+  const [, componentDirName] = match
+  const componentId = componentDirName
 
   // 获取组件配置
   let config: ComponentConfig | null = null
@@ -77,24 +99,28 @@ for (const path in registryModules) {
   }
 
   if (config) {
-    registryConfigs[config.id || componentId] = config
+    const finalComponentId = config.id || componentId
+    registryConfigs[finalComponentId] = config
+
+    // 根据组件 ID 判断分类
+    const categoryKey = getCategoryByComponentId(finalComponentId)
 
     // 添加到临时分类
-    if (!categoriesTemp[categoryDir]) {
-      categoriesTemp[categoryDir] = []
+    if (!categoriesTemp[categoryKey]) {
+      categoriesTemp[categoryKey] = []
     }
-    categoriesTemp[categoryDir].push(config.id || componentId)
+    categoriesTemp[categoryKey].push(finalComponentId)
   }
 }
 
 // 构建最终的分类数组
 Object.entries(categoriesTemp)
   .sort(([, a], [, b]) => a.length - b.length) // 按组件数量排序
-  .forEach(([categoryDir, componentIds]) => {
-    const catConfig = categoryConfig[categoryDir]
+  .forEach(([categoryKey, componentIds]) => {
+    const catConfig = categoryConfig[categoryKey]
     if (catConfig) {
       componentCategories.push({
-        id: categoryDir,
+        id: categoryKey,
         name: catConfig.name,
         icon: catConfig.icon,
         components: componentIds.map(id => ({ id }))

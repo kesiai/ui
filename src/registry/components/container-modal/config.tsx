@@ -1,4 +1,4 @@
-import { Modal } from '@/registry/components/container-modal/modal'
+import { Modal } from '@/registry/components/container-modal/container-modal'
 import { ComponentConfig } from '@/app/config/types'
 
 export const modalPropsConfig = [

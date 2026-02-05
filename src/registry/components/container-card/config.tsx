@@ -1,4 +1,4 @@
-import { Card } from '@/registry/components/container-card/card'
+import { Card } from '@/registry/components/container-card/container-card'
 import { ComponentConfig } from '@/app/config/types'
 
 export const cardPropsConfig = [

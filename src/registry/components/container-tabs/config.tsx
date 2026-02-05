@@ -1,4 +1,4 @@
-import { Tabs } from '@/registry/components/container-tabs/tabs'
+import { Tabs } from '@/registry/components/container-tabs/container-tabs'
 import { ComponentConfig } from '@/app/config/types'
 
 export const tabsPropsConfig = [

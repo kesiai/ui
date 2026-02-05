@@ -1,4 +1,4 @@
-import { Popover } from '@/registry/components/container-popover/popover'
+import { Popover } from '@/registry/components/container-popover/container-popover'
 import { ComponentConfig } from '@/app/config/types'
 
 export const popoverPropsConfig = [

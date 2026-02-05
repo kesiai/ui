@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/log-table-widget/log-table-widget.tsx",
+      "path": "blocks/page-elements/log-table-widget/log-table-widget.tsx",
       "type": "registry:component",
       "content": ""
     }

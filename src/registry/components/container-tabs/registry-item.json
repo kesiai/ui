@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "container-tabs",
+  "type": "registry:component",
+  "title": "Tabs",
+  "description": "标签页容器组件 - 支持多种样式和位置",
+  "registryDependencies": ["tabs"],
+  "dependencies": [
+    "@radix-ui/react-tabs"
+  ],
+  "files": [
+    {
+      "path": "container-tabs/container-tabs.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

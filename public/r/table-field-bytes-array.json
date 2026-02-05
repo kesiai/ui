@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-bytes-array",
+  "type": "registry:component",
+  "title": "TableField.BytesArray",
+  "description": "表格字段 - 字节数组组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-bytes-array/table-field-bytes-array.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/chart/data-view-chart/data-view-chart.tsx",
+      "path": "blocks/chart/data-view-chart/data-view-chart.tsx",
       "type": "registry:component",
       "content": ""
     }

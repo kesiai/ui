@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-link",
+  "type": "registry:component",
+  "title": "TableField.Link",
+  "description": "表格字段 - 链接组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-link/table-field-link.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

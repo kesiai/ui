@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/mobile/mobile-list/mobile-list.tsx",
+      "path": "blocks/mobile/mobile-list/mobile-list.tsx",
       "type": "registry:component",
       "content": ""
     }

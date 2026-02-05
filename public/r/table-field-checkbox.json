@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-checkbox",
+  "type": "registry:component",
+  "title": "TableField.Checkbox",
+  "description": "表格字段 - 复选框组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-checkbox/table-field-checkbox.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

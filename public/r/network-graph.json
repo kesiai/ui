@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/business/network-graph/network-graph.tsx",
+      "path": "blocks/business/network-graph/network-graph.tsx",
       "type": "registry:component",
       "content": ""
     }

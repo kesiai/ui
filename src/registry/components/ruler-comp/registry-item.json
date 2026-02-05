@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ruler-comp",
+  "type": "registry:component",
+  "title": "RulerComp",
+  "description": "标尺 - 标尺组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "components/ruler-comp/ruler-comp.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

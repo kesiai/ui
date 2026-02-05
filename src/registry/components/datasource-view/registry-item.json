@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "datasource-view",
+  "type": "registry:component",
+  "title": "ViewDataSource",
+  "description": "视图数据源 - 查询视图数据，支持维度、度量和过滤条件",
+  "registryDependencies": ["container-context-provider"],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "datasource-view/view-data-source.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

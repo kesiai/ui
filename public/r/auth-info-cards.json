@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/auth-info-cards/auth-info-cards.tsx",
+      "path": "blocks/page-elements/auth-info-cards/auth-info-cards.tsx",
       "type": "registry:component",
       "content": ""
     }

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "datasource-api",
+  "type": "registry:component",
+  "title": "ApiDataSource",
+  "description": "平台接口数据源 - 调用平台 API 接口获取数据",
+  "registryDependencies": ["container-context-provider"],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "datasource-api/api-data-source.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

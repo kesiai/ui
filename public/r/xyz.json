@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "xyz",
+  "type": "registry:component",
+  "title": "xyz",
+  "description": "地图xyz图层",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "/Users/yuhaotian/workspace/apps/shadcn-air/my-component-library/src/registry/blocks/gis/xyz/xyz.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-form-info",
+  "type": "registry:component",
+  "title": "TableField.FormInfo",
+  "description": "表格字段 - 表单信息组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-form-info/table-field-form-info.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

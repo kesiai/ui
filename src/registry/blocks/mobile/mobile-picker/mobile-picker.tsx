@@ -5,7 +5,7 @@ import {
   DrawerContent,
   DrawerPortal,
 } from "@/registry/ui/drawer"
-import { Button } from "@/registry/blocks/components/button/button"
+import { Button } from "@/registry/components/button/button"
 import { ChevronsUpDown, Loader2, ArrowLeft, Check } from "lucide-react"
 
 // ====================== 类型定义 ======================

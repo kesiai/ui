@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/business/data-point-input/data-point-input.tsx",
+      "path": "blocks/business/data-point-input/data-point-input.tsx",
       "type": "registry:component",
       "content": ""
     }

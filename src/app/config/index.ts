@@ -1,7 +1,7 @@
 import type { ComponentConfig } from './types'
 
-// 动态导入 registry/blocks 目录下所有的 config.tsx 文件
-const registryModules = import.meta.glob('../../registry/blocks/**/config.tsx', { eager: true })
+// 动态导入 registry 目录下所有的 config.tsx 文件
+const registryModules = import.meta.glob('../../registry/**/config.tsx', { eager: true })
 
 // 分类配置映射
 const categoryConfig: Record<string, { name: string; icon: string; order: number }> = {
@@ -39,20 +39,20 @@ for (const path in registryModules) {
 
   // 提取分类和组件名
   // 支持两种格式:
-  // 1. ../../registry/blocks/form/form-input/config.tsx (两层: 分类/组件)
-  // 2. ../../registry/blocks/data-source/config.tsx (一层: 直接是组件)
+  // 1. ../../registry/form/form-input/config.tsx (两层: 分类/组件)
+  // 2. ../../registry/data-source/config.tsx (一层: 直接是组件)
   let categoryDir: string
   let componentId: string
 
   // 先尝试匹配两层格式
-  let match = path.match(/registry\/blocks\/([^/]+)\/([^/]+)\/config\.tsx$/)
+  let match = path.match(/registry\/([^/]+)\/([^/]+)\/config\.tsx$/)
   if (match) {
     const [, cat, comp] = match
     categoryDir = cat
     componentId = comp
   } else {
     // 尝试匹配一层格式
-    match = path.match(/registry\/blocks\/([^/]+)\/config\.tsx$/)
+    match = path.match(/registry\/([^/]+)\/config\.tsx$/)
     if (!match) continue
 
     const [, comp] = match

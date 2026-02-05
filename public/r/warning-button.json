@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/warning-button/warning-button.tsx",
+      "path": "blocks/page-elements/warning-button/warning-button.tsx",
       "type": "registry:component",
       "content": ""
     }

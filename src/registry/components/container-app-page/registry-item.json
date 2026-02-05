@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "container-app-page",
+  "type": "registry:component",
+  "title": "AppPage",
+  "description": "内容区域 - 页面内容区域组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "container-app-page/app-page.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

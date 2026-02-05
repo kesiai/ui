@@ -2,6 +2,7 @@ import { HistoryDataSource } from './history-data-source'
 import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { TimeRangeConfig, GroupConfig } from '../types'
+import documentationMd from './history-data-source.md?raw'
 
 // 默认配置
 const defaultHistoryConfig = {
@@ -136,5 +137,6 @@ export const historyDataSourceConfig: ComponentConfig = {
   propsConfig: historyDataSourcePropsConfig,
   defaultProps: historyDataSourceDefaultProps,
   renderPreview: renderHistoryDataSourcePreview,
-  renderCodePreview: renderHistoryDataSourceCodePreview
+  renderCodePreview: renderHistoryDataSourceCodePreview,
+  documentation: documentationMd
 }

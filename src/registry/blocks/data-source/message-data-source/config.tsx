@@ -1,6 +1,7 @@
 import { MessageDataSource } from './message-data-source'
 import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './message-data-source.md?raw'
 
 export const messageDataSourcePropsConfig = [
   {
@@ -135,5 +136,6 @@ export const messageDataSourceConfig: ComponentConfig = {
   propsConfig: messageDataSourcePropsConfig,
   defaultProps: messageDataSourceDefaultProps,
   renderPreview: renderMessageDataSourcePreview,
-  renderCodePreview: renderMessageDataSourceCodePreview
+  renderCodePreview: renderMessageDataSourceCodePreview,
+  documentation: documentationMd
 }

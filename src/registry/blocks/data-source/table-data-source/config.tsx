@@ -2,6 +2,7 @@ import { TableDataSource } from './table-data-source'
 import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { FieldFormatConfig } from '../types'
+import documentationMd from './table-data-source.md?raw'
 
 // 默认配置
 const defaultTableConfig = {
@@ -121,5 +122,6 @@ export const tableDataSourceConfig: ComponentConfig = {
   propsConfig: tableDataSourcePropsConfig,
   defaultProps: tableDataSourceDefaultProps,
   renderPreview: renderTableDataSourcePreview,
-  renderCodePreview: renderTableDataSourceCodePreview
+  renderCodePreview: renderTableDataSourceCodePreview,
+  documentation: documentationMd
 }

@@ -1,6 +1,7 @@
 import { InterfaceDataSource } from './interface-data-source'
 import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './interface-data-source.md?raw'
 
 export const interfaceDataSourcePropsConfig = [
   {
@@ -104,5 +105,6 @@ export const interfaceDataSourceConfig: ComponentConfig = {
   propsConfig: interfaceDataSourcePropsConfig,
   defaultProps: interfaceDataSourceDefaultProps,
   renderPreview: renderInterfaceDataSourcePreview,
-  renderCodePreview: renderInterfaceDataSourceCodePreview
+  renderCodePreview: renderInterfaceDataSourceCodePreview,
+  documentation: documentationMd
 }

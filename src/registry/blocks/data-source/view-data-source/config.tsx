@@ -1,6 +1,7 @@
 import { ViewDataSource } from './view-data-source'
 import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './view-data-source.md?raw'
 
 const defaultView = {
   id: "05294f12-2845-4eeb-abae-154c6bdfe87c",
@@ -144,5 +145,6 @@ export const viewDataSourceConfig: ComponentConfig = {
   propsConfig: viewDataSourcePropsConfig,
   defaultProps: viewDataSourceDefaultProps,
   renderPreview: renderViewDataSourcePreview,
-  renderCodePreview: renderViewDataSourceCodePreview
+  renderCodePreview: renderViewDataSourceCodePreview,
+  documentation: documentationMd
 }

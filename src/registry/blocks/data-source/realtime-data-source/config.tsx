@@ -2,6 +2,7 @@ import { RealtimeDataSource } from './realtime-data-source'
 import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { TagConfig, TimeLineConfig } from '../types'
+import documentationMd from './realtime-data-source.md?raw'
 
 // 默认配置
 const defaultRealtimeConfig = {
@@ -90,5 +91,6 @@ export const realtimeDataSourceConfig: ComponentConfig = {
   propsConfig: realtimeDataSourcePropsConfig,
   defaultProps: realtimeDataSourceDefaultProps,
   renderPreview: renderRealtimeDataSourcePreview,
-  renderCodePreview: renderRealtimeDataSourceCodePreview
+  renderCodePreview: renderRealtimeDataSourceCodePreview,
+  documentation: documentationMd
 }

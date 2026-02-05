@@ -1,6 +1,7 @@
 import { ApiDataSource } from './api-data-source'
 import { DataSourcePreview } from '../components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './api-data-source.md?raw'
 
 // 默认配置
 const defaultApiConfig = {
@@ -151,5 +152,6 @@ export const apiDataSourceConfig: ComponentConfig = {
   propsConfig: apiDataSourcePropsConfig,
   defaultProps: apiDataSourceDefaultProps,
   renderPreview: renderApiDataSourcePreview,
-  renderCodePreview: renderApiDataSourceCodePreview
+  renderCodePreview: renderApiDataSourceCodePreview,
+  documentation: documentationMd
 }

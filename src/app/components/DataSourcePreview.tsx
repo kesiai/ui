@@ -1,6 +1,6 @@
 'use client'
 
-import { useContextProvider } from '@/registry/components/context-provider/context-provider'
+import { useContextProvider } from '@/registry/components/container-context-provider/container-context-provider'
 import { useDatasourceValue } from '@airiot/client'
 
 /**

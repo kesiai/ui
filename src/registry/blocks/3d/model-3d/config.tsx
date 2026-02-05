@@ -3,6 +3,8 @@ import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置，基于 ../3d/src/Space/initParam.js（简化版）
 const defaultModel3dProps = {
+  variables: [],
+  meshes: [],
   sceneConfig: {
     fog: {
       enable: false,
@@ -53,13 +55,34 @@ const defaultModel3dProps = {
       enabled: true
     }
   },
+  snapshotConfig: {
+    showBar: true
+  },
   environmentConfig: {
     type: 'sky'
   },
+  renderConfig: {
+    outputEncoding: 'sRGBEncoding'
+  },
   lightConfig: {
-    ambientIntensity: 1,
-    directionalIntensity: 1,
-    directionalPosition: [0, 300, 300]
+    ambientLight: [
+      {
+        enable: true,
+        color: '#FFFFFF'
+      }
+    ],
+    directionalLight: [
+      {
+        enable: true,
+        color: '#FFFFFF',
+        castShadow: true,
+        position: {
+          x: 0,
+          y: 300,
+          z: 300
+        }
+      }
+    ]
   },
   helperConfig: {
     gridConfig: {
@@ -73,7 +96,11 @@ const defaultModel3dProps = {
       enable: true,
       size: 500
     }
-  }
+  },
+  composerConfig: {
+    unrealBloom: { enable: false }
+  },
+  loadingConfig: {}
 }
 
 export const model3dPropsConfig = [
@@ -125,20 +152,34 @@ export const model3dDefaultProps = {
 }
 
 const renderModel3dPreview = (props: Record<string, any>) => {
-  // 解析 JSON 配置
+  // 解析 JSON 配置，解析失败返回 undefined
   const parseJson = (str: string) => {
     try {
       return JSON.parse(str)
     } catch {
-      return {}
+      return undefined
     }
   }
+
+  const sceneConfig = parseJson(props.sceneConfig)
+  const cameraConfig = parseJson(props.cameraConfig)
+  const controlConfig = parseJson(props.controlConfig)
+  const environmentConfig = parseJson(props.environmentConfig)
+  const lightConfig = parseJson(props.lightConfig)
+  const helperConfig = parseJson(props.helperConfig)
 
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full h-96 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center">
         <div className="w-full h-full flex items-center justify-center p-4">
-          <Model3d>
+          <Model3d
+            sceneConfig={sceneConfig}
+            cameraConfig={cameraConfig}
+            controlConfig={controlConfig}
+            environmentConfig={environmentConfig}
+            lightConfig={lightConfig}
+            helperConfig={helperConfig}
+          >
           </Model3d>
         </div>
       </div>
@@ -151,28 +192,30 @@ const renderModel3dCodePreview = (props: Record<string, any>) => {
     try {
       return JSON.parse(str)
     } catch {
-      return {}
+      return undefined
     }
   }
 
   const sceneConfig = parseJson(props.sceneConfig)
   const cameraConfig = parseJson(props.cameraConfig)
   const controlConfig = parseJson(props.controlConfig)
+  const environmentConfig = parseJson(props.environmentConfig)
+  const lightConfig = parseJson(props.lightConfig)
+  const helperConfig = parseJson(props.helperConfig)
 
   let code = `<Model3d`
   if (props.script) code += `\n  script="${props.script}"`
-  if (Object.keys(sceneConfig).length > 0) code += `\n  sceneConfig={${JSON.stringify(sceneConfig)}}`
-  if (Object.keys(cameraConfig).length > 0) code += `\n  cameraConfig={${JSON.stringify(cameraConfig)}}`
-  if (Object.keys(controlConfig).length > 0) code += `\n  controlConfig={${JSON.stringify(controlConfig)}}`
+  code += `\n  sceneConfig={${JSON.stringify(sceneConfig)}}`
+  code += `\n  cameraConfig={${JSON.stringify(cameraConfig)}}`
+  code += `\n  controlConfig={${JSON.stringify(controlConfig)}}`
+  code += `\n  environmentConfig={${JSON.stringify(environmentConfig)}}`
+  code += `\n  lightConfig={${JSON.stringify(lightConfig)}}`
+  code += `\n  helperConfig={${JSON.stringify(helperConfig)}}`
   code += `\n>`
   code += `\n  {/* 子组件 */}`
   code += `\n</Model3d>`
 
   return code
-}
-
-const renderModel3dCustomForm = (_props: Record<string, any>, _onChange: (name: string, value: any) => void) => {
-  return null
 }
 
 export const model3dConfig: ComponentConfig = {
@@ -182,5 +225,4 @@ export const model3dConfig: ComponentConfig = {
   defaultProps: model3dDefaultProps,
   renderPreview: renderModel3dPreview,
   renderCodePreview: renderModel3dCodePreview,
-  renderCustomForm: renderModel3dCustomForm
 }

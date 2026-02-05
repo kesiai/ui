@@ -8,6 +8,8 @@ import { Suspense } from "react"
 
 // 默认配置，基于 ../3d/src/Space/initParam.js
 const defaultModel3dProps = {
+  variables: [],
+  meshes: [],
   sceneConfig: {
     fog: {
       enable: false,
@@ -68,9 +70,24 @@ const defaultModel3dProps = {
     outputEncoding: 'sRGBEncoding'
   },
   lightConfig: {
-    ambientIntensity: 1,
-    directionalIntensity: 1,
-    directionalPosition: [0, 300, 300]
+    ambientLight: [
+      {
+        enable: true,
+        color: '#FFFFFF'
+      }
+    ],
+    directionalLight: [
+      {
+        enable: true,
+        color: '#FFFFFF',
+        castShadow: true,
+        position: {
+          x: 0,
+          y: 300,
+          z: 300
+        }
+      }
+    ]
   },
   helperConfig: {
     gridConfig: {
@@ -84,6 +101,9 @@ const defaultModel3dProps = {
       enable: true,
       size: 500
     }
+  },
+  composerConfig: {
+    unrealBloom: { enable: false }
   },
   loadingConfig: {},
   script: '',

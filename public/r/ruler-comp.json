@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/business/ruler-comp/ruler-comp.tsx",
+      "path": "blocks/business/ruler-comp/ruler-comp.tsx",
       "type": "registry:component",
       "content": ""
     }

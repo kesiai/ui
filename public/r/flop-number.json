@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/advanced/flop-number/flop-number.tsx",
+      "path": "blocks/advanced/flop-number/flop-number.tsx",
       "type": "registry:component",
       "content": ""
     }

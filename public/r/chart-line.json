@@ -8,9 +8,9 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/chart/chart-line/chart-line.tsx",
+      "path": "blocks/chart/chart-line/chart-line.tsx",
       "type": "registry:component",
-      "content": ""
+      "content": "import _ from 'lodash'\nimport React from 'react'\nimport { BaseChart, BaseChartProps } from '../components/BaseChart'\n\n// 递归，字符串转函数\nconst StrToFunction = (obj: any): any => {\n  const result = _.cloneDeep(obj)\n  for (const key in result) {\n    if (_.isString(result[key]) && result[key].indexOf(' => ') > -1) {\n      try {\n        const func = new Function(`return ${result[key]}`)\n        result[key] = func()\n      } catch (e) {\n        console.error(`字符串转函数失败: ${result[key]}`, e)\n        result[key] = result[key]\n      }\n    } else if (_.isObject(result[key])) {\n      result[key] = StrToFunction(result[key])\n    }\n  }\n  return result\n}\n\nexport interface ChartLineProps extends Omit<BaseChartProps, 'option'> {\n  title?: string\n  option?: any\n  chartCode?: string\n  chartData?: any\n  seriesOption?: any\n}\n\nconst ChartLine: React.FC<ChartLineProps> = (props) => {\n  const { option, chartCode, chartData, seriesOption, cellKey, title } = props\n\n  let newOption = option || { series: [seriesOption] }\n\n  if (chartData && !_.isEmpty(chartData)) {\n    const dataset = chartData\n    newOption = {\n      ...newOption,\n      dataset\n    }\n\n    const d = chartData?.dimensions\n    if (d && d[0] && d[0]?.type == 'time') {\n      if (newOption.xAxis) newOption = _.merge(newOption, { xAxis: { type: 'time' } })\n      newOption.series = newOption.series.slice(0, d.length - 1).map((s: any, i: number) => {\n        return ['bar', 'line'].indexOf(s.type) > -1 ? { ...s, encode: { x: 0, y: i + 1 } } : s\n      })\n    }\n  } else if (chartData) {\n    // 如果配置了数据源，但是还没查询回来的话，不展示默认值\n    delete newOption.dataset\n  }\n\n  return (\n    <BaseChart\n      cellKey={cellKey}\n      option={StrToFunction(newOption || option)}\n      chartCode={chartCode}\n      {...props}\n    />\n  )\n}\n\nexport default ChartLine\n"
     }
   ]
 }

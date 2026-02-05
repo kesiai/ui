@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "datasource-table",
+  "type": "registry:component",
+  "title": "TableDataSource",
+  "description": "表数据源 - 查询数据表获取数据",
+  "registryDependencies": ["container-context-provider"],
+  "dependencies": [
+    "dayjs",
+    "lodash"
+  ],
+  "files": [
+    {
+      "path": "lib/datasource-types.ts",
+      "type": "registry:lib"
+    },
+    {
+      "path": "lib/datasource-utils.ts",
+      "type": "registry:lib"
+    },
+    {
+      "path": "datasource-table/table-data-source.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

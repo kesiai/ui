@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "container-iteration",
+  "type": "registry:component",
+  "title": "Iteration",
+  "description": "迭代 - 迭代容器组件",
+  "registryDependencies": [],
+  "dependencies": [
+    "@airiot/client"
+  ],
+  "files": [
+    {
+      "path": "container-iteration/iteration.tsx",
+      "type": "registry:component"
+    }
+  ]
+}

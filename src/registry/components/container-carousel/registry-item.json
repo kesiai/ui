@@ -1,0 +1,17 @@
+{
+  "name": "container-carousel",
+  "type": "registry:block",
+  "registryDependencies": [],
+  "dependencies": [
+    "embla-carousel-react",
+    "embla-carousel-auto-scroll",
+    "element-resize-event",
+    "lodash"
+  ],
+  "files": [
+    {
+      "path": "container-carousel/container-carousel.tsx",
+      "type": "registry:block"
+    }
+  ]
+}

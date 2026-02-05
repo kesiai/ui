@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/user-form-widget/user-form-widget.tsx",
+      "path": "blocks/form/user-form-widget/user-form-widget.tsx",
       "type": "registry:component",
       "content": ""
     }

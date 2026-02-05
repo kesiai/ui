@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/video/button-widget/video-button.tsx",
+      "path": "blocks/video/button-widget/video-button.tsx",
       "type": "registry:component",
       "content": ""
     }

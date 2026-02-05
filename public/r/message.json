@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/page-elements/message/message.tsx",
+      "path": "blocks/page-elements/message/message.tsx",
       "type": "registry:component",
       "content": ""
     }

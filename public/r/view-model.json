@@ -8,9 +8,9 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/view/view-model/view-model.tsx",
+      "path": "blocks/view/view-model/view-model.tsx",
       "type": "registry:component",
-      "content": ""
+      "content": "import React from 'react'\nimport { TableModel, Model } from '@airiot/client'\n\ninterface TableFilter {\n  [key: string]: any\n}\n\ninterface TableRef {\n  id: string | number\n  [key: string]: any\n}\n\ntype TableViewProps = {\n  tableId?: string\n  modelName?: string\n  loadingComponent?: React.ReactNode, \n  initQuery?: boolean, \n  children?: React.ReactNode\n  table?: TableRef\n\n  queryFields?: string[]\n  projectAll?: boolean\n  limit?: number\n  tableFilters?: TableFilter[]\n  fieldOrder?: Record<string, 'asc' | 'desc'>[]\n  interval?: number\n}\n\nconst TableView = ({ tableId, modelName, children, initQuery, loadingComponent,\n  queryFields, projectAll,\n  limit,\n  tableFilters,\n  fieldOrder,\n  interval\n }: TableViewProps) => {\n  const [ initialValues, setInitialValues ] = React.useState<any | null>(null)\n\n  React.useEffect(() => {\n    const values = {} as any\n    if (queryFields && queryFields.length > 0) {\n      values['fields'] = queryFields\n    }\n    if (projectAll) {\n      values['projectAll'] = true\n    }\n    if (limit) {\n      values['limit'] = limit\n    }\n    if (tableFilters && tableFilters.length > 0) {\n      values['wheres'] = { tableFilters }\n    }\n    if (fieldOrder && fieldOrder.length > 0) {\n      values['order'] = fieldOrder\n    }\n    setInitialValues(values)\n  }, [queryFields, projectAll, limit, tableFilters, fieldOrder, interval])\n\n  if(initialValues === null) {\n    return null\n  } else if (modelName) {\n    return (\n      <Model name={modelName} key={`table-model-view-${modelName}`} initialValues={initialValues}>\n        {children}\n      </Model>\n    )\n  } else if (tableId) {\n    return (\n      <TableModel tableId={tableId} key={`table-model-view-${tableId}`} loadingComponent={loadingComponent} initQuery={initQuery} initialValues={initialValues}>\n        {children}\n      </TableModel>\n    )\n  } else {\n    return null\n  }\n}\n\nexport default TableView\n"
     }
   ]
 }

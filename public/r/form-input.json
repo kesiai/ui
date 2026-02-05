@@ -10,7 +10,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/form-input-number/form-input.tsx",
+      "path": "blocks/form/form-input-number/form-input.tsx",
       "type": "registry:component",
       "content": ""
     }

@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/advanced/time/time.tsx",
+      "path": "blocks/advanced/time/time.tsx",
       "type": "registry:component",
       "content": ""
     }

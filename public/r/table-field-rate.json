@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-rate",
+  "type": "registry:component",
+  "title": "TableField.Rate",
+  "description": "表格字段 - 评分组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-rate/table-field-rate.tsx",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

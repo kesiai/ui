@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/chart/chart-gauge/chart-gauge.tsx",
+      "path": "blocks/chart/chart-gauge/chart-gauge.tsx",
       "type": "registry:component",
       "content": ""
     }

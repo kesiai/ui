@@ -10,7 +10,7 @@
     "build": "tsup",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "build:registry": "tsx --tsconfig ./tsconfig.scripts.json ./scripts/build-registry.mts && tsx scripts/clean-registry.ts",
+    "build:registry": "node ./scripts/build-registry.mjs && tsx scripts/clean-registry.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",

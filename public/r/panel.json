@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "panel",
+  "type": "registry:component",
+  "title": "Panel",
+  "description": "折叠面板容器组件 - 支持手风琴和多开模式",
+  "registryDependencies": [
+    "accordion"
+  ],
+  "dependencies": [
+    "@radix-ui/react-accordion"
+  ],
+  "files": [
+    {
+      "path": "blocks/containers/panel/panel.tsx",
+      "type": "registry:component",
+      "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  Accordion,\n  AccordionItem,\n  AccordionTrigger,\n  AccordionContent,\n} from \"@/components/ui/accordion\"\n\nexport interface PanelConfig {\n  /**\n   * 面板标题\n   */\n  title: string\n  /**\n   * 强制渲染（即使未展开也渲染 DOM）\n   */\n  forceRender?: boolean\n}\n\nexport interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {\n  /**\n   * 是否手风琴模式（只允许一个面板展开）\n   * @default true\n   */\n  accordion?: boolean\n  /**\n   * 是否允许全部折叠（仅在手风琴模式下有效）\n   * @default false\n   */\n  collapsible?: boolean\n  /**\n   * 面板配置数组\n   */\n  panels?: PanelConfig[]\n  /**\n   * 默认展开的面板索引（从 0 开始）\n   * 手风琴模式：单个数字，多开模式：数字数组\n   * @default 0\n   */\n  defaultValue?: number | number[]\n  /**\n   * 受控模式：当前展开的面板索引\n   */\n  value?: string | string[]\n  /**\n   * 展开状态变化回调\n   */\n  onValueChange?: (value: string | string[]) => void\n  /**\n   * 子元素（如果提供 panels，则忽略 children）\n   */\n  children?: React.ReactNode\n}\n\nconst Panel = React.forwardRef<HTMLDivElement, PanelProps>(\n  (\n    {\n      className,\n      accordion = true,\n      collapsible = false,\n      panels,\n      defaultValue = 0,\n      value,\n      onValueChange,\n      children,\n      ...props\n    },\n    ref\n  ) => {\n    // 计算默认值\n    const getDefaultValue = () => {\n      if (accordion) {\n        // 手风琴模式：单个值\n        if (typeof defaultValue === \"number\") {\n          return `panel-${defaultValue}`\n        }\n        return `panel-0`\n      } else {\n        // 多开模式：数组\n        if (Array.isArray(defaultValue)) {\n          return defaultValue.map((i) => `panel-${i}`)\n        }\n        return [`panel-0`]\n      }\n    }\n\n    // 渲染配置模式的面板\n    const renderConfigPanels = () => {\n      if (!panels || panels.length === 0) {\n        return null\n      }\n\n      const childrenArray = React.Children.toArray(children)\n\n      return panels.map((panel, index) => {\n        const panelValue = `panel-${index}`\n        return (\n          <AccordionItem key={panelValue} value={panelValue}>\n            <AccordionTrigger>{panel.title || `面板 ${index + 1}`}</AccordionTrigger>\n            <AccordionContent\n              forceMount={panel.forceRender}\n            >\n              {childrenArray[index] || (\n                <div className=\"flex items-center justify-center h-full text-slate-400\">\n                  <p>面板内容区域 {index + 1}</p>\n                </div>\n              )}\n            </AccordionContent>\n          </AccordionItem>\n        )\n      })\n    }\n\n    // 渲染 children 模式的面板\n    const renderChildrenPanels = () => {\n      return children\n    }\n\n    return (\n      <div\n        ref={ref}\n        className={cn(\"panel-container\", className)}\n        {...props}\n      >\n        <Accordion\n          type={accordion ? \"single\" : \"multiple\"}\n          {...(collapsible && { collapsible: true })}\n          defaultValue={getDefaultValue()}\n          value={value}\n          onValueChange={onValueChange}\n          className=\"w-full\"\n        >\n          {panels && panels.length > 0 ? renderConfigPanels() : renderChildrenPanels()}\n        </Accordion>\n      </div>\n    )\n  }\n)\n\nPanel.displayName = \"Panel\"\n\nexport { Panel }\n"
+    }
+  ]
+}

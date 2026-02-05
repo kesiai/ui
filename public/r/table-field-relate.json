@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-field-relate",
+  "type": "registry:component",
+  "title": "TableField.Relate",
+  "description": "表格字段 - 关联字段组件",
+  "registryDependencies": [],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-relate/index.ts",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/AsyncSelect.tsx",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/DetailShow.tsx",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/RelateComponent.tsx",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/RelateModelSelect.tsx",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/RelateMultiSelect.tsx",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/RelateSelect.tsx",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/types.ts",
+      "type": "registry:component",
+      "content": ""
+    },
+    {
+      "path": "registry/blocks/table-field/table-field-relate/utils.ts",
+      "type": "registry:component",
+      "content": ""
+    }
+  ]
+}

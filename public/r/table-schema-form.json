@@ -8,7 +8,7 @@
   "dependencies": [],
   "files": [
     {
-      "path": "registry/blocks/form/table-schema-form/table-schema-form.tsx",
+      "path": "blocks/form/table-schema-form/table-schema-form.tsx",
       "type": "registry:component",
       "content": ""
     }

@@ -26,9 +26,9 @@ interface ViewPaginationProps {
 }
 
 const ViewPagination: React.FC<ViewPaginationProps> = ({
-  showSizeChanger = true,
-  showQuickJumper = false,
-  showTotal = true,
+  showSizeChanger = false,
+  showQuickJumper = true,
+  showTotal = false,
   className = '',
   disabled = false
 }) => {

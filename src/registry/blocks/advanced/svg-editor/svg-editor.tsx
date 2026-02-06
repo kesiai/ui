@@ -175,6 +175,17 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
     const [properties, setProperties] = React.useState<Property[]>([])
     const [isCanvasReady, setIsCanvasReady] = React.useState(false)
 
+    // 调试：监控属性和选中元素状态
+    React.useEffect(() => {
+      console.log('[状态监控] selectedElements:', selectedElements.length, 'properties:', properties.length)
+      if (selectedElements.length > 0) {
+        console.log('[状态监控] 选中的元素:', selectedElements.map(e => ({ tagName: e.tagName, id: e.id })))
+      }
+      if (properties.length > 0) {
+        console.log('[状态监控] 属性列表:', properties.map(p => ({ key: p.key, label: p.label, value: p.value })))
+      }
+    }, [selectedElements, properties])
+
     // 工具栏位置
     const [toolbarPosition, setToolbarPosition] = React.useState({ x: 20, y: 20 })
 
@@ -275,23 +286,46 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
     }, [])
 
     // 获取选中元素的属性
-    const getSelectedProperties = React.useCallback((elements: any | any[]) => {
+    const getSelectedProperties = React.useCallback((elements: any | any[], svgCanvas?: any) => {
       const elemArray = Array.isArray(elements) ? elements : (elements ? [elements] : [])
-      if (elemArray.length === 0) return []
+      if (elemArray.length === 0) {
+        console.log('[getSelectedProperties] 元素数组为空')
+        return []
+      }
 
       const elem = elemArray[0]
-      if (!elem) return []
+      if (!elem) {
+        console.log('[getSelectedProperties] 第一个元素为空')
+        return []
+      }
+
+      console.log('[getSelectedProperties] 元素信息:', {
+        tagName: elem.tagName,
+        id: elem.id,
+        getAttribute: typeof elem.getAttribute,
+        hasAttribute: typeof elem.hasAttribute,
+        isDomElement: elem instanceof Element,
+      })
 
       const props: Property[] = []
 
       // 基本信息
+      const nameValue = elem.getAttribute ? elem.getAttribute("data-name") : ""
+      const idValue = elem.id || ""
+      console.log('[getSelectedProperties] 基本属性:', { nameValue, idValue })
+
       props.push({
         key: "basic.name",
         label: "名称",
         type: "text",
-        value: elem.getAttribute("data-name") || "",
+        value: nameValue || "",
         onChange: (value) => {
-          elem.setAttribute("data-name", value)
+          if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+            // 使用 SVGEdit 原生方法修改属性
+            svgCanvas.changeSelectedAttribute('data-name', value)
+          } else if (elem.setAttribute) {
+            elem.setAttribute("data-name", value)
+          }
           onPropertyChange?.("basic.name", value)
         },
       })
@@ -300,22 +334,36 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         key: "basic.id",
         label: "ID",
         type: "text",
-        value: elem.id || "",
+        value: idValue || "",
         onChange: (value) => {
-          elem.id = value
+          // 修改 ID 需要特殊处理
+          if (elem.id !== undefined) {
+            elem.id = value
+          }
           onPropertyChange?.("basic.id", value)
         },
       })
 
       // 几何属性
       if (elem.tagName === "rect") {
+        const x = elem.getAttribute ? parseFloat(elem.getAttribute("x") || "0") : 0
+        const y = elem.getAttribute ? parseFloat(elem.getAttribute("y") || "0") : 0
+        const width = elem.getAttribute ? parseFloat(elem.getAttribute("width") || "0") : 0
+        const height = elem.getAttribute ? parseFloat(elem.getAttribute("height") || "0") : 0
+
+        console.log('[getSelectedProperties] rect 几何属性:', { x, y, width, height })
+
         props.push({
           key: "geometry.x",
           label: "X 坐标",
           type: "number",
-          value: parseFloat(elem.getAttribute("x") || "0"),
+          value: x,
           onChange: (value) => {
-            elem.setAttribute("x", value.toString())
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              svgCanvas.changeSelectedAttribute('x', value)
+            } else if (elem.setAttribute) {
+              elem.setAttribute("x", value.toString())
+            }
             onPropertyChange?.("geometry.x", value)
           },
         })
@@ -323,9 +371,13 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           key: "geometry.y",
           label: "Y 坐标",
           type: "number",
-          value: parseFloat(elem.getAttribute("y") || "0"),
+          value: y,
           onChange: (value) => {
-            elem.setAttribute("y", value.toString())
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              svgCanvas.changeSelectedAttribute('y', value)
+            } else if (elem.setAttribute) {
+              elem.setAttribute("y", value.toString())
+            }
             onPropertyChange?.("geometry.y", value)
           },
         })
@@ -333,9 +385,18 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           key: "geometry.width",
           label: "宽度",
           type: "number",
-          value: parseFloat(elem.getAttribute("width") || "0"),
+          value: width,
           onChange: (value) => {
-            elem.setAttribute("width", value.toString())
+            console.log('[属性修改] 修改宽度:', value)
+            // 使用 SVGEdit 原生方法修改属性
+            // 不传递 elems 参数，让它默认使用当前选中的元素
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              console.log('[属性修改] 调用 changeSelectedAttribute')
+              svgCanvas.changeSelectedAttribute('width', value)
+            } else if (elem.setAttribute) {
+              console.log('[属性修改] 回退到 setAttribute')
+              elem.setAttribute("width", value.toString())
+            }
             onPropertyChange?.("geometry.width", value)
           },
         })
@@ -343,22 +404,37 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           key: "geometry.height",
           label: "高度",
           type: "number",
-          value: parseFloat(elem.getAttribute("height") || "0"),
+          value: height,
           onChange: (value) => {
-            elem.setAttribute("height", value.toString())
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              svgCanvas.changeSelectedAttribute('height', value)
+            } else if (elem.setAttribute) {
+              elem.setAttribute("height", value.toString())
+            }
             onPropertyChange?.("geometry.height", value)
           },
         })
       }
 
       if (elem.tagName === "ellipse") {
+        const cx = elem.getAttribute ? parseFloat(elem.getAttribute("cx") || "0") : 0
+        const cy = elem.getAttribute ? parseFloat(elem.getAttribute("cy") || "0") : 0
+        const rx = elem.getAttribute ? parseFloat(elem.getAttribute("rx") || "0") : 0
+        const ry = elem.getAttribute ? parseFloat(elem.getAttribute("ry") || "0") : 0
+
+        console.log('[getSelectedProperties] ellipse 几何属性:', { cx, cy, rx, ry })
+
         props.push({
           key: "geometry.cx",
           label: "圆心 X",
           type: "number",
-          value: parseFloat(elem.getAttribute("cx") || "0"),
+          value: cx,
           onChange: (value) => {
-            elem.setAttribute("cx", value.toString())
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              svgCanvas.changeSelectedAttribute('cx', value)
+            } else if (elem.setAttribute) {
+              elem.setAttribute("cx", value.toString())
+            }
             onPropertyChange?.("geometry.cx", value)
           },
         })
@@ -366,9 +442,13 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           key: "geometry.cy",
           label: "圆心 Y",
           type: "number",
-          value: parseFloat(elem.getAttribute("cy") || "0"),
+          value: cy,
           onChange: (value) => {
-            elem.setAttribute("cy", value.toString())
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              svgCanvas.changeSelectedAttribute('cy', value)
+            } else if (elem.setAttribute) {
+              elem.setAttribute("cy", value.toString())
+            }
             onPropertyChange?.("geometry.cy", value)
           },
         })
@@ -376,9 +456,13 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           key: "geometry.rx",
           label: "X 半径",
           type: "number",
-          value: parseFloat(elem.getAttribute("rx") || "0"),
+          value: rx,
           onChange: (value) => {
-            elem.setAttribute("rx", value.toString())
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              svgCanvas.changeSelectedAttribute('rx', value)
+            } else if (elem.setAttribute) {
+              elem.setAttribute("rx", value.toString())
+            }
             onPropertyChange?.("geometry.rx", value)
           },
         })
@@ -386,22 +470,37 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           key: "geometry.ry",
           label: "Y 半径",
           type: "number",
-          value: parseFloat(elem.getAttribute("ry") || "0"),
+          value: ry,
           onChange: (value) => {
-            elem.setAttribute("ry", value.toString())
+            if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+              svgCanvas.changeSelectedAttribute('ry', value)
+            } else if (elem.setAttribute) {
+              elem.setAttribute("ry", value.toString())
+            }
             onPropertyChange?.("geometry.ry", value)
           },
         })
       }
 
       // 样式属性
+      const fill = elem.getAttribute ? (elem.getAttribute("fill") || "none") : "none"
+      const stroke = elem.getAttribute ? (elem.getAttribute("stroke") || "#000000") : "#000000"
+      const strokeWidth = elem.getAttribute ? parseFloat(elem.getAttribute("stroke-width") || "1") : 1
+      const opacity = elem.getAttribute ? parseFloat(elem.getAttribute("opacity") || "1") : 1
+
+      console.log('[getSelectedProperties] 样式属性:', { fill, stroke, strokeWidth, opacity })
+
       props.push({
         key: "style.fill",
         label: "填充颜色",
         type: "color",
-        value: elem.getAttribute("fill") || "none",
+        value: fill,
         onChange: (value) => {
-          elem.setAttribute("fill", value)
+          if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+            svgCanvas.changeSelectedAttribute('fill', value)
+          } else if (elem.setAttribute) {
+            elem.setAttribute("fill", value)
+          }
           onPropertyChange?.("style.fill", value)
         },
       })
@@ -409,9 +508,13 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         key: "style.stroke",
         label: "边框颜色",
         type: "color",
-        value: elem.getAttribute("stroke") || "#000000",
+        value: stroke,
         onChange: (value) => {
-          elem.setAttribute("stroke", value)
+          if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+            svgCanvas.changeSelectedAttribute('stroke', value)
+          } else if (elem.setAttribute) {
+            elem.setAttribute("stroke", value)
+          }
           onPropertyChange?.("style.stroke", value)
         },
       })
@@ -419,13 +522,17 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         key: "style.strokeWidth",
         label: "边框宽度",
         type: "slider",
-        value: parseFloat(elem.getAttribute("stroke-width") || "1"),
+        value: strokeWidth,
         min: 0,
         max: 20,
         step: 0.5,
         unit: "px",
         onChange: (value) => {
-          elem.setAttribute("stroke-width", value.toString())
+          if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+            svgCanvas.changeSelectedAttribute('stroke-width', value)
+          } else if (elem.setAttribute) {
+            elem.setAttribute("stroke-width", value.toString())
+          }
           onPropertyChange?.("style.strokeWidth", value)
         },
       })
@@ -433,23 +540,30 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         key: "style.opacity",
         label: "透明度",
         type: "slider",
-        value: parseFloat(elem.getAttribute("opacity") || "1"),
+        value: opacity,
         min: 0,
         max: 1,
         step: 0.01,
         unit: "",
         onChange: (value) => {
-          elem.setAttribute("opacity", value.toString())
+          if (svgCanvas && typeof svgCanvas.changeSelectedAttribute === 'function') {
+            svgCanvas.changeSelectedAttribute('opacity', value)
+          } else if (elem.setAttribute) {
+            elem.setAttribute("opacity", value.toString())
+          }
           onPropertyChange?.("style.opacity", value)
         },
       })
 
+      console.log('[getSelectedProperties] 总共生成了', props.length, '个属性')
       return props
     }, [onPropertyChange])
 
     // 初始化 svgedit
     React.useEffect(() => {
       if (!canvasContainerRef.current || !isEditMode) return
+
+      console.log('[useEffect] 初始化 SVG Canvas, isEditMode:', isEditMode)
 
       // 动态导入 svgedit
       // @ts-ignore - @svgedit/svgcanvas 没有类型声明
@@ -466,6 +580,8 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           const w = Math.floor(containerRect.width) || 800
           const h = Math.floor(containerRect.height) || 600
 
+          console.log('[useEffect] 容器尺寸:', w, 'x', h)
+
           // 创建编辑器配置
           const config = {
             initFill: { color: "FFFFFF", opacity: 1 },
@@ -481,8 +597,22 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           const svgCanvas = new SvgCanvas(container, config)
           svgCanvasRef.current = svgCanvas
 
+          console.log('[useEffect] SVG Canvas 创建完成')
+
+          // 探索 svgCanvas 对象的 API
+          console.log('[svgCanvas API] svgCanvas 对象的方法和属性:')
+          console.log('  - getSelectedElems:', typeof svgCanvas.getSelectedElems)
+          console.log('  - getSelectedElements:', typeof svgCanvas.getSelectedElements)
+          console.log('  - getElem:', typeof svgCanvas.getElem)
+          console.log('  - getElement:', typeof svgCanvas.getElement)
+          console.log('  - selection:', typeof svgCanvas.selection)
+          console.log('  - selectedElements:', typeof svgCanvas.selectedElements)
+          console.log('[svgCanvas API] svgCanvas 所有方法:', Object.getOwnPropertyNames(Object.getPrototypeOf(svgCanvas)))
+          console.log('[svgCanvas API] svgCanvas 所有属性:', Object.keys(svgCanvas))
+
           // 设置初始 SVG（使用内部保存的 currentSvg）
           if (currentSvg) {
+            console.log('[useEffect] 设置初始 SVG，长度:', currentSvg.length)
             svgCanvas.setSvgString(currentSvg)
           }
 
@@ -492,7 +622,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
               const svgContent = svgCanvasRef.current.getSvgString()
               if (svgContent) {
                 setCurrentSvg(svgContent)
-                console.log('[SvgEditor] 初始化后保存 SVG 内容，长度:', svgContent.length)
+                console.log('[useEffect] 初始化后保存 SVG 内容，长度:', svgContent.length)
               }
             }
           }, 200)
@@ -500,6 +630,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           // 初始化树数据
           setTimeout(() => {
             const tree = getAllPath(svgCanvas)
+            console.log('[useEffect] 初始化树数据，节点数:', tree.length)
             setTreeData(tree)
           }, 100)
 
@@ -507,15 +638,64 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           setIsCanvasReady(true)
 
           // 监听选择变化
-          svgCanvas.bind("selected", (elems: any) => {
-            const elemArray = Array.isArray(elems) ? elems : Array.from(elems || [])
-            setSelectedElements(elemArray)
-            setSelectedKeys(elemArray.map((e) => e.id))
-            const tree = getAllPath(svgCanvas)
-            setTreeData(tree)
-            const props = getSelectedProperties(elemArray)
-            setProperties(props)
-            onSelectionChange?.(elemArray)
+          svgCanvas.bind("selected", (_elems: any) => {
+            console.log('[selected event] ========== 选中事件触发 ==========')
+
+            // 使用 svgCanvas.selectedElements 获取选中的元素
+            const selectedElems = svgCanvas.selectedElements || []
+            console.log('[selected event] svgCanvas.selectedElements:', selectedElems)
+            console.log('[selected event] selectedElems 长度:', selectedElems.length)
+
+            if (selectedElems.length > 0) {
+              const firstElem = selectedElems[0]
+              console.log('[selected event] 第一个元素原始对象:', firstElem)
+              console.log('[selected event] 第一个元素信息:', {
+                tagName: firstElem?.tagName,
+                id: firstElem?.id,
+                nodeName: firstElem?.nodeName,
+                hasGetAttribute: typeof firstElem?.getAttribute,
+              })
+
+              // 使用 svgCanvas.getElement() 获取真正的元素
+              let realElem = firstElem
+              if (firstElem.id && typeof svgCanvas.getElement === 'function') {
+                realElem = svgCanvas.getElement(firstElem.id)
+                console.log('[selected event] svgCanvas.getElement(' + firstElem.id + ') 返回:', realElem)
+              }
+
+              console.log('[selected event] realElem.tagName:', realElem?.tagName)
+              console.log('[selected event] realElem.getAttribute:', typeof realElem?.getAttribute)
+
+              // 尝试直接读取属性
+              if (realElem) {
+                console.log('[selected event] 尝试读取属性:')
+                console.log('  - id:', realElem.id)
+                console.log('  - getAttribute("id"):', realElem.getAttribute ? realElem.getAttribute('id') : '方法不存在')
+                console.log('  - getAttribute("x"):', realElem.getAttribute ? realElem.getAttribute('x') : '方法不存在')
+                console.log('  - getAttribute("fill"):', realElem.getAttribute ? realElem.getAttribute('fill') : '方法不存在')
+              }
+
+              if (realElem) {
+                console.log('[selected event] 开始设置状态...')
+                setSelectedElements([realElem])
+                setSelectedKeys([realElem.id])
+                const tree = getAllPath(svgCanvas)
+                setTreeData(tree)
+                const props = getSelectedProperties([realElem], svgCanvas)
+                console.log('[selected event] 获取到的属性数量:', props.length)
+                console.log('[selected event] 属性详情:', props.map(p => ({ key: p.key, value: p.value })))
+                setProperties(props)
+                console.log('[selected event] setProperties 调用完成')
+                onSelectionChange?.([realElem])
+              }
+            } else {
+              console.log('[selected event] 没有选中元素，清空状态')
+              setSelectedElements([])
+              setSelectedKeys([])
+              setProperties([])
+              onSelectionChange?.([])
+            }
+            console.log('[selected event] ========== 选中事件处理完成 ==========')
           })
 
           // 监听内容变化
@@ -535,6 +715,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         })
 
       return () => {
+        console.log('[useEffect] 清理 SVG Canvas')
         // 清理
         setIsCanvasReady(false)
         if (svgCanvasRef.current) {
@@ -542,7 +723,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
           svgCanvasRef.current = null
         }
       }
-    }, [isEditMode, currentSvg, getAllPath, getSelectedProperties, onSvgChange, onSelectionChange])
+    }, [isEditMode, getAllPath, getSelectedProperties, onSvgChange, onSelectionChange])
 
     // 工具栏拖拽
     const handleDrag = React.useCallback(
@@ -602,9 +783,8 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
       const svg = svgCanvasRef.current
       const tree = getAllPath(svg)
       setTreeData(tree)
-      const selected = svg.getSelectedElems()
-      const selectedArray = Array.isArray(selected) ? selected : Array.from(selected || [])
-      const props = getSelectedProperties(selectedArray)
+      const selectedArray = svg.selectedElements || []
+      const props = getSelectedProperties(selectedArray, svg)
       setProperties(props)
     }
 
@@ -616,9 +796,8 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
       const svg = svgCanvasRef.current
       const tree = getAllPath(svg)
       setTreeData(tree)
-      const selected = svg.getSelectedElems()
-      const selectedArray = Array.isArray(selected) ? selected : Array.from(selected || [])
-      const props = getSelectedProperties(selectedArray)
+      const selectedArray = svg.selectedElements || []
+      const props = getSelectedProperties(selectedArray, svg)
       setProperties(props)
     }
 
@@ -652,12 +831,12 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
     const handleTreeSelect = (keys: string[]) => {
       if (!svgCanvasRef.current || keys.length === 0) return
 
-      const elem = svgCanvasRef.current.getElem(keys[0])
+      const elem = svgCanvasRef.current.getElement(keys[0])
       if (elem) {
         svgCanvasRef.current.selectOnly([elem])
         setSelectedElements([elem])
         setSelectedKeys(keys)
-        const props = getSelectedProperties([elem])
+        const props = getSelectedProperties([elem], svgCanvasRef.current)
         setProperties(props)
       }
     }
@@ -669,6 +848,16 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
 
     // 处理属性变化
     const handlePropertyChange = (key: string, value: any) => {
+      console.log('[handlePropertyChange] 属性变化:', key, '=', value)
+
+      // 找到对应的属性定义
+      const targetProp = properties.find((p) => p.key === key)
+      if (targetProp?.onChange) {
+        console.log('[handlePropertyChange] 调用属性的 onChange 回调')
+        targetProp.onChange(value)
+      }
+
+      // 更新本地状态
       setProperties((prev) => {
         const newProps = [...prev]
         const idx = newProps.findIndex((p) => p.key === key)
@@ -677,6 +866,7 @@ const SvgEditor = React.forwardRef<HTMLDivElement, SvgEditorProps>(
         }
         return newProps
       })
+
       onPropertyChange?.(key, value)
     }
 

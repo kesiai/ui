@@ -29,4 +29,5 @@ export interface ComponentConfig {
   renderPreview: (props: Record<string, any>) => React.ReactElement
   renderCodePreview?: (props: Record<string, any>) => string
   renderCustomForm?: (props: Record<string, any>, onChange: (name: string, value: any) => void) => React.ReactElement | null
+  documentation?: string // 组件文档的 markdown 内容
 }

@@ -1,0 +1,17 @@
+{
+  "name": "blocks-field-map",
+  "type": "registry:block",
+  "title": "Blocks Field Map",
+  "description": "Blocks Field Map - 区块",
+  "dependencies": [
+    "dayjs"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/view/view-field/field-map.tsx",
+      "type": "registry:block",
+      "content": "import React from 'react'\nimport dayjs from 'dayjs'\n\nconst Text = ({ value }: { value: any }) => value\n\nconst ArrayData = ({ value }: { value: any }) => {\n  if (Array.isArray(value)) {\n    return value.join(', ')\n  }\n  return '-'\n}\n\nconst Textarea = ({ value }: { value: any }) => (\n  <div className=\"whitespace-pre-wrap\">{value}</div>\n)\n\nconst Number = ({ value }: { value: any }) => value\n\nconst Select = ({ value, options }: { value: any, options?: any[] }) => {\n  const selected = options?.find((opt: any) => opt.value === value)\n  return selected ? selected.label : value\n}\n\nconst Checkbox = ({ value }: { value: any }) => (\n  <span>{value ? '✓' : '✗'}</span>\n)\n\nconst Radio = ({ value, options }: { value: any, options?: any[] }) => {\n  const selected = options?.find((opt: any) => opt.value === value)\n  return selected ? selected.label : value\n}\n\nconst Switch = ({ value }: { value: any }) => (\n  <span className={value ? 'text-green-600' : 'text-gray-400'}>\n    {value ? '开' : '关'}\n  </span>\n)\n\nconst Slider = ({ value, min, max }: { value: any, min?: number, max?: number }) => (\n  <div className=\"flex items-center gap-2\">\n    <div className=\"flex-1 h-2 bg-gray-200 rounded-full\">\n      <div\n        className=\"h-2 bg-blue-500 rounded-full\"\n        style={{ width: `${((value - (min || 0)) / ((max || 100) - (min || 0))) * 100}%` }}\n      />\n    </div>\n    <span className=\"text-sm text-gray-600\">{value}</span>\n  </div>\n)\n\nconst Date = ({ value, format }: { value: any, format?: string }) => {\n  if (!value) return '-'\n  return dayjs(value).format(format || 'YYYY-MM-DD')\n}\n\nconst Rate = ({ value, max }: { value: any, max?: number }) => {\n  const maxStars = max || 5\n  return (\n    <div className=\"flex gap-1\">\n      {Array.from({ length: maxStars }).map((_, i) => (\n        <span\n          key={i}\n          className={i < value ? 'text-yellow-400' : 'text-gray-300'}\n        >\n          ★\n        </span>\n      ))}\n    </div>\n  )\n}\n\nconst fieldMap: { [key: string]: React.ComponentType<any> } = {\n  'text': Text,\n  'array': ArrayData,\n  'textarea': Textarea,\n  'number': Number,\n  'select': Select,\n  'checkbox': Checkbox,\n  'radio': Radio,\n  'switch': Switch,\n  'slider': Slider,\n  'date': Date,\n  'rate': Rate\n}\n\nexport default fieldMap\n"
+    }
+  ]
+}

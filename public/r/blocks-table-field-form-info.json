@@ -1,0 +1,15 @@
+{
+  "name": "blocks-table-field-form-info",
+  "type": "registry:block",
+  "title": "Blocks Table Field Form Info",
+  "description": "Blocks Table Field Form Info - 区块",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-form-info/table-field-form-info.tsx",
+      "type": "registry:block",
+      "content": "import * as React from 'react'\nimport { Card, CardContent } from \"@/components/ui/card\";\n\nexport interface TableFieldFormInfoProps {\n  schema?: {\n    widgetContent?: string\n  }\n  args?: Array<{\n    key: string\n    value: any\n  }>\n  outProps?: Record<string, any>\n}\n\nclass ErrorBoundary extends React.Component<\n  { children: React.ReactNode; FallbackComponent?: React.ComponentType<{ error: Error }> },\n  { hasError: boolean; error: Error | null }\n> {\n  constructor(props: any) {\n    super(props)\n    this.state = { hasError: false, error: null }\n  }\n\n  static getDerivedStateFromError(error: Error) {\n    console.error(error)\n    return { hasError: true, error }\n  }\n\n  render() {\n    if (this.state.hasError) {\n      const { FallbackComponent } = this.props\n      if (FallbackComponent) {\n        return <FallbackComponent error={this.state.error!} />\n      }\n      return (\n        <p style={{ color: 'red' }}>\n          运行时错误: {this.state.error?.message}\n        </p>\n      )\n    }\n\n    return this.props.children\n  }\n}\n\nconst TableFieldFormInfo: React.FC<TableFieldFormInfoProps> = ({ schema, args = [], outProps = {} }) => {\n  const code = schema?.widgetContent\n\n  // TODO: LazyBabelTransformedCode 组件待迁移\n  // 原代码: <C is=\"LazyBabelTransformedCode\" code={str} onTransformedCode={onTransformedCode} />\n  // 这个组件负责将代码字符串进行 Babel 转换\n\n  const propsArgs = args.reduce((prev, { key, value }) => {\n    prev[key] = value\n    return prev\n  }, {} as Record<string, any>)\n\n  return (\n    <Card className=\"bg-muted/50\">\n      <CardContent className=\"p-4\">\n        <div className=\"space-y-2\">\n          <p className=\"text-sm font-medium text-muted-foreground\">\n            表单信息组件（待迁移）\n          </p>\n          {code && (\n            <div className=\"text-xs text-muted-foreground\">\n              <p>组件代码长度: {code.length} 字符</p>\n              <p className=\"mt-1\">\n                依赖组件: LazyBabelTransformedCode 待迁移\n              </p>\n            </div>\n          )}\n          {Object.keys(propsArgs).length > 0 && (\n            <div className=\"text-xs text-muted-foreground\">\n              <p>参数: {Object.keys(propsArgs).join(', ')}</p>\n            </div>\n          )}\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { TableFieldFormInfo }\nexport default TableFieldFormInfo\n"
+    }
+  ]
+}

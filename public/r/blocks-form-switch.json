@@ -1,0 +1,15 @@
+{
+  "name": "blocks-form-switch",
+  "type": "registry:block",
+  "title": "Blocks Form Switch",
+  "description": "Blocks Form Switch - 区块",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/form/form-switch/form-switch.tsx",
+      "type": "registry:block",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Switch } from \"@/components/ui/switch\"\n\nexport interface FormSwitchProps\n  extends Omit<React.ComponentPropsWithoutRef<typeof Switch>, \"onChange\"> {\n  /**\n   * 当前值\n   */\n  checked?: boolean\n  /**\n   * 默认值\n   */\n  defaultChecked?: boolean\n  /**\n   * 是否禁用\n   */\n  disabled?: boolean\n  /**\n   * 自动聚焦\n   */\n  autoFocus?: boolean\n  /**\n   * 尺寸\n   */\n  size?: \"default\" | \"small\"\n  /**\n   * 值变化回调\n   */\n  onChange?: (checked: boolean) => void\n  /**\n   * 单元格键值\n   */\n  cellKey?: string\n}\n\nconst FormSwitch = React.forwardRef<HTMLButtonElement, FormSwitchProps>(\n  (\n    {\n      className,\n      checked: controlledChecked,\n      defaultChecked = false,\n      disabled = false,\n      autoFocus = false,\n      size = \"default\",\n      onChange,\n      cellKey,\n      ...props\n    },\n    ref\n  ) => {\n    const [internalChecked, setInternalChecked] = React.useState(defaultChecked)\n    const isControlled = controlledChecked !== undefined\n    const checked = isControlled ? controlledChecked : internalChecked\n\n    const handleChange = React.useCallback(\n      (newChecked: boolean) => {\n        if (!isControlled) {\n          setInternalChecked(newChecked)\n        }\n        onChange?.(newChecked)\n      },\n      [isControlled, onChange]\n    )\n\n    return (\n      <div className=\"widget-switch\">\n        <Switch\n          ref={ref}\n          className={cn(\n            size === \"small\" && \"h-5 w-9\",\n            size === \"small\" && \"[&>[data-radix-switch-thumb]]:h-4 [&>[data-radix-switch-thumb]]:w-4\",\n            size === \"small\" && \"[&>[data-radix-switch-thumb]]:data-[state=checked]:translate-x-4\",\n            className\n          )}\n          checked={checked}\n          onCheckedChange={handleChange}\n          disabled={disabled}\n          autoFocus={autoFocus}\n          {...props}\n        />\n      </div>\n    )\n  }\n)\nFormSwitch.displayName = \"FormSwitch\"\n\nexport { FormSwitch }\n"
+    }
+  ]
+}

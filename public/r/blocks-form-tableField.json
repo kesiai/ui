@@ -1,0 +1,15 @@
+{
+  "name": "blocks-form-tableField",
+  "type": "registry:block",
+  "title": "Blocks Form TableField",
+  "description": "Blocks Form TableField - 区块",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/form/form-tableField/form-tableField.tsx",
+      "type": "registry:block",
+      "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport Field from \"@/components/src/tableField/field\"\n\nexport interface FormTableFieldProps extends React.HTMLAttributes<HTMLDivElement> {\n  /**\n   * 字段类型：string/number/boolean\n   */\n  type: 'string' | 'number' | 'boolean'\n  /**\n   * 自定义渲染函数\n   */\n  render?: (schema: Record<string, any>) => React.ReactNode\n  /**\n   * 字段配置属性\n   */\n  schema?: Record<string, any>\n  /**\n   * 字段值\n   */\n  value?: any\n  /**\n   * 变化回调\n   */\n  onChange?: (value: any) => void\n  /**\n   * 是否禁用\n   */\n  disabled?: boolean\n  /**\n   * 字段标签\n   */\n  label?: string\n  /**\n   * 错误提示\n   */\n  error?: string\n  /**\n   * 是否必填\n   */\n  required?: boolean\n  /**\n   * 描述文本\n   */\n  description?: string\n  /**\n   * 字段名称\n   */\n  name?: string\n}\n\nconst FormTableField = React.forwardRef<HTMLDivElement, FormTableFieldProps>(\n  (\n    {\n      type,\n      render,\n      schema,\n      value,\n      onChange,\n      disabled,\n      label,\n      error,\n      required,\n      description,\n      name,\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    // 合并 schema 和其他属性\n    const fieldSchema = React.useMemo(() => {\n      return {\n        ...schema,\n        value,\n        onChange,\n        disabled,\n        name,\n      }\n    }, [schema, value, onChange, disabled, name])\n\n    return (\n      <div ref={ref} className={cn(\"form-table-field space-y-2\", className)} {...props}>\n        {label && (\n          <label className={cn(\n            \"text-sm font-medium leading-none\",\n            \"peer-disabled:cursor-not-allowed peer-disabled:opacity-70\"\n          )}>\n            {label}\n            {required && <span className=\"text-red-500 ml-1\">*</span>}\n          </label>\n        )}\n\n        <Field\n          type={type}\n          render={render}\n          schema={fieldSchema}\n        />\n\n        {description && (\n          <p className=\"text-sm text-muted-foreground\">{description}</p>\n        )}\n\n        {error && (\n          <p className=\"text-sm text-red-500\">{error}</p>\n        )}\n      </div>\n    )\n  }\n)\n\nFormTableField.displayName = \"FormTableField\"\n\nexport default FormTableField\n"
+    }
+  ]
+}

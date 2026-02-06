@@ -1,5 +1,0 @@
-export { InterfaceDataSource } from './interface-data-source'
-export type { InterfaceDataSourceProps } from './interface-data-source'
-export { interfaceDataSourceConfig, interfaceDataSourceDefaultProps } from './config'
-export { useInterfaceData } from './useInterfaceData'
-export type { InterfaceDataConfig } from './useInterfaceData'

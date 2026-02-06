@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Trash2 } from 'lucide-react'
-import { FieldComponentSelector } from '@/registry/blocks/form/form-widget/form-widget'
+import { FieldComponentSelector } from '@/registry/components/form-widget/form-widget'
 
 export interface TableFieldEditableCardProps {
   input?: {

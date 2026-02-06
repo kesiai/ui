@@ -25,6 +25,11 @@ function getCategoryByComponentId(componentId: string): string {
     return 'data-source'
   }
 
+  // 表单组件
+  if (componentId.startsWith('form-')) {
+    return 'form'
+  }
+
   // 基础组件
   const basicComponents = [
     'button', 'text', 'image', 'status', 'statuses',
@@ -35,8 +40,7 @@ function getCategoryByComponentId(componentId: string): string {
   }
 
   // 表单组件
-  const formComponents = [
-    'data-point', 'data-point-input', 'data-point-panel',
+  const formComponents = [ 'form', 'schema-form',
     'table-select', 'table-data-select', 'point-table'
   ]
   if (formComponents.includes(componentId)) {

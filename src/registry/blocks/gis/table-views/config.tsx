@@ -5,7 +5,7 @@ import { ComponentConfig } from '@/app/config/types'
 import { defaultDrawStyleProps } from '../custom-views/config'
 
 const exampleData = {
-    table: { id: '地理信息', title: '地理信息' },
+    table: { id: 'A', title: 'A' },
     tableData: []
 }
 
@@ -44,21 +44,33 @@ const exampleHighlightMarker = {
     }
 }
 
+const tableOptions = [
+    { value: JSON.stringify({ id: '地理信息', title: '地理信息' }), label: '地理信息' },
+    { value: JSON.stringify({ id: 'A', title: 'A' }), label: '表 A' },
+]
+
+const tableDataOptions = [
+    { value: JSON.stringify([]), label: '空数据' },
+    { value: JSON.stringify([{ id: '1', name: '点位1', _table: 'A' }]), label: '示例数据 (1条)' }
+]
+
 export const tableViewsPropsConfig = [
 
     {
         name: 'table',
         label: '数据表',
-        type: 'text' as const,
-        default: JSON.stringify(exampleData.table),
-        description: '单个表对象，格式: {id: "表ID", title: "表名"}。与 tableData 二选一使用'
+        type: 'select' as const,
+        default: tableOptions[0].value,
+        options: tableOptions,
+        description: '选择数据表配置'
     },
     {
         name: 'tableData',
         label: '表记录',
-        type: 'text' as const,
-        default: JSON.stringify(exampleData.tableData),
-        description: '表记录数组，格式: [{id: "1", _table: "表ID", ...}]。与 table 二选一使用'
+        type: 'select' as const,
+        default: tableDataOptions[0].value,
+        options: tableDataOptions,
+        description: '选择表记录数据'
     },
     {
         name: 'coordinateType',
@@ -227,7 +239,7 @@ const renderTableViewsPreview = (props: Record<string, any>) => {
     const selectConfig = parseJson(props.selectConfig, {})
 
     return (
-        <div className="w-full h-[300px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <TableViews
                     table={table}

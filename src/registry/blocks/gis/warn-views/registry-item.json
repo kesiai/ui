@@ -10,6 +10,10 @@
     {
       "path": "blocks/gis/warn-views/warn-views.tsx",
       "type": "registry:component"
+    },
+    {
+      "path": "blocks/gis/warn-views/config.tsx",
+      "type": "registry:component"
     }
   ]
 }

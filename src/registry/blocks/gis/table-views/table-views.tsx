@@ -1,7 +1,9 @@
 'use client'
-
 import React from 'react'
+import { useWS } from '@airiot/client'
 import { cn } from '@/lib/utils'
+import Feature from 'ol/Feature';
+import Geometry from 'ol/geom/Geometry';
 import VectorSource from 'ol/source/Vector'
 import { Vector as VectorLayer, Heatmap } from 'ol/layer'
 import Cluster from 'ol/source/Cluster'
@@ -19,7 +21,8 @@ import {
     createEmptyFeature,
     createStyleClass,
     clusterStyle,
-    parseIconScript
+    parseIconScript,
+    getTransformTo3857
 } from './utils'
 import _ from 'lodash'
 // @ts-ignore
@@ -152,9 +155,9 @@ const parseJsonProp = (val: any, defaultVal: any = null) => {
 }
 
 // getPointMarkerSubProps - 获取数据点标记需要订阅的数据点
-const getPointMarkerSubProps = (record: any, tableGisConfig: any, tableTags?: any[]) => {
+const getPointMarkerSubProps = (record: any, tableGisConfig: any, tableTags?: any[], defaultTableId?: string) => {
     const { lat, lon, direction, course, velocity, rideHeight } = tableGisConfig || {}
-    const tableId = record?._table || record?.tableId || record?.table
+    const tableId = defaultTableId || record?._table || record?.tableId || record?.table
     // 基础的经纬度
     const baseTags = [
         { tableId, id: record.id, tagId: lat, type: 'lat' },
@@ -205,6 +208,28 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
     ) => {
         const contextMap = useMap()
         const map = mapProp || contextMap
+
+        // WebSocket Hooks
+        const { onData: onPointData, subscribe: subscribePoint } = useWS()
+        const { onData: onRecordData, subscribe: subscribeRecord } = useWS()
+        const { onData: onTableData, subscribe: subscribeTable } = useWS()
+
+        // 订阅引用
+        const wsRef = React.useRef<any>({})
+        // 存储当前所有表的GIS配置
+        const tableRecordsRef = React.useRef<any[]>([])
+        // 当前层所有的表的gis配置,为ws推送的增删改数据提供更新方式
+        const tableRef = React.useRef<any>({})
+        // 缓存防抖期间内的数据
+        const wsDataRef = React.useRef<any>({
+            pendingUpdates: {},
+            updaters: {}
+        })
+        // 坐标类型引用
+        const coordinateTypeRef = React.useRef(coordinateType)
+        React.useEffect(() => { coordinateTypeRef.current = coordinateType }, [coordinateType])
+        // subDataPointAndRecord 引用
+        const subDataPointAndRecordRef = React.useRef<any>(null)
         // ===== 数据解析和转换 =====
         // 解析 JSON 字符串参数
         const table = React.useMemo(() => parseJsonProp(tableProp, null), [tableProp])
@@ -215,6 +240,9 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
         const tableTags = React.useMemo(() => parseJsonProp(tableTagsProp, null), [tableTagsProp])
         const marker = React.useMemo(() => parseJsonProp(markerProp, {}), [markerProp])
         const highlightMarker = React.useMemo(() => parseJsonProp(highlightMarkerProp, {}), [highlightMarkerProp])
+        // tableTags 引用（需要在 tableTags 声明后）
+        const tableTagsRef = React.useRef(tableTags)
+        React.useEffect(() => { tableTagsRef.current = tableTags }, [tableTags])
         const markerScale = React.useMemo(() => parseJsonProp(markerScaleProp, null), [markerScaleProp])
 
         // 判断数据源类型 - 完全对应 record.js 的逻辑
@@ -333,6 +361,234 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             }
         }, [cluster, styleFn])
 
+        // 清除 WebSocket 订阅
+        const clearWs = React.useCallback((fns: any) => {
+            if (fns) {
+                Object.keys(fns).forEach((k) => {
+                    const unwsFn = fns[k]
+                    if (unwsFn && typeof unwsFn === 'function') unwsFn()
+                })
+            }
+        }, [])
+
+        // 订阅数据点和记录
+        const subDataPointAndRecord = React.useCallback((data: any[], tableTags: any) => {
+            if (wsRef.current) {
+                clearWs(wsRef.current)
+            }
+
+            tableRecordsRef.current = data
+            // 存储表配置映射
+            tableRef.current = data.reduce((obj: any, item: any) => {
+                obj[item.tableId] = item
+                return obj
+            }, {})
+
+            // 数据点值
+            let needSubDataPoint: any[] = []
+            // 记录
+            const needSubRecord: any[] = []
+            // 表的添加和删除
+            const needSubTable: any[] = []
+
+            data?.forEach((item) => {
+                needSubTable.push({ tableId: item.tableId, all: true, opsType: ['add', 'delete'] })
+                if (item?.gis?.mapping === "dataPoint") {
+                    item.record.forEach((r: any) => {
+                        const tableId = r._table || r.tableId || item.tableId
+                        const subtags = getPointMarkerSubProps(r, item.gis, tableTags, item.tableId)
+                        needSubDataPoint = needSubDataPoint.concat(subtags)
+                        needSubRecord.push({ tableId, id: r.id, opsType: ['edit'] })
+                    })
+                } else if (item?.gis?.mapping === "map" || item?.gis?.mapping === "noLimit") {
+                    item.record.forEach((r: any) => {
+                        const tableId = r._table || r.tableId || item.tableId
+                        needSubRecord.push({ tableId, id: r.id, opsType: ['edit'] })
+                    })
+                }
+            })
+
+            if (needSubDataPoint.length > 0) {
+                wsRef.current['point'] = subscribePoint('data', needSubDataPoint)
+            }
+            if (needSubRecord.length > 0) {
+                wsRef.current['record'] = subscribeRecord('tabledata', needSubRecord)
+            }
+            if (needSubTable.length > 0) {
+                wsRef.current['table'] = subscribeTable('tabledata', needSubTable)
+            }
+        }, [subscribePoint, subscribeRecord, subscribeTable, clearWs, tableTags])
+
+        // 更新 ref
+        React.useEffect(() => {
+            subDataPointAndRecordRef.current = subDataPointAndRecord
+        }, [subDataPointAndRecord])
+
+        // WebSocket 数据处理 - 合并到一个 useEffect，使用空依赖数组，只注册一次
+        React.useEffect(() => {
+            const { pendingUpdates, updaters } = wsDataRef.current
+
+            // 数据点类型 - 数据点类型标记点的位置修改
+            onPointData((data: any) => {
+                const source = sourceRef.current
+                if (!source) return
+                // 1. 检查数据有效性
+                if (!data?.tableId || !data.id || !data.fields) return
+                const table = tableRef.current[data.tableId]
+                if (!table || !table.gis) return
+
+                const gisConfig = table.gis
+                const featureId = `${data.tableId}|${data.id}`
+
+                // 2. 合并数据到缓存
+                if (!pendingUpdates[featureId]) {
+                    pendingUpdates[featureId] = { ...data }
+                } else {
+                    pendingUpdates[featureId] = {
+                        ...pendingUpdates[featureId],
+                        ...data,
+                        fields: { ...pendingUpdates[featureId].fields, ...data.fields }
+                    }
+                }
+
+                // 3. 执行防抖更新
+                if (updaters[featureId]) {
+                    updaters[featureId].cancel()
+                }
+                updaters[featureId] = _.debounce(() => {
+                    try {
+                        const mergedData = pendingUpdates[featureId]
+                        if (!mergedData) return
+
+                        const feature = source.getFeatureById(featureId)
+                        if (!feature) return
+
+                        const hasCoordsUpdate = gisConfig.lon in mergedData.fields && gisConfig.lat in mergedData.fields
+
+                        if (hasCoordsUpdate) {
+                            const geometry = feature.getGeometry()
+                            const newLon = mergedData.fields[gisConfig.lon]
+                            const newLat = mergedData.fields[gisConfig.lat]
+                            if (geometry && typeof newLon === 'number' && typeof newLat === 'number') {
+                                const transform = getTransformTo3857(coordinateTypeRef.current)
+                                geometry.setCoordinates(transform([newLon, newLat]))
+                            }
+                        }
+
+                        // 更新属性
+                        const markerTags = feature.get('markerTags') || {}
+                        Object.keys(mergedData.fields || {}).forEach(tagId => {
+                            markerTags[tagId] = mergedData.fields[tagId]
+                        })
+                        feature.set('markerTags', { ...markerTags })
+                        feature.changed()
+                    } catch (error) {
+                        console.error('更新要素时出错:', error)
+                    } finally {
+                        delete pendingUpdates[featureId]
+                        delete updaters[featureId]
+                    }
+                }, DEBOUNCE_DELAY, { maxWait: 1000 })
+
+                updaters[featureId]()
+            })
+
+            // 表记录类型 - 表字段类型的标记点位置修改
+            onRecordData((data: any) => {
+                const source = sourceRef.current
+                if (!source) return
+                if (data._opsDataType !== 'edit') return
+
+                const tid = data._table || data.tableId
+                const rid = data.id || data.tableDataId
+                const table = tableRef.current[tid]
+                if (!table || !table.gis) return
+
+                const gisConfig = table.gis
+                const featureId = `${tid}|${rid}`
+                const mapping = gisConfig.mapping
+
+                if (mapping === 'map') {
+                    const field = gisConfig.map
+                    const lng = data[field]?.lng
+                    const lat = data[field]?.lat
+                    if (typeof lng === 'number' && typeof lat === 'number') {
+                        const feature = source.getFeatureById(featureId)
+                        const geometry = feature?.getGeometry()
+                        if (geometry) {
+                            const transform = getTransformTo3857(coordinateTypeRef.current)
+                            geometry.setCoordinates(transform([lng, lat]))
+                        }
+                    }
+                } else if (mapping === 'dataPoint') {
+                    // 记录修改属性只监听在线状态的变化
+                    const feature = source.getFeatureById(featureId)
+                    if (feature) {
+                        const markerRecord = feature.get('markerRecord')
+                        const isOnline = markerRecord?.online
+                        if ('online' in data && isOnline !== data['online']) {
+                            feature.set('markerRecord', {
+                                ...markerRecord,
+                                online: data['online']
+                            })
+                        }
+                    }
+                }
+            })
+
+            // 处理新增和删除
+            onTableData((data: any) => {
+                const source = sourceRef.current
+                if (!source || !data?._opsDataType) return
+
+                if (data._opsDataType === 'add') {
+                    const current = _.cloneDeep(tableRef.current)
+                    const tid = data?._table || data?.tableId || data?.table
+                    if (!current[tid]) return
+
+                    const normalized = {
+                        ...data,
+                        _table: tid,
+                        tableId: tid,
+                        id: data?.id || data?.tableDataId
+                    }
+                    current[tid].record.push(normalized)
+                    tableRef.current = current
+                    const subdata = Object.keys(current).map(k => current[k])
+                    // 更新订阅数据
+                    if (subDataPointAndRecordRef.current) {
+                        subDataPointAndRecordRef.current(subdata, tableTagsRef.current)
+                    }
+                    // 创建新标记
+                    const feature = createEmptyFeature(normalized)
+                    source.addFeature(feature)
+                } else if (data._opsDataType === 'delete') {
+                    const tid = data._table || data.tableId
+                    const rid = data.id || data.tableDataId
+                    const featureId = `${tid}|${rid}`
+
+                    if (data._deleteAll) {
+                        const recordList = tableRef.current[tid]?.record || []
+                        recordList.forEach((r: any) => {
+                            const newid = `${tid}|${r.id}`
+                            const feature = source.getFeatureById(newid)
+                            if (feature) source.removeFeature(feature)
+                        })
+                    } else {
+                        const feature = source.getFeatureById(featureId)
+                        if (feature) source.removeFeature(feature)
+                    }
+                }
+            })
+        }, []) // 空依赖数组 - 只注册一次
+
+        // 卸载时清除 WS
+        React.useEffect(() => {
+            return () => {
+                clearWs(wsRef.current)
+            }
+        }, [clearWs])
+
         // 数据查询主逻辑 - 完全对应 record.js 的三种模式
         const loadData = React.useCallback(async () => {
 
@@ -400,7 +656,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         }
 
                         // 生成 features
-                        const recordFeatures = await generateTableMarker([record], tableGisConfig, coordinateType, tableTags)
+                        const recordFeatures = await generateTableMarker([record], tableGisConfig, coordinateType, tableTags, tableId)
                         features = features.concat(recordFeatures)
                     }
 
@@ -455,7 +711,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         tableRecord.record,
                         tableRecord.gis,
                         coordinateType,
-                        tableTags
+                        tableTags,
+                        tableRecord.tableId
                     )
 
                     result = {
@@ -516,7 +773,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                             element.record,
                             element.gis,
                             coordinateType,
-                            tableTags
+                            tableTags,
+                            element.tableId
                         )
                         featureslist.push(features)
                     }
@@ -541,7 +799,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             recordList: any[],
             tableGisConfig: any,
             coordinateType?: string,
-            tableTags?: any
+            tableTags?: any,
+            tableId?: string
         ) => {
 
             const allFeatures: any[] = []
@@ -550,9 +809,9 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             if (!mapping) {
                 return allFeatures
             }
-
+    
             if (mapping === 'dataPoint') {
-                const subTags = recordList.flatMap((t: any) => getPointMarkerSubProps(t, tableGisConfig, tableTags))
+                const subTags = recordList.flatMap((t: any) => getPointMarkerSubProps(t, tableGisConfig, tableTags, tableId))
 
                 if (subTags.length > 0) {
                     const dataPoints = await getTableRecordDataPoint(subTags)
@@ -562,7 +821,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         const dpLat = dataMap[r.id]?.[tableGisConfig.lat]
                         const dpLon = dataMap[r.id]?.[tableGisConfig.lon]
 
-                        if (dpLat && dpLon) {
+                        if (typeof dpLat === 'number' && typeof dpLon === 'number') {
                             const f = createFeature({
                                 type: 'Point',
                                 record: r,
@@ -650,7 +909,10 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     if (result?.features && result.features.length > 0) {
                         result.features.forEach((f: any) => f.set('cellKey', cellKey))
                         source.addFeatures(result.features)
-                    } else {
+                    }
+
+                    if (result?.tableRecords) {
+                        subDataPointAndRecord(result.tableRecords, tableTags)
                     }
                 }
             } catch (error) {
@@ -704,11 +966,13 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             // baseSource添加feature时，自动分发到点/非点source
             baseSource.on('addfeature', (e: any) => {
                 const targetFeature = e.feature
+                // const targetFeature = e.feature as Feature<Geometry>;  // 类型断言
                 const type = targetFeature.getGeometry()?.getType()
                 if (type === 'Point') {
-                    pointSource.addFeature(targetFeature)
+                    // pointSource.addFeature(targetFeature)
+                    (pointSource as VectorSource).addFeature(targetFeature as Feature<Geometry>);
                 } else {
-                    nonPointSource.addFeature(targetFeature)
+                    (nonPointSource as VectorSource).addFeature(targetFeature as Feature<Geometry>);
                 }
             })
 

@@ -97,7 +97,7 @@ export const geoserverWmsDefaultProps = {
 
 const renderGeoserverWmsPreview = (props: Record<string, any>) => {
     return (
-        <div className="w-full h-[300px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <GeoserverWms
                     source={props.source}

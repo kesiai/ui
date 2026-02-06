@@ -60,8 +60,8 @@ export const getTableRecordDataPoint = (where: any[]) => {
         method: 'POST',
         body: JSON.stringify(where)
     })
-        .then(({ json, status }: any) => {
-            if (json && !_.isEmpty(json) && status == 200) {
+        .then(({ json }: any) => {
+            if (json && !_.isEmpty(json)) {
                 const payload: any = {}
                 json.forEach((item: any) => {
                     const id = item.tableDataId || item.id

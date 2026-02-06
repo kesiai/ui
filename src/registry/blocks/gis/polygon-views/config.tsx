@@ -121,7 +121,7 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
             <div className="rounded-lg overflow-hidden border border-slate-200">
                 <MapContainer
                     width="100%"
-                    height={300}
+                    height={400}
                     viewOptions={{
                         position: { center: [116.391, 39.9042] },
                         zoom: 10

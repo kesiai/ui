@@ -1,7 +1,7 @@
 
-import { WarnViews } from '@/registry/blocks/gis/gis-warn-layer/warn-views'
-import { TableViews } from '../gis-table-layer/table-views'
-import { MapContainer } from '../gis-map-core/map-container'
+import { WarnViews } from '@/registry/components/gis-warn-layer/gis-warn-layer'
+import { TableViews } from '../gis-table-layer/gis-table-layer'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
@@ -245,7 +245,7 @@ const renderWarnViewsCodePreview = (props: Record<string, any>) => {
 }
 
 export const warnViewsConfig: ComponentConfig = {
-    id: 'warn-views',
+    id: 'gis-warn-layer',
     name: '报警层',
     propsConfig: warnViewsPropsConfig,
     defaultProps: warnViewsDefaultProps,

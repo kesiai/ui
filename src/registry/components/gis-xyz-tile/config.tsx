@@ -1,6 +1,6 @@
 
-import { XYZ } from '@/registry/blocks/gis/gis-xyz-tile/xyz'
-import { MapContainer } from '../gis-map-core/map-container'
+import { XYZ } from '@/registry/components/gis-xyz-tile/gis-xyz-tile'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 export const xyzPropsConfig = [
@@ -214,7 +214,7 @@ const renderXYZCodePreview = (props: Record<string, any>) => {
 }
 
 export const xyzConfig: ComponentConfig = {
-    id: 'xyz-layer',
+    id: 'gis-xyz-tile',
     name: 'xyz层',
     propsConfig: xyzPropsConfig,
     defaultProps: xyzDefaultProps,

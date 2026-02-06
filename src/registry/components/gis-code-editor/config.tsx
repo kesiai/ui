@@ -1,6 +1,6 @@
 
-import { CodeEditorViews } from '@/registry/blocks/gis/gis-code-editor/code-editor-views'
-import { MapContainer } from '../gis-map-core/map-container'
+import { CodeEditorViews } from '@/registry/components/gis-code-editor/gis-code-editor'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 export const codeEditorViewsPropsConfig = [
@@ -49,7 +49,7 @@ const renderCodeEditorViewsCodePreview = (props: Record<string, any>) => {
 }
 
 export const codeEditorViewsConfig: ComponentConfig = {
-    id: 'code-editor-views',
+    id: 'gis-code-editor',
     name: '代码图层',
     propsConfig: codeEditorViewsPropsConfig,
     defaultProps: codeEditorViewsDefaultProps,

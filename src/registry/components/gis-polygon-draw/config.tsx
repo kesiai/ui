@@ -1,6 +1,6 @@
 
-import { PolygonViews, PolygonData } from '@/registry/blocks/gis/gis-polygon-draw/polygon-views'
-import { MapContainer } from '../gis-map-core/map-container'
+import { PolygonViews, PolygonData } from '@/registry/components/gis-polygon-draw/gis-polygon-draw'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 export const polygonViewsPropsConfig = [
@@ -175,7 +175,7 @@ const renderPolygonViewsCodePreview = (props: Record<string, unknown>) => {
 }
 
 export const polygonViewsConfig: ComponentConfig = {
-    id: 'polygon-views',
+    id: 'gis-polygon-draw',
     name: '区域层', // Updated name to match reference if needed, but keeping registry ID consistent
     propsConfig: polygonViewsPropsConfig,
     defaultProps: polygonViewsDefaultProps,

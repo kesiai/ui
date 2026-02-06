@@ -1,6 +1,6 @@
 
-import { GeoJson } from '@/registry/blocks/gis/gis-geojson-parse/geojson'
-import { MapContainer } from '../gis-map-core/map-container'
+import { GeoJson } from '@/registry/components/gis-geojson-parse/gis-geojson-parse'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 export const geoJsonPropsConfig = [
@@ -123,7 +123,7 @@ const renderGeoJsonCodePreview = (props: Record<string, any>) => {
 }
 
 export const geoJsonConfig: ComponentConfig = {
-    id: 'geojson-layer',
+    id: 'gis-geojson-parse',
     name: 'geojson层',
     propsConfig: geoJsonPropsConfig,
     defaultProps: geoJsonDefaultProps,

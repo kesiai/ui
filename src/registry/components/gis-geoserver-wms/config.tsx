@@ -1,6 +1,6 @@
 
-import { GeoserverWms } from '@/registry/blocks/gis/gis-geoserver-wms/geoserver-wms'
-import { MapContainer } from '../gis-map-core/map-container'
+import { GeoserverWms } from '@/registry/components/gis-geoserver-wms/gis-geoserver-wms'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 export const geoserverWmsPropsConfig = [
@@ -136,7 +136,7 @@ const renderGeoserverWmsCodePreview = (props: Record<string, any>) => {
 }
 
 export const geoserverWmsConfig: ComponentConfig = {
-    id: 'geoserver-wms',
+    id: 'gis-geoserver-wms',
     name: 'geoserver-wms层',
     propsConfig: geoserverWmsPropsConfig,
     defaultProps: geoserverWmsDefaultProps,

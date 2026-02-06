@@ -1,6 +1,6 @@
 
-import { CustomViews, DrawLineItem } from '@/registry/blocks/gis/gis-custom-layer/custom-views'
-import { MapContainer } from '../gis-map-core/map-container'
+import { CustomViews, DrawLineItem } from '@/registry/components/gis-custom-layer/gis-custom-layer'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 export const customViewsPropsConfig = [
@@ -180,7 +180,7 @@ const renderCustomViewsCodePreview = (props: Record<string, unknown>) => {
 }
 
 export const customViewsConfig: ComponentConfig = {
-    id: 'custom-views',
+    id: 'gis-custom-layer',
     name: '自定义层',
     propsConfig: customViewsPropsConfig,
     defaultProps: customViewsDefaultProps,

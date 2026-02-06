@@ -1,6 +1,6 @@
 
-import { Kmz } from '@/registry/blocks/gis/gis-kmz-loader/kmz'
-import { MapContainer } from '../gis-map-core/map-container'
+import { Kmz } from '@/registry/components/gis-kmz-loader/gis-kmz-loader'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 
 export const kmzPropsConfig = [
@@ -88,7 +88,7 @@ const renderKmzCodePreview = (props: Record<string, any>) => {
 }
 
 export const kmzConfig: ComponentConfig = {
-    id: 'kmz-layer',
+    id: 'gis-kmz-loader',
     name: 'kmz层',
     propsConfig: kmzPropsConfig,
     defaultProps: kmzDefaultProps,

@@ -1,6 +1,6 @@
 
-import { TableViews } from '@/registry/blocks/gis/gis-table-layer/table-views'
-import { MapContainer } from '../gis-map-core/map-container'
+import { TableViews } from '@/registry/components/gis-table-layer/gis-table-layer'
+import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import { defaultDrawStyleProps } from '../gis-custom-layer/config'
 
@@ -305,7 +305,7 @@ const renderTableViewsCodePreview = (props: Record<string, any>) => {
 }
 
 export const tableViewsConfig: ComponentConfig = {
-    id: 'table-views',
+    id: 'gis-table-layer',
     name: '数据表层',
     propsConfig: tableViewsPropsConfig,
     defaultProps: tableViewsDefaultProps,

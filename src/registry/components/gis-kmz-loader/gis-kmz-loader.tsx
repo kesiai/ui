@@ -8,9 +8,9 @@ import { Vector as VectorSource } from 'ol/source'
 // @ts-ignore
 import { KML } from 'ol/format'
 import type Map from 'ol/Map'
-import { useMap } from '../gis-map-core/map-container'
+import { useMap } from '../gis-map-core/gis-map-core'
 import JSZip from 'jszip'
-import { getMapCoordinateType } from '../gis-shared-utils/gis-utils'
+import { getMapCoordinateType } from '../gis-shared-utils/gis-shared-utils'
 
 // Helper to load KMZ (ported from source)
 const loadRemoteKMZ = async (kmzUrl: string) => {

@@ -8,7 +8,7 @@ import VectorSource from 'ol/source/Vector'
 import { Vector as VectorLayer, Heatmap } from 'ol/layer'
 import Cluster from 'ol/source/Cluster'
 // @ts-ignore
-import { useMap } from '../gis-map-core/map-container'
+import { useMap } from '../gis-map-core/gis-map-core'
 import {
     getGISTable,
     getTableRecord,

@@ -6,7 +6,7 @@ import { Image as ImageLayer } from 'ol/layer'
 // @ts-ignore
 import { ImageWMS } from 'ol/source'
 import type Map from 'ol/Map'
-import { useMap } from '../gis-map-core/map-container'
+import { useMap } from '../gis-map-core/gis-map-core'
 
 export interface LayerBase {
   opacity?: number

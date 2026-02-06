@@ -4,7 +4,7 @@ import TileLayer from 'ol/layer/Tile'
 import OSM from 'ol/source/OSM'
 import XYZ from 'ol/source/XYZ'
 import type Map from 'ol/Map'
-import { useMap } from '../gis-map-core/map-container'
+import { useMap } from '../gis-map-core/gis-map-core'
 
 export interface CodeParam {
   name: string

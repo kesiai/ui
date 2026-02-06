@@ -15,7 +15,7 @@ import { unByKey } from 'ol/Observable'
 import * as style from 'ol/style'
 // @ts-ignore
 import * as geom from 'ol/geom'
-import { useMap } from '../gis-map-core/map-container'
+import { useMap } from '../gis-map-core/gis-map-core'
 import { createAPI, useWS } from '@airiot/client'
 
 /**

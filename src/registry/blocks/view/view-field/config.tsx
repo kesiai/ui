@@ -23,18 +23,44 @@ export const viewFieldPropsConfig = [
     type: 'select' as const,
     default: 'text',
     options: [
-      { value: 'text', label: '文本' },
-      { value: 'textarea', label: '多行文本' },
-      { value: 'number', label: '数字' },
-      { value: 'select', label: '下拉选择' },
-      { value: 'checkbox', label: '复选框' },
-      { value: 'radio', label: '单选框' },
-      { value: 'switch', label: '开关' },
-      { value: 'slider', label: '滑块' },
-      { value: 'date', label: '日期' },
-      { value: 'rate', label: '评分' }
+      // 基础类型
+      { value: 'text', label: '📝 文本' },
+      { value: 'textarea', label: '📃 多行文本' },
+      { value: 'number', label: '🔢 数字' },
+      { value: 'password', label: '🔒 密码' },
+      { value: 'select', label: '📋 下拉选择' },
+      { value: 'checkbox', label: '☑️ 复选框' },
+      { value: 'radio', label: '⭕ 单选框' },
+      { value: 'switch', label: '🔘 开关' },
+      { value: 'slider', label: '🎚️ 滑块' },
+      { value: 'date', label: '📅 日期' },
+      { value: 'date-range', label: '📆 日期范围' },
+      { value: 'time', label: '🕐 时间' },
+      { value: 'rate', label: '⭐ 评分' },
+      // TableField 类型（高级显示）
+      { value: 'table-text', label: '📝 TF-文本输入' },
+      { value: 'table-textarea', label: '📃 TF-多行文本' },
+      { value: 'table-number', label: '🔢 TF-数字输入' },
+      { value: 'table-select', label: '📋 TF-下拉选择' },
+      { value: 'table-checkbox', label: '☑️ TF-复选框' },
+      { value: 'table-date', label: '📅 TF-日期选择' },
+      { value: 'table-date-range', label: '📆 TF-日期范围' },
+      { value: 'table-time', label: '🕐 TF-时间选择' },
+      { value: 'table-rate', label: '⭐ TF-评分组件' },
+      { value: 'table-rich-text', label: '📝 TF-富文本编辑器' },
+      { value: 'table-map', label: '🗺️ TF-地图定位' },
+      { value: 'table-upload', label: '📎 TF-附件上传' },
+      { value: 'table-link', label: '🔗 TF-链接组件' },
+      { value: 'table-serial-number', label: '🔢 TF-序列号' },
+      { value: 'table-user-role', label: '👤 TF-用户角色' },
+      { value: 'table-bytes-array', label: '💾 TF-字节数组' },
+      { value: 'table-reference', label: '🔍 TF-查找引用' },
+      { value: 'table-form-info', label: '📋 TF-表单信息' },
+      { value: 'table-editable-table', label: '📊 TF-可编辑表格' },
+      { value: 'table-relate-plus', label: '🔗 TF-关联字段Plus' },
+      { value: 'table-relate', label: '🔗 TF-关联字段' }
     ],
-    description: '字段的显示类型'
+    description: '字段的显示类型（TF=TableField）'
   },
   {
     name: 'value',
@@ -90,7 +116,12 @@ export const viewFieldPropsConfig = [
 export const viewFieldDefaultProps = {
   name: 'name',
   label: '名称',
-  type: 'text',
+  type: 'text' as 'text' | 'textarea' | 'number' | 'password' | 'select' | 'checkbox' | 'radio' | 'switch' | 'slider' | 'date' | 'date-range' | 'time' | 'rate' |
+    'table-text' | 'table-textarea' | 'table-number' | 'table-select' | 'table-checkbox' |
+    'table-date' | 'table-date-range' | 'table-time' | 'table-rate' | 'table-rich-text' |
+    'table-map' | 'table-upload' | 'table-link' | 'table-serial-number' | 'table-user-role' |
+    'table-bytes-array' | 'table-reference' | 'table-form-info' | 'table-editable-table' |
+    'table-relate-plus' | 'table-relate',
   value: '示例文本',
   description: '这是字段的描述信息',
   options: [],
@@ -112,16 +143,40 @@ const renderViewFieldPreview = (props: Record<string, any>) => {
   }
 
   const typeMap: Record<string, string> = {
-    text: '文本',
-    textarea: '多行文本',
-    number: '数字',
-    select: '下拉选择',
-    checkbox: '复选框',
-    radio: '单选框',
-    switch: '开关',
-    slider: '滑块',
-    date: '日期',
-    rate: '评分'
+    'text': '文本',
+    'textarea': '多行文本',
+    'number': '数字',
+    'password': '密码',
+    'select': '下拉选择',
+    'checkbox': '复选框',
+    'radio': '单选框',
+    'switch': '开关',
+    'slider': '滑块',
+    'date': '日期',
+    'date-range': '日期范围',
+    'time': '时间',
+    'rate': '评分',
+    'table-text': 'TF-文本输入',
+    'table-textarea': 'TF-多行文本',
+    'table-number': 'TF-数字输入',
+    'table-select': 'TF-下拉选择',
+    'table-checkbox': 'TF-复选框',
+    'table-date': 'TF-日期选择',
+    'table-date-range': 'TF-日期范围',
+    'table-time': 'TF-时间选择',
+    'table-rate': 'TF-评分组件',
+    'table-rich-text': 'TF-富文本编辑器',
+    'table-map': 'TF-地图定位',
+    'table-upload': 'TF-附件上传',
+    'table-link': 'TF-链接组件',
+    'table-serial-number': 'TF-序列号',
+    'table-user-role': 'TF-用户角色',
+    'table-bytes-array': 'TF-字节数组',
+    'table-reference': 'TF-查找引用',
+    'table-form-info': 'TF-表单信息',
+    'table-editable-table': 'TF-可编辑表格',
+    'table-relate-plus': 'TF-关联字段Plus',
+    'table-relate': 'TF-关联字段'
   }
 
   // 示例数据
@@ -136,6 +191,7 @@ const renderViewFieldPreview = (props: Record<string, any>) => {
   // 根据类型生成示例值
   const getExampleValue = () => {
     switch (props.type) {
+      // 基础类型
       case 'checkbox':
         return true
       case 'switch':
@@ -150,7 +206,50 @@ const renderViewFieldPreview = (props: Record<string, any>) => {
       case 'radio':
         return options.length > 0 ? options[0].value : 'option1'
       case 'date':
+      case 'table-date':
         return '2025-12-31'
+      case 'date-range':
+      case 'table-date-range':
+        return '2025-12-31 - 2026-3-12'
+      case 'time':
+        return '14:30:00'
+      case 'textarea':
+        return '这是多行文本示例\n第二行内容'
+
+      // TableField 类型
+      case 'table-text':
+      case 'table-textarea':
+        return '表格字段文本示例'
+      case 'table-number':
+        return 12345.67
+      case 'table-select':
+        return 'active'
+      case 'table-checkbox':
+        return true
+      case 'table-rate':
+        return 4
+      case 'table-time':
+        return '09:45:00'
+      case 'table-map':
+        return { lng: 116.404, lat: 39.915, name: '北京市' }
+      case 'table-upload':
+        return [{ name: 'example.jpg', url: 'https://example.com/file.jpg' }]
+      case 'table-link':
+        return 'https://example.com'
+      case 'table-serial-number':
+        return 'SN20241201001'
+      case 'table-user-role':
+        return [{ name: '张三', id: 'user001' }]
+      case 'table-bytes-array':
+        return 'SGVsbG8gV29ybGQ='
+      case 'table-reference':
+        return [{ name: '关联项', value: '123' }]
+      case 'table-editable-table':
+        return [{ name: '张三', age: 25 }, { name: '李四', age: 30 }]
+      case 'table-relate':
+      case 'table-relate-plus':
+        return [{id: "方法", name: "感特好22"}]
+
       default:
         return props.value || '示例文本'
     }

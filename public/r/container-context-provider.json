@@ -1,0 +1,15 @@
+{
+  "name": "container-context-provider",
+  "type": "registry:component",
+  "title": "Container Context Provider",
+  "description": "Container Context Provider - 组件",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/container-context-provider/context-provider.tsx",
+      "type": "registry:component",
+      "content": "'use client'\n\nimport { createContext, useContext, ReactNode, useMemo } from 'react'\n\n// Types\nexport interface Table {\n  id: string\n  name: string\n}\n\nexport interface TableData {\n  id: string\n  name: string\n  table: Table\n}\n\nexport interface ContextProviderContextValue {\n  table: Table\n  tableData: TableData\n  data: Array<any>\n}\n\nconst ContextProviderContext = createContext<ContextProviderContextValue | undefined>(\n  undefined\n)\n\n// Props interface\nexport interface ContextProviderProps {\n  children: ReactNode\n  table?: Table\n  tableData?: TableData\n  data?: Array<any>\n}\n\n// Provider Component\nexport function ContextProvider({\n  children,\n  table = { id: '', name: '' },\n  tableData = { id: '', name: '', table: { id: '', name: '' } },\n  data = [],\n}: ContextProviderProps) {\n  // 使用 useMemo 缓存 value 对象，避免不必要的重新渲染\n  const value = useMemo<ContextProviderContextValue>(() => ({\n    table,\n    tableData,\n    data,\n  }), [table, tableData, data])\n\n  return (\n    <ContextProviderContext.Provider value={value}>\n      {children}\n    </ContextProviderContext.Provider>\n  )\n}\n\n// Custom hook to use the context\nexport function useContextProvider(): ContextProviderContextValue {\n  const context = useContext(ContextProviderContext)\n  if (context === undefined) {\n    throw new Error('useContextProvider must be used within a ContextProvider')\n  }\n  return context\n}\n"
+    }
+  ]
+}

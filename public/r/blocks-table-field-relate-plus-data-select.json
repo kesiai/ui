@@ -1,0 +1,15 @@
+{
+  "name": "blocks-table-field-relate-plus-data-select",
+  "type": "registry:block",
+  "title": "Blocks Table Field Relate Plus Data Select",
+  "description": "Blocks Table Field Relate Plus Data Select - 区块",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/table-field/table-field-relate-plus/table-field-relate-plus-data-select.tsx",
+      "type": "registry:block",
+      "content": "import * as React from 'react'\nimport {\n  RelateSelect,\n  RelateMultiSelect,\n  RelateModelSelect,\n} from '@/registry/blocks/table-field/table-field-relate'\nimport type { RelateFieldProps } from '@/registry/blocks/table-field/table-field-relate/types'\n\nexport interface TableFieldRelatePlusDataSelectProps extends RelateFieldProps {\n  relateSchema: {\n    relateTo?: string\n    recordSelectType?: 'select' | 'modal'\n    selectType?: 'single' | 'multiple'\n    showType?: 'select' | 'card' | 'table'\n    showField?: string\n    allowAdd?: boolean\n    editDisabled?: boolean\n    createDisabled?: boolean\n  } & Record<string, any>\n  tableID?: string\n}\n\nconst TableFieldRelatePlusDataSelect: React.FC<TableFieldRelatePlusDataSelectProps> = (props) => {\n  const { relateSchema, tableID, meta, field, input } = props\n\n  // Determine which select component to use\n  let SelectComponent: any = RelateModelSelect\n  let extraProps: Record<string, any> = {}\n\n  // User/Role special handling would go here if needed\n  // For now, we use RelateSelect/RelateMultiSelect/RelateModelSelect based on recordSelectType\n\n  if (relateSchema.recordSelectType === 'select') {\n    if (relateSchema.selectType === 'multiple') {\n      SelectComponent = RelateMultiSelect\n    } else {\n      SelectComponent = RelateSelect\n    }\n  } else if (relateSchema.recordSelectType === 'modal') {\n    SelectComponent = RelateModelSelect\n    // Set input type to button for card/table show types\n    if (['card', 'table'].includes(relateSchema.showType || '')) {\n      extraProps.inputType = 'button'\n    }\n    extraProps.selectType = relateSchema.selectType\n  }\n\n  // Handle disabled state\n  const isDisabled = meta?.data?.disabled ?? relateSchema.editDisabled ?? false\n\n  if (isDisabled) {\n    extraProps.disabled = true\n    extraProps.relateSchema = {\n      ...relateSchema,\n      editDisabled: true,\n      createDisabled: true,\n    }\n  }\n\n  // 构建 field props，确保包含必要的 schema 信息\n  const selectProps: any = {\n    input,\n    meta,\n    field: {\n      ...field,\n      // 为 AsyncSelect 提供带 name 的 schema（与 schemaConverter 的格式一致）\n      schema: tableID ? { name: `core/t/${tableID}/d` } : relateSchema,\n      displayField: relateSchema.relate?.fields?.[0]?.key || relateSchema.showField || 'name',\n      tableID,\n      relateShowFields: relateSchema.relateShowFields,\n    },\n    ...extraProps,\n  }\n\n  return (\n    <div className=\"flex flex-row w-full gap-2\">\n      <SelectComponent {...selectProps} />\n    </div>\n  )\n}\n\nexport { TableFieldRelatePlusDataSelect }\nexport default TableFieldRelatePlusDataSelect\n"
+    }
+  ]
+}

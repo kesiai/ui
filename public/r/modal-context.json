@@ -1,0 +1,15 @@
+{
+  "name": "modal-context",
+  "type": "registry:lib",
+  "title": "Modal Context",
+  "description": "Modal Context - 工具库",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/modal-context.tsx",
+      "type": "registry:lib",
+      "content": "import * as React from \"react\"\n\nexport interface ModalContextValue {\n  // 打开状态\n  open?: boolean\n  // 设置打开状态\n  setOpen?: (open: boolean) => void\n  // 显示底部按钮\n  showButton?: boolean\n  // 设置底部按钮\n  setShowButton?: (show: boolean) => void\n  // 表单信息\n  formInfo?: {\n    handleSubmit?: () => Promise<void>\n    submitting?: boolean\n    invalid?: boolean\n    onReset?: () => void\n  }\n  // 设置表单信息\n  setFormInfo?: (info: ModalContextValue['formInfo']) => void\n}\n\nexport const ModalWigetContext = React.createContext<ModalContextValue>({\n  open: false,\n  setOpen: () => {},\n  showButton: false,\n  setShowButton: () => {},\n  formInfo: undefined,\n  setFormInfo: () => {}\n})\n"
+    }
+  ]
+}

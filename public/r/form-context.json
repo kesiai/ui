@@ -1,0 +1,15 @@
+{
+  "name": "form-context",
+  "type": "registry:lib",
+  "title": "Form Context",
+  "description": "Form Context - 工具库",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/form-context.tsx",
+      "type": "registry:lib",
+      "content": "import * as React from \"react\"\n\nexport interface FormContextValue {\n  onReset?: () => void\n  loading?: boolean\n  handleSubmit?: () => void\n}\n\nexport const FormContext = React.createContext<FormContextValue>({\n  onReset: undefined,\n  loading: false,\n  handleSubmit: undefined\n})\n"
+    }
+  ]
+}

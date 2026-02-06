@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { registryConfigs, componentCategories } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
+import { DocumentationViewer } from './components/DocumentationViewer'
 import { LoginDialog } from './components/LoginDialog'
 import type { ComponentConfig } from './config/types'
 import { setConfig, useUser, useLogout } from '@airiot/client'
@@ -83,10 +84,11 @@ function ComponentDetailPage() {
 
   return (
     <div className="flex w-full">
-      {/* 组件预览区 */}
-      <div className="flex-1 overflow-auto">
+      {/* 左侧：组件预览区和文档区 */}
+      <div className="flex-1 overflow-auto flex flex-col">
+        {/* 组件预览区 */}
         <div className="p-6">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 h-full">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
             <div className="border-b border-slate-200 px-6 py-4">
               <h2 className="text-lg font-semibold text-slate-900">
                 组件预览
@@ -97,9 +99,23 @@ function ComponentDetailPage() {
             </div>
           </div>
         </div>
+
+        {/* 文档展示区 */}
+        {componentConfig.documentation && (
+          <div className="px-6 pb-6">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200">
+              <div className="border-b border-slate-200 px-6 py-4">
+                <h2 className="text-lg font-semibold text-slate-900">
+                  组件文档
+                </h2>
+              </div>
+              <DocumentationViewer content={componentConfig.documentation} />
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* 属性配置面板 */}
+      {/* 右侧：属性配置面板 */}
       <aside className="w-96 bg-white border-l border-slate-200 overflow-y-auto">
         <div className="p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-6">

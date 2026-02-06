@@ -1,5 +1,0 @@
-export { MessageDataSource } from './message-data-source'
-export { useMessageData } from './useMessageData'
-export type { MessageDataSourceProps } from './message-data-source'
-export type { MessageDataConfig, GroupItemConfig, ColumnItemConfig, SortItemConfig, FieldFormatConfig } from './useMessageData'
-export { messageDataSourceConfig, messageDataSourcePropsConfig, messageDataSourceDefaultProps } from './config'

@@ -1,0 +1,15 @@
+{
+  "name": "textarea",
+  "type": "registry:component",
+  "title": "Textarea",
+  "description": "Textarea - 组件",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/textarea/textarea.tsx",
+      "type": "registry:component",
+      "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nexport interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {\n  /**\n   * 文字内容\n   */\n  content?: string\n  /**\n   * 首行缩进（像素）\n   */\n  textIndent?: number\n}\n\nconst TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(\n  (\n    {\n      className,\n      content = '',\n      textIndent = 0,\n      value,\n      ...props\n    },\n    ref\n  ) => {\n    // 使用 content 或 value 属性\n    const textValue = (value !== undefined ? value : content) as string\n\n    return (\n      <div\n        className={cn(\"textarea-container\", className)}\n        style={{ width: '100%', height: '100%', padding: '8px' }}\n      >\n        <textarea\n          ref={ref}\n          className={cn(\n            \"flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50\",\n            \"resize-none\",\n            className\n          )}\n          style={{\n            textIndent: textIndent ? `${textIndent}px` : undefined,\n            height: '100%',\n            minHeight: '80px'\n          }}\n          value={textValue}\n          {...props}\n        />\n      </div>\n    )\n  }\n)\n\nTextArea.displayName = \"TextArea\"\n\nexport { TextArea }\n"
+    }
+  ]
+}

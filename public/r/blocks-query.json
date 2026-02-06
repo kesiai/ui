@@ -1,0 +1,15 @@
+{
+  "name": "blocks-query",
+  "type": "registry:block",
+  "title": "Blocks Query",
+  "description": "Blocks Query - 区块",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/utils/query.ts",
+      "type": "registry:block",
+      "content": "/**\n * 获取查询过滤器（blocks 级别的通用方法）\n * TODO: 从 blocks 级别的 queryEditor.methods 获取实际的查询过滤器构建方法\n */\nexport const getQueryFilter = (initFilter: Record<string, any> = {}): Record<string, any> => {\n  // 暂时直接返回 initFilter\n  // 实际实现应该从 queryEditor.methods 获取\n  return initFilter\n}\n"
+    }
+  ]
+}

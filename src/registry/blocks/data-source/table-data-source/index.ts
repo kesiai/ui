@@ -1,5 +1,0 @@
-export { TableDataSource } from './table-data-source'
-export type { TableDataSourceProps } from './table-data-source'
-export { tableDataSourceConfig, tableDataSourceDefaultProps } from './config'
-export { useTableData } from './useTableData'
-export type { TableDataConfig } from './useTableData'

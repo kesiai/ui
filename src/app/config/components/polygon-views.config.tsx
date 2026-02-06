@@ -1,5 +1,5 @@
-import { PolygonViews, PolygonData } from '@/registry/blocks/gis/polygon-views/polygon-views'
-import { MapContainer } from '@/registry/blocks/gis/map-container/map-container'
+import { PolygonViews, PolygonData } from '@/registry/blocks/gis/gis-polygon-draw/polygon-views'
+import { MapContainer } from '@/registry/blocks/gis/gis-map-core/map-container'
 import { ComponentConfig } from '../types'
 
 export const polygonViewsPropsConfig = [

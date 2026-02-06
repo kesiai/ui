@@ -1,5 +1,5 @@
-import { GeoserverWms, LayerBase } from '@/registry/blocks/gis/geoserver-wms/geoserver-wms'
-import { MapContainer } from '@/registry/blocks/gis/map-container/map-container'
+import { GeoserverWms, LayerBase } from '@/registry/blocks/gis/gis-geoserver-wms/geoserver-wms'
+import { MapContainer } from '@/registry/blocks/gis/gis-map-core/map-container'
 import { ComponentConfig } from '../types'
 
 // 默认配置

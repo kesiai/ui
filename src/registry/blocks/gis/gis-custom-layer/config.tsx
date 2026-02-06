@@ -1,6 +1,6 @@
 
-import { CustomViews, DrawLineItem } from '@/registry/blocks/gis/custom-views/custom-views'
-import { MapContainer } from '../map-container/map-container'
+import { CustomViews, DrawLineItem } from '@/registry/blocks/gis/gis-custom-layer/custom-views'
+import { MapContainer } from '../gis-map-core/map-container'
 import { ComponentConfig } from '@/app/config/types'
 
 export const customViewsPropsConfig = [

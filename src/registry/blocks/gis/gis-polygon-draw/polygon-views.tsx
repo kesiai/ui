@@ -7,7 +7,7 @@ import * as geom from 'ol/geom'
 import * as style from 'ol/style'
 import { fromLonLat } from 'ol/proj'
 import type Map from 'ol/Map'
-import { useMap } from '../map-container/map-container'
+import { useMap } from '../gis-map-core/map-container'
 
 export type DrawType = 'Point' | 'LineString' | 'Polygon' | 'Circle' | 'Semicircle' | null
 

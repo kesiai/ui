@@ -1,6 +1,6 @@
 
-import { XYZ } from '@/registry/blocks/gis/xyz/xyz'
-import { MapContainer } from '../map-container/map-container'
+import { XYZ } from '@/registry/blocks/gis/gis-xyz-tile/xyz'
+import { MapContainer } from '../gis-map-core/map-container'
 import { ComponentConfig } from '@/app/config/types'
 
 export const xyzPropsConfig = [

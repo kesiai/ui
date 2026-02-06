@@ -7,8 +7,8 @@ import { Vector as VectorLayer } from 'ol/layer'
 import { GeoJSON as GeoJSONFormat } from 'ol/format'
 import * as style from 'ol/style'
 import type Map from 'ol/Map'
-import { useMap } from '../map-container/map-container'
-import { createVectorSource, hexToRgba } from '../shared/gis-utils'
+import { useMap } from '../gis-map-core/map-container'
+import { createVectorSource, hexToRgba } from '../gis-shared-utils/gis-utils'
 
 export interface LineStyle {
     color?: string

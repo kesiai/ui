@@ -8,7 +8,7 @@ import { XYZ as XYZSource } from 'ol/source'
 // @ts-ignore
 import * as style from 'ol/style'
 import type Map from 'ol/Map'
-import { useMap } from '../map-container/map-container'
+import { useMap } from '../gis-map-core/map-container'
 import _ from 'lodash'
 import { getProjection, getMapCoordinateType } from './utils'
 

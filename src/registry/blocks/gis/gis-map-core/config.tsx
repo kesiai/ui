@@ -1,7 +1,7 @@
 
-import { MapContainer } from '@/registry/blocks/gis/map-container/map-container'
+import { MapContainer } from '@/registry/blocks/gis/gis-map-core/map-container'
 import { ComponentConfig } from '@/app/config/types'
-import { ZoomOption, ScaleLineOption } from '@/registry/blocks/gis/map-container/map-container'
+import { ZoomOption, ScaleLineOption } from '@/registry/blocks/gis/gis-map-core/map-container'
 
 export const mapContainerPropsConfig = [
     {

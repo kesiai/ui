@@ -1,7 +1,7 @@
 
-import { WarnViews } from '@/registry/blocks/gis/warn-views/warn-views'
-import { TableViews } from '../table-views/table-views'
-import { MapContainer } from '../map-container/map-container'
+import { WarnViews } from '@/registry/blocks/gis/gis-warn-layer/warn-views'
+import { TableViews } from '../gis-table-layer/table-views'
+import { MapContainer } from '../gis-map-core/map-container'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置

@@ -1,5 +1,5 @@
-import { XYZ, CanvasSetting, CoorDefs, LayerBase } from '@/registry/blocks/gis/xyz/xyz'
-import { MapContainer } from '@/registry/blocks/gis/map-container/map-container'
+import { XYZ, CanvasSetting, CoorDefs, LayerBase } from '@/registry/blocks/gis/gis-xyz-tile/xyz'
+import { MapContainer } from '@/registry/blocks/gis/gis-map-core/map-container'
 import { ComponentConfig } from '../types'
 
 // 默认配置

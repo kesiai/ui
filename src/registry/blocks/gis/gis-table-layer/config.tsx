@@ -1,8 +1,8 @@
 
-import { TableViews } from '@/registry/blocks/gis/table-views/table-views'
-import { MapContainer } from '../map-container/map-container'
+import { TableViews } from '@/registry/blocks/gis/gis-table-layer/table-views'
+import { MapContainer } from '../gis-map-core/map-container'
 import { ComponentConfig } from '@/app/config/types'
-import { defaultDrawStyleProps } from '../custom-views/config'
+import { defaultDrawStyleProps } from '../gis-custom-layer/config'
 
 const exampleData = {
     table: { id: 'A', title: 'A' },

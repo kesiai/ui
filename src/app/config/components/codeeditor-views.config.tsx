@@ -1,5 +1,5 @@
-import { CodeEditorViews } from '@/registry/blocks/gis/code-editor-views/code-editor-views'
-import { MapContainer } from '@/registry/blocks/gis/map-container/map-container'
+import { CodeEditorViews } from '@/registry/blocks/gis/gis-code-editor/code-editor-views'
+import { MapContainer } from '@/registry/blocks/gis/gis-map-core/map-container'
 import { ComponentConfig } from '../types'
 
 export const codeEditorViewsPropsConfig = [

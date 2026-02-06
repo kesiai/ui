@@ -1,6 +1,6 @@
 
-import { GeoserverWms } from '@/registry/blocks/gis/geoserver-wms/geoserver-wms'
-import { MapContainer } from '../map-container/map-container'
+import { GeoserverWms } from '@/registry/blocks/gis/gis-geoserver-wms/geoserver-wms'
+import { MapContainer } from '../gis-map-core/map-container'
 import { ComponentConfig } from '@/app/config/types'
 
 export const geoserverWmsPropsConfig = [

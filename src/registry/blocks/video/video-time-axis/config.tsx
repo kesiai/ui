@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TimeAxisWidget, VideoRecord } from '@/registry/blocks/video/time-axis/time-axis'
+import { TimeAxisWidget, VideoRecord } from '@/registry/blocks/video/video-time-axis/time-axis'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
 
 // 属性配置

@@ -37,7 +37,22 @@ function getCategoryByComponentId(componentId: string): string {
   // 表单组件
   const formComponents = [
     'data-point', 'data-point-input', 'data-point-panel',
-    'table-select', 'table-data-select', 'point-table'
+    'table-select', 'table-data-select', 'point-table',
+    // 表单输入组件
+    'form-input', 'form-input-number', 'form-textarea',
+    'form-select', 'form-checkbox', 'form-radio', 'form-switch',
+    'form-slider', 'form-rate', 'form-upload',
+    // 表单日期时间组件
+    'form-date', 'form-date-range', 'form-time',
+    // 表单数据组件
+    'form-bytes-array', 'form-serial-number',
+    // 表单业务组件
+    'form-link', 'form-map', 'form-rich-text',
+    'form-user-role', 'form-reference', 'form-form-info',
+    'form-editable-table', 'form-relate', 'form-relate-plus',
+    // 表单容器组件
+    'form-area', 'form-field', 'form-widget',
+    'form-tableField', 'schema-form'
   ]
   if (formComponents.includes(componentId)) {
     return 'form'

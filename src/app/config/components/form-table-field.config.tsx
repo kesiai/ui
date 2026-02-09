@@ -1,5 +1,5 @@
 import * as React from "react"
-import FormTableField from '@/registry/blocks/form/form-tableField/form-tableField'
+import FormTableField from '@/registry/components/form-tableField/form-tableField'
 import { ComponentConfig } from '../types'
 
 export const FormTableFieldPreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {

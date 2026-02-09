@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
-import { FieldComponentSelector } from '@/registry/blocks/form/form-widget/form-widget'
+import { FieldComponentSelector } from '@/registry/components/form-widget/form-widget'
 
 export interface TableFieldTableViewColumn {
   key: string

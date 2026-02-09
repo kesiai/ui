@@ -42,6 +42,7 @@ const FormField =
   const ContorlComponent = type && fieldMap[type] || Input
   const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
   const formClassNames = methods?.classNames
+  const fieldProps = { label, description, required, ...restProps }
   
   return ui.visible ? (
     <Controller
@@ -58,20 +59,20 @@ const FormField =
             children ? ( typeof children === 'function' ? children({
               id: fieldId,
               ...field,
-              ...restProps,
+              ...fieldProps,
               className: cn(formClassNames?.input, classNames?.input),
               'aria-invalid': fieldState.invalid
             }) : cloneElement(children as React.ReactElement<any>, {
               id: fieldId,
               ...field,
-              ...restProps,
+              ...fieldProps,
               className: cn(formClassNames?.input, classNames?.input),
               'aria-invalid': fieldState.invalid
             }) ) : (
               <ContorlComponent
                 id={fieldId}
                 {...field}
-                {...restProps}
+                {...fieldProps}
                 className={cn(formClassNames?.input, classNames?.input)}
                 aria-invalid={fieldState.invalid}
               />

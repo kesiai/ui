@@ -285,10 +285,7 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
         min={min}
         max={max}
         step={step}
-        className={cn(
-          !bordered && "border-0",
-          "focus-visible:ring-ring focus-visible:ring-offset-0"
-        )}
+        className={cn(!bordered && "border-0")}
         {...props}
       />
     )

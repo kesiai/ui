@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/popover"
 import { CalendarIcon, XIcon, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { TimePicker } from "@/components/ui/time-picker"
+import { TimePicker } from "@/registry/ui/time-picker"
 
 export interface FormDateProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children" | "onChange"> {
@@ -713,7 +713,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
                       onChange={handleInputChange}
                       onKeyDown={handleKeyDown}
                       disabled={disabled}
-                      className={cn(bordered ? "" : "!border-0", "focus-visible:ring-ring focus-visible:ring-offset-0")}
+                      className={cn(bordered ? "" : "!border-0", "")}
                       {...props}
                     />
                     <InputGroupAddon align="inline-end">

@@ -60,7 +60,7 @@ export const viewAdvancedFilterPropsConfig = [
 
 export const viewAdvancedFilterDefaultProps = {
   modelName: null,
-  tableId: 'user',
+  tableId: 'product',
   maxRules: 10,
   collapsible: true,
   defaultCollapsed: false,
@@ -126,12 +126,12 @@ const renderViewAdvancedFilterPreview = (props: Record<string, any>) => {
                 <div className="bg-slate-50 rounded-lg p-6">
                   <ViewModel tableId={props.tableId} modelName={props.modelName}>
                     <ViewAdvancedFilter
-                      modelId={props.tableId}
+                      modelId={props.modelId}
                       maxRules={props.maxRules}
                       collapsible={props.collapsible}
                       defaultCollapsed={props.defaultCollapsed}
                       showFieldSelector={props.showFieldSelector}
-                      fields={mockFields}
+                      // fields={mockFields}
                     />
                   </ViewModel>
                 </div>

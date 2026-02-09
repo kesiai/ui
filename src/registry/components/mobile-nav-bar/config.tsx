@@ -1,6 +1,5 @@
-import { MobileNavBar } from '@/registry/blocks/mobile/mobile-nav-bar/mobile-nav-bar'
+import { MobileNavBar } from '@/registry/components/mobile-nav-bar/mobile-nav-bar'
 import { ComponentConfig } from '@/app/config/types'
-import { TimePicker } from '@/components/ui/time-picker'
 
 export const mobileNavBarPropsConfig = [
   {

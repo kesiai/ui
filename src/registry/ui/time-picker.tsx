@@ -39,11 +39,11 @@ export function TimePicker({
   disabled,
   modal,
   inline = false,
-  onOpenChange,
+  onOpenChange
 }: {
   use12HourFormat?: boolean;
-  value?: Date;
-  onChange?: (date: Date) => void;
+  value: Date;
+  onChange: (date: Date) => void;
   min?: Date;
   max?: Date;
   disabled?: boolean;
@@ -54,19 +54,18 @@ export function TimePicker({
 }) {
   // hours24h = HH
   // hours12h = hh
-  const defaultDate = value ?? new Date();
   const formatStr = useMemo(
     () => (use12HourFormat ? 'yyyy-MM-dd hh:mm:ss.SSS a xxxx' : 'yyyy-MM-dd HH:mm:ss.SSS xxxx'),
     [use12HourFormat]
   );
-  const [ampm, setAmpm] = useState(format(defaultDate, 'a') === 'AM' ? AM_VALUE : PM_VALUE);
-  const [hour, setHour] = useState(use12HourFormat ? +format(defaultDate, 'hh') : defaultDate.getHours());
-  const [minute, setMinute] = useState(defaultDate.getMinutes());
-  const [second, setSecond] = useState(defaultDate.getSeconds());
+  const [ampm, setAmpm] = useState(format(value, 'a') === 'AM' ? AM_VALUE : PM_VALUE);
+  const [hour, setHour] = useState(use12HourFormat ? +format(value, 'hh') : value.getHours());
+  const [minute, setMinute] = useState(value.getMinutes());
+  const [second, setSecond] = useState(value.getSeconds());
 
   useEffect(() => {
-    onChange?.(buildTime({ use12HourFormat, value: defaultDate, formatStr, hour, minute, second, ampm }));
-  }, [JSON.stringify({ hour, minute, second, ampm, formatStr, use12HourFormat, defaultDate, onChange })]);
+    onChange(buildTime({ use12HourFormat, value, formatStr, hour, minute, second, ampm }));
+  }, [hour, minute, second, ampm, formatStr, use12HourFormat]);
 
   const _hourIn24h = useMemo(() => {
     return use12HourFormat ? (hour % 12) + ampm * 12 : hour;
@@ -77,7 +76,7 @@ export function TimePicker({
       Array.from({ length: use12HourFormat ? 12 : 24 }, (_, i) => {
         let disabled = false;
         const hourValue = use12HourFormat ? (i === 0 ? 12 : i) : i;
-        const hDate = setHours(defaultDate, use12HourFormat ? i + ampm * 12 : i);
+        const hDate = setHours(value, use12HourFormat ? i + ampm * 12 : i);
         const hStart = startOfHour(hDate);
         const hEnd = endOfHour(hDate);
         if (min && hEnd < min) disabled = true;
@@ -88,10 +87,10 @@ export function TimePicker({
           disabled,
         };
       }),
-    [defaultDate, min, max, use12HourFormat, ampm]
+    [value, min, max, use12HourFormat, ampm]
   );
   const minutes: SimpleTimeOption[] = useMemo(() => {
-    const anchorDate = setHours(defaultDate, _hourIn24h);
+    const anchorDate = setHours(value, _hourIn24h);
     return Array.from({ length: 60 }, (_, i) => {
       let disabled = false;
       const mDate = setMinutes(anchorDate, i);
@@ -105,9 +104,9 @@ export function TimePicker({
         disabled,
       };
     });
-  }, [defaultDate, min, max, _hourIn24h]);
+  }, [value, min, max, _hourIn24h]);
   const seconds: SimpleTimeOption[] = useMemo(() => {
-    const anchorDate = setMilliseconds(setMinutes(setHours(defaultDate, _hourIn24h), minute), 0);
+    const anchorDate = setMilliseconds(setMinutes(setHours(value, _hourIn24h), minute), 0);
     const _min = min ? setMilliseconds(min, 0) : undefined;
     const _max = max ? setMilliseconds(max, 0) : undefined;
     return Array.from({ length: 60 }, (_, i) => {
@@ -121,10 +120,10 @@ export function TimePicker({
         disabled,
       };
     });
-  }, [defaultDate, minute, min, max, _hourIn24h]);
+  }, [value, minute, min, max, _hourIn24h]);
   const ampmOptions = useMemo(() => {
-    const startD = startOfDay(defaultDate);
-    const endD = endOfDay(defaultDate);
+    const startD = startOfDay(value);
+    const endD = endOfDay(value);
     return [
       { value: AM_VALUE, label: 'AM' },
       { value: PM_VALUE, label: 'PM' },
@@ -136,7 +135,7 @@ export function TimePicker({
       if (max && start > max) disabled = true;
       return { ...v, disabled };
     });
-  }, [defaultDate, min, max]);
+  }, [value, min, max]);
 
   const [open, setOpen] = useState(false);
 
@@ -146,7 +145,7 @@ export function TimePicker({
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (open) {
+      if (open || inline) {
         hourRef.current?.scrollIntoView({ behavior: 'auto' });
         minuteRef.current?.scrollIntoView({ behavior: 'auto' });
         secondRef.current?.scrollIntoView({ behavior: 'auto' });
@@ -154,18 +153,18 @@ export function TimePicker({
     }, 1);
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, inline]);
   const onHourChange = useCallback(
     (v: SimpleTimeOption) => {
       if (min) {
-        let newTime = buildTime({ use12HourFormat, value: defaultDate, formatStr, hour: v.value, minute, second, ampm });
+        let newTime = buildTime({ use12HourFormat, value, formatStr, hour: v.value, minute, second, ampm });
         if (newTime < min) {
           setMinute(min.getMinutes());
           setSecond(min.getSeconds());
         }
       }
       if (max) {
-        let newTime = buildTime({ use12HourFormat, value: defaultDate, formatStr, hour: v.value, minute, second, ampm });
+        let newTime = buildTime({ use12HourFormat, value, formatStr, hour: v.value, minute, second, ampm });
         if (newTime > max) {
           setMinute(max.getMinutes());
           setSecond(max.getSeconds());
@@ -173,32 +172,32 @@ export function TimePicker({
       }
       setHour(v.value);
     },
-    [setHour, use12HourFormat, defaultDate, formatStr, minute, second, ampm, min, max]
+    [setHour, use12HourFormat, value, formatStr, minute, second, ampm]
   );
 
   const onMinuteChange = useCallback(
     (v: SimpleTimeOption) => {
       if (min) {
-        let newTime = buildTime({ use12HourFormat, value: defaultDate, formatStr, hour: v.value, minute, second, ampm });
+        let newTime = buildTime({ use12HourFormat, value, formatStr, hour: v.value, minute, second, ampm });
         if (newTime < min) {
           setSecond(min.getSeconds());
         }
       }
       if (max) {
-        let newTime = buildTime({ use12HourFormat, value: defaultDate, formatStr, hour: v.value, minute, second, ampm });
+        let newTime = buildTime({ use12HourFormat, value, formatStr, hour: v.value, minute, second, ampm });
         if (newTime > max) {
           setSecond(newTime.getSeconds());
         }
       }
       setMinute(v.value);
     },
-    [setMinute, use12HourFormat, defaultDate, formatStr, hour, second, ampm, min, max]
+    [setMinute, use12HourFormat, value, formatStr, hour, second, ampm]
   );
 
   const onAmpmChange = useCallback(
     (v: SimpleTimeOption) => {
       if (min) {
-        let newTime = buildTime({ use12HourFormat, value: defaultDate, formatStr, hour, minute, second, ampm: v.value });
+        let newTime = buildTime({ use12HourFormat, value, formatStr, hour, minute, second, ampm: v.value });
         if (newTime < min) {
           const minH = min.getHours() % 12;
           setHour(minH === 0 ? 12 : minH);
@@ -207,7 +206,7 @@ export function TimePicker({
         }
       }
       if (max) {
-        let newTime = buildTime({ use12HourFormat, value: defaultDate, formatStr, hour, minute, second, ampm: v.value });
+        let newTime = buildTime({ use12HourFormat, value, formatStr, hour, minute, second, ampm: v.value });
         if (newTime > max) {
           const maxH = max.getHours() % 12;
           setHour(maxH === 0 ? 12 : maxH);
@@ -217,14 +216,13 @@ export function TimePicker({
       }
       setAmpm(v.value);
     },
-    [setAmpm, use12HourFormat, defaultDate, formatStr, hour, minute, second, min, max]
+    [setAmpm, use12HourFormat, value, formatStr, hour, minute, second, min, max]
   );
 
   const display = useMemo(() => {
-    return format(defaultDate, use12HourFormat ? 'hh:mm:ss a' : 'HH:mm:ss');
-  }, [defaultDate, use12HourFormat]);
+    return format(value, use12HourFormat ? 'hh:mm:ss a' : 'HH:mm:ss');
+  }, [value, use12HourFormat]);
 
-  // 时间选择内容组件
   const timeContent = (
     <div className="flex-col gap-2 p-2">
       <div className="flex items-center justify-center gap-2 pb-2 border-b">
@@ -232,8 +230,8 @@ export function TimePicker({
         <span className="text-sm font-medium">{display}</span>
       </div>
       <div className="flex h-56 grow">
-        <ScrollArea className="h-full flex-grow">
-          <div className="flex grow flex-col items-stretch overflow-y-auto pe-2 pb-48">
+        <ScrollArea className="h-full flex-grow overflow-auto">
+          <div className="flex grow flex-col items-stretch pe-2 pb-48">
             {hours.map((v) => (
               <div ref={v.value === hour ? hourRef : undefined} key={v.value}>
                 <TimeItem
@@ -247,8 +245,8 @@ export function TimePicker({
             ))}
           </div>
         </ScrollArea>
-        <ScrollArea className="h-full flex-grow">
-          <div className="flex grow flex-col items-stretch overflow-y-auto pe-2 pb-48">
+        <ScrollArea className="h-full flex-grow overflow-auto">
+          <div className="flex grow flex-col items-stretch pe-2 pb-48">
             {minutes.map((v) => (
               <div ref={v.value === minute ? minuteRef : undefined} key={v.value}>
                 <TimeItem
@@ -262,8 +260,8 @@ export function TimePicker({
             ))}
           </div>
         </ScrollArea>
-        <ScrollArea className="h-full flex-grow">
-          <div className="flex grow flex-col items-stretch overflow-y-auto pe-2 pb-48">
+        <ScrollArea className="h-full flex-grow overflow-auto">
+          <div className="flex grow flex-col items-stretch pe-2 pb-48">
             {seconds.map((v) => (
               <div ref={v.value === second ? secondRef : undefined} key={v.value}>
                 <TimeItem
@@ -278,8 +276,8 @@ export function TimePicker({
           </div>
         </ScrollArea>
         {use12HourFormat && (
-          <ScrollArea className="h-full flex-grow">
-            <div className="flex grow flex-col items-stretch overflow-y-auto pe-2">
+          <ScrollArea className="h-full flex-grow overflow-auto">
+            <div className="flex grow flex-col items-stretch pe-2">
               {ampmOptions.map((v) => (
                 <TimeItem
                   key={v.value}
@@ -295,19 +293,15 @@ export function TimePicker({
         )}
       </div>
     </div>
-  );
+  )
 
   // inline 模式：直接显示时间选择内容
   if (inline) {
     return timeContent;
   }
 
-  // 默认模式：带 Popover
   return (
-    <Popover open={open} onOpenChange={(newOpen) => {
-      setOpen(newOpen);
-      onOpenChange?.(newOpen);
-    }} modal={modal}>
+    <Popover open={open} onOpenChange={setOpen} modal={modal}>
       <PopoverTrigger>
         <div
           role="combobox"

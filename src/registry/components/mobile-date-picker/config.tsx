@@ -1,4 +1,4 @@
-import { MobileDatePicker } from "@/registry/blocks/mobile/mobile-date-picker/mobile-date-picker"
+import { MobileDatePicker } from "@/registry/components/mobile-date-picker/mobile-date-picker"
 import { ComponentConfig } from '@/app/config/types'
 
 export const mobileDatePickerPropsConfig = [

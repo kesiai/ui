@@ -11,6 +11,7 @@ const categoryConfig: Record<string, { name: string; icon: string; order: number
   'form': { name: '表单组件', icon: '📝', order: 3 },
   'chart': { name: '图表组件', icon: '📊', order: 4 },
   'business': { name: '业务组件', icon: '💼', order: 5 },
+  'view': { name: '视图组件', icon: '✳️', order: 6 },
 }
 
 // 根据组件 ID 判断分类
@@ -53,6 +54,11 @@ function getCategoryByComponentId(componentId: string): string {
   ]
   if (chartComponents.includes(componentId)) {
     return 'chart'
+  }
+
+  // 视图组件
+  if (componentId.startsWith('view-')) {
+    return 'view'
   }
 
   // 默认归为业务组件

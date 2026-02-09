@@ -1,7 +1,8 @@
-import ViewModel from '../view-model/view-model'
+import ViewModel from '@/registry/components/view-model/view-model'
 import React from 'react'
 import ViewFilter from './view-filter'
 import { ComponentConfig } from '@/app/config/types'
+import { layoutPresets } from '@/registry/components/form/config'
 
 export const viewFilterPropsConfig = [
   {
@@ -19,25 +20,29 @@ export const viewFilterPropsConfig = [
     description: '数据表格的唯一标识符'
   },
   {
-    name: 'fields',
+    name: 'filters',
     label: '筛选字段',
     type: 'json' as const,
     default: '[]',
     description: '筛选字段配置（JSON 数组格式）'
   },
   {
-    name: 'inline',
-    label: '内联模式',
-    type: 'boolean' as const,
-    default: false,
-    description: '筛选条件是否横向排列'
+    name: 'layout',
+    label: '布局样式',
+    type: 'select' as const,
+    default: 'default',
+    options: Object.keys(layoutPresets).map(key => ({
+      value: key,
+      label: layoutPresets[key].name
+    })),
+    description: '选择表单的布局样式'
   },
   {
-    name: 'collapsible',
-    label: '可折叠',
-    type: 'boolean' as const,
-    default: false,
-    description: '是否允许折叠筛选面板'
+    name: 'classNames',
+    label: '自定义样式类',
+    type: 'json' as const,
+    default: JSON.stringify(layoutPresets.default, null, 2),
+    description: '自定义表单各元素的 className (JSON格式)'
   },
   {
     name: 'showExample',
@@ -51,35 +56,34 @@ export const viewFilterPropsConfig = [
 export const viewFilterDefaultProps = {
   modelName: null,
   tableId: 'user',
-  fields: [
-    { key: 'name', label: '名称', type: 'text' },
-    { key: 'status', label: '状态', type: 'select', options: [
-      { label: '激活', value: 'active' },
-      { label: '未激活', value: 'inactive' }
-    ]},
-    { key: 'email', label: '邮箱', type: 'text' }
-  ],
-  inline: false,
-  collapsible: true,
+  filters: [],
+  layout: 'default' as keyof typeof layoutPresets,
+  classNames: null,
   showExample: true
 }
 
 const renderViewFilterPreview = (props: Record<string, any>) => {
-  // 解析 fields
-  let fields = props.fields || []
+  // 解析 filters
+  let filters = props.filters || []
+
   try {
-    fields = typeof props.fields === 'string'
-      ? JSON.parse(props.fields)
-      : props.fields
+    filters = typeof props.filters === 'string'
+      ? JSON.parse(props.filters)
+      : props.filters
   } catch (e) {
-    fields = [
-      { key: 'name', label: '名称', type: 'text' },
-      { key: 'status', label: '状态', type: 'select', options: [
-        { label: '激活', value: 'active' },
-        { label: '未激活', value: 'inactive' }
-      ]}
-    ]
   }
+
+  // 根据 layout 选择对应的预设样式
+  const layoutStyles = layoutPresets[props.layout] || layoutPresets.default
+  const classNames = props.classNames ||
+  {
+    group: layoutStyles.container,
+    field: layoutStyles.field,
+    label: layoutStyles.label,
+    input: layoutStyles.input,
+    description: layoutStyles.descriptionClass,
+    error: layoutStyles.error
+  }  
 
   return (
     <div className="h-full flex items-center justify-center p-8 overflow-auto">
@@ -92,13 +96,9 @@ const renderViewFilterPreview = (props: Record<string, any>) => {
               <div className="text-sm text-slate-600">
                 <p className="font-semibold mb-2">📋 当前配置：</p>
                 <div className="bg-slate-50 rounded-lg p-4 space-y-2">
-                  <div className="flex gap-6">
-                    <p><strong>内联模式：</strong>{props.inline ? '✓ 是' : '✗ 否'}</p>
-                    <p><strong>可折叠：</strong>{props.collapsible ? '✓ 是' : '✗ 否'}</p>
-                  </div>
                   <p><strong>筛选字段：</strong>
                     <code className="ml-2 px-2 py-1 bg-white rounded text-xs">
-                      {fields.map((f: any) => f.label).join(', ') || '未配置'}
+                      {filters.map((f: any) => f?.name || f).join(', ') || '未配置'}
                     </code>
                   </p>
                 </div>
@@ -110,9 +110,8 @@ const renderViewFilterPreview = (props: Record<string, any>) => {
                 <div className="bg-slate-50 rounded-lg p-6">
                   <ViewModel tableId={props.tableId} modelName={props.modelName}>
                     <ViewFilter
-                      fields={fields}
-                      inline={props.inline}
-                      collapsible={props.collapsible}
+                      filters={filters}
+                      classNames={classNames}
                     />
                   </ViewModel>
                 </div>

@@ -31,6 +31,12 @@ import { TableFieldFormInfo } from '@/registry/blocks/table-field/table-field-fo
 import { TableFieldEditableTable } from '@/registry/blocks/table-field/table-field-editable-table/table-field-editable-table'
 import { TableFieldRelatePlus } from '@/registry/blocks/table-field/table-field-relate-plus/table-field-relate-plus'
 import { TableFieldRelate as TableFieldRelate } from '@/registry/blocks/table-field/table-field-relate'
+import { FilterText } from '@/registry/components/filter-text/filter-text'
+import { FilterEnum } from '@/registry/components/filter-enum/filter-enum'
+import { FilterNumber } from '@/registry/components/filter-number/filter-number'
+import { FilterDate } from '@/registry/components/filter-date/filter-date'
+import { FilterBool } from '@/registry/components/filter-bool/filter-bool'
+import { FilterDateRange } from '@/registry/components/filter-datetime/filter-datetime'
 
 // 将 table-field 组件包装为 FormField 可用的组件
 const wrapTableFieldComponent = (Component: React.ComponentType<any>, defaultFieldSchema: any = {}) => {
@@ -81,6 +87,14 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'table-editable-table': wrapTableFieldComponent(TableFieldEditableTable),
   'table-relate-plus': wrapTableFieldComponent(TableFieldRelatePlus),
   'table-relate': wrapTableFieldComponent(TableFieldRelate),
+
+  // filter组件
+  'filter_text': FilterText,
+  'filter_enum': FilterEnum,
+  'filter_number': FilterNumber,
+  'filter_bool': FilterBool,
+  'filter_date': FilterDate,
+  'filter_datetime': FilterDateRange
 }
 
 export default fieldMap

@@ -8,7 +8,7 @@ import {
   Drawer,
   DrawerContent,
   DrawerTrigger,
-} from "@/registry/ui/drawer"
+} from "@/components/ui/drawer"
 
 export interface MobileCalendarProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children" | "onChange"> {
@@ -168,7 +168,7 @@ const MobileCalendar = React.forwardRef<HTMLDivElement, MobileCalendarProps>(
             <DrawerTrigger asChild>
               <div className="cursor-pointer">{placeholderText}</div>
             </DrawerTrigger>
-            <DrawerContent mask className="max-h-[50vh]">
+            <DrawerContent className="max-h-[50vh]">
               <div className="flex justify-between items-center px-4 py-2 border-bx">
                 <button
                   type="button"

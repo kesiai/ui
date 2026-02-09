@@ -6,7 +6,7 @@ import {
   Drawer,
   DrawerContent,
   DrawerPortal,
-} from "@/registry/ui/drawer"
+} from "@/components/ui/drawer"
 import { ChevronLeft } from "lucide-react"
 
 export interface MobileDatePickerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {

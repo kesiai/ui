@@ -5,9 +5,14 @@ import { cn } from "@/lib/utils"
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
   InputGroupTextarea
 } from "@/components/ui/input-group"
+import { ButtonGroup } from "@/components/ui/button-group"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 const inputVariants = cva(
   "relative border transition-colors flex items-center",
@@ -34,7 +39,7 @@ const inputVariants = cva(
 
 export interface InputProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus" | "onInput" | "prefix">,
-    VariantProps<typeof inputVariants> {
+  VariantProps<typeof inputVariants> {
   /**
    * 输入框类型
    */
@@ -254,61 +259,63 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
       )
     }
 
-    // 单行输入框
+    const inputRender = <>
+      <InputGroupInput
+        value={value}
+        placeholder={placeholder}
+        disabled={disabled}
+        readOnly={readOnly}
+        maxLength={maxLength}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        onInput={handleInput}
+        autoFocus={autoFocus}
+        type="text"
+        {...props}
+      />
+      {allowClear && value && !disabled && !readOnly && (
+        <button
+          type="button"
+          onClick={handleClear}
+          className="hover:text-foreground text-muted-foreground transition-colors p-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="m15 9-6 6" />
+            <path d="m9 9 6 6" />
+          </svg>
+        </button>
+      )}
+    </>
+
     return (
       <InputGroup
         ref={ref}
         className={cn(!bordered && "border-0", inputVariants({ variant, size }), className)}
         style={style}
       >
+        {inputRender}
         {addonBefore && (
           <InputGroupAddon align="inline-start">
-            {addonBefore}
+            <InputGroupButton variant="secondary">{addonBefore}</InputGroupButton>
           </InputGroupAddon>
         )}
         {prefix && (
           <InputGroupAddon align="inline-start">
             {prefix}
           </InputGroupAddon>
-        )}
-        <InputGroupInput
-          value={value}
-          placeholder={placeholder}
-          disabled={disabled}
-          readOnly={readOnly}
-          maxLength={maxLength}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          onInput={handleInput}
-          autoFocus={autoFocus}
-          type="text"
-          className="focus-visible:ring-ring focus-visible:ring-offset-0"
-          {...props}
-        />
-        {allowClear && value && !disabled && !readOnly && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className="hover:text-foreground text-muted-foreground transition-colors p-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="m15 9-6 6" />
-              <path d="m9 9 6 6" />
-            </svg>
-          </button>
         )}
         {suffix && (
           <InputGroupAddon align="inline-end">
@@ -317,8 +324,9 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
         )}
         {addonAfter && (
           <InputGroupAddon align="inline-end">
-            {addonAfter}
+            <InputGroupButton variant="secondary">{addonAfter}</InputGroupButton>
           </InputGroupAddon>
+
         )}
         {isMaxLengthReached && (
           <div className="absolute right-3 text-xs text-destructive">

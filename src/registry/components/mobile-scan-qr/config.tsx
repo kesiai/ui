@@ -1,4 +1,4 @@
-import { MobileScanQR } from '@/registry/blocks/mobile/mobile-scan-qr/mobile-scan-qr'
+import { MobileScanQR } from '@/registry/components/mobile-scan-qr/mobile-scan-qr'
 import { ComponentConfig } from '@/app/config/types'
 
 export const mobileScanQRPropsConfig = [
@@ -28,7 +28,6 @@ const renderMobileScanQRPreview = (props: Record<string, any>) => {
       <div className="w-full max-w-md bg-white rounded-lg shadow-sm p-8">
         <MobileScanQR
           text={props.text}
-          previewMode={props.previewMode}
         />
         <p className="mt-4 text-xs text-slate-500">
           点击按钮打开扫描器扫描二维码

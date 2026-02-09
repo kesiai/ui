@@ -6,7 +6,7 @@ import {
   DrawerContent,
   DrawerClose,
   DrawerPortal
-} from "@/registry/ui/drawer"
+} from "@/components/ui/drawer"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 
@@ -133,13 +133,11 @@ const MobilePopup = React.forwardRef<HTMLButtonElement, MobilePopupProps>(
 
         <Drawer open={visible} onOpenChange={setVisible} direction={getPositionDirection()}>
           <DrawerPortal>
-            {/* {mask && <DrawerOverlay className="fixed inset-0 z-50 bg-black/45" />} */}
             <DrawerContent
               className={cn(
                 "app-popup",
                 className
               )}
-              mask={mask}
             >
               <div className="app-popup-body-header p-4 text-center sm:text-left">
                 {title}

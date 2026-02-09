@@ -1,4 +1,4 @@
-import { MobileLocation } from '@/registry/blocks/mobile/mobile-location/mobile-location'
+import { MobileLocation } from '@/registry/components/mobile-location/mobile-location'
 import { ComponentConfig } from '@/app/config/types'
 
 export const mobileLocationPropsConfig = [

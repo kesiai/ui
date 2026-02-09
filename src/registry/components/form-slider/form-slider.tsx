@@ -2,7 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
-import { Slider } from "@/registry/ui/slider"
+import { Slider } from "@/components/ui/slider"
 
 const sliderVariants = cva(
   "relative",
@@ -183,7 +183,6 @@ const FormSlider = React.forwardRef<HTMLDivElement, SliderProps>(
         ref={ref}
         className={cn(
           sliderVariants({ variant, size }),
-          vertical ? "flex flex-row items-center justify-center h-40" : "",
           className
         )}
         style={style}
@@ -200,24 +199,12 @@ const FormSlider = React.forwardRef<HTMLDivElement, SliderProps>(
           orientation={vertical ? "vertical" : "horizontal"}
           inverted={reverse}
           key={'slider-' + (range ? 'range' : 'single')}
-          className={cn(
-            vertical ? "justify-center h-full w-2" : ""
-          )}
         />
         {processedMarks && (
-          <div className={cn(
-            "relative text-xs text-muted-foreground",
-            vertical ? "ml-4 h-full" : "mt-2 w-full"
-          )}>
+          <div >
             {processedMarks.map((mark) => (
               <div
                 key={mark.value}
-                className="absolute"
-                style={{
-                  [vertical ? "bottom" : "left"]: `${mark.position}%`,
-                  [vertical ? "left" : "top"]: vertical ? "0" : "0",
-                  transform: vertical ? "translateY(50%)" : "translateX(-50%)"
-                }}
               >
                 {mark.label}
               </div>

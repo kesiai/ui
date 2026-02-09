@@ -6,7 +6,7 @@ import {
   DrawerContent,
   DrawerClose,
   DrawerPortal
-} from "@/registry/ui/drawer"
+} from "@/components/ui/drawer"
 import { toast } from "sonner"
 import { QrCode } from "lucide-react"
 
@@ -45,7 +45,7 @@ const MobileScanQR = React.forwardRef<HTMLButtonElement, MobileScanQRProps>(
     const [isScanning, setIsScanning] = React.useState(false)
     const canvasRef = React.useRef<HTMLCanvasElement>(null)
     const videoRef = React.useRef<HTMLVideoElement>(null)
-    const animationRef = React.useRef<number>()
+    const animationRef = React.useRef<number>(undefined)
 
     // 获取摄像头流
     const getUserMedia = React.useCallback((constraints: MediaStreamConstraints, success: (stream: MediaStream) => void, error: (err: Error) => void) => {

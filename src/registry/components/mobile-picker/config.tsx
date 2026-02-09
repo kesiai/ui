@@ -1,5 +1,5 @@
 import * as React from "react"
-import { MobilePicker, PickerOption } from '@/registry/blocks/mobile/mobile-picker/mobile-picker'
+import { MobilePicker, PickerOption } from '@/registry/components/mobile-picker/mobile-picker'
 import { ComponentConfig } from '@/app/config/types'
 
 export const MobilePickerPreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {

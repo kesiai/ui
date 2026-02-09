@@ -4,7 +4,7 @@ import {
   Drawer,
   DrawerContent,
   DrawerPortal,
-} from "@/registry/ui/drawer"
+} from "@/components/ui/drawer"
 import { Button } from "@/registry/components/button/button"
 import { ChevronsUpDown, Loader2, ArrowLeft, Check } from "lucide-react"
 

@@ -1,4 +1,4 @@
-import { MobileCalendar } from '@/registry/blocks/mobile/mobile-calendar/mobile-calendar'
+import { MobileCalendar } from '@/registry/components/mobile-calendar/mobile-calendar'
 import { ComponentConfig } from '@/app/config/types'
 
 export const mobileCalendarPropsConfig = [

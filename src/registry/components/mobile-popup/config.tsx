@@ -1,4 +1,4 @@
-import { MobilePopup } from '@/registry/blocks/mobile/mobile-popup/mobile-popup'
+import { MobilePopup } from '@/registry/components/mobile-popup/mobile-popup'
 import { ComponentConfig } from '@/app/config/types'
 
 export const mobilePopupPropsConfig = [

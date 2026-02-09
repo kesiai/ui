@@ -6,7 +6,7 @@ export interface PropConfigOption {
 }
 
 export type PropConfigType =
-  'number' | 'color' | 'select' | 'boolean' | 'text' | 'input' | 'range' | 'code' | 'array' | 'json' | 'object' | 'model-name' | 'table-id'
+  'number' | 'color' | 'select' | 'boolean' | 'text' | 'input' | 'range' | 'code' | 'array' | 'json' | 'object' | 'model-name' | 'table-id' | 'table-data' | 'table-tags'
 
 export interface PropConfig {
   name: string
@@ -19,6 +19,10 @@ export interface PropConfig {
   options?: PropConfigOption[]
   placeholder?: string
   description?: string
+  // table-data 类型专用属性
+  tableId?: string
+  multiple?: boolean
+  dependsOn?: string // 依赖的其他配置项名称
 }
 
 export interface ComponentConfig {

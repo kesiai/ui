@@ -54,8 +54,8 @@ export const formEditableTableDefaultProps = {
 
 const renderFormEditableTablePreview = (props: Record<string, any>) => {
   const [value, setValue] = React.useState([
-    { key: 1, field1: '数据1', field2: '数据2' },
-    { key: 2, field1: '数据3', field2: '数据4' }
+    { key: 1, field1: null, field2: 111 },
+    { key: 2, field1: null, field2: 222 }
   ])
 
   const mockSchema = {
@@ -70,12 +70,13 @@ const renderFormEditableTablePreview = (props: Record<string, any>) => {
         field1: {
           key: 'field1',
           title: '字段1',
-          fieldType: 'text'
+          type: 'object',
+          fieldType: 'map'
         },
         field2: {
           key: 'field2',
           title: '字段2',
-          fieldType: 'text'
+          type: 'number'
         }
       }
     }
@@ -111,8 +112,8 @@ const renderFormEditableTableCodePreview = (props: Record<string, any>) => {
     forms: {
       form: ['field1', 'field2'],
       properties: {
-        field1: { key: 'field1', title: '字段1', fieldType: 'text' },
-        field2: { key: 'field2', title: '字段2', fieldType: 'text' }
+        field1: { key: 'field1', title: '字段1', type: 'object', fieldType: 'map' },
+        field2: { key: 'field2', title: '字段2', type: 'number' }
       }
     }
   }}

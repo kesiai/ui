@@ -17,7 +17,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@airiot/client": "^1.0.9",
+    "@airiot/client": "^1.0.11",
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@base-ui/react": "^1.0.0",
     "@ckeditor/ckeditor5-build-decoupled-document": "^41.4.2",

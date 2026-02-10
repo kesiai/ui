@@ -113,17 +113,11 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
 
       setLoading(true)
       try {
-        const tableName = (schema || field.schema)?.name
-        if (!tableName) {
-          console.warn('缺少 schema.name')
-          return 0
-        }
+        const s = schema || field.schema
+        const resource = s?.name ? s?.name : `core/t/${s?.relate?.id}/d`
 
         // 创建 API 实例
-        const api = createAPI({
-          resource: tableName,
-          name: 'relate'
-        })
+        const api = createAPI({ resource })
 
         // 使用 api.query 查询数据
         const { items } = await api.query(

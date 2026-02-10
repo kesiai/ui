@@ -64,7 +64,6 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
     input,
     field = {},
     label,
-    schema,
     disabled: propsDisabled,
     inputType = 'select',
     selectType = 'single',
@@ -72,7 +71,7 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
   } = props
 
   const { onChange, value } = input || {}
-  const { displayField = 'name', relateShowFields, fieldSchema } = field
+  const { displayField = 'name', relateShowFields, fieldSchema, schema } = field
 
   const { user } = useUser()
 

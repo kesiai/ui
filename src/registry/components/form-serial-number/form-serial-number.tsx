@@ -28,7 +28,6 @@ export interface FormSerialNumberProps {
 const FormSerialNumber: React.FC<FormSerialNumberProps> = (props) => {
   const { input, disabled = true } = props
 
-  console.log(6666, input)
   return (
     <Input
       value={input?.value || ''}

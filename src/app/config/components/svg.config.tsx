@@ -1,4 +1,4 @@
-import { SvgEditor } from '@/registry/blocks/advanced/svg-editor/svg-editor'
+import { SvgEditor } from '@/registry/components/svg/svg'
 import { ComponentConfig } from '../types'
 
 // 示例 SVG 内容
@@ -188,7 +188,7 @@ const renderSvgEditorCustomForm = () => {
 }
 
 export const svgEditorConfig: ComponentConfig = {
-  id: 'svg-editor',
+  id: 'svg',
   name: 'SvgEditor - SVG 绘图编辑器',
   propsConfig: svgEditorPropsConfig,
   defaultProps: svgEditorDefaultProps,

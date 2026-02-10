@@ -114,11 +114,13 @@ for (const path in registryModules) {
   // 支持:
   // 1. ../../registry/components/button/config.tsx
   // 2. ../../registry/components/container-tabs/config.tsx
-  const match = path.match(/registry\/components\/([^/]+)\/config\.tsx$/)
+  // 3. ../../registry/blocks/advanced/svg-editor/config.tsx (多层嵌套)
+  const match = path.match(/registry\/(components|blocks)\/(.+)\/config\.tsx$/)
   if (!match) continue
 
-  const [, componentDirName] = match
-  const componentId = componentDirName
+  const [, , componentPath] = match
+  // 从路径中提取最后一部分作为组件ID
+  const componentId = componentPath.split('/').pop() || componentPath
 
   // 获取组件配置
   let config: ComponentConfig | null = null

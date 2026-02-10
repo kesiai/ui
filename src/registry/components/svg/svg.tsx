@@ -4,7 +4,7 @@ import { Toolbar } from "./toolbar"
 import { Tree } from "./tree"
 import type { TreeNode } from "./tree"
 import { PropertyPanel, Property } from "./property-panel"
-import "./svg-editor.css"
+import "./svg.css"
 
 export interface SvgEditorProps {
   className?: string

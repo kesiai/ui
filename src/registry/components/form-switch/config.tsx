@@ -1,5 +1,6 @@
 import { FormSwitch } from '@/registry/components/form-switch/form-switch'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from '@/registry/components/form-switch/form-switch.md?raw'
 
 export const formSwitchPropsConfig = [
   {
@@ -69,5 +70,6 @@ export const formSwitchConfig: ComponentConfig = {
   propsConfig: formSwitchPropsConfig,
   defaultProps: formSwitchDefaultProps,
   renderPreview: renderFormSwitchPreview,
-  renderCodePreview: renderFormSwitchCodePreview
+  renderCodePreview: renderFormSwitchCodePreview,
+  documentation: documentationMd
 }

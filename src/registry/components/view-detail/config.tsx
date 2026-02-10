@@ -3,6 +3,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import ViewDetail from './view-detail'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './view-detail.md?raw'
 
 export const viewDetailPropsConfig = [
   {
@@ -165,5 +166,6 @@ export const viewDetailConfig: ComponentConfig = {
   propsConfig: viewDetailPropsConfig,
   defaultProps: viewDetailDefaultProps,
   renderPreview: renderViewDetailPreview,
-  renderCodePreview: renderViewDetailCodePreview
+  renderCodePreview: renderViewDetailCodePreview,
+  documentation: documentationMd
 }

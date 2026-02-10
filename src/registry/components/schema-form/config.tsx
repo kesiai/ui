@@ -1,6 +1,7 @@
 import SchemaForm from '@/registry/components/schema-form/schema-form'
 import { ComponentConfig } from '@/app/config/types'
 import { layoutPresets } from '@/registry/components/form/config'
+import documentationMd from './schema-form.md?raw'
 
 export const schemaFormPropsConfig = [
   {
@@ -266,5 +267,6 @@ export const schemaFormConfig: ComponentConfig = {
   propsConfig: schemaFormPropsConfig,
   defaultProps: schemaFormDefaultProps,
   renderPreview: renderSchemaFormPreview,
-  renderCodePreview: renderSchemaFormCodePreview
+  renderCodePreview: renderSchemaFormCodePreview,
+  documentation: documentationMd
 }

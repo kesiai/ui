@@ -1,5 +1,6 @@
 import { VideoWidget } from '@/registry/components/video-widget/video-widget'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
+import documentationMd from './video-widget.md?raw'
 
 // Default values aligned with workspace-v4 VideoCommon
 const defaultJessConfigute = {
@@ -342,5 +343,6 @@ export const videoControlConfig: ComponentConfig = {
   propsConfig: videoControlPropsConfig,
   defaultProps: videoControlDefaultProps,
   renderPreview: renderVideoControlPreview,
-  renderCodePreview: renderVideoControlCodePreview
+  renderCodePreview: renderVideoControlCodePreview,
+  documentation: documentationMd
 }

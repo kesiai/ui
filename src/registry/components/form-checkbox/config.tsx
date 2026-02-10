@@ -1,5 +1,6 @@
 import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from '@/registry/components/form-checkbox/form-checkbox.md?raw'
 
 export const formCheckboxPropsConfig = [
   {
@@ -105,5 +106,6 @@ export const formCheckboxConfig: ComponentConfig = {
   propsConfig: formCheckboxPropsConfig,
   defaultProps: formCheckboxDefaultProps,
   renderPreview: renderFormCheckboxPreview,
-  renderCodePreview: renderFormCheckboxCodePreview
+  renderCodePreview: renderFormCheckboxCodePreview,
+  documentation: documentationMd
 }

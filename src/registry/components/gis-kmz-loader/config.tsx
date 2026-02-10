@@ -2,6 +2,7 @@
 import { Kmz } from '@/registry/components/gis-kmz-loader/gis-kmz-loader'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-kmz-loader.md?raw'
 
 export const kmzPropsConfig = [
     {
@@ -93,5 +94,6 @@ export const kmzConfig: ComponentConfig = {
     propsConfig: kmzPropsConfig,
     defaultProps: kmzDefaultProps,
     renderPreview: renderKmzPreview,
-    renderCodePreview: renderKmzCodePreview
+    renderCodePreview: renderKmzCodePreview,
+    documentation: documentationMd
 }

@@ -1,5 +1,6 @@
 import { MobileDatePicker } from "@/registry/components/mobile-date-picker/mobile-date-picker"
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './mobile-date-picker.md?raw'
 
 export const mobileDatePickerPropsConfig = [
   {
@@ -99,5 +100,6 @@ export const mobileDatePickerConfig: ComponentConfig = {
   propsConfig: mobileDatePickerPropsConfig,
   defaultProps: mobileDatePickerDefaultProps,
   renderPreview: renderMobileDatePickerPreview,
-  renderCodePreview: renderMobileDatePickerCodePreview
+  renderCodePreview: renderMobileDatePickerCodePreview,
+  documentation: documentationMd
 }

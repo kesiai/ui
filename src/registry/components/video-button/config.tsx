@@ -1,5 +1,6 @@
 import { ButtonWidget } from '@/registry/components/video-button/video-button'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './video-button.md?raw'
 
 export const buttonControlPropsConfig = [
   {
@@ -116,5 +117,6 @@ export const buttonControlConfig: ComponentConfig = {
   propsConfig: buttonControlPropsConfig,
   defaultProps: buttonControlDefaultProps,
   renderPreview: renderbuttonControlPreview,
-  renderCodePreview: renderbuttonControlCodePreview
+  renderCodePreview: renderbuttonControlCodePreview,
+  documentation: documentationMd
 }

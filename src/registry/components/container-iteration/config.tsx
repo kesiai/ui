@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { Iteration } from '@/registry/components/container-iteration/iteration'
 import { IterationContext } from '@airiot/client'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-iteration.md?raw'
 
 export const iterationPropsConfig = [
   {
@@ -81,5 +82,6 @@ export const iterationConfig: ComponentConfig = {
   propsConfig: iterationPropsConfig,
   defaultProps: iterationDefaultProps,
   renderPreview: renderIterationPreview,
-  renderCodePreview: renderIterationCodePreview
+  renderCodePreview: renderIterationCodePreview,
+  documentation: documentationMd
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { VideoPeriodsWidget, TimeSegment } from '@/registry/components/video-periods-widget/video-periods-widget'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './video-periods-widget.md?raw'
 
 export const videoPeriodsPropsConfig = [
   {
@@ -123,5 +124,6 @@ export const videoPeriodsConfig: ComponentConfig = {
   propsConfig: videoPeriodsPropsConfig,
   defaultProps: videoPeriodsDefaultProps,
   renderPreview: renderVideoPeriodsPreview,
-  renderCodePreview: renderVideoPeriodsCodePreview
+  renderCodePreview: renderVideoPeriodsCodePreview,
+  documentation: documentationMd
 }

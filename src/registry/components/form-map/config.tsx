@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormMap } from '@/registry/components/form-map/form-map'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-map.md?raw'
 
 export const formMapPropsConfig = [
   {
@@ -120,7 +121,8 @@ export const formMapConfig: ComponentConfig = {
   propsConfig: formMapPropsConfig,
   defaultProps: formMapDefaultProps,
   renderPreview: renderFormMapPreview,
-  renderCodePreview: renderFormMapCodePreview
+  renderCodePreview: renderFormMapCodePreview,
+  documentation: documentationMd
 }
 
 export default formMapConfig

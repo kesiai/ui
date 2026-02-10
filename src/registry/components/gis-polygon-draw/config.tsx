@@ -1,7 +1,7 @@
-
 import { PolygonViews, PolygonData } from '@/registry/components/gis-polygon-draw/gis-polygon-draw'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-polygon-draw.md?raw'
 
 export const polygonViewsPropsConfig = [
     {
@@ -180,5 +180,6 @@ export const polygonViewsConfig: ComponentConfig = {
     propsConfig: polygonViewsPropsConfig,
     defaultProps: polygonViewsDefaultProps,
     renderPreview: renderPolygonViewsPreview,
-    renderCodePreview: renderPolygonViewsCodePreview
+    renderCodePreview: renderPolygonViewsCodePreview,
+    documentation: documentationMd
 }

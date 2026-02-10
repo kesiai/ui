@@ -1,5 +1,6 @@
 import { DataPoint } from '@/registry/components/data-point/data-point'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './data-point.md?raw'
 
 export const dataPointPropsConfig = [
   {
@@ -106,5 +107,6 @@ export const dataPointConfig: ComponentConfig = {
   propsConfig: dataPointPropsConfig,
   defaultProps: dataPointDefaultProps,
   renderPreview: renderDataPointPreview,
-  renderCodePreview: renderDataPointCodePreview
+  renderCodePreview: renderDataPointCodePreview,
+  documentation: documentationMd
 }

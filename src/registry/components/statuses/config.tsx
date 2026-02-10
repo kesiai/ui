@@ -1,6 +1,7 @@
 import { Statuses } from '@/registry/components/statuses/statuses'
 import ViewModel from '../view-model/view-model'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './statuses.md?raw'
 
 // 示例设备配置
 const exampleDevices = [
@@ -502,5 +503,6 @@ export const statusesConfig: ComponentConfig = {
   defaultProps: statusesDefaultProps,
   renderPreview: renderStatusesPreview,
   renderCodePreview: renderStatusesCodePreview,
-  renderCustomForm: renderStatusesCustomForm
+  renderCustomForm: renderStatusesCustomForm,
+  documentation: documentationMd
 }

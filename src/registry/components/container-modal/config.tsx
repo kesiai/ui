@@ -1,5 +1,6 @@
 import { Modal } from '@/registry/components/container-modal/container-modal'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-modal.md?raw'
 
 export const modalPropsConfig = [
   {
@@ -190,5 +191,6 @@ export const modalConfig: ComponentConfig = {
   defaultProps: modalDefaultProps,
   renderPreview: renderModalPreview,
   renderCodePreview: renderModalCodePreview,
-  renderCustomForm: renderModalCustomForm
+  renderCustomForm: renderModalCustomForm,
+  documentation: documentationMd
 }

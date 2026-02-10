@@ -1,7 +1,7 @@
-
 import { XYZ } from '@/registry/components/gis-xyz-tile/gis-xyz-tile'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-xyz-tile.md?raw'
 
 export const xyzPropsConfig = [
     {
@@ -219,5 +219,6 @@ export const xyzConfig: ComponentConfig = {
     propsConfig: xyzPropsConfig,
     defaultProps: xyzDefaultProps,
     renderPreview: renderXYZPreview,
-    renderCodePreview: renderXYZCodePreview
+    renderCodePreview: renderXYZCodePreview,
+    documentation: documentationMd
 }

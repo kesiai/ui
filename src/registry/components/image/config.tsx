@@ -1,5 +1,6 @@
 import { Image } from '@/registry/components/image/image'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './image.md?raw'
 
 export const imagePropsConfig = [
   {
@@ -118,5 +119,6 @@ export const imageConfig: ComponentConfig = {
   defaultProps: imageDefaultProps,
   renderPreview: renderImagePreview,
   renderCodePreview: renderImageCodePreview,
-  renderCustomForm: renderImageCustomForm
+  renderCustomForm: renderImageCustomForm,
+  documentation: documentationMd
 }

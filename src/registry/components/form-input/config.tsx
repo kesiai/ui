@@ -1,5 +1,6 @@
 import { FormInput } from '@/registry/components/form-input/form-input'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from '@/registry/components/form-input/form-input.md?raw'
 
 export const formInputPropsConfig = [
   {
@@ -211,5 +212,6 @@ export const formInputConfig: ComponentConfig = {
   propsConfig: formInputPropsConfig,
   defaultProps: formInputDefaultProps,
   renderPreview: renderFormInputPreview,
-  renderCodePreview: renderFormInputCodePreview
+  renderCodePreview: renderFormInputCodePreview,
+  documentation: documentationMd
 }

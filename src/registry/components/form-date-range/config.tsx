@@ -1,6 +1,7 @@
 import * as React from "react"
 import DateRange from '@/registry/components/form-date-range/form-date-range.tsx'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-date-range.md?raw'
 
 export const DateRangePreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {
   const [value, setValue] = React.useState<string>('')
@@ -110,5 +111,6 @@ export const dateRangeConfig: ComponentConfig = {
   propsConfig: dateRangePropsConfig,
   defaultProps: dateRangeDefaultProps,
   renderPreview: renderDateRangePreview,
-  renderCodePreview: renderDateRangeCodePreview
+  renderCodePreview: renderDateRangeCodePreview,
+  documentation: documentationMd
 }

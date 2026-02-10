@@ -1,5 +1,6 @@
 import { FormRadio } from '@/registry/components/form-radio/form-radio'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from '@/registry/components/form-radio/form-radio.md?raw'
 
 export const formRadioPropsConfig = [
   {
@@ -88,5 +89,6 @@ export const formRadioConfig: ComponentConfig = {
   propsConfig: formRadioPropsConfig,
   defaultProps: formRadioDefaultProps,
   renderPreview: renderFormRadioPreview,
-  renderCodePreview: renderFormRadioCodePreview
+  renderCodePreview: renderFormRadioCodePreview,
+  documentation: documentationMd
 }

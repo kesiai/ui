@@ -1,8 +1,8 @@
-
 import { TableViews } from '@/registry/components/gis-table-layer/gis-table-layer'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
 import { defaultDrawStyleProps } from '../gis-custom-layer/config'
+import documentationMd from './gis-table-layer.md?raw'
 
 const exampleData = {
     table: { id: '地理信息', title: '地理信息' },
@@ -346,5 +346,6 @@ export const tableViewsConfig: ComponentConfig = {
     propsConfig: tableViewsPropsConfig,
     defaultProps: tableViewsDefaultProps,
     renderPreview: renderTableViewsPreview,
-    renderCodePreview: renderTableViewsCodePreview
+    renderCodePreview: renderTableViewsCodePreview,
+    documentation: documentationMd
 }

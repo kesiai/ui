@@ -2,6 +2,7 @@
 import { CodeEditorViews } from '@/registry/components/gis-code-editor/gis-code-editor'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-code-editor.md?raw'
 
 export const codeEditorViewsPropsConfig = [
     {
@@ -54,5 +55,6 @@ export const codeEditorViewsConfig: ComponentConfig = {
     propsConfig: codeEditorViewsPropsConfig,
     defaultProps: codeEditorViewsDefaultProps,
     renderPreview: renderCodeEditorViewsPreview,
-    renderCodePreview: renderCodeEditorViewsCodePreview
+    renderCodePreview: renderCodeEditorViewsCodePreview,
+    documentation: documentationMd
 }

@@ -1,5 +1,6 @@
 import { FormSelect } from '@/registry/components/form-select/form-select'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-select.md?raw'
 
 export const formSelectPropsConfig = [
   {
@@ -203,5 +204,6 @@ export const formSelectConfig: ComponentConfig = {
   propsConfig: formSelectPropsConfig,
   defaultProps: formSelectDefaultProps,
   renderPreview: renderFormSelectPreview,
-  renderCodePreview: renderFormSelectCodePreview
+  renderCodePreview: renderFormSelectCodePreview,
+  documentation: documentationMd
 }

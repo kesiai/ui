@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ConnectWidget, LineSegment } from './connect-widget'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
+import documentationMd from './connect-widget.md?raw'
 
 // 属性配置
 const connectWidgetPropsConfig: PropConfig[] = [
@@ -254,7 +255,8 @@ export const connectWidgetConfig: ComponentConfig = {
   propsConfig: connectWidgetPropsConfig,
   defaultProps: connectWidgetDefaultProps,
   renderPreview: renderConnectWidgetPreview,
-  renderCodePreview: renderConnectWidgetCodePreview
+  renderCodePreview: renderConnectWidgetCodePreview,
+  documentation: documentationMd
 }
 
 export default connectWidgetConfig

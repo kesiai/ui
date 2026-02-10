@@ -1,5 +1,6 @@
 import { FormSlider } from '@/registry/components/form-slider/form-slider'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from '@/registry/components/form-slider/form-slider.md?raw'
 
 export const formSliderPropsConfig = [
   {
@@ -163,5 +164,6 @@ export const formSliderConfig: ComponentConfig = {
   propsConfig: formSliderPropsConfig,
   defaultProps: formSliderDefaultProps,
   renderPreview: renderFormSliderPreview,
-  renderCodePreview: renderFormSliderCodePreview
+  renderCodePreview: renderFormSliderCodePreview,
+  documentation: documentationMd
 }

@@ -3,6 +3,7 @@ import React from 'react'
 import ViewFilter from './view-filter'
 import { ComponentConfig } from '@/app/config/types'
 import { layoutPresets } from '@/registry/components/form/config'
+import documentationMd from './view-filter.md?raw'
 
 export const viewFilterPropsConfig = [
   {
@@ -170,5 +171,6 @@ export const viewFilterConfig: ComponentConfig = {
   propsConfig: viewFilterPropsConfig,
   defaultProps: viewFilterDefaultProps,
   renderPreview: renderViewFilterPreview,
-  renderCodePreview: renderViewFilterCodePreview
+  renderCodePreview: renderViewFilterCodePreview,
+  documentation: documentationMd
 }

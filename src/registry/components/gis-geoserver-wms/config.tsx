@@ -1,7 +1,7 @@
-
 import { GeoserverWms } from '@/registry/components/gis-geoserver-wms/gis-geoserver-wms'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-geoserver-wms.md?raw'
 
 export const geoserverWmsPropsConfig = [
     {
@@ -141,5 +141,6 @@ export const geoserverWmsConfig: ComponentConfig = {
     propsConfig: geoserverWmsPropsConfig,
     defaultProps: geoserverWmsDefaultProps,
     renderPreview: renderGeoserverWmsPreview,
-    renderCodePreview: renderGeoserverWmsCodePreview
+    renderCodePreview: renderGeoserverWmsCodePreview,
+    documentation: documentationMd
 }

@@ -1,5 +1,6 @@
 import { Popover } from '@/registry/components/container-popover/container-popover'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-popover.md?raw'
 
 export const popoverPropsConfig = [
   {
@@ -153,5 +154,6 @@ export const popoverConfig: ComponentConfig = {
   defaultProps: popoverDefaultProps,
   renderPreview: renderPopoverPreview,
   renderCodePreview: renderPopoverCodePreview,
-  renderCustomForm: renderPopoverCustomForm
+  renderCustomForm: renderPopoverCustomForm,
+  documentation: documentationMd
 }

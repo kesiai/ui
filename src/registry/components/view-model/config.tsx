@@ -2,6 +2,7 @@ import React, { use } from 'react'
 import ViewModel from './view-model'
 import { ComponentConfig } from '@/app/config/types'
 import { useModel } from '@airiot/client'
+import documentationMd from './view-model.md?raw'
 
 export const viewModelPropsConfig = [
   {
@@ -261,5 +262,6 @@ export const viewModelConfig: ComponentConfig = {
   propsConfig: viewModelPropsConfig,
   defaultProps: viewModelDefaultProps,
   renderPreview: renderViewModelPreview,
-  renderCodePreview: renderViewModelCodePreview
+  renderCodePreview: renderViewModelCodePreview,
+  documentation: documentationMd
 }

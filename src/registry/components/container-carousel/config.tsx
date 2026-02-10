@@ -1,5 +1,6 @@
 import { Carousel } from '@/registry/components/container-carousel/container-carousel'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-carousel.md?raw'
 
 export const carouselPropsConfig = [
   {
@@ -195,5 +196,6 @@ export const carouselConfig: ComponentConfig = {
   propsConfig: carouselPropsConfig,
   defaultProps: carouselDefaultProps,
   renderPreview: renderCarouselPreview,
-  renderCodePreview: renderCarouselCodePreview
+  renderCodePreview: renderCarouselCodePreview,
+  documentation: documentationMd
 }

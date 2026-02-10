@@ -1,5 +1,6 @@
 import { FormDate } from '@/registry/components/form-date/form-date'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-date.md?raw'
 
 export const formDatePropsConfig = [
   {
@@ -170,5 +171,6 @@ export const formDateConfig: ComponentConfig = {
   propsConfig: formDatePropsConfig,
   defaultProps: formDateDefaultProps,
   renderPreview: renderFormDatePreview,
-  renderCodePreview: renderFormDateCodePreview
+  renderCodePreview: renderFormDateCodePreview,
+  documentation: documentationMd
 }

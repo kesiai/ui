@@ -1,6 +1,7 @@
 import React from 'react'
 import ViewField from './view-field'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './view-field.md?raw'
 
 export const viewFieldPropsConfig = [
   {
@@ -366,5 +367,6 @@ export const viewFieldConfig: ComponentConfig = {
   propsConfig: viewFieldPropsConfig,
   defaultProps: viewFieldDefaultProps,
   renderPreview: renderViewFieldPreview,
-  renderCodePreview: renderViewFieldCodePreview
+  renderCodePreview: renderViewFieldCodePreview,
+  documentation: documentationMd
 }

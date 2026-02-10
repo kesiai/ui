@@ -1,5 +1,6 @@
 import { TextArea } from '@/registry/components/textarea/textarea'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './textarea.md?raw'
 
 export const textareaPropsConfig = [
   {
@@ -92,5 +93,6 @@ export const textareaConfig: ComponentConfig = {
   propsConfig: textareaPropsConfig,
   defaultProps: textareaDefaultProps,
   renderPreview: renderTextareaPreview,
-  renderCodePreview: renderTextareaCodePreview
+  renderCodePreview: renderTextareaCodePreview,
+  documentation: documentationMd
 }

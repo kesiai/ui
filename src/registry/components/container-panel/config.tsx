@@ -1,5 +1,6 @@
 import { Panel } from '@/registry/components/container-panel/container-panel'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-panel.md?raw'
 
 export const panelPropsConfig = [
   {
@@ -134,5 +135,6 @@ export const panelConfig: ComponentConfig = {
   defaultProps: panelDefaultProps,
   renderPreview: renderPanelPreview,
   renderCodePreview: renderPanelCodePreview,
-  renderCustomForm: renderPanelCustomForm
+  renderCustomForm: renderPanelCustomForm,
+  documentation: documentationMd
 }

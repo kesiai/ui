@@ -1,8 +1,8 @@
-import { RealtimeDataSource } from './realtime-data-source'
+import { DatasourceRealtime } from './datasource-realtime'
 import { DataSourcePreview } from '@/app/components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { TagConfig, TimeLineConfig } from '@/registry/lib/datasource-types'
-import documentationMd from './realtime-data-source.md?raw'
+import documentationMd from './datasource-realtime.md?raw'
 
 // 默认配置
 const defaultRealtimeConfig = {
@@ -19,7 +19,7 @@ export const realtimeDataSourcePropsConfig = [
     name: 'id',
     label: '数据源ID',
     type: 'input' as const,
-    default: 'realtime-data-source',
+    default: 'datasource-realtime',
     description: '数据源唯一标识符'
   },
   {
@@ -53,27 +53,27 @@ export const realtimeDataSourcePropsConfig = [
 ]
 
 export const realtimeDataSourceDefaultProps = {
-  id: 'realtime-data-source',
+  id: 'datasource-realtime',
   tags: defaultRealtimeConfig.tags,
   timeLine: defaultRealtimeConfig.timeLine,
   xFormat: defaultRealtimeConfig.xFormat,
   submit: ''
 }
 
-const renderRealtimeDataSourcePreview = (props: Record<string, any>) => {
+const renderDatasourceRealtimePreview = (props: Record<string, any>) => {
   const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <RealtimeDataSource {...props}>
+        <DatasourceRealtime {...props}>
           <DataSourcePreview dataSourceId={id} />
-        </RealtimeDataSource>
+        </DatasourceRealtime>
       </div>
     </div>
   )
 }
 
-const renderRealtimeDataSourceCodePreview = (props: Record<string, any>) => {
+const renderDatasourceRealtimeCodePreview = (props: Record<string, any>) => {
   const { tags = defaultRealtimeConfig.tags, timeLine = defaultRealtimeConfig.timeLine, xFormat = defaultRealtimeConfig.xFormat } = props
 
   const propsString = [
@@ -82,7 +82,7 @@ const renderRealtimeDataSourceCodePreview = (props: Record<string, any>) => {
     `xFormat="${xFormat}"`
   ].join('\n  ')
 
-  return `<RealtimeDataSource\n  ${propsString}\n/>`
+  return `<DatasourceRealtime\n  ${propsString}\n/>`
 }
 
 export const realtimeDataSourceConfig: ComponentConfig = {
@@ -90,7 +90,7 @@ export const realtimeDataSourceConfig: ComponentConfig = {
   name: '实时数据源',
   propsConfig: realtimeDataSourcePropsConfig,
   defaultProps: realtimeDataSourceDefaultProps,
-  renderPreview: renderRealtimeDataSourcePreview,
-  renderCodePreview: renderRealtimeDataSourceCodePreview,
+  renderPreview: renderDatasourceRealtimePreview,
+  renderCodePreview: renderDatasourceRealtimeCodePreview,
   documentation: documentationMd
 }

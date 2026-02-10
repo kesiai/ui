@@ -1,8 +1,8 @@
-# MessageDataSource 消息数据源组件
+# DatasourceMessage 消息数据源组件
 
 ## 简介
 
-`MessageDataSource` 是一个消息数据源容器组件，用于查询系统中的消息数据（如操作日志、系统消息等）。
+`DatasourceMessage` 是一个消息数据源容器组件，用于查询系统中的消息数据（如操作日志、系统消息等）。
 
 - **纯容器组件**：不包含任何布局和样式
 - **Context 集成**：内部集成 `ContextProvider`，子组件通过 `useContextProvider` 获取数据
@@ -133,16 +133,16 @@
 ### 1. 查询所有消息
 
 ```tsx
-import { MessageDataSource } from '@/registry/components/datasource-message'
+import { DatasourceMessage } from '@/registry/components/datasource-message'
 
 function AllMessages() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="all-messages"
       limit={10}
     >
       <MessageList />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -152,7 +152,7 @@ function AllMessages() {
 ```tsx
 function FilteredMessages() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="filtered-messages"
       initFilter={{
         messageType: 'device',
@@ -162,7 +162,7 @@ function FilteredMessages() {
       limit={20}
     >
       <DeviceCreateMessages />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -174,7 +174,7 @@ function FilteredMessages() {
 ```tsx
 function DailyMessageStats() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="daily-stats"
       isGroup={true}
       group={[
@@ -192,7 +192,7 @@ function DailyMessageStats() {
       limit={30}
     >
       <DailyChart />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -202,7 +202,7 @@ function DailyMessageStats() {
 ```tsx
 function TypeMessageStats() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="type-stats"
       isGroup={true}
       group={[
@@ -219,7 +219,7 @@ function TypeMessageStats() {
       fieldOrder={[{ value: '数量', order: 'DESC' }]}
     >
       <TypePieChart />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -231,7 +231,7 @@ function TypeMessageStats() {
 ```tsx
 function ComplexGroupStats() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="complex-stats"
       isGroup={true}
       group={[
@@ -251,7 +251,7 @@ function ComplexGroupStats() {
       limit={100}
     >
       <StatsTable />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -263,7 +263,7 @@ function ComplexGroupStats() {
 ```tsx
 function HourlyMessageStats() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="hourly-stats"
       initFilter={{
         createTime: {
@@ -285,7 +285,7 @@ function HourlyMessageStats() {
       ]}
     >
       <HourlyBarChart />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -295,7 +295,7 @@ function HourlyMessageStats() {
 ```tsx
 function FormattedMessages() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="formatted-messages"
       fieldOrder={[{ value: 'createTime', order: 'DESC' }]}
       feildFormat={[
@@ -307,7 +307,7 @@ function FormattedMessages() {
       limit={50}
     >
       <FormattedMessageList />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -319,7 +319,7 @@ function FormattedMessages() {
 ```tsx
 function RealtimeMessages() {
   return (
-    <MessageDataSource
+    <DatasourceMessage
       id="realtime-messages"
       initFilter={{
         messageType: 'alert'
@@ -329,7 +329,7 @@ function RealtimeMessages() {
       interval={30}
     >
       <AlertList />
-    </MessageDataSource>
+    </DatasourceMessage>
   )
 }
 ```
@@ -349,13 +349,13 @@ function ManualRefreshMessages() {
   return (
     <>
       <button onClick={handleRefresh}>刷新消息</button>
-      <MessageDataSource
+      <DatasourceMessage
         id="manual-messages"
         submit={trigger.toString()}
         limit={20}
       >
         <MessageTable />
-      </MessageDataSource>
+      </DatasourceMessage>
     </>
   )
 }
@@ -395,33 +395,33 @@ function MessageDisplay() {
 ### 消息统计仪表板
 
 ```tsx
-import { MessageDataSource } from '@/registry/components/datasource-message'
+import { DatasourceMessage } from '@/registry/components/datasource-message'
 import { useContextProvider } from '@/registry/components/container-context-provider'
 
 function MessageDashboard() {
   return (
     <div className="grid grid-cols-2 gap-4">
       {/* 总消息数量统计 */}
-      <MessageDataSource
+      <DatasourceMessage
         id="total-count"
         isGroup={true}
         columns={[{ name: '总数', accumulator: '$count' }]}
       >
         <TotalCountCard />
-      </MessageDataSource>
+      </DatasourceMessage>
 
       {/* 按类型分组统计 */}
-      <MessageDataSource
+      <DatasourceMessage
         id="type-distribution"
         isGroup={true}
         group={[{ field: 'messageType' }]}
         columns={[{ name: '数量', accumulator: '$count' }]}
       >
         <TypeDistributionChart />
-      </MessageDataSource>
+      </DatasourceMessage>
 
       {/* 最近消息 */}
-      <MessageDataSource
+      <DatasourceMessage
         id="recent-messages"
         fieldOrder={[{ value: 'createTime', order: 'DESC' }]}
         feildFormat={[
@@ -430,10 +430,10 @@ function MessageDashboard() {
         limit={10}
       >
         <RecentMessageList />
-      </MessageDataSource>
+      </DatasourceMessage>
 
       {/* 每日消息趋势 */}
-      <MessageDataSource
+      <DatasourceMessage
         id="daily-trend"
         isGroup={true}
         group={[{ field: 'createTime', dateOperator: '天' }]}
@@ -442,7 +442,7 @@ function MessageDashboard() {
         limit={30}
       >
         <DailyTrendChart />
-      </MessageDataSource>
+      </DatasourceMessage>
     </div>
   )
 }
@@ -474,7 +474,7 @@ function OperationLogQuery() {
         </button>
       </div>
 
-      <MessageDataSource
+      <DatasourceMessage
         id="operation-logs"
         initFilter={getFilter()}
         fieldOrder={[{ value: 'createTime', order: 'DESC' }]}
@@ -485,7 +485,7 @@ function OperationLogQuery() {
         submit={refreshTrigger.toString()}
       >
         <OperationLogTable />
-      </MessageDataSource>
+      </DatasourceMessage>
     </div>
   )
 }
@@ -582,7 +582,7 @@ function OperationLogQuery() {
 ### 模式 1：简单查询（不分组）
 
 ```tsx
-<MessageDataSource
+<DatasourceMessage
   initFilter={{ messageType: 'device' }}
   fieldOrder={[{ value: 'createTime', order: 'DESC' }]}
   limit={10}
@@ -594,7 +594,7 @@ function OperationLogQuery() {
 ### 模式 2：分组聚合查询
 
 ```tsx
-<MessageDataSource
+<DatasourceMessage
   isGroup={true}
   group={[{ field: 'messageType' }]}
   columns={[{ name: '数量', accumulator: '$count' }]}

@@ -17,7 +17,7 @@ export interface InterfaceDataConfig {
   submit?: string
 }
 
-export interface InterfaceDataSourceProps {
+export interface DatasourceInterfaceProps {
   id?: string
   op?: { key?: string }
   params?: { value?: Record<string, any> }
@@ -170,15 +170,15 @@ function useInterfaceData(config: InterfaceDataConfig) {
   }
 }
 
-export function InterfaceDataSource({
-  id = 'interface-data-source',
+export function DatasourceInterface({
+  id = 'datasource-interface',
   op = { key: 'device_max_values_Yglzib' },
   params = { value: {} },
   predata = false,
   interval = 0,
   submit,
   children
-}: InterfaceDataSourceProps) {
+}: DatasourceInterfaceProps) {
   const datasetSet = useDatasetSet(id)
 
   // 使用接口数据

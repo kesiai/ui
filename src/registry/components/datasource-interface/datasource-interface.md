@@ -1,8 +1,8 @@
-# InterfaceDataSource 接口数据源组件
+# DatasourceInterface 接口数据源组件
 
 ## 简介
 
-`InterfaceDataSource` 是一个接口数据源容器组件，用于调用系统内部定义的接口服务（Interface Service）获取数据。
+`DatasourceInterface` 是一个接口数据源容器组件，用于调用系统内部定义的接口服务（Interface Service）获取数据。
 
 - **纯容器组件**：不包含任何布局和样式
 - **Context 集成**：内部集成 `ContextProvider`，子组件通过 `useContextProvider` 获取数据
@@ -87,18 +87,18 @@
 调用一个无需参数的接口：
 
 ```tsx
-import { InterfaceDataSource } from '@/registry/components/datasource-interface'
+import { DatasourceInterface } from '@/registry/components/datasource-interface'
 
 function SimpleInterface() {
   return (
-    <InterfaceDataSource
+    <DatasourceInterface
       id="simple-data"
       op={{
         key: 'get_system_status'
       }}
     >
       <StatusDisplay />
-    </InterfaceDataSource>
+    </DatasourceInterface>
   )
 }
 ```
@@ -114,7 +114,7 @@ function SimpleInterface() {
 ```tsx
 function InterfaceWithParams() {
   return (
-    <InterfaceDataSource
+    <DatasourceInterface
       id="device-data"
       op={{
         key: 'device_max_values_Yglzib'
@@ -129,7 +129,7 @@ function InterfaceWithParams() {
       }}
     >
       <DeviceChart />
-    </InterfaceDataSource>
+    </DatasourceInterface>
   )
 }
 ```
@@ -143,7 +143,7 @@ function InterfaceWithParams() {
 ```tsx
 function PreprocessedInterface() {
   return (
-    <InterfaceDataSource
+    <DatasourceInterface
       id="chart-data"
       op={{
         key: 'get_statistics'
@@ -156,7 +156,7 @@ function PreprocessedInterface() {
       predata={true}
     >
       <StatisticsChart />
-    </InterfaceDataSource>
+    </DatasourceInterface>
   )
 }
 ```
@@ -168,7 +168,7 @@ function PreprocessedInterface() {
 ```tsx
 function AutoRefreshInterface() {
   return (
-    <InterfaceDataSource
+    <DatasourceInterface
       id="realtime-data"
       op={{
         key: 'get_realtime_data'
@@ -176,7 +176,7 @@ function AutoRefreshInterface() {
       interval={30}
     >
       <RealtimeDashboard />
-    </InterfaceDataSource>
+    </DatasourceInterface>
   )
 }
 ```
@@ -196,7 +196,7 @@ function ManualRefreshInterface() {
   return (
     <>
       <button onClick={handleRefresh}>刷新数据</button>
-      <InterfaceDataSource
+      <DatasourceInterface
         id="manual-data"
         op={{
           key: 'get_report_data'
@@ -204,7 +204,7 @@ function ManualRefreshInterface() {
         submit={trigger.toString()}
       >
         <ReportDisplay />
-      </InterfaceDataSource>
+      </DatasourceInterface>
     </>
   )
 }
@@ -235,7 +235,7 @@ function DataDisplay() {
 ### 设备监控仪表板
 
 ```tsx
-import { InterfaceDataSource } from '@/registry/components/datasource-interface'
+import { DatasourceInterface } from '@/registry/components/datasource-interface'
 import { useContextProvider } from '@/registry/components/container-context-provider'
 
 function DeviceMonitorDashboard() {
@@ -243,7 +243,7 @@ function DeviceMonitorDashboard() {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   return (
-    <InterfaceDataSource
+    <DatasourceInterface
       id="device-monitor"
       op={{
         key: 'device_monitor_data'
@@ -264,7 +264,7 @@ function DeviceMonitorDashboard() {
         onDeviceChange={setSelectedDevice}
         onRefresh={() => setRefreshTrigger(Date.now())}
       />
-    </InterfaceDataSource>
+    </DatasourceInterface>
   )
 }
 
@@ -302,7 +302,7 @@ function MultiInterfaceDashboard() {
   return (
     <div>
       {/* 接口 1: 设备状态 */}
-      <InterfaceDataSource
+      <DatasourceInterface
         id="device-status"
         op={{
           key: 'get_device_status'
@@ -312,10 +312,10 @@ function MultiInterfaceDashboard() {
         }}
       >
         <StatusCard />
-      </InterfaceDataSource>
+      </DatasourceInterface>
 
       {/* 接口 2: 设备历史数据 */}
-      <InterfaceDataSource
+      <DatasourceInterface
         id="device-history"
         op={{
           key: 'get_device_history'
@@ -329,10 +329,10 @@ function MultiInterfaceDashboard() {
         predata={true}
       >
         <HistoryChart />
-      </InterfaceDataSource>
+      </DatasourceInterface>
 
       {/* 接口 3: 设备告警 */}
-      <InterfaceDataSource
+      <DatasourceInterface
         id="device-alarms"
         op={{
           key: 'get_device_alarms'
@@ -345,7 +345,7 @@ function MultiInterfaceDashboard() {
         }}
       >
         <AlarmList />
-      </InterfaceDataSource>
+      </DatasourceInterface>
     </div>
   )
 }
@@ -469,7 +469,7 @@ function MultiInterfaceDashboard() {
 
 ## 与其他数据源的区别
 
-| 特性 | InterfaceDataSource | ApiDataSource | HistoryDataSource |
+| 特性 | DatasourceInterface | DatasourceApi | DatasourceHistory |
 |------|---------------------|---------------|-------------------|
 | 用途 | 调用系统接口服务 | 调用 REST API | 查询历史数据 |
 | 路径格式 | `ds/p/{key}` | 任意 URL | `core/data` |

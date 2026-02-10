@@ -1,8 +1,8 @@
-# HistoryDataSource 历史数据源组件
+# DatasourceHistory 历史数据源组件
 
 ## 简介
 
-`HistoryDataSource` 是一个历史数据查询容器组件，用于从系统中查询设备/表的历史数据并提供给子组件使用。
+`DatasourceHistory` 是一个历史数据查询容器组件，用于从系统中查询设备/表的历史数据并提供给子组件使用。
 
 - **纯容器组件**：不包含任何布局和样式
 - **Context 集成**：内部集成 `ContextProvider`，子组件通过 `useContextProvider` 获取数据
@@ -202,11 +202,11 @@ interface GroupConfig {
 查询设备 A001 的温度数据，最近 1 小时：
 
 ```tsx
-import { HistoryDataSource } from '@/registry/components/datasource-history'
+import { DatasourceHistory } from '@/registry/components/datasource-history'
 
 function TemperatureChart() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       id="temperature-history"
       timeRange={{
         type: 'forward',
@@ -221,7 +221,7 @@ function TemperatureChart() {
       }]}
     >
       <LineChart />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 ```
@@ -233,7 +233,7 @@ function TemperatureChart() {
 ```tsx
 function MultiDeviceChart() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       timeRange={{
         type: 'custom',
         range: {
@@ -262,7 +262,7 @@ function MultiDeviceChart() {
       ]}
     >
       <MultiLineChart />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 ```
@@ -272,7 +272,7 @@ function MultiDeviceChart() {
 ```tsx
 function CompactFormat() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       timeRange={{
         type: 'forward',
         count: 1,
@@ -294,7 +294,7 @@ function CompactFormat() {
       }]}
     >
       <DataDisplay />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 ```
@@ -304,7 +304,7 @@ function CompactFormat() {
 ```tsx
 function FieldQuery() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       timeRange={{
         type: 'forward',
         count: 7,
@@ -318,7 +318,7 @@ function FieldQuery() {
       }]}
     >
       <StatisticsChart />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 ```
@@ -328,7 +328,7 @@ function FieldQuery() {
 ```tsx
 function GroupByDevice() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       timeRange={{
         type: 'custom',
         range: {
@@ -351,7 +351,7 @@ function GroupByDevice() {
       }]}
     >
       <GroupedBarChart />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 ```
@@ -361,7 +361,7 @@ function GroupByDevice() {
 ```tsx
 function ClassScheduleQuery() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       timeRange={{
         type: 'custom',
         range: {
@@ -380,7 +380,7 @@ function ClassScheduleQuery() {
       }]}
     >
       <ProductionChart />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 ```
@@ -392,7 +392,7 @@ function ClassScheduleQuery() {
 ```tsx
 function RealtimeHistory() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       timeRange={{
         type: 'forward',
         count: 5,
@@ -412,7 +412,7 @@ function RealtimeHistory() {
       }]}
     >
       <RealtimeChart />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 ```
@@ -454,7 +454,7 @@ function ManualRefresh() {
   return (
     <>
       <button onClick={handleRefresh}>刷新数据</button>
-      <HistoryDataSource
+      <DatasourceHistory
         submit={trigger.toString()}
         timeRange={{
           type: 'forward',
@@ -464,7 +464,7 @@ function ManualRefresh() {
         tags={[...]}
       >
         <Chart />
-      </HistoryDataSource>
+      </DatasourceHistory>
     </>
   )
 }
@@ -475,12 +475,12 @@ function ManualRefresh() {
 ### 多设备温度监控仪表板
 
 ```tsx
-import { HistoryDataSource } from '@/registry/components/datasource-history'
+import { DatasourceHistory } from '@/registry/components/datasource-history'
 import { useContextProvider } from '@/registry/components/container-context-provider'
 
 function TemperatureDashboard() {
   return (
-    <HistoryDataSource
+    <DatasourceHistory
       id="temperature-dashboard"
       timeRange={{
         type: 'forward',
@@ -520,7 +520,7 @@ function TemperatureDashboard() {
       interval={60}
     >
       <DashboardLayout />
-    </HistoryDataSource>
+    </DatasourceHistory>
   )
 }
 

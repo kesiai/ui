@@ -59,7 +59,7 @@ export interface MessageDataConfig {
   requestId?: string
 }
 
-export interface MessageDataSourceProps {
+export interface DatasourceMessageProps {
   id?: string
   initFilter?: Record<string, any>
   isGroup?: boolean
@@ -321,8 +321,8 @@ function useMessageData(config: MessageDataConfig) {
  * 内部集成 ContextProvider，子组件通过 useContextProvider 获取数据
  * 优化：只在查询参数变化时更新数据，避免大数据集的不必要比较
  */
-export function MessageDataSource({
-  id = 'message-data-source',
+export function DatasourceMessage({
+  id = 'datasource-message',
   initFilter = {},
   isGroup = false,
   group = [],
@@ -333,7 +333,7 @@ export function MessageDataSource({
   feildFormat = [],
   submit,
   children
-}: MessageDataSourceProps) {
+}: DatasourceMessageProps) {
   // 使用消息数据
   const { dataset, loading, requestId } = useMessageData({
     initFilter,

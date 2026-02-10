@@ -1,8 +1,8 @@
-# ViewDataSource 视图数据源组件
+# DatasourceView 视图数据源组件
 
 ## 简介
 
-`ViewDataSource` 是一个视图数据源容器组件，用于查询系统视图（View）中的预配置数据。
+`DatasourceView` 是一个视图数据源容器组件，用于查询系统视图（View）中的预配置数据。
 
 - **纯容器组件**：不包含任何布局和样式
 - **Context 集成**：内部集成 `ContextProvider`，子组件通过 `useContextProvider` 获取数据
@@ -126,11 +126,11 @@
 ### 1. 简单视图查询（计数统计）
 
 ```tsx
-import { ViewDataSource } from '@/registry/components/datasource-view'
+import { DatasourceView } from '@/registry/components/datasource-view'
 
 function SimpleViewQuery() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="simple-view"
       view={{
         id: 'view-001',
@@ -151,7 +151,7 @@ function SimpleViewQuery() {
       ]}
     >
       <StatusChart />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -166,7 +166,7 @@ function SimpleViewQuery() {
 ```tsx
 function MultiDimensionView() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="multi-dimension-view"
       view={{
         id: 'view-002',
@@ -191,7 +191,7 @@ function MultiDimensionView() {
       ]}
     >
       <DepartmentTempChart />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -201,7 +201,7 @@ function MultiDimensionView() {
 ```tsx
 function MultiMeasureView() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="multi-measure-view"
       view={{
         id: 'view-003',
@@ -240,7 +240,7 @@ function MultiMeasureView() {
       ]}
     >
       <MetricsLineChart />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -250,7 +250,7 @@ function MultiMeasureView() {
 ```tsx
 function FilteredViewQuery() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="filtered-view"
       view={{
         id: 'view-004',
@@ -277,7 +277,7 @@ function FilteredViewQuery() {
       ]}
     >
       <AlarmPieChart />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -287,7 +287,7 @@ function FilteredViewQuery() {
 ```tsx
 function NoGroupByView() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="no-group-view"
       view={{
         id: 'view-005',
@@ -316,7 +316,7 @@ function NoGroupByView() {
       ]}
     >
       <DeviceTable />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -331,7 +331,7 @@ function NoGroupByView() {
 ```tsx
 function AutoRefreshView() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="auto-refresh-view"
       view={{
         id: 'view-006',
@@ -352,7 +352,7 @@ function AutoRefreshView() {
       interval={30}  // 每 30 秒刷新一次
     >
       <RealtimeMonitorChart />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -370,7 +370,7 @@ function ManualRefreshView() {
       <button onClick={() => setTrigger(Date.now())}>
         刷新数据
       </button>
-      <ViewDataSource
+      <DatasourceView
         id="manual-refresh-view"
         view={{
           id: 'view-007',
@@ -387,7 +387,7 @@ function ManualRefreshView() {
         submit={trigger.toString()}
       >
         <StatusChart />
-      </ViewDataSource>
+      </DatasourceView>
     </>
   )
 }
@@ -398,7 +398,7 @@ function ManualRefreshView() {
 ```tsx
 function AliasedView() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="aliased-view"
       view={{
         id: 'view-008',
@@ -426,7 +426,7 @@ function AliasedView() {
       ]}
     >
       <ProductionChart />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -436,7 +436,7 @@ function AliasedView() {
 ```tsx
 function StackedView() {
   return (
-    <ViewDataSource
+    <DatasourceView
       id="stacked-view"
       view={{
         id: 'view-009',
@@ -461,7 +461,7 @@ function StackedView() {
       ]}
     >
       <StackedBarChart />
-    </ViewDataSource>
+    </DatasourceView>
   )
 }
 ```
@@ -511,13 +511,13 @@ function ViewDataDisplay() {
 ### 设备监控仪表板
 
 ```tsx
-import { ViewDataSource } from '@/registry/components/datasource-view'
+import { DatasourceView } from '@/registry/components/datasource-view'
 
 function DeviceMonitorDashboard() {
   return (
     <div className="grid grid-cols-2 gap-4">
       {/* 设备状态分布 */}
-      <ViewDataSource
+      <DatasourceView
         id="status-distribution"
         view={{
           id: 'view-status-dist',
@@ -542,10 +542,10 @@ function DeviceMonitorDashboard() {
         ]}
       >
         <StatusPieChart />
-      </ViewDataSource>
+      </DatasourceView>
 
       {/* 按部门统计 */}
-      <ViewDataSource
+      <DatasourceView
         id="department-stats"
         view={{
           id: 'view-dept-stats',
@@ -569,10 +569,10 @@ function DeviceMonitorDashboard() {
         ]}
       >
         <DepartmentBarChart />
-      </ViewDataSource>
+      </DatasourceView>
 
       {/* 温度趋势 */}
-      <ViewDataSource
+      <DatasourceView
         id="temp-trend"
         view={{
           id: 'view-temp-trend',
@@ -603,10 +603,10 @@ function DeviceMonitorDashboard() {
         ]}
       >
         <TempTrendChart />
-      </ViewDataSource>
+      </DatasourceView>
 
       {/* 告警统计 */}
-      <ViewDataSource
+      <DatasourceView
         id="alarm-stats"
         view={{
           id: 'view-alarm-stats',
@@ -633,7 +633,7 @@ function DeviceMonitorDashboard() {
         ]}
       >
         <AlarmBarChart />
-      </ViewDataSource>
+      </DatasourceView>
     </div>
   )
 }
@@ -658,7 +658,7 @@ function ProductionAnalysisReport() {
       </div>
 
       {/* 产量统计 */}
-      <ViewDataSource
+      <DatasourceView
         id="production-stats"
         view={{
           id: 'view-prod-stats',
@@ -685,10 +685,10 @@ function ProductionAnalysisReport() {
         submit={refreshTrigger.toString()}
       >
         <ProductionBarChart />
-      </ViewDataSource>
+      </DatasourceView>
 
       {/* 质量指标 */}
-      <ViewDataSource
+      <DatasourceView
         id="quality-metrics"
         view={{
           id: 'view-quality',
@@ -720,7 +720,7 @@ function ProductionAnalysisReport() {
         submit={refreshTrigger.toString()}
       >
         <QualityLineChart />
-      </ViewDataSource>
+      </DatasourceView>
     </div>
   )
 }
@@ -827,7 +827,7 @@ POST ds/view/preview?id={viewId}&mode=live
 ### 模式 1：分组聚合查询（默认）
 
 ```tsx
-<ViewDataSource
+<DatasourceView
   view={{
     config: {
       noGroupBy: false  // 或不设置
@@ -845,7 +845,7 @@ POST ds/view/preview?id={viewId}&mode=live
 ### 模式 2：原始数据查询
 
 ```tsx
-<ViewDataSource
+<DatasourceView
   view={{
     config: {
       noGroupBy: true
@@ -864,7 +864,7 @@ POST ds/view/preview?id={viewId}&mode=live
 
 ## 与其他数据源的区别
 
-| 特性 | ViewDataSource | TableDataSource | HistoryDataSource |
+| 特性 | DatasourceView | DatasourceTable | DatasourceHistory |
 |------|---------------|-----------------|------------------|
 | 数据来源 | 预定义视图 | 表/数据集 | 历史数据点 |
 | 配置方式 | 视图配置 + 维度度量 | 表配置 + 查询条件 | 标签配置 + 时间范围 |

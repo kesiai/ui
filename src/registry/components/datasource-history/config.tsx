@@ -1,8 +1,8 @@
-import { HistoryDataSource } from './history-data-source'
+import { DatasourceHistory } from './datasource-history'
 import { DataSourcePreview } from '@/app/components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { TimeRangeConfig, GroupConfig } from '@/registry/lib/datasource-types'
-import documentationMd from './history-data-source.md?raw'
+import documentationMd from './datasource-history.md?raw'
 
 // 默认配置
 const defaultHistoryConfig = {
@@ -47,7 +47,7 @@ export const historyDataSourcePropsConfig = [
     name: 'id',
     label: '数据源ID',
     type: 'input' as const,
-    default: 'history-data-source',
+    default: 'datasource-history',
     description: '数据源唯一标识，用于存储和获取数据'
   },
   {
@@ -95,7 +95,7 @@ export const historyDataSourcePropsConfig = [
 ]
 
 export const historyDataSourceDefaultProps = {
-  id: 'history-data-source',
+  id: 'datasource-history',
   timeRange: defaultHistoryConfig.timeRange,
   group: defaultHistoryConfig.group,
   tags: defaultHistoryConfig.tags,
@@ -104,20 +104,20 @@ export const historyDataSourceDefaultProps = {
   submit: ''
 }
 
-const renderHistoryDataSourcePreview = (props: Record<string, any>) => {
+const renderDatasourceHistoryPreview = (props: Record<string, any>) => {
   const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <HistoryDataSource {...props}>
+        <DatasourceHistory {...props}>
           <DataSourcePreview dataSourceId={id} />
-        </HistoryDataSource>
+        </DatasourceHistory>
       </div>
     </div>
   )
 }
 
-const renderHistoryDataSourceCodePreview = (props: Record<string, any>) => {
+const renderDatasourceHistoryCodePreview = (props: Record<string, any>) => {
   const { timeRange = defaultHistoryConfig.timeRange, group = defaultHistoryConfig.group, tags = defaultHistoryConfig.tags, columns = defaultHistoryConfig.columns, xFormat = 'YYYY-MM-DD HH:mm:ss' } = props
 
   const propsString = [
@@ -128,7 +128,7 @@ const renderHistoryDataSourceCodePreview = (props: Record<string, any>) => {
     `xFormat="${xFormat}"`
   ].join('\n  ')
 
-  return `<HistoryDataSource\n  ${propsString}\n/>`
+  return `<DatasourceHistory\n  ${propsString}\n/>`
 }
 
 export const historyDataSourceConfig: ComponentConfig = {
@@ -136,7 +136,7 @@ export const historyDataSourceConfig: ComponentConfig = {
   name: '历史数据源',
   propsConfig: historyDataSourcePropsConfig,
   defaultProps: historyDataSourceDefaultProps,
-  renderPreview: renderHistoryDataSourcePreview,
-  renderCodePreview: renderHistoryDataSourceCodePreview,
+  renderPreview: renderDatasourceHistoryPreview,
+  renderCodePreview: renderDatasourceHistoryCodePreview,
   documentation: documentationMd
 }

@@ -1,14 +1,14 @@
-import { InterfaceDataSource } from './interface-data-source'
+import { DatasourceInterface } from './datasource-interface'
 import { DataSourcePreview } from '@/app/components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
-import documentationMd from './interface-data-source.md?raw'
+import documentationMd from './datasource-interface.md?raw'
 
 export const interfaceDataSourcePropsConfig = [
   {
     name: 'id',
     label: '数据源ID',
     type: 'input' as const,
-    default: 'interface-data-source',
+    default: 'datasource-interface',
     description: '数据源唯一标识符'
   },
   {
@@ -57,7 +57,7 @@ export const interfaceDataSourcePropsConfig = [
 ]
 
 export const interfaceDataSourceDefaultProps = {
-  id: 'interface-data-source',
+  id: 'datasource-interface',
   ds: 'ai',
   op: { id: '67da8683f9f8102e30cf0b3b', key: 'device_max_values_Yglzib' },
   params: { value: {} },
@@ -66,20 +66,20 @@ export const interfaceDataSourceDefaultProps = {
   submit: ''
 }
 
-const renderInterfaceDataSourcePreview = (props: Record<string, any>) => {
+const renderDatasourceInterfacePreview = (props: Record<string, any>) => {
   const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <InterfaceDataSource {...props}>
+        <DatasourceInterface {...props}>
           <DataSourcePreview dataSourceId={id} />
-        </InterfaceDataSource>
+        </DatasourceInterface>
       </div>
     </div>
   )
 }
 
-const renderInterfaceDataSourceCodePreview = (props: Record<string, any>) => {
+const renderDatasourceInterfaceCodePreview = (props: Record<string, any>) => {
   const {
     ds = 'ai',
     op = { id: '67da8683f9f8102e30cf0b3b', key: 'device_max_values_Yglzib' },
@@ -96,7 +96,7 @@ const renderInterfaceDataSourceCodePreview = (props: Record<string, any>) => {
     interval > 0 ? `interval={${interval}}` : ''
   ].filter(Boolean).join('\n  ')
 
-  return `<InterfaceDataSource\n  ${propsString || '/* 配置接口参数 */'}\n/>`
+  return `<DatasourceInterface\n  ${propsString || '/* 配置接口参数 */'}\n/>`
 }
 
 export const interfaceDataSourceConfig: ComponentConfig = {
@@ -104,7 +104,7 @@ export const interfaceDataSourceConfig: ComponentConfig = {
   name: '接口数据源',
   propsConfig: interfaceDataSourcePropsConfig,
   defaultProps: interfaceDataSourceDefaultProps,
-  renderPreview: renderInterfaceDataSourcePreview,
-  renderCodePreview: renderInterfaceDataSourceCodePreview,
+  renderPreview: renderDatasourceInterfacePreview,
+  renderCodePreview: renderDatasourceInterfaceCodePreview,
   documentation: documentationMd
 }

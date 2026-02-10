@@ -1,8 +1,8 @@
-# TableDataSource 表数据源组件
+# DatasourceTable 表数据源组件
 
 ## 简介
 
-`TableDataSource` 是一个表数据源容器组件，用于查询系统表（Table）中的数据记录。
+`DatasourceTable` 是一个表数据源容器组件，用于查询系统表（Table）中的数据记录。
 
 - **纯容器组件**：不包含任何布局和样式
 - **Context 集成**：内部集成 `ContextProvider`，子组件通过 `useContextProvider` 获取数据
@@ -165,17 +165,17 @@
 ### 1. 简单表数据查询
 
 ```tsx
-import { TableDataSource } from '@/registry/components/datasource-table'
+import { DatasourceTable } from '@/registry/components/datasource-table'
 
 function SimpleTableQuery() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="table-data"
       table={{ id: 'A', name: '设备表' }}
       limit={10}
     >
       <DataTable />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -185,7 +185,7 @@ function SimpleTableQuery() {
 ```tsx
 function FilteredTableQuery() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="filtered-table"
       table={{ id: 'A', name: '设备表' }}
       initFilter={{
@@ -196,7 +196,7 @@ function FilteredTableQuery() {
       limit={20}
     >
       <FilteredDataTable />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -206,7 +206,7 @@ function FilteredTableQuery() {
 ```tsx
 function GroupedTableQuery() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="grouped-table"
       table={{ id: 'A', name: '设备表' }}
       isGroup={true}
@@ -223,7 +223,7 @@ function GroupedTableQuery() {
       ]}
     >
       <DepartmentStats />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -233,7 +233,7 @@ function GroupedTableQuery() {
 ```tsx
 function DailyStatsQuery() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="daily-stats"
       table={{ id: 'A', name: '设备表' }}
       isGroup={true}
@@ -253,7 +253,7 @@ function DailyStatsQuery() {
       fieldOrder={[{ value: '平均温度', order: 'DESC' }]}
     >
       <DailyReport />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -263,14 +263,14 @@ function DailyStatsQuery() {
 ```tsx
 function SpecificFieldsQuery() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="specific-fields"
       table={{ id: 'A', name: '设备表' }}
       queryFields={['name', 'status', 'temperature', 'pressure']}
       limit={50}
     >
       <DeviceTable />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -280,7 +280,7 @@ function SpecificFieldsQuery() {
 ```tsx
 function FormattedTableQuery() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="formatted-table"
       table={{ id: 'A', name: '设备表' }}
       feildFormat={[
@@ -300,7 +300,7 @@ function FormattedTableQuery() {
       ]}
     >
       <FormattedDataTable />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -310,14 +310,14 @@ function FormattedTableQuery() {
 ```tsx
 function DatasetQuery() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="dataset-data"
       selectType="dataset"
       table={{ id: 'my-dataset', name: '我的数据集' }}
       limit={100}
     >
       <DatasetTable />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -327,14 +327,14 @@ function DatasetQuery() {
 ```tsx
 function AutoRefreshTable() {
   return (
-    <TableDataSource
+    <DatasourceTable
       id="auto-refresh-table"
       table={{ id: 'A', name: '设备表' }}
       initFilter={{ status: 'alarm' }}
       interval={30}
     >
       <AlarmTable />
-    </TableDataSource>
+    </DatasourceTable>
   )
 }
 ```
@@ -352,13 +352,13 @@ function ManualRefreshTable() {
       <button onClick={() => setTrigger(Date.now())}>
         刷新数据
       </button>
-      <TableDataSource
+      <DatasourceTable
         id="manual-refresh"
         table={{ id: 'A', name: '设备表' }}
         submit={trigger.toString()}
       >
         <RefreshableTable />
-      </TableDataSource>
+      </DatasourceTable>
     </>
   )
 }
@@ -403,7 +403,7 @@ function TableDisplay() {
 ### 设备管理仪表板
 
 ```tsx
-import { TableDataSource } from '@/registry/components/datasource-table'
+import { DatasourceTable } from '@/registry/components/datasource-table'
 import { useContextProvider } from '@/registry/components/container-context-provider'
 
 function DeviceManagementDashboard() {
@@ -412,7 +412,7 @@ function DeviceManagementDashboard() {
   return (
     <div className="space-y-4">
       {/* 设备列表 */}
-      <TableDataSource
+      <DatasourceTable
         id="device-list"
         table={{ id: 'A', name: '设备表' }}
         initFilter={department !== 'all' ? { department: { $in: ['tech', 'ops'] } } : {}}
@@ -426,10 +426,10 @@ function DeviceManagementDashboard() {
         limit={50}
       >
         <DeviceTable />
-      </TableDataSource>
+      </DatasourceTable>
 
       {/* 部门统计 */}
-      <TableDataSource
+      <DatasourceTable
         id="department-stats"
         table={{ id: 'A', name: '设备表' }}
         isGroup={true}
@@ -441,7 +441,7 @@ function DeviceManagementDashboard() {
         ]}
       >
         <DepartmentChart />
-      </TableDataSource>
+      </DatasourceTable>
     </div>
   )
 }
@@ -454,7 +454,7 @@ function DataAnalysisReport() {
   return (
     <div className="grid grid-cols-3 gap-4">
       {/* 设备状态统计 */}
-      <TableDataSource
+      <DatasourceTable
         id="status-stats"
         table={{ id: 'A', name: '设备表' }}
         isGroup={true}
@@ -466,10 +466,10 @@ function DataAnalysisReport() {
         ]}
       >
         <StatusPieChart />
-      </TableDataSource>
+      </DatasourceTable>
 
       {/* 温度统计 */}
-      <TableDataSource
+      <DatasourceTable
         id="temp-stats"
         table={{ id: 'A', name: '设备表' }}
         isGroup={true}
@@ -481,10 +481,10 @@ function DataAnalysisReport() {
         ]}
       >
         <TempBarChart />
-      </TableDataSource>
+      </DatasourceTable>
 
       {/* 按日期统计 */}
-      <TableDataSource
+      <DatasourceTable
         id="daily-stats"
         table={{ id: 'A', name: '设备表' }}
         isGroup={true}
@@ -498,7 +498,7 @@ function DataAnalysisReport() {
         limit={30}
       >
         <DailyTrendChart />
-      </TableDataSource>
+      </DatasourceTable>
     </div>
   )
 }
@@ -543,7 +543,7 @@ function DynamicFilterTable() {
         </button>
       </div>
 
-      <TableDataSource
+      <DatasourceTable
         id="dynamic-filter-table"
         table={{ id: 'A', name: '设备表' }}
         initFilter={getFilter()}
@@ -552,7 +552,7 @@ function DynamicFilterTable() {
         submit={refreshTrigger.toString()}
       >
         <DeviceTable />
-      </TableDataSource>
+      </DatasourceTable>
     </>
   )
 }
@@ -661,7 +661,7 @@ function DynamicFilterTable() {
 ### 模式 1：普通查询（默认）
 
 ```tsx
-<TableDataSource
+<DatasourceTable
   table={{ id: 'A', name: '设备表' }}
   limit={10}
 />
@@ -673,7 +673,7 @@ function DynamicFilterTable() {
 ### 模式 2：分组聚合查询
 
 ```tsx
-<TableDataSource
+<DatasourceTable
   table={{ id: 'A', name: '设备表' }}
   isGroup={true}
   group={[{ field: 'department' }]}
@@ -690,7 +690,7 @@ function DynamicFilterTable() {
 
 ```tsx
 // 只查询指定字段
-<TableDataSource
+<DatasourceTable
   table={{ id: 'A', name: '设备表' }}
   queryFields={['name', 'status', 'temperature']}
 />
@@ -704,7 +704,7 @@ function DynamicFilterTable() {
 ### fieldOrder 字段排序
 
 ```tsx
-<TableDataSource
+<DatasourceTable
   table={{ id: 'A', name: '设备表' }}
   fieldOrder={[
     { value: 'temperature', order: 'DESC' },     // 温度降序
@@ -717,7 +717,7 @@ function DynamicFilterTable() {
 
 ```tsx
 // 显示内部字段
-<TableDataSource
+<DatasourceTable
   table={{ id: 'A', name: '设备表' }}
   showInnerField={true}
 />
@@ -735,13 +735,13 @@ function DynamicFilterTable() {
 
 ```tsx
 // 单条统计（默认）
-<TableDataSource
+<DatasourceTable
   table={{ id: 'A', name: '设备表' }}
   statsBySingle={false}
 />
 
 // 批量统计
-<TableDataSource
+<DatasourceTable
   table={{ id: 'A', name: '设备表' }}
   statsBySingle={true}
 />
@@ -753,7 +753,7 @@ function DynamicFilterTable() {
 
 ## 与其他数据源的区别
 
-| 特性 | TableDataSource | HistoryDataSource | MessageDataSource |
+| 特性 | DatasourceTable | DatasourceHistory | DatasourceMessage |
 |------|---------------|------------------|------------------|
 | 数据来源 | 表/数据集 | 历史数据点 | 系统消息 |
 | 数据类型 | 记录列表 | 时间序列数据 | 消息列表 |

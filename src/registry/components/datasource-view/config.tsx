@@ -1,7 +1,7 @@
-import { ViewDataSource } from './view-data-source'
+import { DatasourceView } from './datasource-view'
 import { DataSourcePreview } from '@/app/components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
-import documentationMd from './view-data-source.md?raw'
+import documentationMd from './datasource-view.md?raw'
 
 const defaultView = {
   id: "05294f12-2845-4eeb-abae-154c6bdfe87c",
@@ -60,7 +60,7 @@ export const viewDataSourcePropsConfig = [
     name: 'id',
     label: '数据源ID',
     type: 'input' as const,
-    default: 'view-data-source',
+    default: 'datasource-view',
     description: '数据源唯一标识符'
   },
   {
@@ -101,7 +101,7 @@ export const viewDataSourcePropsConfig = [
 ]
 
 export const viewDataSourceDefaultProps = {
-  id: 'view-data-source',
+  id: 'datasource-view',
   view: defaultView,
   dimension: defaultDimension,
   measure: defaultMeasure,
@@ -109,20 +109,20 @@ export const viewDataSourceDefaultProps = {
   submit: ''
 }
 
-const renderViewDataSourcePreview = (props: Record<string, any>) => {
+const renderDatasourceViewPreview = (props: Record<string, any>) => {
   const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <ViewDataSource {...props}>
+        <DatasourceView {...props}>
           <DataSourcePreview dataSourceId={id} />
-        </ViewDataSource>
+        </DatasourceView>
       </div>
     </div>
   )
 }
 
-const renderViewDataSourceCodePreview = (props: Record<string, any>) => {
+const renderDatasourceViewCodePreview = (props: Record<string, any>) => {
   const { view = defaultView, dimension = defaultDimension, measure = defaultMeasure, interval = 0 } = props
 
   const viewObj = view && Object.keys(view).length > 0 ? view : defaultView
@@ -136,7 +136,7 @@ const renderViewDataSourceCodePreview = (props: Record<string, any>) => {
     `interval={${interval}}`
   ].join('\n  ')
 
-  return `<ViewDataSource\n  ${propsString}\n/>`
+  return `<DatasourceView\n  ${propsString}\n/>`
 }
 
 export const viewDataSourceConfig: ComponentConfig = {
@@ -144,7 +144,7 @@ export const viewDataSourceConfig: ComponentConfig = {
   name: '视图数据源',
   propsConfig: viewDataSourcePropsConfig,
   defaultProps: viewDataSourceDefaultProps,
-  renderPreview: renderViewDataSourcePreview,
-  renderCodePreview: renderViewDataSourceCodePreview,
+  renderPreview: renderDatasourceViewPreview,
+  renderCodePreview: renderDatasourceViewCodePreview,
   documentation: documentationMd
 }

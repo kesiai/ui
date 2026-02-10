@@ -30,7 +30,7 @@ export interface RealtimeDataConfig {
   submit?: string
 }
 
-export interface RealtimeDataSourceProps {
+export interface DatasourceRealtimeProps {
   id?: string
   tags?: TagConfig[]
   timeLine?: TimeLineConfig
@@ -453,14 +453,14 @@ function useRealtimeData(config: RealtimeDataConfig) {
   }
 }
 
-export function RealtimeDataSource({
-  id = 'realtime-data-source',
+export function DatasourceRealtime({
+  id = 'datasource-realtime',
   tags = [],
   timeLine = { count: 5, unit: 'm' },
   xFormat = 'YYYY-MM-DD HH:mm:ss',
   submit,
   children
-}: RealtimeDataSourceProps) {
+}: DatasourceRealtimeProps) {
   const datasetSet = useDatasetSet(id)
 
   // 使用实时数据

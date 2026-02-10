@@ -1,8 +1,8 @@
-# RealtimeDataSource 实时数据源组件
+# DatasourceRealtime 实时数据源组件
 
 ## 简介
 
-`RealtimeDataSource` 是一个实时数据源容器组件，用于通过 WebSocket 订阅设备标签的实时数据更新。
+`DatasourceRealtime` 是一个实时数据源容器组件，用于通过 WebSocket 订阅设备标签的实时数据更新。
 
 - **纯容器组件**：不包含任何布局和样式
 - **Context 集成**：内部集成 `ContextProvider`，子组件通过 `useContextProvider` 获取数据
@@ -141,11 +141,11 @@
 ### 1. 查询单个标签的实时数据
 
 ```tsx
-import { RealtimeDataSource } from '@/registry/components/datasource-realtime'
+import { DatasourceRealtime } from '@/registry/components/datasource-realtime'
 
 function SingleRealtimeTag() {
   return (
-    <RealtimeDataSource
+    <DatasourceRealtime
       id="single-realtime"
       tags={[{
         tableData: { id: 'A001', table: { id: 'A' } },
@@ -155,7 +155,7 @@ function SingleRealtimeTag() {
       timeLine={{ count: 5, unit: 'm' }}
     >
       <RealtimeChart />
-    </RealtimeDataSource>
+    </DatasourceRealtime>
   )
 }
 ```
@@ -170,7 +170,7 @@ function SingleRealtimeTag() {
 ```tsx
 function MultiRealtimeTags() {
   return (
-    <RealtimeDataSource
+    <DatasourceRealtime
       id="multi-realtime"
       tags={[
         {
@@ -190,7 +190,7 @@ function MultiRealtimeTags() {
       xFormat="HH:mm:ss"
     >
       <MultiLineChart />
-    </RealtimeDataSource>
+    </DatasourceRealtime>
   )
 }
 ```
@@ -200,7 +200,7 @@ function MultiRealtimeTags() {
 ```tsx
 function CompactRealtime() {
   return (
-    <RealtimeDataSource
+    <DatasourceRealtime
       id="compact-realtime"
       tags={[{
         tag: {
@@ -216,7 +216,7 @@ function CompactRealtime() {
       timeLine={{ count: 1, unit: 'h' }}
     >
       <HumidityGauge />
-    </RealtimeDataSource>
+    </DatasourceRealtime>
   )
 }
 ```
@@ -226,7 +226,7 @@ function CompactRealtime() {
 ```tsx
 function LatestValueOnly() {
   return (
-    <RealtimeDataSource
+    <DatasourceRealtime
       id="latest-value"
       tags={[{
         tableData: { id: 'A001', table: { id: 'A' } },
@@ -235,7 +235,7 @@ function LatestValueOnly() {
       timeLine={{ count: 0, unit: '' }}
     >
       <ValueDisplay />
-    </RealtimeDataSource>
+    </DatasourceRealtime>
   )
 }
 ```
@@ -260,7 +260,7 @@ function LatestValueOnly() {
 ```tsx
 function CustomTimeFormat() {
   return (
-    <RealtimeDataSource
+    <DatasourceRealtime
       id="custom-format"
       tags={[{
         tableData: { id: 'A001', table: { id: 'A' } },
@@ -270,7 +270,7 @@ function CustomTimeFormat() {
       xFormat="HH:mm:ss"  // 只显示时分秒
     >
       <FlowChart />
-    </RealtimeDataSource>
+    </DatasourceRealtime>
   )
 }
 ```
@@ -288,13 +288,13 @@ function ManualRefreshRealtime() {
       <button onClick={() => setTrigger(Date.now())}>
         重载数据
       </button>
-      <RealtimeDataSource
+      <DatasourceRealtime
         id="manual-refresh"
         tags={[...]}
         submit={trigger.toString()}
       >
         <RealtimeDisplay />
-      </RealtimeDataSource>
+      </DatasourceRealtime>
     </>
   )
 }
@@ -330,14 +330,14 @@ function RealtimeDisplay() {
 ### 实时监控仪表板
 
 ```tsx
-import { RealtimeDataSource } from '@/registry/components/datasource-realtime'
+import { DatasourceRealtime } from '@/registry/components/datasource-realtime'
 import { useContextProvider } from '@/registry/components/container-context-provider'
 
 function RealtimeMonitorDashboard() {
   return (
     <div className="grid grid-cols-2 gap-4">
       {/* 温度实时监控 */}
-      <RealtimeDataSource
+      <DatasourceRealtime
         id="temp-monitor"
         tags={[
           {
@@ -357,10 +357,10 @@ function RealtimeMonitorDashboard() {
         xFormat="HH:mm:ss"
       >
         <TempMonitorChart />
-      </RealtimeDataSource>
+      </DatasourceRealtime>
 
       {/* 多指标监控 */}
-      <RealtimeDataSource
+      <DatasourceRealtime
         id="multi-metrics"
         tags={[
           {
@@ -379,7 +379,7 @@ function RealtimeMonitorDashboard() {
         timeLine={{ count: 5, unit: 'm' }}
       >
         <MetricsGauge />
-      </RealtimeDataSource>
+      </DatasourceRealtime>
     </div>
   )
 }
@@ -390,7 +390,7 @@ function RealtimeMonitorDashboard() {
 ```tsx
 function RealtimeDataTable() {
   return (
-    <RealtimeDataSource
+    <DatasourceRealtime
       id="realtime-table"
       tags={[
         {
@@ -410,7 +410,7 @@ function RealtimeDataTable() {
       xFormat="YYYY-MM-DD HH:mm:ss"
     >
       <StatusTable />
-    </RealtimeDataSource>
+    </DatasourceRealtime>
   )
 }
 ```
@@ -531,9 +531,9 @@ WebSocket 推送新数据时：
 | `xFormat` | - | 独立配置，影响时间显示格式 |
 | `submit` | - | 独立配置，控制手动刷新 |
 
-## 与 HistoryDataSource 的区别
+## 与 DatasourceHistory 的区别
 
-| 特性 | RealtimeDataSource | HistoryDataSource |
+| 特性 | DatasourceRealtime | DatasourceHistory |
 |------|-------------------|-------------------|
 | 数据获取方式 | WebSocket 实时推送 | HTTP 查询 |
 | 初始数据 | 加载历史数据作为基础 | 查询历史数据 |

@@ -1,4 +1,4 @@
-import { SvgEditor } from '@/registry/blocks/advanced/svg/svg'
+import { SvgEditor } from '@/registry/components/svg/svg'
 import { ComponentConfig } from '../types'
 
 // 示例 SVG 内容

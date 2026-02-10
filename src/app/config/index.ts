@@ -114,7 +114,7 @@ for (const path in registryModules) {
   // 支持:
   // 1. ../../registry/components/button/config.tsx
   // 2. ../../registry/components/container-tabs/config.tsx
-  // 3. ../../registry/blocks/advanced/svg-editor/config.tsx (多层嵌套)
+  // 3. ../../registry/components/svg/config.tsx (业务组件)
   const match = path.match(/registry\/(components|blocks)\/(.+)\/config\.tsx$/)
   if (!match) continue
 

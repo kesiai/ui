@@ -10,14 +10,10 @@ import _ from 'lodash'
 // 全局 app 对象的默认处理
 const app = (globalThis as any).app
 
-const convert = (schema: any, options?: any) => {
+const convert = (schema: any) => {
   if (schema?.config === '区域') {
     schema.multiple = true
   }
-  const opts = options || {}
-  // return app?.load_list('filter_converter')?.reduce((prve: any, converter: any) => {
-  //   return converter(prve, schema, opts)
-  // }, {}) || {}
   return schema
 }
 
@@ -30,9 +26,6 @@ const convert1 = (schema: any, options?: any) => {
     opts.lookup = {}
   }
   return schema
-  return app?.get('schema_converter')?.reduce((prve: any, converter: any) => {
-    return converter(prve, schema, opts)
-  }, opts.global && opts.global?.formDefaults ? _.cloneDeep(opts.global.formDefaults) : {}) || {}
 }
 
 const BindDataWrap = (props: any) => {
@@ -293,7 +286,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
                 value={selectMethod || ''}
                 onValueChange={onMethodChange}
               >
-                <SelectTrigger className="w-full min-w-[130px]">
+                <SelectTrigger className="w-full min-w-32.5">
                   <SelectValue placeholder="请选择" />
                 </SelectTrigger>
                 <SelectContent>
@@ -347,7 +340,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
                 onValueChange={onMethodChange}
               >
                 <SelectTrigger
-                  className="mr-2 w-[100px] h-auto min-w-[130px] flex-shrink-0"
+                  className="mr-2 w-25 h-auto min-w-32.5 shrink-0"
                 >
                   <SelectValue placeholder="请选择" />
                 </SelectTrigger>
@@ -358,10 +351,10 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
                 </SelectContent>
               </Select>
               {selectMethod ?
-                <div className="flex flex-wrap flex-grow gap-2 items-center">
+                <div className="flex flex-wrap grow gap-2 items-center">
                   <div className={`
-                    flex-grow
-                    ${['isNull', 'notNull'].indexOf(selectMethod as string) === -1 && type !== 'boolean' ? 'min-w-[200px] flex-basis-[200px]' : 'min-w-auto flex-basis-auto'}
+                    grow
+                    ${['isNull', 'notNull'].indexOf(selectMethod as string) === -1 && type !== 'boolean' ? 'min-w-50 flex-basis-50' : 'min-w-auto flex-basis-auto'}
                   `}>
                     {
                       ['range', 'notRange', 'gt', 'lt'].indexOf(selectMethod as string) > -1 && timeRangeQuery && isTime ?
@@ -379,7 +372,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
                     }
                   </div>
                   {showValidBtn ?
-                    <div className="flex-shrink-0 min-w-[60px]">
+                    <div className="shrink-0 min-w-15">
                       <BindDataWrap input={{ value: value?.valid, onChange: onValidChange }} field={{ title: '生效', type: 'boolean', unbind }} bind={!unbind} DataWrap={DataWrap} selectMethod={selectMethod}>
                         <Switch
                           checked={_.isNil(value?.valid) || value?.valid}
@@ -436,7 +429,7 @@ const QueryFieldSelect = ({ schema, value, onChange, placeholder }: QueryFieldSe
       value={value || ''}
       onValueChange={handleFieldChange}
     >
-      <SelectTrigger className="mr-2 flex-grow">
+      <SelectTrigger className="mr-2 grow">
         <SelectValue placeholder={placeholder || "选择过滤字段"} />
       </SelectTrigger>
       <SelectContent>
@@ -523,7 +516,7 @@ const QueryItem = (props: QueryItemProps) => {
       {selectHide ? null : (
         <div className="w-full flex flex-row items-center mb-2">
           <QueryFieldSelect schema={schema} value={value?.field || ''} onChange={(field) => onChange({ field })} placeholder={fieldPlaceholder} />
-          <div className="ml-2 flex-shrink-0">
+          <div className="ml-2 shrink-0">
             <button
               type="button"
               onClick={onDelete}
@@ -656,7 +649,7 @@ interface QueryEditorProps {
  * @param allowAndOp - 允许且操作
  */
 const QueryEditor = (props: QueryEditorProps) => {
-  const { input = {}, relation, style, DataWrap, btnName, onlyOneType, schema } = props
+  const { input = {}, relation, style, btnName, onlyOneType, schema } = props
   const { value = [], onChange } = input
   const [queries, setQueries] = useState(value)
 

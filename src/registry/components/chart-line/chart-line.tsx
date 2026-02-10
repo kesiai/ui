@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { BaseChart, BaseChartProps } from '../components/BaseChart'
+import { BaseChart, BaseChartProps } from './BaseChart'
 
 // 递归，字符串转函数
 const StrToFunction = (obj: any): any => {

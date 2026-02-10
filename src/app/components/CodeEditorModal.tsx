@@ -52,11 +52,9 @@ export const CodeEditorModal: React.FC<CodeEditorModalProps> = ({
           <textarea
             value={localCode}
             onChange={(e) => setLocalCode(e.target.value)}
-            placeholder="// 在这里输入 JavaScript 代码，可以访问 myChart, dataset, props 变量
-// 例如：
-// option.title.text = '自定义标题'
-// option.series[0].itemStyle = { color: '#ff6b6b' }
-// return { option, codeOption }"
+            placeholder="codeOption = {
+  backgroundColor: 'red'
+}"
             className="w-full h-full min-h-[300px] p-4 bg-slate-900 text-slate-100 font-mono text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
             spellCheck={false}
           />

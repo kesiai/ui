@@ -1,4 +1,4 @@
-import ChartLine from '@/registry/blocks/chart/chart-line/chart-line'
+import ChartLine from '@/registry/components/chart-line/chart-line'
 import { ComponentConfig } from '@/app/config/types'
 
 export const chartLinePropsConfig = [

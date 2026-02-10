@@ -5,6 +5,13 @@ import { ComponentConfig, PropConfig } from '@/app/config/types'
 // 属性配置
 const timeAxisPropsConfig: PropConfig[] = [
   {
+    name: 'tableData',
+    label: '设备',
+    type: 'json',
+    default: JSON.stringify({}, null, 2),
+    description: '选择设备表数据'
+  },
+  {
     name: 'width',
     label: '时间轴宽度',
     type: 'number',
@@ -59,6 +66,7 @@ const timeAxisPropsConfig: PropConfig[] = [
 
 // 默认属性值
 const timeAxisDefaultProps = {
+  tableData: {},
   width: 600,
   height: 50,
   readonly: false,
@@ -89,6 +97,7 @@ const TimeAxisPreview = ({ props }: { props: Record<string, any> }) => {
   const [currentTime, setCurrentTime] = useState(Math.floor(Date.now() / 1000) - 900) // 15分钟前
 
   const handleTimeChange = (time: number, direction?: "left" | "right") => {
+    console.log('Time changed:', time, direction)
     setCurrentTime(time)
   }
 
@@ -109,6 +118,7 @@ const TimeAxisPreview = ({ props }: { props: Record<string, any> }) => {
         axisConfiguration={axisConfiguration}
         currentTime={currentTime}
         videoRecords={sampleVideoRecords}
+        tableData={props.tableData}
         onTimeChange={handleTimeChange}
         cellKey="preview"
       />
@@ -153,7 +163,9 @@ export default function TimeAxisDemo() {
       }}
       currentTime={currentTime}
       videoRecords={videoRecords}
+      tableData={tableData}
       onTimeChange={(time, direction) => {
+        console.log('Time changed:', time, direction)
         setCurrentTime(time)
       }}
     />
@@ -163,7 +175,7 @@ export default function TimeAxisDemo() {
 
 // 组件配置
 export const timeAxisConfig: ComponentConfig = {
-  id: 'time-axis-widget',
+  id: 'video-time-axis-widget',
   name: '视频时间轴',
   propsConfig: timeAxisPropsConfig,
   defaultProps: timeAxisDefaultProps,

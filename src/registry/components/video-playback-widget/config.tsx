@@ -5,6 +5,13 @@ import { ComponentConfig, PropConfig } from '@/app/config/types'
 // 属性配置
 const videoPlaybackPropsConfig: PropConfig[] = [
   {
+    name: 'tableData',
+    label: '设备',
+    type: 'json',
+    default: JSON.stringify({}, null, 2),
+    description: '选择设备表数据'
+  },
+  {
     name: 'videoHeight',
     label: '视频高度',
     type: 'number',
@@ -44,6 +51,7 @@ const videoPlaybackPropsConfig: PropConfig[] = [
 
 // 默认属性值
 const videoPlaybackDefaultProps = {
+  tableData: {},
   videoHeight: 400,
   timelineHeight: 50,
   backgroundColor: 'rgba(13, 14, 27, 0.7)',
@@ -83,6 +91,7 @@ const VideoPlaybackPreview = ({ props }: { props: Record<string, any> }) => {
         backgroundColor={props.backgroundColor}
         timelineBackground={props.timelineBackground}
         timelineScaleColor={props.timelineScaleColor}
+        tableData={props.tableData}
         date={date}
         onDateChange={setDate}
         isPlaying={isPlaying}
@@ -125,6 +134,7 @@ export default function VideoPlaybackDemo() {
       backgroundColor="${props.backgroundColor}"
       timelineBackground="${props.timelineBackground}"
       timelineScaleColor="${props.timelineScaleColor}"
+      tableData={tableData}
       date={date}
       onDateChange={setDate}
       isPlaying={isPlaying}

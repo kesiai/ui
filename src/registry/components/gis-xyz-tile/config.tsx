@@ -150,7 +150,7 @@ const renderXYZPreview = (props: Record<string, any>) => {
     }
 
     return (
-        <div className="w-full h-[300px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-75 border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <XYZ
                     source={props.source}

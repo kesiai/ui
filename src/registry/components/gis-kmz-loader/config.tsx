@@ -58,7 +58,7 @@ export const kmzDefaultProps = {
 
 const renderKmzPreview = (props: Record<string, any>) => {
     return (
-        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <Kmz
                     source={props.source}

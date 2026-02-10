@@ -278,7 +278,7 @@ const renderTableViewsPreview = (props: Record<string, any>) => {
     const cluster = parseJson(props.cluster, defaultCluster)
 
     return (
-        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <TableViews
                     table={table}

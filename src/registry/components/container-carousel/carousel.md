@@ -143,7 +143,7 @@ function ImageCarousel() {
             alt={image.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+          <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-6">
             <h3 className="text-white text-2xl font-bold mb-2">
               {image.title}
             </h3>
@@ -185,12 +185,12 @@ function ProductCarousel() {
       autoplay={true}
       autoplaySpeed={5}
       cssEase="ease"
-      className="h-[500px]"
+      className="h-125"
     >
       {products.map((product, index) => (
         <div key={index} className="h-full p-8">
           <div className="bg-white rounded-2xl shadow-xl h-full p-8 flex flex-col items-center justify-center">
-            <div className="w-32 h-32 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full mb-6"></div>
+            <div className="w-32 h-32 bg-linear-to-br from-blue-400 to-purple-600 rounded-full mb-6"></div>
             <h3 className="text-3xl font-bold mb-2">{product.name}</h3>
             <p className="text-4xl font-bold text-blue-600 mb-6">{product.price}</p>
             <ul className="text-center space-y-2 mb-8">
@@ -257,7 +257,7 @@ function DataCardCarousel() {
     >
       {stats.map((stat, index) => (
         <div key={index} className="h-full p-4">
-          <div className={`bg-gradient-to-br from-${stat.color}-400 to-${stat.color}-600 rounded-xl p-6 h-full flex flex-col justify-center text-white`}>
+          <div className={`bg-linear-to-br from-${stat.color}-400 to-${stat.color}-600 rounded-xl p-6 h-full flex flex-col justify-center text-white`}>
             <h3 className="text-lg font-medium mb-2 opacity-90">{stat.title}</h3>
             <p className="text-5xl font-bold mb-2">{stat.value}</p>
             <p className={`text-sm ${stat.trend === 'up' ? 'text-green-200' : 'text-red-200'}`}>
@@ -345,7 +345,7 @@ function RangeCarousel() {
     >
       {items.map((item) => (
         <div key={item.id} className="h-full p-4">
-          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg h-full p-6 flex flex-col items-center justify-center">
+          <div className="bg-linear-to-br from-indigo-50 to-purple-50 rounded-lg h-full p-6 flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-indigo-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
               {item.id}
             </div>
@@ -376,13 +376,13 @@ function CustomTransitionCarousel() {
       rtl="flashback"
       className="h-96"
     >
-      <div className="flex items-center justify-center h-full bg-gradient-to-r from-pink-500 to-rose-500 text-white text-3xl font-bold">
+      <div className="flex items-center justify-center h-full bg-linear-to-br from-pink-500 to-rose-500 text-white text-3xl font-bold">
         倒序轮播 1
       </div>
-      <div className="flex items-center justify-center h-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-3xl font-bold">
+      <div className="flex items-center justify-center h-full bg-linear-to-r from-amber-500 to-orange-500 text-white text-3xl font-bold">
         倒序轮播 2
       </div>
-      <div className="flex items-center justify-center h-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-3xl font-bold">
+      <div className="flex items-center justify-center h-full bg-linear-to-r from-emerald-500 to-teal-500 text-white text-3xl font-bold">
         倒序轮播 3
       </div>
     </Carousel>

@@ -31,7 +31,7 @@ function IterationItemDemo() {
   const { value, index } = useContext(IterationContext)
 
   return (
-    <div className="p-4 m-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200 shadow-sm">
+    <div className="p-4 m-2 bg-linear-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200 shadow-sm">
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">
           索引: {index}

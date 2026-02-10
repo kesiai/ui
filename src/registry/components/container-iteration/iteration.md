@@ -268,7 +268,7 @@ function ProductCard() {
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="h-48 bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
+      <div className="h-48 bg-linear-to-br from-blue-400 to-purple-600 flex items-center justify-center">
         <span className="text-white text-6xl font-bold">{value.id}</span>
       </div>
       <div className="p-6">
@@ -409,7 +409,7 @@ function StatCard() {
   const icons = ['👥', '💰', '📊', '⭐']
 
   return (
-    <div className={`bg-gradient-to-br ${colors[index % colors.length]} rounded-xl p-6 text-white`}>
+    <div className={`bg-linear-to-br ${colors[index % colors.length]} rounded-xl p-6 text-white`}>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm opacity-90 mb-1">{value.label}</p>

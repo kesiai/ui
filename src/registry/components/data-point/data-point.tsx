@@ -407,7 +407,7 @@ const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(
             {number}
           </span>
         </PopoverTrigger>
-        <PopoverContent className="z-[999]" side="bottom" align="start">
+        <PopoverContent className="z-999" side="bottom" align="start">
           <div className="font-medium mb-2">{tableDataName}</div>
           <PopoverContentComponent {...contentProps} />
         </PopoverContent>

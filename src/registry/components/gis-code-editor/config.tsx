@@ -27,7 +27,7 @@ export const codeEditorViewsDefaultProps = {
 
 const renderCodeEditorViewsPreview = (props: Record<string, any>) => {
     return (
-        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative flex flex-col">
+        <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative flex flex-col">
             <div className="flex-1 relative">
                 <MapContainer>
                     <CodeEditorViews

@@ -7,6 +7,7 @@ import Geometry from 'ol/geom/Geometry';
 import VectorSource from 'ol/source/Vector'
 import { Vector as VectorLayer, Heatmap } from 'ol/layer'
 import Cluster from 'ol/source/Cluster'
+import { createEmpty, extend } from 'ol/extent'
 // @ts-ignore
 import { useMap } from '../gis-map-core/gis-map-core'
 import {
@@ -22,13 +23,21 @@ import {
     createStyleClass,
     clusterStyle,
     parseIconScript,
-    getTransformTo3857
+    getTransformTo3857,
+    createNumberLabelStyles
 } from './utils'
+import {
+    createOverLayer,
+    DefaultPanel,
+    CustomPanel,
+    ViewPanel,
+    getGeometryCenter
+} from './overlay-utils'
 import _ from 'lodash'
 // @ts-ignore
 import * as olStyle from 'ol/style'
 
-// 默认标记图标（绿色图钉）
+// 默认标记图标（绿色图钉）- 没有配置图标时使用
 const DEFAULT_MARKER_ICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDI0IDM2Ij48cGF0aCBmaWxsPSIjNENBRjUwIiBkPSJNMTIgMEMxOC42MjcgMCAyNC41MzczIDI0IDEyIDI0UzAgMjAuMjc0IDAgMTJDMCA1LjM3MyA1LjM3MyAwIDEyIDB6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNyIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg=='
 
 export interface TableViewsProps {
@@ -202,6 +211,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             marker: markerProp,
             highlightMarker: highlightMarkerProp,
             markerScale: markerScaleProp,
+            modalConfig: modalConfigProp,
             ...props
         },
         ref
@@ -240,6 +250,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
         const tableTags = React.useMemo(() => parseJsonProp(tableTagsProp, null), [tableTagsProp])
         const marker = React.useMemo(() => parseJsonProp(markerProp, {}), [markerProp])
         const highlightMarker = React.useMemo(() => parseJsonProp(highlightMarkerProp, {}), [highlightMarkerProp])
+        const modalConfig = React.useMemo(() => parseJsonProp(modalConfigProp, []), [modalConfigProp])
         // tableTags 引用（需要在 tableTags 声明后）
         const tableTagsRef = React.useRef(tableTags)
         React.useEffect(() => { tableTagsRef.current = tableTags }, [tableTags])
@@ -261,94 +272,299 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
         // Request tracker for cancelling stale requests
         const requestTracker = React.useRef<any>(null)
 
-        // 更新缓存标记配置
-        React.useEffect(() => { markerScaleRef.current = markerScale }, [markerScale])
-        React.useEffect(() => { highlightRef.current = highlightMarker }, [highlightMarker])
+        // 弹窗配置引用
+        const modalConfigRef = React.useRef<any>(null)
 
-        // 样式函数
-        const styleFn = React.useCallback((feature: any) => {
-            const record = feature.get('record')
-            const tableGisConfig = feature.get('tableGisConfig')
-            const selected = feature.get('selected')
-            const markerTags = feature.get('markerTags')
-            const markerType = feature.get('markerType') || 'Point'  // 从 feature 获取，不是从配置
-            const markerInitStyle = feature.get('markerInitStyle')
-            const online = record?.online !== false
+        // 更新弹窗配置缓存
+        React.useEffect(() => {
+            modalConfigRef.current = modalConfig
+        }, [modalConfig])
 
-            // Merge marker configs
-            let mergedMarker = { ...marker }
-            if (tableGisConfig?.Point) {
-                mergedMarker = _.merge({}, mergedMarker, { point: tableGisConfig.Point })
-            }
+        // 创建弹窗的回调函数
+        const createRecordOverlay = React.useCallback(({ feature, record, modalConfig }: any) => {
+            const {
+                showType,
+                offsetX,
+                offsetY,
+                positioning,
+                multi = false,
+                content = 'default',
+                view,
+                customCode
+            } = modalConfig || {}
 
-            let mergedHighlight = { ...highlightMarker }
-            const currentMarker = selected ? mergedHighlight : mergedMarker
+            const hidenCloseBtn = showType === 'alway'
 
-            const iconScript = currentMarker?.point?.iconScript
-            const visible = currentMarker?.point?.visible !== false
-
-            if (!visible) return []
-
-            // Determine icon source (使用默认图标)
-            let src = markerInitStyle?.src || markerInitStyle?.icon || DEFAULT_MARKER_ICON
-
-            // 图标脚本处理
-            if (iconScript) {
-                const parsedSrc = parseIconScript({
-                    iconScript,
-                    record,
-                    tags: markerTags,
-                    style: olStyle
+            // 如果不是多弹窗模式，清除之前的弹窗
+            if (!multi) {
+                const overlays = map.getOverlays().getArray()
+                overlays.forEach((oldOverlay: any) => {
+                    map.removeOverlay(oldOverlay)
                 })
-                if (parsedSrc) src = parsedSrc
-            }
-            // 在线/离线图标处理
-            else if (markerInitStyle?.onlineIcon && markerInitStyle?.iconUrl) {
-                src = online ? markerInitStyle.onlineIcon : markerInitStyle.iconUrl
             }
 
-            // Apply scale
-            let scale = markerInitStyle?.scale || 1
-            if (markerScaleRef.current?.length) {
-                const view = map?.getView()
-                if (view) {
-                    const zoom = view.getZoom() || 0
-                    for (const s of markerScaleRef.current) {
-                        if (s.minZoom <= zoom && zoom <= s.maxZoom) {
-                            scale = s.scale
-                            break
+            const geometry = feature.getGeometry()
+            const coordinate = getGeometryCenter(geometry)
+
+            // 根据 content 类型选择不同的弹窗组件
+            let PanelComponent: React.ComponentType<any>
+
+            if (content === 'view') {
+                // 画面弹窗 - 支持 view.code 或 viewCode
+                const viewCode = view?.code || modalConfig?.viewCode
+                PanelComponent = (props: any) => (
+                    <ViewPanel
+                        {...props}
+                        data={record}
+                        hidenCloseBtn={hidenCloseBtn}
+                        viewId={view?.id}
+                        viewConfig={view}
+                        viewCode={viewCode}
+                    />
+                )
+            } else if (content === 'custom') {
+                // 自定义React代码弹窗
+                PanelComponent = (props: any) => (
+                    <CustomPanel
+                        {...props}
+                        data={record}
+                        hidenCloseBtn={hidenCloseBtn}
+                        customCode={customCode || ''}
+                    />
+                )
+            } else {
+                // 默认弹窗
+                PanelComponent = (props: any) => (
+                    <DefaultPanel
+                        {...props}
+                        data={record}
+                        hidenCloseBtn={hidenCloseBtn}
+                    />
+                )
+            }
+
+            const popup = createOverLayer({
+                map,
+                coordinate,
+                popupConfig: {
+                    onClose: () => {
+                        feature.un('change', onFeatureChange)
+                    },
+                    className: `${cellKey}-overlay`,
+                    id: `overlay-${cellKey}-${record.table || record._table}-${record.id}`,
+                    overlayConfig: {
+                        positioning: positioning || 'top-center',
+                        offset: [offsetX || 0, offsetY || 0]
+                    }
+                },
+                APP: PanelComponent
+            })
+
+            const onFeatureChange = (evt: any) => {
+                const geometry = evt.target.getGeometry()
+                const coordinate = getGeometryCenter(geometry)
+                popup.setPosition(coordinate)
+            }
+
+            feature.on('change', onFeatureChange)
+        }, [map, cellKey])
+
+        // Click Handler - 使用 OpenLayers Overlay
+        React.useEffect(() => {
+            if (!map) return
+
+            const handleClick = (e: any) => {
+                const pixel = map.getEventPixel(e.originalEvent)
+                const feature = map.forEachFeatureAtPixel(pixel, (feature: any) => feature, {
+                    hitTolerance: 5
+                })
+
+                if (feature) {
+                    const fCellKey = feature.get('cellKey')
+                    
+                    // Check if it's a cluster feature
+                    const clusteredFeatures = feature.get('features')
+
+                    if (clusteredFeatures) {
+                        // It's a cluster
+                        if (clusteredFeatures.length > 1) {
+                            // Multiple features clustered
+                            if (map.getView()) {
+                                const extent = createEmpty()
+                                clusteredFeatures.forEach((f: any) => extend(extent, f.getGeometry().getExtent()))
+                                
+                                // Check if all points are at the same location
+                                const firstCoords = clusteredFeatures[0].getGeometry().getCoordinates()
+                                const isSameLocation = clusteredFeatures.every((f: any) => {
+                                    const coords = f.getGeometry().getCoordinates()
+                                    return coords[0] === firstCoords[0] && coords[1] === firstCoords[1]
+                                })
+
+                                if (isSameLocation) {
+                                     map.getView().animate({
+                                        center: firstCoords,
+                                        zoom: map.getView().getZoom() + 1,
+                                        duration: 500
+                                     })
+                                } else {
+                                    map.getView().fit(extent, {
+                                        duration: 500,
+                                        padding: [50, 50, 50, 50]
+                                    })
+                                }
+                            }
+                            return // Stop here for clusters > 1
+                        } else if (clusteredFeatures.length === 1) {
+                            // Single feature in cluster
+                            const originalFeature = clusteredFeatures[0]
+                            const record = originalFeature.get('markerRecord')
+                            const fCellKey = originalFeature.get('cellKey')
+                            
+                            if (fCellKey !== cellKey) return
+                            if (!record) return
+
+                            // Determine modal config
+                            const configs = Array.isArray(modalConfigRef.current) ? modalConfigRef.current : [modalConfigRef.current]
+                            const targetConfig = configs.find((c: any) => c?.showType === 'click') || configs[0]
+
+                            if (targetConfig && targetConfig.showType === 'click') {
+                                createRecordOverlay({ feature: originalFeature, record, modalConfig: targetConfig })
+                            }
+                            return
                         }
+                    }
+
+                    // Regular feature (not clustered or different layer type)
+                    // Ensure the feature belongs to this layer instance
+                    if (fCellKey !== cellKey) return
+
+                    const record = feature.get('markerRecord')
+                    if (!record) return
+
+                    // Determine modal config
+                    const configs = Array.isArray(modalConfigRef.current) ? modalConfigRef.current : [modalConfigRef.current]
+                    const targetConfig = configs.find((c: any) => c?.showType === 'click') || configs[0]
+
+                    if (targetConfig && targetConfig.showType === 'click') {
+                        createRecordOverlay({ feature, record, modalConfig: targetConfig })
                     }
                 }
             }
 
-            // Rotation handling
-            let rotation = 0
-            if (markerTags) {
-                const direction = markerTags.direction || markerTags.course
-                if (typeof direction === 'number') {
-                    rotation = direction * (Math.PI / 180)
+            map.on('singleclick', handleClick)
+
+            return () => {
+                map.un('singleclick', handleClick)
+            }
+        }, [map, cellKey, createRecordOverlay])
+
+        // 更新缓存标记配置
+        React.useEffect(() => { markerScaleRef.current = markerScale }, [markerScale])
+        React.useEffect(() => { highlightRef.current = highlightMarker }, [highlightMarker])
+
+        // 样式函数 - 参考 record.js 的实现逻辑
+        const styleFn = React.useCallback((feature: any) => {
+            const markerRecord = feature.get('markerRecord')
+            const tableGisConfig = feature.get('tableGisConfig')
+            const selected = feature.get('selected')
+            const markerTags = feature.get('markerTags')
+            const markerType = feature.get('markerType') || 'Point'
+            const markerInitStyle = feature.get('markerInitStyle')
+            const markerLabel = feature.get('markerLabel')
+            const visible = feature.get('visible')
+
+            // 检查可见性
+            if (_.isBoolean(visible) && visible === false) {
+                return null
+            }
+
+            let zoomScale = null
+            // 仅对点标记实施缩放
+            if (markerScaleRef.current && markerType === 'Point') {
+                const view = map?.getView()
+                if (view) {
+                    const zoom = view.getZoom() || 0
+                    markerScaleRef.current.forEach((val: any) => {
+                        if (zoom >= val?.from && zoom <= val?.to) {
+                            zoomScale = val?.scale
+                        }
+                    })
                 }
             }
 
-            const styleConfig = {
-                ...markerInitStyle,
-                icon: {
-                    ...markerInitStyle?.icon,
-                    iconSrc: src,
-                    scale,
-                    rotation,
-                    rotateWithView: !!rotation
+            // 选中样式合并 - 与 record.js 保持一致
+            const viewStyle = (selected ? _.merge(_.cloneDeep(marker), highlightRef.current) : marker) || {}
+            const zIndex = selected ? 9 : 0
+            const style = markerInitStyle ? _.merge({}, markerInitStyle, viewStyle) : viewStyle
+            _.set(style, 'text.text', markerLabel)
+
+            if (markerType === 'Point') {
+                // 如果设置了图标脚本（最高优先级）
+                if (viewStyle.iconScript && viewStyle.open) {
+                    const result = parseIconScript({
+                        iconScript: viewStyle.iconScript,
+                        record: markerRecord,
+                        tags: markerTags,
+                        style: olStyle
+                    })
+                    // 如果脚本返回字符串，替换iconsrc；如果返回Style类，直接使用
+                    if (result != null) {
+                        if (_.isString(result)) {
+                            _.set(style, 'icon.iconSrc', result)
+                        } else if (_.isObject(result)) {
+                            return result
+                        }
+                    }
+                } else {
+                    // 处理记录在线图标（第二优先级）
+                    if (markerInitStyle?.onlineIcon && markerInitStyle.onlineIcon.length > 0) {
+                        if (markerRecord?.online) {
+                            _.set(style, 'icon.iconSrc', markerInitStyle.onlineIcon)
+                        } else {
+                            _.set(style, 'icon.iconSrc', markerInitStyle.iconUrl)
+                        }
+                    } else {
+                        // 向后兼容：将旧的 marker.point.src 映射到 icon.iconSrc
+                        // 只有在没有使用新格式 icon.iconSrc 时才进行转换
+                        if (viewStyle.point?.src && !viewStyle.icon?.iconSrc) {
+                            _.set(style, 'icon.iconSrc', viewStyle.point.src)
+                        }
+                    }
+                }
+
+                // 处理方向角度
+                const directionField = tableGisConfig?.course
+                const direction = directionField ? markerTags?.course : markerTags?.direction
+
+                // 图标按 direction 数据点方向旋转
+                _.set(style, 'icon.rotateWithView', true)
+                if (_.isNumber(direction)) {
+                    _.set(style, 'icon.rotation', direction * (Math.PI / 180))
                 }
             }
 
-            return createStyleClass({
-                markerType,
-                style: styleConfig,
-                zIndex: selected ? 9 : 0,
-                zoomScale: scale
+            // style,应包含{ icon, line, polygon, circle, semicircle, text },具体数据结构参考map/schema下对应的文件
+            const baseStyle = createStyleClass({ markerType, style, zIndex, zoomScale, fill: null, stroke: null })
+
+            // 检查是否需要绘制序号（线、面类型）
+            const styleKeyMap: Record<string, string> = {
+                'LineString': 'line',
+                'Polygon': 'polygon',
+                'Circle': 'circle',
+                'Semicircle': 'semicircle'
+            }
+            const styleKey = styleKeyMap[markerType]
+            const enableNumber = styleKey && style?.[styleKey]?.snumber
+
+            if (!enableNumber) {
+                return baseStyle
+            }
+
+            return createNumberLabelStyles({
+                geometry: feature.getGeometry(),
+                baseStyle
             })
-        }, [marker, highlightMarker, map])
+        }, [marker, map])
 
         // 聚合样式函数
         const styleClusterFn = React.useCallback((feature: any) => {
@@ -809,7 +1025,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             if (!mapping) {
                 return allFeatures
             }
-    
+
             if (mapping === 'dataPoint') {
                 const subTags = recordList.flatMap((t: any) => getPointMarkerSubProps(t, tableGisConfig, tableTags, tableId))
 
@@ -966,13 +1182,23 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             // baseSource添加feature时，自动分发到点/非点source
             baseSource.on('addfeature', (e: any) => {
                 const targetFeature = e.feature
-                // const targetFeature = e.feature as Feature<Geometry>;  // 类型断言
                 const type = targetFeature.getGeometry()?.getType()
                 if (type === 'Point') {
-                    // pointSource.addFeature(targetFeature)
                     (pointSource as VectorSource).addFeature(targetFeature as Feature<Geometry>);
                 } else {
                     (nonPointSource as VectorSource).addFeature(targetFeature as Feature<Geometry>);
+                }
+
+                // 如果配置了弹窗，且showType为alway时，创建弹窗
+                const configs = Array.isArray(modalConfigRef.current) ? modalConfigRef.current : [modalConfigRef.current]
+                const hasAlwayShow = configs.some((c: any) => c?.showType === 'alway')
+
+                if (hasAlwayShow) {
+                    const record = targetFeature.get('markerRecord')
+                    const alwayConfig = configs.find((c: any) => c?.showType === 'alway')
+                    if (alwayConfig && record) {
+                        createRecordOverlay({ feature: targetFeature, record, modalConfig: alwayConfig })
+                    }
                 }
             })
 
@@ -1012,8 +1238,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     const clusterLayer = new VectorLayer({
                         source: clusterSource,
                         id: 'cluster_' + cellKey,
-                        layerType: 'cluster',
                         style: styleClusterFn,
+                        properties: { layerType: 'cluster' },
                         ...layerconfig
                     })
                     layerlist.push(clusterLayer)
@@ -1022,10 +1248,10 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     const heatmapLayer = new Heatmap({
                         source: pointSource,
                         id: 'heatmap_' + cellKey,
-                        layerType: 'heatmap',
                         blur: heatmap?.blur || 15,
                         radius: heatmap?.radius || 8,
                         gradient: createHeatmapGradient(heatmap?.gradient || []),
+                        properties: { layerType: 'heatmap' },
                         zIndex: 888
                     })
                     layerlist.push(heatmapLayer)
@@ -1034,9 +1260,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     const layer = new VectorLayer({
                         source: pointSource,
                         id: cellKey,
-                        layerType: 'default',
                         style: styleFn,
-                        properties: { layerType: 'table', cellKey },
+                        properties: { layerType: 'default', cellKey },
                         ...layerconfig
                     })
                     layerlist.push(layer)
@@ -1051,7 +1276,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 source: nonPointSource,
                 id: cellKey,
                 style: styleFn,
-                layerType: 'base',
+                properties: { layerType: 'base' },
                 opacity,
                 zIndex,
                 maxResolution,
@@ -1063,16 +1288,45 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             layerRef.current = [nonPointLayer, ...pointsLayerList]
 
             return () => {
+                // 清除所有overlay
+                if (map) {
+                    const overlays = map.getOverlays().getArray().slice()
+                    overlays.forEach((overlay: any) => {
+                        const overlayId = overlay.getId()
+                        if (overlayId && overlayId.includes(cellKey)) {
+                            map.removeOverlay(overlay)
+                            const element = overlay.getElement()
+                            if (element && element.parentNode) {
+                                element.parentNode.removeChild(element)
+                            }
+                        }
+                    })
+                }
+
                 if (cellKey && map.unset) {
                     try { map.unset(`gisv2.record.pointSource:${cellKey}`) } catch (e) { }
                 }
                 if (map && layerRef.current) {
                     layerRef.current.forEach((l: any) => {
-                        map.removeLayer(l)
+                        try {
+                            map.removeLayer(l)
+                        } catch (e) {
+                            console.warn('Remove layer failed', e)
+                        }
                     })
                 }
+                // Ensure everything is cleared from map to avoid leaks
+                if (map) {
+                    const layersToRemove: any[] = []
+                    map.getLayers().forEach((l: any) => {
+                        if (l.get('id') === cellKey || l.get('id') === 'cluster_' + cellKey || l.get('id') === 'heatmap_' + cellKey) {
+                            layersToRemove.push(l)
+                        }
+                    })
+                    layersToRemove.forEach(l => map.removeLayer(l))
+                }
             }
-        }, [map?.ol_uid])
+        }, [map?.ol_uid, createRecordOverlay])
 
         // Visibility
         React.useEffect(() => {
@@ -1080,7 +1334,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             layerRef.current.forEach((l: any) => l.setVisible(display))
         }, [display])
 
-        // 在挂载后修改配置项更新地图标记点
+        // 在挂载后修改配置项更新地图标记点 - 强制刷新样式
         React.useEffect(() => {
             if (layerRef.current.length > 0) {
                 layerRef.current.forEach((l: any) => {
@@ -1090,6 +1344,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     } else {
                         l.setStyle(styleFn)
                     }
+                    // 强制刷新图层，确保样式更新生效
+                    l.changed()
                 })
             }
         }, [
@@ -1098,7 +1354,9 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             cluster?.color,
             cluster?.font,
             cluster?.background,
-            JSON.stringify(marker)
+            JSON.stringify(marker),
+            styleFn,
+            styleClusterFn
         ])
 
         // 聚合配置更新
@@ -1131,12 +1389,12 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
         // 热力图和聚合显示隐藏时更新layer
         React.useEffect(() => {
             if (!map) return
-            let nonPointLayer
+            let nonPointLayer: any
             layerRef.current?.forEach((layer: any) => {
                 if (!layer) return
                 const layerType = layer.get('layerType')
-                if (!layerType) { nonPointLayer = layer }
-                if (layerType == 'heatmap' || layerType == 'cluster' || layerType == 'default') {
+                if (layerType === 'base') { nonPointLayer = layer }
+                if (layerType === 'heatmap' || layerType === 'cluster' || layerType === 'default' || layerType === 'table') {
                     map.removeLayer(layer)
                 }
             })
@@ -1162,8 +1420,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     const clusterLayer = new VectorLayer({
                         source: clusterSource,
                         id: 'cluster_' + cellKey,
-                        layerType: 'cluster',
                         style: styleClusterFn,
+                        properties: { layerType: 'cluster' },
                         ...layerconfig
                     })
                     layerlist.push(clusterLayer)
@@ -1172,10 +1430,10 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     const heatmapLayer = new Heatmap({
                         source: pointSourceRef.current,
                         id: 'heatmap_' + cellKey,
-                        layerType: 'heatmap',
                         blur: heatmap?.blur || 15,
                         radius: heatmap?.radius || 8,
                         gradient: createHeatmapGradient(heatmap?.gradient || []),
+                        properties: { layerType: 'heatmap' },
                         zIndex: 888
                     })
                     layerlist.push(heatmapLayer)
@@ -1184,8 +1442,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     const layer = new VectorLayer({
                         source: pointSourceRef.current,
                         id: cellKey,
-                        layerType: 'default',
                         style: styleFn,
+                        properties: { layerType: 'default', cellKey },
                         ...layerconfig
                     })
                     layerlist.push(layer)
@@ -1195,10 +1453,16 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
             const pointsLayerList = createPointsLayer()
             pointsLayerList.forEach((l: any) => map.addLayer(l))
-            layerRef.current = [nonPointLayer, ...pointsLayerList]
+            
+            // Rebuild layerRef carefully
+            const newLayers = pointsLayerList
+            if (nonPointLayer) {
+                newLayers.unshift(nonPointLayer)
+            }
+            layerRef.current = newLayers
         }, [cluster?.show, heatmap?.show])
 
-        const { modalConfig, selectConfig, ...restProps } = props
+        const { selectConfig, ...restProps } = props
 
         return (
             <div

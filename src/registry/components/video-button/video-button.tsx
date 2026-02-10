@@ -1,6 +1,7 @@
 import * as React from "react"
 import { ChevronDown, MinusCircle, PlusCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { createAPI } from '@airiot/client'
 
 export type PtzAction =
   | "up"
@@ -22,6 +23,9 @@ export interface ButtonWidgetProps extends React.HTMLAttributes<HTMLDivElement> 
   btnColor?: string
   controlMode?: ButtonWidgetControlMode
   disable?: boolean
+  tableData?: Record<string, any>
+  table?: Record<string, any>
+  buttonType?: 'hk' | 'ez'
   onActionClick?: (action: PtzAction) => void
   onActionStart?: (action: PtzAction) => void
   onActionEnd?: (action: PtzAction) => void
@@ -50,6 +54,9 @@ const ButtonWidget = React.forwardRef<HTMLDivElement, ButtonWidgetProps>(
       btnColor = "#757c99",
       controlMode = "hold",
       disable = false,
+      tableData,
+      table,
+      buttonType = 'hk',
       onActionClick,
       onActionStart,
       onActionEnd,
@@ -57,6 +64,62 @@ const ButtonWidget = React.forwardRef<HTMLDivElement, ButtonWidgetProps>(
     },
     ref
   ) => {
+    const resolvedTableData = React.useMemo(() => {
+      if (tableData?._table && !tableData?.table) {
+        return { ...tableData, table: { id: tableData?._table } }
+      }
+      return tableData
+    }, [tableData])
+
+    const fetchTableSchema = React.useCallback(async (tableId: string) => {
+      const api = createAPI({ resource: 'core/t/schema' })
+      return api.get(tableId)
+    }, [])
+
+    const sendCommand = React.useCallback(async (command: any, controlType?: 'down' | 'up') => {
+      if (!resolvedTableData?.id) return
+      const tableId = resolvedTableData?.table?.id || table?.id
+      if (!tableId) return
+
+      const { json } = await fetchTableSchema(tableId)
+      const groupId = json?.device?.groupId
+
+      if (controlType && groupId) {
+        let urlType = ''
+        if (controlType === 'down') urlType = 'ptzStart'
+        if (controlType === 'up') urlType = 'ptzStop'
+        const api = createAPI({ resource: 'driver/driver/httpProxy' })
+        await api.fetch(`?type=${urlType}&groupId=${groupId}`, {
+          method: 'POST',
+          body: JSON.stringify({ table: tableId, direction: command.id, id: resolvedTableData.id })
+        })
+        return
+      }
+
+      const api = createAPI({ resource: 'driver/driver/command' })
+      await api.fetch('', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...command,
+          title: command.name,
+          tableData: resolvedTableData.id,
+          table: tableId
+        })
+      })
+    }, [resolvedTableData, table, fetchTableSchema])
+
+    const handleCommand = React.useCallback(async (action: PtzAction, controlType?: 'down' | 'up') => {
+      if (!resolvedTableData?.id) return
+      const tableId = resolvedTableData?.table?.id || table?.id
+      if (!tableId) return
+      const { json } = await fetchTableSchema(tableId)
+      const commands = json?.device?.commands || []
+
+      const command = commands.find((item: any) => item.name === action)
+      if (command) {
+        await sendCommand(command, controlType)
+      }
+    }, [resolvedTableData, table, fetchTableSchema, sendCommand])
     const containerSize = React.useMemo<React.CSSProperties>(() => {
       if (typeof size === "number") {
         return { width: size, height: size }
@@ -151,24 +214,33 @@ const ButtonWidget = React.forwardRef<HTMLDivElement, ButtonWidgetProps>(
       (action: PtzAction) => {
         if (disable) return
         onActionStart?.(action)
+        if (buttonType === 'hk') {
+          handleCommand(action, 'down')
+        }
       },
-      [disable, onActionStart]
+      [disable, onActionStart, handleCommand, buttonType]
     )
 
     const callEnd = React.useCallback(
       (action: PtzAction) => {
         if (disable) return
         onActionEnd?.(action)
+        if (buttonType === 'hk') {
+          handleCommand(action, 'up')
+        }
       },
-      [disable, onActionEnd]
+      [disable, onActionEnd, handleCommand, buttonType]
     )
 
     const callClick = React.useCallback(
       (action: PtzAction) => {
         if (disable) return
         onActionClick?.(action)
+        if (buttonType !== 'hk') {
+          handleCommand(action)
+        }
       },
-      [disable, onActionClick]
+      [disable, onActionClick, handleCommand, buttonType]
     )
 
     const renderIcon = (item: ControlItem) => {

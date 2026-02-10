@@ -38,6 +38,10 @@ export interface VideoPeriodsWidgetProps {
    */
   value?: TimeSegment[]
   /**
+   * 设备信息
+   */
+  tableData?: Record<string, any>
+  /**
    * 值变化回调
    */
   onChange?: (value: TimeSegment[]) => void
@@ -68,6 +72,7 @@ const VideoPeriodsWidget = React.forwardRef<HTMLDivElement, VideoPeriodsWidgetPr
       onPeriodChange,
       onRecordingModeChange,
       value = [],
+      tableData,
       onChange,
       showActions = true,
       readonly = false,

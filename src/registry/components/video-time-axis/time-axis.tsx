@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { createAPI } from '@airiot/client'
 
 // 视频记录类型
 export interface VideoRecord {
@@ -28,6 +29,8 @@ export interface TimeAxisWidgetProps extends React.HTMLAttributes<HTMLDivElement
   currentTime?: number
   // 视频记录数组
   videoRecords?: VideoRecord[]
+  // 设备信息
+  tableData?: Record<string, any>
   // 轴配置
   axisConfiguration?: AxisConfiguration
   // 时间改变回调
@@ -46,6 +49,7 @@ const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
       height = 50,
       currentTime: propCurrentTime,
       videoRecords = [],
+      tableData,
       axisConfiguration = {},
       onTimeChange,
       readonly = false,
@@ -60,8 +64,8 @@ const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
     const [tipShow, setTipShow] = React.useState(false)
     const [mouseX, setMouseX] = React.useState(0)
     const [pointTime, setPointTime] = React.useState("")
+    const [records, setRecords] = React.useState<VideoRecord[]>(videoRecords)
 
-    const containerRef = React.useRef<HTMLDivElement>(null)
     const videoCanvasRef = React.useRef<HTMLCanvasElement>(null)
     const scaleCanvasRef = React.useRef<HTMLCanvasElement>(null)
     const interactionCanvasRef = React.useRef<HTMLCanvasElement>(null)
@@ -82,6 +86,45 @@ const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
         setCurrentTime(propCurrentTime)
       }
     }, [propCurrentTime])
+
+    React.useEffect(() => {
+      if (!tableData?.id) {
+        setRecords(videoRecords)
+      }
+    }, [JSON.stringify(videoRecords), tableData?.id])
+
+    const formatUtcDateTime = (value: Date) => {
+      const pad = (num: number) => num.toString().padStart(2, "0")
+      return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}:${pad(value.getSeconds())}Z`
+    }
+
+    const getRecords = React.useCallback(async (targetTime: number) => {
+      if (!tableData?.id || !tableData?.table?.id) return
+      const start = new Date(targetTime * 1000)
+      start.setHours(0, 0, 0, 0)
+      const end = new Date(targetTime * 1000)
+      end.setHours(23, 59, 59, 0)
+      const startTime = formatUtcDateTime(start)
+      const endTime = formatUtcDateTime(end)
+      const api = createAPI({ resource: 'video/playback/records' })
+      const { json } = await api.fetch(`?id=${tableData.id}&startTime=${startTime}&endTime=${endTime}&table=${tableData.table.id}`, {}) as any
+      if (json?.Records?.length) {
+        const mapped = json.Records.map((item: any) => ({
+          ...item,
+          startTime: Date.parse(new Date(item.StartTime).toISOString()) / 1000,
+          endTime: Date.parse(new Date(item.EndTime).toISOString()) / 1000
+        }))
+        setRecords(mapped)
+      } else {
+        setRecords([])
+      }
+    }, [tableData?.id, tableData?.table?.id])
+
+    React.useEffect(() => {
+      if (tableData?.id && currentTime) {
+        getRecords(currentTime)
+      }
+    }, [tableData?.id, currentTime, getRecords])
 
     // 格式化时间
     const formatTime = (timestamp: number) => {
@@ -175,7 +218,7 @@ const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
 
       ctx.clearRect(0, 0, width, height)
 
-      videoRecords.forEach((record) => {
+      records.forEach((record) => {
         let startTimestamp: number
         let endTimestamp: number
 
@@ -209,7 +252,7 @@ const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
           ctx.fillRect(startPoint, 0, w, height)
         }
       })
-    }, [width, height, currentTime, videoRecords])
+    }, [width, height, currentTime, records])
 
     // 重绘
     React.useEffect(() => {
@@ -268,8 +311,8 @@ const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
 
       // 检查边界
       let finalTime = newTime
-      if (videoRecords.length > 0) {
-        const lastRecord = videoRecords[videoRecords.length - 1]
+      if (records.length > 0) {
+        const lastRecord = records[records.length - 1]
         const lastEndTime =
           typeof lastRecord.endTime === "number"
             ? lastRecord.endTime

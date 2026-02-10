@@ -206,9 +206,10 @@ export const createNumberLabelStyles = ({ geometry, baseStyle, textStyle = {} }:
 
 
 // 样式创建相关
-const defaultIcon = 'https://ui.shadcn.com/avatars/01.png' // 临时默认图标
+// 默认标记图标（绿色图钉）- 与主文件保持一致
+const defaultIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDI0IDM2Ij48cGF0aCBmaWxsPSIjNENBRjUwIiBkPSJNMTIgMEMxOC42MjcgMCAyNC41MzczIDI0IDEyIDI0UzAgMjAuMjc0IDAgMTJDMCA1LjM3MyA1LjM3MyAwIDEyIDB6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNyIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg=='
 
-export const createIconClass = ({ iconSrc, color, offsetX, offsetY, scale, rotation, displacementX, displacementY, rotateWithView }: any, zoomScale: any) => {
+export const createIconClass = ({ iconSrc, color, offsetX, offsetY, scale, rotation, displacementX, displacementY, rotateWithView, anchor }: any, zoomScale: any) => {
 
     const baseScale = scale ? scale : 1
     let normalizedSrc = iconSrc
@@ -224,7 +225,7 @@ export const createIconClass = ({ iconSrc, color, offsetX, offsetY, scale, rotat
         src: normalizedSrc || defaultIcon,
         offset: [offsetX || 0, offsetY || 0],
         scale: zoomScale ? zoomScale * baseScale : baseScale,
-        anchor: [0.5, 0.5],
+        anchor: anchor || [0.5, 0.5],
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         rotation: rotation || 0,
@@ -288,31 +289,43 @@ export const createStyleClass = ({
         })
     } else {
         // 简化处理线面圆的样式获取
+        // styleConfig (markerStyle) 包含了 { icon, line, polygon, ... } 以及基础属性 { color, width, ... }
+        
         let typeStyle: any = {}
         if (markerType === 'LineString') typeStyle = line
-        if (markerType === 'Polygon') typeStyle = polygon
-        if (markerType === 'Circle') typeStyle = circle
-        if (markerType === 'Semicircle') typeStyle = semicircle
+        else if (markerType === 'Polygon') typeStyle = polygon
+        else if (markerType === 'Circle') typeStyle = circle
+        else if (markerType === 'Semicircle') typeStyle = semicircle
 
-        const { fill, color, width, lineDash } = typeStyle || {}
+        // typeStyle 是特定类型的样式（如 line: { color: 'blue', width: 8 }）
+        
+        const { fill, fillColor: typeFill, color, width, lineDash } = typeStyle || {}
 
-        let fillColor = fill
-        let strokeColor = color
-        let strokeWidth = width || 2
-        let strokeLineDash = lineDash
+        // 优先级：
+        // 1. typeStyle 中的属性 (line.color, line.width 等)
+        // 2. typeStyle 中的 fill/fillColor
+        // 3. markerStyle 中的全局属性 (markerStyle.color, markerStyle.width 等)
 
-        if (!fillColor) fillColor = markerStyle?.fillColor
-        if (!strokeColor) strokeColor = markerStyle?.color
-        if (!strokeWidth) strokeWidth = markerStyle?.width
+        let finalFillColor = fill || typeFill
+        if (!finalFillColor) finalFillColor = markerStyle?.fillColor
+
+        let finalStrokeColor = color
+        if (!finalStrokeColor) finalStrokeColor = markerStyle?.color
+        
+        let finalStrokeWidth = width
+        if (finalStrokeWidth === undefined) finalStrokeWidth = markerStyle?.width
+        if (finalStrokeWidth === undefined) finalStrokeWidth = 2
+
+        let finalStrokeLineDash = lineDash
 
         return new style.Style({
             text: createTextClass(textStyle || {}),
             zIndex: zIndex || 0,
-            fill: fillColor && new style.Fill({ color: fillColor }),
+            fill: finalFillColor && new style.Fill({ color: finalFillColor }),
             stroke: new style.Stroke({
-                color: strokeColor,
-                width: strokeWidth,
-                lineDash: (strokeLineDash == "dashed" || strokeLineDash == 'dash') ? [10, 10] : null
+                color: finalStrokeColor,
+                width: finalStrokeWidth,
+                lineDash: (finalStrokeLineDash == "dashed" || finalStrokeLineDash == 'dash') ? [10, 10] : null
             }),
         })
     }

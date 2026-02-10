@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { VideoPeriodsWidget, TimeSegment } from '@/registry/blocks/video/video-periods-widget/video-periods-widget'
+import { VideoPeriodsWidget, TimeSegment } from '@/registry/components/video-periods-widget/video-periods-widget'
 import { ComponentConfig } from '@/app/config/types'
 
 export const videoPeriodsPropsConfig = [

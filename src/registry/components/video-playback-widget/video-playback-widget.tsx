@@ -8,6 +8,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { zhCN } from "date-fns/locale"
+import { createAPI } from '@airiot/client'
+import { VideoWidget } from '@/registry/components/video-widget/video-widget'
 
 // 视频记录类型
 export interface VideoRecord {
@@ -43,6 +45,8 @@ export interface VideoPlaybackWidgetProps extends React.HTMLAttributes<HTMLDivEl
   onTimeChange?: (time: number) => void
   // 视频URL
   videoUrl?: string
+  // 设备信息
+  tableData?: Record<string, any>
   // 背景颜色
   backgroundColor?: string
   // 时间轴背景颜色
@@ -277,6 +281,7 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
       currentTime: propCurrentTime,
       onTimeChange,
       videoUrl,
+      tableData,
       backgroundColor = "rgba(13, 14, 27, 0.7)",
       timelineBackground = "#374151",
       timelineScaleColor = "#ffffff",
@@ -292,6 +297,10 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
     )
     const [hms, setHms] = React.useState<TimeHMS>({ hour: "00", minute: "00", second: "00" })
     const [width, setWidth] = React.useState(600)
+    const [records, setRecords] = React.useState<VideoRecord[]>(videoRecords)
+    const [playback, setPlayback] = React.useState<{ current: any; play: boolean }>(() => ({ current: null, play: propIsPlaying }))
+    const isUserInteracting = React.useRef(false)
+    const lastUserActionTime = React.useRef(0)
     const containerRef = React.useRef<HTMLDivElement>(null)
 
     // 同步外部状态
@@ -301,6 +310,7 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
 
     React.useEffect(() => {
       setIsPlaying(propIsPlaying)
+      setPlayback(prev => ({ ...prev, play: propIsPlaying }))
     }, [propIsPlaying])
 
     React.useEffect(() => {
@@ -328,6 +338,86 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
       return () => window.removeEventListener("resize", updateWidth)
     }, [])
 
+    const formatUtcDateTime = (value: Date) => {
+      const pad = (num: number) => num.toString().padStart(2, "0")
+      return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}:${pad(value.getSeconds())}Z`
+    }
+
+    const hasVideoOnDate = (targetTimestamp: number, videoList: VideoRecord[]) => {
+      if (!videoList?.length) return false
+      return videoList.some((record) => {
+        const recordStart = parseInt(record.startTime as any)
+        const recordEnd = parseInt(record.endTime as any)
+        return recordStart <= targetTimestamp && targetTimestamp <= recordEnd
+      })
+    }
+
+    const findNearestVideoRecord = (targetTimestamp: number, videoList: VideoRecord[]) => {
+      if (!videoList?.length) return null
+      let nearest: VideoRecord | null = null
+      let minDistance = Infinity
+      videoList.forEach((record) => {
+        const recordStart = parseInt(record.startTime as any)
+        const recordEnd = parseInt(record.endTime as any)
+        if (recordStart <= targetTimestamp && targetTimestamp <= recordEnd) {
+          nearest = record
+          minDistance = 0
+          return
+        }
+        const distance = Math.min(Math.abs(targetTimestamp - recordStart), Math.abs(targetTimestamp - recordEnd))
+        if (distance < minDistance) {
+          minDistance = distance
+          nearest = record
+        }
+      })
+      return nearest
+    }
+
+    const getRecords = React.useCallback(async (targetDate: Date) => {
+      if (!tableData?.id || !tableData?.table?.id) return
+      const start = new Date(targetDate)
+      start.setHours(0, 0, 0, 0)
+      const end = new Date(targetDate)
+      end.setHours(23, 59, 59, 0)
+      const startTime = formatUtcDateTime(start)
+      const endTime = formatUtcDateTime(end)
+      const api = createAPI({ resource: 'video/playback/records' })
+      const { json } = await api.fetch(`?id=${tableData.id}&startTime=${startTime}&endTime=${endTime}&table=${tableData.table.id}`, {}) as any
+      if (json?.Records?.length) {
+        const mapped = json.Records.map((item: any) => ({
+          ...item,
+          startTime: Date.parse(new Date(item.StartTime).toISOString()) / 1000,
+          endTime: Date.parse(new Date(item.EndTime).toISOString()) / 1000
+        }))
+        setRecords(mapped)
+      } else {
+        setRecords([])
+      }
+    }, [tableData?.id, tableData?.table?.id])
+
+    const getInvite = React.useCallback(async (startTime: string) => {
+      if (!tableData?.id || !tableData?.table?.id) return
+      const endTime = formatUtcDateTime(new Date(new Date(startTime).getTime() + 60 * 60 * 1000))
+      const api = createAPI({ resource: 'video/playback/url' })
+      const { json } = await api.fetch(`?id=${tableData.id}&startTime=${startTime}&endTime=${endTime}&table=${tableData.table.id}`, {}) as any
+      setPlayback(prev => ({
+        ...prev,
+        current: {
+          ...json,
+          startTime,
+          startTimestamp: Math.floor(new Date(startTime).getTime() / 1000)
+        }
+      }))
+      setIsPlaying(true)
+      onPlayChange?.(true)
+    }, [tableData?.id, tableData?.table?.id, onPlayChange])
+
+    React.useEffect(() => {
+      if (tableData?.id) {
+        getRecords(date)
+      }
+    }, [tableData?.id, date, getRecords])
+
     // 处理日期改变
     const handleDateChange = (newDate: Date | undefined) => {
       if (newDate) {
@@ -336,6 +426,9 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
         setCurrentTime(dayStart)
         setHms({ hour: "00", minute: "00", second: "00" })
         onDateChange?.(newDate)
+        if (tableData?.id) {
+          getRecords(newDate)
+        }
       }
     }
 
@@ -343,21 +436,42 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
     const handlePlayToggle = () => {
       const newState = !isPlaying
       setIsPlaying(newState)
+      setPlayback(prev => ({ ...prev, play: newState }))
       onPlayChange?.(newState)
     }
 
     // 处理时间选择器改变
     const handleHmsChange = (value: TimeHMS) => {
+      lastUserActionTime.current = Date.now()
+      isUserInteracting.current = true
       setHms(value)
       const dayStart = new Date(date)
       dayStart.setHours(parseInt(value.hour), parseInt(value.minute), parseInt(value.second), 0)
       const newTime = Math.floor(dayStart.getTime() / 1000)
       setCurrentTime(newTime)
       onTimeChange?.(newTime)
+      if (tableData?.id) {
+        if (hasVideoOnDate(newTime, records)) {
+          getInvite(formatUtcDateTime(new Date(newTime * 1000)))
+        } else {
+          const nearest = findNearestVideoRecord(newTime, records)
+          if (nearest) {
+            const nearestStart = parseInt(nearest.startTime as any)
+            setCurrentTime(nearestStart)
+            const nearestDate = new Date(nearestStart * 1000)
+            getInvite(formatUtcDateTime(nearestDate))
+          }
+        }
+      }
+      setTimeout(() => {
+        isUserInteracting.current = false
+      }, 500)
     }
 
     // 处理时间轴时间改变
     const handleTimelineChange = (time: number) => {
+      lastUserActionTime.current = Date.now()
+      isUserInteracting.current = true
       setCurrentTime(time)
       const d = new Date(time * 1000)
       setHms({
@@ -366,6 +480,22 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
         second: d.getSeconds().toString().padStart(2, "0"),
       })
       onTimeChange?.(time)
+      if (tableData?.id) {
+        if (hasVideoOnDate(time, records)) {
+          getInvite(formatUtcDateTime(d))
+        } else {
+          const nearest = findNearestVideoRecord(time, records)
+          if (nearest) {
+            const nearestStart = parseInt(nearest.startTime as any)
+            setCurrentTime(nearestStart)
+            const nearestDate = new Date(nearestStart * 1000)
+            getInvite(formatUtcDateTime(nearestDate))
+          }
+        }
+      }
+      setTimeout(() => {
+        isUserInteracting.current = false
+      }, 500)
     }
 
     // 判断是否为今天
@@ -412,12 +542,15 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
           className="relative flex items-center justify-center"
           style={{ height: videoHeight, backgroundColor }}
         >
-          {videoUrl ? (
-            <video
-              src={videoUrl}
-              className="w-full h-full object-contain"
-              controls={false}
-              autoPlay={isPlaying}
+          {playback.current?.url ? (
+            <VideoWidget
+              videoAction="record"
+              playback={playback}
+              type={playback.current?.protocol}
+              url={playback.current?.url}
+              tableData={tableData}
+              playbackStartTime={playback.current?.startTime}
+              playbackStartTimestamp={playback.current?.startTimestamp}
             />
           ) : (
             <div className="text-gray-400 text-sm">暂无视频</div>
@@ -451,7 +584,7 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
             width={width}
             height={timelineHeight}
             currentTime={currentTime}
-            videoRecords={videoRecords}
+            videoRecords={records}
             onTimeChange={handleTimelineChange}
             background={timelineBackground}
             scaleColor={timelineScaleColor}

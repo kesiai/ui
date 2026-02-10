@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { VideoPlaybackWidget, VideoRecord } from '@/registry/blocks/video/video-playback-widget/video-playback-widget'
+import { VideoPlaybackWidget, VideoRecord } from '@/registry/components/video-playback-widget/video-playback-widget'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
 
 // 属性配置

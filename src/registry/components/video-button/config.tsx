@@ -1,7 +1,31 @@
-import { ButtonWidget } from '@/registry/blocks/video/video-button/video-button'
+import { ButtonWidget } from '@/registry/components/video-button/video-button'
 import { ComponentConfig } from '@/app/config/types'
 
 export const buttonControlPropsConfig = [
+  {
+    name: 'tableData',
+    label: '设备',
+    type: 'json' as const,
+    default: JSON.stringify({}, null, 2),
+    description: '选择设备表数据'
+  },
+  {
+    name: 'table',
+    label: '设备表',
+    type: 'json' as const,
+    default: JSON.stringify({}, null, 2),
+    description: '设备表信息'
+  },
+  {
+    name: 'buttonType',
+    label: '云台类型',
+    type: 'select' as const,
+    default: 'hk',
+    options: [
+      { value: 'hk', label: '海康' },
+      { value: 'ez', label: '萤石' }
+    ]
+  },
   {
     name: 'size',
     label: '尺寸',
@@ -42,6 +66,9 @@ export const buttonControlPropsConfig = [
 ]
 
 export const buttonControlDefaultProps = {
+  tableData: {},
+  table: {},
+  buttonType: 'hk' as const,
   size: 220,
   bg: '#222641',
   btnColor: '#757c99',
@@ -59,6 +86,9 @@ const renderbuttonControlPreview = (props: Record<string, any>) => {
           btnColor={props.btnColor}
           controlMode={props.controlMode}
           disable={props.disable}
+          tableData={props.tableData}
+          table={props.table}
+          buttonType={props.buttonType}
           cellKey="preview"
         />
       </div>
@@ -73,6 +103,9 @@ const renderbuttonControlCodePreview = (props: Record<string, any>) => {
   btnColor="${props.btnColor}"
   controlMode="${props.controlMode}"
   disable={${props.disable}}
+  tableData={tableData}
+  table={table}
+  buttonType="${props.buttonType}"
   cellKey="your-cell-key"
 />`
 }

@@ -1,4 +1,4 @@
-import { ButtonWidget } from '@/registry/blocks/video/video-button/video-button'
+import { ButtonWidget } from '@/registry/components/video-button/video-button'
 import { ComponentConfig } from '@/app/config/types'
 
 export const buttonControlPropsConfig = [

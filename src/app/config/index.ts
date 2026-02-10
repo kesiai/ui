@@ -11,7 +11,8 @@ const categoryConfig: Record<string, { name: string; icon: string; order: number
   'form': { name: '表单组件', icon: '📝', order: 3 },
   'chart': { name: '图表组件', icon: '📊', order: 4 },
   'gis': { name: 'GIS组件', icon: '🗺️', order: 5 },
-  'business': { name: '业务组件', icon: '💼', order: 6 }
+  'video': { name: '视频组件', icon: '📹', order: 6 },
+  'business': { name: '业务组件', icon: '💼', order: 7 }
 }
 
 // 根据组件 ID 判断分类
@@ -56,6 +57,11 @@ function getCategoryByComponentId(componentId: string): string {
   const gisComponents = [ 'gis-' ]
   if (gisComponents.includes(componentId) || componentId.startsWith('gis-')) {
     return 'gis'
+  }
+
+  // 视频组件
+  if (componentId.startsWith('video-')) {
+    return 'video'
   }
 
   // 默认归为业务组件

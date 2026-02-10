@@ -1,0 +1,20 @@
+{
+  "name": "filter-datetime",
+  "type": "registry:component",
+  "title": "Filter Datetime",
+  "description": "Filter Datetime - 组件",
+  "dependencies": [
+    "lodash",
+    "date-fns"
+  ],
+  "registryDependencies": [
+    "http://localhost:3000/r/form-date.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/filter-datetime/filter-datetime.tsx",
+      "type": "registry:component",
+      "content": "import _ from 'lodash'\nimport { format } from 'date-fns'\nimport { FormDate } from '@/registry/components/form-date/form-date'\n\nconst FilterDateRange = (props: any) => {\n\n  const datetimeFormat = props.datetimeFormat || 'YYYY-MM-DD HH:mm:ss'\n  // 将 moment 格式转换为 date-fns 格式\n  const dateFormat = datetimeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd')\n\n  const onChange = (fieldKey: 'gte' | 'lte', newValue: Date | null) => {\n    const { onChange, value } = props\n    onChange({\n      ...value,\n      [fieldKey]: newValue ? format(newValue, dateFormat) : null,\n      rule: 'range'\n    })\n  }\n\n  const handleStartChange = (value: string) => {\n    const date = value ? new Date(value) : null\n    onChange('gte', date)\n  }\n\n  const handleEndChange = (value: string) => {\n    const date = value ? new Date(value) : null\n    onChange('lte', date)\n  }\n\n  const inputValue = props.value\n  const startValueStr = inputValue?.gte\n  const endValueStr = inputValue?.lte\n\n  return (\n    <div className=\"flex items-center gap-2\">\n      <div className=\"flex-1\">\n        <FormDate\n          allowClear\n          picker=\"dateTime\"\n          value={startValueStr || undefined}\n          onChange={handleStartChange}\n          placeholder=\"起始\"\n        />\n      </div>\n      <span className=\"text-muted-foreground\">到</span>\n      <div className=\"flex-1\">\n        <FormDate\n          allowClear\n          picker=\"dateTime\"\n          value={endValueStr || undefined}\n          onChange={handleEndChange}\n          placeholder=\"结束\"\n        />\n      </div>\n    </div>\n  )\n}\n\nFilterDateRange.displayName = \"FilterDateRange\"\n\nexport { FilterDateRange }\n"
+    }
+  ]
+}

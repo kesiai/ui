@@ -1,0 +1,15 @@
+{
+  "name": "video-shared-utils",
+  "type": "registry:component",
+  "title": "Video Shared Utils",
+  "description": "Video Shared Utils - 组件",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/video-shared-utils.ts",
+      "type": "registry:component",
+      "content": "import { useEffect, useState } from 'react';\n\nexport interface TableConfig {\n  id: string;\n  name: string;\n  [key: string]: any;\n}\n\n/**\n * Hook to manage video configuration based on a data table.\n * \n * @param table The selected data table configuration.\n * @param defaultUrl The static URL provided in props.\n * @returns { videoUrl, loading, error }\n */\nexport const useVideoTableConfig = (table: TableConfig | undefined | null, defaultUrl: string | undefined) => {\n  const [videoUrl, setVideoUrl] = useState(defaultUrl);\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState<string | null>(null);\n\n  useEffect(() => {\n    // If no table is selected, use the default static URL\n    if (!table || !table.id) {\n      setVideoUrl(defaultUrl);\n      return;\n    }\n\n    let isMounted = true;\n    setLoading(true);\n\n    const fetchConfig = async () => {\n      try {\n        // NOTE: This logic simulates the requirement: \"call interface based on data table, return interface address\".\n        // Since the reference implementation (workspace-v4) is not accessible, \n        // this is a placeholder for the actual API call.\n        // You should implement the actual fetch logic here.\n        \n        // Example:\n        // const res = await fetch(`/api/video/get_config?tableId=${table.id}`);\n        // const data = await res.json();\n        // if (isMounted) setVideoUrl(data.url);\n\n        console.log(`[VideoTableConfig] Fetching config for table: ${table.id}`);\n        \n        // Placeholder: currently just falls back to defaultUrl or you could mock a response\n        if (isMounted) {\n            // For now, we assume the table might map to a URL, but without the backend, \n            // we keep the defaultUrl or set it to empty if specific logic requires it.\n            setVideoUrl(defaultUrl); \n        }\n\n      } catch (err) {\n        console.error(\"Failed to fetch video table config:\", err);\n        if (isMounted) setError(\"Failed to load configuration\");\n      } finally {\n        if (isMounted) setLoading(false);\n      }\n    };\n\n    fetchConfig();\n\n    return () => {\n      isMounted = false;\n    };\n  }, [table, defaultUrl]);\n\n  return { videoUrl, loading, error };\n};\n"
+    }
+  ]
+}

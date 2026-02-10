@@ -1,0 +1,15 @@
+{
+  "name": "form-bytes-array",
+  "type": "registry:component",
+  "title": "Form Bytes Array",
+  "description": "Form Bytes Array - 组件",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/form-bytes-array/form-bytes-array.tsx",
+      "type": "registry:component",
+      "content": "import * as React from 'react'\nimport { Input } from '@/components/ui/input'\n\nexport interface FormBytesArrayProps {\n  input?: {\n    value?: string\n    onChange?: (value: string) => void\n  }\n  field?: {\n    schema?: {\n      placeholder?: string\n      defaultVal?: string\n      disabled?: boolean\n    }\n    filter?: any\n  }\n  disabled?: boolean\n  meta?: any\n  record?: any\n}\n\nconst FormBytesArray: React.FC<FormBytesArrayProps> = (props) => {\n  const { input, field, disabled } = props\n  const { onChange, value } = input || {}\n  const schema = field?.schema || {}\n\n  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    onChange?.(e.target.value)\n  }\n\n  return (\n    <Input\n      value={value || ''}\n      onChange={handleChange}\n      placeholder={schema.placeholder || '请输入内容'}\n      disabled={disabled ?? schema.disabled}\n    />\n  )\n}\n\nexport { FormBytesArray }\nexport default FormBytesArray\n"
+    }
+  ]
+}

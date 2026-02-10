@@ -138,6 +138,20 @@ function extractRegistryDepsFromContent(content) {
   return { registryDeps: Array.from(deps), libDeps: Array.from(libDeps) };
 }
 
+// 新增：提取相对 CSS 导入（支持 .css 和 .module.css）
+function extractRelativeCssImports(content, currentFileDir) {
+  const cssImports = new Set(); // 使用 Set 去重
+  // 匹配 import './xxx.css' 或 import styles from './xxx.module.css'
+  const regex = /import[^'"]*['"](\.[^'"]*\.css)['"]/g;
+  let match;
+  while ((match = regex.exec(content))) {
+    const relCssPath = match[1];
+    const absCssPath = path.resolve(currentFileDir, relCssPath);
+    cssImports.add(absCssPath);
+  }
+  return Array.from(cssImports);
+}
+
 // 生成组件名称
 function generateComponentName(folder, relativePath) {
   // 移除文件扩展名
@@ -214,7 +228,7 @@ async function buildRegistry() {
         // 提取注册表依赖（分离组件依赖和 lib 依赖）
         const { registryDeps, libDeps } = extractRegistryDepsFromContent(fileContent);
 
-        // 构建文件列表（包含主文件和 lib 依赖文件）
+        // 构建文件列表
         const fileList = [
           {
             path: `registry/${folder}/${file.replace(/\\/g, '/')}`,
@@ -223,9 +237,8 @@ async function buildRegistry() {
           },
         ];
 
-        // 如果有 lib 依赖，将这些 lib 文件也添加到 files 中
+        // 添加 lib 依赖文件
         for (const libDep of libDeps) {
-          // lib-datasource-utils -> datasource-utils
           const libFileName = libDep.replace(/^lib-/, '');
           const libPath = `registry/lib/${libFileName}.ts`;
           const libAbsPath = path.join(REGISTRY_ROOT, 'lib', libFileName + '.ts');
@@ -242,10 +255,32 @@ async function buildRegistry() {
           }
         }
 
+        // 新增：添加相对导入的 CSS 文件
+        const currentFileDir = path.dirname(absFilePath);
+        const cssAbsPaths = extractRelativeCssImports(fileContent, currentFileDir);
+
+        for (const absCssPath of cssAbsPaths) {
+          try {
+            const cssContent = await fs.readFile(absCssPath, 'utf-8');
+
+            // 计算在 registry 中的路径
+            const relCssFromFolder = path.relative(absFolder, absCssPath);
+            const registryCssPath = `registry/${folder}/${relCssFromFolder.replace(/\\/g, '/')}`;
+
+            fileList.push({
+              path: registryCssPath,
+              type: 'registry:style',
+              content: cssContent.trim(),
+            });
+
+            console.log(`    📄 添加样式文件: ${registryCssPath}`);
+          } catch (err) {
+            console.warn(`  ⚠️  无法读取 CSS 文件: ${absCssPath} (被 ${file} 导入)`);
+          }
+        }
+
         // 构建注册表项
-        // 为 registryDependencies 添加完整 URL 前缀
         const processedRegistryDeps = registryDeps.map(dep => {
-          // 如果已经是完整 URL，保持不变；否则添加前缀
           return dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`;
         });
 
@@ -265,7 +300,7 @@ async function buildRegistry() {
         const componentJsonPath = path.join(OUTPUT_DIR, `${name}.json`);
         await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
 
-        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${libDeps.length} lib files)`);
+        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${libDeps.length} lib files, ${cssAbsPaths.size} css files)`);
       }
     } catch (e) {
       console.error(`  ⚠️  跳过文件夹 ${folder}:`, e.message);

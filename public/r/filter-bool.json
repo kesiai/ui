@@ -1,0 +1,17 @@
+{
+  "name": "filter-bool",
+  "type": "registry:component",
+  "title": "Filter Bool",
+  "description": "Filter Bool - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/filter-bool/filter-bool.tsx",
+      "type": "registry:component",
+      "content": "import React from 'react'\nimport _ from 'lodash'\nimport { Switch } from '@/components/ui/switch'\nimport { Checkbox } from '@/components/ui/checkbox'\nimport { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'\n\nconst FilterBool = (props: any) => {\n  const { name, value, onChange, field } = props\n  const disabled = (value === null || value === undefined || value === '')\n\n  return (\n    <>\n      <TooltipProvider>\n        <Tooltip>\n          <TooltipTrigger asChild>\n            {disabled ? (\n              <Checkbox\n                checked={false}\n                onCheckedChange={() => onChange(true)}\n              />\n            ) : (\n              <Checkbox\n                checked={true}\n                onCheckedChange={() => onChange(null)}\n              />\n            )}\n          </TooltipTrigger>\n          <TooltipContent>\n            <p>使用此过滤</p>\n          </TooltipContent>\n        </Tooltip>\n      </TooltipProvider>\n      {' '}\n      <Switch\n        checked={value}\n        disabled={disabled}\n        onCheckedChange={onChange}\n      />\n      <span className=\"ml-2 text-sm text-muted-foreground\">\n        {value ? (field.boolLabel?.[0] || '真') : (field.boolLabel?.[1] || '假')}\n      </span>\n    </>\n  )\n}\nFilterBool.displayName = \"FilterBool\"\nexport { FilterBool }\n"
+    }
+  ]
+}

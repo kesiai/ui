@@ -1,0 +1,15 @@
+{
+  "name": "mobile-nav-bar",
+  "type": "registry:component",
+  "title": "Mobile Nav Bar",
+  "description": "Mobile Nav Bar - 组件",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/mobile-nav-bar/mobile-nav-bar.tsx",
+      "type": "registry:component",
+      "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { ArrowLeft } from \"lucide-react\"\n\nexport interface MobileNavBarProps extends React.HTMLAttributes<HTMLElement> {\n  /**\n   * 标题文字\n   */\n  title?: string\n  /**\n   * 返回区域文字\n   */\n  back?: string\n  /**\n   * 是否显示返回箭头\n   */\n  backArrow?: boolean\n  /**\n   * 左侧图标 URL\n   */\n  icon?: string\n  /**\n   * 返回按钮点击回调\n   */\n  onBack?: () => void\n  /**\n   * 是否禁用返回功能\n   */\n  disableBack?: boolean\n}\n\nconst MobileNavBar = React.forwardRef<HTMLElement, MobileNavBarProps>(\n  (\n    {\n      className,\n      title,\n      back,\n      backArrow = true,\n      icon,\n      onBack,\n      disableBack = false,\n      ...props\n    },\n    ref\n  ) => {\n    const handleBackClick = React.useCallback(() => {\n      if (disableBack) return\n\n      if (onBack) {\n        onBack()\n      } else {\n        // 默认使用浏览器历史回退\n        window.history.back()\n      }\n    }, [onBack, disableBack])\n\n    return (\n      <header\n        ref={ref}\n        className={cn(\n          \"mobile-nav-bar flex items-center h-11 px-4 bg-white border-b border-slate-200\",\n          className\n        )}\n        {...props}\n      >\n        {/* 左侧区域 */}\n        <div className=\"flex items-center gap-2\">\n          {icon ? (\n            <img src={icon} alt=\"\" className=\"h-5 w-5\" />\n          ) : (\n            (back || backArrow) && (\n              <button\n                type=\"button\"\n                onClick={handleBackClick}\n                disabled={disableBack}\n                className={cn(\n                  \"flex items-center gap-1 text-slate-600 hover:text-slate-900 transition-colors\",\n                  disableBack && \"pointer-events-none opacity-50\"\n                )}\n              >\n                {backArrow && <ArrowLeft className=\"h-4 w-4\" />}\n                {back && <span className=\"text-sm\">{back}</span>}\n              </button>\n            )\n          )}\n        </div>\n\n        {/* 标题 */}\n        <div className=\"flex-1 text-center\">\n          <h1 className=\"text-base font-medium text-slate-900 truncate\">{title}</h1>\n        </div>\n\n        {/* 右侧占位，保持标题居中 */}\n        <div className=\"flex items-center gap-2\" style={{ width: icon ? '24px' : (back || backArrow) ? 'auto' : '0' }}>\n          {icon ? null : <div className=\"h-4 w-4\" />}\n        </div>\n      </header>\n    )\n  }\n)\nMobileNavBar.displayName = \"MobileNavBar\"\n\nexport { MobileNavBar }\n"
+    }
+  ]
+}

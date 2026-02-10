@@ -1,4 +1,4 @@
-import { MapContainer } from '@/registry/blocks/gis/gis-map-core/map-container'
+import { MapContainer } from '@/registry/components/gis-map-core/gis-map-core'
 import { ComponentConfig } from '../types'
 
 export const Container2dPropsConfig = [

@@ -4,6 +4,13 @@ import { ComponentConfig } from '@/app/config/types'
 
 export const videoPeriodsPropsConfig = [
   {
+    name: 'tableData',
+    label: '设备',
+    type: 'json' as const,
+    default: JSON.stringify({}, null, 2),
+    description: '选择设备表数据'
+  },
+  {
     name: 'period',
     label: '周期类型',
     type: 'select' as const,
@@ -41,6 +48,7 @@ export const videoPeriodsPropsConfig = [
 ]
 
 export const videoPeriodsDefaultProps = {
+  tableData: {},
   period: 'week' as const,
   recordingMode: 'CMR' as const,
   showActions: true,
@@ -82,6 +90,7 @@ const VideoPeriodsPreview = ({ props }: { props: Record<string, any> }) => {
           recordingMode={props.recordingMode}
           showActions={props.showActions}
           readonly={props.readonly}
+          tableData={props.tableData}
           cellKey="preview"
           value={segments}
           onChange={(newSegments) => setSegments(newSegments)}
@@ -101,6 +110,7 @@ const renderVideoPeriodsCodePreview = (props: Record<string, any>) => {
   recordingMode="${props.recordingMode}"
   showActions={${props.showActions}}
   readonly={${props.readonly}}
+  tableData={tableData}
   cellKey="your-cell-key"
   value={timeSegments}
   onChange={handleTimeSegmentsChange}

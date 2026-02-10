@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { ComponentConfig } from '../config/types'
 import { FormControl } from './FormControl'
 
@@ -14,10 +14,25 @@ export const PropsFormPanel: React.FC<PropsFormPanelProps> = ({ config, props, o
     return config.propsConfig.some(p => p.name === 'submit')
   }, [config.propsConfig])
 
+  // 处理属性值变化，当 tableId 变化时清空依赖它的配置项
+  const handleChange = useCallback((name: string, value: any) => {
+    // 先更新当前属性值
+    onChange(name, value)
+
+    // 如果修改的是 tableId，清空所有依赖于它的配置项
+    if (name === 'tableId') {
+      config.propsConfig.forEach(propConfig => {
+        if (propConfig.dependsOn === 'tableId') {
+          onChange(propConfig.name, propConfig.default)
+        }
+      })
+    }
+  }, [config.propsConfig, onChange])
+
   // 生成新的 submit 值
   const handleRefresh = () => {
     const newSubmit = Date.now().toString() + Math.random().toString(36).substring(2, 9)
-    onChange('submit', newSubmit)
+    handleChange('submit', newSubmit)
   }
 
   return (
@@ -55,14 +70,15 @@ export const PropsFormPanel: React.FC<PropsFormPanelProps> = ({ config, props, o
             <FormControl
               config={propConfig}
               value={propValue}
-              onChange={onChange}
+              onChange={handleChange}
+              allValues={props} // 传入所有 props 值，用于处理依赖关系
             />
           </div>
         )
       })}
 
       {/* 渲染自定义表单（如果有） */}
-      {config.renderCustomForm && config.renderCustomForm(props, onChange)}
+      {config.renderCustomForm && config.renderCustomForm(props, handleChange)}
 
       {/* 代码预览 */}
       <div className="mt-6">

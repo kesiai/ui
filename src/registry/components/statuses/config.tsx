@@ -1,4 +1,5 @@
 import { Statuses } from '@/registry/components/statuses/statuses'
+import ViewModel from '../view-model/view-model'
 import { ComponentConfig } from '@/app/config/types'
 
 // 示例设备配置
@@ -81,133 +82,53 @@ const exampleDeviceValues = {
   }
 }
 
-// 预设设备表选项
-const tableOptions = [
-  { value: JSON.stringify({ id: 'table1', name: '设备表1' }, null, 2), label: '设备表1' },
-  { value: JSON.stringify({ id: 'table2', name: '温度监控表' }, null, 2), label: '温度监控表' },
-  { value: JSON.stringify({ id: 'table3', name: '湿度监控表' }, null, 2), label: '湿度监控表' }
-]
-
-// 预设设备列表选项
-const nodesOptions = [
-  {
-    value: JSON.stringify([
-      { id: 'device1', name: '设备1' },
-      { id: 'device2', name: '设备2' }
-    ], null, 2),
-    label: '2个设备'
-  },
-  {
-    value: JSON.stringify([
-      { id: 'device1', name: '温度传感器1' },
-      { id: 'device2', name: '温度传感器2' },
-      { id: 'device3', name: '温度传感器3' }
-    ], null, 2),
-    label: '3个温度传感器'
-  },
-  {
-    value: JSON.stringify([
-      { id: 'sensor1', name: '传感器A' },
-      { id: 'sensor2', name: '传感器B' },
-      { id: 'sensor3', name: '传感器C' },
-      { id: 'sensor4', name: '传感器D' }
-    ], null, 2),
-    label: '4个传感器'
-  }
-]
-
-// 预设数据点配置选项
-const tagsOptions = [
-  {
-    value: JSON.stringify([
-      {
-        tags: { id: 'temp', name: '温度' },
-        status: [
-          { name: '正常', activeType: 'activeKey' as const, activeKey: 'normal', text: '正常', bgColor: '#22c55e', color: '#ffffff' },
-          { name: '警告', activeType: 'activeKey' as const, activeKey: 'warning', text: '警告', bgColor: '#f59e0b', color: '#ffffff' },
-          { name: '错误', activeType: 'activeKey' as const, activeKey: 'error', text: '错误', bgColor: '#ef4444', color: '#ffffff' }
-        ]
-      },
-      {
-        tags: { id: 'humidity', name: '湿度' },
-        status: [
-          { name: '正常', activeType: 'range' as const, minKey: 0, maxKey: 60, text: '正常', bgColor: '#22c55e', color: '#ffffff' },
-          { name: '警告', activeType: 'range' as const, minKey: 60, maxKey: 80, text: '警告', bgColor: '#f59e0b', color: '#ffffff' }
-        ]
-      }
-    ], null, 2),
-    label: '温度+湿度（2个数据点）'
-  },
-  {
-    value: JSON.stringify([
-      {
-        tags: { id: 'temp', name: '温度' },
-        status: [
-          { name: '正常', activeType: 'range' as const, minKey: 0, maxKey: 30, text: '正常', bgColor: '#22c55e', color: '#ffffff' },
-          { name: '偏高', activeType: 'range' as const, minKey: 30, maxKey: 50, text: '偏高', bgColor: '#f59e0b', color: '#ffffff' },
-          { name: '过高', activeType: 'range' as const, minKey: 50, maxKey: 100, text: '过高', bgColor: '#ef4444', color: '#ffffff' }
-        ]
-      }
-    ], null, 2),
-    label: '仅温度（3个状态范围）'
-  },
-  {
-    value: JSON.stringify([
-      {
-        tags: { id: 'status', name: '运行状态' },
-        status: [
-          { name: '运行中', activeType: 'activeKey' as const, activeKey: 'running', text: '运行中', bgColor: '#22c55e', color: '#ffffff' },
-          { name: '停止', activeType: 'activeKey' as const, activeKey: 'stopped', text: '停止', bgColor: '#6b7280', color: '#ffffff' },
-          { name: '故障', activeType: 'activeKey' as const, activeKey: 'fault', text: '故障', bgColor: '#ef4444', color: '#ffffff' }
-        ]
-      }
-    ], null, 2),
-    label: '运行状态（3个枚举值）'
-  }
-]
-
 export const statusesPropsConfig = [
   {
-    name: 'table',
+    name: 'tableId',
     label: '设备表',
-    type: 'select' as const,
-    default: tableOptions[0].value,
-    options: tableOptions,
-    description: '选择预设的设备表配置'
+    type: 'table-id' as const,
+    default: null,
+    description: '设备表ID，用于从表获取设备数据'
   },
   {
     name: 'nodes',
     label: '设备列表',
-    type: 'select' as const,
-    default: nodesOptions[0].value,
-    options: nodesOptions,
-    description: '选择预设的设备列表'
+    type: 'table-data' as const,
+    default: [],
+    dependsOn: 'tableId', // 依赖 tableId 配置项
+    multiple: true,
+    description: '从设备表中选择设备，支持多选'
   },
   {
     name: 'tags',
     label: '数据点配置',
-    type: 'select' as const,
-    default: tagsOptions[0].value,
-    options: tagsOptions,
-    description: '选择预设的数据点配置，包含状态显示规则'
+    type: 'table-tags' as const,
+    default: [],
+    dependsOn: 'tableId', // 依赖 tableId 配置项
+    multiple: true,
+    description: '从设备表中选择数据点（tag类型的字段），支持多选'
   },
   {
-    name: 'tagTimeoutState',
-    label: '数据点超时状态',
-    type: 'text' as const,
-    default: JSON.stringify({
-      open: false,
-      text: '离线',
-      bgColor: '#6b7280',
-      color: '#ffffff'
-    }, null, 2),
-    description: '数据点超时状态配置，JSON格式'
+    name: 'dataPointStatus',
+    label: '数据点状态',
+    type: 'json' as const,
+    default: [
+      {
+        activeType: 'activeKey',
+        activeKey: 'offline',
+        text: '离线',
+        bgColor: '#6b7280',
+        color: '#ffffff'
+      }
+    ],
+    description: '数据点状态配置，JSON数组格式。支持条件类型：activeKey(固定值)、range(范围值)'
   },
   {
     name: 'mock',
     label: '模拟数据',
     type: 'text' as const,
     default: '',
+    placeholder: '例如: {"device1": {"temp": "normal"}} - 设备ID为键，数据点ID为值',
     description: '模拟数据，用于预览效果'
   },
   {
@@ -316,15 +237,18 @@ export const statusesPropsConfig = [
 ]
 
 export const statusesDefaultProps = {
-  table: tableOptions[0].value,
-  nodes: nodesOptions[0].value,
-  tags: tagsOptions[0].value,
-  tagTimeoutState: {
-    open: false,
-    text: '离线',
-    bgColor: '#6b7280',
-    color: '#ffffff'
-  },
+  tableId: null,
+  nodes: [],
+  tags: [],
+  dataPointStatus: [
+    {
+      activeType: 'activeKey',
+      activeKey: 'offline',
+      text: '离线',
+      bgColor: '#6b7280',
+      color: '#ffffff'
+    }
+  ],
   mock: '',
   blinkOnStateChange: false,
   flex: {
@@ -341,10 +265,22 @@ export const statusesDefaultProps = {
 
 const renderStatusesPreview = (props: Record<string, any>) => {
   // 解析JSON字符串的props
-  const table = typeof props.table === 'string' ? JSON.parse(props.table) : props.table
-  const nodes = typeof props.nodes === 'string' ? JSON.parse(props.nodes) : props.nodes || exampleDevices
-  const tags = typeof props.tags === 'string' ? JSON.parse(props.tags) : props.tags || exampleDataPoints
-  const tagTimeoutState = typeof props.tagTimeoutState === 'string' ? JSON.parse(props.tagTimeoutState) : props.tagTimeoutState
+  let nodes = Array.isArray(props.nodes) ? props.nodes : (typeof props.nodes === 'string' ? JSON.parse(props.nodes) : props.nodes || exampleDevices)
+
+  // 如果 nodes 是字符串数组（从 table-data 选择器返回的 ID），需要转换为 DeviceConfig 对象
+  // 注意：由于我们无法在这里再次查询表数据，暂时使用 ID 作为 name
+  if (nodes.length > 0 && typeof nodes[0] === 'string') {
+    nodes = nodes.map((id: string) => ({ id, name: id }))
+  }
+
+  // 处理 tags：从新的简单格式 [{ id, name }] 转换为组件期望的格式
+  const tags = Array.isArray(props.tags)
+    ? props.tags.map((tag: any) => ({
+        tags: { id: tag.id, name: tag.name },
+        status: []
+      }))
+    : (typeof props.tags === 'string' ? JSON.parse(props.tags) : props.tags || exampleDataPoints)
+  const dataPointStatus = props.dataPointStatus || []
   const flex = typeof props.flex === 'string' ? JSON.parse(props.flex) : props.flex
   const deviceValues = typeof props.deviceValues === 'string' ? JSON.parse(props.deviceValues) : props.deviceValues || exampleDeviceValues
 
@@ -391,18 +327,33 @@ const renderStatusesPreview = (props: Record<string, any>) => {
           </div>
         </div>
         <div className="flex items-center justify-center flex-wrap gap-2 w-full">
-          <Statuses
-            table={table}
-            nodes={nodes}
-            tags={tags}
-            tagTimeoutState={tagTimeoutState}
-            mock={props.mock}
-            blinkOnStateChange={props.blinkOnStateChange}
-            flex={flex}
-            width={props.width || 100}
-            height={props.height || 100}
-            deviceValues={deviceValues}
-          />
+          {props.tableId ? (
+            <ViewModel tableId={props.tableId}>
+              <Statuses
+                nodes={nodes}
+                tags={tags}
+                dataPointStatus={dataPointStatus}
+                mock={props.mock}
+                blinkOnStateChange={props.blinkOnStateChange}
+                flex={flex}
+                width={props.width || 100}
+                height={props.height || 100}
+                deviceValues={deviceValues}
+              />
+            </ViewModel>
+          ) : (
+            <Statuses
+              nodes={nodes}
+              tags={tags}
+              dataPointStatus={dataPointStatus}
+              mock={props.mock}
+              blinkOnStateChange={props.blinkOnStateChange}
+              flex={flex}
+              width={props.width || 100}
+              height={props.height || 100}
+              deviceValues={deviceValues}
+            />
+          )}
         </div>
         <div className="mt-6 text-xs text-slate-500">
           <p className="mb-2">设备数据状态映射:</p>
@@ -426,26 +377,66 @@ const renderStatusesPreview = (props: Record<string, any>) => {
 }
 
 const renderStatusesCodePreview = (props: Record<string, any>) => {
-  let code = `<Statuses`
+  let statusesProps = []
   if (props.blinkOnStateChange) {
-    code += `\n  blinkOnStateChange`
+    statusesProps.push(`\n  blinkOnStateChange`)
   }
   if (props.mock) {
-    code += `\n  mock`
+    statusesProps.push(`\n  mock`)
   }
   if (props.width !== 100) {
-    code += `\n  width={${props.width}}`
+    statusesProps.push(`\n  width={${props.width}}`)
   }
   if (props.height !== 100) {
-    code += `\n  height={${props.height}}`
+    statusesProps.push(`\n  height={${props.height}}`)
   }
-  code += `\n  table={${typeof props.table === 'string' ? props.table : JSON.stringify(props.table, null, 2)}}`
-  code += `\n  nodes={${typeof props.nodes === 'string' ? props.nodes : JSON.stringify(props.nodes || exampleDevices, null, 2)}}`
-  code += `\n  tags={${typeof props.tags === 'string' ? props.tags : JSON.stringify(props.tags || exampleDataPoints, null, 2)}}`
-  code += `\n  tagTimeoutState={${typeof props.tagTimeoutState === 'string' ? props.tagTimeoutState : JSON.stringify(props.tagTimeoutState, null, 2)}}`
-  code += `\n  flex={${typeof props.flex === 'string' ? props.flex : JSON.stringify(props.flex, null, 2)}}`
-  code += `\n  deviceValues={deviceValues} // 从外部数据源获取`
-  code += `\n/>`
+
+  // 处理 tags 用于代码预览：转换为组件期望的格式
+  const tagsForCode = Array.isArray(props.tags)
+    ? props.tags.map((tag: any) => ({
+        tags: { id: tag.id, name: tag.name },
+        status: []
+      }))
+    : (typeof props.tags === 'string' ? JSON.parse(props.tags) : props.tags || exampleDataPoints)
+
+  const tagsStr = typeof props.tags === 'string' ? props.tags : JSON.stringify(tagsForCode, null, 2)
+  const dataPointStatusStr = typeof props.dataPointStatus === 'string' ? props.dataPointStatus : JSON.stringify(props.dataPointStatus || [], null, 2)
+  const flexStr = typeof props.flex === 'string' ? props.flex : JSON.stringify(props.flex, null, 2)
+
+  // 如果提供了 nodes 且不是 tableId 模式，显示 nodes 参数
+  if (!props.tableId && props.nodes && props.nodes.length > 0) {
+    const nodesStr = Array.isArray(props.nodes) ? JSON.stringify(props.nodes, null, 2) : props.nodes
+    statusesProps.push(`\n  nodes={${nodesStr}}`)
+  }
+
+  statusesProps.push(`\n  tags={${tagsStr}}`)
+  statusesProps.push(`\n  dataPointStatus={${dataPointStatusStr}}`)
+  statusesProps.push(`\n  flex={${flexStr}}`)
+  statusesProps.push(`\n  deviceValues={deviceValues} // 从外部数据源获取`)
+
+  let code
+  if (props.tableId) {
+    code = `import { ViewModel } from '@/registry/components/view-model/view-model'
+import { Statuses } from '@/registry/components/statuses/statuses'
+
+const MyStatuses = () => {
+  return (
+    <ViewModel tableId="${props.tableId}">
+      <Statuses${statusesProps.join('')}
+      />
+    </ViewModel>
+  )
+}`
+  } else {
+    code = `import { Statuses } from '@/registry/components/statuses/statuses'
+
+const MyStatuses = () => {
+  return (
+    <Statuses${statusesProps.join('')}
+    />
+  )
+}`
+  }
 
   return code
 }

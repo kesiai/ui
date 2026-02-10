@@ -1,14 +1,14 @@
-import { MessageDataSource } from './message-data-source'
+import { DatasourceMessage } from './datasource-message'
 import { DataSourcePreview } from '@/app/components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
-import documentationMd from './message-data-source.md?raw'
+import documentationMd from './datasource-message.md?raw'
 
 export const messageDataSourcePropsConfig = [
   {
     name: 'id',
     label: '数据源ID',
     type: 'input' as const,
-    default: 'message-data-source',
+    default: 'datasource-message',
     description: '数据源唯一标识，用于存储和获取数据'
   },
   {
@@ -79,7 +79,7 @@ export const messageDataSourcePropsConfig = [
 ]
 
 export const messageDataSourceDefaultProps = {
-  id: 'message-data-source',
+  id: 'datasource-message',
   initFilter: {},
   isGroup: false,
   group: [],
@@ -91,20 +91,20 @@ export const messageDataSourceDefaultProps = {
   submit: ''
 }
 
-const renderMessageDataSourcePreview = (props: Record<string, any>) => {
+const renderDatasourceMessagePreview = (props: Record<string, any>) => {
   const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <MessageDataSource {...props}>
+        <DatasourceMessage {...props}>
           <DataSourcePreview dataSourceId={id} />
-        </MessageDataSource>
+        </DatasourceMessage>
       </div>
     </div>
   )
 }
 
-const renderMessageDataSourceCodePreview = (props: Record<string, any>) => {
+const renderDatasourceMessageCodePreview = (props: Record<string, any>) => {
   const {
     initFilter = {},
     isGroup = false,
@@ -127,7 +127,7 @@ const renderMessageDataSourceCodePreview = (props: Record<string, any>) => {
     feildFormat.length > 0 ? `feildFormat={${JSON.stringify(feildFormat)}}` : ''
   ].filter(Boolean).join('\n  ')
 
-  return `<MessageDataSource\n  ${propsString || '/* 配置消息参数 */'}\n/>`
+  return `<DatasourceMessage\n  ${propsString || '/* 配置消息参数 */'}\n/>`
 }
 
 export const messageDataSourceConfig: ComponentConfig = {
@@ -135,7 +135,7 @@ export const messageDataSourceConfig: ComponentConfig = {
   name: '消息数据源',
   propsConfig: messageDataSourcePropsConfig,
   defaultProps: messageDataSourceDefaultProps,
-  renderPreview: renderMessageDataSourcePreview,
-  renderCodePreview: renderMessageDataSourceCodePreview,
+  renderPreview: renderDatasourceMessagePreview,
+  renderCodePreview: renderDatasourceMessageCodePreview,
   documentation: documentationMd
 }

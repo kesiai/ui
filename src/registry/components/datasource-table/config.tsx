@@ -1,8 +1,8 @@
-import { TableDataSource } from './table-data-source'
+import { DatasourceTable } from './datasource-table'
 import { DataSourcePreview } from '@/app/components/DataSourcePreview'
 import { ComponentConfig } from '@/app/config/types'
 import type { FieldFormatConfig } from '@/registry/lib/datasource-types'
-import documentationMd from './table-data-source.md?raw'
+import documentationMd from './datasource-table.md?raw'
 
 // 默认配置
 const defaultTableConfig = {
@@ -37,7 +37,7 @@ export const tableDataSourcePropsConfig = [
     name: 'id',
     label: '数据源ID',
     type: 'input' as const,
-    default: 'table-data-source',
+    default: 'datasource-table',
     description: '数据源唯一标识符'
   },
   {
@@ -82,7 +82,7 @@ export const tableDataSourcePropsConfig = [
 ]
 
 export const tableDataSourceDefaultProps = {
-  id: 'table-data-source',
+  id: 'datasource-table',
   selectType: defaultTableConfig.selectType,
   table: defaultTableConfig.table,
   isGroup: defaultTableConfig.isGroup,
@@ -90,20 +90,20 @@ export const tableDataSourceDefaultProps = {
   submit: ''
 }
 
-const renderTableDataSourcePreview = (props: Record<string, any>) => {
+const renderDatasourceTablePreview = (props: Record<string, any>) => {
   const { id } = props
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl">
-        <TableDataSource {...props}>
+        <DatasourceTable {...props}>
           <DataSourcePreview dataSourceId={id} />
-        </TableDataSource>
+        </DatasourceTable>
       </div>
     </div>
   )
 }
 
-const renderTableDataSourceCodePreview = (props: Record<string, any>) => {
+const renderDatasourceTableCodePreview = (props: Record<string, any>) => {
   const { selectType = 'table', table = defaultTableConfig.table, isGroup = false, feildFormat = defaultTableConfig.feildFormat } = props
 
   const propsString = [
@@ -113,7 +113,7 @@ const renderTableDataSourceCodePreview = (props: Record<string, any>) => {
     `feildFormat={${JSON.stringify(feildFormat)}}`
   ].join('\n  ')
 
-  return `<TableDataSource\n  ${propsString}\n/>`
+  return `<DatasourceTable\n  ${propsString}\n/>`
 }
 
 export const tableDataSourceConfig: ComponentConfig = {
@@ -121,7 +121,7 @@ export const tableDataSourceConfig: ComponentConfig = {
   name: '表数据源',
   propsConfig: tableDataSourcePropsConfig,
   defaultProps: tableDataSourceDefaultProps,
-  renderPreview: renderTableDataSourcePreview,
-  renderCodePreview: renderTableDataSourceCodePreview,
+  renderPreview: renderDatasourceTablePreview,
+  renderCodePreview: renderDatasourceTableCodePreview,
   documentation: documentationMd
 }

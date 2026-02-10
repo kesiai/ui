@@ -176,7 +176,7 @@ function useViewData(config: ViewDataConfig) {
   return { dataset, loading, fetchData, requestId }
 }
 
-export interface ViewDataSourceProps {
+export interface DatasourceViewProps {
   id?: string
   view?: {
     id?: string
@@ -192,15 +192,15 @@ export interface ViewDataSourceProps {
   children?: ReactNode
 }
 
-export function ViewDataSource({
-  id = 'view-data-source',
+export function DatasourceView({
+  id = 'datasource-view',
   view = {},
   dimension = [],
   measure = [],
   interval = 0,
   submit,
   children
-}: ViewDataSourceProps) {
+}: DatasourceViewProps) {
   const datasetSet = useDatasetSet(id)
 
   // 使用视图数据

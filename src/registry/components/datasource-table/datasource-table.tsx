@@ -88,7 +88,7 @@ export interface TableDataConfig {
   submit?: string
 }
 
-export interface TableDataSourceProps {
+export interface DatasourceTableProps {
   id?: string
   selectType?: 'table' | 'dataset'
   table?: any
@@ -662,8 +662,8 @@ function useTableData(config: TableDataConfig) {
   }
 }
 
-export function TableDataSource({
-  id = 'table-data-source',
+export function DatasourceTable({
+  id = 'datasource-table',
   selectType = 'table',
   table,
   initFilter,
@@ -675,7 +675,7 @@ export function TableDataSource({
   interval = 0,
   submit,
   children
-}: TableDataSourceProps) {
+}: DatasourceTableProps) {
   const datasetSet = useDatasetSet(id)
 
   const { dataset, loading, requestId } = useTableData({

@@ -1,4 +1,4 @@
-import QRCodeComp from '@/registry/blocks/advanced/qrcode/qrcode'
+import QRCodeComp from './qrcode'
 import { ComponentConfig } from '@/app/config/types'
 
 export const qrcodePropsConfig = [

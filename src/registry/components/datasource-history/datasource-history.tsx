@@ -37,7 +37,7 @@ export interface HistoryDataConfig {
   submit?: string
 }
 
-export interface HistoryDataSourceProps {
+export interface DatasourceHistoryProps {
   id?: string
   timeRange?: TimeRangeConfig
   group?: GroupConfig
@@ -706,8 +706,8 @@ function useHistoryData(config: HistoryDataConfig) {
  * 内部集成 ContextProvider，子组件通过 useContextProvider 获取数据
  * 优化：只在查询参数变化时更新数据，避免大数据集的不必要比较
  */
-export function HistoryDataSource({
-  id = 'history-data-source',
+export function DatasourceHistory({
+  id = 'datasource-history',
   timeRange,
   group,
   tags = [],
@@ -716,7 +716,7 @@ export function HistoryDataSource({
   xFormat = 'YYYY-MM-DD HH:mm:ss',
   submit,
   children
-}: HistoryDataSourceProps) {
+}: DatasourceHistoryProps) {
   // 使用历史数据
   const { dataset, loading, requestId } = useHistoryData({
     timeRange,

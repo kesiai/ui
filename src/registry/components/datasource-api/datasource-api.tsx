@@ -6,7 +6,7 @@ import { ContextProvider } from '@/registry/components/container-context-provide
 
 // ==================== Types ====================
 
-export interface ApiDataSourceProps {
+export interface DatasourceApiProps {
   id?: string
   url?: string
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
@@ -310,8 +310,8 @@ function useApiData(config: ApiDataConfig) {
  * 内部集成 ContextProvider，子组件通过 useContextProvider 获取数据
  * 优化：只在查询参数变化时更新数据，避免大数据集的不必要比较
  */
-export function ApiDataSource({
-  id = 'api-data-source',
+export function DatasourceApi({
+  id = 'datasource-api',
   url = '',
   method = 'GET',
   headers = [],
@@ -323,7 +323,7 @@ export function ApiDataSource({
   interval = 0,
   submit,
   children
-}: ApiDataSourceProps) {
+}: DatasourceApiProps) {
   // 使用 API 数据
   const { dataset, loading, requestId } = useApiData({
     url,

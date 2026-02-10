@@ -1,8 +1,8 @@
-# ApiDataSource API 数据源组件
+# DatasourceApi API 数据源组件
 
 ## 简介
 
-`ApiDataSource` 是一个 API 数据源容器组件，用于从外部 API 获取数据并提供给子组件使用。
+`DatasourceApi` 是一个 API 数据源容器组件，用于从外部 API 获取数据并提供给子组件使用。
 
 - **纯容器组件**：不包含任何布局和样式
 - **Context 集成**：内部集成 `ContextProvider`，子组件通过 `useContextProvider` 获取数据
@@ -42,7 +42,7 @@ url: 'core/t/{table}/d'
 - **关联参数**：必须配置 `table` 参数
 - **示例**：
   ```tsx
-  <ApiDataSource
+  <DatasourceApi
     url="core/t/{table}/d"
     table={{ id: "user", title: "用户表" }}
   />
@@ -59,7 +59,7 @@ url: 'core/systemVariable'
 - **关联参数**：无需额外配置
 - **示例**：
   ```tsx
-  <ApiDataSource
+  <DatasourceApi
     url="core/systemVariable"
   />
   ```
@@ -75,7 +75,7 @@ url: 'core/auth/token?appkey={appkey}&appsecret={appsecret}'
 - **关联参数**：必须同时配置 `appkey` 和 `appsecret`
 - **示例**：
   ```tsx
-  <ApiDataSource
+  <DatasourceApi
     url="core/auth/token?appkey={appkey}&appsecret={appsecret}"
     appkey="my-app-key"
     appsecret="my-app-secret"
@@ -95,7 +95,7 @@ url: 'http://localhost:8080/api/users'
 - **关联参数**：无需额外配置
 - **示例**：
   ```tsx
-  <ApiDataSource
+  <DatasourceApi
     url="https://api.example.com/users"
     method="GET"
   />
@@ -123,17 +123,17 @@ url: 'http://localhost:8080/api/users'
 查询内部表数据，使用 `{table}` 占位符：
 
 ```tsx
-import { ApiDataSource } from '@/registry/components/datasource-api'
+import { DatasourceApi } from '@/registry/components/datasource-api'
 
 function TableDataExample() {
   return (
-    <ApiDataSource
+    <DatasourceApi
       id="user-table-data"
       url="core/t/{table}/d"
       table={{ id: 'user', title: '用户表' }}
     >
       <DataTable />
-    </ApiDataSource>
+    </DatasourceApi>
   )
 }
 ```
@@ -145,12 +145,12 @@ function TableDataExample() {
 ```tsx
 function SystemVariableExample() {
   return (
-    <ApiDataSource
+    <DatasourceApi
       id="system-vars"
       url="core/systemVariable"
     >
       <VariableDisplay />
-    </ApiDataSource>
+    </DatasourceApi>
   )
 }
 ```
@@ -162,14 +162,14 @@ function SystemVariableExample() {
 ```tsx
 function AuthTokenExample() {
   return (
-    <ApiDataSource
+    <DatasourceApi
       id="auth-token"
       url="core/auth/token?appkey={appkey}&appsecret={appsecret}"
       appkey="your-app-key"
       appsecret="your-app-secret"
     >
       <TokenDisplay />
-    </ApiDataSource>
+    </DatasourceApi>
   )
 }
 ```
@@ -181,13 +181,13 @@ function AuthTokenExample() {
 ```tsx
 function ExternalApiExample() {
   return (
-    <ApiDataSource
+    <DatasourceApi
       id="external-data"
       url="https://jsonplaceholder.typicode.com/users"
       method="GET"
     >
       <UserList />
-    </ApiDataSource>
+    </DatasourceApi>
   )
 }
 ```
@@ -195,7 +195,7 @@ function ExternalApiExample() {
 ### 5. 带请求头的外部接口
 
 ```tsx
-<ApiDataSource
+<DatasourceApi
   id="secure-data"
   url="https://api.example.com/data"
   method="GET"
@@ -205,13 +205,13 @@ function ExternalApiExample() {
   ]}
 >
   <SecureDataTable />
-</ApiDataSource>
+</DatasourceApi>
 ```
 
 ### 6. POST 请求
 
 ```tsx
-<ApiDataSource
+<DatasourceApi
   id="create-user"
   url="https://api.example.com/users"
   method="POST"
@@ -224,7 +224,7 @@ function ExternalApiExample() {
   ]}
 >
   <SuccessMessage />
-</ApiDataSource>
+</DatasourceApi>
 ```
 
 ### 7. 定时轮询数据
@@ -232,13 +232,13 @@ function ExternalApiExample() {
 每 5 秒自动刷新数据：
 
 ```tsx
-<ApiDataSource
+<DatasourceApi
   id="realtime-data"
   url="https://api.example.com/status"
   interval={5000}
 >
   <RealtimeChart />
-</ApiDataSource>
+</DatasourceApi>
 ```
 
 ### 5. 子组件获取数据
@@ -286,7 +286,7 @@ function AnotherComponent() {
 ### 数据表格展示
 
 ```tsx
-import { ApiDataSource } from '@/registry/components/datasource-api'
+import { DatasourceApi } from '@/registry/components/datasource-api'
 import { useContextProvider } from '@/registry/components/container-context-provider'
 
 function UserTable() {
@@ -319,14 +319,14 @@ function UserTable() {
 
 function App() {
   return (
-    <ApiDataSource
+    <DatasourceApi
       id="users"
       url="https://jsonplaceholder.typicode.com/users"
       method="GET"
       interval={0}
     >
       <UserTable />
-    </ApiDataSource>
+    </DatasourceApi>
   )
 }
 ```
@@ -334,11 +334,11 @@ function App() {
 ### 实时监控数据
 
 ```tsx
-import { ApiDataSource } from '@/registry/components/datasource-api'
+import { DatasourceApi } from '@/registry/components/datasource-api'
 
 function MonitorDashboard() {
   return (
-    <ApiDataSource
+    <DatasourceApi
       id="monitor-data"
       url="https://api.example.com/metrics"
       method="GET"
@@ -349,14 +349,14 @@ function MonitorDashboard() {
     >
       <MetricsChart />
       <StatusPanel />
-    </ApiDataSource>
+    </DatasourceApi>
   )
 }
 ```
 
 ## 注意事项
 
-1. **唯一 ID**：每个 `ApiDataSource` 的 `id` 必须唯一，避免数据冲突
+1. **唯一 ID**：每个 `DatasourceApi` 的 `id` 必须唯一，避免数据冲突
 2. **HTTPS**：生产环境建议使用 HTTPS 接口
 3. **错误处理**：建议在子组件中处理加载和错误状态
 4. **轮询间隔**：`interval` 设置过小可能造成性能问题，建议不低于 1000ms

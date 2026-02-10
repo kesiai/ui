@@ -73,7 +73,7 @@ export const formUploadPropsConfig = [
 
 export const formUploadDefaultProps = {
   styleType: 'picture-card' as 'picture-card' | 'text' | 'video' | 'audio',
-  accept: '',
+  accept: 'image/*',
   size: undefined,
   width: 104,
   height: 104,

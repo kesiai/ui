@@ -94,6 +94,11 @@ export const schemaFormDefaultProps = {
         title: '邮箱',
         format: 'email'
       },
+      photo: {
+        type: 'object',
+        properties: {},
+        title: '照片'
+      },
       age: {
         type: 'number',
         title: '年龄'
@@ -114,7 +119,7 @@ export const schemaFormDefaultProps = {
     required: ['username', 'email']
   },
   formSchema: [
-    { name: "name" }, "*"
+    { name: "name" }, { name: "photo", type: 'table-upload' }, "*"
   ],
   showExample: true
 }

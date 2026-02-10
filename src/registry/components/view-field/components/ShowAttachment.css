@@ -169,7 +169,7 @@
    上传项图片样式（列表中的缩略图）
    ============================================ */
 
-.upload-item-img-wrapper {
+.upload-item-img-wrapper-thumb {
   position: relative;
   width: 36px;
   height: 36px;

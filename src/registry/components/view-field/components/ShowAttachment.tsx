@@ -285,7 +285,7 @@ const ImageShow = ({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="upload-item-img-wrapper" onClick={handlePreview}>
+            <div className="upload-item-img-wrapper-thumb" onClick={handlePreview}>
               <img src={src} style={{ width: 36, height: 36 }} className="upload-item-img" />
             </div>
           </TooltipTrigger>

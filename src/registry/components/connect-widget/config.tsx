@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ConnectWidget, LineSegment } from '@/registry/blocks/advanced/connect-widget/connect-widget'
+import { ConnectWidget, LineSegment } from './connect-widget'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
 
 // 属性配置

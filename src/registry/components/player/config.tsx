@@ -1,4 +1,4 @@
-import { Player, AudioTrack } from '@/registry/blocks/advanced/player/player'
+import { Player, AudioTrack } from './player'
 import { ComponentConfig } from '@/app/config/types'
 
 // 示例音频列表

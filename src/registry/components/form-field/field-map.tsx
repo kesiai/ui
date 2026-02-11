@@ -42,7 +42,7 @@ const wrapFormComponent = (Component: React.ComponentType<any>, defaultFieldSche
         ...field?.schema
       }
     }
-    return <Component input={input} field={combinedField} {...rest} />
+    return <Component input={input} {...combinedField} {...rest} />
   }
 }
 

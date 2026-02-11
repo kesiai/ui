@@ -2,27 +2,18 @@ import * as React from 'react'
 import { Input } from '@/components/ui/input'
 
 export interface FormBytesArrayProps {
-  input?: {
-    value?: string
-    onChange?: (value: string) => void
-  }
-  field?: {
-    schema?: {
-      placeholder?: string
-      defaultVal?: string
-      disabled?: boolean
-    }
-    filter?: any
-  }
+  value?: string
+  onChange?: (value: string) => void
+  placeholder?: string
+  defaultVal?: string
   disabled?: boolean
+  filter?: any
   meta?: any
   record?: any
 }
 
 const FormBytesArray: React.FC<FormBytesArrayProps> = (props) => {
-  const { input, field, disabled } = props
-  const { onChange, value } = input || {}
-  const schema = field?.schema || {}
+  const { value, onChange, placeholder, disabled } = props
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.value)
@@ -32,8 +23,8 @@ const FormBytesArray: React.FC<FormBytesArrayProps> = (props) => {
     <Input
       value={value || ''}
       onChange={handleChange}
-      placeholder={schema.placeholder || '请输入内容'}
-      disabled={disabled ?? schema.disabled}
+      placeholder={placeholder || '请输入内容'}
+      disabled={disabled}
     />
   )
 }

@@ -18,24 +18,18 @@ export interface FormUserRoleOption {
 }
 
 export interface FormUserRoleProps {
-  input?: {
-    value?: any
-    onChange?: (value: any) => void
-  }
-  field?: {
-    schema?: { name?: string }
-    displayField?: string
-    showField?: string
-    relateSchema?: {
-      ignoreAdmin?: boolean
-      size?: string
-    }
-    fieldSchema?: {
-      enum?: string[]
-      enum_title?: string[]
-      enum1?: string[]
-      enum_title1?: string[]
-    }
+  value?: any
+  onChange?: (value: any) => void
+  name?: string
+  displayField?: string
+  showField?: string
+  ignoreAdmin?: boolean
+  size?: string
+  fieldSchema?: {
+    enum?: string[]
+    enum_title?: string[]
+    enum1?: string[]
+    enum_title1?: string[]
   }
   label?: string
   disabled?: boolean
@@ -45,13 +39,23 @@ export interface FormUserRoleProps {
 }
 
 const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
-  const { field, input, label, disabled, mode = 'single' } = props
+  const {
+    value,
+    onChange,
+    name,
+    displayField = 'name',
+    showField,
+    ignoreAdmin = false,
+    size,
+    fieldSchema,
+    label,
+    disabled,
+    mode = 'single'
+  } = props
+
   const [loading, setLoading] = React.useState(false)
   const [options, setOptions] = React.useState<FormUserRoleOption[]>([])
   const [open, setOpen] = React.useState(false)
-
-  const displayField = field?.displayField || 'name'
-  const showField = field?.showField
 
   // 加载选项
   const loadOptions = React.useCallback(
@@ -59,7 +63,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
       setLoading(true)
       try {
         const api = createAPI({
-          resource: field?.schema?.name || 'core/user',
+          resource: name || 'core/user',
           name: 'user'
         })
 
@@ -77,7 +81,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
             key: item.id,
             item,
           }))
-          .filter((opt) => !(field?.relateSchema?.ignoreAdmin && opt.value === 'admin'))
+          .filter((opt) => !(ignoreAdmin && opt.value === 'admin'))
 
         setOptions(newOptions)
       } catch (error) {
@@ -87,7 +91,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
         setLoading(false)
       }
     },
-    [JSON.stringify(field), displayField, showField]
+    [name, displayField, showField, ignoreAdmin]
   )
 
   // 打开下拉时加载选项
@@ -100,11 +104,11 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
   // 处理选择变化
   const handleChange = (value: string) => {
     const selected = options.find((opt) => opt.value === value)
-    input?.onChange?.(selected?.item || {})
+    onChange?.(selected?.item || {})
   }
 
   // 获取当前显示的值
-  const currentValue = input?.value
+  const currentValue = value
   const displayValue = currentValue?.[displayField] || currentValue?.id || ''
 
   return (
@@ -145,7 +149,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
 }
 
 const FormUserRole: React.FC<FormUserRoleProps> = (props) => {
-  const { input, field, mode = 'single', disabled, label } = props
+  const { value, onChange, mode = 'single', disabled, label, name, displayField, showField, ignoreAdmin, fieldSchema } = props
 
   if (mode === 'multiple') {
     // TODO: 多选模式待实现
@@ -156,7 +160,18 @@ const FormUserRole: React.FC<FormUserRoleProps> = (props) => {
     )
   }
 
-  return <FormUserRoleSelect input={input} field={field} mode={mode} disabled={disabled} label={label} />
+  return <FormUserRoleSelect
+    value={value}
+    onChange={onChange}
+    mode={mode}
+    disabled={disabled}
+    label={label}
+    name={name}
+    displayField={displayField}
+    showField={showField}
+    ignoreAdmin={ignoreAdmin}
+    fieldSchema={fieldSchema}
+  />
 }
 
 export { FormUserRole }

@@ -13,26 +13,19 @@ import MyUploadAdapterPlugin from './RichTextUploadAdapter'
 // import './form-rich-text.css'
 
 export interface FormRichTextProps {
-  input: {
-    value?: string
-    onChange?: (value: string) => void
-  }
-  field?: {
-    schema?: {
-      placeholder?: string
-      disabled?: boolean
-      defaultVal?: string
-      defaultValType?: 'fixed' | 'logic'
-      inList?: boolean
-      key?: string
-      title?: string
-      ediforms?: boolean
-      toolbar?: any
-      [key: string]: any
-    }
-    filter?: any
-    meta?: any
-  }
+  value?: string
+  onChange?: (value: string) => void
+  placeholder?: string
+  disabled?: boolean
+  defaultVal?: string
+  defaultValType?: 'fixed' | 'logic'
+  inList?: boolean
+  key?: string
+  title?: string
+  ediforms?: boolean
+  toolbar?: any
+  filter?: any
+  meta?: any
   record?: any
   [key: string]: any
 }
@@ -96,10 +89,9 @@ const Preview: React.FC<{
 
 const FormRichText = React.forwardRef<HTMLDivElement, FormRichTextProps>(
   (props, ref) => {
-    const { input, field: { schema } = {}, record } = props
-    const { value, onChange } = input || {}
-
     const {
+      value,
+      onChange,
       placeholder = '编辑富文本',
       disabled = false,
       defaultVal,
@@ -108,8 +100,9 @@ const FormRichText = React.forwardRef<HTMLDivElement, FormRichTextProps>(
       key: fieldKey,
       title,
       ediforms = true,
-      toolbar
-    } = schema || {}
+      toolbar,
+      record
+    } = props
 
     const editorRef = React.useRef<any>(null)
 

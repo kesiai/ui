@@ -4,22 +4,14 @@ import { cn } from '@/lib/utils'
 import moment from 'moment'
 
 export interface FormTimeProps {
-  input: {
-    value?: string
-    onChange?: (value: string | null) => void
-  }
-  field?: {
-    schema?: {
-      timeFormat?: string
-      disabled?: boolean
-      defaultVal?: string
-      defaultValType?: 'fixed' | 'logic'
-      size?: 'small' | 'middle' | 'large'
-      [key: string]: any
-    }
-    filter?: any
-    meta?: any
-  }
+  value?: string
+  onChange?: (value: string | null) => void
+  timeFormat?: string
+  disabled?: boolean
+  defaultVal?: string
+  defaultValType?: 'fixed' | 'logic'
+  size?: 'small' | 'middle' | 'large'
+  filter?: any
   meta?: any
   style?: React.CSSProperties
   record?: any
@@ -28,16 +20,17 @@ export interface FormTimeProps {
 
 const FormTime = React.forwardRef<HTMLInputElement, FormTimeProps>(
   (props, ref) => {
-    const { input, field: { schema } = {}, meta, style } = props
-    const { value, onChange } = input || {}
-
     const {
+      value,
+      onChange,
       timeFormat = 'HH:mm:ss',
       disabled = false,
       defaultVal,
       defaultValType = 'fixed',
-      size = 'middle'
-    } = schema || {}
+      size = 'middle',
+      meta,
+      style
+    } = props
 
     // 默认值生效
     React.useEffect(() => {

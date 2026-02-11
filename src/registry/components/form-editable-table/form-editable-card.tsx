@@ -5,16 +5,12 @@ import { Trash2 } from 'lucide-react'
 import { FieldComponentSelector } from '@/registry/components/form-widget/form-widget'
 
 export interface FormEditableCardProps {
-  input?: {
-    value?: any[]
-    onChange?: (value: any[] | null) => void
-    name?: string
-  }
-  schema?: {
-    disabled?: boolean
-    minCount?: number
-    cardLayout?: '1' | '2' | '3'
-  }
+  value?: any[]
+  onChange?: (value: any[] | null) => void
+  name?: string
+  disabled?: boolean
+  minCount?: number
+  cardLayout?: '1' | '2' | '3'
   columns?: Array<{
     key: string
     dataIndex: string
@@ -30,18 +26,17 @@ export interface FormEditableCardProps {
 }
 
 const FormEditableCard: React.FC<FormEditableCardProps> = (props) => {
-  const { input, schema, columns, showDelBtn } = props
-  const { value = [] } = input || {}
+  const { value, onChange, schema, columns, showDelBtn } = props
 
   const handleDelete = (key: string | number) => {
     const data = value.filter((item: any) => item?.key !== key)
-    input?.onChange?.(data.length ? data : null)
+    onChange?.(data.length ? data : null)
   }
 
   const handleFieldChange = (record: any, fieldKey: string, newValue: any) => {
     const updatedRecord = { ...record, [fieldKey]: newValue }
     const newData = value.map((d: any) => (d?.key === record?.key ? updatedRecord : d))
-    input?.onChange?.(newData)
+    onChange?.(newData)
   }
 
   if (!columns || columns.length === 0) {

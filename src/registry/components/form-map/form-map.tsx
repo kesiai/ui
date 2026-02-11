@@ -25,29 +25,22 @@ console.log(config.user)
 console.log(config.language)
 
 export interface FormMapProps {
-  input: {
-    value?: {
-      name?: string
-      lng?: number
-      lat?: number
-    }
-    onChange?: (value: { name?: string; lng: number; lat: number } | null) => void
+  value?: {
+    name?: string
+    lng?: number
+    lat?: number
   }
-  field?: {
-    schema?: {
-      placeholder?: string
-      lngLat?: boolean
-      positionName?: boolean
-      canEdit?: boolean
-      canHand?: boolean
-      defaultVal?: { name?: string; lng: number; lat: number }
-      showType?: 'map' | 'modal'
-      size?: 'small' | 'middle' | 'large'
-      [key: string]: any
-    }
-    filter?: any
-    meta?: any
-  }
+  onChange?: (value: { name?: string; lng: number; lat: number } | null) => void
+  placeholder?: string
+  lngLat?: boolean
+  positionName?: boolean
+  canEdit?: boolean
+  canHand?: boolean
+  defaultVal?: { name?: string; lng: number; lat: number }
+  showType?: 'map' | 'modal'
+  size?: 'small' | 'middle' | 'large'
+  disabled?: boolean
+  filter?: any
   meta?: any
   record?: any
   [key: string]: any
@@ -89,11 +82,9 @@ const GisPlaceholder: React.FC<{
 
 const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
   (props, ref) => {
-    const { input, field } = props
-    const { onChange, value } = input || {}
-    const schema = field?.schema || {}
-
     const {
+      value,
+      onChange,
       placeholder = '请选择位置',
       lngLat = true,
       positionName = true,
@@ -101,10 +92,9 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
       canHand = true,
       defaultVal,
       showType = 'modal',
-      size = 'middle'
-    } = schema
-
-    const disabled = schema.disabled || false
+      size = 'middle',
+      disabled = false
+    } = props
 
     const getInit = (v: any) => {
       return isEmpty(v) ? {} : {
@@ -340,11 +330,10 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
       <>
         <div className="flex gap-2">
           <Input
-            {...input}
+            value={displayValue}
             ref={ref}
             allowClear
             onChange={handleChange}
-            value={displayValue}
             placeholder={placeholder}
             className={sizeClasses[size as 'small' | 'middle' | 'large']}
           />

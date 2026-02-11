@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
 
 // 导入迁移后的字段组件
@@ -122,7 +121,7 @@ const FieldComponentSelector: React.FC<{
   // 关联字段（新版）- 使用 recordSelectType
   if ((config.relateTo || config.relate) && config.recordSelectType) {
     const tableID = config.relate?.id || config.relateTo
-    return <FormRelatePlus relateSchema={config} tableID={tableID} input={input} field={field ? { schema: config, ...field } : { schema: config }} meta={meta} schema={schema} />
+    return <FormRelatePlus relateSchema={config} tableID={tableID} value={input.value} onChange={input.onChange} meta={meta} schema={schema} />
   }
 
   // 外部工作表关联 - 使用 relate?.id
@@ -134,20 +133,19 @@ const FieldComponentSelector: React.FC<{
 
   if (convertedRelateSchema) {
     const relateProps = {
-      input,
-      field: {
-        schema: convertedRelateSchema.schema,
-        fieldSchema: convertedRelateSchema.fieldSchema,
-        displayField: convertedRelateSchema.displayField,
-        tableID: convertedRelateSchema.tableID,
-        relateShowFields: convertedRelateSchema.relateShowFields,
-        key: convertedRelateSchema.key,
-        option: {
-          form: {
-            change: (field: string, value: any) => {
-              // TODO: 实现表单字段联动
-              console.log('Relate field change:', field, value)
-            }
+      value: input.value,
+      onChange: input.onChange,
+      schema: convertedRelateSchema.schema,
+      fieldSchema: convertedRelateSchema.fieldSchema,
+      displayField: convertedRelateSchema.displayField,
+      tableID: convertedRelateSchema.tableID,
+      relateShowFields: convertedRelateSchema.relateShowFields,
+      key: convertedRelateSchema.key,
+      option: {
+        form: {
+          change: (field: string, value: any) => {
+            // TODO: 实现表单字段联动
+            console.log('Relate field change:', field, value)
           }
         }
       },
@@ -170,21 +168,21 @@ const FieldComponentSelector: React.FC<{
 
   // 内部表关联（internalTable）
   if (config.internalTable && config.relate) {
-    return <RelateComponent input={input} field={{ schema: config, ...field, internalTable: true }} meta={meta} record={record} />
+    return <RelateComponent value={input.value} onChange={input.onChange} schema={config} internalTable={true} meta={meta} record={record} />
   }
 
   // 附件上传
   if (config.type === 'object' && config.fieldType === 'attachment') {
-    return <FormUpload input={input} field={{ schema: config, meta }} type="upload_attachment" />
+    return <FormUpload value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} defaultVal={config.defaultVal} type="upload_attachment" />
   }
 
   if (config.type === 'array' && config.fieldType === 'attachments') {
-    return <FormUpload input={input} field={{ schema: config, meta }} type="upload_attachment_group" />
+    return <FormUpload value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} defaultVal={config.defaultVal} type="upload_attachment_group" />
   }
 
   // 用户/角色关联
   if (['User', 'Role'].includes(config.relateTo || '')) {
-    return <FormUserRole input={input} field={{ schema: config, displayField: config.showField || 'name' }} meta={meta} record={record} />
+    return <FormUserRole value={input.value} onChange={input.onChange} name={config.name} displayField={config.showField || 'name'} meta={meta} record={record} />
   }
 
   // 关联字段只读
@@ -195,47 +193,47 @@ const FieldComponentSelector: React.FC<{
 
   // 文本输入
   if (config.type === 'string' && config.fieldType === 'input') {
-    return <FormInput input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormInput value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} textContent={config.textContent} delBlank={config.delBlank} maxLength={config.maxLength} />
   }
 
   // 枚举选择器
   if (config.enum1 && config.enum1.length > 0) {
-    return <FormSelect input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormSelect value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} selectFace={config.selectFace} selectType={config.selectType} options={config.enum} />
   }
 
   // 数字输入
   if (config.type === 'number' && config.fieldType === 'inputNumber') {
-    return <FormInputNumber input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormInputNumber value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} unit={config.unit} decimal={config.decimal} precision={config.precision} min={config.min} max={config.max} />
   }
 
   // 日期选择
   if (config.type === 'string' && config.fieldType === 'datePicker') {
-    return <FormDate input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormDate value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} defaultVal={config.defaultVal} defaultValType={config.defaultValType} format={config.format} format2={config.format2} />
   }
 
   // 日期范围
   if (config.type === 'string' && config.fieldType === 'dateRange') {
-    return <FormDateRange input={input} field={{ schema: config, meta }} meta={meta} record={record} cellKey={cellKey} />
+    return <FormDateRange value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} defaultVal={config.defaultVal} size={config.size} />
   }
 
   // 时间选择
   if (config.type === 'string' && config.fieldType === 'timePicker') {
-    return <FormTime input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormTime value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} defaultVal={config.defaultVal} defaultValType={config.defaultValType} timeFormat={config.timeFormat} size={config.size} />
   }
 
   // 地图定位
   if (config.type === 'object' && config.fieldType === 'map') {
-    return <FormMap input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormMap value={input.value} onChange={input.onChange} placeholder={config.placeholder} lngLat={config.lngLat} positionName={config.positionName} canEdit={config.canEdit} canHand={config.canHand} defaultVal={config.defaultVal} showType={config.showType} size={config.size} disabled={config.disabled} />
   }
 
   // 布尔值/复选框
   if (config.type === 'boolean' && (config.fieldType === 'checkbox' || config.fieldType === 'boolean')) {
-    return <FormCheckbox input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
+    return <FormCheckbox value={input.value} onChange={input.onChange} label={config.title} disabled={config.disabled} />
   }
 
   // 可编辑表格
   if (config.fieldType === 'editableTable') {
-    return <FormEditableTable input={input} schema={config} meta={meta} record={record} />
+    return <FormEditableTable value={input.value} onChange={input.onChange} schema={config} meta={meta} record={record} />
   }
 
   // 只读表格
@@ -246,21 +244,17 @@ const FieldComponentSelector: React.FC<{
 
   // 编号
   if (config.fieldType === 'serialNumber') {
-    return <FormSerialNumber input={input} field={{ schema: config }} />
+    return <FormSerialNumber value={input.value} onChange={input.onChange} serialRules={config.serialRules} />
   }
 
   // 链接
   if (config.fieldType === 'link') {
-    return <FormLink input={input} field={{ schema: config }} meta={meta} record={record} />
+    return <FormLink value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} linkType={config.linkType} size={config.size} />
   }
 
   // 区域选择
   if (config.fieldType === 'area') {
-    const areaInput = {
-      value: input.value,
-      onChange: input.onChange || (() => {})
-    }
-    return <AreaComponent input={areaInput} field={{ schema: config }} meta={meta || {}} areaType={config.areaType || 'pca'} />
+    return <AreaComponent value={input.value} onChange={input.onChange || (() => {})} areaType={config.areaType || 'pca'} />
   }
 
   // 报警关联
@@ -271,17 +265,17 @@ const FieldComponentSelector: React.FC<{
 
   // 星级评价
   if (config.fieldType === 'rate') {
-    return <Rate input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <Rate value={input.value} onChange={input.onChange} disabled={config.disabled} defaultVal={config.defaultVal} inList={config.inList} />
   }
 
   // 富文本编辑器
   if (config.fieldType === 'textEditor') {
-    return <FormRichText input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormRichText value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} defaultVal={config.defaultVal} defaultValType={config.defaultValType} inList={config.inList} key={config.key} title={config.title} ediforms={config.ediforms} toolbar={config.toolbar} />
   }
 
   // 字节数组
   if (config.fieldType === 'bytesArray') {
-    return <FormBytesArray input={input} field={{ schema: config, filter: null }} meta={meta} record={record} />
+    return <FormBytesArray value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} />
   }
 
   // 多语言输入
@@ -292,7 +286,7 @@ const FieldComponentSelector: React.FC<{
 
   // 查找引用
   if (config.config === '查找引用') {
-    return <FormReference schema={config} field={{ key: config.key }} option={{ schema: { name: schema?.name } }} tableData={record} />
+    return <FormReference schema={config} key={config.key} option={{ schema: { name: schema?.name } }} tableData={record} />
   }
 
   // 表单信息
@@ -302,15 +296,15 @@ const FieldComponentSelector: React.FC<{
 
   // 默认：根据基础类型显示
   if (config.type === 'string') {
-    return <FormInput input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormInput value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} />
   }
 
   if (config.type === 'number') {
-    return <FormInputNumber input={input} field={{ schema: config, meta }} meta={meta} record={record} />
+    return <FormInputNumber value={input.value} onChange={input.onChange} placeholder={config.placeholder} disabled={config.disabled} />
   }
 
   if (config.type === 'boolean') {
-    return <FormCheckbox input={input} field={{ schema: config, meta }} meta={meta} record={record} label={config.title} />
+    return <FormCheckbox value={input.value} onChange={input.onChange} label={config.title} disabled={config.disabled} />
   }
 
   // 未知类型
@@ -405,7 +399,6 @@ const FormWidget = React.forwardRef<HTMLDivElement, FormWidgetProps>(
         <FieldComponentSelector
           schema={schema}
           input={inputProps}
-          field={{ schema, meta }}
           meta={meta}
           record={record}
           cellKey={cellKey}

@@ -418,40 +418,32 @@ const uploadFile = async (
 export { fileType, imageType, videoType, audioType }
 
 export interface FormUploadProps {
-  input: {
-    value?: any
-    onChange?: (value: any) => void
-  }
-  field?: {
-    schema?: {
-      styleType?: 'picture-card' | 'text' | 'video' | 'audio'
-      accept?: string
-      size?: number
-      width?: number
-      height?: number
-      maxUploadNum?: number
-      disabled?: boolean
-      onlyCamera?: boolean
-      uploadPosition?: 'media' | 'local'
-      uploadFolder?: boolean
-      folderType?: 'folder' | 'upload'
-      folder?: string
-      base64?: boolean
-      autoZip?: boolean
-      autoName?: boolean
-      watermark?: any
-      sort?: 'asc' | 'desc'
-      mediaDelete?: boolean
-      ftp?: boolean
-      textToAudio?: boolean
-      defaultVal?: any
-      defaultValType?: string
-      key?: string
-      [key: string]: any
-    }
-    filter?: any
-    meta?: any
-  }
+  value?: any
+  onChange?: (value: any) => void
+  styleType?: 'picture-card' | 'text' | 'video' | 'audio'
+  accept?: string
+  size?: number
+  width?: number
+  height?: number
+  maxUploadNum?: number
+  disabled?: boolean
+  onlyCamera?: boolean
+  uploadPosition?: 'media' | 'local'
+  uploadFolder?: boolean
+  folderType?: 'folder' | 'upload'
+  folder?: string
+  base64?: boolean
+  autoZip?: boolean
+  autoName?: boolean
+  watermark?: any
+  sort?: 'asc' | 'desc'
+  mediaDelete?: boolean
+  ftp?: boolean
+  textToAudio?: boolean
+  defaultVal?: any
+  defaultValType?: string
+  key?: string
+  filter?: any
   cellKey?: string
   type?: 'upload_attachment' | 'upload_attachment_group'
   meta?: any
@@ -460,22 +452,20 @@ export interface FormUploadProps {
 
 const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
   (props, ref) => {
-    const { input, field, cellKey, type } = props
-    const { value, onChange } = input || {}
-    const schema = field?.schema || {}
+    const { value, onChange, cellKey, type } = props
 
     const { user } = useUser()
     const api = createAPI({ name: 'media' })
 
     const isSingleUpload = type === 'upload_attachment'
-    const styleType = schema.styleType || 'picture-card'
-    const accept = getAccept(schema.accept, styleType)
+    const styleType = props.styleType || 'picture-card'
+    const accept = getAccept(props.accept, styleType)
 
     // 上传地址
     console.log('api', api, user)
     const uploadUrl = api.host + '/core/mediaLibrary/upload?action=' +
-      (schema.onlyCamera ? 'rename' : 'cover')
-    const catalog = schema.folderType === 'folder' ? ('&catalog=' + schema.folder) : ''
+      (props.onlyCamera ? 'rename' : 'cover')
+    const catalog = props.folderType === 'folder' ? ('&catalog=' + props.folder) : ''
     const fullUploadUrl = uploadUrl + catalog
 
     // 获取请求头
@@ -504,7 +494,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
     React.useEffect(() => {
       setTimeout(() => {
         if (!value && schema?.defaultVal && onChange && schema?.defaultValType !== 'logic') {
-          onChange(schema.defaultVal)
+          onChange(props.defaultVal)
         }
       })
     }, [])
@@ -520,9 +510,9 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
       })
     }, [isSingleUpload, value])
 
-    const cKey = schema.key || cellKey
-    const width = schema.width
-    const height = schema.height
+    const cKey = props.key || cellKey
+    const width = props.width
+    const height = props.height
 
     const showPreview = async (file: any) => {
       const fileType = file.name.substring(file.name.lastIndexOf('.') + 1)
@@ -559,7 +549,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
 
     const onRemove = (file: any) => {
       return new Promise((resolve) => {
-        if (schema.mediaDelete) {
+        if (props.mediaDelete) {
           // TODO: 显示删除确认对话框
           onRemoveChange(file)
           resolve(false)
@@ -573,8 +563,8 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
     // 处理文件上传
     const handleFileUpload = async (file: File) => {
       // 检查上传数量限制
-      if (isNumber(schema.maxUploadNum) && fileList.length >= schema.maxUploadNum!) {
-        console.warn(`最多上传${schema.maxUploadNum}个文件`)
+      if (isNumber(props.maxUploadNum) && fileList.length >= props.maxUploadNum!) {
+        console.warn(`最多上传${props.maxUploadNum}个文件`)
         return
       }
 
@@ -595,8 +585,8 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
 
       try {
         // 上传前验证
-        if (schema.size && file.size / 1024 / 1024 > schema.size) {
-          throw new Error(`文件大小不可超过${schema.size}MB`)
+        if (props.size && file.size / 1024 / 1024 > props.size) {
+          throw new Error(`文件大小不可超过${props.size}MB`)
         }
 
         const fileType = file.name.substring(file.name.lastIndexOf('.') + 1)
@@ -609,19 +599,19 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
 
         // 自动压缩
         let processedFile = file
-        if (schema.autoZip) {
-          processedFile = await autoZip(file, schema.autoZip)
+        if (props.autoZip) {
+          processedFile = await autoZip(file, props.autoZip)
         }
 
         // 自动重命名
-        if (schema.autoName) {
+        if (props.autoName) {
           const ext = file.name.split('.')?.[1]
           const newName = Math.random().toString(36).substring(2, 18) + '.' + ext
           processedFile = new File([processedFile], newName, { type: processedFile.type })
         }
 
         // 加水印
-        processedFile = await addWatermark(processedFile, schema.watermark, user)
+        processedFile = await addWatermark(processedFile, props.watermark, user)
 
         // 执行上传
         const response = await uploadFile(
@@ -717,7 +707,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
                 />
               ))}
 
-              {!hideAddBtn && !schema.disabled && (
+              {!hideAddBtn && !props.disabled && (
                 <div
                   className="upload-item-container upload-item-add-btn cursor-pointer hover:bg-slate-100"
                   style={{ width: defaultWidth, height: defaultHeight }}
@@ -742,7 +732,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
               )}
 
               {/* 媒体库上传 - TODO */}
-              {!schema.disabled && (
+              {!props.disabled && (
                 <div className="text-sm text-slate-400 flex items-center justify-center border-2 border-dashed rounded"
                      style={{ width: defaultWidth, height: defaultHeight }}>
                   <div className="text-center p-2">
@@ -764,7 +754,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
               />
             ))}
 
-            {!hideAddBtn && !schema.disabled && (
+            {!hideAddBtn && !props.disabled && (
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
                   <label className="cursor-pointer">
@@ -789,14 +779,14 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
             )}
 
             {/* 文字转音频 - TODO */}
-            {styleType === 'audio' && schema.textToAudio && !(isSingleUpload && fileList.length >= 1) && (
+            {styleType === 'audio' && props.textToAudio && !(isSingleUpload && fileList.length >= 1) && (
               <div className="text-sm text-slate-400">
                 等待 Dashboard.BoradcastButton 迁移
               </div>
             )}
 
             {/* 媒体库上传 - TODO */}
-            {!schema.disabled && (
+            {!props.disabled && (
               <div className="text-sm text-slate-400">
                 等待 MediaModal 迁移
               </div>

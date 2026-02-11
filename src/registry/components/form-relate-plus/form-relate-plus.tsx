@@ -70,6 +70,9 @@ const FormRelatePlus: React.FC<FormRelatePlusProps> = (props) => {
     schema: props.schema,
   }
 
+  if (!props.relateSchema) {
+    return <div className="text-sm text-red-500">关联字段配置错误：缺少 relateSchema</div>
+  }
   return (
     <div className="flex flex-col items-stretch w-full gap-2">
       <div className="flex flex-row gap-2">

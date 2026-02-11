@@ -3,20 +3,12 @@ import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 
 export interface FormLinkProps {
-  input?: {
-    value?: string
-    onChange?: (value: string) => void
-  }
-  field?: {
-    schema?: {
-      placeholder?: string
-      defaultVal?: string
-      disabled?: boolean
-      linkType?: 'in' | 'out'
-      size?: string
-    }
-  }
+  value?: string
+  onChange?: (value: string) => void
+  placeholder?: string
   disabled?: boolean
+  linkType?: 'in' | 'out'
+  size?: string
   meta?: any
   record?: any
 }
@@ -47,10 +39,7 @@ const MenuItemSelect: React.FC<{
 
 const FormLink = React.forwardRef<HTMLDivElement, FormLinkProps>(
   (props, ref) => {
-    const { input, field, disabled } = props
-    const { onChange, value } = input || {}
-    const schema = field?.schema || {}
-    const { linkType } = schema
+    const { value, onChange, placeholder, disabled, linkType } = props
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e.target.value)
@@ -60,15 +49,15 @@ const FormLink = React.forwardRef<HTMLDivElement, FormLinkProps>(
       <MenuItemSelect
         value={value}
         onChange={onChange}
-        placeholder={schema.placeholder || '选择系统内置的菜单项'}
-        disabled={disabled ?? schema.disabled}
+        placeholder={placeholder || '选择系统内置的菜单项'}
+        disabled={disabled}
       />
     ) : (
       <Input
         value={value || ''}
         onChange={handleChange}
-        placeholder={schema.placeholder || '请输入链接'}
-        disabled={disabled ?? schema.disabled}
+        placeholder={placeholder || '请输入链接'}
+        disabled={disabled}
       />
     )
   }

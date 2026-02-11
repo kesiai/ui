@@ -13,12 +13,9 @@ export interface FormTableViewColumn {
 }
 
 export interface FormTableViewProps {
-  input?: {
-    value?: any[]
-    onChange?: (value: any[]) => void
-    name?: string
-  }
-  schema?: any
+  value?: any[]
+  onChange?: (value: any[]) => void
+  name?: string
   columns?: FormTableViewColumn[]
   selectedRows?: any[]
   setSelectedRows?: (rows: any[]) => void
@@ -28,12 +25,11 @@ export interface FormTableViewProps {
 }
 
 const FormTableView: React.FC<FormTableViewProps> = (props) => {
-  const { input, schema, columns, selectedRows, setSelectedRows } = props
-  const { value = [] } = input || {}
+  const { value, onChange, schema, columns, selectedRows, setSelectedRows } = props
 
   const handleSave = (row: any) => {
     const newValue = value.map((d: any) => (d?.key === row?.key ? row : d))
-    input?.onChange?.(newValue)
+    onChange?.(newValue)
   }
 
   const handleSelectRow = (row: any, checked: boolean) => {
@@ -104,7 +100,7 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
                 {columns.map((col) => (
                   <td key={col.key} className="px-4 py-2">
                     {col.editable ? (
-                      <EditableCell
+                      <EditCell
                         schema={col.schema}
                         record={record}
                         onSave={handleSave}
@@ -125,7 +121,7 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
 }
 
 // 可编辑单元格
-const EditableCell: React.FC<{
+const EditCell: React.FC<{
   schema: any
   record: any
   onSave: (row: any) => void

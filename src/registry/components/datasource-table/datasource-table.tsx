@@ -3,7 +3,7 @@
 import { useMemo, useEffect, useState, useRef, useCallback, type ReactNode } from 'react'
 import _ from 'lodash'
 import { api, useDatasetSet } from '@airiot/client'
-import { toast } from '@/hooks/use-toast'
+import { toast } from '@/registry/hooks/use-toast'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 import { numberFormat, dateFormat } from '@/registry/lib/datasource-utils'
 import type { TableInfo } from '@/registry/lib/datasource-types'

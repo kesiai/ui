@@ -33,10 +33,6 @@ const SKIP_DEPENDENCIES = [
   'tailwind-merge',
 ];
 
-// 组件名称映射（用于手动覆盖自动生成的名称）
-const COMPONENT_NAME_OVERRIDES = {
-  // 例如：'datasource/table-data-source' -> 'datasource-table'
-};
 
 // 递归获取目录下所有文件
 async function getFilesRecursive(dir, base = '') {
@@ -231,7 +227,9 @@ async function buildRegistry() {
         // 构建文件列表
         const fileList = [
           {
-            path: `registry/${folder}/${file.replace(/\\/g, '/')}`,
+            path: folder === 'components'
+              ? `registry/components/airiot/${file.replace(/\\/g, '/')}`
+              : `registry/${folder}/${file.replace(/\\/g, '/')}`,
             type: type,
             content: fileContent,
           },
@@ -265,7 +263,9 @@ async function buildRegistry() {
 
             // 计算在 registry 中的路径
             const relCssFromFolder = path.relative(absFolder, absCssPath);
-            const registryCssPath = `registry/${folder}/${relCssFromFolder.replace(/\\/g, '/')}`;
+            const registryCssPath = folder === 'components'
+              ? `registry/components/airiot/${relCssFromFolder.replace(/\\/g, '/')}`
+              : `registry/${folder}/${relCssFromFolder.replace(/\\/g, '/')}`;
 
             fileList.push({
               path: registryCssPath,

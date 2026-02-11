@@ -9,7 +9,7 @@
   "registryDependencies": [],
   "files": [
     {
-      "path": "registry/components/form/form.tsx",
+      "path": "registry/components/airiot/form/form.tsx",
       "type": "registry:component",
       "content": "import { FormProvider, useForm, type UseFormPropsExtended } from '@airiot/client'\nimport { type ReactNode } from 'react'\n\ntype FormProps = UseFormPropsExtended & {\n  formId: string\n  children: ReactNode\n  onSubmit: (data: any) => void\n  onEffect?: (formData: any, setFormData: (data: any) => void) => void\n  classNames?: Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error', string>\n}\n\nconst Form = ({ formId, children, onSubmit, onEffect, classNames, ...props } : FormProps ) => {\n  const methods = useForm({ ...props, onEffect })\n  return (\n    <FormProvider {...methods} classNames={classNames}>\n      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)} className={classNames?.form}>\n        {children}\n      </form>\n    </FormProvider>\n  )\n}\n\nexport default Form"
     }

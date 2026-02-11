@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { api, useWS } from '@airiot/client'
 import { useDatasetSet } from '@airiot/client'
 import dayjs from 'dayjs'
-import { toast } from '@/hooks/use-toast'
+import { toast } from '@/registry/hooks/use-toast'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 import type {
   TagValue,

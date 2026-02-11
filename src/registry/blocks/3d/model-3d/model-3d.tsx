@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Canvas, useThree } from "@react-three/fiber"
 import * as THREE from "three"
-import { OrbitControls, Environment, PerspectiveCamera, TransformControls, PointerLockControls, FlyControls, useProgress } from "@react-three/drei"
+import { OrbitControls, Environment, PerspectiveCamera, PointerLockControls, FlyControls, useProgress } from "@react-three/drei"
 import { suspend } from 'suspend-react'
 import { cn } from "@/lib/utils"
 import { Suspense } from "react"
@@ -415,7 +415,7 @@ const Controls = (props: any) => {
         camera={camera}
         {...orbitConfig}
         enabled={orbitConfig?.enabled && controlType === 'orbit'}
-        onEnd={() => {}}
+        onEnd={() => { }}
       />
       {pointerLockConfig?.enabled && controlType === 'pointerLock' && (
         <PointerLockControls

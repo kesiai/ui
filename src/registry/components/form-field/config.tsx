@@ -25,38 +25,31 @@ export const formFieldPropsConfig = [
     default: 'text',
     options: [
       // 基础组件
-      { value: 'text', label: '📝 文本输入框' },
-      { value: 'number', label: '🔢 数字输入框' },
-      { value: 'textarea', label: '📃 多行文本框' },
-      { value: 'select', label: '📋 下拉选择框' },
-      { value: 'checkbox', label: '☑️ 复选框' },
       { value: 'radio', label: '⭕ 单选框' },
       { value: 'switch', label: '🔘 开关' },
       { value: 'slider', label: '🎚️ 滑块' },
-      { value: 'date', label: '📅 日期选择器' },
-      { value: 'rate', label: '⭐ 评分组件' },
       // 高级组件
-      { value: 'table-text', label: '📝 文本输入（增强版）' },
-      { value: 'table-textarea', label: '📃 多行文本（增强版）' },
-      { value: 'table-number', label: '🔢 数字输入（增强版）' },
-      { value: 'table-select', label: '📋 下拉选择（增强版）' },
-      { value: 'table-checkbox', label: '☑️ 复选框（增强版）' },
-      { value: 'table-date', label: '📅 日期选择（增强版）' },
-      { value: 'table-date-range', label: '📆 日期范围（增强版）' },
-      { value: 'table-time', label: '🕐 时间选择（增强版）' },
-      { value: 'table-rate', label: '⭐ 评分组件（增强版）' },
-      { value: 'table-rich-text', label: '📝 富文本编辑器' },
-      { value: 'table-map', label: '🗺️ 地图定位' },
-      { value: 'table-upload', label: '📎 附件上传' },
-      { value: 'table-link', label: '🔗 链接组件' },
-      { value: 'table-serial-number', label: '🔢 序列号' },
-      { value: 'table-user-role', label: '👤 用户角色' },
-      { value: 'table-bytes-array', label: '💾 字节数组' },
-      { value: 'table-reference', label: '🔍 查找引用' },
-      { value: 'table-form-info', label: '📋 表单信息' },
-      { value: 'table-editable-table', label: '📊 可编辑表格' },
-      { value: 'table-relate-plus', label: '🔗 关联字段Plus' },
-      { value: 'table-relate', label: '🔗 关联字段' }
+      { value: 'text', label: '📝 文本输入' },
+      { value: 'textarea', label: '📃 多行文本' },
+      { value: 'number', label: '🔢 数字输入' },
+      { value: 'select', label: '📋 下拉选择' },
+      { value: 'checkbox', label: '☑️ 复选框' },
+      { value: 'date', label: '📅 日期选择' },
+      { value: 'date-range', label: '📆 日期范围' },
+      { value: 'time', label: '🕐 时间选择' },
+      { value: 'rate', label: '⭐ 评分组件' },
+      { value: 'rich-text', label: '📝 富文本编辑器' },
+      { value: 'map', label: '🗺️ 地图定位' },
+      { value: 'upload', label: '📎 附件上传' },
+      { value: 'link', label: '🔗 链接组件' },
+      { value: 'serial-number', label: '🔢 序列号' },
+      { value: 'user-role', label: '👤 用户角色' },
+      { value: 'bytes-array', label: '💾 字节数组' },
+      { value: 'reference', label: '🔍 查找引用' },
+      { value: 'form-info', label: '📋 表单信息' },
+      { value: 'editable-table', label: '📊 可编辑表格' },
+      { value: 'relate-plus', label: '🔗 关联字段Plus' },
+      { value: 'relate', label: '🔗 关联字段' }
     ],
     description: '选择字段的输入类型（增强版=支持更多配置选项）'
   },
@@ -114,12 +107,12 @@ export const formFieldPropsConfig = [
 export const formFieldDefaultProps = {
   name: 'username',
   label: '用户名',
-  type: 'text' as 'text' | 'number' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'switch' | 'slider' | 'date' | 'rate' |
-    'table-text' | 'table-textarea' | 'table-number' | 'table-select' | 'table-checkbox' |
-    'table-date' | 'table-date-range' | 'table-time' | 'table-rate' | 'table-rich-text' |
-    'table-map' | 'table-upload' | 'table-link' | 'table-serial-number' | 'table-user-role' |
-    'table-bytes-array' | 'table-reference' | 'table-form-info' | 'table-editable-table' |
-    'table-relate-plus' | 'table-relate',
+  type: 'text' as 'radio' | 'switch' | 'slider' |
+    'text' | 'textarea' | 'number' | 'select' | 'checkbox' |
+    'date' | 'date-range' | 'time' | 'rate' | 'rich-text' |
+    'map' | 'upload' | 'link' | 'serial-number' | 'user-role' |
+    'bytes-array' | 'reference' | 'form-info' | 'editable-table' |
+    'relate-plus' | 'relate',
   placeholder: '请输入用户名',
   description: '请输入您的用户名',
   required: true,

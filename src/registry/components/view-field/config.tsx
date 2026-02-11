@@ -37,30 +37,21 @@ export const viewFieldPropsConfig = [
       { value: 'date-range', label: '📆 日期范围' },
       { value: 'time', label: '🕐 时间' },
       { value: 'rate', label: '⭐ 评分' },
-      // TableField 类型（高级显示）
-      { value: 'table-text', label: '📝 TF-文本输入' },
-      { value: 'table-textarea', label: '📃 TF-多行文本' },
-      { value: 'table-number', label: '🔢 TF-数字输入' },
-      { value: 'table-select', label: '📋 TF-下拉选择' },
-      { value: 'table-checkbox', label: '☑️ TF-复选框' },
-      { value: 'table-date', label: '📅 TF-日期选择' },
-      { value: 'table-date-range', label: '📆 TF-日期范围' },
-      { value: 'table-time', label: '🕐 TF-时间选择' },
-      { value: 'table-rate', label: '⭐ TF-评分组件' },
-      { value: 'table-rich-text', label: '📝 TF-富文本编辑器' },
-      { value: 'table-map', label: '🗺️ TF-地图定位' },
-      { value: 'table-upload', label: '📎 TF-附件上传' },
-      { value: 'table-link', label: '🔗 TF-链接组件' },
-      { value: 'table-serial-number', label: '🔢 TF-序列号' },
-      { value: 'table-user-role', label: '👤 TF-用户角色' },
-      { value: 'table-bytes-array', label: '💾 TF-字节数组' },
-      { value: 'table-reference', label: '🔍 TF-查找引用' },
-      { value: 'table-form-info', label: '📋 TF-表单信息' },
-      { value: 'table-editable-table', label: '📊 TF-可编辑表格' },
-      { value: 'table-relate-plus', label: '🔗 TF-关联字段Plus' },
-      { value: 'table-relate', label: '🔗 TF-关联字段' }
+      // 高级类型（原 TableField 类型）
+      { value: 'rich-text', label: '📝 富文本编辑器' },
+      { value: 'map', label: '🗺️ 地图定位' },
+      { value: 'upload', label: '📎 附件上传' },
+      { value: 'link', label: '🔗 链接组件' },
+      { value: 'serial-number', label: '🔢 序列号' },
+      { value: 'user-role', label: '👤 用户角色' },
+      { value: 'bytes-array', label: '💾 字节数组' },
+      { value: 'reference', label: '🔍 查找引用' },
+      { value: 'form-info', label: '📋 表单信息' },
+      { value: 'editable-table', label: '📊 可编辑表格' },
+      { value: 'relate-plus', label: '🔗 关联字段Plus' },
+      { value: 'relate', label: '🔗 关联字段' }
     ],
-    description: '字段的显示类型（TF=TableField）'
+    description: '字段的显示类型'
   },
   {
     name: 'value',
@@ -117,11 +108,8 @@ export const viewFieldDefaultProps = {
   name: 'name',
   label: '名称',
   type: 'text' as 'text' | 'textarea' | 'number' | 'password' | 'select' | 'checkbox' | 'radio' | 'switch' | 'slider' | 'date' | 'date-range' | 'time' | 'rate' |
-    'table-text' | 'table-textarea' | 'table-number' | 'table-select' | 'table-checkbox' |
-    'table-date' | 'table-date-range' | 'table-time' | 'table-rate' | 'table-rich-text' |
-    'table-map' | 'table-upload' | 'table-link' | 'table-serial-number' | 'table-user-role' |
-    'table-bytes-array' | 'table-reference' | 'table-form-info' | 'table-editable-table' |
-    'table-relate-plus' | 'table-relate',
+    'rich-text' | 'map' | 'upload' | 'link' | 'serial-number' | 'user-role' |
+    'bytes-array' | 'reference' | 'form-info' | 'editable-table' | 'relate-plus' | 'relate',
   value: '示例文本',
   description: '这是字段的描述信息',
   options: [],
@@ -156,27 +144,18 @@ const renderViewFieldPreview = (props: Record<string, any>) => {
     'date-range': '日期范围',
     'time': '时间',
     'rate': '评分',
-    'table-text': 'TF-文本输入',
-    'table-textarea': 'TF-多行文本',
-    'table-number': 'TF-数字输入',
-    'table-select': 'TF-下拉选择',
-    'table-checkbox': 'TF-复选框',
-    'table-date': 'TF-日期选择',
-    'table-date-range': 'TF-日期范围',
-    'table-time': 'TF-时间选择',
-    'table-rate': 'TF-评分组件',
-    'table-rich-text': 'TF-富文本编辑器',
-    'table-map': 'TF-地图定位',
-    'table-upload': 'TF-附件上传',
-    'table-link': 'TF-链接组件',
-    'table-serial-number': 'TF-序列号',
-    'table-user-role': 'TF-用户角色',
-    'table-bytes-array': 'TF-字节数组',
-    'table-reference': 'TF-查找引用',
-    'table-form-info': 'TF-表单信息',
-    'table-editable-table': 'TF-可编辑表格',
-    'table-relate-plus': 'TF-关联字段Plus',
-    'table-relate': 'TF-关联字段'
+    'rich-text': '富文本编辑器',
+    'map': '地图定位',
+    'upload': '附件上传',
+    'link': '链接组件',
+    'serial-number': '序列号',
+    'user-role': '用户角色',
+    'bytes-array': '字节数组',
+    'reference': '查找引用',
+    'form-info': '表单信息',
+    'editable-table': '可编辑表格',
+    'relate-plus': '关联字段Plus',
+    'relate': '关联字段'
   }
 
   // 示例数据
@@ -206,48 +185,37 @@ const renderViewFieldPreview = (props: Record<string, any>) => {
       case 'radio':
         return options.length > 0 ? options[0].value : 'option1'
       case 'date':
-      case 'table-date':
         return '2025-12-31'
       case 'date-range':
-      case 'table-date-range':
         return '2025-12-31 - 2026-3-12'
       case 'time':
         return '14:30:00'
       case 'textarea':
         return '这是多行文本示例\n第二行内容'
 
-      // TableField 类型
-      case 'table-text':
-      case 'table-textarea':
-        return '表格字段文本示例'
-      case 'table-number':
-        return 12345.67
-      case 'table-select':
-        return 'active'
-      case 'table-checkbox':
-        return true
-      case 'table-rate':
-        return 4
-      case 'table-time':
-        return '09:45:00'
-      case 'table-map':
+      // 高级类型
+      case 'rich-text':
+        return '<p>富文本示例</p>'
+      case 'map':
         return { lng: 116.404, lat: 39.915, name: '北京市' }
-      case 'table-upload':
+      case 'upload':
         return [{ name: 'example.jpg', url: 'https://example.com/file.jpg' }]
-      case 'table-link':
+      case 'link':
         return 'https://example.com'
-      case 'table-serial-number':
+      case 'serial-number':
         return 'SN20241201001'
-      case 'table-user-role':
+      case 'user-role':
         return [{ name: '张三', id: 'user001' }]
-      case 'table-bytes-array':
+      case 'bytes-array':
         return 'SGVsbG8gV29ybGQ='
-      case 'table-reference':
+      case 'reference':
         return [{ name: '关联项', value: '123' }]
-      case 'table-editable-table':
+      case 'form-info':
+        return '表单信息示例'
+      case 'editable-table':
         return [{ name: '张三', age: 25 }, { name: '李四', age: 30 }]
-      case 'table-relate':
-      case 'table-relate-plus':
+      case 'relate':
+      case 'relate-plus':
         return [{id: "方法", name: "感特好22"}]
 
       default:

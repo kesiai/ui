@@ -10,24 +10,6 @@ export const chartLinePropsConfig = [
     placeholder: '请输入图表标题'
   },
   {
-    name: 'width',
-    label: '宽度',
-    type: 'range' as const,
-    default: 100,
-    min: 50,
-    max: 100,
-    step: 1
-  },
-  {
-    name: 'height',
-    label: '高度',
-    type: 'range' as const,
-    default: 100,
-    min: 50,
-    max: 100,
-    step: 1
-  },
-  {
     name: 'chartCode',
     label: '图表代码',
     type: 'code' as const,
@@ -85,10 +67,6 @@ const renderChartLineCodePreview = (props: Record<string, any>) => {
   return `<ChartLine
   title="${props.title}"
   option={${JSON.stringify(props.option, null, 2)}}
-  size={{
-    width: "${props.width}%",
-    height: "${props.height}%"
-  }}
   cellKey="your-cell-key"
 />`
 }

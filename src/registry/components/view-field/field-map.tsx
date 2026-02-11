@@ -586,7 +586,7 @@ const ScriptRender = ({ value, schema }: { value: any; schema?: any }) => {
 // ============================================
 
 const fieldMap: { [key: string]: React.ComponentType<any> } = {
-  // 基础类型
+  // 基础类型（融合 TableField 类型）
   'text': Text,
   'textarea': Textarea,
   'number': Number,
@@ -600,29 +600,17 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'date-range': DateRange,
   'time': TimeField,
   'rate': Rate,
-
-  // TableField 类型
-  'table-text': Text,
-  'table-textarea': Textarea,
-  'table-number': Number,
-  'table-select': Select,
-  'table-checkbox': BooleanIcon,
-  'table-date': DateField,
-  'table-date-range': DateRange,
-  'table-time': TimeField,
-  'table-rate': Rate,
-  'table-rich-text': RichText,
-  'table-map': Map,
-  'table-upload': Upload,
-  'table-link': Link,
-  'table-serial-number': SerialNumber,
-  'table-user-role': UserRole,
-  'table-bytes-array': BytesArray,
-  'table-reference': Reference,
-  'table-form-info': FormInfo,
-  'table-editable-table': EditableTable,
-  'table-relate-plus': RelatePlus,
-  'table-relate': Relate,
+  'rich-text': RichText,
+  'map': Map,
+  'upload': Upload,
+  'link': Link,
+  'serial-number': SerialNumber,
+  'user-role': UserRole,
+  'bytes-array': BytesArray,
+  'form-info': FormInfo,
+  'editable-table': EditableTable,
+  'relate-plus': RelatePlus,
+  'relate': Relate,
 
   // 特殊类型
   'formula': Formula,
@@ -669,13 +657,13 @@ export const ViewFieldRender = ({ type, value, schema, ...props }: any) => {
     'datePicker': 'date',
     'dateRange': 'date-range',
     'timePicker': 'time',
-    'textEditor': 'table-rich-text',
-    'attachment': 'table-upload',
-    'attachments': 'table-upload',
-    'editableTable': 'table-editable-table',
-    'link': 'table-link',
-    'map': 'table-map',
-    'area': 'table-map', // 暂时用 map 代替
+    'textEditor': 'rich-text',
+    'attachment': 'upload',
+    'attachments': 'upload',
+    'editableTable': 'editable-table',
+    'link': 'link',
+    'map': 'map',
+    'area': 'map',
   }
 
   const mappedType = typeMapping[fieldType]

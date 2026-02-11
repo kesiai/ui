@@ -1,12 +1,12 @@
-import ChartLine from '@/registry/components/chart-line/chart-line'
+import ChartEcharts from '@/registry/components/chart-echarts/chart-echarts'
 import { ComponentConfig } from '@/app/config/types'
 
-export const chartLinePropsConfig = [
+export const chartEchartsPropsConfig = [
   {
     name: 'title',
     label: '标题',
     type: 'text' as const,
-    default: '折线图',
+    default: 'echarts图表',
     placeholder: '请输入图表标题'
   },
   {
@@ -17,11 +17,11 @@ export const chartLinePropsConfig = [
   }
 ]
 
-export const chartLineDefaultProps = {
-  title: '折线图',
+export const chartEchartsDefaultProps = {
+  title: 'echarts图表',
   option: {
     title: {
-      text: '折线图示例'
+      text: 'echarts图表示例'
     },
     tooltip: {
       trigger: 'axis'
@@ -43,12 +43,12 @@ export const chartLineDefaultProps = {
   }
 }
 
-const renderChartLinePreview = (props: Record<string, any>) => {
+const renderChartEchartsPreview = (props: Record<string, any>) => {
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full h-48 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center">
         <div className="w-full h-full" style={{ width: '100%', height: '100%' }}>
-          <ChartLine
+          <ChartEcharts
             option={props.option}
             chartCode={props.chartCode}
             cellKey="preview"
@@ -63,19 +63,19 @@ const renderChartLinePreview = (props: Record<string, any>) => {
   )
 }
 
-const renderChartLineCodePreview = (props: Record<string, any>) => {
-  return `<ChartLine
+const renderChartEchartsCodePreview = (props: Record<string, any>) => {
+  return `<ChartEcharts
   title="${props.title}"
   option={${JSON.stringify(props.option, null, 2)}}
   cellKey="your-cell-key"
 />`
 }
 
-export const chartLineConfig: ComponentConfig = {
-  id: 'chart-line',
-  name: 'ChartLine 折线图',
-  propsConfig: chartLinePropsConfig,
-  defaultProps: chartLineDefaultProps,
-  renderPreview: renderChartLinePreview,
-  renderCodePreview: renderChartLineCodePreview
+export const chartEchartsConfig: ComponentConfig = {
+  id: 'chart-echarts',
+  name: 'ChartEcharts echarts图表',
+  propsConfig: chartEchartsPropsConfig,
+  defaultProps: chartEchartsDefaultProps,
+  renderPreview: renderChartEchartsPreview,
+  renderCodePreview: renderChartEchartsCodePreview
 }

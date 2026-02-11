@@ -52,9 +52,32 @@ export const CodeEditorModal: React.FC<CodeEditorModalProps> = ({
           <textarea
             value={localCode}
             onChange={(e) => setLocalCode(e.target.value)}
-            placeholder="codeOption = {
-  backgroundColor: 'red'
-}"
+            placeholder={`option = {
+  "title": {
+    "text": "echarts图表示例"
+  },
+  "tooltip": {
+    "trigger": "axis"
+  },
+  "xAxis": {
+    "type": "category",
+    "data": [
+      "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+    ]
+  },
+  "yAxis": {
+    "type": "value"
+  },
+  "series": [
+    {
+      "data": [
+        150, 230, 224, 218, 135, 147, 260
+      ],
+      "type": "line",
+      "smooth": true
+    }
+  ]
+}`}
             className="w-full h-full min-h-[300px] p-4 bg-slate-900 text-slate-100 font-mono text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
             spellCheck={false}
           />

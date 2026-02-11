@@ -68,7 +68,7 @@ function getCategoryByComponentId(componentId: string): string {
 
   // 图表组件
   const chartComponents = [
-    'liquid-level', 'network-graph', 'node-tree-select', 'ruler-comp'
+    'chart-echarts', 'liquid-level', 'network-graph', 'node-tree-select', 'ruler-comp'
   ]
   if (chartComponents.includes(componentId)) {
     return 'chart'

@@ -21,7 +21,7 @@ const StrToFunction = (obj: any): any => {
   return result
 }
 
-export interface ChartLineProps extends Omit<BaseChartProps, 'option'> {
+export interface ChartEchartsProps extends Omit<BaseChartProps, 'option'> {
   title?: string
   option?: any
   chartCode?: string
@@ -29,7 +29,7 @@ export interface ChartLineProps extends Omit<BaseChartProps, 'option'> {
   seriesOption?: any
 }
 
-const ChartLine: React.FC<ChartLineProps> = (props) => {
+const ChartEcharts: React.FC<ChartEchartsProps> = (props) => {
   const { option, chartCode, chartData, seriesOption, cellKey, title } = props
 
   let newOption = option || { series: [seriesOption] }
@@ -63,4 +63,4 @@ const ChartLine: React.FC<ChartLineProps> = (props) => {
   )
 }
 
-export default ChartLine
+export default ChartEcharts

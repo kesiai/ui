@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { api, useWS } from '@airiot/client'
 import { useDatasetSet } from '@airiot/client'
 import dayjs from 'dayjs'
-import { toast } from '@/registry/hooks/use-toast'
+import { toast } from 'sonner'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 import type {
   TagValue,
@@ -110,10 +110,7 @@ const fetchHistoryData = async (where: string): Promise<Record<string, any[]>> =
     return data
   } catch (err: any) {
     const errorMessage = err.json?.data || err.message || err?.json?.detail || err?.detail || '获取历史数据失败'
-    toast({
-      variant: 'destructive',
-      title: errorMessage
-    })
+    toast.error(errorMessage)
     throw err
   }
 }

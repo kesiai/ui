@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { api } from '@airiot/client'
 import { useDatasetSet } from '@airiot/client'
 import dayjs from 'dayjs'
-import { toast } from '@/registry/hooks/use-toast'
+import { toast } from 'sonner'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 import { timeQuery } from '@/registry/lib/datasource-utils'
 import type {
@@ -189,10 +189,7 @@ const getTimeRange = async (timeRange: TimeRangeConfig): Promise<TimeRangeConfig
       if (!recordId) {
         messageTip += '未指定班次记录'
       }
-      toast({
-        variant: 'warning',
-        title: messageTip
-      })
+      toast.warning(messageTip)
       return Promise.reject(new Error(messageTip))
     }
 
@@ -226,10 +223,7 @@ const getTimeRange = async (timeRange: TimeRangeConfig): Promise<TimeRangeConfig
       }
     } catch (error) {
       console.error('获取班次记录失败:', error)
-      toast({
-        variant: 'destructive',
-        title: '获取班次记录失败'
-      })
+      toast.error('获取班次记录失败')
       return Promise.reject(error)
     }
   }
@@ -490,10 +484,7 @@ const queryData = async (
     }
   } catch (err) {
     console.error('数据查询出现错误，请检查数据', err)
-    toast({
-      variant: 'destructive',
-      title: '数据查询出现错误，请检查数据'
-    })
+    toast.error('数据查询出现错误，请检查数据')
     return undefined
   }
 }

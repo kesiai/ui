@@ -3,7 +3,7 @@
 import { useMemo, useEffect, useState, useRef, useCallback, type ReactNode } from 'react'
 import _ from 'lodash'
 import { api, useDatasetSet } from '@airiot/client'
-import { toast } from '@/registry/hooks/use-toast'
+import { toast } from 'sonner'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 import { numberFormat, dateFormat } from '@/registry/lib/datasource-utils'
 import type { TableInfo } from '@/registry/lib/datasource-types'
@@ -595,10 +595,7 @@ function useTableData(config: TableDataConfig) {
       setRequestId(`${Date.now()}-${Math.random().toString(36).substring(2, 9)}`)
     } catch (error) {
       console.error('查询表数据失败:', error)
-      toast({
-        variant: 'destructive',
-        title: '数据查询出现错误，请检查数据'
-      })
+      toast.error('数据查询出现错误，请检查数据')
       setDataset([])
       setRequestId(`${Date.now()}-${Math.random().toString(36).substring(2, 9)}`)
     } finally {

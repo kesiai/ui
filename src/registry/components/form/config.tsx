@@ -5,6 +5,7 @@ import {
 import Form from '@/registry/components/form/form'
 import FormField from '@/registry/components/form-field/form-field'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form.md?raw'
 
 // 预设的布局样式
 export const layoutPresets: Record<string, {
@@ -300,5 +301,6 @@ export const formConfig: ComponentConfig = {
   propsConfig: formPropsConfig,
   defaultProps: formDefaultProps,
   renderPreview: renderFormPreview,
-  renderCodePreview: renderFormCodePreview
+  renderCodePreview: renderFormCodePreview,
+  documentation: documentationMd
 }

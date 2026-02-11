@@ -1,5 +1,6 @@
 import { MobileNavBar } from '@/registry/components/mobile-nav-bar/mobile-nav-bar'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './mobile-nav-bar.md?raw'
 
 export const mobileNavBarPropsConfig = [
   {
@@ -78,5 +79,6 @@ export const mobileNavBarConfig: ComponentConfig = {
   propsConfig: mobileNavBarPropsConfig,
   defaultProps: mobileNavBarDefaultProps,
   renderPreview: renderMobileNavBarPreview,
-  renderCodePreview: renderMobileNavBarCodePreview
+  renderCodePreview: renderMobileNavBarCodePreview,
+  documentation: documentationMd
 }

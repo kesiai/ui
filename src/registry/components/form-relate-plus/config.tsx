@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormRelatePlus } from '@/registry/components/form-relate-plus/form-relate-plus'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-relate-plus.md?raw'
 
 export const formRelatePlusPropsConfig = [
   {
@@ -172,7 +173,8 @@ export const formRelatePlusConfig: ComponentConfig = {
   propsConfig: formRelatePlusPropsConfig,
   defaultProps: formRelatePlusDefaultProps,
   renderPreview: renderFormRelatePlusPreview,
-  renderCodePreview: renderFormRelatePlusCodePreview
+  renderCodePreview: renderFormRelatePlusCodePreview,
+  documentation: documentationMd
 }
 
 export default formRelatePlusConfig

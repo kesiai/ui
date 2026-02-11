@@ -1,5 +1,6 @@
 import { Button } from '@/registry/components/button/button'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './button.md?raw'
 
 export const buttonPropsConfig = [
   {
@@ -168,5 +169,6 @@ export const buttonConfig: ComponentConfig = {
   defaultProps: buttonDefaultProps,
   renderPreview: renderButtonPreview,
   renderCodePreview: renderButtonCodePreview,
-  renderCustomForm: renderButtonCustomForm
+  renderCustomForm: renderButtonCustomForm,
+  documentation: documentationMd
 }

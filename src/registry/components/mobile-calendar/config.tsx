@@ -1,5 +1,6 @@
 import { MobileCalendar } from '@/registry/components/mobile-calendar/mobile-calendar'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './mobile-calendar.md?raw'
 
 export const mobileCalendarPropsConfig = [
   {
@@ -103,5 +104,6 @@ export const mobileCalendarConfig: ComponentConfig = {
   propsConfig: mobileCalendarPropsConfig,
   defaultProps: mobileCalendarDefaultProps,
   renderPreview: renderMobileCalendarPreview,
-  renderCodePreview: renderMobileCalendarCodePreview
+  renderCodePreview: renderMobileCalendarCodePreview,
+  documentation: documentationMd
 }

@@ -6,6 +6,7 @@ import ViewPagination from '../view-pagination/view-pagination'
 import Actions, { CreateAction } from '../view-actions/view-actions'
 import Tools from '../view-tools/view-tools'
 import BatchActions from '../view-batch/view-batch'
+import documentationMd from './view-demo.md?raw'
 
 export const viewDemoPropsConfig = [
   {
@@ -90,5 +91,6 @@ export const viewDemoConfig: ComponentConfig = {
   propsConfig: viewDemoPropsConfig,
   defaultProps: viewDemoDefaultProps,
   renderPreview: renderViewDemoPreview,
-  renderCodePreview: renderViewDemoCodePreview
+  renderCodePreview: renderViewDemoCodePreview,
+  documentation: documentationMd
 }

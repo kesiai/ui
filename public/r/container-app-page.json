@@ -7,7 +7,7 @@
   "registryDependencies": [],
   "files": [
     {
-      "path": "registry/components/container-app-page/app-page.tsx",
+      "path": "registry/components/airiot/container-app-page/app-page.tsx",
       "type": "registry:component",
       "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nexport interface AppPageProps extends React.HTMLAttributes<HTMLDivElement> {\n  children?: React.ReactNode\n}\n\nconst AppPage = React.forwardRef<HTMLDivElement, AppPageProps>(\n  ({ className, children, ...props }, ref) => {\n    return (\n      <div\n        ref={ref}\n        className={cn(\"app-page w-full h-full\", className)}\n        {...props}\n      >\n        {children}\n      </div>\n    )\n  }\n)\n\nAppPage.displayName = \"AppPage\"\n\nexport { AppPage }\n"
     }

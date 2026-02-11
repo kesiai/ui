@@ -1,5 +1,6 @@
 import { MobileScanQR } from '@/registry/components/mobile-scan-qr/mobile-scan-qr'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './mobile-scan-qr.md?raw'
 
 export const mobileScanQRPropsConfig = [
   {
@@ -50,5 +51,6 @@ export const mobileScanQRConfig: ComponentConfig = {
   propsConfig: mobileScanQRPropsConfig,
   defaultProps: mobileScanQRDefaultProps,
   renderPreview: renderMobileScanQRPreview,
-  renderCodePreview: renderMobileScanQRCodePreview
+  renderCodePreview: renderMobileScanQRCodePreview,
+  documentation: documentationMd
 }

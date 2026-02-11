@@ -3,6 +3,7 @@ import { WarnViews } from '@/registry/components/gis-warn-layer/gis-warn-layer'
 import { TableViews } from '../gis-table-layer/gis-table-layer'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-warn-layer.md?raw'
 
 // 默认配置
 const defaultWarnViewsProps = {
@@ -250,5 +251,6 @@ export const warnViewsConfig: ComponentConfig = {
     propsConfig: warnViewsPropsConfig,
     defaultProps: warnViewsDefaultProps,
     renderPreview: renderWarnViewsPreview,
-    renderCodePreview: renderWarnViewsCodePreview
+    renderCodePreview: renderWarnViewsCodePreview,
+    documentation: documentationMd
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import ViewAdvancedFilter from './view-advanced-filter'
 import ViewModel from '../view-model/view-model'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './view-advanced-filter.md?raw'
 
 export const viewAdvancedFilterPropsConfig = [
   {
@@ -187,5 +188,6 @@ export const viewAdvancedFilterConfig: ComponentConfig = {
   propsConfig: viewAdvancedFilterPropsConfig,
   defaultProps: viewAdvancedFilterDefaultProps,
   renderPreview: renderViewAdvancedFilterPreview,
-  renderCodePreview: renderViewAdvancedFilterCodePreview
+  renderCodePreview: renderViewAdvancedFilterCodePreview,
+  documentation: documentationMd
 }

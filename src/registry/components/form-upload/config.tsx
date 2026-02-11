@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormUpload } from '@/registry/components/form-upload/form-upload'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-upload.md?raw'
 
 export const formUploadPropsConfig = [
   {
@@ -143,7 +144,8 @@ export const formUploadConfig: ComponentConfig = {
   propsConfig: formUploadPropsConfig,
   defaultProps: formUploadDefaultProps,
   renderPreview: renderFormUploadPreview,
-  renderCodePreview: renderFormUploadCodePreview
+  renderCodePreview: renderFormUploadCodePreview,
+  documentation: documentationMd
 }
 
 export default formUploadConfig

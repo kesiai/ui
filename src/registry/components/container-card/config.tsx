@@ -1,5 +1,6 @@
 import { Card } from '@/registry/components/container-card/container-card'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-card.md?raw'
 
 export const cardPropsConfig = [
   {
@@ -76,5 +77,6 @@ export const cardConfig: ComponentConfig = {
   propsConfig: cardPropsConfig,
   defaultProps: cardDefaultProps,
   renderPreview: renderCardPreview,
-  renderCodePreview: renderCardCodePreview
+  renderCodePreview: renderCardCodePreview,
+  documentation: documentationMd
 }

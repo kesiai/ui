@@ -1,6 +1,7 @@
 import * as React from "react"
 import FormWidget from '@/registry/components/form-widget/form-widget'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-widget.md?raw'
 
 export const FormWidgetPreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {
   const [value, setValue] = React.useState<any>('')
@@ -202,7 +203,8 @@ export const formWidgetConfig: ComponentConfig = {
   propsConfig: formWidgetPropsConfig,
   defaultProps: formWidgetDefaultProps,
   renderPreview: renderFormWidgetPreview,
-  renderCodePreview: renderFormWidgetCodePreview
+  renderCodePreview: renderFormWidgetCodePreview,
+  documentation: documentationMd
 }
 
 export default formWidgetConfig

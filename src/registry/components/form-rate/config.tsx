@@ -1,6 +1,7 @@
 import * as React from "react"
 import Rate from '@/registry/components/form-rate/form-rate.tsx'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-rate.md?raw'
 
 export const RatePreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {
   const [value, setValue] = React.useState<number>(0)
@@ -113,5 +114,6 @@ export const rateConfig: ComponentConfig = {
   propsConfig: ratePropsConfig,
   defaultProps: rateDefaultProps,
   renderPreview: renderRatePreview,
-  renderCodePreview: renderRateCodePreview
+  renderCodePreview: renderRateCodePreview,
+  documentation: documentationMd
 }

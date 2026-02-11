@@ -1,0 +1,15 @@
+{
+  "name": "video-isc",
+  "type": "registry:component",
+  "title": "Video Isc",
+  "description": "Video Isc - 组件",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/airiot/video-isc/web-control.esm.min.d.ts",
+      "type": "registry:component",
+      "content": "declare module \"*.esm.min.js\" {\n  export class WebControl {\n    constructor(options: any);\n    JS_StartService(type: string, options: any): Promise<any>;\n    JS_CreateWnd(containerId: string, width: number, height: number): Promise<any>;\n    JS_RequestInterface(request: any): Promise<any>;\n    JS_Resize(width: number, height: number): void;\n    JS_SetWindowControlCallback(callbacks: any): void;\n    JS_HideWnd?(): void;\n    JS_DestroyWnd(): Promise<any>;\n  }\n}"
+    }
+  ]
+}

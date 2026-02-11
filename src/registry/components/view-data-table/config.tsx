@@ -2,6 +2,7 @@ import React from 'react'
 import ViewDataTable from './view-data-table'
 import ViewModel from '../view-model/view-model'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './view-data-table.md?raw'
 
 export const viewDataTablePropsConfig = [
   {
@@ -324,5 +325,6 @@ export const viewDataTableConfig: ComponentConfig = {
   propsConfig: viewDataTablePropsConfig,
   defaultProps: viewDataTableDefaultProps,
   renderPreview: renderViewDataTablePreview,
-  renderCodePreview: renderViewDataTableCodePreview
+  renderCodePreview: renderViewDataTableCodePreview,
+  documentation: documentationMd
 }

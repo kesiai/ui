@@ -1,7 +1,7 @@
-
 import { CustomViews, DrawLineItem } from '@/registry/components/gis-custom-layer/gis-custom-layer'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-custom-layer.md?raw'
 
 export const customViewsPropsConfig = [
     {
@@ -185,7 +185,8 @@ export const customViewsConfig: ComponentConfig = {
     propsConfig: customViewsPropsConfig,
     defaultProps: customViewsDefaultProps,
     renderPreview: renderCustomViewsPreview,
-    renderCodePreview: renderCustomViewsCodePreview
+    renderCodePreview: renderCustomViewsCodePreview,
+    documentation: documentationMd
 }
 
 export { defaultDrawStyleProps }

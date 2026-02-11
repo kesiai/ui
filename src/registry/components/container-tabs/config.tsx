@@ -1,5 +1,6 @@
 import { Tabs } from '@/registry/components/container-tabs/container-tabs'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-tabs.md?raw'
 
 export const tabsPropsConfig = [
   {
@@ -155,5 +156,6 @@ export const tabsConfig: ComponentConfig = {
   defaultProps: tabsDefaultProps,
   renderPreview: renderTabsPreview,
   renderCodePreview: renderTabsCodePreview,
-  renderCustomForm: renderTabsCustomForm
+  renderCustomForm: renderTabsCustomForm,
+  documentation: documentationMd
 }

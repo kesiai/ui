@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormUserRole } from '@/registry/components/form-user-role/form-user-role'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-user-role.md?raw'
 
 export const formUserRolePropsConfig = [
   {
@@ -76,7 +77,8 @@ export const formUserRoleConfig: ComponentConfig = {
   propsConfig: formUserRolePropsConfig,
   defaultProps: formUserRoleDefaultProps,
   renderPreview: renderFormUserRolePreview,
-  renderCodePreview: renderFormUserRoleCodePreview
+  renderCodePreview: renderFormUserRoleCodePreview,
+  documentation: documentationMd
 }
 
 export default formUserRoleConfig

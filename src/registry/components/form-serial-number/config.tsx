@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-serial-number.md?raw'
 
 export const formSerialNumberPropsConfig = [
   {
@@ -56,7 +57,8 @@ export const formSerialNumberConfig: ComponentConfig = {
   propsConfig: formSerialNumberPropsConfig,
   defaultProps: formSerialNumberDefaultProps,
   renderPreview: renderFormSerialNumberPreview,
-  renderCodePreview: renderFormSerialNumberCodePreview
+  renderCodePreview: renderFormSerialNumberCodePreview,
+  documentation: documentationMd
 }
 
 export default formSerialNumberConfig

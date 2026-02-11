@@ -1,6 +1,7 @@
 import * as React from "react"
 import Area from '@/registry/components/form-area/form-area.tsx'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-area.md?raw'
 
 export const AreaPreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {
   const [value, setValue] = React.useState<string>('')
@@ -64,5 +65,6 @@ export const areaConfig: ComponentConfig = {
   propsConfig: areaPropsConfig,
   defaultProps: areaDefaultProps,
   renderPreview: renderAreaPreview,
-  renderCodePreview: renderAreaCodePreview
+  renderCodePreview: renderAreaCodePreview,
+  documentation: documentationMd
 }

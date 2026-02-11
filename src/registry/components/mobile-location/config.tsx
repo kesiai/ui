@@ -1,5 +1,6 @@
 import { MobileLocation } from '@/registry/components/mobile-location/mobile-location'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './mobile-location.md?raw'
 
 export const mobileLocationPropsConfig = [
   {
@@ -74,5 +75,6 @@ export const mobileLocationConfig: ComponentConfig = {
   propsConfig: mobileLocationPropsConfig,
   defaultProps: mobileLocationDefaultProps,
   renderPreview: renderMobileLocationPreview,
-  renderCodePreview: renderMobileLocationCodePreview
+  renderCodePreview: renderMobileLocationCodePreview,
+  documentation: documentationMd
 }

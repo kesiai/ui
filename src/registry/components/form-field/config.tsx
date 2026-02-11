@@ -2,6 +2,7 @@ import React from 'react'
 import FormField from '@/registry/components/form-field/form-field'
 import Form from '@/registry/components/form/form'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-field.md?raw'
 
 export const formFieldPropsConfig = [
   {
@@ -263,5 +264,6 @@ export const formFieldConfig: ComponentConfig = {
   propsConfig: formFieldPropsConfig,
   defaultProps: formFieldDefaultProps,
   renderPreview: renderFormFieldPreview,
-  renderCodePreview: renderFormFieldCodePreview
+  renderCodePreview: renderFormFieldCodePreview,
+  documentation: documentationMd
 }

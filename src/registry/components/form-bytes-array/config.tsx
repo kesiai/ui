@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormBytesArray } from '@/registry/components/form-bytes-array/form-bytes-array'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-bytes-array.md?raw'
 
 export const formBytesArrayPropsConfig = [
   {
@@ -75,7 +76,8 @@ export const formBytesArrayConfig: ComponentConfig = {
   propsConfig: formBytesArrayPropsConfig,
   defaultProps: formBytesArrayDefaultProps,
   renderPreview: renderFormBytesArrayPreview,
-  renderCodePreview: renderFormBytesArrayCodePreview
+  renderCodePreview: renderFormBytesArrayCodePreview,
+  documentation: documentationMd
 }
 
 export default formBytesArrayConfig

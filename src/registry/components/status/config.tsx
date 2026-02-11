@@ -1,5 +1,6 @@
 import { Status } from '@/registry/components/status/status'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './status.md?raw'
 
 // 示例状态配置
 const exampleStatuses = [
@@ -199,5 +200,6 @@ export const statusConfig: ComponentConfig = {
   defaultProps: statusDefaultProps,
   renderPreview: renderStatusPreview,
   renderCodePreview: renderStatusCodePreview,
-  renderCustomForm: renderStatusCustomForm
+  renderCustomForm: renderStatusCustomForm,
+  documentation: documentationMd
 }

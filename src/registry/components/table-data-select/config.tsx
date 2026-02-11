@@ -1,5 +1,6 @@
 import { TableSelect } from './table-data-select'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './table-data-select.md?raw'
 
 // 翻译函数占位符
 const _r = (str: string) => str
@@ -68,5 +69,6 @@ export const tableSelectConfig: ComponentConfig = {
   propsConfig: tableSelectPropsConfig,
   defaultProps: tableSelectDefaultProps,
   renderPreview: renderTableSelectPreview,
-  renderCodePreview: renderTableSelectCodePreview
+  renderCodePreview: renderTableSelectCodePreview,
+  documentation: documentationMd
 }

@@ -1,7 +1,7 @@
-
 import { XYZ } from '@/registry/components/gis-xyz-tile/gis-xyz-tile'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-xyz-tile.md?raw'
 
 export const xyzPropsConfig = [
     {
@@ -150,7 +150,7 @@ const renderXYZPreview = (props: Record<string, any>) => {
     }
 
     return (
-        <div className="w-full h-[300px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-75 border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <XYZ
                     source={props.source}
@@ -219,5 +219,6 @@ export const xyzConfig: ComponentConfig = {
     propsConfig: xyzPropsConfig,
     defaultProps: xyzDefaultProps,
     renderPreview: renderXYZPreview,
-    renderCodePreview: renderXYZCodePreview
+    renderCodePreview: renderXYZCodePreview,
+    documentation: documentationMd
 }

@@ -1,0 +1,18 @@
+{
+  "name": "gis-xyz-tile",
+  "type": "registry:component",
+  "title": "Gis Xyz Tile",
+  "description": "Gis Xyz Tile - 组件",
+  "dependencies": [
+    "ol",
+    "proj4"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/airiot/gis-xyz-tile/utils.ts",
+      "type": "registry:component",
+      "content": "\nimport Map from 'ol/Map'\nimport * as proj from 'ol/proj'\nimport proj4 from 'proj4'\nimport { register } from 'ol/proj/proj4'\n\n// 注册 proj4 到 OpenLayers\nregister(proj4)\n\n// 坐标系映射表（兼容多种别名）\nconst COORD_SYSTEM_MAP: Record<string, string> = {\n    // WGS84系列\n    WGS84: 'EPSG:4326',\n    WGS1984: 'EPSG:4326',\n    EPSG4326: 'EPSG:4326',\n    'EPSG:4326': 'EPSG:4326',\n\n    // 火星坐标系\n    GCJ02: 'GCJ02',\n    AMap: 'GCJ02',\n\n    // 百度坐标系\n    BD09: 'BD09',\n    BD09LL: 'BD09',\n    Baidu: 'BD09',\n    BMap: 'BD09',\n    BD09MC: 'BD09MC',\n    BD09Meter: 'BD09MC',\n\n    // Web墨卡托\n    EPSG3857: 'EPSG:3857',\n    'EPSG:3857': 'EPSG:3857',\n    EPSG900913: 'EPSG:3857',\n    EPSG102100: 'EPSG:3857',\n    WebMercator: 'EPSG:3857',\n    WM: 'EPSG:3857'\n}\n\nexport const getProjectionCode = (coordinateType: string) => {\n    return COORD_SYSTEM_MAP[coordinateType] || coordinateType\n}\n\n// 获取地图坐标系类型\nexport const getMapCoordinateType = (map: Map | null) => {\n    if (!map || !map.getView) {\n        // 默认返回 EPSG:3857\n        return 'EPSG:3857'\n    }\n    const view = map.getView();\n    const projection = view.getProjection();\n    const code = projection.getCode()\n    return code\n}\n\n// 获取 Projection 对象\nexport const getProjection = (coorDefs: any, tileCoordinateType: string | undefined, mapCoordinateSystem: string) => {\n    const dataProjection = coorDefs?.dataProjection\n    // 如果没有提供坐标系定义，使用默认的地图坐标系（或 tileCoordinateType）\n    const tileProjectionCode = dataProjection || tileCoordinateType || mapCoordinateSystem\n\n    // 1. 标准坐标系处理\n    if (['EPSG:4326', 'EPSG:3857'].includes(tileProjectionCode)) {\n        return proj.get(tileProjectionCode);\n    }\n\n    // 2. 自定义坐标系处理 (Proj4)\n    if (dataProjection && coorDefs?.defs) {\n        // 注册自定义坐标系\n        try {\n            proj4.defs(dataProjection, coorDefs.defs)\n            register(proj4)\n\n            const projection_ = new proj.Projection({\n                code: dataProjection,\n                units: coorDefs?.unit || 'm',\n                axisOrientation: 'neu',\n                //   extent: coorDefs?.extent?.length ? coorDefs.extent.map(Number) : null // options conflict in types?\n            })\n            if (coorDefs?.extent?.length) {\n                projection_.setExtent(coorDefs.extent.map(Number))\n            }\n\n            // 如果已经在 OL 中注册（通过 register(proj4)），可能不需要手动 addProjection，但为了保险\n            // proj4.defs 注册后，OL 的 proj4 插件会自动识别\n\n            return projection_ // 或者 use proj.get(dataProjection)\n\n        } catch (e) {\n            console.error('Proj4 registration failed', e)\n        }\n    }\n\n    // Fallback to getting by code (allows things like 'EPSG:xxx' if already known by proj4 or OL)\n    // 如果 tileProjectionCode 是 'GCJ02' 或 'BD09' 等如果未定义会返回 null\n    return proj.get(tileProjectionCode)\n}\n"
+    }
+  ]
+}

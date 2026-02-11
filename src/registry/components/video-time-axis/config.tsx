@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { TimeAxisWidget, VideoRecord } from '@/registry/components/video-time-axis/time-axis'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
+import documentationMd from './video-time-axis.md?raw'
 
 // 属性配置
 const timeAxisPropsConfig: PropConfig[] = [
@@ -180,7 +181,8 @@ export const timeAxisConfig: ComponentConfig = {
   propsConfig: timeAxisPropsConfig,
   defaultProps: timeAxisDefaultProps,
   renderPreview: renderTimeAxisPreview,
-  renderCodePreview: renderTimeAxisCodePreview
+  renderCodePreview: renderTimeAxisCodePreview,
+  documentation: documentationMd
 }
 
 export default timeAxisConfig

@@ -1,12 +1,13 @@
 import { ContextProvider, useContextProvider, type Table, type TableData } from '@/registry/components/container-context-provider/context-provider'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-context-provider.md?raw'
 
 // 示例子组件 - 使用context数据
 function ContextConsumer() {
   const { table, tableData, data } = useContextProvider()
 
   return (
-    <div className="space-y-4 p-6 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg">
+    <div className="space-y-4 p-6 bg-linear-to-br from-green-50 to-blue-50 rounded-lg">
       <div className="bg-white p-4 rounded-lg shadow-sm">
         <h3 className="text-lg font-semibold text-gray-700 mb-2">Table 数据</h3>
         <p className="text-gray-600">ID: {table.id}</p>
@@ -123,12 +124,11 @@ const renderContextProviderPreview = (props: Record<string, any>) => {
 
   return (
     <div className="h-full flex items-center justify-center p-4" style={{ minHeight: '400px' }}>
-      <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6">
+      <div className="w-full h-full bg-linear-to-br from-gray-50 to-gray-100 rounded-lg p-6">
         <ContextProvider
           table={table}
           tableData={tableData}
           data={data}
-          className="h-full"
         >
           <div className="h-full flex flex-col items-center justify-center">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Context Provider 示例</h2>
@@ -197,5 +197,6 @@ export const contextProviderConfig: ComponentConfig = {
   propsConfig: contextProviderPropsConfig,
   defaultProps: contextProviderDefaultProps,
   renderPreview: renderContextProviderPreview,
-  renderCodePreview: renderContextProviderCodePreview
+  renderCodePreview: renderContextProviderCodePreview,
+  documentation: documentationMd
 }

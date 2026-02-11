@@ -2,6 +2,7 @@
 import { CodeEditorViews } from '@/registry/components/gis-code-editor/gis-code-editor'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-code-editor.md?raw'
 
 export const codeEditorViewsPropsConfig = [
     {
@@ -26,7 +27,7 @@ export const codeEditorViewsDefaultProps = {
 
 const renderCodeEditorViewsPreview = (props: Record<string, any>) => {
     return (
-        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative flex flex-col">
+        <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative flex flex-col">
             <div className="flex-1 relative">
                 <MapContainer>
                     <CodeEditorViews
@@ -54,5 +55,6 @@ export const codeEditorViewsConfig: ComponentConfig = {
     propsConfig: codeEditorViewsPropsConfig,
     defaultProps: codeEditorViewsDefaultProps,
     renderPreview: renderCodeEditorViewsPreview,
-    renderCodePreview: renderCodeEditorViewsCodePreview
+    renderCodePreview: renderCodeEditorViewsCodePreview,
+    documentation: documentationMd
 }

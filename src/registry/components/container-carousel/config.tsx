@@ -1,5 +1,6 @@
 import { Carousel } from '@/registry/components/container-carousel/container-carousel'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './container-carousel.md?raw'
 
 export const carouselPropsConfig = [
   {
@@ -100,7 +101,7 @@ export const carouselDefaultProps = {
 const renderCarouselPreview = (props: Record<string, any>) => {
   return (
     <div className="h-full flex items-center justify-center p-4" style={{ minHeight: '400px' }}>
-      <div className="w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6">
+      <div className="w-full h-full bg-linear-to-br from-blue-50 to-purple-50 rounded-lg p-6">
         <Carousel
           autoplay={props.autoplay}
           autoplaySpeed={props.autoplaySpeed}
@@ -113,19 +114,19 @@ const renderCarouselPreview = (props: Record<string, any>) => {
           cssEase={props.cssEase}
           className="h-full"
         >
-          <div className="flex items-center justify-center h-full bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-lg">
+          <div className="flex items-center justify-center h-full bg-linear-to-r from-blue-400 to-blue-600 text-white rounded-lg">
             <div className="text-center">
               <p className="text-4xl font-bold mb-2">1</p>
               <p className="text-lg">第一页</p>
             </div>
           </div>
-          <div className="flex items-center justify-center h-full bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg">
+          <div className="flex items-center justify-center h-full bg-linear-to-r from-purple-400 to-purple-600 text-white rounded-lg">
             <div className="text-center">
               <p className="text-4xl font-bold mb-2">2</p>
               <p className="text-lg">第二页</p>
             </div>
           </div>
-          <div className="flex items-center justify-center h-full bg-gradient-to-r from-pink-400 to-pink-600 text-white rounded-lg">
+          <div className="flex items-center justify-center h-full bg-linear-to-r from-pink-400 to-pink-600 text-white rounded-lg">
             <div className="text-center">
               <p className="text-4xl font-bold mb-2">3</p>
               <p className="text-lg">第三页</p>
@@ -195,5 +196,6 @@ export const carouselConfig: ComponentConfig = {
   propsConfig: carouselPropsConfig,
   defaultProps: carouselDefaultProps,
   renderPreview: renderCarouselPreview,
-  renderCodePreview: renderCarouselCodePreview
+  renderCodePreview: renderCarouselCodePreview,
+  documentation: documentationMd
 }

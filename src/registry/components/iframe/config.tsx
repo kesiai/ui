@@ -1,5 +1,6 @@
 import { Iframe } from '@/registry/components/iframe/iframe'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './iframe.md?raw'
 
 export const iframePropsConfig = [
   {
@@ -87,5 +88,6 @@ export const iframeConfig: ComponentConfig = {
   defaultProps: iframeDefaultProps,
   renderPreview: renderIframePreview,
   renderCodePreview: renderIframeCodePreview,
-  renderCustomForm: renderIframeCustomForm
+  renderCustomForm: renderIframeCustomForm,
+  documentation: documentationMd
 }

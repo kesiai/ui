@@ -3,11 +3,9 @@ import dayjs from "dayjs"
 import _ from "lodash"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { convertValue, valueFormat, type DataPointConfig } from "./data-point.utils"
-import { useUser } from "@airiot/client"
+import { convertValue, valueFormat, type DataPointConfig } from "@/registry/lib/data-point-utils"
+import { useUser, useTag } from "@airiot/client"
 
-const useDataTag = () => { }
-// Type definitions
 export interface WarningState {
   className?: string
   level?: '低' | '中' | '高'
@@ -342,7 +340,7 @@ const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(
 
     // Use useDataTag to get real-time data point data and configuration
     // 只有在登录时才使用 useDataTag
-    const tagValue = useDataTag({
+    const tagValue = useTag({
       tableId,
       dataId: tableDataId,
       tagId,
@@ -409,7 +407,7 @@ const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(
             {number}
           </span>
         </PopoverTrigger>
-        <PopoverContent className="z-[999]" side="bottom" align="start">
+        <PopoverContent className="z-999" side="bottom" align="start">
           <div className="font-medium mb-2">{tableDataName}</div>
           <PopoverContentComponent {...contentProps} />
         </PopoverContent>
@@ -421,4 +419,4 @@ const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(
 DataPoint.displayName = "DataPoint"
 
 export { DataPoint, convertValue, valueFormat, AnimatedNumber }
-export type { DataPointConfig } from "./data-point.utils"
+export type { DataPointConfig } from "../../lib/data-point-utils"

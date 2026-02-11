@@ -1,5 +1,6 @@
 import { MobilePopup } from '@/registry/components/mobile-popup/mobile-popup'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './mobile-popup.md?raw'
 
 export const mobilePopupPropsConfig = [
   {
@@ -106,5 +107,6 @@ export const mobilePopupConfig: ComponentConfig = {
   propsConfig: mobilePopupPropsConfig,
   defaultProps: mobilePopupDefaultProps,
   renderPreview: renderMobilePopupPreview,
-  renderCodePreview: renderMobilePopupCodePreview
+  renderCodePreview: renderMobilePopupCodePreview,
+  documentation: documentationMd
 }

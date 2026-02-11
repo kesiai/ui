@@ -5,6 +5,7 @@ import { ComponentConfig } from '@/app/config/types'
 import { useModelGetItems } from '@airiot/client'
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import documentationMd from './view-pagination.md?raw'
 
 export const viewPaginationPropsConfig = [
   {
@@ -197,5 +198,6 @@ export const viewPaginationConfig: ComponentConfig = {
   propsConfig: viewPaginationPropsConfig,
   defaultProps: viewPaginationDefaultProps,
   renderPreview:  renderViewPaginationPreviewWrap,
-  renderCodePreview: renderViewPaginationCodePreview
+  renderCodePreview: renderViewPaginationCodePreview,
+  documentation: documentationMd
 }

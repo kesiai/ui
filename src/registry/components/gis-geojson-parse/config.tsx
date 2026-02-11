@@ -2,6 +2,7 @@
 import { GeoJson } from '@/registry/components/gis-geojson-parse/gis-geojson-parse'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-geojson-parse.md?raw'
 
 export const geoJsonPropsConfig = [
     {
@@ -82,7 +83,7 @@ export const geoJsonDefaultProps = {
 
 const renderGeoJsonPreview = (props: Record<string, any>) => {
     return (
-        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <GeoJson
                     source={props.source}
@@ -128,5 +129,6 @@ export const geoJsonConfig: ComponentConfig = {
     propsConfig: geoJsonPropsConfig,
     defaultProps: geoJsonDefaultProps,
     renderPreview: renderGeoJsonPreview,
-    renderCodePreview: renderGeoJsonCodePreview
+    renderCodePreview: renderGeoJsonCodePreview,
+    documentation: documentationMd
 }

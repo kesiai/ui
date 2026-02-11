@@ -1,6 +1,6 @@
-
 import { MapContainer, ViewOptions, ZoomOption, ScaleLineOption, ExtentOption } from '@/registry/components/gis-map-core/gis-map-core'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
+import documentationMd from './gis-map-core.md?raw'
 
 // 默认视图配置（对应原系统的 viewOptions）
 const defaultViewOptions: ViewOptions = {
@@ -173,5 +173,6 @@ export const mapContainerConfig: ComponentConfig = {
     propsConfig: mapContainerPropsConfig,
     defaultProps: mapContainerDefaultProps,
     renderPreview: renderMapContainerPreview,
-    renderCodePreview: renderMapContainerCodePreview
+    renderCodePreview: renderMapContainerCodePreview,
+    documentation: documentationMd
 }

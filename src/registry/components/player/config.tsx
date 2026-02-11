@@ -1,5 +1,6 @@
 import { Player, AudioTrack } from './player'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './player.md?raw'
 
 // 示例音频列表
 const examplePlaylist: AudioTrack[] = [
@@ -246,5 +247,6 @@ export const playerConfig: ComponentConfig = {
   defaultProps: playerDefaultProps,
   renderPreview: renderPlayerPreview,
   renderCodePreview: renderPlayerCodePreview,
-  renderCustomForm: renderPlayerCustomForm
+  renderCustomForm: renderPlayerCustomForm,
+  documentation: documentationMd
 }

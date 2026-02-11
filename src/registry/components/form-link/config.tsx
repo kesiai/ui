@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormLink } from '@/registry/components/form-link/form-link'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-link.md?raw'
 
 export const formLinkPropsConfig = [
   {
@@ -88,7 +89,8 @@ export const formLinkConfig: ComponentConfig = {
   propsConfig: formLinkPropsConfig,
   defaultProps: formLinkDefaultProps,
   renderPreview: renderFormLinkPreview,
-  renderCodePreview: renderFormLinkCodePreview
+  renderCodePreview: renderFormLinkCodePreview,
+  documentation: documentationMd
 }
 
 export default formLinkConfig

@@ -1,5 +1,6 @@
 import QRCodeComp from './qrcode'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './qrcode.md?raw'
 
 export const qrcodePropsConfig = [
   {
@@ -83,5 +84,6 @@ export const qrcodeConfig: ComponentConfig = {
   propsConfig: qrcodePropsConfig,
   defaultProps: qrcodeDefaultProps,
   renderPreview: renderQRCodePreview,
-  renderCodePreview: renderQRCodeCodePreview
+  renderCodePreview: renderQRCodeCodePreview,
+  documentation: documentationMd
 }

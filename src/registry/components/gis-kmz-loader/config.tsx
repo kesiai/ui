@@ -2,6 +2,7 @@
 import { Kmz } from '@/registry/components/gis-kmz-loader/gis-kmz-loader'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './gis-kmz-loader.md?raw'
 
 export const kmzPropsConfig = [
     {
@@ -57,7 +58,7 @@ export const kmzDefaultProps = {
 
 const renderKmzPreview = (props: Record<string, any>) => {
     return (
-        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <Kmz
                     source={props.source}
@@ -93,5 +94,6 @@ export const kmzConfig: ComponentConfig = {
     propsConfig: kmzPropsConfig,
     defaultProps: kmzDefaultProps,
     renderPreview: renderKmzPreview,
-    renderCodePreview: renderKmzCodePreview
+    renderCodePreview: renderKmzCodePreview,
+    documentation: documentationMd
 }

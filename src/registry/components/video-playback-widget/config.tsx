@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { VideoPlaybackWidget, VideoRecord } from '@/registry/components/video-playback-widget/video-playback-widget'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
+import documentationMd from './video-playback-widget.md?raw'
 
 // 属性配置
 const videoPlaybackPropsConfig: PropConfig[] = [
@@ -154,7 +155,8 @@ export const videoPlaybackConfig: ComponentConfig = {
   propsConfig: videoPlaybackPropsConfig,
   defaultProps: videoPlaybackDefaultProps,
   renderPreview: renderVideoPlaybackPreview,
-  renderCodePreview: renderVideoPlaybackCodePreview
+  renderCodePreview: renderVideoPlaybackCodePreview,
+  documentation: documentationMd
 }
 
 export default videoPlaybackConfig

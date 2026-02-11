@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormRichText } from '@/registry/components/form-rich-text/form-rich-text'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-rich-text.md?raw'
 
 export const formRichTextPropsConfig = [
   {
@@ -94,7 +95,8 @@ export const formRichTextConfig: ComponentConfig = {
   propsConfig: formRichTextPropsConfig,
   defaultProps: formRichTextDefaultProps,
   renderPreview: renderFormRichTextPreview,
-  renderCodePreview: renderFormRichTextCodePreview
+  renderCodePreview: renderFormRichTextCodePreview,
+  documentation: documentationMd
 }
 
 export default formRichTextConfig

@@ -1,6 +1,7 @@
 import * as React from "react"
 import { MobilePicker, PickerOption } from '@/registry/components/mobile-picker/mobile-picker'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './mobile-picker.md?raw'
 
 export const MobilePickerPreview: React.FC<{ props: Record<string, any> }> = ({ props }) => {
   const [value, setValue] = React.useState<string | string[]>(props.multiple ? [] : '')
@@ -188,5 +189,6 @@ export const mobilePickerConfig: ComponentConfig = {
   defaultProps: mobilePickerDefaultProps,
   renderPreview: renderMobilePickerPreview,
   renderCodePreview: renderMobilePickerCodePreview,
-  renderCustomForm: renderMobilePickerCustomForm
+  renderCustomForm: renderMobilePickerCustomForm,
+  documentation: documentationMd
 }

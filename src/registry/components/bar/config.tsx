@@ -1,5 +1,6 @@
 import { Bar } from '@/registry/components/bar/bar'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './bar.md?raw'
 
 export const barPropsConfig = [
   {
@@ -138,5 +139,6 @@ export const barConfig: ComponentConfig = {
   defaultProps: barDefaultProps,
   renderPreview: renderBarPreview,
   renderCodePreview: renderBarCodePreview,
-  renderCustomForm: renderBarCustomForm
+  renderCustomForm: renderBarCustomForm,
+  documentation: documentationMd
 }

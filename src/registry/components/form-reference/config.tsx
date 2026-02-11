@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormReference } from '@/registry/components/form-reference/form-reference'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-reference.md?raw'
 
 export const formReferencePropsConfig = [
   {
@@ -59,7 +60,8 @@ export const formReferenceConfig: ComponentConfig = {
   propsConfig: formReferencePropsConfig,
   defaultProps: formReferenceDefaultProps,
   renderPreview: renderFormReferencePreview,
-  renderCodePreview: renderFormReferenceCodePreview
+  renderCodePreview: renderFormReferenceCodePreview,
+  documentation: documentationMd
 }
 
 export default formReferenceConfig

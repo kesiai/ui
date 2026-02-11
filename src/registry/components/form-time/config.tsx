@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormTime } from '@/registry/components/form-time/form-time'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-time.md?raw'
 
 export const formTimePropsConfig = [
   {
@@ -94,7 +95,8 @@ export const formTimeConfig: ComponentConfig = {
   propsConfig: formTimePropsConfig,
   defaultProps: formTimeDefaultProps,
   renderPreview: renderFormTimePreview,
-  renderCodePreview: renderFormTimeCodePreview
+  renderCodePreview: renderFormTimeCodePreview,
+  documentation: documentationMd
 }
 
 export default formTimeConfig

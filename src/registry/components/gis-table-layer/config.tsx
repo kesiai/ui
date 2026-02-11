@@ -1,8 +1,8 @@
-
 import { TableViews } from '@/registry/components/gis-table-layer/gis-table-layer'
 import { MapContainer } from '../gis-map-core/gis-map-core'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
 import { defaultDrawStyleProps } from '../gis-custom-layer/config'
+import documentationMd from './gis-table-layer.md?raw'
 
 const exampleData = {
     table: { id: '地理信息', title: '地理信息' },
@@ -278,7 +278,7 @@ const renderTableViewsPreview = (props: Record<string, any>) => {
     const cluster = parseJson(props.cluster, defaultCluster)
 
     return (
-        <div className="w-full h-[400px] border border-gray-200 rounded overflow-hidden relative">
+        <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
             <MapContainer>
                 <TableViews
                     table={table}
@@ -346,5 +346,6 @@ export const tableViewsConfig: ComponentConfig = {
     propsConfig: tableViewsPropsConfig,
     defaultProps: tableViewsDefaultProps,
     renderPreview: renderTableViewsPreview,
-    renderCodePreview: renderTableViewsCodePreview
+    renderCodePreview: renderTableViewsCodePreview,
+    documentation: documentationMd
 }

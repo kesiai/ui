@@ -1,5 +1,6 @@
 import { Text } from '@/registry/components/text/text'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './text.md?raw'
 
 export const textPropsConfig = [
   {
@@ -111,5 +112,6 @@ export const textConfig: ComponentConfig = {
   propsConfig: textPropsConfig,
   defaultProps: textDefaultProps,
   renderPreview: renderTextPreview,
-  renderCodePreview: renderTextCodePreview
+  renderCodePreview: renderTextCodePreview,
+  documentation: documentationMd
 }

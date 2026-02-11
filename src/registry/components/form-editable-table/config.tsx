@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
 import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './form-editable-table.md?raw'
 
 export const formEditableTablePropsConfig = [
   {
@@ -126,7 +127,8 @@ export const formEditableTableConfig: ComponentConfig = {
   propsConfig: formEditableTablePropsConfig,
   defaultProps: formEditableTableDefaultProps,
   renderPreview: renderFormEditableTablePreview,
-  renderCodePreview: renderFormEditableTableCodePreview
+  renderCodePreview: renderFormEditableTableCodePreview,
+  documentation: documentationMd
 }
 
 export default formEditableTableConfig

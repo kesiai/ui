@@ -1,0 +1,17 @@
+{
+  "name": "filter-number",
+  "type": "registry:component",
+  "title": "Filter Number",
+  "description": "Filter Number - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/airiot/filter-number/filter-number.tsx",
+      "type": "registry:component",
+      "content": "import React from 'react'\nimport _ from 'lodash'\nimport { Input } from '@/components/ui/input'\nimport { cn } from '@/lib/utils'\n\nconst FilterNumber = (props: any) => {\n  const { name, value, onBlur, onChange, ...inputProps } = props\n\n  const gte = !_.isNil(value?.gte) ? value.gte : ''\n  const lte = !_.isNil(value?.lte) ? value.lte : ''\n\n  const inputChange = (v: string, k: 'gte' | 'lte') => {\n    const num = v === '' ? null : Number(v)\n    const vs = _.pickBy({ ...value, [k]: num }, _.isNumber)\n    onChange(_.isEmpty(vs) ? null : vs)\n  }\n\n  return (\n    <div className=\"inline-flex items-center gap-2\">\n      <Input\n        {...inputProps}\n        type=\"number\"\n        className={cn(props.style?.width ? 'w-auto' : 'w-24')}\n        style={props.style}\n        value={gte}\n        placeholder={props.minimum ? `最小值(${props.minimum})` : '无限制'}\n        onChange={(e) => inputChange(e.target.value, 'gte')}\n      />\n      <span className=\"text-muted-foreground\">~</span>\n      <Input\n        {...inputProps}\n        type=\"number\"\n        className={cn(props.style?.width ? 'w-auto' : 'w-24')}\n        style={props.style}\n        value={lte}\n        placeholder={props.maximum ? `最大值(${props.maximum})` : '无限制'}\n        onChange={(e) => inputChange(e.target.value, 'lte')}\n      />\n    </div>\n  )\n}\nFilterNumber.displayName = \"FilterNumber\"\nexport { FilterNumber }\n"
+    }
+  ]
+}

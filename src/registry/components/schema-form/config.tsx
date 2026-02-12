@@ -90,37 +90,36 @@ export const schemaFormDefaultProps = {
         type: 'string',
         title: '用户名'
       },
-      email: {
-        type: 'string',
-        title: '邮箱',
-        format: 'email'
-      },
-      photo: {
-        type: 'object',
-        properties: {},
-        title: '照片'
-      },
       age: {
         type: 'number',
         title: '年龄'
       },
-      bio: {
-        type: 'string',
-        title: '个人简介'
-      },
-      subscribe: {
-        type: 'boolean',
-        title: '订阅邮件'
+      photo: {
+        type: 'array',
+        items: {},
+        aaa: 'xxx',
+        title: '照片'
       },
       rating: {
         type: 'number',
         title: '评分'
+      },
+      radioio: {
+        type: 'string',
+        enum: ['option1', 'option2', 'option3'],
+        enum_title: ['选项一', '选项二', '选项三'],
+        title: '单选'
       }
     },
-    required: ['username', 'email']
+    required: ['username']
   },
   formSchema: [
-    { name: "name" }, { name: "photo", type: 'table-upload' }, "*"
+    { key: "username", name: "username" },
+    { key: "age", name: "age" },
+    { key: "photo", name: "photo", type: 'upload' },
+    { key: "rating", name: "rating", type: 'rate' },
+    { key: "radioio", name: "radioio", type: 'radio', enum: ['option1', 'option2', 'option3'],
+        enum_title: ['选项一', '选项二', '选项三333'], }
   ],
   showExample: true
 }

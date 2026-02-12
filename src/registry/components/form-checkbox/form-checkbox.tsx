@@ -59,6 +59,10 @@ export interface FormCheckboxProps
    * 单元格键值
    */
   cellKey?: string
+  /**
+   * 单选框标签（当 options 为空时使用）
+   */
+  label?: string
 }
 
 const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
@@ -71,6 +75,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
       config = {},
       onChange,
       cellKey,
+      label,
       ...props
     },
     ref
@@ -83,20 +88,28 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
     const isControlled = controlledValue !== undefined
     const value = isControlled ? controlledValue : internalValue
 
+    // 处理布尔值：当 options 为空时，value 可能是布尔值
+    const getBooleanValue = () => {
+      if (options.length === 0 && typeof value === 'boolean') {
+        return value ? ['checked'] : []
+      }
+      return value
+    }
+
     // 全选状态
     const [checkAll, setCheckAll] = React.useState(false)
     // 半选状态
     const [indeterminate, setIndeterminate] = React.useState(false)
 
-    const currentValues = Array.isArray(value) ? value : value ? [value] : []
+    const currentValues = Array.isArray(getBooleanValue()) ? getBooleanValue() : getBooleanValue() ? [getBooleanValue()] : []
 
     // 更新全选/半选状态
     React.useEffect(() => {
       if (isMulti) {
-        setCheckAll(currentValues.length === options.length)
-        setIndeterminate(currentValues.length > 0 && currentValues.length < options.length)
+        setCheckAll(getBooleanValue().length === options.length)
+        setIndeterminate(getBooleanValue().length > 0 && getBooleanValue().length < options.length)
       }
-    }, [currentValues, options.length, isMulti])
+    }, [getBooleanValue, options.length, isMulti])
 
     // 单个 checkbox 变化
     const handleCheckboxChange = React.useCallback(
@@ -109,7 +122,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
           newValues = isChecked ? [optionValue] : []
         } else {
           // 多选模式
-          newValues = [...currentValues]
+          newValues = [...getBooleanValue()]
           if (isChecked) {
             if (!newValues.includes(optionValue)) {
               newValues.push(optionValue)
@@ -155,38 +168,57 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
         )}
         {...props}
       >
-        {config?.isCheckAll && isMulti && (
-          <label className="flex items-center gap-2 check-all">
-            <Checkbox
-              checked={checkAll}
-              disabled={config?.disabled}
-              onCheckedChange={handleCheckAllChange}
-              className={indeterminate ? "data-[state=checked]:bg-indeterminate-500" : ""}
-            />
-            <span className="text-sm">全选</span>
-          </label>
-        )}
-        <div
-          className={cn(
-            "flex flex-col gap-2",
-            config?.checkAllSeparate ? "w-full" : "flex-wrap flex-row"
-          )}
-        >
-          {options.map((option) => (
-            <label
-              key={option.value}
-              className="flex items-center gap-2 cursor-pointer"
-            >
+        {options.length === 0 ? (
+          // options 为空时，显示单个 checkbox（输出布尔值）
+          label ? (
+            <label className="flex items-center gap-2 cursor-pointer">
               <Checkbox
-                checked={currentValues.includes(option.value)}
+                checked={!!value}
                 disabled={config?.disabled}
-                onCheckedChange={(checked) => handleCheckboxChange(option.value, checked)}
+                onCheckedChange={(checked) => {
+                  onChange?.(checked as any)
+                }}
                 aria-invalid={props['aria-invalid']}
               />
-              <span className="text-sm">{option.label}</span>
+              <span className="text-sm">{label}</span>
             </label>
-          ))}
-        </div>
+          ) : null
+        ) : (
+          <>
+            {config?.isCheckAll && isMulti && (
+              <label className="flex items-center gap-2 check-all">
+                <Checkbox
+                  checked={checkAll}
+                  disabled={config?.disabled}
+                  onCheckedChange={handleCheckAllChange}
+                  className={indeterminate ? "data-[state=checked]:bg-indeterminate-500" : ""}
+                />
+                <span className="text-sm">全选</span>
+              </label>
+            )}
+            <div
+              className={cn(
+                "flex flex-col gap-2",
+                config?.checkAllSeparate ? "w-full" : "flex-wrap flex-row"
+              )}
+            >
+              {options.map((option) => (
+                <label
+                  key={option.value}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <Checkbox
+                    checked={getBooleanValue().includes(option.value)}
+                    disabled={config?.disabled}
+                    onCheckedChange={(checked) => handleCheckboxChange(option.value, checked)}
+                    aria-invalid={props['aria-invalid']}
+                  />
+                  <span className="text-sm">{option.label}</span>
+                </label>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     )
   }

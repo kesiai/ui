@@ -34,15 +34,13 @@ import { FilterDateRange } from '@/registry/components/filter-datetime/filter-da
 
 // 将 table-field 组件包装为 FormField 可用的组件
 const wrapFormComponent = (Component: React.ComponentType<any>, defaultFieldSchema: any = {}) => {
-  return ({ input, field, ...rest }: any) => {
+  return ({ input, field, schema = {}, ...rest }: any) => {
     const combinedField = {
       ...field,
-      schema: {
-        ...defaultFieldSchema,
-        ...field?.schema
-      }
+      ...defaultFieldSchema,
+      ...field?.schema
     }
-    return <Component input={input} {...combinedField} {...rest} />
+    return <Component input={input} {...combinedField} {...rest} {...schema} />
   }
 }
 

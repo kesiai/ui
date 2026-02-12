@@ -33,7 +33,7 @@ export interface RadioProps
   /**
    * 数据项
    */
-  options?: Array<{ label: string; value: string | number }>
+  options?: Array<{ name: string; value: string | number }>
   /**
    * 当前值
    */
@@ -115,7 +115,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
                 htmlFor={String(option.value)}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                {option.label}
+                {option.name}
               </label>
             </div>
           ))}

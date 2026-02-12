@@ -1,5 +1,5 @@
 import * as React from "react"
-import Area from '@/registry/components/form-area/form-area.tsx'
+import { FormArea } from '@/registry/components/form-area/form-area'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form-area.md?raw'
 
@@ -9,12 +9,13 @@ export const AreaPreview: React.FC<{ props: Record<string, any> }> = ({ props })
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full" style={{ maxWidth: `${props.width || 100}%` }}>
-        <Area
-          areaType={props.areaType}
-          // disabled={props.disabled}
-          // placeholder={props.placeholder}
-          input={{ value, onChange: setValue }}
-          // cellKey="preview"
+        <FormArea
+          value={value}
+          onChange={setValue}
+          config={{
+            areaType: props.areaType,
+          }}
+          cellKey="preview"
         />
       </div>
     </div>
@@ -50,11 +51,12 @@ const renderAreaPreview = (props: Record<string, any>) => {
 }
 
 const renderAreaCodePreview = (props: Record<string, any>) => {
-  return `<Area
-  areaType="${props.areaType}"
-  disabled={${props.disabled}}
-  placeholder="${props.placeholder}"
-  input="${props.input}"
+  return `<FormArea
+  value={value}
+  onChange={setValue}
+  config={{
+    areaType: "${props.areaType}"
+  }}
   cellKey="your-cell-key"
 />`
 }

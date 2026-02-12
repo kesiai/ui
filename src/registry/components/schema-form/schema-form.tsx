@@ -15,6 +15,7 @@ type SchemaFormProps = UseFormPropsExtended & UseFormSchemaProps & {
 
 const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, ...props }: SchemaFormProps) => {
   const { fields, resolver } = useFormSchema({ schema, formSchema })
+  console.log('SchemaForm', fields, schema, formSchema)
   const methods = useForm({
     resolver: resolver, ...props
   } as any)

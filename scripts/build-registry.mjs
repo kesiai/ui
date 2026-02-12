@@ -148,6 +148,42 @@ function extractRelativeCssImports(content, currentFileDir) {
   return Array.from(cssImports);
 }
 
+// 提取相对路径的 TS/TSX 导入，返回基础路径（不带扩展名的）
+function extractRelativeTsImports(content, currentFileDir) {
+  const tsImports = new Set(); // 使用 Set 去重
+  // 匹配 import xxx from './xxx' 或 import { xxx } from './xxx.tsx'
+  const regex = /import[^'"]*['"](\.[^'"]*)['"]/g;
+  let match;
+  while ((match = regex.exec(content))) {
+    const relPath = match[1];
+    // 排除 .css, .json 等非 ts/tsx 文件
+    if (relPath.endsWith('.css') || relPath.endsWith('.json') || relPath.endsWith('.scss')) {
+      continue;
+    }
+    // 解析为绝对路径
+    const absPath = path.resolve(currentFileDir, relPath);
+    // 移除已有的扩展名，统一返回不带扩展名的路径
+    const baseAbsPath = absPath.replace(/\.(ts|tsx|js|jsx)$/, '');
+    tsImports.add(baseAbsPath);
+  }
+  return Array.from(tsImports);
+}
+
+// 检查文件是否存在（尝试不同扩展名）
+async function findExistingFile(basePath) {
+  const possibleExtensions = ['.tsx', '.ts', '.jsx', '.js'];
+  const possiblePaths = [basePath, ...possibleExtensions.map(ext => basePath + ext)];
+  for (const p of possiblePaths) {
+    try {
+      await fs.access(p);
+      return p;
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
 // 生成组件名称
 function generateComponentName(folder, relativePath) {
   // 移除文件扩展名
@@ -279,6 +315,36 @@ async function buildRegistry() {
           }
         }
 
+        // 添加相对导入的 TS/TSX 文件
+        const tsAbsPaths = extractRelativeTsImports(fileContent, currentFileDir);
+
+        for (const absTsPath of tsAbsPaths) {
+          const existingPath = await findExistingFile(absTsPath);
+          if (!existingPath) continue;
+
+          try {
+            const tsContent = await fs.readFile(existingPath, 'utf-8');
+
+            // 计算在 registry 中的路径
+            const relTsFromFolder = path.relative(absFolder, existingPath);
+            const registryTsPath = folder === 'components'
+              ? `registry/components/airiot/${relTsFromFolder.replace(/\\/g, '/')}`
+              : `registry/${folder}/${relTsFromFolder.replace(/\\/g, '/')}`;
+
+            // 避免重复添加（已经在 fileList 中的文件不再添加）
+            if (!fileList.some(f => f.path === registryTsPath)) {
+              fileList.push({
+                path: registryTsPath,
+                type: existingPath.endsWith('.css') ? 'registry:style' : type,
+                content: tsContent,
+              });
+              console.log(`    📄 添加依赖文件: ${registryTsPath}`);
+            }
+          } catch (err) {
+            console.warn(`  ⚠️  无法读取 TS/TSX 文件: ${existingPath} (被 ${file} 导入)`);
+          }
+        }
+
         // 构建注册表项
         const processedRegistryDeps = registryDeps.map(dep => {
           return dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`;
@@ -300,7 +366,7 @@ async function buildRegistry() {
         const componentJsonPath = path.join(OUTPUT_DIR, `${name}.json`);
         await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
 
-        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${libDeps.length} lib files, ${cssAbsPaths.size} css files)`);
+        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
       }
     } catch (e) {
       console.error(`  ⚠️  跳过文件夹 ${folder}:`, e.message);

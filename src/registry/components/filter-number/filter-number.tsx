@@ -9,7 +9,7 @@ const FilterNumber = (props: any) => {
   const gte = !_.isNil(value?.gte) ? value.gte : ''
   const lte = !_.isNil(value?.lte) ? value.lte : ''
 
-  const inputChange = (v: string, k: 'gte' | 'lte') => {
+  const inputChange = (v: any, k: 'gte' | 'lte') => {
     const num = v === '' ? null : Number(v)
     const vs = _.pickBy({ ...value, [k]: num }, _.isNumber)
     onChange(_.isEmpty(vs) ? null : vs)

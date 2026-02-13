@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import _ from 'lodash'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { Check, ChevronDown } from 'lucide-react'
+import { Check, ChevronDown, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const FilterEnum = (props: any) => {
@@ -37,9 +35,11 @@ const FilterEnum = (props: any) => {
     onChange(v)
   }
 
-  const handleClear = () => {
+  // 清空选择
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onChange(undefined)
     setSelectedValues([])
-    onChange(null)
   }
 
   const getSelectedNames = () => {
@@ -53,26 +53,45 @@ const FilterEnum = (props: any) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
+        <button
+          type="button"
           className={cn(
-            "w-full justify-start text-left font-normal",
-            selectedValues.length === 0 && "text-muted-foreground"
+            'flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-w-[150px]',
+            selectedNames.length > 0 && 'h-auto min-h-10 py-1'
           )}
         >
           <div className="flex flex-wrap gap-1 flex-1">
             {selectedNames.length > 0 ? (
-              selectedNames.map((name: string, index: number) => (
-                <Badge key={index} variant="secondary" className="gap-1">
-                  {name}
-                </Badge>
-              ))
+              selectedNames.map((name: string, index: number) => {
+                const val = selectedValues[index]
+                return (
+                  <Badge key={val} variant="secondary" className="gap-1 pl-1 pr-1 py-0">
+                    {name}
+                    <X
+                      className="h-3 w-3 ml-1 cursor-pointer opacity-70 hover:opacity-100"
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleToggle(val)
+                      }}
+                    />
+                  </Badge>
+                )
+              })
             ) : (
-              <span>{placeholder || '请选择'}</span>
+              <span className='text-muted-foreground'>{placeholder || '请选择'}</span>
             )}
           </div>
-          <ChevronDown className="h-4 w-4 opacity-50 ml-2 shrink-0" />
-        </Button>
+          {
+            selectedValues.length > 0 ? (
+              <div
+                onClick={handleClear}
+                className="cursor-pointer opacity-50 hover:opacity-100"
+              >
+                <X className="h-4 w-4" />
+              </div>
+            ) : <ChevronDown className="h-4 w-4 opacity-50" />
+          }
+        </button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-2" align="start">
         <div className="space-y-1">
@@ -88,10 +107,6 @@ const FilterEnum = (props: any) => {
                   )}
                   onClick={() => handleToggle(item.value)}
                 >
-                  <Checkbox
-                    checked={isSelected}
-                    onChange={() => {}}
-                  />
                   <span className="flex-1">{item.name}</span>
                   {isSelected && <Check className="h-4 w-4 text-primary" />}
                 </div>
@@ -101,17 +116,6 @@ const FilterEnum = (props: any) => {
             <div className="text-sm text-muted-foreground py-2">暂无选项</div>
           )}
         </div>
-        {selectedValues.length > 0 && (
-          <div className="mt-2 pt-2 border-t flex justify-end">
-            <button
-              type="button"
-              onClick={handleClear}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              清空
-            </button>
-          </div>
-        )}
       </PopoverContent>
     </Popover>
   )

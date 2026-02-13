@@ -20,6 +20,9 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   const { getItems } = useModelGetItems()
 
   const properties = _.mapValues(model.properties || {}, (prop, key) => ({ ...prop, name: key }))
+  
+  const formSchema = filters.filter((f: any) => properties[f.name || f])
+
   const onSubmit = (value: any) => {
     setWheres((w: any) => {
       return { ...w, filter: { ...w.filter, ...value } }
@@ -38,7 +41,7 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   }
 
   return (
-    <FilterSchemaForm formId={model.name || ''} schema={{ ...model, properties }} formSchema={filters} classNames={classNames} onSubmit={onSubmit} >
+    <FilterSchemaForm formId={model.name || ''} schema={{ ...model, properties }} formSchema={formSchema} classNames={classNames} onSubmit={onSubmit} >
       {(methods) => (
         <div className="mt-6 pt-4 border-t border-slate-200 flex gap-2">
           <button

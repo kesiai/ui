@@ -25,13 +25,23 @@ import { FormFormInfo } from '@/registry/components/form-form-info/form-form-inf
 import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
 import { FormRelatePlus } from '@/registry/components/form-relate-plus/form-relate-plus'
 import { FormRelate as FormRelate } from '@/registry/components/form-relate'
+import FormArea from '@/registry/components/form-area/form-area'
 import { FilterText } from '@/registry/components/filter-text/filter-text'
 import { FilterEnum } from '@/registry/components/filter-enum/filter-enum'
 import { FilterNumber } from '@/registry/components/filter-number/filter-number'
 import { FilterDate } from '@/registry/components/filter-date/filter-date'
 import { FilterBool } from '@/registry/components/filter-bool/filter-bool'
-import { FilterDateRange } from '@/registry/components/filter-datetime/filter-datetime'
-import FormArea from '../form-area/form-area'
+import { FilterDatetime } from '@/registry/components/filter-datetime/filter-datetime'
+import { FilterInputSelect } from '@/registry/components/filter-input-select/filter-input-select'
+import { FilterRelateUnique } from '@/registry/components/filter-relate-unique/filter-relate-unique'
+import { FilterUserRole } from '@/registry/components/filter-user-role/filter-user-role'
+import { FilterSingleDate } from '@/registry/components/filter-single-date/filter-single-date'
+import { FilterWarningType } from '@/registry/components/filter-warning-type/filter-warning-type'
+import { FilterLogType } from '@/registry/components/filter-log-type/filter-log-type'
+import { FilterTextBoolean } from '@/registry/components/filter-text-boolean/filter-text-boolean'
+import { FilterRelateSelect } from '@/registry/components/filter-relate-select/filter-relate-select'
+import { TableSelect } from '@/registry/components/table-select/table-select'
+import TableDataSelect from '@/registry/components/table-data-select/table-data-select'
 
 // 将 table-field 组件包装为 FormField 可用的组件
 const wrapFormComponent = (Component: React.ComponentType<any>, defaultFieldSchema: any = {}) => {
@@ -81,7 +91,18 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'filter_number': FilterNumber,
   'filter_bool': FilterBool,
   'filter_date': FilterDate,
-  'filter_datetime': FilterDateRange
+  'filter_datetime': FilterDatetime,
+  'filter_relate_unique': FilterRelateUnique,
+  'filter_input_select': FilterInputSelect,
+  'filter_user_role': FilterUserRole,
+  'filter_single_date': FilterSingleDate,
+  'filter_warning_type': FilterWarningType,
+  'filter_log_type': FilterLogType, 
+  'filter_text_boolean': FilterTextBoolean,
+  'filter_relate_select': FilterRelateSelect,
+
+  'tableselect': TableSelect,
+  'tableData': TableDataSelect
 }
 
 export default fieldMap

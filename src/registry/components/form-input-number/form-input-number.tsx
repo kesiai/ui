@@ -7,6 +7,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { ButtonGroup } from "@/components/ui/button-group"
+import { Button } from "@/components/ui/button"
 
 const inputNumberVariants = cva(
   "relative border transition-colors",
@@ -20,8 +22,8 @@ const inputNumberVariants = cva(
       },
       size: {
         sm: "h-8 text-sm",
-        md: "h-10 text-base",
-        lg: "h-12 text-lg",
+        md: "h-9 text-base",
+        lg: "h-10 text-lg",
       },
     },
     defaultVariants: {
@@ -292,34 +294,36 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
 
     if (addonBefore || addonAfter) {
       return (
-        <InputGroup
-          ref={ref}
-          className={cn(
-            inputNumberVariants({ variant, size }),
-            !bordered && "border-transparent",
-            disabled && "opacity-50 cursor-not-allowed",
-            readOnly && "cursor-default",
-            className
-          )}
-          style={style}
-        >
-          {addonBefore && <InputGroupAddon align="inline-start">{addonBefore}</InputGroupAddon>}
-          <div className="relative flex flex-1">
-            {prefix && (
-              <InputGroupAddon align="inline-start">
-                {prefix}
-              </InputGroupAddon>
+        <ButtonGroup>
+          {addonBefore && <Button variant="outline">{addonBefore}</Button>}
+          <InputGroup
+            ref={ref}
+            className={cn(
+              inputNumberVariants({ variant, size }),
+              !bordered && "border-transparent",
+              disabled && "opacity-50 cursor-not-allowed",
+              readOnly && "cursor-default",
+              className
             )}
-            {inputElement}
-            {(suffix || unit) && (
-              <InputGroupAddon align="inline-end">
-                {suffix}
-                {unit && <span className="ml-1 text-sm text-muted-foreground">{unit}</span>}
-              </InputGroupAddon>
-            )}
-          </div>
-          {addonAfter && <InputGroupAddon align="inline-end">{addonAfter}</InputGroupAddon>}
-        </InputGroup>
+            style={style}
+          >
+            <div className="relative flex flex-1">
+              {prefix && (
+                <InputGroupAddon align="inline-start">
+                  {prefix}
+                </InputGroupAddon>
+              )}
+              {inputElement}
+              {(suffix || unit) && (
+                <InputGroupAddon align="inline-end">
+                  {suffix}
+                  {unit && <span className="ml-1 text-sm text-muted-foreground">{unit}</span>}
+                </InputGroupAddon>
+              )}
+            </div>
+          </InputGroup>
+          {addonAfter && <Button variant="outline">{addonAfter}</Button>}
+        </ButtonGroup>
       )
     }
 

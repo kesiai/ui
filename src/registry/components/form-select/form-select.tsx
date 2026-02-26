@@ -52,7 +52,7 @@ export interface FormSelectProps
   /**
    * 选项列表
    */
-  options?: Array<{ value: string; label: string; disabled?: boolean }>
+  options?: Array<{ value: string; name: string; disabled?: boolean }>
   /**
    * 是否禁用
    */
@@ -162,7 +162,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
         return options
       }
       return options.filter(option =>
-        option.label.toLowerCase().includes(searchValue.toLowerCase()) ||
+        option.name.toLowerCase().includes(searchValue.toLowerCase()) ||
         option.value.toLowerCase().includes(searchValue.toLowerCase())
       )
     }, [options, searchValue, showSearch])
@@ -239,7 +239,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
                   value={option.value}
                   disabled={option.disabled}
                 >
-                  {option.label}
+                  {option.name}
                 </SelectItem>
               ))
             ) : (

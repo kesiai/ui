@@ -7,7 +7,7 @@ export interface CheckboxOption {
   /**
    * 显示文字
    */
-  label: string
+  name: string
   /**
    * 选项值
    */
@@ -213,7 +213,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
                     onCheckedChange={(checked) => handleCheckboxChange(option.value, checked)}
                     aria-invalid={props['aria-invalid']}
                   />
-                  <span className="text-sm">{option.label}</span>
+                  <span className="text-sm">{option.name}</span>
                 </label>
               ))}
             </div>

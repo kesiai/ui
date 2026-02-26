@@ -63,8 +63,8 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
       setLoading(true)
       try {
         const api = createAPI({
-          resource: name || 'core/user',
-          name: 'user'
+          resource: 'core/' + (name || 'user'),
+          name: name ||'user'
         })
 
         const fields = showField ? ['id', displayField, showField] : ['id', displayField]

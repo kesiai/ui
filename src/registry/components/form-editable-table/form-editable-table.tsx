@@ -73,7 +73,8 @@ export interface FormEditableTableProps {
 }
 
 const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
-  const { input, schema, meta } = props
+  const { input, meta } = props
+  const schema = { ...props, ...(props.schema || {}) }
   const { onChange, value = [] } = input || {}
   const [dataSource, setDataSource] = React.useState<any[]>(value || schema?.defaultVal || [])
   const [selectedRows, setSelectedRows] = React.useState<any[]>([])
@@ -140,7 +141,9 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
   const canDelete = !schema?.minCount || dataSource.length > schema.minCount
 
   const tableProps = {
-    input: { value: dataSource, onChange, name: input?.name },
+    value: dataSource,
+    onChange,
+    name: input?.name,
     schema,
     columns,
     selectedRows,

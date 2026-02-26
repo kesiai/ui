@@ -31,6 +31,7 @@ import { FilterNumber } from '@/registry/components/filter-number/filter-number'
 import { FilterDate } from '@/registry/components/filter-date/filter-date'
 import { FilterBool } from '@/registry/components/filter-bool/filter-bool'
 import { FilterDateRange } from '@/registry/components/filter-datetime/filter-datetime'
+import FormArea from '../form-area/form-area'
 
 // 将 table-field 组件包装为 FormField 可用的组件
 const wrapFormComponent = (Component: React.ComponentType<any>, defaultFieldSchema: any = {}) => {
@@ -72,6 +73,7 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'editable-table': wrapFormComponent(FormEditableTable),
   'relate-plus': wrapFormComponent(FormRelatePlus),
   'relate': wrapFormComponent(FormRelate),
+  'area': wrapFormComponent(FormArea),
 
   // filter组件
   'filter_text': FilterText,

@@ -185,12 +185,9 @@ export const schemaFormDefaultProps = {
         items: {},
         title: '可编辑表格'
       },
-      relatePlus: {
-        type: 'string',
-        title: '关联增强'
-      },
       relate: {
-        type: 'string',
+        type: 'object',
+        properties: {},
         title: '关联'
       }
     },
@@ -240,75 +237,6 @@ export const schemaFormDefaultProps = {
       }
     },
     {
-      key: "relatePlus",
-      name: "relatePlus",
-      type: 'relate-plus',
-      relateSchema: {
-        allowAdd: false,
-        allowSelectOld: true,
-        canOrder: false,
-        config: "关联字段",
-        createShow: true,
-        defaultVal: null,
-        descriptionType: "tooltip",
-        editShow: true,
-        insideFilter: [],
-        invalid: false,
-        key: "relate-table-6A5F",
-        listFields: true,
-        need: false,
-        properties: {},
-        recordSelectType: 'modal',
-        relate: {
-          fields: [
-            {
-              fieldSchema: {
-                canOrder: false,
-                config: "文本",
-                createShow: true,
-                descriptionType: "tooltip",
-                editShow: true,
-                fieldType: "input",
-                invalid: false,
-                key: "text-60CF",
-                listFields: true,
-                need: false,
-                rowKey: "B5EE",
-                size: "middle",
-                textContent: "text",
-                textType: "input",
-                title: "批号",
-                type: "string",
-                widthInForm: "8"
-              },
-              key: "text-60CF",
-              title: "批号"
-            }
-          ],
-          function: [
-            "formschema",
-            "fieldRules",
-            "tablePermission",
-            "gis"
-          ],
-          i18nProp: {},
-          id: "文本时间",
-          tableMajorType: "normal",
-          tableType: "table",
-          title: "文本时间",
-          tt: "normal"
-        },
-        relateShowFields: null,
-        selectType: "single",
-        showField: null,
-        showType: "select",
-        size: "middle",
-        title: "关联字段",
-        type: "object",
-        widthInForm: "24"
-      }
-    },
-    {
       key: "relate",
       name: "relate",
       type: 'relate',
@@ -327,7 +255,7 @@ export const schemaFormDefaultProps = {
         listFields: true,
         need: false,
         properties: {},
-        recordSelectType: 'modal',
+        recordSelectType: 'select',
         relate: {
           fields: [
             {

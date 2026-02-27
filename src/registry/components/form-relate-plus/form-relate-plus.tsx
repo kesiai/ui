@@ -27,6 +27,8 @@ export interface FormRelatePlusProps {
     value?: any
     onChange?: (value: any) => void
   }
+  value?: any
+  onChange?: (value: any) => void
   field?: {
     schema?: Record<string, any>
     displayField?: string
@@ -47,11 +49,12 @@ export interface FormRelatePlusProps {
 }
 
 const FormRelatePlus: React.FC<FormRelatePlusProps> = (props) => {
+  const input = props.input || { value: props.value, onChange: props.onChange }
   // 只传递需要的属性给子组件
   const dataSelectProps: any = {
     relateSchema: props.relateSchema,
     tableID: props.tableID,
-    input: props.input,
+    input,
     field: props.field,
     meta: props.meta,
   }
@@ -59,13 +62,13 @@ const FormRelatePlus: React.FC<FormRelatePlusProps> = (props) => {
   const addRecordBtnProps = {
     relateSchema: props.relateSchema,
     tableID: props.tableID,
-    input: props.input,
+    input: props,
     meta: props.meta,
   }
 
   const dataShowProps = {
     relateSchema: props.relateSchema,
-    input: props.input,
+    input: props,
     field: props.field,
     schema: props.schema,
   }

@@ -24,7 +24,6 @@ import { FormReference } from '@/registry/components/form-reference/form-referen
 import { FormFormInfo } from '@/registry/components/form-form-info/form-form-info'
 import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
 import { FormRelatePlus } from '@/registry/components/form-relate-plus/form-relate-plus'
-import { FormRelate as FormRelate } from '@/registry/components/form-relate'
 import FormArea from '@/registry/components/form-area/form-area'
 import { FilterText } from '@/registry/components/filter-text/filter-text'
 import { FilterEnum } from '@/registry/components/filter-enum/filter-enum'
@@ -45,13 +44,8 @@ import TableDataSelect from '@/registry/components/table-data-select/table-data-
 
 // 将 table-field 组件包装为 FormField 可用的组件
 const wrapFormComponent = (Component: React.ComponentType<any>, defaultFieldSchema: any = {}) => {
-  return ({ input, field, schema = {}, ...rest }: any) => {
-    const combinedField = {
-      ...field,
-      ...defaultFieldSchema,
-      ...field?.schema
-    }
-    return <Component input={input} {...combinedField} {...rest} {...schema} />
+  return ({ schema = {}, ...rest }: any) => {
+    return <Component field={rest} {...defaultFieldSchema} {...rest} {...schema} />
   }
 }
 
@@ -81,8 +75,7 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'reference': wrapFormComponent(FormReference),
   'form-info': wrapFormComponent(FormFormInfo),
   'editable-table': wrapFormComponent(FormEditableTable),
-  'relate-plus': wrapFormComponent(FormRelatePlus),
-  'relate': wrapFormComponent(FormRelate),
+  'relate': wrapFormComponent(FormRelatePlus),
   'area': wrapFormComponent(FormArea),
 
   // filter组件

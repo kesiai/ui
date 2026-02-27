@@ -251,11 +251,11 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
         onValueChange={handleChange}
         disabled={disabled}
       >
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue placeholder={label}>
             {mode === 'multiple' && isArray(propValue) && propValue.length > 0
               ? propValue.map((v) => formatDisplayValue(v)).join(', ')
-              : formatDisplayValue(currentValue)}
+              : formatDisplayValue(propValue)}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
@@ -303,7 +303,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
         </SelectContent>
       </Select>
 
-      <TooltipProvider>
+      {/* <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -319,7 +319,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
             <p>{precise ? '模糊搜索' : '精确搜索'}</p>
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
+      </TooltipProvider> */}
     </div>
   )
 }

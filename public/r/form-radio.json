@@ -4,7 +4,9 @@
   "title": "Form Radio",
   "description": "Form Radio - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "radio-group"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-radio/form-radio.tsx",

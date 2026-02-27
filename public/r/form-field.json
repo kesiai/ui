@@ -6,7 +6,11 @@
   "dependencies": [
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "button",
+    "field",
+    "input"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-field/form-field.tsx",

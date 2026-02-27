@@ -4,7 +4,9 @@
   "title": "Form Select",
   "description": "Form Select - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "select"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-select/form-select.tsx",

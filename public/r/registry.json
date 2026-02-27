@@ -230,12 +230,19 @@
       "title": "Button",
       "description": "Button - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/button/button.tsx",
           "type": "registry:component",
           "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Button as ShadcnButton } from \"@/components/ui/button\"\nimport { FormContext } from \"@/registry/lib/form-context\"\n\nexport interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n  /**\n   * 按钮文字\n   */\n  text?: React.ReactNode\n  /**\n   * 隐藏边框\n   */\n  border?: boolean\n  /**\n   * 禁用状态\n   */\n  disable?: boolean | string\n  /**\n   * 表单提交键\n   */\n  isSubmit?: boolean\n  /**\n   * 表单重置键\n   */\n  isReset?: boolean\n  /**\n   * 加载状态\n   */\n  loading?: boolean\n  /**\n   * 按钮变体\n   */\n  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'\n  /**\n   * 按钮尺寸\n   */\n  size?: 'default' | 'sm' | 'lg' | 'icon'\n}\n\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  (\n    {\n      className,\n      text = '按钮',\n      border = false,\n      disable = false,\n      isSubmit = false,\n      isReset = false,\n      loading = false,\n      variant = 'default',\n      size = 'default',\n      onClick,\n      ...props\n    },\n    ref\n  ) => {\n    const formContext = React.useContext(FormContext)\n\n    // 处理禁用状态\n    const disabled = React.useMemo(() => {\n      if (typeof disable === 'boolean') {\n        return disable\n      }\n      if (disable === '1' || disable === 1 || disable === 'true') {\n        return true\n      }\n      return false\n    }, [disable])\n\n    // 处理按钮文字\n    const buttonText = React.useMemo(() => {\n      return text || '按钮'\n    }, [text])\n\n    // 处理点击事件\n    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {\n      if (disabled) return\n\n      // 调用自定义 onClick\n      onClick?.(e)\n\n      // 表单提交\n      if (isSubmit && formContext?.handleSubmit) {\n        formContext.handleSubmit()\n      }\n\n      // 表单重置\n      if (isReset && formContext?.onReset) {\n        formContext.onReset()\n      }\n    }\n\n    // 合并加载状态\n    const isLoading = loading || formContext?.loading || false\n\n    // 处理边框样式\n    const buttonStyle = border ? {\n      border: 'none',\n      boxShadow: 'none'\n    } : {}\n\n    return (\n      <div\n        className={cn(\"button-container\", className)}\n        style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}\n      >\n        <ShadcnButton\n          ref={ref}\n          variant={border ? 'ghost' : variant}\n          size={size}\n          disabled={disabled}\n          loading={isLoading}\n          onClick={handleClick}\n          style={buttonStyle}\n          className=\"w-full\"\n          {...props}\n        >\n          {buttonText}\n        </ShadcnButton>\n      </div>\n    )\n  }\n)\n\nButton.displayName = \"Button\"\n\nexport { Button }\n"
+        },
+        {
+          "path": "registry/lib/form-context.tsx",
+          "type": "registry:lib",
+          "content": "import * as React from \"react\"\n\nexport interface FormContextValue {\n  onReset?: () => void\n  loading?: boolean\n  handleSubmit?: () => void\n}\n\nexport const FormContext = React.createContext<FormContextValue>({\n  onReset: undefined,\n  loading: false,\n  handleSubmit: undefined\n})\n"
         }
       ]
     },
@@ -317,7 +324,9 @@
       "title": "Container Card",
       "description": "Container Card - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "card"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/container-card/container-card.tsx",
@@ -335,7 +344,9 @@
         "lodash",
         "element-resize-event"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "carousel"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/container-carousel/container-carousel.tsx",
@@ -383,13 +394,19 @@
       "description": "Container Modal - 组件",
       "dependencies": [],
       "registryDependencies": [
-        "http://localhost:3000/r/button.json"
+        "http://localhost:3000/r/button.json",
+        "dialog"
       ],
       "files": [
         {
           "path": "registry/components/airiot/container-modal/container-modal.tsx",
           "type": "registry:component",
           "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogTitle,\n  DialogTrigger,\n} from \"@/components/ui/dialog\"\nimport { Button } from \"@/registry/components/button/button\"\nimport { ModalWigetContext } from \"@/registry/lib/modal-context\"\n\nexport interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {\n  /**\n   * 弹窗标题\n   */\n  title?: string\n  /**\n   * 弹窗描述\n   */\n  description?: string\n  /**\n   * 是否打开\n   */\n  open?: boolean\n  /**\n   * 打开状态变化回调\n   */\n  onOpenChange?: (open: boolean) => void\n  /**\n   * 弹窗宽度\n   */\n  modalWidth?: number | string\n  /**\n   * 弹窗高度\n   */\n  modalHeight?: number | string\n  /**\n   * 隐藏遮罩\n   */\n  hiddenMask?: boolean\n  /**\n   * 关闭时销毁数据\n   */\n  destroyOnClose?: boolean\n  /**\n   * 显示触发按钮\n   */\n  showTrigger?: boolean\n  /**\n   * 触发按钮文字\n   */\n  triggerText?: string\n  /**\n   * 显示保存按钮\n   */\n  showSubmitButton?: boolean\n  /**\n   * 显示取消按钮\n   */\n  showCancelButton?: boolean\n  /**\n   * 保存按钮文字\n   */\n  submitText?: string\n  /**\n   * 取消按钮文字\n   */\n  cancelText?: string\n  /**\n   * 保存按钮点击回调\n   */\n  onSubmit?: () => void | Promise<void>\n  /**\n   * 取消按钮点击回调\n   */\n  onCancel?: () => void\n  /**\n   * 子元素\n   */\n  children?: React.ReactNode\n}\n\nconst Modal = React.forwardRef<HTMLDivElement, ModalProps>(\n  (\n    {\n      className,\n      title = '弹窗标题',\n      description,\n      open,\n      onOpenChange,\n      modalWidth = 500,\n      modalHeight,\n      hiddenMask = false,\n      destroyOnClose = false,\n      showTrigger = false,\n      triggerText = '打开弹窗',\n      showSubmitButton = false,\n      showCancelButton = false,\n      submitText = '保存',\n      cancelText = '取消',\n      onSubmit,\n      onCancel,\n      children,\n      ...props\n    },\n    ref\n  ) => {\n    // 内部状态管理（当 open 未受控时使用）\n    const [internalOpen, setInternalOpen] = React.useState(false)\n\n    // 表单信息状态（用于与内部表单组件通信）\n    const [formInfo, _setFormInfo] = React.useState<{\n      handleSubmit?: () => Promise<void>\n      submitting?: boolean\n      invalid?: boolean\n      onReset?: () => void\n    }>({})\n\n    // 判断是否受控\n    const isControlled = open !== undefined\n    const isOpen = isControlled ? open : internalOpen\n\n    // 处理打开/关闭\n    const handleOpenChange = (newOpen: boolean) => {\n      if (!isControlled) {\n        setInternalOpen(newOpen)\n      }\n      onOpenChange?.(newOpen)\n    }\n\n    // 处理保存（支持表单提交）\n    const handleSubmit = async () => {\n      // 如果有表单提交函数，优先使用表单提交\n      if (formInfo?.handleSubmit) {\n        await formInfo.handleSubmit()\n      }\n      // 否则使用自定义 onSubmit\n      if (onSubmit) {\n        await onSubmit()\n      }\n      handleOpenChange(false)\n    }\n\n    // 处理取消（支持表单重置）\n    const handleCancel = () => {\n      // 如果有表单重置函数，调用表单重置\n      if (formInfo?.onReset) {\n        formInfo.onReset()\n      }\n      // 调用自定义 onCancel\n      onCancel?.()\n      handleOpenChange(false)\n    }\n\n    // 计算样式\n    const contentStyle = React.useMemo(() => {\n      const style: React.CSSProperties = {}\n      if (typeof modalWidth === 'number') {\n        style.width = `${modalWidth}px`\n      } else if (typeof modalWidth === 'string') {\n        style.width = modalWidth\n      }\n\n      if (modalHeight) {\n        if (typeof modalHeight === 'number') {\n          style.maxHeight = `${modalHeight}px`\n        } else if (typeof modalHeight === 'string') {\n          style.maxHeight = modalHeight\n        }\n      }\n\n      return style\n    }, [modalWidth, modalHeight])\n\n    // Modal Context 值\n    const modalContextValue = React.useMemo(() => ({\n      open: isOpen,\n      setOpen: handleOpenChange,\n      showButton: showSubmitButton || showCancelButton,\n      formInfo\n    }), [isOpen, showSubmitButton, showCancelButton, formInfo])\n\n    return (\n      <ModalWigetContext.Provider value={modalContextValue}>\n        <Dialog open={isOpen} onOpenChange={handleOpenChange}>\n          {showTrigger && (\n            <DialogTrigger asChild>\n              <Button variant=\"outline\">{triggerText}</Button>\n            </DialogTrigger>\n          )}\n          <DialogContent\n            ref={ref}\n            className={cn(\"modal-container\", className)}\n            style={contentStyle}\n            onPointerDownOutside={() => {\n              // 阻止点击遮罩关闭（如果需要）\n              // event.preventDefault()\n            }}\n            {...props}\n          >\n            {(title || description) && (\n              <DialogHeader>\n                {title && <DialogTitle>{title}</DialogTitle>}\n                {description && <DialogDescription>{description}</DialogDescription>}\n              </DialogHeader>\n            )}\n\n            <div\n              className={cn(\n                \"overflow-auto\",\n                modalHeight && \"flex-1\"\n              )}\n              style={{\n                maxHeight: modalHeight ? 'calc(100% - 100px)' : undefined\n              }}\n            >\n              {destroyOnClose && isOpen ? children : !destroyOnClose && children}\n            </div>\n\n            {(showSubmitButton || showCancelButton) && (\n              <DialogFooter>\n                {showCancelButton && (\n                  <Button variant=\"outline\" onClick={handleCancel}>\n                    {cancelText}\n                  </Button>\n                )}\n                {showSubmitButton && (\n                  <Button\n                    onClick={handleSubmit}\n                    loading={formInfo?.submitting}\n                    disabled={formInfo?.invalid}\n                  >\n                    {submitText}\n                  </Button>\n                )}\n              </DialogFooter>\n            )}\n          </DialogContent>\n        </Dialog>\n      </ModalWigetContext.Provider>\n    )\n  }\n)\n\nModal.displayName = \"Modal\"\n\nexport { Modal }\n"
+        },
+        {
+          "path": "registry/lib/modal-context.tsx",
+          "type": "registry:lib",
+          "content": "import * as React from \"react\"\n\nexport interface ModalContextValue {\n  // 打开状态\n  open?: boolean\n  // 设置打开状态\n  setOpen?: (open: boolean) => void\n  // 显示底部按钮\n  showButton?: boolean\n  // 设置底部按钮\n  setShowButton?: (show: boolean) => void\n  // 表单信息\n  formInfo?: {\n    handleSubmit?: () => Promise<void>\n    submitting?: boolean\n    invalid?: boolean\n    onReset?: () => void\n  }\n  // 设置表单信息\n  setFormInfo?: (info: ModalContextValue['formInfo']) => void\n}\n\nexport const ModalWigetContext = React.createContext<ModalContextValue>({\n  open: false,\n  setOpen: () => {},\n  showButton: false,\n  setShowButton: () => {},\n  formInfo: undefined,\n  setFormInfo: () => {}\n})\n"
         }
       ]
     },
@@ -399,7 +416,9 @@
       "title": "Container Panel",
       "description": "Container Panel - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "accordion"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/container-panel/container-panel.tsx",
@@ -415,7 +434,8 @@
       "description": "Container Popover - 组件",
       "dependencies": [],
       "registryDependencies": [
-        "http://localhost:3000/r/button.json"
+        "http://localhost:3000/r/button.json",
+        "popover"
       ],
       "files": [
         {
@@ -431,7 +451,9 @@
       "title": "Container Tabs",
       "description": "Container Tabs - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "tabs"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/container-tabs/container-tabs.tsx",
@@ -450,7 +472,9 @@
         "lodash",
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "popover"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/data-point/data-point.tsx",
@@ -645,7 +669,11 @@
       "dependencies": [
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "switch",
+        "checkbox",
+        "tooltip"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/filter-bool/filter-bool.tsx",
@@ -663,7 +691,11 @@
         "lodash",
         "date-fns"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "calendar",
+        "popover",
+        "button"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/filter-date/filter-date.tsx",
@@ -700,7 +732,12 @@
       "dependencies": [
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "checkbox",
+        "badge",
+        "popover",
+        "button"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/filter-enum/filter-enum.tsx",
@@ -719,7 +756,8 @@
         "lodash"
       ],
       "registryDependencies": [
-        "http://localhost:3000/r/form-field.json"
+        "http://localhost:3000/r/form-field.json",
+        "field"
       ],
       "files": [
         {
@@ -737,7 +775,9 @@
       "dependencies": [
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/filter-number/filter-number.tsx",
@@ -754,7 +794,10 @@
       "dependencies": [
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input",
+        "tooltip"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/filter-text/filter-text.tsx",
@@ -788,7 +831,12 @@
       "dependencies": [
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "command",
+        "checkbox"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-area/form-area.tsx",
@@ -823,7 +871,9 @@
       "title": "Form Bytes Array",
       "description": "Form Bytes Array - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-bytes-array/form-bytes-array.tsx",
@@ -838,7 +888,9 @@
       "title": "Form Checkbox",
       "description": "Form Checkbox - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "checkbox"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-checkbox/form-checkbox.tsx",
@@ -854,7 +906,11 @@
       "description": "Form Date - 组件",
       "dependencies": [],
       "registryDependencies": [
-        "http://localhost:3000/r/time-picker.json"
+        "http://localhost:3000/r/time-picker.json",
+        "calendar",
+        "input-group",
+        "popover",
+        "button"
       ],
       "files": [
         {
@@ -872,7 +928,11 @@
       "dependencies": [
         "date-fns"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "calendar",
+        "popover",
+        "button"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-date-range/form-date-range.tsx",
@@ -888,7 +948,9 @@
       "description": "Form Editable Table - 组件",
       "dependencies": [],
       "registryDependencies": [
-        "http://localhost:3000/r/form-widget.json"
+        "http://localhost:3000/r/form-widget.json",
+        "card",
+        "button"
       ],
       "files": [
         {
@@ -904,7 +966,9 @@
       "title": "Form Editable Table",
       "description": "Form Editable Table - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-editable-table/form-editable-table.tsx",
@@ -930,7 +994,8 @@
       "description": "Form Editable Table - 组件",
       "dependencies": [],
       "registryDependencies": [
-        "http://localhost:3000/r/form-widget.json"
+        "http://localhost:3000/r/form-widget.json",
+        "checkbox"
       ],
       "files": [
         {
@@ -975,7 +1040,8 @@
         "http://localhost:3000/r/filter-number.json",
         "http://localhost:3000/r/filter-date.json",
         "http://localhost:3000/r/filter-bool.json",
-        "http://localhost:3000/r/filter-datetime.json"
+        "http://localhost:3000/r/filter-datetime.json",
+        "textarea"
       ],
       "files": [
         {
@@ -993,7 +1059,11 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-field/form-field.tsx",
@@ -1013,7 +1083,9 @@
       "title": "Form Form Info",
       "description": "Form Form Info - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "card"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-form-info/form-form-info.tsx",
@@ -1028,7 +1100,9 @@
       "title": "Form Input",
       "description": "Form Input - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input-group"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-input/form-input.tsx",
@@ -1043,7 +1117,9 @@
       "title": "Form Input Number",
       "description": "Form Input Number - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input-group"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-input-number/form-input-number.tsx",
@@ -1058,7 +1134,9 @@
       "title": "Form Link",
       "description": "Form Link - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-link/form-link.tsx",
@@ -1077,7 +1155,13 @@
         "@amap/amap-jsapi-loader",
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input",
+        "button",
+        "label",
+        "dialog",
+        "tooltip"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-map/form-map.tsx",
@@ -1092,7 +1176,9 @@
       "title": "Form Radio",
       "description": "Form Radio - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "radio-group"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-radio/form-radio.tsx",
@@ -1145,7 +1231,11 @@
         "lodash",
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "select",
+        "button",
+        "tooltip"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-relate/AsyncSelect.tsx",
@@ -1173,7 +1263,11 @@
         "lodash",
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "popover",
+        "button",
+        "dialog"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-relate/DetailShow.tsx",
@@ -1218,7 +1312,11 @@
         "lodash",
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input",
+        "button",
+        "dialog"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-relate/RelateModelSelect.tsx",
@@ -1356,7 +1454,10 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "dialog"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-relate-plus/form-relate-plus-add-record-btn.tsx",
@@ -1392,7 +1493,9 @@
         "@airiot/client"
       ],
       "registryDependencies": [
-        "http://localhost:3000/r/form-relate.json"
+        "http://localhost:3000/r/form-relate.json",
+        "card",
+        "button"
       ],
       "files": [
         {
@@ -1499,7 +1602,9 @@
       "title": "Form Select",
       "description": "Form Select - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "select"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-select/form-select.tsx",
@@ -1514,7 +1619,9 @@
       "title": "Form Serial Number",
       "description": "Form Serial Number - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-serial-number/form-serial-number.tsx",
@@ -1529,7 +1636,9 @@
       "title": "Form Slider",
       "description": "Form Slider - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "slider"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-slider/form-slider.tsx",
@@ -1544,7 +1653,9 @@
       "title": "Form Switch",
       "description": "Form Switch - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "switch"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-switch/form-switch.tsx",
@@ -1576,7 +1687,9 @@
       "dependencies": [
         "moment"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-time/form-time.tsx",
@@ -1594,7 +1707,12 @@
         "@airiot/client",
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "progress",
+        "dialog",
+        "tooltip"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-upload/form-upload.tsx",
@@ -1616,7 +1734,9 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "select"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/form-user-role/form-user-role.tsx",
@@ -1911,7 +2031,10 @@
       "dependencies": [
         "ol"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "badge"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/gis-table-layer/overlay-utils.tsx",
@@ -2047,7 +2170,10 @@
         "react-day-picker",
         "date-fns"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "calendar",
+        "drawer"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/mobile-calendar/mobile-calendar.tsx",
@@ -2062,7 +2188,9 @@
       "title": "Mobile Date Picker",
       "description": "Mobile Date Picker - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "drawer"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/mobile-date-picker/mobile-date-picker.tsx",
@@ -2079,7 +2207,9 @@
       "dependencies": [
         "sonner"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "input-group"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/mobile-location/mobile-location.tsx",
@@ -2110,7 +2240,8 @@
       "description": "Mobile Picker - 组件",
       "dependencies": [],
       "registryDependencies": [
-        "http://localhost:3000/r/button.json"
+        "http://localhost:3000/r/button.json",
+        "drawer"
       ],
       "files": [
         {
@@ -2126,7 +2257,10 @@
       "title": "Mobile Popup",
       "description": "Mobile Popup - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "drawer",
+        "button"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/mobile-popup/mobile-popup.tsx",
@@ -2143,7 +2277,10 @@
       "dependencies": [
         "sonner"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "drawer"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/mobile-scan-qr/mobile-scan-qr.tsx",
@@ -2191,7 +2328,8 @@
         "@airiot/client"
       ],
       "registryDependencies": [
-        "http://localhost:3000/r/form-field.json"
+        "http://localhost:3000/r/form-field.json",
+        "field"
       ],
       "files": [
         {
@@ -2244,7 +2382,9 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "select"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/table-data-select/table-data-select.tsx",
@@ -2261,7 +2401,9 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "select"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/table-select/table-select.tsx",
@@ -2358,7 +2500,10 @@
       "title": "Video Periods Widget",
       "description": "Video Periods Widget - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "popover"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/video-periods-widget/video-periods-widget.tsx",
@@ -2377,7 +2522,10 @@
         "@airiot/client"
       ],
       "registryDependencies": [
-        "http://localhost:3000/r/video-widget.json"
+        "http://localhost:3000/r/video-widget.json",
+        "button",
+        "popover",
+        "calendar"
       ],
       "files": [
         {
@@ -2574,7 +2722,12 @@
       ],
       "registryDependencies": [
         "http://localhost:3000/r/view-field.json",
-        "http://localhost:3000/r/schema-form.json"
+        "http://localhost:3000/r/schema-form.json",
+        "dialog",
+        "popover",
+        "button",
+        "dropdown-menu",
+        "scroll-area"
       ],
       "files": [
         {
@@ -2595,7 +2748,15 @@
       ],
       "registryDependencies": [
         "http://localhost:3000/r/form-date.json",
-        "http://localhost:3000/r/time-picker.json"
+        "http://localhost:3000/r/time-picker.json",
+        "button",
+        "select",
+        "input",
+        "radio-group",
+        "checkbox",
+        "calendar",
+        "popover",
+        "badge"
       ],
       "files": [
         {
@@ -2613,7 +2774,12 @@
       "dependencies": [
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "select",
+        "switch",
+        "separator"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-advanced-filter/queryEditor.tsx",
@@ -2663,7 +2829,16 @@
         "@airiot/client",
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "button",
+        "input",
+        "label",
+        "select",
+        "collapsible",
+        "badge",
+        "card",
+        "dialog"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-advanced-filter/view-advanced-filter.tsx",
@@ -2687,7 +2862,12 @@
         "@airiot/client"
       ],
       "registryDependencies": [
-        "http://localhost:3000/r/schema-form.json"
+        "http://localhost:3000/r/schema-form.json",
+        "dialog",
+        "dropdown-menu",
+        "button",
+        "scroll-area",
+        "badge"
       ],
       "files": [
         {
@@ -2705,7 +2885,12 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "card",
+        "badge",
+        "button",
+        "select"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-data-aggregate/view-data-aggregate.tsx",
@@ -2725,7 +2910,11 @@
         "lodash"
       ],
       "registryDependencies": [
-        "http://localhost:3000/r/view-field.json"
+        "http://localhost:3000/r/view-field.json",
+        "data-grid",
+        "data-grid-column-header",
+        "data-grid-table",
+        "scroll-area"
       ],
       "files": [
         {
@@ -2743,7 +2932,13 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "dialog",
+        "button",
+        "scroll-area",
+        "badge",
+        "separator"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-detail/view-detail.tsx",
@@ -2760,7 +2955,9 @@
       "dependencies": [
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "dialog"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-field/components/RelatePlusShow.tsx",
@@ -2783,7 +2980,10 @@
         "lodash",
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "dialog",
+        "tooltip"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-field/components/RelateShow.tsx",
@@ -2802,7 +3002,11 @@
         "jszip",
         "file-saver"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "dialog",
+        "tooltip",
+        "button"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-field/components/ShowAttachment.tsx",
@@ -2840,7 +3044,10 @@
         "dayjs",
         "lodash"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "tooltip",
+        "dialog"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-field/field-map.tsx",
@@ -2875,7 +3082,9 @@
       "title": "View Field",
       "description": "View Field - 组件",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "field"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-field/view-field.tsx",
@@ -2937,7 +3146,10 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "pagination",
+        "select"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-pagination/view-pagination.tsx",
@@ -2954,7 +3166,14 @@
       "dependencies": [
         "@airiot/client"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "popover",
+        "dropdown-menu",
+        "button",
+        "input",
+        "checkbox",
+        "label"
+      ],
       "files": [
         {
           "path": "registry/components/airiot/view-tools/view-tools.tsx",
@@ -3067,7 +3286,11 @@
       "dependencies": [
         "date-fns"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "popover",
+        "button",
+        "scroll-area"
+      ],
       "files": [
         {
           "path": "registry/ui/time-picker.tsx",

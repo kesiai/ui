@@ -6,7 +6,10 @@
   "dependencies": [
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "pagination",
+    "select"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/view-pagination/view-pagination.tsx",

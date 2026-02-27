@@ -4,7 +4,9 @@
   "title": "Form Input Number",
   "description": "Form Input Number - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input-group"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-input-number/form-input-number.tsx",

@@ -5,7 +5,8 @@
   "description": "Mobile Picker - 组件",
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:3000/r/button.json"
+    "http://localhost:3000/r/button.json",
+    "drawer"
   ],
   "files": [
     {

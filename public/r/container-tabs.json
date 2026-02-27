@@ -4,7 +4,9 @@
   "title": "Container Tabs",
   "description": "Container Tabs - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "tabs"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/container-tabs/container-tabs.tsx",

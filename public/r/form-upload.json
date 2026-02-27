@@ -7,7 +7,12 @@
     "@airiot/client",
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "button",
+    "progress",
+    "dialog",
+    "tooltip"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-upload/form-upload.tsx",

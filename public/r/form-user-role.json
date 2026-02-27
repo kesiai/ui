@@ -6,7 +6,9 @@
   "dependencies": [
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "select"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-user-role/form-user-role.tsx",

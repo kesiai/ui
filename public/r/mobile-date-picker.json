@@ -4,7 +4,9 @@
   "title": "Mobile Date Picker",
   "description": "Mobile Date Picker - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "drawer"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/mobile-date-picker/mobile-date-picker.tsx",

@@ -4,7 +4,9 @@
   "title": "Form Form Info",
   "description": "Form Form Info - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "card"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-form-info/form-form-info.tsx",

@@ -6,7 +6,9 @@
   "dependencies": [
     "sonner"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input-group"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/mobile-location/mobile-location.tsx",

@@ -7,7 +7,16 @@
     "@airiot/client",
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "button",
+    "input",
+    "label",
+    "select",
+    "collapsible",
+    "badge",
+    "card",
+    "dialog"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/view-advanced-filter/view-advanced-filter.tsx",

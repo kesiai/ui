@@ -6,7 +6,10 @@
   "dependencies": [
     "sonner"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "button",
+    "drawer"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/mobile-scan-qr/mobile-scan-qr.tsx",

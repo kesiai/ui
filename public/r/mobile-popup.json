@@ -4,7 +4,10 @@
   "title": "Mobile Popup",
   "description": "Mobile Popup - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "drawer",
+    "button"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/mobile-popup/mobile-popup.tsx",

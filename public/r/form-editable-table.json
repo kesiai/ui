@@ -5,7 +5,8 @@
   "description": "Form Editable Table - 组件",
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:3000/r/form-widget.json"
+    "http://localhost:3000/r/form-widget.json",
+    "checkbox"
   ],
   "files": [
     {

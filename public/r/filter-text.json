@@ -6,7 +6,10 @@
   "dependencies": [
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input",
+    "tooltip"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-text/filter-text.tsx",

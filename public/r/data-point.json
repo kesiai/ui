@@ -8,7 +8,9 @@
     "lodash",
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "popover"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/data-point/data-point.tsx",

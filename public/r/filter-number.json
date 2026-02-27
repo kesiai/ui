@@ -6,7 +6,9 @@
   "dependencies": [
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-number/filter-number.tsx",

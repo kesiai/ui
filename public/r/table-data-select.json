@@ -6,7 +6,9 @@
   "dependencies": [
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "select"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/table-data-select/table-data-select.tsx",

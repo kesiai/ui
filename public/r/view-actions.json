@@ -8,7 +8,12 @@
   ],
   "registryDependencies": [
     "http://localhost:3000/r/view-field.json",
-    "http://localhost:3000/r/schema-form.json"
+    "http://localhost:3000/r/schema-form.json",
+    "dialog",
+    "popover",
+    "button",
+    "dropdown-menu",
+    "scroll-area"
   ],
   "files": [
     {

@@ -7,7 +7,11 @@
     "lodash",
     "date-fns"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "calendar",
+    "popover",
+    "button"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-date/filter-date.tsx",

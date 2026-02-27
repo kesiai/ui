@@ -6,7 +6,12 @@
   "dependencies": [
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "checkbox",
+    "badge",
+    "popover",
+    "button"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-enum/filter-enum.tsx",

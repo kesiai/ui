@@ -4,7 +4,9 @@
   "title": "Form Checkbox",
   "description": "Form Checkbox - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "checkbox"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-checkbox/form-checkbox.tsx",

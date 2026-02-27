@@ -4,7 +4,9 @@
   "title": "Form Switch",
   "description": "Form Switch - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "switch"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-switch/form-switch.tsx",

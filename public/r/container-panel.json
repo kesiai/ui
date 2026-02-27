@@ -4,7 +4,9 @@
   "title": "Container Panel",
   "description": "Container Panel - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "accordion"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/container-panel/container-panel.tsx",

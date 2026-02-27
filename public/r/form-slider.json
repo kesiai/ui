@@ -4,7 +4,9 @@
   "title": "Form Slider",
   "description": "Form Slider - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "slider"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-slider/form-slider.tsx",

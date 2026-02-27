@@ -4,7 +4,9 @@
   "title": "View Field",
   "description": "View Field - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "field"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/view-field/view-field.tsx",

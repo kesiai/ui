@@ -55,9 +55,9 @@ export const viewFilterPropsConfig = [
 ]
 
 export const viewFilterDefaultProps = {
-  modelName: null,
-  tableId: 'user',
-  filters: [],
+  modelName: 'User',
+  tableId: null,
+  filters: ["name", "email"],
   layout: 'default' as keyof typeof layoutPresets,
   classNames: null,
   showExample: true

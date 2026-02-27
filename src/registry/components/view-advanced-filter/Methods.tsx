@@ -8,31 +8,23 @@ import { TimePicker } from '@/registry/ui/time-picker'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Badge } from '@/components/ui/badge'
-import { X } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { X, CalendarIcon } from 'lucide-react'
+import dayjs from 'dayjs'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/ui/input-group'
 import { format } from 'date-fns'
-import { FormDate } from '@/registry/components/form-date/form-date'
 import _ from 'lodash'
-
-// 时间格式化
-const formatDate = (value: any, dateFormat: string) => {
-  if (_.isPlainObject(value) && value['gte'] && value['lte']) {
-    const fmt = dateFormat || 'YYYY-MM-DD HH:mm:ss'
-    // 使用 date-fns 解析日期
-    return [
-      new Date(value['gte']),
-      new Date(value['lte'])
-    ]
-  } else {
-    return null
-  }
-}
+import { FilterDatetime } from '@/registry/components/filter-datetime/filter-datetime'
 
 const NullInput = () => null
 
 // 文本输入组件（支持多标签）
-const TextInput = ({ input }: { input: any }) => {
-  const initialValue = Array.isArray(input.value) ? input.value : (input.value ? [input.value] : [])
+const TextInput = ({ value, onChange, placeholder }: { value?: any; onChange?: (value: any) => void; placeholder?: string }) => {
+  const initialValue = Array.isArray(value) ? value : (value ? [value] : [])
   const [inputValue, setInputValue] = useState('')
   const [tags, setTags] = useState<string[]>(initialValue)
   const [showSuggestion, setShowSuggestion] = useState(false)
@@ -41,7 +33,7 @@ const TextInput = ({ input }: { input: any }) => {
 
   const handleChange = (newTags: string[]) => {
     setTags(newTags)
-    input.onChange(newTags)
+    onChange?.(newTags)
   }
 
   const addTag = () => {
@@ -114,8 +106,8 @@ const TextInput = ({ input }: { input: any }) => {
               setShowSuggestion(true)
             }
           }}
-          placeholder={input.placeholder || "请输入"}
-          className="flex-1 min-w-[80px] border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-7"
+          placeholder={placeholder || "请输入"}
+          className="flex-1 min-w-20 border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-7 shadow-none"
         />
       </div>
       {showSuggestion && inputValue.trim() && !tags.includes(inputValue.trim()) && (
@@ -131,23 +123,23 @@ const TextInput = ({ input }: { input: any }) => {
 }
 
 // 数字输入组件
-const NumberInput = ({ input }: { input: any }) => {
+const NumberInput = ({ value, onChange }: { value?: any; onChange?: (value: any) => void }) => {
   return (
     <Input
       type="number"
       className="w-full"
-      value={input.value ?? ''}
-      onChange={(e) => input.onChange(e.target.value ? Number(e.target.value) : null)}
+      value={value ?? ''}
+      onChange={(e) => onChange?.(e.target.value ? Number(e.target.value) : null)}
     />
   )
 }
 
 // 布尔输入组件
-const BooleanInput = ({ input }: { input: any }) => {
+const BooleanInput = ({ value, onChange }: { value?: any; onChange?: (value: any) => void }) => {
   return (
     <RadioGroup
-      value={input.value?.toString()}
-      onValueChange={(v) => input.onChange(v === 'true')}
+      value={value?.toString()}
+      onValueChange={(v) => onChange?.(v === 'true')}
       className="flex gap-4"
     >
       <div className="flex items-center space-x-2">
@@ -163,16 +155,20 @@ const BooleanInput = ({ input }: { input: any }) => {
 }
 
 // 枚举输入组件
-const EnumInput = (props: { input: any; field: { schema?: any }; mode?: string }) => {
-  const { input, field: { schema = {} }, mode } = props
-  const value = input.value?.['$in'] || input.value?.in || input.value
+const EnumInput = ({ value, onChange, schema, mode }: {
+  value?: any
+  onChange?: (value: any) => void
+  schema?: any
+  mode?: string
+}) => {
+  const currentValue = value?.['$in'] || value?.in || value
 
-  const enum_title = schema.enum_title || schema.enum_title1 || []
-  const enums = schema.enum || schema.enum1 || []
+  const enum_title = schema?.enum_title || schema?.enum_title1 || []
+  const enums = schema?.enum || schema?.enum1 || []
   return (
     <Select
-      value={mode == 'multiple' ? (value?.[0] || '') : (value || '')}
-      onValueChange={(v) => input.onChange(mode == 'multiple' ? [v] : v)}
+      value={mode == 'multiple' ? (currentValue?.[0] || '') : (currentValue || '')}
+      onValueChange={(v) => onChange?.(mode == 'multiple' ? [v] : v)}
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="请选择" />
@@ -191,25 +187,25 @@ const EnumInput = (props: { input: any; field: { schema?: any }; mode?: string }
 }
 
 // 范围输入组件
-const RangeInput = ({ input }: { input: any }) => {
-  const onChange = (val: string, type: 'gte' | 'lte') => {
-    input.onChange({ ...input.value, [type]: val })
+const RangeInput = ({ value, onChange }: { value?: any; onChange?: (value: any) => void }) => {
+  const handleChange = (val: string, type: 'gte' | 'lte') => {
+    onChange?.({ ...value, [type]: val })
   }
 
   return (
     <div className="flex items-center gap-2">
       <Input
         type="number"
-        value={input.value?.gte ?? ''}
-        onChange={(e) => onChange(e.target.value, 'gte')}
+        value={value?.gte ?? ''}
+        onChange={(e) => handleChange(e.target.value, 'gte')}
         placeholder="最小值"
         className="flex-1"
       />
       <span className="text-muted-foreground">~</span>
       <Input
         type="number"
-        value={input.value?.lte ?? ''}
-        onChange={(e) => onChange(e.target.value, 'lte')}
+        value={value?.lte ?? ''}
+        onChange={(e) => handleChange(e.target.value, 'lte')}
         placeholder="最大值"
         className="flex-1"
       />
@@ -217,118 +213,15 @@ const RangeInput = ({ input }: { input: any }) => {
   )
 }
 
-// 日期范围选择器组件
-const RangeTimeInput = ({ input, field: { schema } }: { input: any; field: { schema?: any } }) => {
-  const fmt = schema?.format || schema?.formatType
-  const timeFormat = schema?.timeFormat || (fmt == 'time' ? 'HH:mm:ss' : fmt == 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss')
-
-  const [open, setOpen] = useState(false)
-  const dateRange = input.value?.gte && input.value?.lte
-    ? [new Date(input.value.gte), new Date(input.value.lte)]
-    : undefined
-
-  const onChange = (range: { from?: Date; to?: Date } | undefined) => {
-    if (!range || !range.from || !range.to) {
-      input.onChange(null)
-      return
-    }
-    const date = {
-      'gte': format(range.from, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd')),
-      'lte': format(range.to, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd'))
-    }
-    input.onChange(date)
-  }
-
-  // 纯时间范围（使用 TimePicker）
-  if (fmt == 'time' || schema?.timeFormat) {
-    return (
-      <div className="flex items-center gap-2">
-        <TimePicker
-          value={input.value?.gte || undefined}
-          onChange={(date) => input.onChange({ ...input.value, gte: date?.toISOString() })}
-        />
-        <span>~</span>
-        <TimePicker
-          value={input.value?.lte || undefined}
-          onChange={(date) => input.onChange({ ...input.value, lte: date?.toISOString() })}
-        />
-      </div>
-    )
-  }
-
-  // 日期时间范围（使用 FormDate dateTime picker）
-  if (fmt == 'dateTime' || fmt == 'date-time') {
-    return (
-      <div className="flex items-center gap-2">
-        <FormDate
-          allowClear
-          picker="dateTime"
-          value={input.value?.gte || undefined}
-          onChange={(d) => {
-            if (d) {
-              input.onChange({ ...input.value, gte: new Date(d).toISOString() })
-            } else {
-              input.onChange({ ...input.value, gte: null })
-            }
-          }}
-        />
-        <span>~</span>
-        <FormDate
-          allowClear
-          picker="dateTime"
-          value={input.value?.lte || undefined}
-          onChange={(d) => {
-            if (d) {
-              input.onChange({ ...input.value, lte: new Date(d).toISOString() })
-            } else {
-              input.onChange({ ...input.value, lte: null })
-            }
-          }}
-        />
-      </div>
-    )
-  }
-
-  // 纯日期范围（使用 Calendar）
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            "w-full justify-start text-left font-normal",
-            !dateRange && "text-muted-foreground"
-          )}
-        >
-          {dateRange ? (
-            `${format(dateRange[0], 'yyyy-MM-dd')} - ${format(dateRange[1], 'yyyy-MM-dd')}`
-          ) : (
-            "选择日期范围"
-          )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="range"
-          selected={{ from: dateRange?.[0], to: dateRange?.[1] }}
-          onSelect={(range) => {
-            onChange(range)
-            if (range?.from && range?.to) {
-              setOpen(false)
-            }
-          }}
-          numberOfMonths={2}
-        />
-      </PopoverContent>
-    </Popover>
-  )
-}
-
 // 变化范围时间输入组件
-const VariateRangeTimeInput = ({ input: { value, onChange }, field: { schema } }: { input: { value?: any; onChange: any }; field: { schema?: any } }) => {
+const VariateRangeTimeInput = ({ value, onChange, schema }: {
+  value?: any
+  onChange?: (value: any, expression?: string | null) => void
+  schema?: any
+}) => {
   const fmt = schema?.format || schema?.formatType
   const timeFormat = schema?.timeFormat || (fmt == 'time' ? 'HH:mm:ss' : fmt == 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss')
-  const [type, setType] = useState(value?.type)
+  const [type, setType] = useState<string | undefined>(value?.type)
   const opts = [
     { key: '前', value: 'forward' },
     { key: '后', value: 'backward' },
@@ -363,7 +256,7 @@ const VariateRangeTimeInput = ({ input: { value, onChange }, field: { schema } }
     const newTime = timeRange.unit
       ? (timeRange.type == 'now' ? 'now ' + timeRange.unit : (end && mid ? start + mid + end : null))
       : null
-    onChange(timeRange, newTime)
+    onChange?.(timeRange, newTime)
   }
 
   return (
@@ -371,8 +264,7 @@ const VariateRangeTimeInput = ({ input: { value, onChange }, field: { schema } }
       <div className="flex gap-2">
         <Select
           value={value?.type || ''}
-          onValueChange={(v) => { setType(v); handleChange({ type: v }) }
-          }
+          onValueChange={(v) => { setType(v); handleChange({ type: v }) }}
         >
           <SelectTrigger className="w-[30%]">
             <SelectValue placeholder="选择方向" />
@@ -421,30 +313,138 @@ const VariateRangeTimeInput = ({ input: { value, onChange }, field: { schema } }
 }
 
 // 时间输入组件
-const TimeInput = ({ input, field: { schema } }: { input: any; field: { schema?: any } }) => {
+const TimeInput = ({ value, onChange, schema }: {
+  value?: any
+  onChange?: (value: any) => void
+  schema?: any
+}) => {
   const fmt = schema?.format || schema?.formatType
   const timeFormat = schema?.timeFormat || (fmt == 'time' ? 'HH:mm:ss' : fmt == 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss')
 
-  const onChange = (val: Date | undefined) => {
-    input.onChange(val ? format(val, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd')) : val)
+  const handleChange = (val: Date | undefined) => {
+    onChange?.(val ? format(val, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd')) : val)
   }
 
   if (fmt == 'time' || schema?.timeFormat) {
     return (
       <TimePicker
-        value={input.value || undefined}
-        onChange={onChange}
+        value={value || undefined}
+        onChange={handleChange}
       />
     )
   }
 
+  // 日期/日期时间选择（使用 Popover + Calendar + TimePicker）
+  const [open, setOpen] = useState(false)
+  const [tempDate, setTempDate] = useState<Date | undefined>(value ? new Date(value) : undefined)
+
+  // Parse date string to Date object
+  const parseDate = (dateStr: string | undefined) => {
+    if (!dateStr) return undefined
+    const parsed = dayjs(dateStr)
+    return parsed.isValid() ? parsed.toDate() : undefined
+  }
+
+  const currentDate = parseDate(value)
+
+  // Format display value
+  const formatDisplayValue = (date: Date | undefined) => {
+    return date ? dayjs(date).format(timeFormat == 'HH:mm:ss' ? 'HH:mm:ss' : 'YYYY-MM-DD HH:mm:ss') : ''
+  }
+
+  // Date selection handlers
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      setTempDate(prev => {
+        if (!prev) return new Date(selectedDate)
+        const newDate = new Date(prev)
+        newDate.setFullYear(selectedDate.getFullYear())
+        newDate.setMonth(selectedDate.getMonth())
+        newDate.setDate(selectedDate.getDate())
+        return newDate
+      })
+    }
+  }
+
+  const handleTimeChange = (newDate: Date) => {
+    setTempDate(newDate)
+  }
+
+  const handleConfirm = () => {    
+    if (tempDate) {
+      const formatted = format(tempDate, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd'))
+      onChange?.(formatted)
+    }
+    setOpen(false)
+  }
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onChange?.(null)
+  }
+
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setTempDate(currentDate || new Date())
+    }
+    setOpen(open)
+  }
+
   return (
-    <FormDate
-      allowClear
-      picker={fmt == 'date' ? 'date' : 'dateTime'}
-      value={input.value || undefined}
-      onChange={d => onChange(d ? new Date(d) : undefined)}
-    />
+    <Popover open={open} onOpenChange={handleOpenChange}>
+      <PopoverTrigger asChild>
+        <div className="w-full">
+          <InputGroup className="h-9">
+            <InputGroupInput
+              value={formatDisplayValue(currentDate)}
+              placeholder={fmt == 'date' ? '选择日期' : '选择日期时间'}
+              readOnly
+              className="cursor-pointer"
+            />
+            <InputGroupAddon align="inline-end">
+              {currentDate && (
+                <InputGroupButton
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={handleClear}
+                >
+                  <X className="h-3 w-3" />
+                </InputGroupButton>
+              )}
+              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-auto overflow-hidden p-0"
+        align="end"
+        alignOffset={-8}
+        sideOffset={10}
+      >
+        <div className="flex">
+          <Calendar
+            mode="single"
+            selected={tempDate}
+            onSelect={handleDateSelect}
+          />
+          {fmt !== 'date' && (
+            <div className="w-full border-t pt-4">
+              <TimePicker
+                value={tempDate || new Date()}
+                onChange={handleTimeChange}
+                inline={true}
+              />
+            </div>
+          )}
+        </div>
+        <div className="flex justify-end pb-2 px-2">
+          <Button size="sm" onClick={handleConfirm}>
+            确定
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
 
@@ -486,8 +486,8 @@ const METHODS = {
     { name: '晚于', key: 'gt', component: TimeInput },
     { name: '早于等于', key: 'lte', component: TimeInput },
     { name: '晚于等于', key: 'gte', component: TimeInput },
-    { name: '在范围内', key: 'range', component: RangeTimeInput },
-    { name: '不在范围内', key: 'notRange', component: RangeTimeInput },
+    { name: '在范围内', key: 'range', component: FilterDatetime },
+    { name: '不在范围内', key: 'notRange', component: FilterDatetime },
     { name: '为空', key: 'isNull', component: NullInput },
     { name: '不为空', key: 'notNull', component: NullInput },
   ],

@@ -6,42 +6,9 @@ import { Separator } from '@/components/ui/separator'
 import { NullInput, TextInput, VariateRangeTimeInput } from './Methods'
 import { convertProps, getMethods } from './util'
 import _ from 'lodash'
-
-// 全局 app 对象的默认处理
-const app = (globalThis as any).app
-
-const convert = (schema: any) => {
-  if (schema?.config === '区域') {
-    schema.multiple = true
-  }
-  return schema
-}
-
-const convert1 = (schema: any, options?: any) => {
-  const opts = options || {}
-  if (opts.path === undefined) {
-    opts.path = []
-  }
-  if (opts.lookup === undefined) {
-    opts.lookup = {}
-  }
-  return schema
-}
-
-const BindDataWrap = (props: any) => {
-  const { children, bind, DataWrap, selectMethod } = props
-  if (['isNull', 'notNull'].indexOf(selectMethod) > -1) { // 为空，不为空，不渲染 DataWrap
-    return null
-  }
-
-  return (
-    bind ? (
-      DataWrap ?
-        <DataWrap {...props} /> :
-        null
-    ) : children
-  )
-}
+import { useFilterSchema, useFormSchema } from '@airiot/client'
+import FormField from '@/registry/components/form-field/form-field'
+import Form from '@/registry/components/form/form'
 
 interface QueryItemFromProps {
   value: any
@@ -61,10 +28,81 @@ interface QueryItemFromProps {
   onlyOneType?: boolean
 }
 
-const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQuery, DataWrap, showValidBtn }: QueryItemFromProps) => {
+const FieldCom = ({ fieldKey, ...restProps }: { fieldKey: string, restProps: any }) => {
+  return <Form formId={fieldKey} onSubmit={() => null}>
+    <FormField className="w-full" {...restProps} label={null} name={fieldKey} />
+  </Form>
+}
+
+const getFieldCom = (fSchema: any, method: any, { fields, filterFields, multipleFields }: any) => {
+  let field: any
+  if (!fSchema.fieldType && !fSchema.relateTo && !fSchema.relate && !fSchema.enum && !fSchema.enum1) return
+  if (method?.type == 'multipleSelect') {
+    if (fSchema.type == 'array') {
+      field = fields?.[0]
+    } else {
+      field = multipleFields?.[0]
+    }
+    field = field.type == 'array' ? filterFields?.[0] : field
+  } else if (fSchema.type == 'object' && ['eq', 'ne'].indexOf(method?.key) > -1 && (fSchema.relateTo || fSchema.relate)) {
+    field = fields?.[0]
+  } else {
+    field = filterFields?.[0]
+  }
+  return field?.type ? (props: any) => <FieldCom {...props} {...field} /> : null
+}
+
+const getConvertCom = (fieldSchema: any, method: any, { fields, filterFields, multipleFields }: any) => {
+  if (!method) return NullInput
+  const FieldTypeCom = getFieldCom(fieldSchema, method, { fields, filterFields, multipleFields })
+  if (fieldSchema?.selectFace) fieldSchema.selectFace = 'select'
+  if (method?.useCustomCom || method?.key == 'isNull' || method?.key == 'notNull') {
+    return method.component
+  }
+  if (method?.key == 'eq' || method?.key == 'ne') {
+    if (fieldSchema.component) {
+      return fieldSchema.component
+    } else if (fieldSchema?.type === 'string' && fieldSchema.fieldType == 'input') {
+      return method.component
+    } else if (!fieldSchema?.format && fieldSchema?.type !== 'number') {
+      return FieldTypeCom || method.component
+    }
+    return method.component
+  }
+  if (method?.type == 'multipleSelect' && ['in', 'nin'].indexOf(method?.key) > -1) {
+    if (fieldSchema.enum) return method.component
+    return FieldTypeCom || fieldSchema.component || method?.component || TextInput
+  }
+  if (fieldSchema.fieldType && (fieldSchema.enum || fieldSchema.enum1) || fieldSchema.relateTo || fieldSchema.fieldType === 'area') {
+    return fieldSchema.component || FieldTypeCom || TextInput
+  }
+  if (method?.type == 'multipleSelect' && fieldSchema.type == 'array') {
+    return fieldSchema.component || method?.component || FieldTypeCom || fieldSchema.field?.component || TextInput
+  }
+  return fieldSchema.component || method?.component || FieldTypeCom || TextInput
+}
+
+const ValueComponent = ({ method, fieldSchema, fieldKey, ...restProps }: any) => {
+  const schema = { type: 'object', properties: { [fieldKey]: { ...fieldSchema, name: fieldKey } } }
+  const params = { schema, formSchema: [{ name: fieldKey }] }
+  const multipleSchema = { items: schema, ...fieldSchema, selectType: 'multiple', type: 'array' }
+  const multipleParams = { schema: multipleSchema, formSchema: [{ name: fieldKey }] }
+  const { fields } = useFormSchema(params)
+  const { fields: filterFields } = useFilterSchema(params)
+  const { fields: multipleFields } = useFormSchema(multipleParams)
+
+  const Com = () => getConvertCom(fieldSchema, method, { fields, filterFields, multipleFields }) || TextInput
+  const [FieldComponent, setFieldComponent] = useState<any>(Com)
+  React.useEffect(() => {
+    setFieldComponent(Com)
+  }, [fieldKey, method])
+
+  return <FieldComponent fieldKey={fieldKey} {...restProps} />
+}
+
+const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, showValidBtn }: QueryItemFromProps) => {
   const [methods, setMethods] = useState<any[]>()
   const [isTime, setIsTime] = useState<boolean>()
-  const [fieldCovert, setFieldCovert] = useState<any>({ schema: schema.properties[fieldKey] || {} })
   const [containerWidth, setContainerWidth] = useState(0)
   const containerRef = React.useRef<HTMLDivElement>(null)
   const [rangeType, setRangeTypeState] = useState(value?.timeRange?.rangeType)
@@ -215,61 +253,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
     onChange({ ...value, valid: v })
   }
 
-  const getConvertCom = (fSchema: any, method: any) => {
-    if (!fSchema.fieldType && !fSchema.relateTo && !fSchema.relate && !fSchema.enum && !fSchema.enum1) return
-    let convertSchema: any
-    if (method?.type == 'multipleSelect') {
-      if (fSchema.type == 'array') {
-        convertSchema = convert1(fSchema)
-      } else {
-        convertSchema = convert1({ items: { type: fSchema.type, properties: {}, relateTo: fSchema.relateTo }, ...fSchema, selectType: 'multiple', type: 'array' })
-      }
-      if (convertSchema.type == 'array') convertSchema = convert(fSchema)
-    } else if (fSchema.type == 'object' && ['eq', 'ne'].indexOf(method?.key as string) > -1 && (fSchema.relateTo || fSchema.relate)) {
-      convertSchema = convert1(fSchema)
-    } else {
-      convertSchema = convert(fSchema)
-    }    
-    setFieldCovert(convertSchema)
-    const type = convertSchema.type
-    const formFields = app?.get('form_fields')
-    return formFields?.[type]?.component
-  }
-
-  const ValueComponent = React.useMemo(() => {
-    if (!methods) return NullInput
-    const method = _.find(methods, m => m.key == selectMethod) || (methods && methods[0])
-    if (fieldSchema?.selectFace) fieldSchema.selectFace = 'select'
-    const fSchema = { ...filterSchema, ...fieldSchema }
-    if (method?.useCustomCom) {
-      return method.component
-    }
-    if (method?.key == 'isNull' || method?.key == 'notNull') {
-      return method?.component
-    }
-    if (method?.key == 'eq' || method?.key == 'ne') {
-      if (fSchema.component) {
-        return fSchema.component
-      } else if (fSchema?.type === 'string' && fSchema.fieldType == 'input') {
-        return method.component
-      } else if (!fSchema?.format && fSchema?.type !== 'number') {
-        return getConvertCom(fSchema, method) || method.component
-      }
-      return method.component
-    }
-    if (method?.type == 'multipleSelect' && ['in', 'nin'].indexOf(method?.key as string) > -1) {
-      if (fSchema.enum) return method.component
-      return getConvertCom(fSchema, method) || fSchema.component || method?.component || TextInput
-    }
-    if (fSchema.fieldType && (fSchema.enum || fSchema.enum1) || fSchema.relateTo || fSchema.fieldType === 'area') {
-      return fSchema.component || getConvertCom(fSchema, method) || TextInput
-    }
-    if (method?.type == 'multipleSelect' && fSchema.type == 'array') {
-      return fSchema.component || method?.component || getConvertCom(fSchema, method) || fSchema.field?.component || TextInput
-    }
-    return fSchema.component || method?.component || getConvertCom(fSchema, method) || TextInput
-  }, [JSON.stringify(methods), selectMethod])
-
+  const method = _.find(methods, m => m.key == selectMethod) || (methods && methods[0])
   const type = schema?.properties?.[fieldKey]?.type
 
   // 根据容器宽度决定布局方式
@@ -310,22 +294,18 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
                           {ops.map(op => <SelectItem key={op.value} value={op.value}>{op.label}</SelectItem>)}
                         </SelectContent>
                       </Select> :
-                      <BindDataWrap input={{ value: value?.value, onChange: onValueChange }} field={{ ...fieldSchema, unbind }} bind={!unbind} DataWrap={DataWrap} selectMethod={selectMethod}>
-                        <div className="w-full">
-                          <ValueComponent {...fieldCovert} input={{ value: value?.value, onChange: onValueChange }} field={{...fieldCovert, schema: fieldCovert}} label={fieldSchema.title} meta={{}} className="w-full" />
-                        </div>
-                      </BindDataWrap>
+                      <div className="w-full">
+                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={{ ...filterSchema, ...fieldSchema }} label={fieldSchema.title} />
+                      </div>
                   }
                 </div>
 
                 {showValidBtn ?
                   <div className="mb-2">
-                    <BindDataWrap input={{ value: value?.valid, onChange: onValidChange }} field={{ title: '生效', type: 'boolean', unbind }} bind={!unbind} DataWrap={DataWrap} selectMethod={selectMethod}>
-                      <Switch
-                        checked={_.isNil(value?.valid) || value?.valid}
-                        onCheckedChange={onValidChange}
-                      />
-                    </BindDataWrap>
+                    <Switch
+                      checked={_.isNil(value?.valid) || value?.valid}
+                      onCheckedChange={onValidChange}
+                    />
                   </div>
                   : null}
               </>
@@ -366,19 +346,15 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
                             {ops.map(op => <SelectItem key={op.value} value={op.value}>{op.label}</SelectItem>)}
                           </SelectContent>
                         </Select> :
-                        <BindDataWrap input={{ value: value?.value, onChange: onValueChange }} field={{ ...fieldSchema, unbind }} bind={!unbind} DataWrap={DataWrap} selectMethod={selectMethod}>
-                          <ValueComponent {...fieldCovert} input={{ value: value?.value, onChange: onValueChange }} field={{...fieldCovert, schema: fieldCovert}} label={fieldSchema.title} meta={{}} className="w-full" />
-                        </BindDataWrap>
+                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={{ ...filterSchema, ...fieldSchema }} />
                     }
                   </div>
                   {showValidBtn ?
                     <div className="shrink-0 min-w-15">
-                      <BindDataWrap input={{ value: value?.valid, onChange: onValidChange }} field={{ title: '生效', type: 'boolean', unbind }} bind={!unbind} DataWrap={DataWrap} selectMethod={selectMethod}>
-                        <Switch
-                          checked={_.isNil(value?.valid) || value?.valid}
-                          onCheckedChange={onValidChange}
-                        />
-                      </BindDataWrap>
+                      <Switch
+                        checked={_.isNil(value?.valid) || value?.valid}
+                        onCheckedChange={onValidChange}
+                      />
                     </div>
                     : null}
                 </div>
@@ -389,12 +365,10 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, unbind, timeRangeQue
 
         {
           ['range', 'notRange', 'gt', 'lt'].indexOf(selectMethod as string) > -1 && timeRangeQuery && isTime &&
-          (rangeType == 'dynamic' ? <VariateRangeTimeInput {...fieldSchema} input={{ value: value?.timeRange, onChange: onTimeRangeChange }} field={fieldCovert} label={fieldSchema.title}></VariateRangeTimeInput> :
+          (rangeType == 'dynamic' ? <VariateRangeTimeInput {...fieldSchema} value={value?.timeRange} onChange={onTimeRangeChange} label={fieldSchema.title}></VariateRangeTimeInput> :
             rangeType == 'fixed' || defaultType == 'fixed' ?
               <div className="mb-2">
-                <BindDataWrap input={{ value: value?.value, onChange: onValueChange }} field={{ ...fieldSchema, unbind }} bind={!unbind} DataWrap={DataWrap} selectMethod={selectMethod}>
-                  <ValueComponent {...fieldCovert} input={{ value: value?.value, onChange: onValueChange }} field={{...fieldCovert, schema: fieldCovert}} label={fieldSchema.title} meta={{}} className="w-full" />
-                </BindDataWrap>
+                <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={{ ...filterSchema, ...fieldSchema }} />
               </div> : null)
         }
       </div>
@@ -614,10 +588,8 @@ const QueryForm = (props: QueryFormProps) => {
 }
 
 interface QueryEditorProps {
-  input?: {
-    value?: any[]
-    onChange?: (value: any[]) => void
-  }
+  value?: any[]
+  onChange?: (value: any[]) => void
   relation?: string
   unbind?: boolean
   style?: React.CSSProperties
@@ -649,8 +621,7 @@ interface QueryEditorProps {
  * @param allowAndOp - 允许且操作
  */
 const QueryEditor = (props: QueryEditorProps) => {
-  const { input = {}, relation, style, btnName, onlyOneType, schema } = props
-  const { value = [], onChange } = input
+  const { value = [], onChange, relation, style, btnName, onlyOneType, schema } = props
   const [queries, setQueries] = useState(value)
 
   const saveQueries = (qs: any[]) => {
@@ -660,8 +631,8 @@ const QueryEditor = (props: QueryEditorProps) => {
   }
 
   useEffect(() => {
-    setQueries(input.value || [])
-  }, [input.value])
+    setQueries(value || [])
+  }, [value])
 
   const addQuery = useCallback((i: number) => {
     const query = queries[i] || []
@@ -730,4 +701,4 @@ const QueryEditor = (props: QueryEditorProps) => {
 }
 
 export default QueryEditor
-export { QueryEditor, QueryItem, QueryForm, QueryFieldSelect, QueryItemFrom, BindDataWrap }
+export { QueryEditor, QueryItem, QueryForm, QueryFieldSelect, QueryItemFrom }

@@ -6,7 +6,11 @@
   "dependencies": [
     "dayjs"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "calendar",
+    "popover",
+    "input-group"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-single-date/filter-single-date.tsx",

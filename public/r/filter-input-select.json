@@ -7,7 +7,9 @@
     "lodash",
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "select"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-input-select/filter-input-select.tsx",

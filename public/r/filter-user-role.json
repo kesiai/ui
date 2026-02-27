@@ -7,7 +7,10 @@
     "lodash",
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "badge",
+    "popover"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-user-role/filter-user-role.tsx",

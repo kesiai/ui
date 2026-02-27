@@ -6,7 +6,10 @@
   "dependencies": [
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "button",
+    "button-group"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-text-boolean/filter-text-boolean.tsx",

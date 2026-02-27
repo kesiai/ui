@@ -7,7 +7,12 @@
     "lodash",
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "button",
+    "badge",
+    "popover",
+    "command"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-log-type/filter-log-type.tsx",

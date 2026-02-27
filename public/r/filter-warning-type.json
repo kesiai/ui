@@ -6,7 +6,10 @@
   "dependencies": [
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "badge",
+    "popover"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-warning-type/filter-warning-type.tsx",

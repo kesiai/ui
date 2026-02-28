@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import QueryEditor from './queryEditor'
+import QueryEditor from '@/registry/components/query-editor/query-editor'
 import { useModel, useModelGetItems, useSetModelState } from '@airiot/client'
 import _ from 'lodash'
 import {
@@ -77,7 +77,9 @@ const ViewAdvancedFilter: React.FC<ViewAdvancedFilterProps> = ({
           <DialogClose asChild>
             <Button variant="outline">取消</Button>
           </DialogClose>
-          <Button onClick={onSearch} type="submit">搜索</Button>
+          <DialogClose asChild>
+            <Button onClick={onSearch} type="submit">搜索</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

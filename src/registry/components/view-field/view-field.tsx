@@ -20,7 +20,17 @@ type ViewFieldProps = {
   [key: string]: any
 }
 
-const Text = ({ value }: { value: any }) => value
+// const Text = ({ value }: { value: any }) => value
+const Text = ({ value }: { value: any }) => {
+  // 处理对象类型的值（如 {id, name}）
+  if (value && typeof value === 'object') {
+    // 优先显示 name，其次显示 id，最后显示 JSON
+    if ('name' in value) return value.name
+    if ('id' in value) return value.id
+    return JSON.stringify(value)
+  }
+  return value
+}
 
 const ViewField = ({ name, label, type, description, children, value, item, schema, ...restProps }: ViewFieldProps) => {
   // 优先使用 schema.fieldType，其次使用 type 参数

@@ -493,7 +493,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
     // 默认值生效
     React.useEffect(() => {
       setTimeout(() => {
-        if (!value && schema?.defaultVal && onChange && schema?.defaultValType !== 'logic') {
+        if (!value && props.defaultVal && onChange && props.defaultValType !== 'logic') {
           onChange(props.defaultVal)
         }
       })

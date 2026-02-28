@@ -143,8 +143,7 @@ export const schemaFormDefaultProps = {
         title: '出生日期'
       },
       dateRange: {
-        type: 'array',
-        items: {},
+        type: 'string',
         title: '日期范围'
       },
       meetingTime: {
@@ -169,8 +168,9 @@ export const schemaFormDefaultProps = {
         title: '序列号'
       },
       role: {
-        type: 'string',
-        title: '用户角色'
+        type: 'object',
+        title: '用户角色',
+        properties: {}
       },
       referenceF: {
         type: 'string',
@@ -197,7 +197,7 @@ export const schemaFormDefaultProps = {
     { key: "username", name: "username", type: 'text' },
     { key: "age", name: "age", type: 'number' },
     { key: "photo", name: "photo", type: 'upload' },
-    { key: "rating", name: "rating", type: 'rate' },
+    { key: "rating", name: "rating", type: 'rate', count: 10 },
     { key: "radioio", name: "radioio", type: 'radio' },
     { key: "checkboxF", name: "checkboxF", type: 'checkbox' },
     { key: "areaF", name: "areaF", type: 'area' },

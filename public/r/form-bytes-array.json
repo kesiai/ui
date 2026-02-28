@@ -4,7 +4,9 @@
   "title": "Form Bytes Array",
   "description": "Form Bytes Array - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-bytes-array/form-bytes-array.tsx",

@@ -8,7 +8,13 @@
     "@amap/amap-jsapi-loader",
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input",
+    "button",
+    "label",
+    "dialog",
+    "tooltip"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-map/form-map.tsx",

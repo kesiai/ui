@@ -6,7 +6,13 @@
   "dependencies": [
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "dialog",
+    "button",
+    "scroll-area",
+    "badge",
+    "separator"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/view-detail/view-detail.tsx",

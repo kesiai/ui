@@ -414,6 +414,59 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
     },
     ref
   ) => {
+    // 辅助函数：补零
+    const pad = (num: number) => num.toString().padStart(2, "0")
+
+    function formatDate(date: Date | undefined, pickerType: string) {
+      if (!date) {
+        return ""
+      }
+
+      // time 模式：返回 HH:mm:ss
+      if (pickerType === "time") {
+        return date.toLocaleTimeString("zh-CN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: use12Hours,
+        })
+      }
+
+      // dateTime 模式：返回 YYYY-MM-DD HH:mm:ss
+      if (pickerType === "dateTime") {
+        const formattedDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+        const formattedTime = `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+        return `${formattedDate} ${formattedTime}`
+      }
+
+      // week 模式
+      if (pickerType === "week") {
+        const startOfYear = new Date(date.getFullYear(), 0, 1)
+        const week = Math.ceil(((date.getTime() - startOfYear.getTime()) / 86400000 + startOfYear.getDay() + 1) / 7)
+        return `${date.getFullYear()}-${week}周`
+      }
+
+      // month 模式
+      if (pickerType === "month") {
+        return `${date.getFullYear()}年${date.getMonth() + 1}月`
+      }
+
+      // quarter 模式
+      if (pickerType === "quarter") {
+        const quarter = Math.floor(date.getMonth() / 3) + 1
+        return `${date.getFullYear()}年Q${quarter}`
+      }
+
+      // year 模式
+      if (pickerType === "year") {
+        return `${date.getFullYear()}`
+      }
+
+      // date 模式：返回 YYYY-MM-DD 格式
+      const formattedDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+      return `${formattedDate}`
+    }
+
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(() => {
       const initialValue = value ?? defaultValue
@@ -468,59 +521,6 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
         inputRef.current.focus()
       }
     }, [autoFocus, disabled])
-
-    // 辅助函数：补零
-    const pad = (num: number) => num.toString().padStart(2, "0")
-
-    function formatDate(date: Date | undefined, pickerType: string) {
-      if (!date) {
-        return ""
-      }
-
-      // time 模式：返回 HH:mm:ss
-      if (pickerType === "time") {
-        return date.toLocaleTimeString("zh-CN", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: use12Hours,
-        })
-      }
-
-      // dateTime 模式：返回 YYYY-MM-DD HH:mm:ss
-      if (pickerType === "dateTime") {
-        const formattedDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
-        const formattedTime = `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
-        return `${formattedDate} ${formattedTime}`
-      }
-
-      // week 模式
-      if (pickerType === "week") {
-        const startOfYear = new Date(date.getFullYear(), 0, 1)
-        const week = Math.ceil(((date.getTime() - startOfYear.getTime()) / 86400000 + startOfYear.getDay() + 1) / 7)
-        return `${date.getFullYear()}-${week}周`
-      }
-
-      // month 模式
-      if (pickerType === "month") {
-        return `${date.getFullYear()}年${date.getMonth() + 1}月`
-      }
-
-      // quarter 模式
-      if (pickerType === "quarter") {
-        const quarter = Math.floor(date.getMonth() / 3) + 1
-        return `${date.getFullYear()}年Q${quarter}`
-      }
-
-      // year 模式
-      if (pickerType === "year") {
-        return `${date.getFullYear()}`
-      }
-
-      // date 模式：返回 YYYY-MM-DD 格式
-      const formattedDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
-      return `${formattedDate}`
-    }
 
     function isValidDate(date: Date | undefined) {
       if (!date) {

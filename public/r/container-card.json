@@ -4,7 +4,9 @@
   "title": "Container Card",
   "description": "Container Card - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "card"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/container-card/container-card.tsx",

@@ -6,7 +6,11 @@
   "dependencies": [
     "date-fns"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "popover",
+    "button",
+    "scroll-area"
+  ],
   "files": [
     {
       "path": "registry/ui/time-picker.tsx",

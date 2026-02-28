@@ -6,7 +6,11 @@
   "dependencies": [
     "lodash"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "switch",
+    "checkbox",
+    "tooltip"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/filter-bool/filter-bool.tsx",

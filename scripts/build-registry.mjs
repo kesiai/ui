@@ -95,8 +95,11 @@ function extractThirdPartyDepsFromContent(content, thirdPartyDeps) {
 
 // 从文件内容中提取注册表依赖
 function extractRegistryDepsFromContent(content) {
-  const deps = new Set();
-  // lib 依赖单独记录，不作为 registryDependencies
+  // registryDeps: 来自 @/registry/ 的依赖，需要添加 URL 前缀
+  const registryDeps = new Set();
+  // standardDeps: 来自 @/components/ui/ 和 @/lib/ 的依赖，不需要 URL 前缀
+  const standardDeps = new Set();
+  // lib 依赖单独记录，不作为 registryDependencies，而是内联到 files 中
   const libDeps = new Set();
 
   // 匹配 @/registry/components/xxx 或 @/registry/components/xxx/yyy
@@ -105,24 +108,43 @@ function extractRegistryDepsFromContent(content) {
   const uiImportRegex = /['"]@\/registry\/ui\/([\w-]+)['"]/g;
   // 匹配 @/registry/lib/xxx
   const libImportRegex = /['"]@\/registry\/lib\/([\w-\/]+)['"]/g;
+  // 匹配 @/components/ui/xxx（标准 shadcn/ui 路径）
+  const standardUiImportRegex = /['"]@\/components\/ui\/([\w-]+)['"]/g;
+  // 匹配 @/lib/utils（标准 shadcn/utils 路径）
+  const standardLibImportRegex = /['"]@\/lib\/([\w-]+)['"]/g;
 
-  // 处理组件依赖
+  // 处理组件依赖（来自 @/registry/components/）
   let match;
   while ((match = compImportRegex.exec(content))) {
     const depPath = match[1];
     // 将路径转换为组件名：例如 container-context-provider/context-provider -> container-context-provider
     const depName = depPath.split('/')[0];
-    // 只返回组件名，不返回完整 URL（shadcn CLI 会自动构建 URL）
-    deps.add(depName);
+    registryDeps.add(depName);
   }
 
-  // 处理 UI 组件依赖
+  // 处理 UI 组件依赖（来自 @/registry/ui/）
   while ((match = uiImportRegex.exec(content))) {
     const uiName = match[1];
-    deps.add(uiName);
+    registryDeps.add(uiName);
   }
 
-  // 处理 lib 依赖（lib 文件不作为 registryDependencies，而是内联到 files 中）
+  // 处理标准 shadcn/ui 组件依赖（来自 @/components/ui/xxx）
+  // 不跳过标准组件，而是添加到 standardDeps（不需要 URL 前缀）
+  while ((match = standardUiImportRegex.exec(content))) {
+    const uiName = match[1];
+    standardDeps.add(uiName);
+  }
+
+  // 处理标准 shadcn/lib 依赖（来自 @/lib/xxx）
+  // 跳过 utils，因为它是 shadcn/ui 的核心工具文件，每个项目都应该已经存在
+  while ((match = standardLibImportRegex.exec(content))) {
+    const libName = match[1];
+    if (libName !== 'utils') {
+      standardDeps.add('lib-' + libName);
+    }
+  }
+
+  // 处理 lib 依赖（来自 @/registry/lib/xxx，内联到 files 中）
   while ((match = libImportRegex.exec(content))) {
     const libPath = match[1];
     // 将路径转换为 lib 文件名：例如 datasource-utils -> lib-datasource-utils
@@ -130,8 +152,8 @@ function extractRegistryDepsFromContent(content) {
     libDeps.add(libName);
   }
 
-  // 返回包含两个数组（组件依赖和 lib 依赖）
-  return { registryDeps: Array.from(deps), libDeps: Array.from(libDeps) };
+  // 返回包含三个数组（registry 依赖、标准依赖、lib 依赖）
+  return { registryDeps: Array.from(registryDeps), standardDeps: Array.from(standardDeps), libDeps: Array.from(libDeps) };
 }
 
 // 新增：提取相对 CSS 导入（支持 .css 和 .module.css）
@@ -257,8 +279,8 @@ async function buildRegistry() {
         const allDeps = extractThirdPartyDepsFromContent(fileContent, thirdPartyDeps);
         const filteredDeps = allDeps.filter(dep => !SKIP_DEPENDENCIES.includes(dep));
 
-        // 提取注册表依赖（分离组件依赖和 lib 依赖）
-        const { registryDeps, libDeps } = extractRegistryDepsFromContent(fileContent);
+        // 提取注册表依赖（分离 registry 依赖、标准依赖和 lib 依赖）
+        const { registryDeps, standardDeps, libDeps } = extractRegistryDepsFromContent(fileContent);
 
         // 构建文件列表
         const fileList = [
@@ -274,8 +296,19 @@ async function buildRegistry() {
         // 添加 lib 依赖文件
         for (const libDep of libDeps) {
           const libFileName = libDep.replace(/^lib-/, '');
-          const libPath = `registry/lib/${libFileName}.ts`;
-          const libAbsPath = path.join(REGISTRY_ROOT, 'lib', libFileName + '.ts');
+          // 尝试 .ts 和 .tsx 扩展名
+          const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libFileName + '.ts');
+          const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libFileName + '.tsx');
+          const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
+
+          if (!libAbsPath) {
+            console.warn(`  ⚠️  无法找到 lib 文件: ${libFileName}`);
+            continue;
+          }
+
+          // 确定输出路径和类型
+          const ext = path.extname(libAbsPath);
+          const libPath = `registry/lib/${libFileName}${ext}`;
 
           try {
             const libContent = await fs.readFile(libAbsPath, 'utf-8');
@@ -346,9 +379,12 @@ async function buildRegistry() {
         }
 
         // 构建注册表项
-        const processedRegistryDeps = registryDeps.map(dep => {
-          return dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`;
-        });
+        // registryDeps: 来自 @/registry/ 的依赖，添加 URL 前缀
+        // standardDeps: 来自 @/components/ui/ 和 @/lib/ 的依赖，不添加 URL 前缀
+        const processedRegistryDeps = [
+          ...registryDeps.map(dep => dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`),
+          ...standardDeps,
+        ];
 
         const item = {
           name,
@@ -366,7 +402,7 @@ async function buildRegistry() {
         const componentJsonPath = path.join(OUTPUT_DIR, `${name}.json`);
         await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
 
-        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
+        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} standard deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
       }
     } catch (e) {
       console.error(`  ⚠️  跳过文件夹 ${folder}:`, e.message);

@@ -6,7 +6,11 @@
   "dependencies": [
     "date-fns"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "calendar",
+    "popover",
+    "button"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-date-range/form-date-range.tsx",

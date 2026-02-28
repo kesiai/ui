@@ -4,7 +4,10 @@
   "title": "Video Periods Widget",
   "description": "Video Periods Widget - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "button",
+    "popover"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/video-periods-widget/video-periods-widget.tsx",

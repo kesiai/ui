@@ -7,7 +7,9 @@
     "lodash",
     "element-resize-event"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "carousel"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/container-carousel/container-carousel.tsx",

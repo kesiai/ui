@@ -8,7 +8,12 @@
     "@airiot/client"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/schema-form.json"
+    "http://localhost:3000/r/schema-form.json",
+    "dialog",
+    "dropdown-menu",
+    "button",
+    "scroll-area",
+    "badge"
   ],
   "files": [
     {

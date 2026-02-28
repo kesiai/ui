@@ -7,7 +7,10 @@
     "react-day-picker",
     "date-fns"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "calendar",
+    "drawer"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/mobile-calendar/mobile-calendar.tsx",

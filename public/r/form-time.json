@@ -6,7 +6,9 @@
   "dependencies": [
     "moment"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-time/form-time.tsx",

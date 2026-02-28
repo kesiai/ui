@@ -4,7 +4,9 @@
   "title": "Form Serial Number",
   "description": "Form Serial Number - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "input"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-serial-number/form-serial-number.tsx",

@@ -6,7 +6,12 @@
   "dependencies": [
     "@airiot/client"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "card",
+    "badge",
+    "button",
+    "select"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/view-data-aggregate/view-data-aggregate.tsx",

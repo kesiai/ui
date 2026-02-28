@@ -9,7 +9,11 @@
     "lodash"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/view-field.json"
+    "http://localhost:3000/r/view-field.json",
+    "data-grid",
+    "data-grid-column-header",
+    "data-grid-table",
+    "scroll-area"
   ],
   "files": [
     {

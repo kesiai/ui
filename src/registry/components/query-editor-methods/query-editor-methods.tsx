@@ -19,7 +19,7 @@ import {
 import { format } from 'date-fns'
 import _ from 'lodash'
 import { FilterDatetime } from '@/registry/components/filter-datetime/filter-datetime'
-import { convertProps } from '../query-editor/util'
+import { convertProps } from '@/registry/lib/query-editor-util'
 
 const NullInput = () => null
 

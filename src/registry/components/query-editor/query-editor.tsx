@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
 import { NullInput, TextInput, VariateRangeTimeInput, getMethods } from '@/registry/components/query-editor-methods/query-editor-methods'
-import { convertProps } from './util'
+import { convertProps } from '@/registry/lib/query-editor-util'
 import _ from 'lodash'
 import { useFilterSchema, useFormSchema } from '@airiot/client'
 import FormField from '@/registry/components/form-field/form-field'

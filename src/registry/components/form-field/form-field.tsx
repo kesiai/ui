@@ -56,7 +56,7 @@ import TableDataSelect from '@/registry/components/table-data-select/table-data-
 
 // 将 table-field 组件包装为 FormField 可用的组件
 const wrapFormComponent = (Component: React.ComponentType<any>, defaultFieldSchema: any = {}) => {
-  return ({ schema = {}, ...rest }: any) => {
+  return ({ schema = {}, key: _key, ...rest }: any) => {
     return <Component field={rest} {...defaultFieldSchema} {...rest} {...schema} />
   }
 }

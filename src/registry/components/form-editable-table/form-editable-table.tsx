@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Plus, Trash2 } from 'lucide-react'
-import { FormTableView } from './form-table-view'
-import type { FormTableViewColumn } from './form-table-view'
-import FormEditableCard from './form-editable-card'
+import { FormTableView } from '@/registry/components/form-table-view/form-table-view'
+import type { FormTableViewColumn } from '@/registry/components/form-table-view/form-table-view'
+import FormEditableCard from '@/registry/components/form-editable-card/form-editable-card'
 
 export interface FormEditableTableProps {
   input?: {

@@ -15,40 +15,12 @@ import {
 import { Plus, Repeat2 } from 'lucide-react'
 import { useUser } from '@airiot/client'
 import { createAPI } from '@airiot/client'
-import { getFormValues, dealFilter, getQueryFilter } from './utils'
+import { getFormValues, dealFilter, getQueryFilter } from '@/registry/lib/form-relate-utils'
+import type { RelateFieldProps } from '@/registry/components/form-relate/types'
 
-interface RelateModelSelectProps {
-  input?: {
-    value?: any
-    onChange?: (value: any) => void
-  }
-  field?: {
-    schema?: Record<string, any>
-    filter?: any
-    meta?: any
-    key?: string
-    displayField?: string
-    tableID?: string
-    relateShowFields?: Array<{
-      key: string
-      title: string
-      mapToCurrent?: boolean
-      mapField?: string
-      fieldSchema?: any
-    }>
-    option?: {
-      form?: {
-        change: (field: string, value: any) => void
-      }
-    }
-    fieldSchema?: any
-  }
-  meta?: any
-  record?: any
-  disabled?: boolean
+interface RelateModelSelectProps extends RelateFieldProps {
   label?: string
   schema?: any
-  antdForm?: any
   inputType?: 'select' | 'button'
   selectType?: 'single' | 'multiple'
   allFieldReturn?: boolean

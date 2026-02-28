@@ -12,7 +12,7 @@ import {
 import { Loader2 } from 'lucide-react'
 import { useUser } from '@airiot/client'
 import { createAPI } from '@airiot/client'
-import { fieldRender } from './utils'
+import { fieldRender } from '@/registry/lib/form-relate-utils'
 
 interface DetailShowProps {
   children?: React.ReactNode

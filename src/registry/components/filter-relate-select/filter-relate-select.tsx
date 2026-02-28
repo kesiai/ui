@@ -1,5 +1,5 @@
 import React from 'react'
-import AsyncSelect from '@/registry/components/form-relate/AsyncSelect'
+import AsyncSelect from '@/registry/components/form-relate-async-select/async-select'
 import _ from 'lodash'
 
 interface FilterRelateSelectProps {

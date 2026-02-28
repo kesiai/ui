@@ -1,17 +1,16 @@
 import * as React from 'react'
 import isEmpty from 'lodash/isEmpty'
-import isArray from 'lodash/isArray'
-import { getFormValues } from './utils'
-import AsyncSelect from './AsyncSelect'
-import type { RelateFieldProps } from './types'
+import { getFormValues } from '@/registry/lib/form-relate-utils'
+import AsyncSelect from '@/registry/components/form-relate-async-select/async-select'
+import type { RelateFieldProps } from '@/registry/components/form-relate/types'
 
 /**
- * RelateMultiSelect - 多选关联字段组件
- * 外部工作表关联，多选模式
+ * RelateSelect - 单选关联字段组件
+ * 外部工作表关联，单选模式
  */
-const RelateMultiSelect: React.FC<RelateFieldProps> = (props) => {
+const RelateSelect: React.FC<RelateFieldProps> = (props) => {
   const { input, field = {}, label, meta, record, disabled: propsDisabled } = props
-  const { onChange, value: items } = input || {}
+  const { onChange, value: item } = input || {}
   const { displayField = 'name', schema: relateSchema = {} } = field
 
   // 获取表单状态用于字段脚本
@@ -23,7 +22,7 @@ const RelateMultiSelect: React.FC<RelateFieldProps> = (props) => {
   React.useEffect(() => {
     const defaultVal = relateSchema?.defaultVal
     setTimeout(() => {
-      if (!items && defaultVal && onChange) {
+      if (!item && defaultVal && onChange) {
         onChange(defaultVal)
       }
     })
@@ -34,29 +33,30 @@ const RelateMultiSelect: React.FC<RelateFieldProps> = (props) => {
     const values = getFormValues(relateSchema, { values: formState })
     if (values && !isEmpty(values)) {
       // TODO: 实现字段脚本逻辑
-      // useScriptVal({ schema: relateSchema, value: items, values, record, onChange })
+      // useScriptVal({ schema: relateSchema, value: item, values, record, onChange })
     }
   }, [JSON.stringify(formState)])
 
-  const handleChange = (options: any[]) => {
-    if (!options || options.length === 0) {
-      onChange?.([])
+  const handleChange = (option: any) => {
+    if (!option || (Array.isArray(option) && option.length === 0)) {
+      onChange?.(null)
+    } else if (Array.isArray(option)) {
+      onChange?.(option.map((item) => item.item))
     } else {
-      onChange?.(options.map((opt) => opt.item))
+      onChange?.(option.item)
     }
   }
 
   return (
     <AsyncSelect
-      mode="multiple"
       value={
-        items && !isEmpty(items) && isArray(items)
-          ? items.map((item: any) => ({
+        item
+          ? {
               key: item.id,
               label: item[displayField],
               item,
-            }))
-          : []
+            }
+          : null
       }
       onChange={handleChange}
       field={field}
@@ -68,4 +68,4 @@ const RelateMultiSelect: React.FC<RelateFieldProps> = (props) => {
   )
 }
 
-export default RelateMultiSelect
+export default RelateSelect

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createAPI } from '@airiot/client'
 import { Loader2 } from 'lucide-react'
-import { fieldRender } from '@/registry/components/form-relate/utils'
+import { fieldRender } from '@/registry/lib/form-relate-utils'
 import debounce from 'lodash/debounce'
 
 export interface FormReferenceProps {

@@ -5,7 +5,7 @@ import { createAPI } from '@airiot/client'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { fieldRender } from '@/registry/components/form-relate/utils'
+import { fieldRender } from '@/registry/lib/form-relate-utils'
 
 export interface FormRelatePlusDataShowProps {
   relateSchema: {

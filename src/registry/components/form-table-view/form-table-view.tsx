@@ -22,6 +22,7 @@ export interface FormTableViewProps {
   setDataSource?: (data: any[]) => void
   setErrors?: (errors: any) => void
   meta?: any
+  schema?: any
 }
 
 const FormTableView: React.FC<FormTableViewProps> = (props) => {

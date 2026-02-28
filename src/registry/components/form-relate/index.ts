@@ -10,15 +10,15 @@
  */
 
 // 基础组件
-export { default as AsyncSelect } from './AsyncSelect'
-export { default as FormRelate } from './RelateComponent'
-export { default as RelateSelect } from './RelateSelect'
-export { default as RelateMultiSelect } from './RelateMultiSelect'
-export { default as RelateModelSelect } from './RelateModelSelect'
-export { default as DetailShow } from './DetailShow'
+export { default as AsyncSelect } from '@/registry/components/form-relate-async-select/async-select'
+export { default as FormRelate } from '@/registry/components/form-relate-component/relate-component'
+export { default as RelateSelect } from '@/registry/components/form-relate-select/relate-select'
+export { default as RelateMultiSelect } from '@/registry/components/form-relate-multi-select/relate-multi-select'
+export { default as RelateModelSelect } from '@/registry/components/form-relate-model-select/relate-model-select'
+export { default as DetailShow } from '@/registry/components/form-relate-detail-show/detail-show'
 
 // 向后兼容的导出（旧名称）
-export { default as RelateComponent } from './RelateComponent'
+export { default as RelateComponent } from '@/registry/components/form-relate-component/relate-component'
 
 // 工具函数 - 同时导入和导出
 import {
@@ -29,7 +29,7 @@ import {
   fieldRender,
   getFormState,
   getFormValues,
-} from './utils'
+} from '@/registry/lib/form-relate-utils'
 
 export {
   findRelateKeyInTableSchema,

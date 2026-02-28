@@ -1,7 +1,7 @@
 import * as React from 'react'
-import FormRelatePlusDataSelect from './form-relate-plus-data-select'
-import FormRelatePlusAddRecordBtn from './form-relate-plus-add-record-btn'
-import FormRelatePlusDataShow from './form-relate-plus-data-show'
+import FormRelatePlusDataSelect from '@/registry/components/form-relate-plus-data-select/form-relate-plus-data-select'
+import FormRelatePlusAddRecordBtn from '@/registry/components/form-relate-plus-add-record-btn/form-relate-plus-add-record-btn'
+import FormRelatePlusDataShow from '@/registry/components/form-relate-plus-data-show/form-relate-plus-data-show'
 
 export interface FormRelatePlusProps {
   relateSchema: {

@@ -331,7 +331,7 @@ function StatisticsTable() {
 
 7. **请求方式**：API 请求使用 POST 方法，请求体包含 tableId 和 data 字段，确保后端接口能够正确处理。
 
-8. **字段格式化**：组件使用 `fieldRender` 工具函数格式化显示值，确保已导入 `@/registry/components/form-relate/utils` 中的此函数。
+8. **字段格式化**：组件使用 `fieldRender` 工具函数格式化显示值，确保已导入 `@/registry/lib/form-relate-utils` 中的此函数。
 
 9. **性能考虑**：由于涉及网络请求，组件显示可能有延迟，建议配合加载状态使用（组件已内置加载动画）。
 

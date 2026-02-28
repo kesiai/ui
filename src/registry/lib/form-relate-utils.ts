@@ -49,7 +49,7 @@ export const getQueryFilter = (_filterObj: any, _field: any, _getFormState?: () 
 export const dealFilter = (
   _filterObj: any,
   _field: any,
-  _getQueryFilter: typeof import('./utils').getQueryFilter,
+  _getQueryFilter: typeof import('./form-relate-util').getQueryFilter,
   _getFormState?: () => any
 ) => {
   // TODO: 实现过滤器处理逻辑

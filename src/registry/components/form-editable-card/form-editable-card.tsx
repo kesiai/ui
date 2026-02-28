@@ -23,6 +23,7 @@ export interface FormEditableCardProps {
   setErrors?: (errors: any) => void
   meta?: any
   record?: any
+  schema?: any
 }
 
 const FormEditableCard: React.FC<FormEditableCardProps> = (props) => {

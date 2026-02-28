@@ -12,8 +12,8 @@ import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Crosshair, Loader2 } from 'lucide-react'
 import { createAPI } from '@airiot/client'
-import { dealFilter, getQueryFilter } from './utils'
-import type { RelateFieldOption } from './types'
+import { dealFilter, getQueryFilter } from '@/registry/lib/form-relate-utils'
+import type { RelateFieldOption } from '@/registry/components/form-relate/types'
 
 interface AsyncSelectProps {
   input?: {

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FormRelate } from '@/registry/components/form-relate'
+import { FormRelate } from '@/registry/components/form-relate/form-relate'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form-relate.md?raw'
 

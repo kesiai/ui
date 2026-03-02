@@ -49,7 +49,7 @@ export const getQueryFilter = (_filterObj: any, _field: any, _getFormState?: () 
 export const dealFilter = (
   _filterObj: any,
   _field: any,
-  _getQueryFilter: typeof import('./form-relate-util').getQueryFilter,
+  _getQueryFilter: typeof import('./form-relate-utils').getQueryFilter,
   _getFormState?: () => any
 ) => {
   // TODO: 实现过滤器处理逻辑
@@ -134,4 +134,66 @@ export const getFormValues = (schema: any, formState?: any) => {
   }
 
   return values
+}
+
+/**
+ * Schema 转换器
+ * 将关联字段的 schema 转换为组件可用的格式
+ */
+export const schemaConverter = (
+  schema: any,
+  options?: { tableSchema?: any }
+): {
+  type: string
+  schema: { name: string }
+  fieldSchema?: any
+  relateSchema: any
+  tableID: string
+  displayField: string
+  relateTableName: string
+  insideFilter?: any
+  relateShowFields?: any[]
+  selectType?: 'single' | 'multiple'
+  key?: string
+} | null => {
+  if (
+    !['object', 'array'].includes(schema.type) ||
+    !schema.relate?.id ||
+    schema.recordSelectType
+  ) {
+    return null
+  }
+
+  const relate = schema.relate
+  const relateShowFields = schema.relateShowFields
+  const id = relate.id
+  const fieldSchema = relate.fields?.[0]?.fieldSchema
+
+  const result: any = {
+    type: schema.selectType === 'multiple' ? 'relate_multi_select' : 'relate_fkselect',
+    schema: { name: `core/t/${id}/d` },
+    fieldSchema,
+    relateSchema: schema,
+    tableID: id,
+    displayField: relate.fields?.[0]?.key || 'name',
+    relateTableName: id,
+    insideFilter: schema.insideFilter,
+  }
+
+  // 使用 findRelateKeyInTableSchema 查找关联键
+  if (options?.tableSchema) {
+    const relateKey = findRelateKeyInTableSchema(options.tableSchema, relate.id)
+    if (relateKey) {
+      result.key = relateKey
+    }
+  }
+
+  // 多字段
+  if (relateShowFields && relateShowFields.length > 0) {
+    result.type = 'relate_list_fkselect'
+    result.relateShowFields = relateShowFields
+    result.selectType = schema.selectType
+  }
+
+  return result
 }

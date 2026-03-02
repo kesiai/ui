@@ -15,13 +15,11 @@ import { FormRichText } from '@/registry/components/form-rich-text/form-rich-tex
 import { FormMap } from '@/registry/components/form-map/form-map'
 import { FormUpload } from '@/registry/components/form-upload/form-upload'
 import AreaComponent from '../form-area/form-area'
-import {
-  RelateSelect,
-  RelateMultiSelect,
-  RelateModelSelect,
-  FormRelate as RelateComponent,
-  schemaConverter,
-} from '@/registry/components/form-relate'
+import { FormRelate } from '@/registry/components/form-relate/form-relate'
+import RelateSelect from '@/registry/components/form-relate-select/form-relate-select'
+import RelateMultiSelect from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
+import RelateModelSelect from '@/registry/components/form-relate-model-select/form-relate-model-select'
+import { schemaConverter } from '@/registry/lib/form-relate-utils'
 import { FormRelatePlus } from '@/registry/components/form-relate-plus/form-relate-plus'
 import { FormUserRole } from '@/registry/components/form-user-role/form-user-role'
 import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
@@ -168,7 +166,7 @@ const FieldComponentSelector: React.FC<{
 
   // 内部表关联（internalTable）
   if (config.internalTable && config.relate) {
-    return <RelateComponent value={input.value} onChange={input.onChange} schema={config} internalTable={true} meta={meta} record={record} />
+    return <FormRelate input={{ value: input.value, onChange: input.onChange }} field={{ schema: config, internalTable: true }} meta={meta} record={record} />
   }
 
   // 附件上传

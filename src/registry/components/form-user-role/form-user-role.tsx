@@ -8,7 +8,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Loader2 } from 'lucide-react'
-import { dealFilter } from '@/components/form/components/relate/utils'
 
 export interface FormUserRoleOption {
   value: string

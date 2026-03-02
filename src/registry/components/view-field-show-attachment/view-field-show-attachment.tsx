@@ -18,7 +18,7 @@ import isString from 'lodash/isString'
 import JSZip from 'jszip'
 // @ts-ignore - file-saver doesn't have proper types
 import { saveAs } from 'file-saver'
-import '@/registry/components/view-field-show-attachment/ShowAttachment.css'
+import './ShowAttachment.css'
 
 // ============================================
 // 工具函数

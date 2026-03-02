@@ -5,8 +5,8 @@ import {
 } from "@/components/ui/field"
 import type { ReactNode } from 'react'
 import React, { cloneElement } from 'react'
-import fieldMap from './field-map'
-import { ViewFieldRender } from './field-map'
+import fieldMap from '@/registry/components/view-field/field-map'
+import { ViewFieldRender } from '@/registry/components/view-field/field-map'
 
 type ViewFieldProps = {
   name: string

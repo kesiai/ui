@@ -1,5 +1,5 @@
 import React from 'react'
-import ViewField from './view-field'
+import ViewField from '@/registry/components/view-field/view-field'
 
 /**
  * ViewField 使用示例

@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { ChevronDown, ChevronUp, Table as TableIcon } from 'lucide-react'
-import { ViewFieldRender } from '../field-map'
+import { ViewFieldRender } from '@/registry/components/view-field/field-map'
 
 // ============================================
 // 工具函数

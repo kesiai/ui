@@ -11,7 +11,7 @@ export interface PCAItem {
  */
 const loadPCAData = async (): Promise<PCAItem[]> => {
   // 导入 pca.json 并指定类型为 PCAItem[]
-  const { default: largeData } = await import('./pca.json') as {
+  const { default: largeData } = await import('@/registry/components/form-area/pca.json') as {
     default: PCAItem[];
   };
   return largeData;

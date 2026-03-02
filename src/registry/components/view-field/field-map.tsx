@@ -21,10 +21,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import ShowAttachment from './components/ShowAttachment'
-import RelateShow from './components/RelateShow'
-import RelatePlusShow from './components/RelatePlusShow'
-import './components/ShowAttachment.css'
+import ShowAttachment from '@/registry/components/view-field/components/ShowAttachment'
+import RelateShow from '@/registry/components/view-field/components/RelateShow'
+import RelatePlusShow from '@/registry/components/view-field/components/RelatePlusShow'
+import '@/registry/components/view-field/components/ShowAttachment.css'
 
 // ============================================
 // 基础展示组件

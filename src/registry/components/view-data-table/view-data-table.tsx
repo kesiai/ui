@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelSelect, useModelState, type ModelSchema } from '@airiot/client'
-import { DataGrid } from '@/components/ui/data-grid';
-import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
+import { useModelList, useModel, useModelState, type ModelSchema } from '@airiot/client'
+import { DataGrid } from '@/components/reui//data-grid/data-grid';
+import { DataGridColumnHeader } from '@/components/reui//data-grid/data-grid-column-header';
 import { DataGridTable,
   DataGridTableRowSelect,
-  DataGridTableRowSelectAll, } from '@/components/ui/data-grid-table';
+  DataGridTableRowSelectAll, } from '@/components/reui/data-grid/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import ViewField from "@/registry/components/view-field/view-field"
 import {
@@ -15,7 +15,6 @@ import {
   createColumnHelper,
 } from '@tanstack/react-table';
 import { cn } from '@/lib/utils';
-import { set } from 'lodash';
 
 interface IData {
   id: string;

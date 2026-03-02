@@ -7,7 +7,8 @@
     "@airiot/client"
   ],
   "registryDependencies": [
-    "select"
+    "select",
+    "@form/components"
   ],
   "files": [
     {

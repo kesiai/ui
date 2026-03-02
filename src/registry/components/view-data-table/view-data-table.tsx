@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useModelList, useModel, useModelState, type ModelSchema } from '@airiot/client'
-import { DataGrid } from '@/components/reui//data-grid/data-grid';
-import { DataGridColumnHeader } from '@/components/reui//data-grid/data-grid-column-header';
+import { DataGrid } from '@/components/reui/data-grid/data-grid';
+import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
 import { DataGridTable,
   DataGridTableRowSelect,
   DataGridTableRowSelectAll, } from '@/components/reui/data-grid/data-grid-table';

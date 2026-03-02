@@ -4,7 +4,9 @@
   "title": "Form TableField",
   "description": "Form TableField - 组件",
   "dependencies": [],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "@src/form"
+  ],
   "files": [
     {
       "path": "registry/components/airiot/form-tableField/form-tableField.tsx",

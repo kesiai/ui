@@ -97,7 +97,7 @@ function extractThirdPartyDepsFromContent(content, thirdPartyDeps) {
 function extractRegistryDepsFromContent(content) {
   // registryDeps: 来自 @/registry/ 的依赖，需要添加 URL 前缀
   const registryDeps = new Set();
-  // standardDeps: 来自 @/components/ui/ 和 @/lib/ 的依赖，不需要 URL 前缀
+  // standardDeps: 来自 @/components/ 的依赖（包括 ui 和其他第三方库），不需要 URL 前缀
   const standardDeps = new Set();
   // lib 依赖单独记录，不作为 registryDependencies，而是内联到 files 中
   const libDeps = new Set();
@@ -108,8 +108,8 @@ function extractRegistryDepsFromContent(content) {
   const uiImportRegex = /['"]@\/registry\/ui\/([\w-]+)['"]/g;
   // 匹配 @/registry/lib/xxx
   const libImportRegex = /['"]@\/registry\/lib\/([\w-\/]+)['"]/g;
-  // 匹配 @/components/ui/xxx（标准 shadcn/ui 路径）
-  const standardUiImportRegex = /['"]@\/components\/ui\/([\w-]+)['"]/g;
+  // 通用匹配 @/components/{prefix}/{path}，支持 ui、reui、xxxui 等任何前缀
+  const componentImportRegex = /['"]@\/components\/([\w-]+)\/([\w-\/]+)['"]/g;
   // 匹配 @/lib/utils（标准 shadcn/utils 路径）
   const standardLibImportRegex = /['"]@\/lib\/([\w-]+)['"]/g;
 
@@ -128,11 +128,23 @@ function extractRegistryDepsFromContent(content) {
     registryDeps.add(uiName);
   }
 
-  // 处理标准 shadcn/ui 组件依赖（来自 @/components/ui/xxx）
-  // 不跳过标准组件，而是添加到 standardDeps（不需要 URL 前缀）
-  while ((match = standardUiImportRegex.exec(content))) {
-    const uiName = match[1];
-    standardDeps.add(uiName);
+  // 处理通用 components 依赖（来自 @/components/{prefix}/{path}）
+  // 支持 ui、reui、xxxui 等任何前缀
+  while ((match = componentImportRegex.exec(content))) {
+    const prefix = match[1];
+    const path = match[2];
+    // 清理多余的斜杠
+    const cleanPath = path.replace(/\/+/g, '/');
+
+    if (prefix === 'ui') {
+      // shadcn/ui 官方组件，直接使用组件名
+      standardDeps.add(cleanPath.split('/')[0]);
+    } else {
+      // 第三方组件库（reui、xxxui 等），使用 @prefix/path 格式
+      // 只取第一级目录名，例如 data-grid/data-grid-table -> data-grid
+      const topLevelDir = cleanPath.split('/')[0];
+      standardDeps.add('@' + prefix + '/' + topLevelDir);
+    }
   }
 
   // 处理标准 shadcn/lib 依赖（来自 @/lib/xxx）
@@ -380,7 +392,7 @@ async function buildRegistry() {
 
         // 构建注册表项
         // registryDeps: 来自 @/registry/ 的依赖，添加 URL 前缀
-        // standardDeps: 来自 @/components/ui/ 和 @/lib/ 的依赖，不添加 URL 前缀
+        // standardDeps: 来自 @/components/ 的依赖（包括 ui、reui、xxxui 等），不添加 URL 前缀
         const processedRegistryDeps = [
           ...registryDeps.map(dep => dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`),
           ...standardDeps,
@@ -402,7 +414,7 @@ async function buildRegistry() {
         const componentJsonPath = path.join(OUTPUT_DIR, `${name}.json`);
         await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
 
-        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} standard deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
+        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} component deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
       }
     } catch (e) {
       console.error(`  ⚠️  跳过文件夹 ${folder}:`, e.message);

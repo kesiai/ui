@@ -62,26 +62,13 @@ export const formSelectPropsConfig = [
     description: '默认值（兼容 table-field）'
   },
   {
-    name: 'variant',
-    label: '样式变体',
-    type: 'select' as const,
-    default: 'default',
-    options: [
-      { value: 'default', label: '默认' },
-      { value: 'outline', label: '边框' },
-      { value: 'filled', label: '填充' },
-      { value: 'ghost', label: '幽灵' }
-    ]
-  },
-  {
     name: 'size',
     label: '尺寸',
     type: 'select' as const,
-    default: 'md',
+    default: 'default',
     options: [
       { value: 'sm', label: '小' },
-      { value: 'md', label: '中' },
-      { value: 'lg', label: '大' }
+      { value: 'default', label: '标准' }
     ]
   },
   {
@@ -145,8 +132,7 @@ export const formSelectDefaultProps = {
   selectType: 'single' as 'single' | 'multiple',
   dataType: 'string' as 'string' | 'number',
   defaultVal: '',
-  variant: 'default' as 'default' | 'outline' | 'filled' | 'ghost',
-  size: 'md' as 'sm' | 'md' | 'lg',
+  size: 'default' as 'sm' | 'default',
   disabled: false,
   readOnly: false,
   bordered: true,
@@ -164,7 +150,6 @@ const renderFormSelectPreview = (props: Record<string, any>) => {
         <FormSelect
           placeholder={props.placeholder}
           options={props.options}
-          variant={props.variant}
           size={props.size}
           disabled={props.disabled}
           readOnly={props.readOnly}
@@ -185,7 +170,6 @@ const renderFormSelectCodePreview = (props: Record<string, any>) => {
   return `<FormSelect
   placeholder="${props.placeholder}"
   options={${optionsStr}}
-  variant="${props.variant}"
   size="${props.size}"
   ${props.disabled ? 'disabled' : ''}
   ${props.readOnly ? 'readOnly' : ''}

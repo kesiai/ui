@@ -11,32 +11,8 @@ import {
 } from "@/components/ui/select"
 import { X } from "lucide-react"
 
-const selectVariants = cva(
-  "relative border transition-colors",
-  {
-    variants: {
-      variant: {
-        default: "border-border bg-background",
-        outline: "border-2 border-primary",
-        filled: "border-primary/20 bg-primary/5",
-        ghost: "border-transparent hover:bg-accent/50",
-      },
-      size: {
-        sm: "h-8 text-sm",
-        md: "h-10 text-base",
-        lg: "h-12 text-lg",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "md",
-    },
-  }
-)
-
 export interface FormSelectProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus">,
-  VariantProps<typeof selectVariants> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus"> {
   /**
    * 当前值
    */
@@ -52,7 +28,11 @@ export interface FormSelectProps
   /**
    * 选项列表
    */
-  options?: Array<{ value: string; name: string; disabled?: boolean }>
+  options?: Array<{ value: string; label?: string, name?: string; disabled?: boolean }>
+  /**
+   * 尺寸
+   */
+  size?: "sm" | "default" | undefined
   /**
    * 是否禁用
    */
@@ -106,7 +86,6 @@ export interface FormSelectProps
 const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
   ({
     className,
-    variant,
     size,
     value,
     defaultValue,
@@ -129,7 +108,6 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     const [internalValue, setInternalValue] = React.useState(defaultValue || "")
     const [isOpen, setIsOpen] = React.useState(defaultOpen)
     const [searchValue, setSearchValue] = React.useState("")
-    const [isHovered, setIsHovered] = React.useState(false)
     const selectRef = React.useRef<HTMLButtonElement>(null)
 
     const handleValueChange = (newValue: string) => {
@@ -161,97 +139,83 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
       if (!showSearch || !searchValue.trim()) {
         return options
       }
-      return options.filter(option =>
-        option.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        option.value.toLowerCase().includes(searchValue.toLowerCase())
-      )
+      return options.filter(option => {
+        const label = option.label || option.name || ''
+        return label.toLowerCase().includes(searchValue.toLowerCase()) ||
+          option.value.toLowerCase().includes(searchValue.toLowerCase())
+      })
     }, [options, searchValue, showSearch])
 
     return (
-      <div
-        ref={ref}
-        className={cn(
-          selectVariants({ variant, size }),
-          !bordered && "border-transparent",
-          disabled && "opacity-50 cursor-not-allowed",
-          readOnly && "cursor-default",
-          className
-        )}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        {...props}
+      <Select
+        value={currentValue}
+        onValueChange={handleValueChange}
+        disabled={disabled || readOnly}
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open)
+          if (open) {
+            onFocus?.()
+          } else {
+            onBlur?.()
+          }
+        }}
       >
-        <Select
-          value={currentValue}
-          onValueChange={handleValueChange}
-          disabled={disabled || readOnly}
-          open={isOpen}
-          onOpenChange={(open) => {
-            setIsOpen(open)
-            if (open) {
-              onFocus?.()
-            } else {
-              onBlur?.()
-            }
-          }}
-        >
-          <div className="relative">
-            <SelectTrigger
-              ref={selectRef}
-              className={cn(
-                "w-full border-0 bg-transparent h-full px-3"
-              )}
-              aria-invalid={props['aria-invalid']}
-            >
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            {showClear && (
-              <button
-                type="button"
-                onClick={handleClear}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors bg-gray-200 rounded-full"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-          <SelectContent
+        <div className="relative">
+          <SelectTrigger
+            ref={selectRef}
             className={cn(
-              dropdownMatchSelectWidth && "w-[var(--radix-select-trigger-width)]"
+              "w-full",
+              !bordered && "border-transparent",
+              className
             )}
+            size={size}
+            aria-invalid={props['aria-invalid']}
           >
-            {showSearch && (
-              <div className="px-3 py-2 border-b">
-                <input
-                  type="text"
-                  placeholder="搜索选项..."
-                  value={searchValue}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  onClick={(e) => e.stopPropagation()}
-                />
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
+          {showClear && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors bg-gray-200 rounded-full"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        <SelectContent position="popper">
+          {showSearch && (
+            <div className="px-3 py-2 border-b">
+              <input
+                type="text"
+                placeholder="搜索选项..."
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          )}
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((option) => (
+              <SelectItem
+                key={option.value}
+                value={option.value}
+                disabled={option.disabled}
+              >
+                {option.label || option.name}
+              </SelectItem>
+            ))
+          ) : (
+            showSearch && searchValue && (
+              <div className="px-3 py-2 text-sm text-muted-foreground text-center">
+                没有找到匹配的选项
               </div>
-            )}
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  disabled={option.disabled}
-                >
-                  {option.name}
-                </SelectItem>
-              ))
-            ) : (
-              showSearch && searchValue && (
-                <div className="px-3 py-2 text-sm text-muted-foreground text-center">
-                  没有找到匹配的选项
-                </div>
-              )
-            )}
-          </SelectContent>
-        </Select>
-      </div>
+            )
+          )}
+        </SelectContent>
+      </Select>
     )
   }
 )

@@ -3,7 +3,7 @@ import { FormRelate as FormRelateComponent } from '@/registry/components/form-re
 import RelateSelect from '@/registry/components/form-relate-select/form-relate-select'
 import RelateMultiSelect from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
 import RelateModelSelect from '@/registry/components/form-relate-model-select/form-relate-model-select'
-import type { RelateFieldProps } from './types'
+import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 /**
  * FormRelate - 关联字段容器组件

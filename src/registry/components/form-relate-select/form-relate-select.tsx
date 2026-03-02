@@ -2,7 +2,7 @@ import * as React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { getFormValues } from '@/registry/lib/form-relate-utils'
 import AsyncSelect from '@/registry/components/form-relate-async-select/form-relate-async-select'
-import type { RelateFieldProps } from '@/registry/components/form-relate/types'
+import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 /**
  * RelateSelect - 单选关联字段组件

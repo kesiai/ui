@@ -16,7 +16,7 @@ import { Plus, Repeat2 } from 'lucide-react'
 import { useUser } from '@airiot/client'
 import { createAPI } from '@airiot/client'
 import { getFormValues, dealFilter, getQueryFilter } from '@/registry/lib/form-relate-utils'
-import type { RelateFieldProps } from '@/registry/components/form-relate/types'
+import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 interface RelateModelSelectProps extends RelateFieldProps {
   label?: string

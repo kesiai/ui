@@ -13,7 +13,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Crosshair, Loader2 } from 'lucide-react'
 import { createAPI } from '@airiot/client'
 import { dealFilter, getQueryFilter } from '@/registry/lib/form-relate-utils'
-import type { RelateFieldOption } from '@/registry/components/form-relate/types'
+import type { RelateFieldOption } from '@/registry/lib/form-relate-types'
 
 interface AsyncSelectProps {
   input?: {

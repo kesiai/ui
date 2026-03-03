@@ -1,4 +1,3 @@
-import React from 'react'
 import ViewField from '@/registry/components/view-field/view-field'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './view-field.md?raw'

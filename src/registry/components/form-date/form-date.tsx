@@ -705,7 +705,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <div className="w-full">
-                  <InputGroup className={cn(bordered ? "" : "!border-0", getSizeClass())}>
+                  <InputGroup className={cn(bordered ? "" : "border-0!", getSizeClass())}>
                     <InputGroupInput
                       ref={inputRef}
                       value={inputValue}
@@ -713,7 +713,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
                       onChange={handleInputChange}
                       onKeyDown={handleKeyDown}
                       disabled={disabled}
-                      className={cn(bordered ? "" : "!border-0", "")}
+                      className={cn(bordered ? "" : "border-0!", "")}
                       {...props}
                     />
                     <InputGroupAddon align="inline-end">

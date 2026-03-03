@@ -67,11 +67,11 @@ const Textarea = ({ value }: { value: any }) => {
   // 处理对象类型的值
   if (isObject(value) && !isArray(value)) {
     const obj = value as Record<string, any>
-    if ('name' in obj) return <div className="whitespace-pre-wrap break-words">{obj.name}</div>
-    if ('id' in obj) return <div className="whitespace-pre-wrap break-words">{obj.id}</div>
-    return <div className="whitespace-pre-wrap break-words">{JSON.stringify(value)}</div>
+    if ('name' in obj) return <div className="whitespace-pre-wrap break-word">{obj.name}</div>
+    if ('id' in obj) return <div className="whitespace-pre-wrap break-word">{obj.id}</div>
+    return <div className="whitespace-pre-wrap break-word">{JSON.stringify(value)}</div>
   }
-  return <div className="whitespace-pre-wrap break-words">{value}</div>
+  return <div className="whitespace-pre-wrap break-word">{value}</div>
 }
 
 // 数字展示（带格式化）
@@ -98,7 +98,7 @@ const Number = ({ value, schema }: { value: any; schema?: any }) => {
 }
 
 // 密码展示
-const Password = ({ value }: { value: any }) => {
+const Password = ({  }: { value: any }) => {
   return <span>······</span>
 }
 
@@ -217,13 +217,13 @@ const DateRange = ({ value, schema }: { value: any; schema?: any }) => {
 }
 
 // 时间展示
-const TimeField = ({ value, schema }: { value: any; schema?: any }) => {
+const TimeField = ({ value }: { value: any; schema?: any }) => {
   if (isNil(value)) return <span className="text-muted-foreground">空</span>
   return <span>{value}</span>
 }
 
 // 滑块展示
-const Slider = ({ value, schema }: { value: any; schema?: any }) => {
+const Slider = ({ value }: { value: any; schema?: any }) => {
   if (isNil(value)) return <span className="text-muted-foreground">空</span>
   return <span>{value}</span>
 }
@@ -267,7 +267,7 @@ const RichText = ({ value }: { value: any }) => {
             <span className="cursor-help">{text.substring(0, 100)}...</span>
           </TooltipTrigger>
           <TooltipContent>
-            <p className="max-w-md break-words">{text}</p>
+            <p className="max-w-md break-word">{text}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -461,14 +461,14 @@ const Reference = ({ value, schema }: { value: any; schema?: any }) => {
 }
 
 // 表单信息展示
-const FormInfo = ({ value, schema }: { value: any; schema?: any }) => {
+const FormInfo = ({ value }: { value: any; schema?: any }) => {
   if (isNil(value)) return <span className="text-muted-foreground">空</span>
   // 简化版：直接显示值
   return <span>{String(value)}</span>
 }
 
 // 可编辑表格展示（在对话框中显示）
-const EditableTable = ({ value, schema }: { value: any; schema?: any }) => {
+const EditableTable = ({ value }: { value: any; schema?: any }) => {
   const [open, setOpen] = React.useState(false)
 
   if (!isArray(value) || value.length === 0) {
@@ -487,7 +487,7 @@ const EditableTable = ({ value, schema }: { value: any; schema?: any }) => {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-auto">
+        <DialogContent className="max-w-4xl max-h-200 overflow-auto">
           <DialogHeader>
             <DialogTitle>表格内容</DialogTitle>
           </DialogHeader>
@@ -557,7 +557,7 @@ const Formula = ({ value }: { value: any }) => {
               <span className="cursor-help">{str.substring(0, 50)}...</span>
             </TooltipTrigger>
             <TooltipContent>
-              <p className="max-w-md break-words">{str}</p>
+              <p className="max-w-md break-word">{str}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

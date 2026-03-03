@@ -158,7 +158,7 @@ export const ColumnsTool: React.FC<ColumnsToolProps> = ({ className }) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className={menuShow ? 'w-auto p-4' : 'w-[600px] p-4'}
+        className={menuShow ? 'w-auto p-4' : 'w-150 p-4'}
         align="end"
       >
         <ColumnsToolContent />

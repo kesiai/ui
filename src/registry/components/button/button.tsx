@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils"
 import { Button as ShadcnButton } from "@/components/ui/button"
 import { FormContext } from "@/registry/lib/form-context"
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof React.HTMLAttributes<HTMLDivElement>> {
   /**
    * 按钮文字
    */
@@ -74,11 +76,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }, [text])
 
     // 处理点击事件
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (disabled) return
 
       // 调用自定义 onClick
-      onClick?.(e)
+      onClick?.(e as any)
 
       // 表单提交
       if (isSubmit && formContext?.handleSubmit) {
@@ -104,17 +106,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <div
         className={cn("button-container", className)}
         style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}
+        {...props}
       >
         <ShadcnButton
           ref={ref}
           variant={border ? 'ghost' : variant}
           size={size}
-          disabled={disabled}
-          loading={isLoading}
+          disabled={disabled || isLoading}
           onClick={handleClick}
           style={buttonStyle}
           className="w-full"
-          {...props}
         >
           {buttonText}
         </ShadcnButton>

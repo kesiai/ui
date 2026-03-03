@@ -113,7 +113,7 @@ const FieldComponentSelector: React.FC<{
   meta?: any
   record?: any
   cellKey?: string
-}> = ({ schema, input, field, meta, record, cellKey }) => {
+}> = ({ schema, input, meta, record }) => {
   const config = schema || {}
 
   // 关联字段（新版）- 使用 recordSelectType
@@ -133,6 +133,7 @@ const FieldComponentSelector: React.FC<{
     const relateProps = {
       value: input.value,
       onChange: input.onChange,
+      input: { value: input.value, onChange: input.onChange }, // 添加 input 属性
       schema: convertedRelateSchema.schema,
       fieldSchema: convertedRelateSchema.fieldSchema,
       displayField: convertedRelateSchema.displayField,
@@ -372,7 +373,7 @@ const FormWidget = React.forwardRef<HTMLDivElement, FormWidgetProps>(
           ref={ref}
           className={cn(
             "form-widget flex items-center justify-center",
-            "min-h-[130px] w-full text-sm text-muted-foreground",
+            "min-h-32 w-full text-sm text-muted-foreground",
             className
           )}
           {...props}

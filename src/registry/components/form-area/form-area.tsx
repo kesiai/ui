@@ -107,7 +107,6 @@ const getHierarchyData = (areaType: 'p' | 'pc' | 'pca', pcaData: PCAItem[]): any
     // 根据 areaType 控制层级
     const isProvinceLevel = !parentPath;
     const isCityLevel = parentPath && !parentPath.includes('/');
-    const isDistrictLevel = parentPath && parentPath.includes('/');
 
     if (areaType === 'p' && isProvinceLevel) {
       // 仅省级
@@ -157,13 +156,10 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
       value: controlledValue,
       defaultValue,
       config = {},
-      onChange,
-      cellKey,
-      ...props
-    },
-    ref
+      onChange
+    }
   ) => {
-    const { areaType = 'pca', multiple = false, size = 'md', disabled = false } = config;
+    const { areaType = 'pca', multiple = false, disabled = false } = config;
 
     // 状态管理
     const [internalValue, setInternalValue] = useState<string | string[]>(
@@ -284,8 +280,8 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
               <ChevronsUpDown className="h-4 w-4 ml-2 shrink-0" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-[280px] p-0">
-            <Command className="h-[300px] overflow-auto">
+          <DropdownMenuContent className="w-70 p-0">
+            <Command className="h-75 overflow-auto">
               <CommandInput placeholder={"请选择区域"} disabled={disabled} />
               <CommandEmpty>未找到匹配项</CommandEmpty>
 
@@ -433,7 +429,7 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
           </div>
 
           {/* 层级选择区域（模拟树形） */}
-          <div className="max-h-[300px] overflow-auto pr-2">
+          <div className="max-h-75 overflow-auto pr-2">
             {renderHierarchyItems(hierarchyData)}
           </div>
         </div>

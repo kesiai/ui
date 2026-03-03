@@ -30,6 +30,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       <div
         className={cn("textarea-container", className)}
         style={{ width: '100%', height: '100%', padding: '8px' }}
+        {...props}
       >
         <textarea
           ref={ref}

@@ -69,6 +69,7 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
             width: '100%',
             height: '100%'
           }}
+          {...props}
           dangerouslySetInnerHTML={{ __html: svgContent }}
         />
       )
@@ -79,6 +80,7 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       <div
         className={cn("image-wrapper", className)}
         style={{ width: '100%', height: '100%' }}
+        {...props}
       >
         {src ? (
           <img

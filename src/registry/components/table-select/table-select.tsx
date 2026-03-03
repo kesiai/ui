@@ -196,7 +196,7 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
   if (multiple) {
     // 多选使用简单的div包装，实际项目中可能需要实现多选Select
     return (
-      <div className="w-full" style={{ width, ...style }}>
+      <div className="w-full" style={{ width, ...style }} {...restProps}>
         <Select
           value={displayValue?.[0]} // 多选暂不支持，使用单选占位
           onValueChange={handleChange}
@@ -222,7 +222,7 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
 
   // 单选实现
   return (
-    <div className="w-full" style={{ width, ...style }}>
+    <div className="w-full" style={{ width, ...style }} {...restProps}>
       <Select
         value={displayValue}
         onValueChange={handleChange}

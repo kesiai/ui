@@ -200,7 +200,7 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
 
   // 渲染选择器内容
   return (
-    <div className="w-full" style={{ width, ...style }}>
+    <div className="w-full" style={{ width, ...style }} {...restProps}>
       <Select
         value={displayValue}
         onValueChange={handleChange}

@@ -131,7 +131,7 @@ const FormRichText = React.forwardRef<HTMLDivElement, FormRichTextProps>(
     }
 
     return (
-      <div ref={ref} className="custom-text-editor">
+      <div ref={ref} className="custom-text-editor" {...props}>
         <CKEditor
           id={fieldKey}
           onReady={(editor) => {

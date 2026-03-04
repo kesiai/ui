@@ -64,7 +64,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (typeof disable === 'boolean') {
         return disable
       }
-      if (disable === '1' || disable === 1 || disable === 'true') {
+      if (
+        disable === '1' ||
+        disable === 'true' ||
+        disable === 1 ||
+        disable === true
+      ) {
         return true
       }
       return false

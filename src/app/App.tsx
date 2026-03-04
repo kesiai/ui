@@ -3,9 +3,11 @@ import { registryConfigs, componentCategories } from './config'
 import { PropsFormPanel } from './components/PropsFormPanel'
 import { DocumentationViewer } from './components/DocumentationViewer'
 import { LoginDialog } from './components/LoginDialog'
+import { EventsTestPage } from './components/EventsTestPage'
 import type { ComponentConfig } from './config/types'
 import { setConfig, useUser, useLogout } from '@airiot/client'
 import { Routes, Route, Link, useParams, Outlet } from 'react-router-dom'
+import { GlobalDialogs } from '@/registry/components/events/events'
 
 // 配置 @airiot/client
 const apiHost = import.meta.env.VITE_AIRIOT_API_URL
@@ -160,7 +162,13 @@ function HomePage() {
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-slate-600">
+              <Link
+                to="/test-events"
+                className="text-sm text-slate-600 hover:text-blue-600 transition-colors"
+              >
+                事件测试
+              </Link>
+              <span className="text-sm text-slate-600 border-l border-slate-200 pl-4">
                 {componentCategories.reduce((acc, cat) => acc + cat.components.length, 0)} 个组件
               </span>
               <div className="flex items-center gap-3 border-l border-slate-200 pl-4">
@@ -258,7 +266,9 @@ function HomePage() {
 // 主 App 组件
 function App() {
   return (
-    <Routes>
+    <>
+      <GlobalDialogs />
+      <Routes>
       <Route path="/" element={<HomePage />}>
         {/* 默认路由：显示欢迎页 */}
         <Route index element={<WelcomePage />} />
@@ -272,6 +282,12 @@ function App() {
         />
       </Route>
 
+      {/* 事件测试页面路由 */}
+      <Route
+        path="test-events"
+        element={<EventsTestPage />}
+      />
+
       {/* 404 页面 */}
       <Route path="*" element={
         <div className="h-screen flex items-center justify-center">
@@ -284,6 +300,7 @@ function App() {
         </div>
       } />
     </Routes>
+    </>
   )
 }
 

@@ -61,6 +61,7 @@ export type {
   Action,
   EventConfig,
   EventContext,
+  EventFunctions,
   ActionResult,
   ActionHandler,
   EventHandlerReturn,

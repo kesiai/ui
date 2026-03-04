@@ -28,18 +28,21 @@ import type {
   ChangeVarParams,
 } from '../events.types'
 import { toast } from 'sonner'
-import { useSetPageVar } from '@airiot/client'
 
 
 export const changeVarHandler: ActionHandler = async (
   params: ChangeVarParams,
-  _context: EventContext
+  context: EventContext
 ): Promise<ActionResult> => {
   try {
     const { var: varConfig, varValue } = params
-    const varPath = varConfig.path 
-    const setPageVar = useSetPageVar(varPath)
-    setPageVar(varValue)
+    const varPath = varConfig.path || Object.keys(varConfig).join('.')
+    console.log('changeVarHandler - 修改变量:', { path: varPath, value: varValue })
+    if (context.eventFunctions?.setPageVar) {
+      context.eventFunctions.setPageVar(varPath, varValue)
+    } else {
+      throw new Error('EventContext 必须包含 eventFunctions.setPageVar 函数来设置页面变量')
+    }
     // 显示成功提示
     if (params.successMess !== false) {
       toast.success(params.successContent || '修改变量成功', {

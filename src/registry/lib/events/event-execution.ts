@@ -7,6 +7,7 @@ import type {
   ActionResult,
   EventConfig,
   EventContext,
+  EventFunctions,
   EventType,
 } from './events.types'
 import { getActionHandler } from './action-handlers'
@@ -269,7 +270,8 @@ export function createEventHandler(
   eventType: EventType,
   actions: Action[],
   onLoadingChange?: (loading: boolean) => void,
-  onError?: (error: string) => void
+  onError?: (error: string) => void,
+  eventFunctions?: EventFunctions
 ) {
   return async (e?: React.SyntheticEvent) => {
     if (!actions || actions.length === 0) {
@@ -285,6 +287,7 @@ export function createEventHandler(
       const context: EventContext = {
         eventType,
         eventParams: e,
+        eventFunctions,
       }
 
       const results = await executeActions(actions, context)
@@ -309,7 +312,8 @@ export function createEventHandler(
  * 解析事件配置，生成事件处理器映射
  */
 export function parseEventConfig(
-  config: EventConfig
+  config: EventConfig,
+  eventFunctions?: EventFunctions
 ): Record<EventType, (e?: React.SyntheticEvent) => Promise<void>> {
   const handlers: Record<
     EventType,
@@ -320,7 +324,10 @@ export function parseEventConfig(
     if (actions && actions.length > 0) {
       handlers[eventType as EventType] = createEventHandler(
         eventType as EventType,
-        actions
+        actions,
+        undefined,
+        undefined,
+        eventFunctions
       )
     }
   }

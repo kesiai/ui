@@ -33,11 +33,13 @@
 'use client'
 
 import { useState, useMemo, useCallback, useRef } from 'react'
+import { useSetPageVar } from '@airiot/client'
 import type {
   EventConfig,
   EventType,
   EventsReturn,
   Action,
+  EventContext,
 } from './events.types'
 import { executeActions } from './event-execution'
 import { eventTypeToReactEvent } from './event-execution'
@@ -49,6 +51,41 @@ import { eventTypeToReactEvent } from './event-execution'
  * @returns 事件处理器对象
  */
 export function useEvents(config: EventConfig = {}): EventsReturn {
+  // 检测配置中需要修改变量的路径
+  const varPaths = useMemo(() => {
+    const paths = new Set<string>()
+    for (const actions of Object.values(config)) {
+      if (actions) {
+        for (const action of actions) {
+          if (action.type === 'changeVar') {
+            const varPath = action.params?.var?.path
+            if (varPath) paths.add(varPath)
+          }
+        }
+      }
+    }
+    return Array.from(paths)
+  }, [config])
+
+  // 为每个需要修改的路径创建独立的 setter
+  const setters = useMemo(() => {
+    const result: Record<string, (value: any) => void> = {}
+    for (const path of varPaths) {
+      result[path] = useSetPageVar(path)
+    }
+    return result
+  }, [varPaths])
+
+  // 通用 setter：根据 path 选择对应的 setter
+  const setPageVar = useCallback((path: string, value: any) => {
+    const setter = setters[path]
+    if (setter) {
+      setter(value)
+    } else {
+      console.warn(`未找到路径 "${path}" 的 setter`)
+    }
+  }, [setters])
+
   // 状态管理
   const [loading, setLoading] = useState(false)
   const [_error, setError] = useState<string | null>(null)
@@ -75,9 +112,12 @@ export function useEvents(config: EventConfig = {}): EventsReturn {
           setError(null)
 
           try {
-            const context = {
+            const context: EventContext = {
               eventType: eventType as EventType,
               eventParams: e,
+              eventFunctions: {
+                setPageVar,
+              },
             }
 
             const results = await executeActions(actions, context)
@@ -98,7 +138,7 @@ export function useEvents(config: EventConfig = {}): EventsReturn {
     }
 
     return result
-  }, [config])
+  }, [config, setPageVar])
 
   // 返回事件处理器和配置
   return {
@@ -121,6 +161,9 @@ export function useEvent(
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // 自动创建页面变量设置函数
+  const setPageVar = useSetPageVar()
+
   const loadingRef = useRef(loading)
   loadingRef.current = loading
 
@@ -135,9 +178,12 @@ export function useEvent(
     setError(null)
 
     try {
-      const context = {
+      const context: EventContext = {
         eventType,
         eventParams: e,
+        eventFunctions: {
+          setPageVar,
+        },
       }
 
       const results = await executeActions(actions, context)
@@ -152,7 +198,7 @@ export function useEvent(
     } finally {
       setLoading(false)
     }
-  }, [eventType, actions])
+  }, [eventType, actions, setPageVar])
 
   return { handler, loading, error }
 }

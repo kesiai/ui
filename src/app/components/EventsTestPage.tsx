@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useEvents } from '@/registry/components/events/events'
+import { usePageVarValue, usePageVar, useSetPageVar, Page } from '@airiot/client'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
@@ -14,6 +15,98 @@ function TempCard({ className, children, ...props }: React.HTMLAttributes<HTMLDi
     >
       {children}
     </div>
+  )
+}
+
+function VarPage({ addLog }: any) {
+  const testVar = usePageVarValue('test')
+
+  // ============== 修改变量 ==============
+  const changeVarNormal = useEvents({
+    click: [{
+      type: 'changeVar',
+      params: {
+        var: { name: 'testVar', path: 'test' },
+        varValue: `正常-${new Date().toLocaleTimeString()}`
+      }
+    }]
+  })
+
+  const changeVarDelay = useEvents({
+    click: [{
+      type: 'changeVar',
+      params: {
+        var: { name: 'testVar', path: 'test' },
+        varValue: `延迟-${new Date().toLocaleTimeString()}`
+      },
+      delay: 1000
+    }]
+  })
+
+  const changeVarConfirm = useEvents({
+    click: [{
+      type: 'changeVar',
+      params: {
+        var: { name: 'testVar', path: 'test' },
+        varValue: `确认-${new Date().toLocaleTimeString()}`
+      },
+      confirm: {
+        title: '确认修改变量',
+        message: '确定要修改变量吗？',
+        confirmText: '确定',
+        cancelText: '取消'
+      }
+    }]
+  })
+
+  return (
+    <>
+      <h3 className="text-base font-semibold text-slate-900 mb-3">
+        🔧 修改变量
+      </h3>
+      <div className="space-y-2">
+        <Button
+          onClick={() => {
+            changeVarNormal.click?.()
+            addLog('修改变量: 正常')
+          }}
+          className="w-full"
+          size="sm"
+        >
+          正常修改
+        </Button>
+        <Button
+          onClick={() => {
+            changeVarDelay.click?.()
+            addLog('修改变量: 延迟 1s')
+          }}
+          className="w-full"
+          variant="outline"
+          size="sm"
+        >
+          延迟修改 (1s)
+        </Button>
+        <Button
+          onClick={() => {
+            changeVarConfirm.click?.()
+            addLog('修改变量: 二次确认')
+          }}
+          className="w-full"
+          variant="secondary"
+          size="sm"
+        >
+          确认修改
+        </Button>
+      </div>
+
+      {/* 显示变量值 */}
+      <div className="mt-4 p-3 bg-slate-50 rounded-lg">
+        <div className="text-xs text-slate-500 mb-1">当前变量值 (test):</div>
+        <div className="font-mono text-sm text-slate-700 break-all">
+          {JSON.stringify(testVar, null, 2)}
+        </div>
+      </div>
+    </>
   )
 }
 
@@ -71,47 +164,6 @@ export function EventsTestPage() {
       confirm: {
         title: '确认跳转',
         message: '确定要跳转到首页吗？',
-        confirmText: '确定',
-        cancelText: '取消'
-      }
-    }]
-  })
-
-  // ============== 修改变量 ==============
-  const changeVarNormal = useEvents({
-    click: [{
-      type: 'changeVar',
-      params: {
-        var: { name: 'testVar', path: 'test' },
-        varType: 'varValue',
-        varValue: `正常-${new Date().toLocaleTimeString()}`
-      }
-    }]
-  })
-
-  const changeVarDelay = useEvents({
-    click: [{
-      type: 'changeVar',
-      params: {
-        var: { name: 'testVar', path: 'test' },
-        varType: 'varValue',
-        varValue: `延迟-${new Date().toLocaleTimeString()}`
-      },
-      delay: 1000
-    }]
-  })
-
-  const changeVarConfirm = useEvents({
-    click: [{
-      type: 'changeVar',
-      params: {
-        var: { name: 'testVar', path: 'test' },
-        varType: 'varValue',
-        varValue: `确认-${new Date().toLocaleTimeString()}`
-      },
-      confirm: {
-        title: '确认修改变量',
-        message: '确定要修改变量吗？',
         confirmText: '确定',
         cancelText: '取消'
       }
@@ -478,44 +530,11 @@ export function EventsTestPage() {
           </TempCard>
 
           {/* ============== 修改变量 ============== */}
+
           <TempCard className="p-5">
-            <h3 className="text-base font-semibold text-slate-900 mb-3">
-              🔧 修改变量
-            </h3>
-            <div className="space-y-2">
-              <Button
-                onClick={() => {
-                  changeVarNormal.click?.()
-                  addLog('修改变量: 正常')
-                }}
-                className="w-full"
-                size="sm"
-              >
-                正常修改
-              </Button>
-              <Button
-                onClick={() => {
-                  changeVarDelay.click?.()
-                  addLog('修改变量: 延迟 1s')
-                }}
-                className="w-full"
-                variant="outline"
-                size="sm"
-              >
-                延迟修改 (1s)
-              </Button>
-              <Button
-                onClick={() => {
-                  changeVarConfirm.click?.()
-                  addLog('修改变量: 二次确认')
-                }}
-                className="w-full"
-                variant="secondary"
-                size="sm"
-              >
-                确认修改
-              </Button>
-            </div>
+            <Page>
+              <VarPage addLog={addLog} />
+            </Page>
           </TempCard>
 
           {/* ============== 修改表数据 ============== */}

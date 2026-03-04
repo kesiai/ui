@@ -156,6 +156,12 @@ export interface EventConfig {
   [eventType: string]: Action[]
 }
 
+/** 事件函数集合 */
+export interface EventFunctions {
+  /** 设置页面变量 */
+  setPageVar?: (path: string, value: any) => void
+}
+
 /** 事件执行上下文 */
 export interface EventContext {
   /** 事件源组件 */
@@ -166,6 +172,8 @@ export interface EventContext {
   eventParams?: any
   /** 前一个动作的执行结果 */
   prevResult?: any
+  /** 事件函数集合 */
+  eventFunctions?: EventFunctions
 }
 
 /** 动作执行结果 */

@@ -57,7 +57,7 @@ export function showConfirmDialog(
     cancelText?: string
   }
 ): Promise<boolean> {
-  console.log('showConfirmDialog called with config:', confirmConfig)
+
   return baseShowConfirmDialog(confirmConfig)
 }
 
@@ -80,13 +80,13 @@ export async function executeAction(
   action: Action,
   context: EventContext
 ): Promise<ActionResult> {
-  console.log('executeAction called for action:', action.type, 'with confirm:', !!action.confirm)
+
   try {
     // 检查是否需要二次确认
     if (action.confirm) {
-      console.log('Showing confirm dialog with config:', action.confirm)
+
       const confirmed = await showConfirmDialog(action.confirm)
-      console.log('User confirmed:', confirmed)
+
       if (!confirmed) {
         return { success: false, error: '用户取消操作' }
       }

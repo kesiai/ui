@@ -106,24 +106,26 @@ export function closeFormDialog() {
 
 // 显示 SchemaForm 对话框
 export function showSchemaFormDialog(
-  schema: any,
-  initialValues?: Record<string, any>,
-  title?: string,
-  description?: string,
-  formSchema?: any
+  config?: {
+    schema?: any
+    initialValues?: Record<string, any>
+    title?: string
+    description?: string
+    formSchema?: any
+  }
 ): Promise<Record<string, any> | null> {
   return new Promise((resolve) => {
     dialogStore.set(schemaFormDialogAtom, {
       open: true,
       resolve,
       config: {
-        title,
-        description,
-        schema,
-        formSchema,
+        title: config?.title,
+        description: config?.description,
+        schema: config?.schema,
+        formSchema: config?.formSchema,
         confirmText: '确定',
         cancelText: '取消',
-        initialValues,
+        initialValues: config?.initialValues,
       },
     })
   })

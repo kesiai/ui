@@ -13,7 +13,7 @@ import { GlobalDialogs } from '@/registry/components/events/events'
 const apiHost = 'http://localhost:3000'//'http://192.168.99.101:3031'
 const projectId = 'ljnew'
 
-console.log('🔧 配置 @airiot/client:', { apiHost, projectId })
+// console.log('🔧 配置 @airiot/client:', { apiHost, projectId })
 
 try {
   const { loadUser } = useUser()

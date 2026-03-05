@@ -38,7 +38,7 @@ export const changeVarHandler: ActionHandler = async (
   try {
     const { var: varConfig, varValue } = params
     const varPath = varConfig.path || Object.keys(varConfig).join('.')
-    console.log('changeVarHandler - 修改变量:', { path: varPath, value: varValue })
+
     if (context.eventFunctions?.setPageVar) {
       // setPageVar 一定支持函数式更新 
       context.eventFunctions.setPageVar(state => ({ ..._.set(state, varPath, varValue) }))

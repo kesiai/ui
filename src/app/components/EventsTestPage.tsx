@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useEvents } from '@/registry/components/events/events'
-import { usePageVarValue, usePageVar, useSetPageVar, Page } from '@airiot/client'
+import { usePageVarValue, Page } from '@airiot/client'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
@@ -117,8 +117,7 @@ function VarPage({ addLog }: any) {
  * 每个动作都有三个测试场景：正常、延迟、二次确认
  */
 export function EventsTestPage() {
-  // 使用本地状态模拟全局变量（用于演示）
-  const [globalVars] = React.useState<Record<string, any>>({})
+
   const [eventLog, setEventLog] = React.useState<string[]>([])
 
   // 记录事件日志
@@ -219,6 +218,19 @@ export function EventsTestPage() {
         message: '确定要修改表数据吗？',
         confirmText: '确定',
         cancelText: '取消'
+      }
+    }]
+  })
+
+  const changeTableDataForm = useEvents({
+    click: [{
+      type: 'changeTableData',
+      params: {
+        table: { id: '成绩单', name: '成绩单' },
+        data: { id: '68ac1c70940d6833927dc9b2' },
+        showForm: true,
+        successMess: true,
+        successContent: '表数据表单修改成功'
       }
     }]
   })
@@ -467,13 +479,6 @@ export function EventsTestPage() {
     }]
   })
 
-  // 查看当前全局变量
-  const handleViewGlobalVars = () => {
-    console.log('当前全局变量:', globalVars)
-    toast.success('全局变量已打印到控制台')
-    addLog('查看全局变量: ' + JSON.stringify(globalVars))
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -574,6 +579,17 @@ export function EventsTestPage() {
                 size="sm"
               >
                 确认修改
+              </Button>
+              <Button
+                onClick={() => {
+                  changeTableDataForm.click?.()
+                  addLog('修改表数据: 触发时修改')
+                }}
+                className="w-full"
+                variant="destructive"
+                size="sm"
+              >
+                触发时修改 (showForm)
               </Button>
             </div>
           </TempCard>
@@ -781,21 +797,6 @@ export function EventsTestPage() {
                 确认调用
               </Button>
             </div>
-          </TempCard>
-
-          {/* ============== 全局变量查看 ============== */}
-          <TempCard className="p-5">
-            <h3 className="text-base font-semibold text-slate-900 mb-3">
-              🗂️ 全局变量
-            </h3>
-            <Button
-              onClick={handleViewGlobalVars}
-              className="w-full"
-              variant="outline"
-              size="sm"
-            >
-              查看全局变量（控制台）
-            </Button>
           </TempCard>
         </div>
 

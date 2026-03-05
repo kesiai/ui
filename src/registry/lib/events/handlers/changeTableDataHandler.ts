@@ -44,8 +44,6 @@ export const changeTableDataHandler: ActionHandler = async (
   try {
     const { table, data, nodeProp, showForm } = params
 
-    console.log('修改表数据:', { table, data, nodeProp, showForm })
-
     // 检查必要的参数
     if (!table?.id || !data?.id) {
       throw new Error('缺少必要的表或数据ID')
@@ -59,19 +57,18 @@ export const changeTableDataHandler: ActionHandler = async (
       // 获取表的 schema
       const schemaApi = createAPI({ name: 'core/t/schema' })
       const schema = await schemaApi.get(table.id)
-      console.log('表 schema:', schema)
 
       // 获取当前数据
       const dataApi = createAPI({ name: `core/t/${table.id}/d/` })
       const currentData = await dataApi.get(data.id)
-      console.log('当前数据:', currentData)
 
-      const formData = await showSchemaFormDialog(
-        schema,
-        currentData,
-        '修改数据',
-        `修改表 ${table.name || table.id} 的数据`
-      )
+      const formData = await showSchemaFormDialog({
+        schema: schema.schema,
+        formSchema:['number-7B4F'],
+        initialValues: currentData,
+        title: '修改数据',
+        description: `修改表 ${table.name || table.id} 的数据`,
+      })
 
       // 用户取消操作
       if (!formData) {

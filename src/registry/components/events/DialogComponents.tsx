@@ -32,7 +32,6 @@ export function GlobalDialogs() {
   const confirmOpen = !!confirmDialog?.open
   const formOpen = !!formDialog?.open
   const schemaFormOpen = !!schemaFormDialog?.open
-  console.log('GlobalDialogs render, confirmOpen:', confirmOpen, 'formOpen:', formOpen, 'schemaFormOpen:', schemaFormOpen)
 
   return (
     <>

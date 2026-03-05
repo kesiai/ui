@@ -37,6 +37,21 @@ export const formDialogAtom = atom<{
   }
 } | null>(null)
 
+/** SchemaForm 对话框 atom */
+export const schemaFormDialogAtom = atom<{
+  open: boolean
+  resolve?: (value: any) => void
+  config?: {
+    title?: string
+    description?: string
+    schema?: any
+    formSchema?: any
+    confirmText?: string
+    cancelText?: string
+    initialValues?: Record<string, any>
+  }
+} | null>(null)
+
 // 显示确认对话框
 export function showConfirmDialog(
   config?: {
@@ -89,13 +104,45 @@ export function closeFormDialog() {
   dialogStore.set(formDialogAtom, null)
 }
 
+// 显示 SchemaForm 对话框
+export function showSchemaFormDialog(
+  schema: any,
+  initialValues?: Record<string, any>,
+  title?: string,
+  description?: string,
+  formSchema?: any
+): Promise<Record<string, any> | null> {
+  return new Promise((resolve) => {
+    dialogStore.set(schemaFormDialogAtom, {
+      open: true,
+      resolve,
+      config: {
+        title,
+        description,
+        schema,
+        formSchema,
+        confirmText: '确定',
+        cancelText: '取消',
+        initialValues,
+      },
+    })
+  })
+}
+
+// 关闭 SchemaForm 对话框
+export function closeSchemaFormDialog() {
+  dialogStore.set(schemaFormDialogAtom, null)
+}
+
 // 组件使用的 hook
 export function useGlobalDialogs() {
   // 指定使用 dialogStore
   const [confirmDialog] = useAtom(confirmDialogAtom, { store: dialogStore })
   const [formDialog] = useAtom(formDialogAtom, { store: dialogStore })
+  const [schemaFormDialog] = useAtom(schemaFormDialogAtom, { store: dialogStore })
   const setConfirmDialog = useSetAtom(confirmDialogAtom, { store: dialogStore })
   const setFormDialog = useSetAtom(formDialogAtom, { store: dialogStore })
+  const setSchemaFormDialog = useSetAtom(schemaFormDialogAtom, { store: dialogStore })
 
   // 处理确认对话框的确认
   const handleConfirm = () => {
@@ -129,12 +176,31 @@ export function useGlobalDialogs() {
     }
   }
 
+  // 处理 SchemaForm 对话框的确认
+  const handleSchemaFormConfirm = (data: any) => {
+    if (schemaFormDialog?.resolve) {
+      schemaFormDialog.resolve(data)
+      setSchemaFormDialog(null)
+    }
+  }
+
+  // 处理 SchemaForm 对话框的取消
+  const handleSchemaFormCancel = () => {
+    if (schemaFormDialog?.resolve) {
+      schemaFormDialog.resolve(null)
+      setSchemaFormDialog(null)
+    }
+  }
+
   return {
     confirmDialog,
     formDialog,
+    schemaFormDialog,
     handleConfirm,
     handleCancel,
     handleFormConfirm,
     handleFormCancel,
+    handleSchemaFormConfirm,
+    handleSchemaFormCancel,
   }
 }

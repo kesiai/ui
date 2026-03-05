@@ -10,8 +10,8 @@ import { Routes, Route, Link, useParams, Outlet } from 'react-router-dom'
 import { GlobalDialogs } from '@/registry/components/events/events'
 
 // 配置 @airiot/client
-const apiHost = import.meta.env.VITE_AIRIOT_API_URL
-const projectId = import.meta.env.VITE_AIRIOT_PROJECT_ID
+const apiHost = 'http://localhost:3000'//'http://192.168.99.101:3031'
+const projectId = 'ljnew'
 
 console.log('🔧 配置 @airiot/client:', { apiHost, projectId })
 
@@ -142,7 +142,6 @@ function HomePage() {
 
   const handleLogout = () => {
     onLogout()
-    window.location.reload()
   }
 
   return (

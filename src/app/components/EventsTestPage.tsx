@@ -175,10 +175,10 @@ export function EventsTestPage() {
     click: [{
       type: 'changeTableData',
       params: {
-        table: { id: 'testTable', name: '测试表' },
-        data: { id: 1, name: '测试数据' },
+        table: { id: '成绩单', name: '成绩单' },
+        data: { id: '68ac1c70940d6833927dc9b2' },
         nodeProp: [
-          { key: 'name', value: '正常更新' }
+          { key: 'number-7B4F', value: 111 }
         ],
         successMess: true,
         successContent: '表数据修改成功'
@@ -190,10 +190,10 @@ export function EventsTestPage() {
     click: [{
       type: 'changeTableData',
       params: {
-        table: { id: 'testTable', name: '测试表' },
-        data: { id: 1, name: '测试数据' },
+        table: { id: '成绩单', name: '成绩单' },
+        data: { id: '68ac1c70940d6833927dc9b2' },
         nodeProp: [
-          { key: 'name', value: '延迟更新' }
+          { key: 'number-7B4F', value: 222 }
         ],
         successMess: true,
         successContent: '表数据延迟修改成功'
@@ -206,10 +206,10 @@ export function EventsTestPage() {
     click: [{
       type: 'changeTableData',
       params: {
-        table: { id: 'testTable', name: '测试表' },
-        data: { id: 1, name: '测试数据' },
+        table: { id: '成绩单', name: '成绩单' },
+        data: { id: '68ac1c70940d6833927dc9b2' },
         nodeProp: [
-          { key: 'name', value: '确认更新' }
+          { key: 'number-7B4F', value: 333 }
         ],
         successMess: true,
         successContent: '表数据确认修改成功'

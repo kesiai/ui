@@ -10,6 +10,8 @@ import type {
   ResultMessage,
 } from '../events.types'
 import { toast } from 'sonner'
+import { showSchemaFormDialog } from '../dialog-atom'
+import { createAPI } from '@airiot/client'
 
 /**
  * 显示执行结果消息
@@ -40,13 +42,68 @@ export const changeTableDataHandler: ActionHandler = async (
   _context: EventContext
 ): Promise<ActionResult> => {
   try {
-    const { table, data, nodeProp } = params
+    const { table, data, nodeProp, showForm } = params
 
-    console.log('修改表数据:', { table, data, nodeProp })
-    
+    console.log('修改表数据:', { table, data, nodeProp, showForm })
+
+    // 检查必要的参数
+    if (!table?.id || !data?.id) {
+      throw new Error('缺少必要的表或数据ID')
+    }
+
+    // 构建 API
+    const api = createAPI({ name: 'core/t' })
+
+    // 如果需要弹出表单
+    if (showForm) {
+      // 获取表的 schema
+      const schemaApi = createAPI({ name: 'core/t/schema' })
+      const schema = await schemaApi.get(table.id)
+      console.log('表 schema:', schema)
+
+      // 获取当前数据
+      const dataApi = createAPI({ name: `core/t/${table.id}/d/` })
+      const currentData = await dataApi.get(data.id)
+      console.log('当前数据:', currentData)
+
+      const formData = await showSchemaFormDialog(
+        schema,
+        currentData,
+        '修改数据',
+        `修改表 ${table.name || table.id} 的数据`
+      )
+
+      // 用户取消操作
+      if (!formData) {
+        return { success: true, data: { table, data, cancelled: true } }
+      }
+
+      // 构建修改数据
+      const changeData = formData
+
+      // 调用 API 修改数据
+      await api.fetch(`/${table.id}/d/${data.id}`, {
+        method: 'PATCH',
+        noMessage: true,
+        body: JSON.stringify(changeData)
+      })
+    } else {
+      // 直接修改模式
+      let changeData = (nodeProp || []).reduce((prev, cur: { key?: string; value?: any }) => ({
+        ...prev,
+        [cur?.key as string]: cur?.value
+      }), {})
+
+      await api.fetch(`/${table.id}/d/${data.id}`, {
+        method: 'PATCH',
+        noMessage: true,
+        body: JSON.stringify(changeData)
+      })
+    }
+
     showResultMessage({ success: true }, params)
 
-    return { success: true, data: { table, data: {} } }
+    return { success: true, data: { table, data } }
   } catch (error) {
     const result: ActionResult = {
       success: false,

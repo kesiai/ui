@@ -28,6 +28,7 @@ import type {
   ChangeVarParams,
 } from '../events.types'
 import { toast } from 'sonner'
+import _ from 'lodash'
 
 
 export const changeVarHandler: ActionHandler = async (
@@ -39,7 +40,8 @@ export const changeVarHandler: ActionHandler = async (
     const varPath = varConfig.path || Object.keys(varConfig).join('.')
     console.log('changeVarHandler - 修改变量:', { path: varPath, value: varValue })
     if (context.eventFunctions?.setPageVar) {
-      context.eventFunctions.setPageVar(varPath, varValue)
+      // setPageVar 一定支持函数式更新 
+      context.eventFunctions.setPageVar(state => ({ ..._.set(state, varPath, varValue) }))
     } else {
       throw new Error('EventContext 必须包含 eventFunctions.setPageVar 函数来设置页面变量')
     }

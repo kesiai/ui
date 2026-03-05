@@ -1,12 +1,12 @@
 'use client'
 
-import * as React from 'react'
 import {
   ConfirmDialog,
 } from './ConfirmDialog'
 import {
   FormDialog,
 } from './FormDialog'
+import { SchemaFormDialog } from './SchemaFormDialog'
 import {
   useGlobalDialogs,
 } from '@/registry/lib/events/dialog-atom'
@@ -17,11 +17,22 @@ import {
  * 不需要任何 Provider，直接放在根组件即可
  */
 export function GlobalDialogs() {
-  const { confirmDialog, formDialog, handleConfirm, handleCancel, handleFormConfirm, handleFormCancel } = useGlobalDialogs()
+  const {
+    confirmDialog,
+    formDialog,
+    schemaFormDialog,
+    handleConfirm,
+    handleCancel,
+    handleFormConfirm,
+    handleFormCancel,
+    handleSchemaFormConfirm,
+    handleSchemaFormCancel
+  } = useGlobalDialogs()
 
   const confirmOpen = !!confirmDialog?.open
   const formOpen = !!formDialog?.open
-  console.log('GlobalDialogs render, confirmOpen:', confirmOpen, 'formOpen:', formOpen)
+  const schemaFormOpen = !!schemaFormDialog?.open
+  console.log('GlobalDialogs render, confirmOpen:', confirmOpen, 'formOpen:', formOpen, 'schemaFormOpen:', schemaFormOpen)
 
   return (
     <>
@@ -60,6 +71,27 @@ export function GlobalDialogs() {
           initialValues={formDialog.config?.initialValues}
           onConfirm={handleFormConfirm}
           onCancel={handleFormCancel}
+        />
+      )}
+
+      {/* SchemaForm 对话框 */}
+      {schemaFormOpen && schemaFormDialog && (
+        <SchemaFormDialog
+          open={schemaFormOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              handleSchemaFormCancel()
+            }
+          }}
+          title={schemaFormDialog.config?.title || '填写表单'}
+          description={schemaFormDialog.config?.description || '请填写以下信息'}
+          schema={schemaFormDialog.config?.schema}
+          formSchema={schemaFormDialog.config?.formSchema}
+          confirmText={schemaFormDialog.config?.confirmText || '确定'}
+          cancelText={schemaFormDialog.config?.cancelText || '取消'}
+          initialValues={schemaFormDialog.config?.initialValues}
+          onConfirm={handleSchemaFormConfirm}
+          onCancel={handleSchemaFormCancel}
         />
       )}
     </>

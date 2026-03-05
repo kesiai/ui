@@ -17,6 +17,10 @@ export default defineConfig({
     port: 3000,
     open: true,
     proxy: {
+      '/rest/core/': {
+        target: 'http://192.168.99.101:3031',
+        changeOrigin: true
+      },
       // 匹配 /rest/core/fileServer 开头的请求
       '/rest/core/fileServer': {
         target: 'http://192.168.99.101:3031',

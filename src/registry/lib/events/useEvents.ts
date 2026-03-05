@@ -51,40 +51,8 @@ import { eventTypeToReactEvent } from './event-execution'
  * @returns 事件处理器对象
  */
 export function useEvents(config: EventConfig = {}): EventsReturn {
-  // 检测配置中需要修改变量的路径
-  const varPaths = useMemo(() => {
-    const paths = new Set<string>()
-    for (const actions of Object.values(config)) {
-      if (actions) {
-        for (const action of actions) {
-          if (action.type === 'changeVar') {
-            const varPath = action.params?.var?.path
-            if (varPath) paths.add(varPath)
-          }
-        }
-      }
-    }
-    return Array.from(paths)
-  }, [config])
 
-  // 为每个需要修改的路径创建独立的 setter
-  const setters = useMemo(() => {
-    const result: Record<string, (value: any) => void> = {}
-    for (const path of varPaths) {
-      result[path] = useSetPageVar(path)
-    }
-    return result
-  }, [varPaths])
-
-  // 通用 setter：根据 path 选择对应的 setter
-  const setPageVar = useCallback((path: string, value: any) => {
-    const setter = setters[path]
-    if (setter) {
-      setter(value)
-    } else {
-      console.warn(`未找到路径 "${path}" 的 setter`)
-    }
-  }, [setters])
+  const setPageVar = useSetPageVar()
 
   // 状态管理
   const [loading, setLoading] = useState(false)

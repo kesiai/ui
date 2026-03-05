@@ -285,9 +285,14 @@ export function EventsTestPage() {
       params: {
         dataPointMulti: [
           {
-            dataPoint: { id: 'dp1', name: '数据点1' },
-            key: 'value',
-            value: '100'
+            recordDataPoint: {
+              "tableId": "A",
+              "tableDataId": "6912cc842e0f29806c78bce5",
+              "tagId": "dd",
+              name: '数据点1'
+            },
+            key: 'unit',
+            value: 'cm'
           }
         ],
         successMess: true,
@@ -300,17 +305,22 @@ export function EventsTestPage() {
     click: [{
       type: 'changeDataPoint',
       params: {
+        showForm: true,
         dataPointMulti: [
           {
-            dataPoint: { id: 'dp2', name: '数据点2' },
-            key: 'value',
-            value: '200'
+            recordDataPoint: {
+              "tableId": "A",
+              "tableDataId": "6912cc842e0f29806c78bce5",
+              "tagId": "dd",
+              name: '数据点1'
+            },
+            key: 'unit',
+            value: null
           }
         ],
         successMess: true,
         successContent: '数据点延迟修改成功'
-      },
-      delay: 1000
+      }
     }]
   })
 
@@ -318,15 +328,31 @@ export function EventsTestPage() {
     click: [{
       type: 'changeDataPoint',
       params: {
+        showForm: true,
         dataPointMulti: [
           {
-            dataPoint: { id: 'dp3', name: '数据点3' },
-            key: 'value',
-            value: '300'
+            recordDataPoint: {
+              "tableId": "A",
+              "tableDataId": "6912cc842e0f29806c78bce5",
+              "tagId": "dd",
+              name: '数据点1'
+            },
+            key: 'unit',
+            value: null
+          },
+          {
+            dataPoint: {
+              "tableId": "C类无人机",
+              "tableDataId": "C类无人机",
+              "tagId": "lon",
+              name: '数据点1'
+            },
+            key: 'unit',
+            value: null
           }
         ],
         successMess: true,
-        successContent: '数据点确认修改成功'
+        successContent: '数据确认修改成功'
       },
       confirm: {
         title: '确认修改数据点',
@@ -655,7 +681,7 @@ export function EventsTestPage() {
                 variant="outline"
                 size="sm"
               >
-                延迟修改 (1s)
+                表单修改
               </Button>
               <Button
                 onClick={() => {

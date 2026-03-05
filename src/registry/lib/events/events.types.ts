@@ -89,15 +89,28 @@ export interface ChangeDictParams extends ResultMessage {
 
 /** 数据点属性 */
 export interface DataPointProperty {
-  dataPoint: Record<string, any>
+  /** 资产数据点 */
+  recordDataPoint?: {
+    tableId: string
+    tableDataId: string
+    tagId: string
+  }
+  /** 模型数据点 */
+  tableDataPoint?: {
+    tableId: string
+    tagId: string
+  }
+  /** 要更新的属性键 */
   key: string
-  value: string
+  /** 要设置的值 */
+  value?: any
 }
 
 /** 修改数据点配置动作参数 */
 export interface ChangeDataPointParams extends ResultMessage {
   /** 触发时修改（弹出表单） */
   showForm?: boolean
+  /** 数据点配置数组 */
   dataPointMulti: DataPointProperty[]
 }
 

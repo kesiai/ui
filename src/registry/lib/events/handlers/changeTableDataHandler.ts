@@ -64,7 +64,7 @@ export const changeTableDataHandler: ActionHandler = async (
 
       const formData = await showSchemaFormDialog({
         schema: schema.schema,
-        formSchema:['number-7B4F'],
+        formSchema: schema.formSchema || ['number-7B4F'],
         initialValues: currentData,
         title: '修改数据',
         description: `修改表 ${table.name || table.id} 的数据`,

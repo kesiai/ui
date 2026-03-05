@@ -61,7 +61,7 @@ export function useEvents(config: EventConfig = {}): EventsReturn {
   // 使用 ref 避免在循环中依赖 loading
   const loadingRef = useRef(loading)
   loadingRef.current = loading
-
+ 
   // 创建事件处理器
   const handlers = useMemo(() => {
     const result: Record<EventType, (e?: React.SyntheticEvent) => Promise<void>> = {} as any
@@ -87,7 +87,7 @@ export function useEvents(config: EventConfig = {}): EventsReturn {
                 setPageVar,
               },
             }
-
+         
             const results = await executeActions(actions, context)
 
             // 检查是否有失败的执行

@@ -1,11 +1,7 @@
 'use client'
 
-import {
-  ConfirmDialog,
-} from './ConfirmDialog'
-import {
-  FormDialog,
-} from './FormDialog'
+import { ConfirmDialog } from './ConfirmDialog'
+
 import { SchemaFormDialog } from './SchemaFormDialog'
 import {
   useGlobalDialogs,
@@ -19,18 +15,14 @@ import {
 export function GlobalDialogs() {
   const {
     confirmDialog,
-    formDialog,
     schemaFormDialog,
     handleConfirm,
     handleCancel,
-    handleFormConfirm,
-    handleFormCancel,
     handleSchemaFormConfirm,
     handleSchemaFormCancel
   } = useGlobalDialogs()
 
   const confirmOpen = !!confirmDialog?.open
-  const formOpen = !!formDialog?.open
   const schemaFormOpen = !!schemaFormDialog?.open
 
   return (
@@ -52,27 +44,6 @@ export function GlobalDialogs() {
           onCancel={handleCancel}
         />
       )}
-
-      {/* 表单对话框 */}
-      {formOpen && formDialog && (
-        <FormDialog
-          open={formOpen}
-          onOpenChange={(open) => {
-            if (!open) {
-              handleFormCancel()
-            }
-          }}
-          title={formDialog.config?.title || '填写信息'}
-          description={formDialog.config?.description || '请填写以下信息'}
-          fields={formDialog.config?.fields || []}
-          confirmText={formDialog.config?.confirmText || '确定'}
-          cancelText={formDialog.config?.cancelText || '取消'}
-          initialValues={formDialog.config?.initialValues}
-          onConfirm={handleFormConfirm}
-          onCancel={handleFormCancel}
-        />
-      )}
-
       {/* SchemaForm 对话框 */}
       {schemaFormOpen && schemaFormDialog && (
         <SchemaFormDialog

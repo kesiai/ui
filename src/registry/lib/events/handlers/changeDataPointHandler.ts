@@ -8,7 +8,6 @@ import type {
   EventContext,
   ChangeDataPointParams,
   ResultMessage,
-  DataPointProperty,
 } from '../events.types'
 import { toast } from 'sonner'
 import { showSchemaFormDialog } from '../dialog-atom'
@@ -158,7 +157,7 @@ export const changeDataPointHandler: ActionHandler = async (
     if (showForm) {
       // 获取当前的数据点值
       const initialValues: any = {}
-    
+
       // 查询每个数据点的当前值
       for (const dp of dataPointMulti) {
         if (dp.recordDataPoint) {
@@ -173,6 +172,7 @@ export const changeDataPointHandler: ActionHandler = async (
 
             const oldData = items?.[0]?._settings
             const tag = oldData?.device?.tags?.find((t: any) => t.id === tagId)
+
             if (tag) {
               initialValues[dp.key] = _.get(tag, dp.key)
             }
@@ -195,27 +195,15 @@ export const changeDataPointHandler: ActionHandler = async (
           }
         }
       }
-      console.log('initialValues', initialValues, dataPointMulti.map(dp => ({
-        key: dp.key,
-        type: 'string-7B4F',
-        title: dp.key,
-        description: `请输入 ${dp.key} 的值`,
-        required: true
-      })))
+
       // 弹出表单对话框
-      const formData = false
-      // await showSchemaFormDialog({
-      //   formSchema: dataPointMulti.map(dp => ({
-      //     key: dp.key,
-      //     type: 'string-7B4F',
-      //     title: dp.key,
-      //     description: `请输入 ${dp.key} 的值`,
-      //     required: true
-      //   })),
-      //   initialValues,
-      //   title: '修改数据点',
-      //   description: `请填写要修改的数据点值`,
-      // })
+      const formData = await showSchemaFormDialog({
+        formSchema: {},
+        schema: {},
+        initialValues,
+        title: '修改数据点',
+        description: `请填写要修改的数据点值`,
+      })
 
       // 用户取消操作
       if (!formData) {

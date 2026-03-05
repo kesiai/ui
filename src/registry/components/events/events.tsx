@@ -121,20 +121,6 @@ export {
 }
 export type { ConfirmDialogProps } from './ConfirmDialog'
 
-import {
-  FormDialog,
-  useFormDialog,
-} from './FormDialog'
-export {
-  FormDialog,
-  useFormDialog,
-}
-export type {
-  FormDialogProps,
-  FormField as FormDialogField,
-  FormFieldType,
-} from './FormDialog'
-
 // ============== GlobalDialogs - 全局对话框组件 ==============
 
 import { GlobalDialogs } from './DialogComponents'

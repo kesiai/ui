@@ -92,25 +92,6 @@ export async function executeAction(
       }
     }
 
-    // 检查是否需要显示表单
-    if (action.params?.showForm) {
-      // 根据动作类型确定需要显示的表单字段
-      const formConfig = getFormFieldsForAction(action.type, action.params)
-      if (formConfig.fields && formConfig.fields.length > 0) {
-        const formData = await showFormDialog(
-          formConfig.fields,
-          formConfig.initialValues,
-          formConfig.title,
-          formConfig.description
-        )
-        if (!formData) {
-          return { success: false, error: '用户取消操作' }
-        }
-        // 合并表单数据到 params
-        action.params = { ...action.params, ...formData }
-      }
-    }
-
     // 检查是否需要延迟执行
     if (action.delay && action.delay > 0) {
       await new Promise((resolve) => setTimeout(resolve, action.delay))

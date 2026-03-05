@@ -339,16 +339,6 @@ export function EventsTestPage() {
             },
             key: 'unit',
             value: null
-          },
-          {
-            dataPoint: {
-              "tableId": "C类无人机",
-              "tableDataId": "C类无人机",
-              "tagId": "lon",
-              name: '数据点1'
-            },
-            key: 'unit',
-            value: null
           }
         ],
         successMess: true,
@@ -675,7 +665,7 @@ export function EventsTestPage() {
               <Button
                 onClick={() => {
                   changeDataPointDelay.click?.()
-                  addLog('修改数据点: 延迟 1s')
+                  addLog('修改数据点: 表单')
                 }}
                 className="w-full"
                 variant="outline"

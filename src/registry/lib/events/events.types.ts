@@ -65,7 +65,6 @@ export interface PageJumpParams {
 /** 修改变量动作参数 */
 export interface ChangeVarParams extends ResultMessage {
   var: Record<string, any>
-  varType?: ValueType
   varValue?: Record<string, any>
 }
 
@@ -78,7 +77,6 @@ export interface ChangeTableDataParams extends ResultMessage {
   fields?: string[]
   nodeProp?: Array<{
     key: string
-    varType?: ValueType
     value: string
   }>
 }
@@ -86,7 +84,6 @@ export interface ChangeTableDataParams extends ResultMessage {
 /** 修改数据字典动作参数 */
 export interface ChangeDictParams extends ResultMessage {
   systemVar: Record<string, any>
-  varType?: ValueType
   value?: Record<string, any>
 }
 

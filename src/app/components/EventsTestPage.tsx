@@ -178,7 +178,7 @@ export function EventsTestPage() {
         table: { id: 'testTable', name: '测试表' },
         data: { id: 1, name: '测试数据' },
         nodeProp: [
-          { key: 'name', value: '正常更新', varType: 'varValue' }
+          { key: 'name', value: '正常更新' }
         ],
         successMess: true,
         successContent: '表数据修改成功'
@@ -193,7 +193,7 @@ export function EventsTestPage() {
         table: { id: 'testTable', name: '测试表' },
         data: { id: 1, name: '测试数据' },
         nodeProp: [
-          { key: 'name', value: '延迟更新', varType: 'varValue' }
+          { key: 'name', value: '延迟更新' }
         ],
         successMess: true,
         successContent: '表数据延迟修改成功'
@@ -209,7 +209,7 @@ export function EventsTestPage() {
         table: { id: 'testTable', name: '测试表' },
         data: { id: 1, name: '测试数据' },
         nodeProp: [
-          { key: 'name', value: '确认更新', varType: 'varValue' }
+          { key: 'name', value: '确认更新' }
         ],
         successMess: true,
         successContent: '表数据确认修改成功'

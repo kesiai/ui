@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useEvents } from '@/registry/components/events/events'
 import { usePageVarValue, Page } from '@airiot/client'
 import { Button } from '@/components/ui/button'
-import { toast } from 'sonner'
 
 // Card 组件的临时实现（如果 @/components/ui/card 不存在）
 function TempCard({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
@@ -585,8 +584,7 @@ export function EventsTestPage() {
                   changeTableDataForm.click?.()
                   addLog('修改表数据: 触发时修改')
                 }}
-                className="w-full"
-                variant="destructive"
+                className="w-full bg-pink-400"
                 size="sm"
               >
                 触发时修改 (showForm)

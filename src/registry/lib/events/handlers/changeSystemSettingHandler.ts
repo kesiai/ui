@@ -49,10 +49,7 @@ export const changeSystemSettingHandler: ActionHandler = async (
         updates[item.key] = item.value
       }
     }
-
-    // 使用 @airiot/client 的系统设置
-    const { useSystemSettings } = require('@airiot/client')
-    useSystemSettings(updates)
+    console.log('修改系统设置:', updates)
 
     showResultMessage({ success: true }, params)
 

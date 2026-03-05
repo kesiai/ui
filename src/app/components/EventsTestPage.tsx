@@ -239,9 +239,8 @@ export function EventsTestPage() {
     click: [{
       type: 'changeDict',
       params: {
-        systemVar: { name: 'status', path: 'system.status' },
-        varType: 'varValue',
-        value: 'active',
+        systemVar: { name: 'status', id: '69a93ad55f6fd4fb4cab5762', path: 'yht.a.b' },
+        value: '111',
         successMess: true,
         successContent: '数据字典修改成功'
       }
@@ -252,9 +251,8 @@ export function EventsTestPage() {
     click: [{
       type: 'changeDict',
       params: {
-        systemVar: { name: 'status', path: 'system.status' },
-        varType: 'varValue',
-        value: 'paused',
+        systemVar: { name: 'status', id: '6913f2a74f45615913742840', path: 'A33' },
+        value: '222',
         successMess: true,
         successContent: '数据字典延迟修改成功'
       },
@@ -266,9 +264,8 @@ export function EventsTestPage() {
     click: [{
       type: 'changeDict',
       params: {
-        systemVar: { name: 'status', path: 'system.status' },
-        varType: 'varValue',
-        value: 'stopped',
+        systemVar: { name: 'status', id: '6913f2a74f45615913742840', path: 'A33' },
+        value: '333',
         successMess: true,
         successContent: '数据字典确认修改成功'
       },

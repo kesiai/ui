@@ -21,8 +21,6 @@ import AMapLoader from '@amap/amap-jsapi-loader'
 import isEmpty from 'lodash/isEmpty'
 
 const config = getConfig()
-console.log(config.user)
-console.log(config.language)
 
 export interface FormMapProps {
   value?: {

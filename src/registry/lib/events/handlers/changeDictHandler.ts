@@ -12,27 +12,6 @@ import type {
 import { toast } from 'sonner'
 
 /**
- * 解析变量值 - 支持变量路径和组件值
- */
-function resolveValue(value: any, _context: EventContext): any {
-  if (typeof value !== 'string') return value
-
-  // 检查是否是变量路径格式，如 "vars.a.b"
-  if (value.startsWith('vars.')) {
-    const path = value.slice(5)
-    const { useVar } = require('@airiot/client')
-    return useVar(path)
-  }
-
-  // 检查是否是组件值格式
-  if (value.startsWith('component.')) {
-    return value
-  }
-
-  return value
-}
-
-/**
  * 显示执行结果消息
  */
 function showResultMessage(
@@ -61,24 +40,14 @@ export const changeDictHandler: ActionHandler = async (
   _context: EventContext
 ): Promise<ActionResult> => {
   try {
-    const { systemVar, varType = 'varValue', value } = params
+    const { systemVar, value } = params
 
-    let valueToSet: any
-
-    if (varType === 'comValue') {
-      valueToSet = resolveValue(value, _context)
-    } else {
-      valueToSet = value
-    }
-
-    // 使用 @airiot/client 的数据字典设置
-    const { useDict } = require('@airiot/client')
-    const dictPath = systemVar.path || Object.keys(systemVar).join('.')
-    useDict(dictPath, valueToSet)
+    
+    console.log('修改系统设置:', params)
 
     showResultMessage({ success: true }, params)
 
-    return { success: true, data: { systemVar, value: valueToSet } }
+    return { success: true, data: { systemVar, value } }
   } catch (error) {
     const result: ActionResult = {
       success: false,

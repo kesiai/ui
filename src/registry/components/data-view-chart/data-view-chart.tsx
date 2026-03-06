@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import dayjs from 'dayjs'
 import { BaseChart, BaseChartProps } from '@/registry/components/chart-echarts/BaseChart'
-import { createAPI, getConfig } from '@airiot/client'
+import { createAPI, getSettings } from '@airiot/client'
 
 // ECharts 图表类型定义
 interface EChartSchema {
@@ -81,9 +81,10 @@ const StrToFunction = (obj: any): any => {
 }
 
 // 内容国际化
-const getAliasLang = (item: ChartField | undefined): string | undefined => {
+const getAliasLang = async (item: ChartField | undefined) => {
   if (!item) return undefined
-  const { language } = getConfig()
+  const settings = await getSettings()
+  const { language } = settings
 
   if (language && language !== 'zh_Hans') {
     const aliasKey = `alias_${language}` as keyof ChartField

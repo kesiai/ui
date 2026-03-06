@@ -21,7 +21,7 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
 
   const properties = _.mapValues(model.properties || {}, (prop, key) => ({ ...prop, name: key }))
   
-  const formSchema = filters.filter((f: any) => properties[f.name || f])
+  const formSchema = filters.filter((f: any) => properties[f.name || f.key || f])
 
   const onSubmit = (value: any) => {
     setWheres((w: any) => {

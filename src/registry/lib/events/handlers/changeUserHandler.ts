@@ -10,7 +10,8 @@ import type {
   ResultMessage,
 } from '../events.types'
 import { toast } from 'sonner'
-
+import { createAPI, getSettings } from '@airiot/client'
+import { showSchemaFormDialog } from '../dialog-atom'
 /**
  * 显示执行结果消息
  */
@@ -40,7 +41,7 @@ export const changeUserHandler: ActionHandler = async (
   _context: EventContext
 ): Promise<ActionResult> => {
   try {
-    const { nodeProp } = params
+    const { nodeProp, showForm, fields } = params
 
     const updates: Record<string, string> = {}
 
@@ -50,9 +51,58 @@ export const changeUserHandler: ActionHandler = async (
       }
     }
 
-    // 使用 @airiot/client 的用户设置
-    const { useUser } = require('@airiot/client')
-    useUser(updates)
+    // 使用 API 修改用户
+    const api = createAPI({ name: 'core/auth/user' })
+    const saveUser = async (data: Record<string, string>) => {
+      await api.fetch('', {
+        method: 'PUT',
+        noMessage: true,
+        body: JSON.stringify(data)
+      })
+    }
+    if (showForm) {
+      // 获取当前用户信息
+      const settings = await getSettings()
+
+      const exSchema = settings?.userExpand || {}
+
+      const schema = {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+            title: '邮箱',
+            format: 'email'
+          },
+          phone: {
+            type: 'string',
+            title: '电话',
+          },
+          language: {
+            title: '系统语言',
+            type: 'string',
+          },
+          ...(exSchema.properties || {})
+        }
+      }
+      const formSchema = fields || {}
+
+      const formData = await showSchemaFormDialog({
+        schema,
+        formSchema,
+        title: '修改用户信息',
+      })
+
+      // 用户取消操作
+      if (!formData) {
+        return { success: true, data: { cancelled: true } }
+      } else {
+        saveUser(formData)
+      }
+      
+    } else {
+      saveUser(updates)
+    }
 
     showResultMessage({ success: true }, params)
 

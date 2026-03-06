@@ -406,7 +406,10 @@ export function EventsTestPage() {
       type: 'changeUser',
       params: {
         nodeProp: [
-          { key: 'nickname', value: '正常用户' }
+          {
+            value: "455821359@qq.com",
+            key: "email"
+          }
         ],
         successMess: true,
         successContent: '用户信息修改成功'
@@ -418,32 +421,11 @@ export function EventsTestPage() {
     click: [{
       type: 'changeUser',
       params: {
-        nodeProp: [
-          { key: 'nickname', value: '延迟用户' }
-        ],
+        showForm: true,
+        fields: ["email"],
         successMess: true,
         successContent: '用户信息延迟修改成功'
       },
-      delay: 1000
-    }]
-  })
-
-  const changeUserConfirm = useEvents({
-    click: [{
-      type: 'changeUser',
-      params: {
-        nodeProp: [
-          { key: 'nickname', value: '确认用户' }
-        ],
-        successMess: true,
-        successContent: '用户信息确认修改成功'
-      },
-      confirm: {
-        title: '确认修改用户信息',
-        message: '确定要修改用户信息吗？',
-        confirmText: '确定',
-        cancelText: '取消'
-      }
     }]
   })
 
@@ -452,8 +434,11 @@ export function EventsTestPage() {
     click: [{
       type: 'callFlow',
       params: {
-        flow: { id: 'flow1', name: '测试流程' },
-        params: { action: 'normal' },
+        flow: {
+          id: "6938e724e8b9b34ab8278b5c",
+          name: "yyh"
+        },
+        params: { da: true },
         successMess: true,
         successContent: '流程调用成功'
       }
@@ -464,29 +449,14 @@ export function EventsTestPage() {
     click: [{
       type: 'callFlow',
       params: {
-        flow: { id: 'flow2', name: '测试流程' },
-        params: { action: 'delay' },
+        showForm: true,
+        flow: {
+          id: "6938e724e8b9b34ab8278b5c",
+          name: "yyh"
+        },
+        params: { da: true },
         successMess: true,
-        successContent: '流程延迟调用成功'
-      },
-      delay: 1000
-    }]
-  })
-
-  const callFlowConfirm = useEvents({
-    click: [{
-      type: 'callFlow',
-      params: {
-        flow: { id: 'flow3', name: '测试流程' },
-        params: { action: 'confirm' },
-        successMess: true,
-        successContent: '流程确认调用成功'
-      },
-      confirm: {
-        title: '确认调用流程',
-        message: '确定要调用此流程吗？',
-        confirmText: '确定',
-        cancelText: '取消'
+        successContent: '流程调用成功'
       }
     }]
   })
@@ -747,24 +717,13 @@ export function EventsTestPage() {
               <Button
                 onClick={() => {
                   changeUserDelay.click?.()
-                  addLog('修改用户: 延迟 1s')
+                  addLog('修改用户: 表单修改')
                 }}
                 className="w-full"
                 variant="outline"
                 size="sm"
               >
-                延迟修改 (1s)
-              </Button>
-              <Button
-                onClick={() => {
-                  changeUserConfirm.click?.()
-                  addLog('修改用户: 二次确认')
-                }}
-                className="w-full"
-                variant="secondary"
-                size="sm"
-              >
-                确认修改
+                表单修改
               </Button>
             </div>
           </TempCard>
@@ -788,24 +747,13 @@ export function EventsTestPage() {
               <Button
                 onClick={() => {
                   callFlowDelay.click?.()
-                  addLog('调用流程: 延迟 1s')
+                  addLog('调用流程: 表单修改')
                 }}
                 className="w-full"
                 variant="outline"
                 size="sm"
               >
-                延迟调用 (1s)
-              </Button>
-              <Button
-                onClick={() => {
-                  callFlowConfirm.click?.()
-                  addLog('调用流程: 二次确认')
-                }}
-                className="w-full"
-                variant="secondary"
-                size="sm"
-              >
-                确认调用
+                表单修改
               </Button>
             </div>
           </TempCard>

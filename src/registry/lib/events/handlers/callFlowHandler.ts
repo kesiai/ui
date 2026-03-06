@@ -7,53 +7,52 @@ import type {
   ActionResult,
   EventContext,
   CallFlowParams,
-  ResultMessage,
 } from '../events.types'
-import { toast } from 'sonner'
-
-/**
- * 显示执行结果消息
- */
-function showResultMessage(
-  result: ActionResult,
-  resultConfig?: ResultMessage
-) {
-  if (!resultConfig) return
-
-  if (result.success) {
-    if (resultConfig.successMess !== false) {
-      toast.success(resultConfig.successContent || '操作成功', {
-        duration: resultConfig.successTime || 3000,
-      })
-    }
-  } else {
-    if (resultConfig.errorMess !== false) {
-      toast.error(resultConfig.errorContent || result.error || '操作失败', {
-        duration: resultConfig.errorTime || 3000,
-      })
-    }
-  }
-}
+import { showSchemaFormDialog } from '../dialog-atom'
+import { createAPI } from '@airiot/client'
+import { showResultMessage } from './utils'
 
 export const callFlowHandler: ActionHandler = async (
   params: CallFlowParams,
   _context: EventContext
 ): Promise<ActionResult> => {
   try {
-    const { flow, params: flowParams } = params
+    const { flow, params: flowParams, showForm } = params
 
-    // TODO: 实现实际的流程调用逻辑
-    // 可能需要调用 API 或其他服务来执行流程
-    await new Promise((resolve) => setTimeout(resolve, 500))
+    const manualTriggerApi = createAPI({ name: 'engine/manualTrigger' })
+
+    const executionFlowApi = async ({ flowId, variable }: { flowId: string; variable: any }) => manualTriggerApi.fetch('', {
+      method: 'POST',
+      body: JSON.stringify({ flowId, variable })
+    })
+
+    if (showForm) {
+      // 如果需要展示表单，先获取流程的输入变量定义
+      const flowDetailApi = createAPI({ name: 'flow/flow/' })
+      const schema = await flowDetailApi.fetch(flow.id, { headers: { cache: 'no-cache' } }).then(({ json }) => json?.settings?.schema)
+
+      const formData = await showSchemaFormDialog({
+        schema,
+        title: '调用流程',
+        description: `请输入流程 ${flow.name || flow.id} 的输入参数`,
+      })
+
+      if (!formData) {
+        return { success: true, data: { flowId: flow.id || JSON.stringify(flow), params: flowParams, cancelled: true } }
+      }
+
+      await executionFlowApi({ flowId: flow.id, variable: formData })
+    } else {
+      await executionFlowApi({ flowId: flow.id, variable: flowParams })
+    }
 
     showResultMessage({ success: true }, params)
 
     return {
       success: true,
       data: {
-        flowId: flow.id || JSON.stringify(flow),
+        flowId: flow.name,
         params: flowParams,
-        result: { /* 流程执行结果 */ },
       },
     }
   } catch (error) {

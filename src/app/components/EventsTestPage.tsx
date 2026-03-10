@@ -656,6 +656,90 @@ export function EventsTestPage() {
     }]
   })
 
+  const executeCommandForm = useEvents({
+    click: [{
+      type: 'executeCommand',
+      params: {
+        "commandType": "model",
+        "showForm": true,
+        "commandNodes": [
+          {
+            "_label": "测试a",
+            "_table": "A",
+            "id": "6912cc842e0f29806c78bce5",
+            "name": "测试a",
+            "__type__": "tableData",
+            "table": {
+              "id": "A",
+              "title": "A"
+            }
+          }
+        ],
+        "commandValue": {
+          "AA": "1"
+        },
+        "commandNode": null,
+        "command": {
+          "defaultValue": {
+            "AA": "1"
+          },
+          "form": [
+            {
+              "arrayValue": null,
+              "defaultValue": {
+                "default": "1"
+              },
+              "ifRepeat": null,
+              "ioway": "默认写入",
+              "mod": null,
+              "name": "AA",
+              "objectValue": null,
+              "objectValue2": null,
+              "select": null,
+              "select2": null,
+              "tableValue": null,
+              "tableValue2": null,
+              "tag": null,
+              "tagValue": null,
+              "type": "string"
+            }
+          ],
+          "id": "AA",
+          "name": "AA",
+          "ops": [
+            {
+              "param": "AA"
+            }
+          ],
+          "retry": 0,
+          "showName": "AA",
+          "tag": null,
+          "title": "AA",
+          "writeOut": {
+            "arrayValue": null,
+            "ifRepeat": null,
+            "mod": null,
+            "objectValue": null,
+            "objectValue2": null,
+            "select": null,
+            "select2": null,
+            "tableValue": null,
+            "tableValue2": null,
+            "tag": null,
+            "tagValue": null
+          }
+        },
+        "commandNodeFilter": null,
+        "commandModel": {
+          "id": "A",
+          "title": "A"
+        },
+        "commandBatchType": "sync",
+        "commandStyle": false,
+        "isAsync": true
+      },
+    }]
+  })
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
@@ -1010,6 +1094,17 @@ export function EventsTestPage() {
                 size="sm"
               >
                 设备表
+              </Button>
+              <Button
+                onClick={() => {
+                  executeCommandForm.click?.()
+                  addLog('执行指令: 设备表(表单)')
+                }}
+                className="w-full"
+                variant="outline"
+                size="sm"
+              >
+                设备表(表单)
               </Button>
             </div>
           </TempCard>

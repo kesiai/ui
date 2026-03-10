@@ -9,6 +9,7 @@ import type {
 } from '../events.types'
 import { createAPI } from '@airiot/client'
 import { showResultMessage } from './utils'
+import { showSchemaFormDialog } from '../dialog-atom'
 import _ from 'lodash'
 
 // 临时方法，确保不报错
@@ -60,6 +61,46 @@ const sendCommand = async (commandType: string, command: any, deviceId: any, par
   return response?.json || {}
 }
 
+// 根据 command.form 构造 schema
+const buildSchemaFromForm = (form: any[]) => {
+  if (!Array.isArray(form)) return {}
+
+  const properties: any = {}
+  const required: string[] = []
+
+  form.forEach(field => {
+    if (field.name) {
+      const fieldSchema: any = {
+        type: field.type || 'string',
+        title: field.showName || field.title || field.name,
+        default: field.defaultValue?.default
+      }
+
+      // 根据类型添加特定的验证规则
+      if (field.type === 'string') {
+        fieldSchema.minLength = 1
+      } else if (field.type === 'number') {
+        fieldSchema.minimum = 0
+      } else if (field.type === 'boolean') {
+        fieldSchema.type = 'boolean'
+      }
+
+      properties[field.name] = fieldSchema
+
+      // 如果有默认值，则不是必填
+      if (field.defaultValue?.default === undefined) {
+        required.push(field.name)
+      }
+    }
+  })
+
+  return {
+    type: 'object',
+    properties,
+    required: required.length > 0 ? required : undefined
+  }
+}
+
 // 批量执行的策略枚举
 const ExecutionStrategy = {
   SERIAL: 'serial',      // 串行执行
@@ -74,11 +115,31 @@ export const executeCommandHandler: ActionHandler = async (
   try {
     const {
       commandType, commandModel, commandNode, commandStyle, commandBatchType, isAsync,
-      commandNodes, commandNodeFilter, commandValue, command
+      commandNodes, commandNodeFilter, commandValue, command, showForm
     } = params
-  
+
+    let finalCommandValue = commandValue
+
+    // 如果 showForm 为 true，显示表单让用户输入参数
+    if (showForm && command?.form) {
+      const schema = buildSchemaFromForm(command.form)
+      const formData = await showSchemaFormDialog({
+        schema,
+        title: '执行指令',
+        description: `请输入指令 ${command.name || command.title || ''} 的参数`,
+      })
+
+      if (!formData) {
+        return { success: true, data: { cancelled: true } }
+      }
+
+      finalCommandValue = formData
+    }
+
     // 布尔类型指令，默认是false
-    const finalCommandValue = command?.tag?.dataType === 'Boolean' ? (commandValue ?? false) : commandValue
+    if (command?.tag?.dataType === 'Boolean') {
+      finalCommandValue = finalCommandValue ?? false
+    }
 
     let nodeId, modelId: any
 

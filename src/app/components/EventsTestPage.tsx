@@ -359,7 +359,7 @@ export function EventsTestPage() {
       type: 'changeSystemSetting',
       params: {
         nodeProp: [
-          { key: 'theme', value: 'light' }
+          { key: 'name', value: 'haha' }
         ],
         successMess: true,
         successContent: '系统设置修改成功'
@@ -371,32 +371,11 @@ export function EventsTestPage() {
     click: [{
       type: 'changeSystemSetting',
       params: {
-        nodeProp: [
-          { key: 'theme', value: 'dark' }
-        ],
+        showForm: true,
+        fields: ['name'],
         successMess: true,
-        successContent: '系统设置延迟修改成功'
+        successContent: '系统设置表单修改成功'
       },
-      delay: 1000
-    }]
-  })
-
-  const changeSystemSettingConfirm = useEvents({
-    click: [{
-      type: 'changeSystemSetting',
-      params: {
-        nodeProp: [
-          { key: 'theme', value: 'auto' }
-        ],
-        successMess: true,
-        successContent: '系统设置确认修改成功'
-      },
-      confirm: {
-        title: '确认修改系统设置',
-        message: '确定要修改系统设置吗？',
-        confirmText: '确定',
-        cancelText: '取消'
-      }
     }]
   })
 
@@ -457,6 +436,95 @@ export function EventsTestPage() {
         params: { da: true },
         successMess: true,
         successContent: '流程调用成功'
+      }
+    }]
+  })
+
+  // ============== 发送请求 ==============
+  const sendRequestNormal = useEvents({
+    click: [{
+      type: 'sendRequest',
+      params: {
+        "method": "GET",
+        "op": null,
+        "params": null,
+        "type": "inside",
+        "config": {
+          "method": "GET"
+        },
+        "url": "core/systemVariable"
+      }
+    }]
+  })
+
+  const sendRequestDelay = useEvents({
+    click: [{
+      type: 'sendRequest',
+      params: {
+        "method": "GET",
+        "op": null,
+        "params": null,
+        "type": "inside",
+        "config": {
+          "method": "GET"
+        },
+        "url": "core/t/{table}/d",
+        "table": {
+          "id": "成绩",
+          "title": "成绩"
+        },
+        "body": null
+      }
+    }]
+  })
+
+  const sendRequestConfirm = useEvents({
+    click: [{
+      type: 'sendRequest',
+      params: {
+        "method": "GET",
+        "op": {
+          "id": "67e3c219c22288282a536e82",
+          "key": "max_values_I5KYEm"
+        },
+        "params": null,
+        "type": "dataApi",
+        "ds": "ai"
+      }
+    }]
+  })
+
+  // ============== 执行指令 ==============
+  const executeCommandNormal = useEvents({
+    click: [{
+      type: 'executeCommand',
+      params: {
+        command: 'restart'
+      }
+    }]
+  })
+
+  const executeCommandDelay = useEvents({
+    click: [{
+      type: 'executeCommand',
+      params: {
+        command: 'update'
+      },
+      delay: 1000
+    }]
+  })
+
+  const executeCommandConfirm = useEvents({
+    click: [{
+      type: 'executeCommand',
+      params: {
+        command: 'reset'
+      },
+      confirm: {
+        title: '确认执行指令',
+        message: '确定要执行这个指令吗？此操作可能会影响系统。',
+        confirmText: '确定',
+        cancelText: '取消'
       }
     }]
   })
@@ -676,24 +744,13 @@ export function EventsTestPage() {
               <Button
                 onClick={() => {
                   changeSystemSettingDelay.click?.()
-                  addLog('修改系统设置: 延迟 1s')
+                  addLog('修改系统设置: 表单修改')
                 }}
                 className="w-full"
                 variant="outline"
                 size="sm"
               >
-                延迟修改 (1s)
-              </Button>
-              <Button
-                onClick={() => {
-                  changeSystemSettingConfirm.click?.()
-                  addLog('修改系统设置: 二次确认')
-                }}
-                className="w-full"
-                variant="secondary"
-                size="sm"
-              >
-                确认修改
+                表单修改
               </Button>
             </div>
           </TempCard>
@@ -757,6 +814,88 @@ export function EventsTestPage() {
               </Button>
             </div>
           </TempCard>
+
+          {/* ============== 发送请求 ============== */}
+          <TempCard className="p-5">
+            <h3 className="text-base font-semibold text-slate-900 mb-3">
+              🌐 发送请求
+            </h3>
+            <div className="space-y-2">
+              <Button
+                onClick={() => {
+                  sendRequestNormal.click?.()
+                  addLog('发送请求: 数据字典查询')
+                }}
+                className="w-full"
+                size="sm"
+              >
+                数据字典查询
+              </Button>
+              <Button
+                onClick={() => {
+                  sendRequestDelay.click?.()
+                  addLog('发送请求: 表查询')
+                }}
+                className="w-full"
+                variant="outline"
+                size="sm"
+              >
+                表查询
+              </Button>
+              <Button
+                onClick={() => {
+                  sendRequestConfirm.click?.()
+                  addLog('发送请求: ')
+                }}
+                className="w-full"
+                variant="secondary"
+                size="sm"
+              >
+                数据接口
+              </Button>
+            </div>
+          </TempCard>
+
+          {/* ============== 执行指令 ============== */}
+          <TempCard className="p-5">
+            <h3 className="text-base font-semibold text-slate-900 mb-3">
+              ⚡ 执行指令
+            </h3>
+            <div className="space-y-2">
+              <Button
+                onClick={() => {
+                  executeCommandNormal.click?.()
+                  addLog('执行指令: 正常 (restart)')
+                }}
+                className="w-full"
+                size="sm"
+              >
+                正常执行 (restart)
+              </Button>
+              <Button
+                onClick={() => {
+                  executeCommandDelay.click?.()
+                  addLog('执行指令: 延迟 1s (update)')
+                }}
+                className="w-full"
+                variant="outline"
+                size="sm"
+              >
+                延迟执行 (update, 1s)
+              </Button>
+              <Button
+                onClick={() => {
+                  executeCommandConfirm.click?.()
+                  addLog('执行指令: 二次确认 (reset)')
+                }}
+                className="w-full"
+                variant="secondary"
+                size="sm"
+              >
+                确认执行 (reset)
+              </Button>
+            </div>
+          </TempCard>
         </div>
 
         {/* 事件日志 */}
@@ -796,7 +935,7 @@ export function EventsTestPage() {
               <strong className="text-slate-900">1. 动作类型：</strong>
               <p className="mt-1 text-slate-600">
                 pageJump, changeVar, changeTableData, changeDict, changeDataPoint,
-                changeSystemSetting, changeUser, callFlow
+                changeSystemSetting, changeUser, callFlow, sendRequest, executeCommand
               </p>
             </div>
             <div>

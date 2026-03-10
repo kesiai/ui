@@ -10,7 +10,7 @@ import { Routes, Route, Link, useParams, Outlet } from 'react-router-dom'
 import { GlobalDialogs } from '@/registry/components/events/events'
 
 // 配置 @airiot/client
-const apiHost = 'http://localhost:3000'//'http://192.168.99.101:3031'
+const apiHost = 'http://192.168.99.101:3031'
 const projectId = 'ljnew'
 
 // console.log('🔧 配置 @airiot/client:', { apiHost, projectId })

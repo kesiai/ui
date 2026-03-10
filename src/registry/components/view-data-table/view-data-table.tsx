@@ -205,6 +205,7 @@ export function ViewDataTable({
     header: () => <DataGridTableRowSelectAll />,
     cell: ({ row }) => <DataGridTableRowSelect row={row} />,
     enableSorting: false,
+    enableResizing: false,
     size: 35,
     meta: {
       headerClassName: '',

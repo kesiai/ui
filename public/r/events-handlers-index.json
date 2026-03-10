@@ -1,0 +1,15 @@
+{
+  "name": "events-handlers-index",
+  "type": "registry:lib",
+  "title": "Events Handlers Index",
+  "description": "Events Handlers Index - 工具库",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/events/handlers/index.ts",
+      "type": "registry:lib",
+      "content": "/**\n * Handlers 导出索引\n */\n\nexport { pageJumpHandler } from './pageJumpHandler'\nexport { changeVarHandler } from './changeVarHandler'\nexport { changeTableDataHandler } from './changeTableDataHandler'\nexport { changeDictHandler } from './changeDictHandler'\nexport { changeDataPointHandler } from './changeDataPointHandler'\nexport { changeSystemSettingHandler } from './changeSystemSettingHandler'\nexport { changeUserHandler } from './changeUserHandler'\nexport { callFlowHandler } from './callFlowHandler'\nexport { executeCommandHandler } from './executeCommandHandler'\nexport { sendRequestHandler } from './sendRequestHandler'\n"
+    }
+  ]
+}

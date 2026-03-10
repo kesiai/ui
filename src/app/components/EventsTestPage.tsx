@@ -824,34 +824,34 @@ export function EventsTestPage() {
               <Button
                 onClick={() => {
                   sendRequestNormal.click?.()
-                  addLog('发送请求: 正常 (GET)')
+                  addLog('发送请求: 数据字典查询')
                 }}
                 className="w-full"
                 size="sm"
               >
-                正常发送 (GET)
+                数据字典查询
               </Button>
               <Button
                 onClick={() => {
                   sendRequestDelay.click?.()
-                  addLog('发送请求: 延迟 1s (POST)')
+                  addLog('发送请求: 表查询')
                 }}
                 className="w-full"
                 variant="outline"
                 size="sm"
               >
-                延迟发送 (POST, 1s)
+                表查询
               </Button>
               <Button
                 onClick={() => {
                   sendRequestConfirm.click?.()
-                  addLog('发送请求: 二次确认 (DELETE)')
+                  addLog('发送请求: ')
                 }}
                 className="w-full"
                 variant="secondary"
                 size="sm"
               >
-                确认发送 (DELETE)
+                数据接口
               </Button>
             </div>
           </TempCard>

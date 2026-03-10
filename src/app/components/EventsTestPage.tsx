@@ -499,7 +499,74 @@ export function EventsTestPage() {
     click: [{
       type: 'executeCommand',
       params: {
-        command: 'restart'
+        "commandType": "node",
+        "showForm": false,
+        "commandNodes": [],
+        "commandValue": {
+          "AA": "1"
+        },
+        "commandNode": {
+          "_label": "测试a",
+          "_table": "A",
+          "id": "6912cc842e0f29806c78bce5",
+          "name": "测试a",
+          "__type__": "tableData",
+          "table": {
+            "id": "A",
+            "title": "A"
+          }
+        },
+        "command": {
+          "defaultValue": {
+            "AA": "1"
+          },
+          "form": [
+            {
+              "arrayValue": null,
+              "defaultValue": {
+                "default": "1"
+              },
+              "ifRepeat": null,
+              "ioway": "默认写入",
+              "mod": null,
+              "name": "AA",
+              "objectValue": null,
+              "objectValue2": null,
+              "select": null,
+              "select2": null,
+              "tableValue": null,
+              "tableValue2": null,
+              "tag": null,
+              "tagValue": null,
+              "type": "string"
+            }
+          ],
+          "id": "AA",
+          "name": "AA",
+          "ops": [
+            {
+              "param": "AA"
+            }
+          ],
+          "retry": 0,
+          "showName": "AA",
+          "tag": null,
+          "title": "AA",
+          "writeOut": {
+            "arrayValue": null,
+            "ifRepeat": null,
+            "mod": null,
+            "objectValue": null,
+            "objectValue2": null,
+            "select": null,
+            "select2": null,
+            "tableValue": null,
+            "tableValue2": null,
+            "tag": null,
+            "tagValue": null
+          }
+        },
+        "commandNodeFilter": null,
       }
     }]
   })
@@ -508,26 +575,87 @@ export function EventsTestPage() {
     click: [{
       type: 'executeCommand',
       params: {
-        command: 'update'
+        "commandType": "model",
+        "showForm": false,
+        "commandNodes": [
+          {
+            "_label": "测试a",
+            "_table": "A",
+            "id": "6912cc842e0f29806c78bce5",
+            "name": "测试a",
+            "__type__": "tableData",
+            "table": {
+              "id": "A",
+              "title": "A"
+            }
+          }
+        ],
+        "commandValue": {
+          "AA": "1"
+        },
+        "commandNode": null,
+        "command": {
+          "defaultValue": {
+            "AA": "1"
+          },
+          "form": [
+            {
+              "arrayValue": null,
+              "defaultValue": {
+                "default": "1"
+              },
+              "ifRepeat": null,
+              "ioway": "默认写入",
+              "mod": null,
+              "name": "AA",
+              "objectValue": null,
+              "objectValue2": null,
+              "select": null,
+              "select2": null,
+              "tableValue": null,
+              "tableValue2": null,
+              "tag": null,
+              "tagValue": null,
+              "type": "string"
+            }
+          ],
+          "id": "AA",
+          "name": "AA",
+          "ops": [
+            {
+              "param": "AA"
+            }
+          ],
+          "retry": 0,
+          "showName": "AA",
+          "tag": null,
+          "title": "AA",
+          "writeOut": {
+            "arrayValue": null,
+            "ifRepeat": null,
+            "mod": null,
+            "objectValue": null,
+            "objectValue2": null,
+            "select": null,
+            "select2": null,
+            "tableValue": null,
+            "tableValue2": null,
+            "tag": null,
+            "tagValue": null
+          }
+        },
+        "commandNodeFilter": null,
+        "commandModel": {
+          "id": "A",
+          "title": "A"
+        },
+        "commandBatchType": "sync",
+        "commandStyle": false,
+        "isAsync": true
       },
-      delay: 1000
     }]
   })
 
-  const executeCommandConfirm = useEvents({
-    click: [{
-      type: 'executeCommand',
-      params: {
-        command: 'reset'
-      },
-      confirm: {
-        title: '确认执行指令',
-        message: '确定要执行这个指令吗？此操作可能会影响系统。',
-        confirmText: '确定',
-        cancelText: '取消'
-      }
-    }]
-  })
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
@@ -865,34 +993,23 @@ export function EventsTestPage() {
               <Button
                 onClick={() => {
                   executeCommandNormal.click?.()
-                  addLog('执行指令: 正常 (restart)')
+                  addLog('执行指令: 设备')
                 }}
                 className="w-full"
                 size="sm"
               >
-                正常执行 (restart)
+                设备
               </Button>
               <Button
                 onClick={() => {
                   executeCommandDelay.click?.()
-                  addLog('执行指令: 延迟 1s (update)')
+                  addLog('执行指令: 设备表')
                 }}
                 className="w-full"
                 variant="outline"
                 size="sm"
               >
-                延迟执行 (update, 1s)
-              </Button>
-              <Button
-                onClick={() => {
-                  executeCommandConfirm.click?.()
-                  addLog('执行指令: 二次确认 (reset)')
-                }}
-                className="w-full"
-                variant="secondary"
-                size="sm"
-              >
-                确认执行 (reset)
+                设备表
               </Button>
             </div>
           </TempCard>

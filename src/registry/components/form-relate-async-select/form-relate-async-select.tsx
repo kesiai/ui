@@ -11,8 +11,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Crosshair, Loader2 } from 'lucide-react'
-import { createAPI } from '@airiot/client'
-import { dealFilter, getQueryFilter } from '@/registry/lib/form-relate-utils'
+import { createAPI, useFormContext } from '@airiot/client'
+import { dealFilter } from '@/registry/lib/form-relate-utils'
 import type { RelateFieldOption } from '@/registry/lib/form-relate-types'
 
 interface AsyncSelectProps {
@@ -90,6 +90,14 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   const itemsRef = React.useRef<RelateFieldOption[]>([])
   const currentPageRef = React.useRef(0)
 
+  const form = useFormContext()
+
+  const getFormState = () => {
+    if (form) {
+      return form.getValues()
+    }
+  }
+
   // 获取选项数据
   const loadOptions = React.useCallback(
     async (inputValue: string = '', pageNum: number = 0): Promise<number> => {
@@ -109,7 +117,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
           : { [displayField]: { $like: inputValue } }
       }
 
-      dealFilter(filterObj, field, getQueryFilter)
+      dealFilter(filterObj, field, getFormState)
 
       setLoading(true)
       try {
@@ -137,7 +145,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
         }))
 
         itemsRef.current = [...itemsRef.current, ...newOptions]
-        setOptions(itemsRef.current)
+        setOptions(newOptions)
         setCount(items.length || 0)
 
         return items.length || 0

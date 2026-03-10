@@ -140,9 +140,16 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
   const canAdd = !schema?.maxCount || dataSource.length < schema.maxCount
   const canDelete = !schema?.minCount || dataSource.length > schema.minCount
 
+  // 包装 onChange 以同时更新本地状态和外部值
+  const handleChange = React.useCallback((newValue: any[] | null) => {
+    const data = newValue || []
+    setDataSource(data)
+    onChange?.(data.length ? data : null)
+  }, [onChange])
+
   const tableProps = {
     value: dataSource,
-    onChange,
+    onChange: handleChange,
     name: input?.name,
     schema,
     columns,

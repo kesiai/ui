@@ -1,6 +1,7 @@
 import isEmpty from 'lodash/isEmpty'
 import isObject from 'lodash/isObject'
 import isArray from 'lodash/isArray'
+import { getQueryFilter } from './filter-utils'
 
 /**
  * 在 tableSchema 中查找 value?.relate?.id 等于 tableID 的对应 key
@@ -36,24 +37,77 @@ export const findTreeNode = (treeData: any[], value: any): any => {
 }
 
 /**
- * 获取查询过滤器 - TODO 待实现
+ * 替换字段占位符
+ * 将 [field]:fieldName 或 [field][table]:fieldName 替换为实际值
  */
-export const getQueryFilter = (_filterObj: any, _field: any, _getFormState?: () => any) => {
-  // TODO: 实现查询过滤器逻辑
-  // 这个函数需要从 queryEditor 获取查询过滤条件
+export const replaceFieldPlaceholders = (value: any, allValues: Record<string, any>): any => {
+  if (typeof value === 'string') {
+    // 处理 [field]:fieldName 占位符
+    if (value.startsWith('[field]:')) {
+      const key = value.substring(8)
+      return allValues[key] !== undefined ? allValues[key] : value
+    }
+    // 处理 [field][table]:fieldName 占位符
+    if (value.startsWith('[field][table]:')) {
+      const key = value.substring(15)
+      return allValues[key] !== undefined ? allValues[key] : value
+    }
+    return value
+  }
+
+  if (isArray(value)) {
+    return value.map(item => replaceFieldPlaceholders(item, allValues))
+  }
+
+  if (isObject(value) && value !== null) {
+    const result: Record<string, any> = {}
+    for (const [key, val] of Object.entries(value)) {
+      result[key] = replaceFieldPlaceholders(val, allValues)
+    }
+    return result
+  }
+
+  return value
 }
 
 /**
  * 处理过滤器
+ * 将内置查询过滤器应用到 filterObj 中
+ *
+ * @param filterObj - 过滤器对象，会被修改
+ * @param field - 字段配置
+ * @param getFormState - 获取表单状态的函数
+ * @param outTable - 外部表的 editingSchema（可选）
  */
 export const dealFilter = (
-  _filterObj: any,
-  _field: any,
-  _getQueryFilter: typeof import('./form-relate-utils').getQueryFilter,
-  _getFormState?: () => any
+  filterObj: Record<string, any>,
+  field: any,
+  getFormState?: () => any,
+  outTable?: { editingSchema?: Record<string, any> }
 ) => {
-  // TODO: 实现过滤器处理逻辑
-  // 需要结合 getQueryFilter 和 getFormState 来处理过滤条件
+  // 在过滤器中，如果没有设置 field.filter，则使用内置查询
+  const ifFilter = field.filter
+
+  // 设置了内置查询
+  if (field.insideFilter && !ifFilter) {
+    const inFilter = getQueryFilter(field.insideFilter, field.schema)
+    const allValues = {
+      ...(outTable?.editingSchema || {}),
+      ...(getFormState?.()?.values || {})
+    }
+
+    // 确保 filterObj 有 search 属性
+    if (!filterObj.search) {
+      filterObj.search = {}
+    }
+
+    // 替换占位符并添加到搜索条件中
+    for (const key in inFilter) {
+      let insideVal = inFilter[key]
+      const replacedVal = replaceFieldPlaceholders(insideVal, allValues)
+      filterObj.search[key] = replacedVal
+    }
+  }
 }
 
 /**

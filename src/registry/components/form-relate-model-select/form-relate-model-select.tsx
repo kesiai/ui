@@ -15,7 +15,7 @@ import {
 import { Plus, Repeat2 } from 'lucide-react'
 import { useUser } from '@airiot/client'
 import { createAPI } from '@airiot/client'
-import { getFormValues, dealFilter, getQueryFilter } from '@/registry/lib/form-relate-utils'
+import { getFormValues, dealFilter } from '@/registry/lib/form-relate-utils'
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 interface RelateModelSelectProps extends RelateFieldProps {
@@ -94,7 +94,7 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
     setLoading(true)
     let filterObj: any = {}
 
-    dealFilter(filterObj, field, getQueryFilter, () => ({ values: formState }))
+    dealFilter(filterObj, field, () => ({ values: formState }))
 
     try {
       const tableName = schema.name

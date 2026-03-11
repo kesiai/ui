@@ -36,12 +36,12 @@ const ViewPagination: React.FC<ViewPaginationProps> = ({
   const { sizes, setPageSize, size } = useModelPageSize()
   const { count } = useModelCount()
 
-  const totalPages = Math.ceil(items) || 1
+  const totalPages = count > 0 ? Math.ceil(count / size) : Math.ceil(items) || 1
 
   // 不显示分页的情况
-  // if (totalPages <= 1) {
-  //   return null
-  // }
+  if (totalPages <= 1) {
+    return null
+  }
 
   const handlePageChange = (page: number) => {
     if (!disabled) {
@@ -112,9 +112,9 @@ const ViewPagination: React.FC<ViewPaginationProps> = ({
             <PaginationLink
               aria-label="Go to previous page"
               size="default"
-              onClick={() => handlePageChange(activePage - 1)}
-              isActive={!(disabled || activePage === 1)}
-              className="gap-1 pl-2.5 disabled:opacity-50"
+              onClick={() => activePage > 1 && handlePageChange(activePage - 1)}
+              aria-disabled={disabled || activePage === 1}
+              className={`gap-1 pl-2.5 ${disabled || activePage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}`}
             >
               <ChevronLeft className="h-4 w-4" />
               <span>上一页</span>
@@ -143,9 +143,9 @@ const ViewPagination: React.FC<ViewPaginationProps> = ({
             <PaginationLink
               aria-label="Go to next page"
               size="default"
-              onClick={() => handlePageChange(activePage + 1)}
-              isActive={!(disabled || activePage === totalPages)}
-              className="gap-1 pr-2.5 disabled:opacity-50"
+              onClick={() => activePage < totalPages && handlePageChange(activePage + 1)}
+              aria-disabled={disabled || activePage === totalPages}
+              className={`gap-1 pr-2.5 ${disabled || activePage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}`}
             >
               <span>下一页</span>
               <ChevronRight className="h-4 w-4" />

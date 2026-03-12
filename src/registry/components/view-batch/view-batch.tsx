@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, Trash2, Edit } from 'lucide-react'
-import SchemaForm from '@/components/airiot/schema-form/schema-form'
+import SchemaForm from '@/registry/components/schema-form/schema-form'
 
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载

@@ -1,0 +1,17 @@
+{
+  "name": "table-context",
+  "type": "registry:lib",
+  "title": "Table Context",
+  "description": "Table Context - 工具库",
+  "dependencies": [
+    "@airiot/client"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/table-context.tsx",
+      "type": "registry:lib",
+      "content": "import React from \"react\";\nimport { createAPI } from '@airiot/client';\n\ninterface TableContextValue {\n  list?: any[]\n  tableInfo?: any\n  editingSchema?: any\n}\n\ninterface Table2ContextValue {\n  editingSchema?: any\n}\n\ninterface TCProviderProps {\n  children: React.ReactNode\n  id?: string\n  editingSchema?: any\n}\n\nconst TableContext = React.createContext<TableContextValue | undefined>(undefined)\n\nconst TCProvider: React.FC<TCProviderProps> = ({ children, id, editingSchema }) => {\n  const [list, setList] = React.useState<any[]>()\n  const [tableInfo, setTableInfo] = React.useState<any>()\n\n  React.useEffect(() => {\n    if (id) {\n      const dataApi = createAPI({ resource: `core/t/${id}/d` })\n      const schemaApi = createAPI({ resource: `core/t/schema/${id}` })\n\n      dataApi.query({}).then(({ items }: any) => {\n        setList(items)\n      }).catch((err: Error) => {\n        console.error(err)\n      })\n\n      schemaApi.fetch('').then((res: any) => {\n        setTableInfo(res?.json)\n      }).catch((err: Error) => {\n        console.error(err)\n      })\n    }\n  }, [id])\n\n  return <TableContext.Provider value={{ list, tableInfo, editingSchema }}>\n    {children}\n  </TableContext.Provider>\n}\n\n// 表格控件，高级编辑中使用\nconst Table2Context = React.createContext<Table2ContextValue | undefined>(undefined)\n\nconst TC2Provider: React.FC<TCProviderProps> = ({ children, editingSchema }) => {\n  return <Table2Context.Provider value={{ editingSchema }}>\n    {children}\n  </Table2Context.Provider>\n}\n\nexport { TableContext, TCProvider, Table2Context, TC2Provider }\n"
+    }
+  ]
+}

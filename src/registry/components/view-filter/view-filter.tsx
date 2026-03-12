@@ -1,6 +1,6 @@
 import React from 'react'
 import { useModel, useSetModelState, useModelGetItems } from '@airiot/client'
-import FilterSchemaForm from '@/components/airiot/filter-form/filter-form'
+import FilterSchemaForm from '@/registry/components/filter-form/filter-form'
 import _ from 'lodash'
 
 interface ViewFilterProps {

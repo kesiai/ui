@@ -121,7 +121,7 @@ function DataGridColumnHeaderInner<TData, TValue>({
           disabled={!canSort}
         >
           <ArrowUpIcon className="size-3.5!" />
-          <span className="grow">Asc</span>
+          <span className="grow">升序</span>
           {isSorted === "asc" && (
             <CheckIcon className="text-primary size-4 opacity-100!" />
           )}
@@ -138,7 +138,7 @@ function DataGridColumnHeaderInner<TData, TValue>({
           disabled={!canSort}
         >
           <ArrowDownIcon className="size-3.5!" />
-          <span className="grow">Desc</span>
+          <span className="grow">降序</span>
           {isSorted === "desc" && (
             <CheckIcon className="text-primary size-4 opacity-100!" />
           )}
@@ -158,7 +158,7 @@ function DataGridColumnHeaderInner<TData, TValue>({
           onClick={() => column.pin(isPinned === "left" ? false : "left")}
         >
           <ArrowLeftToLineIcon className="size-3.5!" aria-hidden="true" />
-          <span className="grow">Pin to left</span>
+          <span className="grow">左固</span>
           {isPinned === "left" && (
             <CheckIcon className="text-primary size-4 opacity-100!" />
           )}
@@ -168,7 +168,7 @@ function DataGridColumnHeaderInner<TData, TValue>({
           onClick={() => column.pin(isPinned === "right" ? false : "right")}
         >
           <ArrowRightToLineIcon className="size-3.5!" aria-hidden="true" />
-          <span className="grow">Pin to right</span>
+          <span className="grow">右固</span>
           {isPinned === "right" && (
             <CheckIcon className="text-primary size-4 opacity-100!" />
           )}

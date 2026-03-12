@@ -108,7 +108,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose }
   return (
     <>
       <DialogHeader>
-        <DialogTitle>编辑 {title}</DialogTitle>
+        <DialogTitle>编辑 {model?.title}</DialogTitle>
       </DialogHeader>
       {loading ? (
         <div className="flex items-center justify-center py-12">

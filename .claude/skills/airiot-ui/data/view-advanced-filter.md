@@ -1,3 +1,9 @@
+### ⚠️ 组合使用说明
+
+> **重要**: view-advanced-filter 是 视图系统 的子组件，不能单独使用。
+>
+> 必须配合父组件 view-model 使用。请查看 [视图系统 完整指南](data/view-system.md) 了解正确的使用方法。
+
 # ViewAdvancedFilter 高级筛选组件
 
 ## 简介

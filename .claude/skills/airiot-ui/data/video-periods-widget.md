@@ -1,3 +1,9 @@
+### ⚠️ 组合使用说明
+
+> **重要**: video-periods-widget 是 视频系统 的子组件，不能单独使用。
+>
+> 必须配合父组件 video-widget 使用。请查看 [视频系统 完整指南](data/video-system.md) 了解正确的使用方法。
+
 # 录制计划
 
 ## 简介

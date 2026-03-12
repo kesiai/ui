@@ -1,3 +1,9 @@
+### ⚠️ 组合使用说明
+
+> **重要**: gis-geojson-parse 是 GIS系统 的子组件，不能单独使用。
+>
+> 必须配合父组件 gis-map-core 使用。请查看 [GIS系统 完整指南](data/gis-system.md) 了解正确的使用方法。
+
 # GeoJSON 层
 
 ## 简介

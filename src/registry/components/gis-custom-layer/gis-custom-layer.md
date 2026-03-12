@@ -90,8 +90,8 @@ interface LineStyle {
 在地图上绘制单个点标记。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { CustomViews } from '@/registry/components/gis-custom-layer'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { CustomViews } from '@/registry/components/airiot/gis-custom-layer'
 
 function PointLayer() {
   const data = [{
@@ -320,8 +320,8 @@ function MultiGeometryLayer() {
 演示数据级样式如何覆盖图层默认样式。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { CustomViews } from '@/registry/components/gis-custom-layer'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { CustomViews } from '@/registry/components/airiot/gis-custom-layer'
 
 function StyleOverrideExample() {
   const data = [

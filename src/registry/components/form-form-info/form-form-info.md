@@ -25,7 +25,7 @@
 最简单的用法，显示一个空白的表单信息组件。
 
 ```tsx
-import { FormFormInfo } from '@/registry/components/form-form-info/form-form-info'
+import { FormFormInfo } from '@/registry/components/airiot/form-form-info/form-form-info'
 
 function Example() {
   return (
@@ -85,7 +85,7 @@ function Example() {
 创建一个动态信息展示组件。
 
 ```tsx
-import { FormFormInfo } from '@/registry/components/form-form-info/form-form-info'
+import { FormFormInfo } from '@/registry/components/airiot/form-form-info/form-form-info'
 import { Card } from '@/components/ui/card'
 
 function DynamicInfoDisplay() {

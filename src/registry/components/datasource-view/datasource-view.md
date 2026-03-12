@@ -126,7 +126,7 @@
 ### 1. 简单视图查询（计数统计）
 
 ```tsx
-import { DatasourceView } from '@/registry/components/datasource-view'
+import { DatasourceView } from '@/registry/components/airiot/datasource-view'
 
 function SimpleViewQuery() {
   return (
@@ -469,7 +469,7 @@ function StackedView() {
 ### 10. 子组件获取数据
 
 ```tsx
-import { useContextProvider } from '@/registry/components/container-context-provider'
+import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
 
 function ViewDataDisplay() {
   const { data, loading } = useContextProvider()[0]
@@ -511,7 +511,7 @@ function ViewDataDisplay() {
 ### 设备监控仪表板
 
 ```tsx
-import { DatasourceView } from '@/registry/components/datasource-view'
+import { DatasourceView } from '@/registry/components/airiot/datasource-view'
 
 function DeviceMonitorDashboard() {
   return (

@@ -36,7 +36,7 @@
 最常用的日期范围选择，用于筛选某段时间的数据。
 
 ```tsx
-import DateRange from '@/registry/components/form-date-range/form-date-range'
+import DateRange from '@/registry/components/airiot/form-date-range/form-date-range'
 
 function Example() {
   const [range, setRange] = useState('')
@@ -135,7 +135,7 @@ function Example() {
 在订单管理系统中按日期范围查询订单。
 
 ```tsx
-import DateRange from '@/registry/components/form-date-range/form-date-range'
+import DateRange from '@/registry/components/airiot/form-date-range/form-date-range'
 
 function OrderFilter() {
   const [dateRange, setDateRange] = useState('')

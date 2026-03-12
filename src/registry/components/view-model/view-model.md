@@ -43,7 +43,7 @@ interface TableFilter {
 最常见的方式是通过 tableId 指定要查询的数据表。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function UserTable() {
   return (
@@ -59,7 +59,7 @@ function UserTable() {
 使用项目中预定义的内置模型。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function TaskList() {
   return (
@@ -75,7 +75,7 @@ function TaskList() {
 设置 initQuery 为 true，组件加载时立即查询数据。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function ProductList() {
   return (
@@ -94,7 +94,7 @@ function ProductList() {
 只查询需要的字段，减少数据传输量。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function OrderList() {
   return (
@@ -113,7 +113,7 @@ function OrderList() {
 包括嵌套字段在内的所有字段。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function UserDetail() {
   return (
@@ -132,7 +132,7 @@ function UserDetail() {
 设置 limit 限制返回的数据条数。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function TopProducts() {
   return (
@@ -151,7 +151,7 @@ function TopProducts() {
 通过 tableFilters 添加数据筛选条件。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function ActiveUsers() {
   return (
@@ -173,7 +173,7 @@ function ActiveUsers() {
 通过 fieldOrder 设置字段的排序规则。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function SortedProducts() {
   return (
@@ -195,7 +195,7 @@ function SortedProducts() {
 设置 interval 定时自动刷新数据。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function RealtimeData() {
   return (
@@ -214,7 +214,7 @@ function RealtimeData() {
 在数据加载时显示自定义的加载组件。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 import { Loader2 } from 'lucide-react'
 
 function CustomLoading() {
@@ -243,10 +243,10 @@ function CustomLoading() {
 完整的用户管理系统，包含查询、筛选、排序等功能。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
-import ViewDataTable, { TableColumn } from '@/registry/components/view-data-table/view-data-table'
-import ViewPagination from '@/registry/components/view-pagination/view-pagination'
-import Actions, { CreateAction } from '@/registry/components/view-actions/view-actions'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import ViewDataTable, { TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import ViewPagination from '@/registry/components/airiot/view-pagination/view-pagination'
+import Actions, { CreateAction } from '@/registry/components/airiot/view-actions/view-actions'
 import { Card } from '@/components/ui/card'
 
 function UserManagement() {
@@ -304,8 +304,8 @@ function UserManagement() {
 实时数据监控系统，自动刷新显示最新数据。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
-import ViewDataTable, { TableColumn } from '@/registry/components/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import ViewDataTable, { TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Activity } from 'lucide-react'
@@ -362,10 +362,10 @@ function DeviceMonitor() {
 支持复杂查询条件的数据列表。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
-import ViewDataTable, { TableColumn } from '@/registry/components/view-data-table/view-data-table'
-import ViewPagination from '@/registry/components/view-pagination/view-pagination'
-import ViewAdvancedFilter from '@/registry/components/view-advanced-filter/view-advanced-filter'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import ViewDataTable, { TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import ViewPagination from '@/registry/components/airiot/view-pagination/view-pagination'
+import ViewAdvancedFilter from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
 import { useState } from 'react'
 
 function AdvancedQuery() {
@@ -415,8 +415,8 @@ function AdvancedQuery() {
 使用 projectAll 查询包括嵌套字段在内的所有数据。
 
 ```tsx
-import { ViewModel } from '@/registry/components/view-model/view-model'
-import ViewDataTable, { TableColumn } from '@/registry/components/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import ViewDataTable, { TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
 import { Card } from '@/components/ui/card'
 
 function NestedDataView() {

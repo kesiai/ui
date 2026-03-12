@@ -202,7 +202,7 @@ interface GroupConfig {
 查询设备 A001 的温度数据，最近 1 小时：
 
 ```tsx
-import { DatasourceHistory } from '@/registry/components/datasource-history'
+import { DatasourceHistory } from '@/registry/components/airiot/datasource-history'
 
 function TemperatureChart() {
   return (
@@ -420,7 +420,7 @@ function RealtimeHistory() {
 ### 8. 子组件获取数据
 
 ```tsx
-import { useContextProvider } from '@/registry/components/container-context-provider'
+import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
 
 function DataDisplay() {
   const { data, loading } = useContextProvider()[0]
@@ -475,8 +475,8 @@ function ManualRefresh() {
 ### 多设备温度监控仪表板
 
 ```tsx
-import { DatasourceHistory } from '@/registry/components/datasource-history'
-import { useContextProvider } from '@/registry/components/container-context-provider'
+import { DatasourceHistory } from '@/registry/components/airiot/datasource-history'
+import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
 
 function TemperatureDashboard() {
   return (

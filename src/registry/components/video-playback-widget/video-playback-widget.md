@@ -61,7 +61,7 @@ interface TimeHMS {
 使用设备数据进行视频回放的最简单方式。
 
 ```tsx
-import { VideoPlaybackWidget } from '@/registry/components/video-playback-widget/video-playback-widget'
+import { VideoPlaybackWidget } from '@/registry/components/airiot/video-playback-widget/video-playback-widget'
 import { useState } from 'react'
 
 function Example() {
@@ -236,7 +236,7 @@ function Example() {
 限制回放的日期范围，不允许选择未来日期。
 
 ```tsx
-import { VideoPlaybackWidget } from '@/registry/components/video-playback-widget/video-playback-widget'
+import { VideoPlaybackWidget } from '@/registry/components/airiot/video-playback-widget/video-playback-widget'
 
 function Example() {
   const [date, setDate] = useState(new Date())
@@ -265,7 +265,7 @@ function Example() {
 创建一个完整的监控录像回放系统，包含设备选择、日期选择和录像播放。
 
 ```tsx
-import { VideoPlaybackWidget } from '@/registry/components/video-playback-widget/video-playback-widget'
+import { VideoPlaybackWidget } from '@/registry/components/airiot/video-playback-widget/video-playback-widget'
 import { useState } from 'react'
 
 function MonitoringPlaybackSystem() {
@@ -348,7 +348,7 @@ function MonitoringPlaybackSystem() {
 根据事件时间快速定位并播放相关录像。
 
 ```tsx
-import { VideoPlaybackWidget } from '@/registry/components/video-playback-widget/video-playback-widget'
+import { VideoPlaybackWidget } from '@/registry/components/airiot/video-playback-widget/video-playback-widget'
 import { useState, useEffect } from 'react'
 
 function EventPlayback() {
@@ -427,7 +427,7 @@ function EventPlayback() {
 在回放视频时添加事件标注功能。
 
 ```tsx
-import { VideoPlaybackWidget } from '@/registry/components/video-playback-widget/video-playback-widget'
+import { VideoPlaybackWidget } from '@/registry/components/airiot/video-playback-widget/video-playback-widget'
 import { useState } from 'react'
 
 function AnnotatedPlayback() {

@@ -47,7 +47,7 @@ const visualMap = [
 最简单的水平进度条，显示默认进度：
 
 ```tsx
-import { Bar } from '@/registry/components/bar/bar'
+import { Bar } from '@/registry/components/airiot/bar/bar'
 
 function Example() {
   return (
@@ -166,7 +166,7 @@ function Example() {
 
 ```tsx
 import { useState } from 'react'
-import { Bar } from '@/registry/components/bar/bar'
+import { Bar } from '@/registry/components/airiot/bar/bar'
 
 function FileUploadProgress() {
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -205,7 +205,7 @@ function FileUploadProgress() {
 显示多个指标的进度条，使用颜色区分状态：
 
 ```tsx
-import { Bar } from '@/registry/components/bar/bar'
+import { Bar } from '@/registry/components/airiot/bar/bar'
 
 function Dashboard() {
   const metrics = [
@@ -245,7 +245,7 @@ function Dashboard() {
 多个垂直进度条，用于显示对比数据：
 
 ```tsx
-import { Bar } from '@/registry/components/bar/bar'
+import { Bar } from '@/registry/components/airiot/bar/bar'
 
 function VerticalBars() {
   const data = [

@@ -71,7 +71,7 @@
 #### 方式一：使用 ViewField 组件（推荐）
 
 ```tsx
-import ViewField from '@/registry/components/view-field/view-field'
+import ViewField from '@/registry/components/airiot/view-field/view-field'
 
 // 基础使用
 <ViewField
@@ -160,7 +160,7 @@ import ViewField from '@/registry/components/view-field/view-field'
 #### 方式二：直接使用 ViewFieldRender
 
 ```tsx
-import { ViewFieldRender } from '@/registry/components/view-field/field-map'
+import { ViewFieldRender } from '@/registry/components/airiot/view-field/field-map'
 
 // 根据 schema.fieldType 自动渲染
 <ViewFieldRender
@@ -184,7 +184,7 @@ import { ViewFieldRender } from '@/registry/components/view-field/field-map'
 #### 方式三：直接使用 fieldMap
 
 ```tsx
-import fieldMap from '@/registry/components/view-field/field-map'
+import fieldMap from '@/registry/components/airiot/view-field/field-map'
 
 const TextComponent = fieldMap['text']
 const SelectComponent = fieldMap['select']
@@ -315,7 +315,7 @@ schema={{
 ### 8. 示例：完整的表单渲染
 
 ```tsx
-import ViewField from '@/registry/components/view-field/view-field'
+import ViewField from '@/registry/components/airiot/view-field/view-field'
 
 function UserDetail({ user }) {
   return (

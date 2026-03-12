@@ -63,7 +63,7 @@ interface ClassNamesConfig {
 
 ```tsx
 import { Form } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
+import FormField from '@/registry/components/airiot/form-field/form-field'
 
 function Example() {
   const handleSubmit = (data: any) => {
@@ -89,8 +89,8 @@ function Example() {
 
 ```tsx
 import { Form } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
-import { layoutPresets } from '@/registry/components/form/config'
+import FormField from '@/registry/components/airiot/form-field/form-field'
+import { layoutPresets } from '@/registry/components/airiot/form/config'
 
 function Example() {
   const handleSubmit = (data: any) => {
@@ -279,8 +279,8 @@ function Example() {
 
 ```tsx
 import { Form } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
-import { layoutPresets } from '@/registry/components/form/config'
+import FormField from '@/registry/components/airiot/form-field/form-field'
+import { layoutPresets } from '@/registry/components/airiot/form/config'
 
 function RegistrationForm() {
   const handleSubmit = (data: any) => {
@@ -379,8 +379,8 @@ function RegistrationForm() {
 
 ```tsx
 import { Form } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
-import { layoutPresets } from '@/registry/components/form/config'
+import FormField from '@/registry/components/airiot/form-field/form-field'
+import { layoutPresets } from '@/registry/components/airiot/form/config'
 
 function SettingsForm() {
   const handleSubmit = (data: any) => {
@@ -464,7 +464,7 @@ function SettingsForm() {
 
 ```tsx
 import { Form } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
+import FormField from '@/registry/components/airiot/form-field/form-field'
 import { useState } from 'react'
 
 function DynamicForm() {

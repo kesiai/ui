@@ -80,7 +80,7 @@ interface DataPointConfig {
 显示最简单的实时数据点。
 
 ```tsx
-import { DataPoint } from '@/registry/components/data-point'
+import { DataPoint } from '@/registry/components/airiot/data-point'
 
 function Example() {
   return (
@@ -234,7 +234,7 @@ function Example() {
 创建一个完整的设备监控面板，显示多个数据点。
 
 ```tsx
-import { DataPoint } from '@/registry/components/data-point'
+import { DataPoint } from '@/registry/components/airiot/data-point'
 
 function DeviceMonitorPanel() {
   return (
@@ -312,7 +312,7 @@ function DeviceMonitorPanel() {
 展示数据转换功能，将原始数据转换为工程单位。
 
 ```tsx
-import { DataPoint } from '@/registry/components/data-point'
+import { DataPoint } from '@/registry/components/airiot/data-point'
 
 function DataConversionExample() {
   return (
@@ -382,7 +382,7 @@ function DataConversionExample() {
 创建一个带告警状态指示的监控面板。
 
 ```tsx
-import { DataPoint } from '@/registry/components/data-point'
+import { DataPoint } from '@/registry/components/airiot/data-point'
 
 function AlarmMonitorPanel() {
   return (

@@ -87,7 +87,7 @@
 调用一个无需参数的接口：
 
 ```tsx
-import { DatasourceInterface } from '@/registry/components/datasource-interface'
+import { DatasourceInterface } from '@/registry/components/airiot/datasource-interface'
 
 function SimpleInterface() {
   return (
@@ -213,7 +213,7 @@ function ManualRefreshInterface() {
 ### 6. 子组件获取数据
 
 ```tsx
-import { useContextProvider } from '@/registry/components/container-context-provider'
+import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
 
 function DataDisplay() {
   const { data, loading } = useContextProvider()[0]
@@ -235,8 +235,8 @@ function DataDisplay() {
 ### 设备监控仪表板
 
 ```tsx
-import { DatasourceInterface } from '@/registry/components/datasource-interface'
-import { useContextProvider } from '@/registry/components/container-context-provider'
+import { DatasourceInterface } from '@/registry/components/airiot/datasource-interface'
+import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
 
 function DeviceMonitorDashboard() {
   const [selectedDevice, setSelectedDevice] = useState('A001')

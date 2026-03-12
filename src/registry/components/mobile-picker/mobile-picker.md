@@ -50,7 +50,7 @@ interface PickerOption {
 最简单的单选示例。
 
 ```tsx
-import { MobilePicker } from '@/registry/components/mobile-picker'
+import { MobilePicker } from '@/registry/components/airiot/mobile-picker'
 import { useState } from 'react'
 
 function Example() {
@@ -223,7 +223,7 @@ function Example() {
 创建一个完整的城市级联选择器。
 
 ```tsx
-import { MobilePicker } from '@/registry/components/mobile-picker'
+import { MobilePicker } from '@/registry/components/airiot/mobile-picker'
 import { useState } from 'react'
 
 function CityPicker() {

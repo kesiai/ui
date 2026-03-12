@@ -26,7 +26,7 @@
 最简单的用法，嵌入一个外部网页。
 
 ```tsx
-import { Iframe } from '@/registry/components/iframe'
+import { Iframe } from '@/registry/components/airiot/iframe'
 
 function Example() {
   return (
@@ -157,7 +157,7 @@ function Example() {
 嵌入一个需要认证的外部报表系统。
 
 ```tsx
-import { Iframe } from '@/registry/components/iframe'
+import { Iframe } from '@/registry/components/airiot/iframe'
 
 function ReportViewer() {
   return (
@@ -188,7 +188,7 @@ function ReportViewer() {
 使用标签页切换不同的嵌入页面。
 
 ```tsx
-import { Iframe } from '@/registry/components/iframe'
+import { Iframe } from '@/registry/components/airiot/iframe'
 import { useState } from 'react'
 
 function EmbeddedSystemTabs() {
@@ -242,7 +242,7 @@ function EmbeddedSystemTabs() {
 嵌入在线帮助文档系统。
 
 ```tsx
-import { Iframe } from '@/registry/components/iframe'
+import { Iframe } from '@/registry/components/airiot/iframe'
 
 function HelpDocumentation() {
   return (
@@ -278,7 +278,7 @@ function HelpDocumentation() {
 创建一个响应式的嵌入内容布局。
 
 ```tsx
-import { Iframe } from '@/registry/components/iframe'
+import { Iframe } from '@/registry/components/airiot/iframe'
 
 function ResponsiveEmbed() {
   return (

@@ -87,8 +87,8 @@ interface Cluster {
 通过表 ID 从服务器加载地理信息数据。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { TableViews } from '@/registry/components/gis-table-layer'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { TableViews } from '@/registry/components/airiot/gis-table-layer'
 
 function TableByID() {
   return (
@@ -309,8 +309,8 @@ function MarkerScaleExample() {
 创建一个完整的设备监控应用，展示设备位置、状态和实时数据。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { TableViews } from '@/registry/components/gis-table-layer'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { TableViews } from '@/registry/components/airiot/gis-table-layer'
 
 function DeviceMonitoringApp() {
   const [selectedStatus, setSelectedStatus] = React.useState('all')

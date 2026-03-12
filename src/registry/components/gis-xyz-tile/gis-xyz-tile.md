@@ -76,8 +76,8 @@ interface LayerBase {
 加载高德地图瓦片作为底图。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { XYZ } from '@/registry/components/gis-xyz-tile'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { XYZ } from '@/registry/components/airiot/gis-xyz-tile'
 
 function AmapLayer() {
   return (
@@ -231,8 +231,8 @@ function GCJ02Map() {
 叠加多个 XYZ 瓦片图层，实现丰富的地图效果。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { XYZ } from '@/registry/components/gis-xyz-tile'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { XYZ } from '@/registry/components/airiot/gis-xyz-tile'
 
 function MultiLayerMap() {
   return (

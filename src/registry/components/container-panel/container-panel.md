@@ -54,7 +54,7 @@
 创建一个手风琴模式的面板，同时只能展开一个。
 
 ```tsx
-import { Panel } from '@/registry/components/container-panel'
+import { Panel } from '@/registry/components/airiot/container-panel'
 
 function Example() {
   return (
@@ -220,7 +220,7 @@ function Example() {
 创建一个常见问题解答页面。
 
 ```tsx
-import { Panel } from '@/registry/components/container-panel'
+import { Panel } from '@/registry/components/airiot/container-panel'
 
 function FAQPage() {
   const faqs = [
@@ -270,7 +270,7 @@ function FAQPage() {
 创建一个课程目录的折叠面板。
 
 ```tsx
-import { Panel } from '@/registry/components/container-panel'
+import { Panel } from '@/registry/components/airiot/container-panel'
 
 function CourseOutline() {
   const chapters = [
@@ -342,7 +342,7 @@ function CourseOutline() {
 创建一个分类的系统设置页面。
 
 ```tsx
-import { Panel } from '@/registry/components/container-panel'
+import { Panel } from '@/registry/components/airiot/container-panel'
 import { useState } from 'react'
 
 function SystemSettings() {

@@ -40,7 +40,7 @@ interface InputProps {
 使用默认配置选择时间，输出格式为 HH:mm:ss。
 
 ```tsx
-import { FormTime } from '@/registry/components/form-time'
+import { FormTime } from '@/registry/components/airiot/form-time'
 
 function Example() {
   const [time, setTime] = useState('')
@@ -183,7 +183,7 @@ function Example() {
 记录员工的上班和下班打卡时间。
 
 ```tsx
-import { FormTime } from '@/registry/components/form-time'
+import { FormTime } from '@/registry/components/airiot/form-time'
 
 function WorkTimeTracker() {
   const [startTime, setStartTime] = useState('')

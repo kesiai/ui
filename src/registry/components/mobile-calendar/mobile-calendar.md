@@ -32,7 +32,7 @@
 底部弹出日历选择器。
 
 ```tsx
-import { MobileCalendar } from '@/registry/components/mobile-calendar'
+import { MobileCalendar } from '@/registry/components/airiot/mobile-calendar'
 
 function Example() {
   return (
@@ -165,9 +165,9 @@ function Example() {
 创建一个酒店预订日期选择表单。
 
 ```tsx
-import { MobileCalendar } from '@/registry/components/mobile-calendar'
+import { MobileCalendar } from '@/registry/components/airiot/mobile-calendar'
 import { useState } from 'react'
-import { Button } from '@/registry/components/button/button'
+import { Button } from '@/registry/components/airiot/button/button'
 
 function HotelBookingForm() {
   const [checkIn, setCheckIn] = useState('')
@@ -245,7 +245,7 @@ function HotelBookingForm() {
 选择活动的开始和结束日期范围。
 
 ```tsx
-import { MobileCalendar } from '@/registry/components/mobile-calendar'
+import { MobileCalendar } from '@/registry/components/airiot/mobile-calendar'
 
 function EventDateRange() {
   const [dateRange, setDateRange] = useState([])

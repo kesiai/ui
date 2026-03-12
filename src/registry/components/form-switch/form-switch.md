@@ -41,7 +41,7 @@
 ### 1. 基础开关
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 
 function BasicSwitch() {
   return <FormSwitch />
@@ -122,7 +122,7 @@ function SwitchWithLabel() {
 ### 通知设置
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 import { useState } from 'react'
 
 function NotificationSettings() {
@@ -174,7 +174,7 @@ function NotificationSettings() {
 ### 暗黑模式切换
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 import { useState } from 'react'
 
 function DarkModeToggle() {
@@ -206,7 +206,7 @@ function DarkModeToggle() {
 ### 功能开关
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 import { useState } from 'react'
 
 function FeatureToggles() {
@@ -278,7 +278,7 @@ function FeatureToggles() {
 ### 隐私设置
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 import { useState } from 'react'
 
 function PrivacySettings() {
@@ -350,7 +350,7 @@ function PrivacySettings() {
 ### 状态切换列表
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 import { useState } from 'react'
 
 interface ToggleItem {
@@ -400,7 +400,7 @@ function ToggleList() {
 ### 权限管理
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 import { useState } from 'react'
 
 function PermissionManagement() {
@@ -445,7 +445,7 @@ function PermissionManagement() {
 ### 自动保存示例
 
 ```tsx
-import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormSwitch } from '@/registry/components/airiot/form-switch/form-switch'
 import { useState, useEffect } from 'react'
 
 function AutoSaveExample() {

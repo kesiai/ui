@@ -37,7 +37,7 @@
 最简单的用法，创建一个内部表关联字段。
 
 ```tsx
-import { FormRelate } from '@/registry/components/form-relate'
+import { FormRelate } from '@/registry/components/airiot/form-relate'
 import { useState } from 'react'
 
 function Example() {
@@ -230,7 +230,7 @@ function Example() {
 创建一个产品分类选择器，支持单选和多选。
 
 ```tsx
-import { FormRelate } from '@/registry/components/form-relate'
+import { FormRelate } from '@/registry/components/airiot/form-relate'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'

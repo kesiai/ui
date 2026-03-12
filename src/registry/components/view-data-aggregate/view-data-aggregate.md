@@ -50,7 +50,7 @@ interface AggregateField {
 最简单的方式是定义字段和聚合类型，系统会自动计算统计数据。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 
 function Dashboard() {
   const fields = [
@@ -74,7 +74,7 @@ function Dashboard() {
 使用网格布局展示统计卡片，适合仪表板场景。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 
 function StatisticsGrid() {
   const fields = [
@@ -99,7 +99,7 @@ function StatisticsGrid() {
 使用列表布局展示统计数据，更适合详细查看。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 
 function StatisticsList() {
   const fields = [
@@ -123,7 +123,7 @@ function StatisticsList() {
 使用紧凑布局以 Badge 形式展示，适合空间有限的场景。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 
 function CompactStats() {
   const fields = [
@@ -147,7 +147,7 @@ function CompactStats() {
 按字段进行分组统计，对比不同组别的数据。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 
 function GroupStatistics() {
   const fields = [
@@ -171,7 +171,7 @@ function GroupStatistics() {
 设置定时自动刷新统计数据。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 
 function RealtimeStats() {
   const fields = [
@@ -195,7 +195,7 @@ function RealtimeStats() {
 为统计卡片添加点击事件，实现数据联动。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 
 function InteractiveStats() {
   const fields = [
@@ -226,7 +226,7 @@ function InteractiveStats() {
 完整的设备监控仪表板，展示各种设备数据的统计信息。
 
 ```tsx
-import { ViewDataAggregate, AggregateField } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate, AggregateField } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useModelList } from '@airiot/client'
 
@@ -310,7 +310,7 @@ function DeviceMonitorDashboard() {
 销售数据分析仪表板，包含分组统计和多种聚合类型。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useState } from 'react'
 
@@ -376,7 +376,7 @@ function SalesAnalytics() {
 生产数据实时统计系统，包含自动刷新和列表布局。
 
 ```tsx
-import { ViewDataAggregate } from '@/registry/components/view-data-aggregate/view-data-aggregate'
+import { ViewDataAggregate } from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'

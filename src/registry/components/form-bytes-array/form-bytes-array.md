@@ -59,7 +59,7 @@ field={{
 最简单的用法，提供一个基础的文本输入框。
 
 ```tsx
-import { FormBytesArray } from '@/registry/components/form-bytes-array/form-bytes-array'
+import { FormBytesArray } from '@/registry/components/airiot/form-bytes-array/form-bytes-array'
 import { useState } from 'react'
 
 function Example() {
@@ -237,7 +237,7 @@ function Example() {
 创建一个完整的字节数据录入场景，包含多个配置选项和状态管理。
 
 ```tsx
-import { FormBytesArray } from '@/registry/components/form-bytes-array/form-bytes-array'
+import { FormBytesArray } from '@/registry/components/airiot/form-bytes-array/form-bytes-array'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
@@ -356,7 +356,7 @@ function BytesArrayForm() {
 支持动态切换配置的字节数组编辑器。
 
 ```tsx
-import { FormBytesArray } from '@/registry/components/form-bytes-array/form-bytes-array'
+import { FormBytesArray } from '@/registry/components/airiot/form-bytes-array/form-bytes-array'
 import { useState } from 'react'
 import { Switch } from '@/components/ui/switch'
 

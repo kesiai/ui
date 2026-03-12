@@ -50,7 +50,7 @@
 ### 1. 基础多选框
 
 ```tsx
-import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
+import { FormCheckbox } from '@/registry/components/airiot/form-checkbox/form-checkbox'
 
 function BasicCheckbox() {
   const options = [
@@ -182,7 +182,7 @@ function DisabledCheckbox() {
 ### 兴趣爱好选择
 
 ```tsx
-import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
+import { FormCheckbox } from '@/registry/components/airiot/form-checkbox/form-checkbox'
 import { useState } from 'react'
 
 function HobbiesSelector() {
@@ -217,7 +217,7 @@ function HobbiesSelector() {
 ### 权限配置
 
 ```tsx
-import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
+import { FormCheckbox } from '@/registry/components/airiot/form-checkbox/form-checkbox'
 
 function PermissionConfig() {
   const permissions = [
@@ -255,7 +255,7 @@ function PermissionConfig() {
 ### 批量操作
 
 ```tsx
-import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
+import { FormCheckbox } from '@/registry/components/airiot/form-checkbox/form-checkbox'
 import { useState } from 'react'
 
 function BatchOperation() {
@@ -301,7 +301,7 @@ function BatchOperation() {
 ### 协议确认
 
 ```tsx
-import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
+import { FormCheckbox } from '@/registry/components/airiot/form-checkbox/form-checkbox'
 import { useState } from 'react'
 
 function AgreementForm() {
@@ -337,7 +337,7 @@ function AgreementForm() {
 ### 标签过滤器
 
 ```tsx
-import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
+import { FormCheckbox } from '@/registry/components/airiot/form-checkbox/form-checkbox'
 import { useState } from 'react'
 
 function TagFilter() {
@@ -378,7 +378,7 @@ function TagFilter() {
 ### 动态选项
 
 ```tsx
-import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
+import { FormCheckbox } from '@/registry/components/airiot/form-checkbox/form-checkbox'
 import { useState } from 'react'
 
 function DynamicCheckbox() {

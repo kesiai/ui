@@ -92,7 +92,7 @@ interface ExtentOption {
 创建一个基本的地图容器，使用默认配置。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
 
 function BasicMap() {
   return (
@@ -214,7 +214,7 @@ function ResponsiveMap() {
 创建一个以北京市为中心的地图应用，配置合理的缩放范围和控件。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
 
 function BeijingMap() {
   return (
@@ -258,8 +258,8 @@ function BeijingMap() {
 在地图容器中添加子图层组件。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { XYZ } from '@/registry/components/gis-xyz-tile'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { XYZ } from '@/registry/components/airiot/gis-xyz-tile'
 
 function MapWithLayers() {
   return (

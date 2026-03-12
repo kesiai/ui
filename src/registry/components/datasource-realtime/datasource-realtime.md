@@ -141,7 +141,7 @@
 ### 1. 查询单个标签的实时数据
 
 ```tsx
-import { DatasourceRealtime } from '@/registry/components/datasource-realtime'
+import { DatasourceRealtime } from '@/registry/components/airiot/datasource-realtime'
 
 function SingleRealtimeTag() {
   return (
@@ -303,7 +303,7 @@ function ManualRefreshRealtime() {
 ### 7. 子组件获取数据
 
 ```tsx
-import { useContextProvider } from '@/registry/components/container-context-provider'
+import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
 
 function RealtimeDisplay() {
   const { data, loading } = useContextProvider()[0]
@@ -330,8 +330,8 @@ function RealtimeDisplay() {
 ### 实时监控仪表板
 
 ```tsx
-import { DatasourceRealtime } from '@/registry/components/datasource-realtime'
-import { useContextProvider } from '@/registry/components/container-context-provider'
+import { DatasourceRealtime } from '@/registry/components/airiot/datasource-realtime'
+import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
 
 function RealtimeMonitorDashboard() {
   return (

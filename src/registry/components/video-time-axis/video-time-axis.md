@@ -58,7 +58,7 @@ interface VideoRecord {
 使用默认配置创建一个简单的时间轴。
 
 ```tsx
-import { TimeAxisWidget } from '@/registry/components/video-time-axis/time-axis'
+import { TimeAxisWidget } from '@/registry/components/airiot/video-time-axis/time-axis'
 import { useState } from 'react'
 
 function Example() {
@@ -234,8 +234,8 @@ function Example() {
 创建一个完整的录像查询界面，时间轴与视频播放器联动。
 
 ```tsx
-import { TimeAxisWidget } from '@/registry/components/video-time-axis/time-axis'
-import { VideoWidget } from '@/registry/components/video-widget/video-widget'
+import { TimeAxisWidget } from '@/registry/components/airiot/video-time-axis/time-axis'
+import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget'
 import { useState, useEffect } from 'react'
 
 function VideoQuerySystem() {

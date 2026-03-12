@@ -35,9 +35,9 @@
 使用触发器模式，通过按钮打开详情弹窗。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Button } from '@/components/ui/button'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function BasicDetail() {
   return (
@@ -58,10 +58,10 @@ function BasicDetail() {
 通过状态控制弹窗的打开和关闭。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function ControlledDetail() {
   const [isOpen, setIsOpen] = useState(false)
@@ -93,9 +93,9 @@ function ControlledDetail() {
 根据内容量选择合适的弹窗尺寸。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Button } from '@/components/ui/button'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function SizeDetail() {
   return (
@@ -137,10 +137,10 @@ function SizeDetail() {
 在数据表格的操作列中添加详情查看功能。
 
 ```tsx
-import { ViewDataTable, TableColumn } from '@/registry/components/view-data-table/view-data-table'
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Button } from '@/components/ui/button'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function TableWithDetail() {
   return (
@@ -180,9 +180,9 @@ function TableWithDetail() {
 可以使用任何 React 元素作为触发器。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Eye, MoreVertical } from 'lucide-react'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function CustomTriggerDetail() {
   return (
@@ -239,11 +239,11 @@ function CustomTriggerDetail() {
 创建一个完整的任务详情页面，包含所有任务相关字段的展示。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 import { useState } from 'react'
 
 function TaskDetailExample() {
@@ -300,11 +300,11 @@ function TaskDetailExample() {
 在用户管理页面中展示用户的完整信息。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function UserProfileDetail() {
   return (
@@ -326,11 +326,11 @@ function UserProfileDetail() {
 展示订单的完整信息，包括商品列表、价格、配送信息等。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function OrderDetail() {
   return (
@@ -352,10 +352,10 @@ function OrderDetail() {
 在列表中为每一项提供详情查看功能。
 
 ```tsx
-import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { ViewDetail } from '@/registry/components/airiot/view-detail/view-detail'
 import { Button } from '@/components/ui/button'
 import { Eye } from 'lucide-react'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function MultipleItemsDetail() {
   const items = [

@@ -47,8 +47,8 @@ interface LayerBase {
 加载 GeoServer 发布的 WMS 图层。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { GeoserverWms } from '@/registry/components/gis-geoserver-wms'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { GeoserverWms } from '@/registry/components/airiot/gis-geoserver-wms'
 
 function BasicWMSLayer() {
   return (
@@ -232,8 +232,8 @@ function DynamicWMSLayer() {
 创建一个完整的 WMS 图层应用，包含透明度控制和图层切换。
 
 ```tsx
-import { MapContainer } from '@/registry/components/gis-map-core'
-import { GeoserverWms } from '@/registry/components/gis-geoserver-wms'
+import { MapContainer } from '@/registry/components/airiot/gis-map-core'
+import { GeoserverWms } from '@/registry/components/airiot/gis-geoserver-wms'
 
 function WMSApplication() {
   const [opacity, setOpacity] = React.useState(1)

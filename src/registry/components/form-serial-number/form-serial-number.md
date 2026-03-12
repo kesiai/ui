@@ -70,7 +70,7 @@ const serialRules = [
 最简单的用法，显示一个自动生成的序列号。
 
 ```tsx
-import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
+import { FormSerialNumber } from '@/registry/components/airiot/form-serial-number/form-serial-number'
 
 function Example() {
   const [serialNumber, setSerialNumber] = useState('SN-20240210-0001')
@@ -261,7 +261,7 @@ function Example() {
 创建一个完整的订单管理系统，自动生成订单序列号。
 
 ```tsx
-import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
+import { FormSerialNumber } from '@/registry/components/airiot/form-serial-number/form-serial-number'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -399,7 +399,7 @@ function OrderForm() {
 创建一个产品批次管理界面，自动生成批次序列号。
 
 ```tsx
-import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
+import { FormSerialNumber } from '@/registry/components/airiot/form-serial-number/form-serial-number'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'

@@ -44,7 +44,7 @@
 ### 1. 基础滑块
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 
 function BasicSlider() {
   return <FormSlider />
@@ -196,7 +196,7 @@ function DotsSlider() {
 ### 音量控制
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function VolumeControl() {
@@ -227,7 +227,7 @@ function VolumeControl() {
 ### 价格范围选择
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function PriceRange() {
@@ -266,7 +266,7 @@ function PriceRange() {
 ### 亮度调节
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function BrightnessControl() {
@@ -294,7 +294,7 @@ function BrightnessControl() {
 ### 进度控制
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function ProgressControl() {
@@ -344,7 +344,7 @@ function ProgressControl() {
 ### 年龄范围筛选
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function AgeRangeFilter() {
@@ -382,7 +382,7 @@ function AgeRangeFilter() {
 ### 温度调节
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function TemperatureControl() {
@@ -428,7 +428,7 @@ function TemperatureControl() {
 ### 多个滑块
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function MultipleSliders() {
@@ -482,7 +482,7 @@ function MultipleSliders() {
 ### 垂直滑块组
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function VerticalSliders() {
@@ -515,7 +515,7 @@ function VerticalSliders() {
 ### 实时预览
 
 ```tsx
-import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormSlider } from '@/registry/components/airiot/form-slider/form-slider'
 import { useState } from 'react'
 
 function SliderWithPreview() {

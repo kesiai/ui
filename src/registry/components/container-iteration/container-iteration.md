@@ -35,7 +35,7 @@ interface IterationContextValue {
 最简单的使用方式，遍历数组并渲染列表：
 
 ```tsx
-import { Iteration } from '@/registry/components/container-iteration/iteration'
+import { Iteration } from '@/registry/components/airiot/container-iteration/iteration'
 import { useContext } from 'react'
 import { IterationContext } from '@airiot/client'
 
@@ -120,7 +120,7 @@ function UserList() {
 ### 用户卡片列表
 
 ```tsx
-import { Iteration } from '@/registry/components/container-iteration/iteration'
+import { Iteration } from '@/registry/components/airiot/container-iteration/iteration'
 import { useContext } from 'react'
 import { IterationContext } from '@airiot/client'
 
@@ -177,7 +177,7 @@ function UserList() {
 ### 任务列表
 
 ```tsx
-import { Iteration } from '@/registry/components/container-iteration/iteration'
+import { Iteration } from '@/registry/components/airiot/container-iteration/iteration'
 import { useContext } from 'react'
 import { IterationContext } from '@airiot/client'
 
@@ -258,7 +258,7 @@ function TaskList() {
 ### 产品网格
 
 ```tsx
-import { Iteration } from '@/registry/components/container-iteration/iteration'
+import { Iteration } from '@/registry/components/airiot/container-iteration/iteration'
 import { useContext } from 'react'
 import { IterationContext } from '@airiot/client'
 
@@ -314,7 +314,7 @@ function ProductGrid() {
 ### 数据表格
 
 ```tsx
-import { Iteration } from '@/registry/components/container-iteration/iteration'
+import { Iteration } from '@/registry/components/airiot/container-iteration/iteration'
 import { useContext } from 'react'
 import { IterationContext } from '@airiot/client'
 
@@ -391,7 +391,7 @@ function EmployeeTable() {
 ### 统计卡片
 
 ```tsx
-import { Iteration } from '@/registry/components/container-iteration/iteration'
+import { Iteration } from '@/registry/components/airiot/container-iteration/iteration'
 import { useContext } from 'react'
 import { IterationContext } from '@airiot/client'
 

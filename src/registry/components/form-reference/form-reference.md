@@ -42,7 +42,7 @@
 显示计算记录的查找引用结果。
 
 ```tsx
-import { FormReference } from '@/registry/components/form-reference'
+import { FormReference } from '@/registry/components/airiot/form-reference'
 
 function Example() {
   const tableData = {
@@ -146,7 +146,7 @@ function Example() {
 根据订单数据自动计算并显示总金额。
 
 ```tsx
-import { FormReference } from '@/registry/components/form-reference'
+import { FormReference } from '@/registry/components/airiot/form-reference'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'

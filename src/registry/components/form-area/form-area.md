@@ -68,7 +68,7 @@
 默认模式，完整的省、市、区三级选择。
 
 ```tsx
-import Area from '@/registry/components/form-area/form-area'
+import Area from '@/registry/components/airiot/form-area/form-area'
 import { useState } from 'react'
 
 function Example() {
@@ -199,7 +199,7 @@ function Example() {
 用户收货地址的省市区选择。
 
 ```tsx
-import Area from '@/registry/components/form-area/form-area'
+import Area from '@/registry/components/airiot/form-area/form-area'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'

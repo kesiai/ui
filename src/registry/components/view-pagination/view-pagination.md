@@ -28,8 +28,8 @@
 最简单的分页组件，只有上一页、下一页和页码。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function BasicPagination() {
   return (
@@ -45,8 +45,8 @@ function BasicPagination() {
 显示当前数据集的总记录数。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function PaginationWithTotal() {
   return (
@@ -62,8 +62,8 @@ function PaginationWithTotal() {
 允许用户切换每页显示的数据条数。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function PaginationWithSizeChanger() {
   return (
@@ -82,8 +82,8 @@ function PaginationWithSizeChanger() {
 提供输入框，让用户可以直接跳转到指定页码。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function PaginationWithJumper() {
   return (
@@ -99,8 +99,8 @@ function PaginationWithJumper() {
 启用所有功能的完整分页组件。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function FullPagination() {
   return (
@@ -121,8 +121,8 @@ function FullPagination() {
 在某些场景下禁用分页组件。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function DisabledPagination() {
   return (
@@ -138,9 +138,9 @@ function DisabledPagination() {
 将分页组件与数据表格配合使用。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewDataTable } from '@/registry/components/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function TableWithPagination() {
   return (
@@ -166,8 +166,8 @@ function TableWithPagination() {
 自定义每页条数选择器的选项。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function CustomPageSizeOptions() {
   return (
@@ -188,9 +188,9 @@ function CustomPageSizeOptions() {
 创建一个完整的任务列表页面，包含表格和分页。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewDataTable, TableColumn } from '@/registry/components/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 import { Card } from '@/components/ui/card'
 
 function TaskListWithPagination() {
@@ -236,9 +236,9 @@ function TaskListWithPagination() {
 创建一个用户管理页面，展示分页的各种功能。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewDataTable, TableColumn } from '@/registry/components/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 import { Button } from '@/components/ui/button'
 
 function UserManagementWithPagination() {
@@ -281,9 +281,9 @@ function UserManagementWithPagination() {
 创建一个简洁的分页组件，只显示必要的功能。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewDataTable } from '@/registry/components/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function MinimalPagination() {
   return (
@@ -309,9 +309,9 @@ function MinimalPagination() {
 为移动端优化的分页组件布局。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewDataTable } from '@/registry/components/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 
 function MobilePagination() {
   return (
@@ -350,9 +350,9 @@ function MobilePagination() {
 在分页组件上方显示额外的统计信息。
 
 ```tsx
-import { ViewPagination } from '@/registry/components/view-pagination/view-pagination'
-import { ViewDataTable } from '@/registry/components/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/view-model/view-model'
+import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination'
+import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
 import { useModelPagination, useModelPageSize, useModelCount } from '@airiot/client'
 
 function PaginationWithStats() {

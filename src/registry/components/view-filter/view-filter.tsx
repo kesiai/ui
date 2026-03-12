@@ -1,6 +1,6 @@
 import React from 'react'
 import { useModel, useSetModelState, useModelGetItems } from '@airiot/client'
-import FilterSchemaForm from '@/registry/components/filter-form/filter-form'
+import FilterSchemaForm from '@/components/airiot/filter-form/filter-form'
 import _ from 'lodash'
 
 interface ViewFilterProps {
@@ -43,19 +43,20 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   return (
     <FilterSchemaForm formId={model.name || ''} schema={{ ...model, properties }} formSchema={formSchema} classNames={classNames} onSubmit={onSubmit} >
       {(methods) => (
-        <div className="mt-6 pt-4 border-t border-slate-200 flex gap-2">
+        <div className="mt-4 flex justify-center gap-3">
+          <button
+            type="submit"
+            className="px-8 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1.5"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            搜索
+          </button>
           <button
             type="button"
             onClick={() => onReset(methods.reset)}
-            className="flex-1 bg-white border border-slate-300 text-slate-700 py-2 px-4 rounded-md hover:bg-slate-50 transition-colors"
+            className="px-8 py-2 text-sm border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
           >
             重置
-          </button>
-          <button
-            type="submit"
-            className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
-          >
-            搜索
           </button>
         </div>
       )}

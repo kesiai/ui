@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, Trash2, Edit } from 'lucide-react'
-import SchemaForm from '@/registry/components/schema-form/schema-form'
+import SchemaForm from '@/components/airiot/schema-form/schema-form'
 
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
@@ -59,7 +59,7 @@ const BatchDeleteContent: React.FC<BatchDeleteContentProps> = ({
       </DialogHeader>
 
       <div className="space-y-4 py-4">
-        <div className="text-sm text-slate-600">
+        <div className="text-sm text-slate-600 dark:text-slate-300">
           确定要删除选中的 <Badge variant="destructive">{selected.length}</Badge> 项数据吗？此操作不可撤销。
         </div>
 
@@ -67,8 +67,8 @@ const BatchDeleteContent: React.FC<BatchDeleteContentProps> = ({
           <ScrollArea className="max-h-[60vh] border rounded-lg">
             <div className="p-4 space-y-2 pr-4">
               {selected.map((item) => (
-                <div key={item.id} className="flex items-center gap-2 p-2 hover:bg-slate-50 rounded">
-                  <div className="flex-1">
+                <div key={item.id} className="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded">
+                  <div className="flex-1 text-sm text-slate-800 dark:text-slate-200">
                     {model.displayField && item[model.displayField] || item._label || item.name || item.id}
                   </div>
                 </div>
@@ -135,7 +135,7 @@ const BatchChangeContent: React.FC<BatchChangeContentProps> = ({
       </DialogHeader>
 
       <div className="space-y-4 py-4">
-        <div className="text-sm text-slate-600">
+        <div className="text-sm text-slate-600 dark:text-slate-300">
           已选择 <Badge variant="secondary">{selected.length}</Badge> 项数据，请输入要修改的字段值。
         </div>
 

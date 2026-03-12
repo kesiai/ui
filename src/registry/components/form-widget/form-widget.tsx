@@ -119,7 +119,7 @@ const FieldComponentSelector: React.FC<{
   // 关联字段（新版）- 使用 recordSelectType
   if ((config.relateTo || config.relate) && config.recordSelectType) {
     const tableID = config.relate?.id || config.relateTo
-    return <FormRelatePlus relateSchema={config} tableID={tableID} value={input.value} onChange={input.onChange} meta={meta} schema={schema} />
+    return <FormRelatePlus relateSchema={config} tableID={tableID} value={input.value} onChange={input.onChange} meta={meta} schema={schema} field={schema} />
   }
 
   // 外部工作表关联 - 使用 relate?.id

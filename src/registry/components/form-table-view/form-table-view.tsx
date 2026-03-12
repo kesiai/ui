@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FieldComponentSelector } from '@/registry/components/form-widget/form-widget'
+import { TC2Provider } from '@/registry/lib/table-context'
 
 export interface FormTableViewColumn {
   key: string
@@ -135,14 +136,14 @@ const EditCell: React.FC<{
     onSave(updatedRecord)
   }
 
-  return (
+  return <TC2Provider editingSchema={record}>
     <FieldComponentSelector
       schema={disabled ? { ...schema, disabled: true } : schema}
       input={{ value, onChange: handleChange }}
       meta={{}}
       record={record}
     />
-  )
+  </TC2Provider>
 }
 
 export { FormTableView }

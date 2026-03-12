@@ -14,6 +14,8 @@ import { Crosshair, Loader2 } from 'lucide-react'
 import { createAPI, useFormContext } from '@airiot/client'
 import { dealFilter } from '@/registry/lib/form-relate-utils'
 import type { RelateFieldOption } from '@/registry/lib/form-relate-types'
+import { getQueryFilter } from '@/registry/lib/filter-utils'
+import { Table2Context } from '@/registry/lib/table-context'
 
 interface AsyncSelectProps {
   input?: {
@@ -91,6 +93,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   const currentPageRef = React.useRef(0)
 
   const form = useFormContext()
+  const outTable = React.useContext(Table2Context)
 
   const getFormState = () => {
     if (form) {
@@ -117,7 +120,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
           : { [displayField]: { $like: inputValue } }
       }
 
-      dealFilter(filterObj, field, getFormState)
+      dealFilter(filterObj, field, getFormState, outTable)
 
       setLoading(true)
       try {
@@ -132,9 +135,9 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
           {
             limit: 50,
             skip: pageNum * 50,
-            fields: ['id', displayField].filter(Boolean),
-            ...(inputValue && { search: filterObj })
-          }
+            fields: ['id', displayField].filter(Boolean)
+          },
+          filterObj
         )
 
         const newOptions = items.map((item: any) => ({

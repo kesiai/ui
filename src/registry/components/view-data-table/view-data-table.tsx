@@ -228,8 +228,8 @@ export function ViewDataTable({
   useEffect(() => {
     setSorting(Object.keys(order || {}).map(key => ({
       id: key,
-      desc: order ? order[key] === 'desc' : false,
-      asc: order ? order[key] === 'asc' : false
+      desc: order ? order[key]?.toLowerCase() === 'desc' : false,
+      asc: order ? order[key]?.toLowerCase() === 'asc' : false
     })));
   }, [order]);
 

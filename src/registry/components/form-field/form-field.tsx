@@ -142,11 +142,72 @@ const FormField =
   const formClassNames = methods?.classNames
   const fieldProps = { label, description, required, ...restProps }
   
+  // 为 editable-table 类型创建自定义验证函数
+  // 将表格内部字段的 need 属性转换为外层的验证规则
+  const editableTableValidate = React.useMemo(() => {
+    const forms = fieldProps?.forms
+    const hasEditableTableForms = forms?.form && forms?.properties
+
+    // 检查是否为 editable-table 类型（通过 type 或 forms 属性判断）
+    const isEditableTable = type === 'editable-table' || hasEditableTableForms
+
+    if (!isEditableTable) {
+      return undefined
+    }
+
+    if (!hasEditableTableForms) {
+      return undefined
+    }
+
+    // 找出所有必填字段 (need: true)
+    const requiredFields: Array<{ key: string; title: string }> = []
+    forms.form.forEach((key: string) => {
+      const fieldSchema = forms.properties[key]
+      if (fieldSchema?.need === true) {
+        requiredFields.push({
+          key: fieldSchema.key || key,
+          title: fieldSchema.title || key
+        })
+      }
+    })
+
+    // 如果没有必填字段，不需要特殊验证
+    if (requiredFields.length === 0) {
+      return undefined
+    }
+
+    // 返回验证函数
+    const validateFn = (value: any) => {
+      // 空数组验证
+      if (!Array.isArray(value) || value.length === 0) {
+        return `请至少添加一条数据`
+      }
+
+      // 检查每一行的必填字段
+      for (let i = 0; i < value.length; i++) {
+        const row = value[i]
+        for (const field of requiredFields) {
+          const fieldValue = row?.[field.key]
+          // 检查值是否为空 (null, undefined, 或空字符串)
+          if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
+            return `第 ${i + 1} 行的「${field.title}」不能为空`
+          }
+        }
+      }
+
+      return undefined // 验证通过
+    }
+
+    return validateFn
+  }, [type, fieldProps?.forms])
+
+  const controllerRules = { required, ...rules, validate: editableTableValidate }
+
   return ui.visible ? (
     <Controller
         name={name}
         control={methods?.control}
-        rules={{ required, ...rules }}
+        rules={controllerRules}
         render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} 
           className={cn(className, formClassNames?.field, classNames?.field)}>

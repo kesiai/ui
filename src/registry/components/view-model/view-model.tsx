@@ -50,7 +50,13 @@ const TableView = ({ tableId, modelName, children, initQuery, loadingComponent,
       values['wheres'] = { tableFilters }
     }
     if (fieldOrder && fieldOrder.length > 0) {
-      values['order'] = fieldOrder
+      const orderObj: Record<string, 'ASC' | 'DESC'> = {}
+      fieldOrder.forEach(obj => {
+        Object.entries(obj).forEach(([key, val]) => {
+          orderObj[key] = val.toUpperCase() as 'ASC' | 'DESC'
+        })
+      })
+      values['order'] = orderObj
     }
     setInitialValues(values)
   }, [queryFields, projectAll, limit, tableFilters, fieldOrder, interval])

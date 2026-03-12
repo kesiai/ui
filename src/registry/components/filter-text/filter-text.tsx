@@ -85,7 +85,7 @@ const TextFilter = (props: any) => {
         value={value}
         onChange={(e) => onValueChange(e.target.value)}
         onKeyDown={onKeyPress}
-        placeholder={'Search ' + label}
+        placeholder={label}
         className="pr-8"
       />
       <div className="absolute right-2 top-1/2 -translate-y-1/2">

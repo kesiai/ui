@@ -1,41 +1,17 @@
+import {
+  useEvents,
+  useEvent,
+  useEventsWithSpread,
+} from '@/registry/lib/events/useEvents'
+
 export {
   useEvents,
   useEvent,
   useEventsWithSpread,
-} from '../../lib/events/useEvents'
-
+}
 // ============== 导出类型 ==============
 
-export type {
-  EventType,
-  ActionType,
-  ValueType,
-  OpenWay,
-  PermissionType,
-  PageJumpParams,
-  ChangeVarParams,
-  ChangeTableDataParams,
-  ChangeDictParams,
-  DataPointProperty,
-  ChangeDataPointParams,
-  FieldValuePair,
-  ChangeSystemSettingParams,
-  ChangeUserParams,
-  CallFlowParams,
-  Action,
-  EventConfig,
-  EventContext,
-  EventFunctions,
-  ActionResult,
-  ActionHandler,
-  EventHandlerReturn,
-  EventsReturn,
-  ResultMessage,
-} from '@/registry/lib/events/events.types'
-
-// ============== 导出动作处理器相关 ==============
-
-export {
+import {
   pageJumpHandler,
   changeVarHandler,
   changeTableDataHandler,
@@ -50,9 +26,23 @@ export {
   getActionHandler,
 } from '@/registry/lib/events/action-handlers'
 
+export {
+  pageJumpHandler,
+  changeVarHandler,
+  changeTableDataHandler,
+  changeDictHandler,
+  changeDataPointHandler,
+  changeSystemSettingHandler,
+  changeUserHandler,
+  callFlowHandler,
+  executeCommandHandler,
+  sendRequestHandler,
+  actionHandlers,
+  getActionHandler,
+}
 // ============== 导出对话框相关 ==============
 
-export {
+import {
   showConfirmDialog,
   showFormDialog,
   closeConfirmDialog,
@@ -60,11 +50,16 @@ export {
   useGlobalDialogs,
 } from '@/registry/lib/events/dialog-atom'
 
-export type { ConfirmDialogConfig, FormDialogConfig, FormField } from '@/registry/lib/events/action-handlers'
-
+export {
+  showConfirmDialog,
+  showFormDialog,
+  closeConfirmDialog,
+  closeFormDialog,
+  useGlobalDialogs,
+}
 // ============== 导出事件执行相关 ==============
 
-export {
+import {
   eventTypeToReactEvent,
   reactEventToEventType,
   executeAction,
@@ -73,19 +68,20 @@ export {
   parseEventConfig,
 } from '@/registry/lib/events/event-execution'
 
-// ============== 导出对话框组件 ==============
-
-import {
-  ConfirmDialog,
-  useConfirmDialog,
-} from './ConfirmDialog'
 export {
-  ConfirmDialog,
-  useConfirmDialog,
+  eventTypeToReactEvent,
+  reactEventToEventType,
+  executeAction,
+  executeActions,
+  createEventHandler,
+  parseEventConfig,
 }
-export type { ConfirmDialogProps } from './ConfirmDialog'
 
-// ============== GlobalDialogs - 全局对话框组件 ==============
+import { ConfirmDialog, useConfirmDialog } from './ConfirmDialog'
+export { ConfirmDialog, useConfirmDialog }
+
+import { SchemaFormDialog } from "./SchemaFormDialog";
+export { SchemaFormDialog }
 
 import { GlobalDialogs } from './DialogComponents'
 export { GlobalDialogs }

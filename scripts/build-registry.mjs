@@ -159,9 +159,8 @@ function extractRegistryDepsFromContent(content) {
   // 处理 lib 依赖（来自 @/registry/lib/xxx，内联到 files 中）
   while ((match = libImportRegex.exec(content))) {
     const libPath = match[1];
-    // 将路径转换为 lib 文件名：例如 datasource-utils -> lib-datasource-utils
-    const libName = 'lib-' + libPath.replace(/\//g, '-');
-    libDeps.add(libName);
+    // 直接使用 lib 路径，不添加 lib- 前缀
+    libDeps.add(libPath);
   }
 
   // 返回包含三个数组（registry 依赖、标准依赖、lib 依赖）
@@ -307,20 +306,19 @@ async function buildRegistry() {
 
         // 添加 lib 依赖文件
         for (const libDep of libDeps) {
-          const libFileName = libDep.replace(/^lib-/, '');
           // 尝试 .ts 和 .tsx 扩展名
-          const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libFileName + '.ts');
-          const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libFileName + '.tsx');
+          const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libDep + '.ts');
+          const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libDep + '.tsx');
           const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
 
           if (!libAbsPath) {
-            console.warn(`  ⚠️  无法找到 lib 文件: ${libFileName}`);
+            console.warn(`  ⚠️  无法找到 lib 文件: ${libDep}`);
             continue;
           }
 
           // 确定输出路径和类型
           const ext = path.extname(libAbsPath);
-          const libPath = `registry/lib/${libFileName}${ext}`;
+          const libPath = `registry/lib/${libDep}${ext}`;
 
           try {
             const libContent = await fs.readFile(libAbsPath, 'utf-8');
@@ -329,6 +327,7 @@ async function buildRegistry() {
               type: 'registry:lib',
               content: libContent,
             });
+            console.log(`    📄 添加 lib 文件: ${libPath}`);
           } catch (err) {
             console.warn(`  ⚠️  无法读取 lib 文件: ${libAbsPath}`);
           }

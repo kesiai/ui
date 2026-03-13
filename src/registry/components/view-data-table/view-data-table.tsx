@@ -357,7 +357,7 @@ export const TableColumn: React.FC<TableColumnProps> = ({
       id: name,
       accessorKey: name,
       header: header ? header as any : (({ column }) => <DataGridColumnHeader title={title || name} column={column as any} />),
-      cell: cell ? cell as any : DataCell({ name, type, children }),
+      cell: cell ? cell as any : DataCell({ name, type, children, ...columnProps }),
       size: width as number | undefined,
       ...columnProps
     };

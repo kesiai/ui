@@ -6,11 +6,9 @@ import type { FormTableViewColumn } from '@/registry/components/form-table-view/
 import FormEditableCard from '@/registry/components/form-editable-card/form-editable-card'
 
 export interface FormEditableTableProps {
-  input?: {
-    value?: any[]
-    onChange?: (value: any[] | null) => void
-    name?: string
-  }
+  onChange?: (value: any[] | null) => void
+  name?: string
+  value?: any[]
   schema?: {
     key?: string
     disabled?: boolean
@@ -73,18 +71,11 @@ export interface FormEditableTableProps {
 }
 
 const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
-  const { input, meta } = props
+  const { meta } = props
   const schema = { ...props, ...(props.schema || {}) }
-  const { onChange, value = [] } = input || {}
+  const { onChange, value = [] } = props || {}
   const [dataSource, setDataSource] = React.useState<any[]>(value || schema?.defaultVal || [])
   const [selectedRows, setSelectedRows] = React.useState<any[]>([])
-
-  // 同步外部 value 变化
-  React.useEffect(() => {
-    if (input?.value !== undefined) {
-      setDataSource(input.value || [])
-    }
-  }, [input?.value])
 
   // 批量删除
   const handleBatchDelete = () => {
@@ -150,7 +141,7 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
   const tableProps = {
     value: dataSource,
     onChange: handleChange,
-    name: input?.name,
+    name: props.name,
     schema,
     columns,
     selectedRows,

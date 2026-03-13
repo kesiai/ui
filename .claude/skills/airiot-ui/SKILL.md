@@ -1,11 +1,11 @@
 ---
 name: airiot-ui
-description: "根据业务需求选择合适的 Airiot UI 组件，并提供完整的组件使用指南"
+description: "Airiot UI 组件库助手 - 智能选择组件并自动生成安装命令。支持98+个组件，涵盖容器、表单、数据源、视图、GIS、视频、3D、移动端等10大分类，提供完整的组件文档和组合系统指南。自动检测使用的组件并生成对应的npm安装命令，一键安装所有依赖。"
 author: yuhaotian
 version: 2.0.0
 category: ui-components
-tags: ["react", "typescript", "ui-library", "components"]
-keywords: ["组件", "UI", "表单", "图表", "地图", "3D", "视频", "移动端"]
+tags: ["react", "typescript", "ui-library", "components", "auto-install", "code-generation"]
+keywords: ["组件", "UI", "表单", "图表", "地图", "3D", "视频", "移动端", "视图系统", "GIS系统", "组件安装", "代码生成"]
 ---
 
 # Airiot UI 组件库助手
@@ -27,6 +27,66 @@ keywords: ["组件", "UI", "表单", "图表", "地图", "3D", "视频", "移动
 - "需要实现一个地图展示功能"
 - "要做一个视频播放器"
 - "需要创建一个复杂的数据录入表单"
+
+## 📦 组件安装说明
+
+> **重要**: 本技能生成的代码中使用的组件需要先通过以下方式安装到你的项目中。
+
+### 安装方式
+
+所有组件都发布为 `@airiot/ComponentName` 格式的 npm 包，基于 shadcn/ui 构建。
+
+#### 单个组件安装
+
+```bash
+# 安装单个组件
+npx shadcn@latest add @airiot/ComponentName
+```
+
+#### 批量安装
+
+```bash
+# 一次性安装多个组件
+npx shadcn@latest add @airiot/Carousel @airiot/ContainerCard @airiot/ViewModel
+```
+
+### 安装示例
+
+当技能生成页面代码时，会在代码前显示需要安装的组件清单：
+
+```bash
+## 需要安装的组件
+
+- @airiot/Carousel
+- @airiot/ContainerCard
+- @airiot/ViewModel
+- @airiot/ViewDataTable
+```
+
+你只需复制这些安装命令并执行即可。
+
+### 组件使用
+
+安装完成后，就可以在代码中使用：
+
+```tsx
+import { Carousel } from '@/components/airiot/container-carousel';
+import { ViewModel } from '@/components/airiot/view-model/view-model';
+
+function Example() {
+  return (
+    <Carousel>...</Carousel>
+    <ViewModel>...</ViewModel>
+  );
+}
+```
+
+### 注意事项
+
+1. **先安装再使用**: 所有组件必须先通过 `npx shadcn@latest add` 命令安装
+2. **路径配置**: 安装后组件会自动添加到正确的导入路径
+3. **shadcn/ui**: 确保你的项目已配置 shadcn/ui
+4. **组件文档**: 点击组件名链接可查看详细文档
 
 ## 📦 组件分类
 

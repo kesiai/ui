@@ -6,7 +6,7 @@ import { SchemaFormDialog } from './SchemaFormDialog'
 
 import {
   useGlobalDialogs,
-} from '@/registry/lib/events/dialog-atom'
+} from '@airiot/client'
 
 /**
  * 全局对话框组件

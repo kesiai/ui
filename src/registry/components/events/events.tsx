@@ -2,79 +2,12 @@ import {
   useEvents,
   useEvent,
   useEventsWithSpread,
-} from '@/registry/lib/events/useEvents'
+} from '@airiot/client'
 
 export {
   useEvents,
   useEvent,
   useEventsWithSpread,
-}
-// ============== 导出类型 ==============
-
-import {
-  pageJumpHandler,
-  changeVarHandler,
-  changeTableDataHandler,
-  changeDictHandler,
-  changeDataPointHandler,
-  changeSystemSettingHandler,
-  changeUserHandler,
-  callFlowHandler,
-  executeCommandHandler,
-  sendRequestHandler,
-  actionHandlers,
-  getActionHandler,
-} from '@/registry/lib/events/action-handlers'
-
-export {
-  pageJumpHandler,
-  changeVarHandler,
-  changeTableDataHandler,
-  changeDictHandler,
-  changeDataPointHandler,
-  changeSystemSettingHandler,
-  changeUserHandler,
-  callFlowHandler,
-  executeCommandHandler,
-  sendRequestHandler,
-  actionHandlers,
-  getActionHandler,
-}
-// ============== 导出对话框相关 ==============
-
-import {
-  showConfirmDialog,
-  showFormDialog,
-  closeConfirmDialog,
-  closeFormDialog,
-  useGlobalDialogs,
-} from '@/registry/lib/events/dialog-atom'
-
-export {
-  showConfirmDialog,
-  showFormDialog,
-  closeConfirmDialog,
-  closeFormDialog,
-  useGlobalDialogs,
-}
-// ============== 导出事件执行相关 ==============
-
-import {
-  eventTypeToReactEvent,
-  reactEventToEventType,
-  executeAction,
-  executeActions,
-  createEventHandler,
-  parseEventConfig,
-} from '@/registry/lib/events/event-execution'
-
-export {
-  eventTypeToReactEvent,
-  reactEventToEventType,
-  executeAction,
-  executeActions,
-  createEventHandler,
-  parseEventConfig,
 }
 
 import { ConfirmDialog, useConfirmDialog } from './ConfirmDialog'

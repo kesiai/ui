@@ -1,6 +1,6 @@
 import { ContextProvider, useContextProvider, type Table, type TableData } from '@/registry/components/container-context-provider/context-provider'
 import { ComponentConfig } from '@/app/config/types'
-import documentationMd from './container-context-provider.md?raw'
+import documentationMd from './context-provider.md?raw'
 
 // 示例子组件 - 使用context数据
 function ContextConsumer() {

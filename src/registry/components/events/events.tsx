@@ -1,39 +1,3 @@
-/**
- * 事件系统 - 统一导出
- *
- * 提供完整的事件和动作管理系统，包括：
- * - useEvents Hook: 用于组件事件绑定
- * - 事件和动作类型定义
- * - 动作处理器
- * - 对话框组件（确认对话框、表单对话框）
- * - GlobalDialogs: 监听 jotai atoms 的全局对话框组件
- *
- * @example 基本用法
- * ```tsx
- * import { useEvents } from '@/registry/components/events/events'
- *
- * function MyComponent() {
- *   const events = useEvents({
- *     click: [
- *       { type: 'changeVar', params: { var: { path: 'a' }, varValue: 'haha' } },
- *       { type: 'pageJump', params: { url: '/home' } }
- *     ],
- *     doubleClick: []
- *   })
- *
- *   return (
- *     <div {...events}>
- *       <p>hah</p>
- *       <Button onClick={events.click}>Click me</Button>
- *       <Card onDoubleClick={events.doubleClick}>Double click me</Card>
- *     </div>
- *   )
- * }
- * ```
- */
-
-// ============== 导出 Hooks ==============
-
 export {
   useEvents,
   useEvent,

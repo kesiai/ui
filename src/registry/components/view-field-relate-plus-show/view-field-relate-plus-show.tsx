@@ -9,8 +9,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { ChevronDown, ChevronUp, Table as TableIcon } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { ChevronDown, ChevronUp, Table as TableIcon, ExternalLink } from 'lucide-react'
 import { ViewFieldRender } from '@/registry/components/view-field/view-field'
+import { createAPI } from '@airiot/client'
 
 // ============================================
 // 工具函数
@@ -52,6 +54,195 @@ function parseJsonStrings(data: any): any {
   return processValue(clonedData)
 }
 
+// 解析 value（可能是 JSON 字符串）
+function parseValue(value: any): any {
+  let v = value
+  if (isString(value)) {
+    try {
+      v = JSON.parse(value)
+    } catch (e) {
+      // 解析失败，返回原值
+    }
+  }
+  return v
+}
+
+// ============================================
+// DetailShow 组件 - 点击查看关联数据详情
+// ============================================
+
+interface DetailShowProps {
+  children: React.ReactNode
+  schema: any
+  value: any
+  inList?: boolean
+}
+
+const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value, inList }) => {
+  const [dialogOpen, setDialogOpen] = React.useState(false)
+  const [popoverOpen, setPopoverOpen] = React.useState(false)
+  const [detailData, setDetailData] = React.useState<Array<{ title: string; value: any }>>([])
+  const [loading, setLoading] = React.useState(false)
+
+  const getDetailData = async () => {
+    if (!value?.id || !schema?.relate?.id) {
+      return
+    }
+
+    setLoading(true)
+    try {
+      // 先获取表结构
+      const api = createAPI({ resource: 'core/t/schema' })
+      const relateTable = await api.get(schema.relate.id)
+
+      if (!relateTable?.schema) {
+        console.error('该表已被删除')
+        setLoading(false)
+        return
+      }
+
+      // 再获取数据详情
+      const dataApi = createAPI({ resource: `core/t/${schema.relate.id}/d/` })
+      const data = await dataApi.get(value.id)
+
+      setLoading(false)
+      if (!data || Object.keys(data).length === 0) {
+        console.error('该条数据已被删除')
+        return
+      }
+
+      // 根据 recordDetail.showField 构建详情数据
+      const result: Array<{ title: string; value: any }> = []
+      const showFields = schema.recordDetail?.showField || Object.keys(relateTable.schema.properties || {}).slice(0, 10)
+
+      showFields.forEach((key: string) => {
+        const s = relateTable.schema.properties?.[key]
+        if (!s) return
+
+        let fieldValue: any
+        if (s.fieldType === 'attachment' || s.fieldType === 'attachments') {
+          fieldValue = <ViewFieldRender value={data?.[key]} schema={s} type="upload" inList={false} />
+        } else {
+          fieldValue = <ViewFieldRender value={data?.[key]} schema={s} type={s.fieldType} inList={false} />
+        }
+
+        result.push({
+          title: s?.title || key,
+          value: fieldValue
+        })
+      })
+
+      setDetailData(result)
+    } catch (e) {
+      console.error('获取数据失败', e)
+      setLoading(false)
+    }
+  }
+
+  const handleClick = () => {
+    if (!value?.id) return
+
+    const showType = schema.recordDetail?.showType
+
+    if (showType === 'page') {
+      // 跳转页面
+      const url = `/table/${schema?.relate?.id}/${value.id}/detail`
+      window.open(url, '_blank')
+    } else if (showType === 'popover') {
+      // 先获取数据，然后显示 popover
+      if (detailData.length === 0) {
+        getDetailData()
+      }
+      setPopoverOpen(!popoverOpen)
+    } else if (showType === 'modal') {
+      // 先获取数据，然后显示 dialog
+      if (detailData.length === 0) {
+        getDetailData()
+      }
+      setDialogOpen(!dialogOpen)
+    } else {
+      // 默认不处理
+    }
+  }
+
+  // 如果没有配置 recordDetail，直接显示子元素
+  if (!schema?.recordDetail?.showType) {
+    return <>{children}</>
+  }
+
+  const showType = schema.recordDetail?.showType
+
+  // Popover 模式
+  if (showType === 'popover') {
+    return (
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+        <PopoverTrigger asChild>
+          <span className="cursor-pointer hover:text-blue-600" onClick={handleClick}>
+            {children}
+          </span>
+        </PopoverTrigger>
+        <PopoverContent className="w-[500px] max-h-[400px] overflow-y-auto">
+          {loading ? (
+            <div className="flex justify-center py-4">加载中...</div>
+          ) : (
+            <div className="space-y-2">
+              {detailData.map((item, index) => (
+                <div key={index} className="flex">
+                  <span className="w-24 text-slate-600 shrink-0">{item.title}：</span>
+                  <span className="flex-1">{item.value}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </PopoverContent>
+      </Popover>
+    )
+  }
+
+  // Modal 模式
+  if (showType === 'modal') {
+    return (
+      <>
+        <span className="cursor-pointer hover:text-blue-600" onClick={handleClick}>
+          {children}
+        </span>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-auto">
+            <DialogHeader>
+              <DialogTitle>记录详情</DialogTitle>
+            </DialogHeader>
+            {loading ? (
+              <div className="flex justify-center py-8">加载中...</div>
+            ) : (
+              <div className="space-y-3">
+                {detailData.map((item, index) => (
+                  <div key={index} className="flex">
+                    <span className="w-32 text-slate-600 shrink-0">{item.title}：</span>
+                    <span className="flex-1">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </>
+    )
+  }
+
+  // Page 模式 - 跳转链接
+  if (showType === 'page') {
+    return (
+      <span className="cursor-pointer hover:text-blue-600 inline-flex items-center gap-1" onClick={handleClick}>
+        {children}
+        <ExternalLink className="h-3 w-3" />
+      </span>
+    )
+  }
+
+  // 默认显示子元素
+  return <>{children}</>
+}
+
 // ============================================
 // 单条记录展示
 // ============================================
@@ -62,19 +253,22 @@ const ItemShow: React.FC<{
   field?: any
   detailPage?: boolean
 }> = ({ relateSchema, val, field, detailPage }) => {
-  const displayField = field?.displayField || 'name'
+  // 获取显示字段配置（从 schema.relate.fields[0]）
+  const displayFieldConfig = relateSchema?.relate?.fields?.[0]
+  const displayFieldKey = displayFieldConfig?.key
+  const fieldSchema = displayFieldConfig?.fieldSchema
 
-  // 详情页模式
+  // 详情页模式 - 完整展示所有字段
   if (detailPage) {
     return (
-      <div className="inline-block bg-slate-50 rounded border p-3 mr-2 mt-2 align-top" style={{ width: 500 }}>
+      <div className="inline-block bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 p-3 mr-2 mt-2 align-top" style={{ width: 500 }}>
         <div className="flex mb-2">
-          <span className="w-24 text-slate-600">记录编号：</span>
+          <span className="w-24 text-slate-600 dark:text-slate-400">记录编号：</span>
           <span className="flex-1">{val.id}</span>
         </div>
         {relateSchema.relateShowFields?.map((f: any, index: number) => (
           <div key={index} className="flex">
-            <span className="w-24 text-slate-600">{f.title}：</span>
+            <span className="w-24 text-slate-600 dark:text-slate-400">{f.title}：</span>
             <span className="flex-1">
               <ViewFieldRender
                 value={val[f.key]}
@@ -88,14 +282,16 @@ const ItemShow: React.FC<{
     )
   }
 
-  // 多字段展示模式
+  // 多字段展示模式 - 卡片式展示
   if (relateSchema.relateShowFields?.length > 0) {
     return (
-      <div className="inline-block bg-slate-50 rounded border p-2 mr-2 mt-2 align-top" style={{ width: 'calc(50% - 10px)' }}>
-        <div className="font-medium text-sm mb-1">{val[displayField]}</div>
+      <div className="inline-block bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 p-2 mr-2 mt-2 align-top" style={{ width: 'calc(50% - 10px)' }}>
+        <div className="font-medium text-sm mb-1">
+          {val[displayFieldKey || field?.displayField || 'name']}
+        </div>
         {relateSchema.relateShowFields.map((f: any, index: number) => (
-          <div key={index} className="text-xs text-slate-600 flex">
-            <span className="w-20">{f.title}：</span>
+          <div key={index} className="text-xs text-slate-600 dark:text-slate-400 flex">
+            <span className="w-20 shrink-0">{f.title}：</span>
             <span className="flex-1 truncate">
               <ViewFieldRender
                 value={val[f.key]}
@@ -109,11 +305,45 @@ const ItemShow: React.FC<{
     )
   }
 
-  // 默认标签模式
+  // 默认标签模式 - 使用 fieldRender 渲染或直接显示
+  const getDisplayValue = () => {
+    // 从 val[field.key] 获取实际值
+    let fieldValue = val?.[displayFieldKey]
+
+    // 尝试解析 JSON 字符串
+    if (isString(fieldValue)) {
+      try {
+        const parsed = JSON.parse(fieldValue)
+        if (isObject(parsed) || isArray(parsed)) {
+          fieldValue = parsed
+        }
+      } catch (e) {
+        // 保持原值
+      }
+    }
+
+    // 对于特定类型，直接显示原始值
+    const directDisplayTypes = ['input', 'serialNumber', 'timePicker', 'dateRange', 'date-range']
+    if (directDisplayTypes.includes(fieldSchema?.fieldType) || directDisplayTypes.includes(fieldSchema?.type)) {
+      return val?.[displayFieldKey]
+    }
+
+    // 使用 ViewFieldRender 渲染字段值
+    return (
+      <ViewFieldRender
+        value={fieldValue}
+        schema={fieldSchema}
+        type={fieldSchema?.fieldType || 'text'}
+      />
+    )
+  }
+
   return (
-    <span className="inline-block border rounded px-2 py-1 text-xs bg-slate-50">
-      {val[displayField]}
-    </span>
+    <DetailShow schema={relateSchema} value={val}>
+      <span className="inline-block border rounded px-2 py-1 text-xs bg-slate-50 dark:bg-slate-800">
+        {getDisplayValue()}
+      </span>
+    </DetailShow>
   )
 }
 
@@ -173,13 +403,13 @@ const TableShow: React.FC<{
             <DialogTitle>关联数据</DialogTitle>
           </DialogHeader>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-slate-200">
+            <table className="w-full border-collapse border border-slate-200 dark:border-slate-700">
               <thead>
-                <tr className="bg-slate-100">
+                <tr className="bg-slate-100 dark:bg-slate-800">
                   {displayFields.map((field) => (
                     <th
                       key={field.key}
-                      className="border border-slate-200 px-4 py-2 text-left text-sm font-medium"
+                      className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-left text-sm font-medium"
                     >
                       {field.title}
                     </th>
@@ -192,7 +422,7 @@ const TableShow: React.FC<{
                     {displayFields.map((field) => (
                       <td
                         key={field.key}
-                        className="border border-slate-200 px-4 py-2 text-sm"
+                        className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm"
                       >
                         <ViewFieldRender
                           value={row[field.key]}
@@ -229,16 +459,122 @@ const RelatePlusShow: React.FC<RelatePlusShowProps> = ({ value, schema, inList }
     return <span className="text-muted-foreground">空</span>
   }
 
+  // 解析 value（可能是 JSON 字符串）
+  const parsedValue = parseValue(value)
+
   const showType = schema?.showType || 'select'
+
+  // select 模式 - 使用旧版逻辑
+  if (showType === 'select') {
+    // 获取显示字段配置（从 schema.relate.fields[0]）
+    const displayFieldConfig = schema?.relate?.fields?.[0]
+    const displayFieldKey = displayFieldConfig?.key
+    const fieldSchema = displayFieldConfig?.fieldSchema
+
+    // 单选
+    if (!isArray(parsedValue)) {
+      let fieldValue = parsedValue?.[displayFieldKey]
+
+      // 尝试解析 JSON 字符串
+      if (isString(fieldValue)) {
+        try {
+          const parsed = JSON.parse(fieldValue)
+          if (isObject(parsed) || isArray(parsed)) {
+            fieldValue = parsed
+          }
+        } catch (e) {
+          // 保持原值
+        }
+      }
+
+      // 对于特定类型，直接显示原始值
+      const directDisplayTypes = ['input', 'serialNumber', 'timePicker', 'dateRange', 'date-range']
+      let displayValue: any
+      if (directDisplayTypes.includes(fieldSchema?.fieldType) || directDisplayTypes.includes(fieldSchema?.type)) {
+        displayValue = parsedValue?.[displayFieldKey]
+      } else {
+        // 使用 ViewFieldRender 渲染
+        displayValue = (
+          <ViewFieldRender
+            value={fieldValue}
+            schema={fieldSchema}
+            type={fieldSchema?.fieldType || 'text'}
+          />
+        )
+      }
+
+      // 用 DetailShow 包裹
+      return (
+        <DetailShow schema={schema} value={parsedValue}>
+          <span className="inline-block border rounded px-2 py-1 text-xs bg-slate-50 dark:bg-slate-800">
+            {displayValue}
+          </span>
+        </DetailShow>
+      )
+    }
+
+    // 多选 - 遍历数组，用逗号分隔
+    if (isArray(parsedValue)) {
+      const items: React.ReactNode[] = []
+
+      parsedValue.forEach((item: any, index: number) => {
+        let fieldValue = item?.[displayFieldKey]
+
+        // 尝试解析 JSON 字符串
+        if (isString(fieldValue)) {
+          try {
+            const parsed = JSON.parse(fieldValue)
+            if (isObject(parsed) || isArray(parsed)) {
+              fieldValue = parsed
+            }
+          } catch (e) {
+            // 保持原值
+          }
+        }
+
+        // 对于特定类型，直接显示原始值
+        const directDisplayTypes = ['input', 'serialNumber', 'timePicker']
+        let displayValue: any
+        if (directDisplayTypes.includes(fieldSchema?.fieldType) || directDisplayTypes.includes(fieldSchema?.type)) {
+          displayValue = item?.[displayFieldKey]
+        } else {
+          // 使用 ViewFieldRender 渲染
+          displayValue = (
+            <ViewFieldRender
+              value={fieldValue}
+              schema={fieldSchema}
+              type={fieldSchema?.fieldType || 'text'}
+            />
+          )
+        }
+
+        // 用 DetailShow 包裹每个项
+        items.push(
+          <DetailShow key={index} schema={schema} value={item}>
+            <span className="inline-block border rounded px-2 py-1 text-xs bg-slate-50 dark:bg-slate-800">
+              {displayValue}
+            </span>
+          </DetailShow>
+        )
+
+        // 添加逗号分隔符（除了最后一项）
+        if (index < parsedValue.length - 1) {
+          items.push(<span key={`comma-${index}`}>, </span>)
+        }
+      })
+
+      return <span className="inline-block">{items}</span>
+    }
+  }
 
   // Card 模式
   if (showType === 'card') {
-    const items = isArray(value) ? value : [value]
-    const parsedItems = items.map(item => parseJsonStrings(item))
+    const items = isArray(parsedValue) ? parsedValue : [parsedValue]
+    const processedItems = items.map(item => parseJsonStrings(item))
 
     // 列表中最多显示 6 条
     if (inList) {
-      const displayItems = parsedItems.slice(0, 6)
+      const displayItems = processedItems.slice(0, 6)
       return (
         <div className="flex flex-wrap">
           {displayItems.map((item: any, index: number) => (
@@ -259,7 +595,7 @@ const RelatePlusShow: React.FC<RelatePlusShowProps> = ({ value, schema, inList }
     }
 
     // 非列表模式，支持展开/收起
-    const displayList = expand ? parsedItems : parsedItems.slice(0, 6)
+    const displayList = expand ? processedItems : processedItems.slice(0, 6)
 
     return (
       <div className="m-1">
@@ -296,31 +632,17 @@ const RelatePlusShow: React.FC<RelatePlusShowProps> = ({ value, schema, inList }
 
   // Table 模式
   if (showType === 'table') {
-    const items = isArray(value) ? value : [value]
-    const parsedItems = items.map(item => parseJsonStrings(item))
+    const items = isArray(parsedValue) ? parsedValue : [parsedValue]
     return (
       <TableShow
         relateSchema={schema}
-        val={parsedItems}
+        val={items}
         field={{ displayField: schema?.displayField || 'name' }}
       />
     )
   }
 
-  // 默认展示
-  const items = isArray(value) ? value : [value]
-  return (
-    <div className="flex flex-wrap gap-1">
-      {items.map((item: any, index: number) => (
-        <span
-          key={index}
-          className="inline-block border rounded px-2 py-1 text-xs bg-slate-50"
-        >
-          {item?.name || item}
-        </span>
-      ))}
-    </div>
-  )
+  return null
 }
 
 export default RelatePlusShow

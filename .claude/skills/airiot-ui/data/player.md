@@ -51,7 +51,7 @@ interface AudioTrack {
 播放单个音频文件。
 
 ```tsx
-import { Player } from '@/registry/components/airiot/player'
+import { Player } from '@/components/airiot/player'
 
 function Example() {
   return (
@@ -191,7 +191,7 @@ function Example() {
 创建一个完整的音乐播放器界面。
 
 ```tsx
-import { Player, AudioTrack } from '@/registry/components/airiot/player'
+import { Player, AudioTrack } from '@/components/airiot/player'
 import { useState } from 'react'
 
 function MusicPlayerApp() {

@@ -28,7 +28,7 @@
 生成一个简单的 URL 二维码。
 
 ```tsx
-import QRCodeComp from '@/registry/components/airiot/qrcode'
+import QRCodeComp from '@/components/airiot/qrcode'
 
 function Example() {
   return (
@@ -181,7 +181,7 @@ function Example() {
 生成包含联系方式的二维码。
 
 ```tsx
-import QRCodeComp from '@/registry/components/airiot/qrcode'
+import QRCodeComp from '@/components/airiot/qrcode'
 
 function ContactQRCode() {
   const contactInfo = `

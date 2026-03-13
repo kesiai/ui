@@ -41,7 +41,7 @@
 最简单的文本展示，使用默认的正文样式。
 
 ```tsx
-import { Text } from '@/registry/components/airiot/text'
+import { Text } from '@/components/airiot/text'
 
 function Example() {
   return <Text content="这是一段示例文本" />
@@ -152,7 +152,7 @@ function Example() {
 创建一个包含标题和段落的文章排版示例。
 
 ```tsx
-import { Text } from '@/registry/components/airiot/text'
+import { Text } from '@/components/airiot/text'
 
 function Example() {
   return (
@@ -189,7 +189,7 @@ function Example() {
 创建一个卡片式的文本展示组件。
 
 ```tsx
-import { Text } from '@/registry/components/airiot/text'
+import { Text } from '@/components/airiot/text'
 
 function Example() {
   return (
@@ -225,7 +225,7 @@ function Example() {
 创建并排显示的数据标签。
 
 ```tsx
-import { Text } from '@/registry/components/airiot/text'
+import { Text } from '@/components/airiot/text'
 
 function Example() {
   return (
@@ -267,7 +267,7 @@ function Example() {
 创建一个带有省略效果的响应式文本容器。
 
 ```tsx
-import { Text } from '@/registry/components/airiot/text'
+import { Text } from '@/components/airiot/text'
 
 function Example() {
   return (

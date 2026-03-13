@@ -8,7 +8,7 @@ import type { ComponentConfig } from './config/types'
 import { setConfig, useUser, useLogout } from '@airiot/client'
 import { Routes, Route, Link, useParams, Outlet } from 'react-router-dom'
 import { GlobalDialogs } from '@/registry/components/events/events'
-
+import { toast } from 'sonner'
 // 配置 @airiot/client
 const apiHost = 'http://192.168.99.101:3031'
 const projectId = 'ljnew'
@@ -21,6 +21,7 @@ try {
     language: 'zh-CN',
     rest: apiHost + '/rest/',
     projectId,
+    toast: toast,
     settings: {
       apiHost,
       projectId,
@@ -268,37 +269,37 @@ function App() {
     <>
       <GlobalDialogs />
       <Routes>
-      <Route path="/" element={<HomePage />}>
-        {/* 默认路由：显示欢迎页 */}
-        <Route index element={<WelcomePage />} />
+        <Route path="/" element={<HomePage />}>
+          {/* 默认路由：显示欢迎页 */}
+          <Route index element={<WelcomePage />} />
 
-        {/* 组件详情路由：嵌套在 HomePage 内部 */}
+          {/* 组件详情路由：嵌套在 HomePage 内部 */}
+          <Route
+            path="component/:componentId"
+            element={
+              <ComponentDetailPageWrapper />
+            }
+          />
+        </Route>
+
+        {/* 事件测试页面路由 */}
         <Route
-          path="component/:componentId"
-          element={
-            <ComponentDetailPageWrapper />
-          }
+          path="test-events"
+          element={<EventsTestPage />}
         />
-      </Route>
 
-      {/* 事件测试页面路由 */}
-      <Route
-        path="test-events"
-        element={<EventsTestPage />}
-      />
-
-      {/* 404 页面 */}
-      <Route path="*" element={
-        <div className="h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-slate-900 mb-4">页面未找到</h1>
-            <Link to="/" className="text-blue-600 hover:text-blue-700">
-              返回首页
-            </Link>
+        {/* 404 页面 */}
+        <Route path="*" element={
+          <div className="h-screen flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold text-slate-900 mb-4">页面未找到</h1>
+              <Link to="/" className="text-blue-600 hover:text-blue-700">
+                返回首页
+              </Link>
+            </div>
           </div>
-        </div>
-      } />
-    </Routes>
+        } />
+      </Routes>
     </>
   )
 }

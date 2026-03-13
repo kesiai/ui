@@ -19,7 +19,7 @@ VideoWidget (核心播放器)
 ### 最小可用组合
 
 ```tsx
-import { VideoWidget } from '@/components';
+import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget';
 
 function SimpleVideoPlayer() {
   return (
@@ -36,12 +36,20 @@ function SimpleVideoPlayer() {
 
 ```tsx
 import {
-  VideoWidget,
-  VideoButton,
-  VideoPlaybackWidget,
-  VideoTimeAxisWidget,
+  VideoWidget
+} from '@/registry/components/airiot/video-widget/video-widget';
+import {
+  VideoButton
+} from '@/registry/components/airiot/video-button/video-button';
+import {
+  VideoPlaybackWidget
+} from '@/registry/components/airiot/video-playback-widget/video-playback-widget';
+import {
+  VideoTimeAxisWidget
+} from '@/registry/components/airiot/video-time-axis/video-time-axis';
+import {
   VideoPeriodsWidget
-} from '@/components';
+} from '@/registry/components/airiot/video-periods-widget/video-periods-widget';
 
 function CompleteVideoSystem() {
   const [currentTime, setCurrentTime] = useState(0);

@@ -23,7 +23,7 @@ GisMapCore (核心地图)
 ### 最小可用组合
 
 ```tsx
-import { GisMapCore } from '@/components';
+import { GisMapCore } from '@/registry/components/airiot/gis-map-core/gis-map-core';
 
 function SimpleMap() {
   return (
@@ -40,15 +40,29 @@ function SimpleMap() {
 
 ```tsx
 import {
-  GisMapCore,
-  GisCustomLayer,
-  GisPolygonDraw,
-  GisTableLayer,
-  GisWarnLayer,
-  GisXyzTile,
-  GisGeojsonParse,
+  GisMapCore
+} from '@/registry/components/airiot/gis-map-core/gis-map-core';
+import {
+  GisCustomLayer
+} from '@/registry/components/airiot/gis-custom-layer/gis-custom-layer';
+import {
+  GisPolygonDraw
+} from '@/registry/components/airiot/gis-polygon-draw/gis-polygon-draw';
+import {
+  GisTableLayer
+} from '@/registry/components/airiot/gis-table-layer/gis-table-layer';
+import {
+  GisWarnLayer
+} from '@/registry/components/airiot/gis-warn-layer/gis-warn-layer';
+import {
+  GisXyzTile
+} from '@/registry/components/airiot/gis-xyz-tile/gis-xyz-tile';
+import {
+  GisGeojsonParse
+} from '@/registry/components/airiot/gis-geojson-parse/gis-geojson-parse';
+import {
   GisGeoserverWMS
-} from '@/components';
+} from '@/registry/components/airiot/gis-geoserver-wms/gis-geoserver-wms';
 
 function CompleteGISSystem() {
   const [drawingMode, setDrawingMode] = useState(false);

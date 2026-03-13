@@ -31,7 +31,7 @@
 选择年月日。
 
 ```tsx
-import { MobileDatePicker } from '@/registry/components/airiot/mobile-date-picker'
+import { MobileDatePicker } from '@/components/airiot/mobile-date-picker'
 
 function Example() {
   return (
@@ -176,9 +176,9 @@ function Example() {
 创建一个会议时间预约表单。
 
 ```tsx
-import { MobileDatePicker } from '@/registry/components/airiot/mobile-date-picker'
+import { MobileDatePicker } from '@/components/airiot/mobile-date-picker'
 import { useState } from 'react'
-import { Button } from '@/registry/components/airiot/button/button'
+import { Button } from '@/components/airiot/button/button'
 
 function MeetingScheduler() {
   const [datetime, setDatetime] = useState('')
@@ -235,7 +235,7 @@ function MeetingScheduler() {
 选择用户生日。
 
 ```tsx
-import { MobileDatePicker } from '@/registry/components/airiot/mobile-date-picker'
+import { MobileDatePicker } from '@/components/airiot/mobile-date-picker'
 
 function BirthdayPicker() {
   const maxDate = new Date().toISOString().split('T')[0]

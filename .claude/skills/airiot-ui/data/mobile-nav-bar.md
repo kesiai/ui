@@ -28,7 +28,7 @@
 最简单的标题栏。
 
 ```tsx
-import { MobileNavBar } from '@/registry/components/airiot/mobile-nav-bar'
+import { MobileNavBar } from '@/components/airiot/mobile-nav-bar'
 
 function Example() {
   return (
@@ -128,7 +128,7 @@ function Example() {
 创建一个包含标题栏的完整移动端页面。
 
 ```tsx
-import { MobileNavBar } from '@/registry/components/airiot/mobile-nav-bar'
+import { MobileNavBar } from '@/components/airiot/mobile-nav-bar'
 
 function UserCenterPage() {
   return (
@@ -169,7 +169,7 @@ function UserCenterPage() {
 实现多级页面导航。
 
 ```tsx
-import { MobileNavBar } from '@/registry/components/airiot/mobile-nav-bar'
+import { MobileNavBar } from '@/components/airiot/mobile-nav-bar'
 import { useState } from 'react'
 
 function MultiLevelNavigation() {

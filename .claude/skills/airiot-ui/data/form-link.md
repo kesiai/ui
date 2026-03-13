@@ -45,7 +45,7 @@ Schema 配置对象，用于定义组件的行为和默认值。
 默认模式，用户手动输入完整的 URL 地址。
 
 ```tsx
-import { FormLink } from '@/registry/components/airiot/form-link'
+import { FormLink } from '@/components/airiot/form-link'
 
 function Example() {
   const [value, setValue] = useState('')
@@ -150,7 +150,7 @@ function Example() {
 用于配置导航菜单的链接地址，支持内部和外部链接。
 
 ```tsx
-import { FormLink } from '@/registry/components/airiot/form-link'
+import { FormLink } from '@/components/airiot/form-link'
 import { Label } from '@/components/ui/label'
 import { Select } from '@/components/ui/select'
 import { useState } from 'react'

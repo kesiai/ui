@@ -26,7 +26,7 @@
 最简单的二维码扫描。
 
 ```tsx
-import { MobileScanQR } from '@/registry/components/airiot/mobile-scan-qr'
+import { MobileScanQR } from '@/components/airiot/mobile-scan-qr'
 
 function Example() {
   return (
@@ -127,9 +127,9 @@ function Example() {
 创建一个扫码登录功能。
 
 ```tsx
-import { MobileScanQR } from '@/registry/components/airiot/mobile-scan-qr'
+import { MobileScanQR } from '@/components/airiot/mobile-scan-qr'
 import { useState } from 'react'
-import { Button } from '@/registry/components/airiot/button/button'
+import { Button } from '@/components/airiot/button/button'
 
 function QRCodeLogin() {
   const [scanResult, setScanResult] = useState('')
@@ -190,7 +190,7 @@ function QRCodeLogin() {
 扫描商品二维码添加到购物车。
 
 ```tsx
-import { MobileScanQR } from '@/registry/components/airiot/mobile-scan-qr'
+import { MobileScanQR } from '@/components/airiot/mobile-scan-qr'
 import { useState } from 'react'
 
 function ProductScanner() {
@@ -255,7 +255,7 @@ function ProductScanner() {
 扫描二维码进行签到。
 
 ```tsx
-import { MobileScanQR } from '@/registry/components/airiot/mobile-scan-qr'
+import { MobileScanQR } from '@/components/airiot/mobile-scan-qr'
 import { useState } from 'react'
 
 function CheckInScanner() {

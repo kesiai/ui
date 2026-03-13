@@ -30,7 +30,7 @@
 最简单的五星级评价。
 
 ```tsx
-import Rate from '@/registry/components/airiot/form-rate/form-rate'
+import Rate from '@/components/airiot/form-rate/form-rate'
 
 function Example() {
   const [rating, setRating] = useState(0)
@@ -159,7 +159,7 @@ function Example() {
 为商品打分，支持显示分数。
 
 ```tsx
-import Rate from '@/registry/components/airiot/form-rate/form-rate'
+import Rate from '@/components/airiot/form-rate/form-rate'
 
 function ProductRating() {
   const [rating, setRating] = useState(0)

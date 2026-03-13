@@ -75,8 +75,8 @@ interface TableLayoutProps {
 最简单的用法，使用 Model 自动获取数据并展示。
 
 ```tsx
-import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewDataTable } from '@/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/components/airiot/view-model/view-model'
 
 function BasicTable() {
   return (
@@ -92,7 +92,7 @@ function BasicTable() {
 通过 `tableLayout` 属性自定义表格的视觉样式。
 
 ```tsx
-import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewDataTable } from '@/components/airiot/view-data-table/view-data-table'
 
 function CustomStyledTable() {
   const tableLayout = {
@@ -115,7 +115,7 @@ function CustomStyledTable() {
 使用 `TableColumn` 子组件自定义列的渲染方式。
 
 ```tsx
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewDataTable, TableColumn } from '@/components/airiot/view-data-table/view-data-table'
 
 function CustomColumnsTable() {
   return (
@@ -154,7 +154,7 @@ function CustomColumnsTable() {
 ### 4. 禁用行选择和排序
 
 ```tsx
-import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewDataTable } from '@/components/airiot/view-data-table/view-data-table'
 
 function ReadOnlyTable() {
   return (
@@ -176,7 +176,7 @@ function ReadOnlyTable() {
 将重要列固定到左侧或右侧。
 
 ```tsx
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewDataTable, TableColumn } from '@/components/airiot/view-data-table/view-data-table'
 
 function FixedColumnsTable() {
   return (
@@ -209,7 +209,7 @@ function FixedColumnsTable() {
 使用 `level2` 属性创建分组表头。
 
 ```tsx
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewDataTable, TableColumn } from '@/components/airiot/view-data-table/view-data-table'
 
 function GroupedHeaderTable() {
   return (
@@ -232,7 +232,7 @@ function GroupedHeaderTable() {
 使用 `children` 函数完全自定义单元格内容。
 
 ```tsx
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
+import { ViewDataTable, TableColumn } from '@/components/airiot/view-data-table/view-data-table'
 
 function CustomCellTable() {
   return (
@@ -272,8 +272,8 @@ function CustomCellTable() {
 创建一个完整的任务管理表格，支持选择、排序和自定义操作列。
 
 ```tsx
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewDataTable, TableColumn } from '@/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/components/airiot/view-model/view-model'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useModelState } from '@airiot/client'
@@ -410,8 +410,8 @@ function TaskManagementTable() {
 创建一个用户列表，包含头像、状态和操作列。
 
 ```tsx
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewDataTable, TableColumn } from '@/components/airiot/view-data-table/view-data-table'
+import { ViewModel } from '@/components/airiot/view-model/view-model'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 

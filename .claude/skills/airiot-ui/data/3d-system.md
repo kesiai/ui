@@ -24,7 +24,7 @@ Model3D (核心3D场景)
 ### 最小可用组合
 
 ```tsx
-import { Model3D } from '@/registry/components/airiot/model3d/model3d';
+import { Model3D } from '@/components/airiot/model3d/model3d';
 
 function Simple3DScene() {
   return (
@@ -47,22 +47,22 @@ function Simple3DScene() {
 ```tsx
 import {
   Model3D
-} from '@/registry/components/airiot/model3d/model3d';
+} from '@/components/airiot/model3d/model3d';
 import {
   Model3DGeometryBox
-} from '@/registry/components/airiot/model3d-geometry-box/model3d-geometry-box';
+} from '@/components/airiot/model3d-geometry-box/model3d-geometry-box';
 import {
   Model3DGeometrySphere
-} from '@/registry/components/airiot/model3d-geometry-sphere/model3d-geometry-sphere';
+} from '@/components/airiot/model3d-geometry-sphere/model3d-geometry-sphere';
 import {
   Model3DGeometryCylinder
-} from '@/registry/components/airiot/model3d-geometry-cylinder/model3d-geometry-cylinder';
+} from '@/components/airiot/model3d-geometry-cylinder/model3d-geometry-cylinder';
 import {
   Model3DLayout3D
-} from '@/registry/components/airiot/model3d-layout3d/model3d-layout3d';
+} from '@/components/airiot/model3d-layout3d/model3d-layout3d';
 import {
   Model3DCard
-} from '@/registry/components/airiot/model3d-card/model3d-card';
+} from '@/components/airiot/model3d-card/model3d-card';
 
 function Complete3DSystem() {
   const [selectedModel, setSelectedModel] = useState(null);

@@ -63,7 +63,7 @@ interface TimeSegment {
 创建一个按周设置的录制计划。
 
 ```tsx
-import { VideoPeriodsWidget } from '@/registry/components/airiot/video-periods-widget/video-periods-widget'
+import { VideoPeriodsWidget } from '@/components/airiot/video-periods-widget/video-periods-widget'
 import { useState } from 'react'
 
 function Example() {
@@ -242,7 +242,7 @@ function Example() {
 为监控设备配置完整的录制计划。
 
 ```tsx
-import { VideoPeriodsWidget } from '@/registry/components/airiot/video-periods-widget/video-periods-widget'
+import { VideoPeriodsWidget } from '@/components/airiot/video-periods-widget/video-periods-widget'
 import { useState } from 'react'
 
 function DeviceRecordingConfig() {

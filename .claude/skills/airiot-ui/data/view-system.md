@@ -25,11 +25,11 @@ ViewModel (最外层容器)
 ### 最小可用组合
 
 ```tsx
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model';
-import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table';
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter';
-import { ViewPagination } from '@/registry/components/airiot/view-pagination/view-pagination';
-import { ViewActions } from '@/registry/components/airiot/view-actions/view-actions';
+import { ViewModel } from '@/components/airiot/view-model/view-model';
+import { ViewDataTable } from '@/components/airiot/view-data-table/view-data-table';
+import { ViewFilter } from '@/components/airiot/view-filter/view-filter';
+import { ViewPagination } from '@/components/airiot/view-pagination/view-pagination';
+import { ViewActions } from '@/components/airiot/view-actions/view-actions';
 
 function BasicTableView() {
   return (
@@ -58,37 +58,37 @@ function BasicTableView() {
 ```tsx
 import {
   ViewModel
-} from '@/registry/components/airiot/view-model/view-model';
+} from '@/components/airiot/view-model/view-model';
 import {
   ViewDataTable
-} from '@/registry/components/airiot/view-data-table/view-data-table';
+} from '@/components/airiot/view-data-table/view-data-table';
 import {
   ViewFilter
-} from '@/registry/components/airiot/view-filter/view-filter';
+} from '@/components/airiot/view-filter/view-filter';
 import {
   ViewPagination
-} from '@/registry/components/airiot/view-pagination/view-pagination';
+} from '@/components/airiot/view-pagination/view-pagination';
 import {
   ViewActions
-} from '@/registry/components/airiot/view-actions/view-actions';
+} from '@/components/airiot/view-actions/view-actions';
 import {
   ViewAdvancedFilter
-} from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter';
+} from '@/components/airiot/view-advanced-filter/view-advanced-filter';
 import {
   ViewBatch
-} from '@/registry/components/airiot/view-batch/view-batch';
+} from '@/components/airiot/view-batch/view-batch';
 import {
   ViewDataAggregate
-} from '@/registry/components/airiot/view-data-aggregate/view-data-aggregate';
+} from '@/components/airiot/view-data-aggregate/view-data-aggregate';
 import {
   ViewDetail
-} from '@/registry/components/airiot/view-detail/view-detail';
+} from '@/components/airiot/view-detail/view-detail';
 import {
   ViewField
-} from '@/registry/components/airiot/view-field/view-field';
+} from '@/components/airiot/view-field/view-field';
 import {
   ViewTools
-} from '@/registry/components/airiot/view-tools/view-tools';
+} from '@/components/airiot/view-tools/view-tools';
 
 function CompleteViewSystem() {
   return (

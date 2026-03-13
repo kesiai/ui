@@ -28,7 +28,7 @@
 选择单个表的记录。
 
 ```tsx
-import { TableSelect } from '@/registry/components/airiot/table-data-select'
+import { TableSelect } from '@/components/airiot/table-data-select'
 
 function Example() {
   return (

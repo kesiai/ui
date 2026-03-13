@@ -31,7 +31,7 @@
 最简单的气泡卡片，点击按钮显示内容。
 
 ```tsx
-import { Popover } from '@/registry/components/airiot/container-popover'
+import { Popover } from '@/components/airiot/container-popover'
 
 function Example() {
   return (
@@ -188,8 +188,8 @@ function Example() {
 创建一个显示用户详细信息的气泡卡片。
 
 ```tsx
-import { Popover } from '@/registry/components/airiot/container-popover'
-import { Avatar } from '@/registry/components/airiot/avatar/avatar'
+import { Popover } from '@/components/airiot/container-popover'
+import { Avatar } from '@/components/airiot/avatar/avatar'
 
 function UserInfoPopover() {
   const user = {
@@ -239,8 +239,8 @@ function UserInfoPopover() {
 创建一个包含多个操作选项的气泡菜单。
 
 ```tsx
-import { Popover } from '@/registry/components/airiot/container-popover'
-import { Button } from '@/registry/components/airiot/button/button'
+import { Popover } from '@/components/airiot/container-popover'
+import { Button } from '@/components/airiot/button/button'
 
 function ActionMenuPopover() {
   const actions = [
@@ -282,8 +282,8 @@ function ActionMenuPopover() {
 为表单字段提供详细的帮助信息。
 
 ```tsx
-import { Popover } from '@/registry/components/airiot/container-popover'
-import { Input } from '@/registry/components/airiot/input/input'
+import { Popover } from '@/components/airiot/container-popover'
+import { Input } from '@/components/airiot/input/input'
 import { QuestionMarkCircledIcon } from '@radix-ui/react-icons'
 
 function FormHelpPopover() {

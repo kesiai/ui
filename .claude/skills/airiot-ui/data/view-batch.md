@@ -48,7 +48,7 @@
 最简单的方式是使用 BatchActions 容器组件，它会自动管理所有批量操作。
 
 ```tsx
-import { BatchActions } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchActions } from '@/components/airiot/view-batch/view-batch'
 
 function DataTable() {
   return (
@@ -65,7 +65,7 @@ function DataTable() {
 使用按钮组形式可以更直观地展示所有操作，并显示选中项数量。
 
 ```tsx
-import { BatchActions } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchActions } from '@/components/airiot/view-batch/view-batch'
 
 function DataTable() {
   return (
@@ -82,7 +82,7 @@ function DataTable() {
 单独使用批量删除组件，提供更大的灵活性。
 
 ```tsx
-import { BatchDeleteAction } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchDeleteAction } from '@/components/airiot/view-batch/view-batch'
 
 function DataTable() {
   return (
@@ -102,7 +102,7 @@ function DataTable() {
 单独使用批量修改组件，配合自定义字段配置。
 
 ```tsx
-import { BatchChangeAction } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchChangeAction } from '@/components/airiot/view-batch/view-batch'
 
 function DataTable() {
   return (
@@ -122,7 +122,7 @@ function DataTable() {
 通过 children 属性添加自定义操作项。
 
 ```tsx
-import { BatchActions } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchActions } from '@/components/airiot/view-batch/view-batch'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 function DataTable() {
@@ -145,7 +145,7 @@ function DataTable() {
 根据业务需求只启用特定的批量操作。
 
 ```tsx
-import { BatchActions } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchActions } from '@/components/airiot/view-batch/view-batch'
 
 function ReadOnlyTable() {
   return (
@@ -162,7 +162,7 @@ function ReadOnlyTable() {
 在特定条件下禁用所有批量操作。
 
 ```tsx
-import { BatchActions } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchActions } from '@/components/airiot/view-batch/view-batch'
 
 function LockedTable({ isLocked }: { isLocked: boolean }) {
   return (
@@ -181,7 +181,7 @@ function LockedTable({ isLocked }: { isLocked: boolean }) {
 完整的用户管理表格，包含批量删除和批量修改功能。
 
 ```tsx
-import { BatchActions } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchActions } from '@/components/airiot/view-batch/view-batch'
 import { useModelSelect } from '@airiot/client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -260,7 +260,7 @@ function UserTable() {
 订单管理系统的批量处理功能，包含状态更新和删除。
 
 ```tsx
-import { BatchActions, BatchChangeAction } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchActions, BatchChangeAction } from '@/components/airiot/view-batch/view-batch'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useModelSelect } from '@airiot/client'
@@ -346,7 +346,7 @@ function OrderBatchSystem() {
 设备管理系统中的批量维护功能。
 
 ```tsx
-import { BatchDeleteAction, BatchChangeAction } from '@/registry/components/airiot/view-batch/view-batch'
+import { BatchDeleteAction, BatchChangeAction } from '@/components/airiot/view-batch/view-batch'
 import { Button } from '@/components/ui/button'
 import { Trash2, Edit, Wrench } from 'lucide-react'
 

@@ -55,7 +55,7 @@
 默认使用弹窗模式，点击地图图标打开地图选择器。
 
 ```tsx
-import { FormMap } from '@/registry/components/airiot/form-map'
+import { FormMap } from '@/components/airiot/form-map'
 import { useState } from 'react'
 
 function Example() {
@@ -182,7 +182,7 @@ function Example() {
 管理连锁门店的地理位置信息。
 
 ```tsx
-import { FormMap } from '@/registry/components/airiot/form-map'
+import { FormMap } from '@/components/airiot/form-map'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'

@@ -76,7 +76,7 @@
 ### 1. 简单折线图
 
 ```tsx
-import ChartEcharts from '@/registry/components/airiot/data-view-chart/data-view-chart'
+import ChartEcharts from '@/components/airiot/data-view-chart/data-view-chart'
 
 function LineChart() {
   return (

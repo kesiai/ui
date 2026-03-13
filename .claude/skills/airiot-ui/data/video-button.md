@@ -59,7 +59,7 @@ type PtzAction =
 使用设备数据进行云台控制的最简单方式。
 
 ```tsx
-import { ButtonWidget } from '@/registry/components/airiot/video-button/video-button'
+import { ButtonWidget } from '@/components/airiot/video-button/video-button'
 
 function Example() {
   const tableData = {
@@ -224,8 +224,8 @@ function Example() {
 创建一个包含视频播放和云台控制的完整监控控制台。
 
 ```tsx
-import { ButtonWidget } from '@/registry/components/airiot/video-button/video-button'
-import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget'
+import { ButtonWidget } from '@/components/airiot/video-button/video-button'
+import { VideoWidget } from '@/components/airiot/video-widget/video-widget'
 import { useState } from 'react'
 
 function MonitoringConsole() {

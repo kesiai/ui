@@ -33,7 +33,7 @@
 最简单的轮播容器，包含多个子元素。
 
 ```tsx
-import { Carousel } from '@/registry/components/airiot/container-carousel'
+import { Carousel } from '@/components/airiot/container-carousel'
 
 function Example() {
   return (
@@ -176,7 +176,7 @@ function Example() {
 创建一个完整的图片轮播展示组件。
 
 ```tsx
-import { Carousel } from '@/registry/components/airiot/container-carousel'
+import { Carousel } from '@/components/airiot/container-carousel'
 import { cn } from '@/lib/utils'
 
 function ImageCarousel() {
@@ -232,8 +232,8 @@ function ImageCarousel() {
 创建一个产品展示的轮播组件。
 
 ```tsx
-import { Carousel } from '@/registry/components/airiot/container-carousel'
-import { Button } from '@/registry/components/airiot/button/button'
+import { Carousel } from '@/components/airiot/container-carousel'
+import { Button } from '@/components/airiot/button/button'
 
 function ProductCarousel() {
   const products = [

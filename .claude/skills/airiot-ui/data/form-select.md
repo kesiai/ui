@@ -61,7 +61,7 @@ const options = [
 最简单的下拉框用法，提供选项列表供用户选择。
 
 ```tsx
-import { FormSelect } from '@/registry/components/airiot/form-select'
+import { FormSelect } from '@/components/airiot/form-select'
 
 function Example() {
   const options = [
@@ -208,7 +208,7 @@ function Example() {
 在用户注册或信息编辑表单中使用下拉框选择用户类型和地区。
 
 ```tsx
-import { FormSelect } from '@/registry/components/airiot/form-select'
+import { FormSelect } from '@/components/airiot/form-select'
 
 function UserForm() {
   const [userType, setUserType] = useState('')

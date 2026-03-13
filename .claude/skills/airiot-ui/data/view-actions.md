@@ -80,7 +80,7 @@
 最简单的方式是使用 Actions 容器组件，它会自动管理所有操作的显示和交互。
 
 ```tsx
-import { Actions } from '@/registry/components/airiot/view-actions/view-actions'
+import { Actions } from '@/components/airiot/view-actions/view-actions'
 
 function DataTable() {
   return (
@@ -99,7 +99,7 @@ function DataTable() {
 使用按钮组形式可以更直观地展示所有操作。
 
 ```tsx
-import { Actions } from '@/registry/components/airiot/view-actions/view-actions'
+import { Actions } from '@/components/airiot/view-actions/view-actions'
 
 function DataTable() {
   return (
@@ -118,7 +118,7 @@ function DataTable() {
 CreateAction 不需要 itemId，通常用于表格顶部的新建按钮。
 
 ```tsx
-import { CreateAction } from '@/registry/components/airiot/view-actions/view-actions'
+import { CreateAction } from '@/components/airiot/view-actions/view-actions'
 
 function DataTable() {
   return (
@@ -135,7 +135,7 @@ function DataTable() {
 可以传入自定义的按钮或触发元素。
 
 ```tsx
-import { EditAction } from '@/registry/components/airiot/view-actions/view-actions'
+import { EditAction } from '@/components/airiot/view-actions/view-actions'
 import { Button } from '@/components/ui/button'
 
 function DataTable({ itemId }) {
@@ -154,7 +154,7 @@ function DataTable({ itemId }) {
 可以直接传入包含 id 的数据对象，无需单独传递 itemId。
 
 ```tsx
-import { Actions } from '@/registry/components/airiot/view-actions/view-actions'
+import { Actions } from '@/components/airiot/view-actions/view-actions'
 
 function DataTable({ user }) {
   return (
@@ -172,7 +172,7 @@ function DataTable({ user }) {
 为删除操作提供更具体的确认信息。
 
 ```tsx
-import { DeleteAction } from '@/registry/components/airiot/view-actions/view-actions'
+import { DeleteAction } from '@/components/airiot/view-actions/view-actions'
 
 function DataTable({ itemId }) {
   return (
@@ -189,7 +189,7 @@ function DataTable({ itemId }) {
 导出操作支持 JSON、CSV 和 Excel 三种格式。
 
 ```tsx
-import { ExportAction } from '@/registry/components/airiot/view-actions/view-actions'
+import { ExportAction } from '@/components/airiot/view-actions/view-actions'
 
 function DataTable({ itemId }) {
   return (
@@ -212,7 +212,7 @@ function DataTable({ itemId }) {
 完整的用户管理表格，包含新建、查看、编辑、删除等操作。
 
 ```tsx
-import { Actions, CreateAction } from '@/registry/components/airiot/view-actions/view-actions'
+import { Actions, CreateAction } from '@/components/airiot/view-actions/view-actions'
 import { useModelGetItems } from '@airiot/client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
@@ -275,7 +275,7 @@ function UserTable() {
 使用卡片布局的任务列表，展示更灵活的操作方式。
 
 ```tsx
-import { Actions } from '@/registry/components/airiot/view-actions/view-actions'
+import { Actions } from '@/components/airiot/view-actions/view-actions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
@@ -337,7 +337,7 @@ function TaskBoard() {
 提供多种导出格式的数据导出中心。
 
 ```tsx
-import { ExportAction } from '@/registry/components/airiot/view-actions/view-actions'
+import { ExportAction } from '@/components/airiot/view-actions/view-actions'
 import { Button } from '@/components/ui/button'
 import { Download, FileJson, FileSpreadsheet } from 'lucide-react'
 

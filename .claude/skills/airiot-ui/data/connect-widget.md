@@ -83,7 +83,7 @@ interface AnimationConfig {
 最简单的直线连接，适合简单的两点连接场景。
 
 ```tsx
-import { ConnectWidget } from '@/registry/components/airiot/connect-widget'
+import { ConnectWidget } from '@/components/airiot/connect-widget'
 
 function Example() {
   return (
@@ -231,7 +231,7 @@ function Example() {
 实现一个流程图的连线系统，支持多种箭头组合和动画效果。
 
 ```tsx
-import { ConnectWidget } from '@/registry/components/airiot/connect-widget'
+import { ConnectWidget } from '@/components/airiot/connect-widget'
 import { useState } from 'react'
 
 function FlowchartExample() {
@@ -281,7 +281,7 @@ function FlowchartExample() {
 展示数据从多个源流向单一目标的场景。
 
 ```tsx
-import { ConnectWidget } from '@/registry/components/airiot/connect-widget'
+import { ConnectWidget } from '@/components/airiot/connect-widget'
 
 function DataFlowExample() {
   return (
@@ -331,7 +331,7 @@ function DataFlowExample() {
 一个完整的连线编辑器，支持实时编辑和预览。
 
 ```tsx
-import { ConnectWidget } from '@/registry/components/airiot/connect-widget'
+import { ConnectWidget } from '@/components/airiot/connect-widget'
 import { useState } from 'react'
 
 function InteractiveEditor() {

@@ -76,7 +76,7 @@
 最简单的文本字段显示。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function UserProfile() {
   return (
@@ -95,7 +95,7 @@ function UserProfile() {
 显示数字类型的字段。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function ProductInfo() {
   return (
@@ -115,7 +115,7 @@ function ProductInfo() {
 显示日期类型的字段。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function TaskDetail() {
   return (
@@ -135,7 +135,7 @@ function TaskDetail() {
 显示选择类型的字段。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function OrderStatus() {
   const options = [
@@ -161,7 +161,7 @@ function OrderStatus() {
 显示布尔类型的字段。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function UserSettings() {
   return (
@@ -181,7 +181,7 @@ function UserSettings() {
 显示数值范围字段。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function VolumeControl() {
   return (
@@ -202,7 +202,7 @@ function VolumeControl() {
 显示评分类型的字段。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function ProductReview() {
   return (
@@ -222,7 +222,7 @@ function ProductReview() {
 使用 children 函数自定义渲染逻辑。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function CustomField({ item }) {
   return (
@@ -249,7 +249,7 @@ function CustomField({ item }) {
 通过 schema 定义字段，自动推断类型。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function SchemaField({ data }) {
   const schema = {
@@ -277,7 +277,7 @@ function SchemaField({ data }) {
 显示多行文本内容。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 
 function DescriptionField() {
   return (
@@ -298,7 +298,7 @@ function DescriptionField() {
 完整的用户详情展示卡片。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
@@ -370,7 +370,7 @@ function UserProfileCard({ user }) {
 产品详细信息展示，包含多种字段类型。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 import { Card, CardContent } from '@/components/ui/card'
 
 function ProductDetail({ product }) {
@@ -477,7 +477,7 @@ function ProductDetail({ product }) {
 任务管理系统的详情面板。
 
 ```tsx
-import { ViewField } from '@/registry/components/airiot/view-field/view-field'
+import { ViewField } from '@/components/airiot/view-field/view-field'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 

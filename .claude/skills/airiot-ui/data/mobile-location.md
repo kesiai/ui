@@ -30,7 +30,7 @@
 最简单的定位组件。
 
 ```tsx
-import { MobileLocation } from '@/registry/components/airiot/mobile-location'
+import { MobileLocation } from '@/components/airiot/mobile-location'
 
 function Example() {
   return (
@@ -163,10 +163,10 @@ function Example() {
 创建一个收货地址表单，包含定位功能。
 
 ```tsx
-import { MobileLocation } from '@/registry/components/airiot/mobile-location'
+import { MobileLocation } from '@/components/airiot/mobile-location'
 import { useState } from 'react'
-import { Button } from '@/registry/components/airiot/button/button'
-import { Input } from '@/registry/components/airiot/input/input'
+import { Button } from '@/components/airiot/button/button'
+import { Input } from '@/components/airiot/input/input'
 
 function ShippingAddressForm() {
   const [location, setLocation] = useState(null)
@@ -237,9 +237,9 @@ function ShippingAddressForm() {
 记录用户的当前位置。
 
 ```tsx
-import { MobileLocation } from '@/registry/components/airiot/mobile-location'
+import { MobileLocation } from '@/components/airiot/mobile-location'
 import { useState } from 'react'
-import { Button } from '@/registry/components/airiot/button/button'
+import { Button } from '@/components/airiot/button/button'
 
 function LocationTracker() {
   const [locations, setLocations] = useState([])

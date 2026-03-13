@@ -54,9 +54,9 @@ interface OverrunHide {
 显示所有实时报警。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { WarnViews } from '@/registry/components/airiot/gis-warn-layer'
-import { TableViews } from '@/registry/components/airiot/gis-table-layer'
+import { MapContainer } from '@/components/airiot/gis-map-core'
+import { WarnViews } from '@/components/airiot/gis-warn-layer'
+import { TableViews } from '@/components/airiot/gis-table-layer'
 
 function BasicWarnLayer() {
   return (
@@ -268,9 +268,9 @@ function DynamicDisplayWarn() {
 组合多个过滤条件，精确控制显示的报警。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { WarnViews } from '@/registry/components/airiot/gis-warn-layer'
-import { TableViews } from '@/registry/components/airiot/gis-table-layer'
+import { MapContainer } from '@/components/airiot/gis-map-core'
+import { WarnViews } from '@/components/airiot/gis-warn-layer'
+import { TableViews } from '@/components/airiot/gis-table-layer'
 
 function MultiFilterWarn() {
   return (

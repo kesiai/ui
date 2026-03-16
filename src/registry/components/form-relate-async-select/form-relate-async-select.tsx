@@ -131,11 +131,12 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
         const api = createAPI({ resource })
 
         // 使用 api.query 查询数据
+        const relateFieldKeys = relateShowFields?.map((f: { key: string }) => f.key) || []
         const { items } = await api.query(
           {
             limit: 50,
             skip: pageNum * 50,
-            fields: ['id', displayField].filter(Boolean)
+            fields: ['id', displayField, ...relateFieldKeys].filter(Boolean)
           },
           filterObj
         )

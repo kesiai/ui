@@ -239,7 +239,7 @@ interface BatchActionsProps {
 }
 
 const BatchActions: React.FC<BatchActionsProps> = ({
-  actions = ['batch-delete', 'batch-change'],
+  actions = ['batch-delete'],
   variant = 'dropdown',
   disabled = false,
   children

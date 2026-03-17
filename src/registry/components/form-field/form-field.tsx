@@ -37,6 +37,7 @@ import { FormFormInfo } from '@/registry/components/form-form-info/form-form-inf
 import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
 import { FormRelatePlus } from '@/registry/components/form-relate-plus/form-relate-plus'
 import FormArea from '@/registry/components/form-area/form-area'
+import { FilterArea } from "../filter-area/filter-area"
 import { FilterText } from '@/registry/components/filter-text/filter-text'
 import { FilterEnum } from '@/registry/components/filter-enum/filter-enum'
 import { FilterNumber } from '@/registry/components/filter-number/filter-number'
@@ -91,6 +92,7 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'area': wrapFormComponent(FormArea),
 
   // filter组件
+  'filter_area': wrapFormComponent(FilterArea),
   'filter_text': FilterText,
   'filter_enum': FilterEnum,
   'filter_number': FilterNumber,

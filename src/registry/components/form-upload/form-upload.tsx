@@ -179,8 +179,10 @@ const ImageCardItemRender: React.FC<{
         <div className="upload-item-actions">
           <button
             className="upload-item-btn"
+            type="button"
             onClick={(e) => {
               e.stopPropagation()
+              e.preventDefault()
               onPreview()
             }}
             title="预览"

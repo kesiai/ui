@@ -1,6 +1,6 @@
 "use client"
 
-import { CSSProperties, Fragment, ReactNode } from "react"
+import { CSSProperties, Fragment, ReactNode, useRef, useState, useEffect } from "react"
 import { useDataGrid } from "@/components/reui/data-grid/data-grid"
 import {
   Cell,
@@ -14,6 +14,12 @@ import { cva } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 const headerCellSpacingVariants = cva("", {
   variants: {
@@ -362,6 +368,16 @@ function DataGridTableBodyRowCell<TData>({
   dndStyle?: CSSProperties
 }) {
   const { props } = useDataGrid()
+  const internalRef = useRef<HTMLTableCellElement>(null)
+  const [tooltipText, setTooltipText] = useState("")
+
+  useEffect(() => {
+    const el = internalRef.current
+    if (el) {
+      const isOverflowing = el.scrollWidth > el.offsetWidth
+      setTooltipText(isOverflowing ? (el.textContent || "") : "")
+    }
+  })
 
   const { column, row } = cell
   const isPinned = column.getIsPinned()
@@ -372,10 +388,18 @@ function DataGridTableBodyRowCell<TData>({
     size: props.tableLayout?.dense ? "dense" : "default",
   })
 
-  return (
+  const mergedRef = (el: HTMLTableCellElement | null) => {
+    (internalRef as React.MutableRefObject<HTMLTableCellElement | null>).current = el
+    if (dndRef) {
+      if (typeof dndRef === "function") dndRef(el)
+      else (dndRef as React.MutableRefObject<HTMLTableCellElement | null>).current = el
+    }
+  }
+
+  const tdElement = (
     <td
       key={cell.id}
-      ref={dndRef}
+      ref={mergedRef}
       {...(props.tableLayout?.columnsDraggable && !isPinned ? { cell } : {})}
       style={{
         ...(props.tableLayout?.columnsResizable && {
@@ -410,6 +434,21 @@ function DataGridTableBodyRowCell<TData>({
       {children}
     </td>
   )
+
+  if (tooltipText) {
+    return (
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>{tdElement}</TooltipTrigger>
+          <TooltipContent>
+            <p className="max-w-sm break-all">{tooltipText}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    )
+  }
+
+  return tdElement
 }
 
 function DataGridTableEmpty() {
@@ -422,7 +461,7 @@ function DataGridTableEmpty() {
         colSpan={totalColumns}
         className="text-muted-foreground text-sm py-6 text-center"
       >
-        {props.emptyMessage || "No data available"}
+        {props.emptyMessage || "暂无数据"}
       </td>
     </tr>
   )

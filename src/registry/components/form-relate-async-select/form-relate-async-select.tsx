@@ -254,7 +254,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   const currentValue: any =
     mode === 'multiple'
       ? (isArray(propValue) ? propValue.map((v) => (v as any)?.key || v).filter(Boolean) : [])
-      : (propValue as any)?.key || propValue || ''
+      : (propValue as any)?.key || ''
 
   return (
     <div style={{ position: 'relative', width: '100%', minWidth: 150, ...style }}>

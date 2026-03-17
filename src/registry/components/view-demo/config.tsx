@@ -1,7 +1,7 @@
 import ViewModel from '../view-model/view-model'
 import React from 'react'
 import { ComponentConfig } from '@/app/config/types'
-import ViewDataTable, { TableColumn} from '../view-data-table/view-data-table'
+import ViewDataTable, { TableColumn } from '../view-data-table/view-data-table'
 import ViewPagination from '../view-pagination/view-pagination'
 import Actions, { CreateAction } from '../view-actions/view-actions'
 import Tools from '../view-tools/view-tools'
@@ -27,7 +27,7 @@ export const viewDemoPropsConfig = [
 
 export const viewDemoDefaultProps = {
   modelName: null,
-  tableId: 'task_def'
+  tableId: '主表'
 }
 
 const renderViewDemoPreview = (props: Record<string, any>) => {
@@ -53,7 +53,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
               </TableColumn>
             </ViewDataTable>
             <div className="flex items-center justify-between">
-              <BatchActions actions={[ 'batch-change', 'batch-delete' ]}/>
+              <BatchActions actions={['batch-change', 'batch-delete']} />
               <ViewPagination />
             </div>
           </div>

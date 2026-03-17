@@ -10,13 +10,14 @@ interface TableRef {
   [key: string]: any
 }
 
-type TableViewProps = {
+type ViewModelProps = {
   tableId?: string
   modelName?: string
-  loadingComponent?: React.ReactNode, 
-  initQuery?: boolean, 
+  loadingComponent?: React.ReactNode,
+  initQuery?: boolean,
   children?: React.ReactNode
   table?: TableRef
+  schemaTransform?: (schema: any) => any
 
   queryFields?: string[]
   projectAll?: boolean
@@ -26,14 +27,15 @@ type TableViewProps = {
   interval?: number
 }
 
-const TableView = ({ tableId, modelName, children, initQuery, loadingComponent,
+const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
   queryFields, projectAll,
   limit,
   tableFilters,
   fieldOrder,
-  interval
- }: TableViewProps) => {
-  const [ initialValues, setInitialValues ] = React.useState<any | null>(null)
+  interval,
+  schemaTransform,
+}: ViewModelProps) => {
+  const [initialValues, setInitialValues] = React.useState<any | null>(null)
 
   React.useEffect(() => {
     const values = {} as any
@@ -61,17 +63,17 @@ const TableView = ({ tableId, modelName, children, initQuery, loadingComponent,
     setInitialValues(values)
   }, [queryFields, projectAll, limit, tableFilters, fieldOrder, interval])
 
-  if(initialValues === null) {
+  if (initialValues === null) {
     return null
   } else if (modelName) {
     return (
-      <Model name={modelName} key={`table-model-view-${modelName}`} initialValues={initialValues}>
+      <Model name={modelName} schemaTransform={schemaTransform} key={`table-model-view-${modelName}`} initialValues={initialValues}>
         {children}
       </Model>
     )
   } else if (tableId) {
     return (
-      <TableModel tableId={tableId} key={`table-model-view-${tableId}`} loadingComponent={loadingComponent} initQuery={initQuery} initialValues={initialValues}>
+      <TableModel tableId={tableId} key={`table-model-view-${tableId}`} schemaTransform={schemaTransform} loadingComponent={loadingComponent} initQuery={initQuery} initialValues={initialValues}>
         {children}
       </TableModel>
     )
@@ -80,4 +82,4 @@ const TableView = ({ tableId, modelName, children, initQuery, loadingComponent,
   }
 }
 
-export default TableView
+export default ViewModel

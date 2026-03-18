@@ -89,6 +89,7 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'form-info': wrapFormComponent(FormFormInfo),
   'editable-table': wrapFormComponent(FormEditableTable),
   'relate': wrapFormComponent(FormRelatePlus),
+  'relate-plus': wrapFormComponent(FormRelatePlus),
   'area': wrapFormComponent(FormArea),
 
   // filter组件
@@ -104,7 +105,7 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'filter_user_role': FilterUserRole,
   'filter_single_date': FilterSingleDate,
   'filter_warning_type': FilterWarningType,
-  'filter_log_type': FilterLogType, 
+  'filter_log_type': FilterLogType,
   'filter_text_boolean': FilterTextBoolean,
   'filter_relate_select': FilterRelateSelect,
 
@@ -129,128 +130,129 @@ type FormContextReturnType = ReturnType<typeof useFormContext> & {
   classNames?: Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const FormField = 
-  ({ name, label, type, description, children, required, rules, className, classNames, ...restProps }: FormFieldProps) => {
-  let methods = null
-  try {
-    methods = useFormContext() as FormContextReturnType
-  } catch {
-    return <Button variant={"destructive"}>FormField must be used within a Form.</Button>
-  }
-
-  const ui = useFieldUIStateValue(name)
-  const ContorlComponent = type && fieldMap[type] || Input
-  const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
-  const formClassNames = methods?.classNames
-  const fieldProps = { label, description, required, ...restProps }
-  
-  // 为 editable-table 类型创建自定义验证函数
-  // 将表格内部字段的 need 属性转换为外层的验证规则
-  const editableTableValidate = React.useMemo(() => {
-    const forms = fieldProps?.forms
-    const hasEditableTableForms = forms?.form && forms?.properties
-
-    // 检查是否为 editable-table 类型（通过 type 或 forms 属性判断）
-    const isEditableTable = type === 'editable-table' || hasEditableTableForms
-
-    if (!isEditableTable) {
-      return undefined
+const FormField =
+  ({ name, label, description, children, required, rules, className, classNames, ...restProps }: FormFieldProps) => {
+    let methods = null
+    const type = restProps.fieldType
+    try {
+      methods = useFormContext() as FormContextReturnType
+    } catch {
+      return <Button variant={"destructive"}>FormField must be used within a Form.</Button>
     }
 
-    if (!hasEditableTableForms) {
-      return undefined
-    }
+    const ui = useFieldUIStateValue(name)
+    const ContorlComponent = type && fieldMap[type] || Input
+    const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
+    const formClassNames = methods?.classNames
+    const fieldProps = { label, description, required, ...restProps, ...restProps.schema }
 
-    // 找出所有必填字段 (need: true)
-    const requiredFields: Array<{ key: string; title: string }> = []
-    forms.form.forEach((key: string) => {
-      const fieldSchema = forms.properties[key]
-      if (fieldSchema?.need === true) {
-        requiredFields.push({
-          key: fieldSchema.key || key,
-          title: fieldSchema.title || key
-        })
-      }
-    })
+    // 为 editable-table 类型创建自定义验证函数
+    // 将表格内部字段的 need 属性转换为外层的验证规则
+    const editableTableValidate = React.useMemo(() => {
+      const forms = fieldProps?.forms
+      const hasEditableTableForms = forms?.form && forms?.properties
 
-    // 如果没有必填字段，不需要特殊验证
-    if (requiredFields.length === 0) {
-      return undefined
-    }
+      // 检查是否为 editable-table 类型（通过 type 或 forms 属性判断）
+      const isEditableTable = type === 'editable-table' || hasEditableTableForms
 
-    // 返回验证函数
-    const validateFn = (value: any) => {
-      // 空数组验证
-      if (!Array.isArray(value) || value.length === 0) {
-        return `请至少添加一条数据`
+      if (!isEditableTable) {
+        return undefined
       }
 
-      // 检查每一行的必填字段
-      for (let i = 0; i < value.length; i++) {
-        const row = value[i]
-        for (const field of requiredFields) {
-          const fieldValue = row?.[field.key]
-          // 检查值是否为空 (null, undefined, 或空字符串)
-          if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
-            return `第 ${i + 1} 行的「${field.title}」不能为空`
+      if (!hasEditableTableForms) {
+        return undefined
+      }
+
+      // 找出所有必填字段 (need: true)
+      const requiredFields: Array<{ key: string; title: string }> = []
+      forms.form.forEach((key: string) => {
+        const fieldSchema = forms.properties[key]
+        if (fieldSchema?.need === true) {
+          requiredFields.push({
+            key: fieldSchema.key || key,
+            title: fieldSchema.title || key
+          })
+        }
+      })
+
+      // 如果没有必填字段，不需要特殊验证
+      if (requiredFields.length === 0) {
+        return undefined
+      }
+
+      // 返回验证函数
+      const validateFn = (value: any) => {
+        // 空数组验证
+        if (!Array.isArray(value) || value.length === 0) {
+          return `请至少添加一条数据`
+        }
+
+        // 检查每一行的必填字段
+        for (let i = 0; i < value.length; i++) {
+          const row = value[i]
+          for (const field of requiredFields) {
+            const fieldValue = row?.[field.key]
+            // 检查值是否为空 (null, undefined, 或空字符串)
+            if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
+              return `第 ${i + 1} 行的「${field.title}」不能为空`
+            }
           }
         }
+
+        return undefined // 验证通过
       }
 
-      return undefined // 验证通过
-    }
+      return validateFn
+    }, [type, fieldProps?.forms])
 
-    return validateFn
-  }, [type, fieldProps?.forms])
+    const controllerRules = { required, ...rules, validate: editableTableValidate }
 
-  const controllerRules = { required, ...rules, validate: editableTableValidate }
-
-  return ui.visible ? (
-    <Controller
+    return ui.visible ? (
+      <Controller
         name={name}
         control={methods?.control}
         rules={controllerRules}
         render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid} 
-          className={cn(className, formClassNames?.field, classNames?.field)}>
-          { label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label)}>
-            {label}{required && <span className="text-red-500">*</span>}
-          </FieldLabel>}
-          {
-            children ? ( typeof children === 'function' ? children({
-              id: fieldId,
-              ...field,
-              ...fieldProps,
-              className: cn(formClassNames?.input, classNames?.input),
-              'aria-invalid': fieldState.invalid
-            }) : cloneElement(children as React.ReactElement<any>, {
-              id: fieldId,
-              ...field,
-              ...fieldProps,
-              className: cn(formClassNames?.input, classNames?.input),
-              'aria-invalid': fieldState.invalid
-            }) ) : (
-              <ContorlComponent
-                id={fieldId}
-                {...field}
-                {...fieldProps}
-                className={cn(formClassNames?.input, classNames?.input)}
-                aria-invalid={fieldState.invalid}
-              />
-            )
-          }
-          {description && (
-            <FieldDescription className={cn(formClassNames?.description, classNames?.description)}>
-              {description}
-            </FieldDescription>
-          )}
-          {fieldState.invalid && (
-            <FieldError errors={[fieldState.error]} className={cn(formClassNames?.error, classNames?.error)} />
-          )}
-        </Field>
-      )}
-    />
-  ) : null
-}
+          <Field data-invalid={fieldState.invalid}
+            className={cn(className, formClassNames?.field, classNames?.field)}>
+            {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label)}>
+              {label}{required && <span className="text-red-500">*</span>}
+            </FieldLabel>}
+            {
+              children ? (typeof children === 'function' ? children({
+                id: fieldId,
+                ...field,
+                ...fieldProps,
+                className: cn(formClassNames?.input, classNames?.input),
+                'aria-invalid': fieldState.invalid
+              }) : cloneElement(children as React.ReactElement<any>, {
+                id: fieldId,
+                ...field,
+                ...fieldProps,
+                className: cn(formClassNames?.input, classNames?.input),
+                'aria-invalid': fieldState.invalid
+              })) : (
+                <ContorlComponent
+                  id={fieldId}
+                  {...field}
+                  {...fieldProps}
+                  className={cn(formClassNames?.input, classNames?.input)}
+                  aria-invalid={fieldState.invalid}
+                />
+              )
+            }
+            {description && (
+              <FieldDescription className={cn(formClassNames?.description, classNames?.description)}>
+                {description}
+              </FieldDescription>
+            )}
+            {fieldState.invalid && (
+              <FieldError errors={[fieldState.error]} className={cn(formClassNames?.error, classNames?.error)} />
+            )}
+          </Field>
+        )}
+      />
+    ) : null
+  }
 
 export default FormField

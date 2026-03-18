@@ -76,6 +76,9 @@ const SCHEMA_CORE_FIELDS = [
 
   // 用户字段
   'userType', 'relateTo',
+
+  // 选择器
+  'enum', 'enum_title', 'enum1', 'enum_title1'
 ];
 
 /**

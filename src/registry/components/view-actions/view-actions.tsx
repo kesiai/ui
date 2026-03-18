@@ -116,7 +116,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose }
         </div>
       ) : (
         <ScrollArea className="max-h-[70vh] pr-3">
-          <SchemaForm formId={formId} defaultValues={data} schema={model} formSchema={model.form} onSubmit={handleSave} />
+          <SchemaForm formId={formId} defaultValues={data} schema={model} formSchema={model.formSchema} onSubmit={handleSave} />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}

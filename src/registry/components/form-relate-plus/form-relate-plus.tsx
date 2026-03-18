@@ -53,7 +53,7 @@ const FormRelatePlus: React.FC<FormRelatePlusProps> = (props) => {
   // 只传递需要的属性给子组件
   const dataSelectProps: any = {
     relateSchema: props.relateSchema,
-    tableID: props.tableID,
+    tableID: props.tableID || props.relateSchema?.relate?.id,
     input,
     field: props.field,
     meta: props.meta,
@@ -61,11 +61,11 @@ const FormRelatePlus: React.FC<FormRelatePlusProps> = (props) => {
 
   const addRecordBtnProps = {
     relateSchema: props.relateSchema,
-    tableID: props.tableID,
+    tableID: props.tableID || props.relateSchema?.relate?.id,
     input: props,
     meta: props.meta,
   }
-
+ 
   const dataShowProps = {
     relateSchema: props.relateSchema,
     input: props,

@@ -136,7 +136,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
           },
           filterObj
         )
-
+        
         const newOptions = items.map((item: any) => ({
           value: item.id,
           label: item[displayField] || item.name || item.id,

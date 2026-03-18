@@ -796,7 +796,7 @@ export const ViewFieldRender = ({ value, schema, tableSchema, ...props }: any) =
   const fieldType = tableSchema?.fieldType || schema?.fieldType
 
   const mergeSchema = { ...schema, ...tableSchema }
- 
+  // console.log(fieldType, mergeSchema)
   // 判断公式
   if (mergeSchema?.textContent === 'logic' || fieldType === '公式') {
     const FormulaComponent = fieldMap['formula']

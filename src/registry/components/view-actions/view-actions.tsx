@@ -79,7 +79,7 @@ const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
               return (label || description) ? (
                 <Field>
                   {label && <FieldLabel>
-                    {label}
+                    {label} :
                   </FieldLabel>}
                   {fieldValue}
                   {description && (

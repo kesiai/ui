@@ -95,20 +95,18 @@ const BatchDeleteContent: React.FC<BatchDeleteContentProps> = ({
 }
 
 interface BatchChangeContentProps {
+  batchActionsSchema?: object
   onClose?: () => void
 }
 
 const BatchChangeContent: React.FC<BatchChangeContentProps> = ({
+  batchActionsSchema,
   onClose
 }) => {
-  const { model } = useModel()
   const { saveItem } = useModelSave()
   const { getItems } = useModelGetItems()
   const { selected } = useModelSelect<{ id: string, [key: string]: any }>()
   const [saving, setSaving] = useState(false)
-  const fields = (model.batchChangeFields || ['name', 'money']) as string[]
-  const fs = fields.map(f => f.split('.')[0])
-  const formSchema = model.form !== undefined ? fs.map(name => find(model.form, f => f && (f == name || f.key == name || f.name == name)) || name) : ['*']
   const formId = `batch-change-form-${Date.now()}`
 
   const handleSubmit = useModelCallback(async (_get, set, atoms, values: any) => {
@@ -127,7 +125,7 @@ const BatchChangeContent: React.FC<BatchChangeContentProps> = ({
       setSaving(false)
     }
   }, [selected, saveItem, getItems, onClose])
-
+  
   return (
     <>
       <DialogHeader>
@@ -139,19 +137,23 @@ const BatchChangeContent: React.FC<BatchChangeContentProps> = ({
           已选择 <Badge variant="secondary">{selected.length}</Badge> 项数据，请输入要修改的字段值。
         </div>
 
-        <ScrollArea className="max-h-[60vh] pr-3">
-          <SchemaForm
-            formId={formId}
-            schema={omit({
-              ...model,
-              properties: pick(model.properties, fs),
-              form: formSchema
-            }, 'required')}
-            formSchema={formSchema}
-            onSubmit={handleSubmit}
-          />
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        {
+          batchActionsSchema ? (
+          <ScrollArea className="max-h-[60vh] pr-3">
+            <SchemaForm
+              formId={formId}
+              schema={batchActionsSchema.schema}
+              formSchema={batchActionsSchema.formSchema}
+              onSubmit={handleSubmit}
+            />
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+          ) : (
+            <div className="text-sm text-slate-500 dark:text-slate-400">
+              未配置批量修改字段。
+            </div>
+          )
+        }
       </div>
 
       <DialogFooter>
@@ -201,8 +203,9 @@ export const BatchDeleteAction: React.FC<BaseBatchActionProps> = ({
   )
 }
 
-export const BatchChangeAction: React.FC<BaseBatchActionProps> = ({
-  children
+export const BatchChangeAction: React.FC<BaseBatchActionProps & { batchActionsSchema?: object }> = ({
+  children,
+  batchActionsSchema
 }) => {
   const [open, setOpen] = useState(false)
 
@@ -221,6 +224,7 @@ export const BatchChangeAction: React.FC<BaseBatchActionProps> = ({
       <DialogContent className="max-w-4xl">
         <BatchChangeContent
           onClose={() => setOpen(false)}
+          batchActionsSchema={batchActionsSchema}
         />
       </DialogContent>
     </Dialog>
@@ -235,6 +239,7 @@ interface BatchActionsProps {
   actions: BatchActionType[]
   variant?: 'buttons' | 'dropdown'
   disabled?: boolean
+  batchActionsSchema?: object
   children?: React.ReactNode
 }
 
@@ -242,6 +247,7 @@ const BatchActions: React.FC<BatchActionsProps> = ({
   actions = ['batch-delete'],
   variant = 'dropdown',
   disabled = false,
+  batchActionsSchema,
   children
 }) => {
   const actionLabels: Record<BatchActionType, string> = {
@@ -269,7 +275,7 @@ const BatchActions: React.FC<BatchActionsProps> = ({
           action === 'batch-delete' ? (
             <BatchDeleteAction key={action} />
           ) : action === 'batch-change' ? (
-            <BatchChangeAction key={action} />
+            <BatchChangeAction key={action} batchActionsSchema={batchActionsSchema} />
           ) : null
         ))}
         {children}
@@ -301,7 +307,7 @@ const BatchActions: React.FC<BatchActionsProps> = ({
                 </DropdownMenuItem>
               </BatchDeleteAction>
             ) : action === 'batch-change' ? (
-              <BatchChangeAction>
+              <BatchChangeAction batchActionsSchema={batchActionsSchema}>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   {actionIcons[action]}
                   {actionLabels[action]}

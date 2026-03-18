@@ -98,7 +98,7 @@ const Number = ({ value, schema }: { value: any; schema?: any }) => {
 }
 
 // 密码展示
-const Password = ({  }: { value: any }) => {
+const Password = ({ }: { value: any }) => {
   return <span>······</span>
 }
 
@@ -791,58 +791,28 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
 // 统一字段渲染入口
 // ============================================
 
-// 辅助函数：判断是否需要使用脚本渲染
-const shouldRenderScript = (schema: any) => {
-  return !!(schema?.fieldRenderScript || schema?.allScript)
-}
+export const ViewFieldRender = ({ value, schema, tableSchema, ...props }: any) => {
 
-export const ViewFieldRender = ({ type, value, schema, ...props }: any) => {
-  // 优先判断脚本渲染
-  if (shouldRenderScript(schema)) {
-    const ScriptComponent = fieldMap['script']
-    return <ScriptComponent value={value} schema={schema} {...props} />
-  }
+  const fieldType = tableSchema?.fieldType || schema?.fieldType
 
+  const mergeSchema = { ...schema, ...tableSchema }
+ 
   // 判断公式
-  if (schema?.textContent === 'logic' || schema?.config === '公式') {
+  if (mergeSchema?.textContent === 'logic' || fieldType === '公式') {
     const FormulaComponent = fieldMap['formula']
     return <FormulaComponent value={value} schema={schema} {...props} />
   }
 
   // 判断查找引用
-  if (schema?.config === '查找引用') {
+  if (fieldType === '查找引用') {
     const ReferenceComponent = fieldMap['reference']
     return <ReferenceComponent value={value} schema={schema} {...props} />
-  }
-
-  // 根据 fieldType 映射到对应的组件
-  let fieldType = type || schema?.fieldType
-
-  // 映射旧字段类型到新类型
-  const typeMapping: Record<string, string | undefined> = {
-    'input': schema?.config === '文本' ? 'text' : undefined,
-    'inputNumber': 'number',
-    'datePicker': 'date',
-    'dateRange': 'date-range',
-    'timePicker': 'time',
-    'textEditor': 'rich-text',
-    'attachment': 'upload',
-    'attachments': 'upload',
-    'editableTable': 'editable-table',
-    'link': 'link',
-    'map': 'map',
-    'area': 'map',
-  }
-
-  const mappedType = typeMapping[fieldType]
-  if (mappedType) {
-    fieldType = mappedType
   }
 
   // 获取对应的组件
   const FieldComponent = fieldMap[fieldType] || fieldMap['text']
 
-  return <FieldComponent value={value} schema={schema} {...props} />
+  return <FieldComponent value={value} schema={mergeSchema} {...props} />
 }
 
 // ============================================
@@ -850,91 +820,21 @@ export const ViewFieldRender = ({ type, value, schema, ...props }: any) => {
 // ============================================
 
 type ViewFieldProps = {
-  name: string
   value: any
   item: any
-  type?: string
   schema?: any
-  label?: ReactNode | string
-  description?: ReactNode | string
+  tableSchame?: any
   children?: ReactNode | ((props: any) => ReactNode)
   [key: string]: any
 }
 
-const ViewField = ({ name, label, type, description, children, value, item, schema, ...restProps }: ViewFieldProps) => {
-  // 优先使用 schema.fieldType，其次使用 type 参数
-  const fieldType = type || schema?.fieldType
-
-  // 如果有 schema，使用统一的 ViewFieldRender 组件
-  if (schema) {
-    const fieldValue = (
-      children ? ( typeof children === 'function' ? children({
-        name, value, item, schema,
-        ...restProps
-      }) : cloneElement(children as React.ReactElement<any>, {
-        name,
-        value, item, schema,
-        ...restProps
-      }) ) : (
-        <ViewFieldRender
-          type={fieldType}
-          value={value}
-          schema={schema}
-          item={item}
-          {...restProps}
-        />
-      )
-    )
-
-    return (label || description) ?(
-      <Field>
-        {label && <FieldLabel>
-          {label}
-        </FieldLabel>}
-        {fieldValue}
-        {description && (
-          <FieldDescription>
-            {description}
-          </FieldDescription>
-        )}
-      </Field>
-    ) : fieldValue
-  }
-
-  // 如果没有 schema，使用旧的逻辑（向后兼容）
-  const ValueComponent = (fieldType && fieldMap[fieldType] || Text) as React.ComponentType<any>
-
-  const fieldValue = (
-    children ? ( typeof children === 'function' ? children({
-      name, value, item,
-      ...restProps
-    }) : cloneElement(children as React.ReactElement<any>, {
-      name,
-      value, item,
-      ...restProps
-    }) ) : (
-      <ValueComponent
-        name={name}
-        value={value}
-        item={item}
-        {...restProps}
-      />
+const ViewField = ({ children, schema, ...restProps }: ViewFieldProps) => {
+  const childrenProps = { schema, ...restProps }
+  return (
+    children ? (typeof children === 'function' ? children(childrenProps) : cloneElement(children as React.ReactElement<any>, childrenProps)) : (
+      <ViewFieldRender {...childrenProps} />
     )
   )
-
-  return (label || description) ?(
-    <Field>
-      {label && <FieldLabel>
-        {label}
-      </FieldLabel>}
-      {fieldValue}
-      {description && (
-        <FieldDescription>
-          {description}
-        </FieldDescription>
-      )}
-    </Field>
-  ) : fieldValue
 }
 
 export default ViewField

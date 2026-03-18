@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelState, type ModelSchema } from '@airiot/client'
+import { useModelList, useModel, useModelCallback, useModelState, type ModelSchema } from '@airiot/client'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
-import { DataGridTable,
+import {
+  DataGridTable,
   DataGridTableRowSelect,
-  DataGridTableRowSelectAll, } from '@/components/reui/data-grid/data-grid-table';
+  DataGridTableRowSelectAll,
+} from '@/components/reui/data-grid/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import ViewField from "@/registry/components/view-field/view-field"
 import {
@@ -19,11 +21,6 @@ import { cn } from '@/lib/utils';
 interface IData {
   id: string;
   [key: string]: any;
-}
-
-type ColumnFieldDef = ColumnDef<IData> & {
-  postion?: 'left' | 'right';
-  remove: boolean;
 }
 
 export interface TableLayoutProps {
@@ -53,16 +50,20 @@ const getFieldProp = (model: ModelSchema | null | undefined, field: string): any
   }, model)
 }
 
-const DataCell = ({ name, type, children, ...restProps }: 
-  {name: string, type?: string, 
-    children?: React.ReactNode | ((props: any) => React.ReactNode), [key: string]: any}) => 
-  ({ getValue, row }: CellContext<IData, any>) => {
-  return <ViewField name={name} type={type} value={getValue()} item={row.original} {...restProps}>{children}</ViewField>
-}
+const DataCell = ({ children, ...restProps }:
+  {
+    children?: React.ReactNode | ((props: any) => React.ReactNode), [key: string]: any
+  }) =>
+  ({ getValue, row, column }: CellContext<IData, any>) => {
+
+    const schema = restProps.schema || column.columnDef?.field
+
+    return <ViewField {...restProps} value={getValue()} item={row.original} schema={schema}>{children}</ViewField>
+  }
 
 export const DataTable = ({
   data,
-  columns=[],
+  columns = [],
   className,
   tableLayout = {},
   tableOptions = {},
@@ -83,14 +84,14 @@ export const DataTable = ({
 
   columns.forEach(column => {
     const defColumn = defColumns.find(col => col.id === column.id);
-    if(defColumn) {
+    if (defColumn) {
       Object.assign(column, defColumn)
       defColumns.splice(defColumns.indexOf(defColumn), 1)
     }
     columnsFinal.push(column);
   })
   defColumns.forEach(col => {
-      columnsFinal.push(col);
+    columnsFinal.push(col);
   })
 
   const table = useReactTable({
@@ -148,38 +149,42 @@ export function ViewDataTable({
   const { items, loading, fields } = useModelList()
   const { model, atoms } = useModel()
 
-  const [ rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [ selected, setSelected ] = useModelState<{id: string}[]>(atoms.selected)
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [selected, setSelected] = useModelState<{ id: string }[]>(atoms.selected)
 
-  const [ order, setOrder ] = useModelState(atoms.order)
-  const [ sorting, setSorting ] = useState<SortingState>([])
+  const [order, setOrder] = useModelState(atoms.order)
+  const [sorting, setSorting] = useState<SortingState>([])
 
-  const lockedFields = model.lockedFields || []
   const columnHelper = createColumnHelper<IData>()
   const columns: ColumnDef<IData>[] = []
 
-  fields.forEach((fieldName)=> {
-    const field = getFieldProp(model, fieldName)
-    if(!field) return
+  fields.forEach((tableSchema) => {
+    const fieldName = tableSchema.key
+    const baseSchema = getFieldProp(model, fieldName)
+    const field = { ...baseSchema, ...tableSchema }
+    if (!field) return
     const column: ColumnDef<IData> = columnHelper.accessor(fieldName, {
       id: fieldName,
       field,
       size: field.width || undefined,
-      fixed: lockedFields.indexOf(fieldName) >= 0,
-      header: ({ column }) => <DataGridColumnHeader title={field.title || fieldName} column={column} />,
-      cell: DataCell({ name: fieldName, type: field.type as string, ...field.column }),
+      fixed: field.tableFixed,
+      enableSorting: field.canOrder,
+      header: ({ column }) => {
+        return <DataGridColumnHeader title={field.title || fieldName} column={column} />
+      },
+      cell: DataCell({ name: fieldName, schema: baseSchema, tableSchema, type: field.type as string, ...field.column }),
       ...field.column
     })
 
-    if(field.level2) {
+    if (field.level2) {
       const lastColumn = columns[columns.length - 1] as any
-      if(lastColumn && lastColumn.columns !== undefined &&
-        lastColumn.header == field.level2 ) {
+      if (lastColumn && lastColumn.columns !== undefined &&
+        lastColumn.header == field.level2) {
         lastColumn.columns.push(column)
       } else {
         columns.push({
           header: field.level2,
-          columns: [ column ]
+          columns: [column]
         })
       }
     } else {
@@ -198,7 +203,7 @@ export function ViewDataTable({
       obj[item.id] = true;
       return obj;
     }, {}));
-  }, [ selected ]);
+  }, [selected]);
 
   columns.unshift({
     accessorKey: 'id',
@@ -319,7 +324,7 @@ const useTableContainer = (children: React.ReactElement[] | undefined) => {
   };
 
   React.useEffect(() => {
-    if(!inited)
+    if (!inited)
       setInited(true);
   }, []);
 
@@ -328,7 +333,7 @@ const useTableContainer = (children: React.ReactElement[] | undefined) => {
       {useMemo(() => children, [])}
       {inited && table}
     </ColumnContext.Provider>
-  ), [ children, contextValue, inited])
+  ), [children, contextValue, inited])
 
   return { withColumns, getColumns };
 }
@@ -340,7 +345,6 @@ export const TableColumn: React.FC<TableColumnProps> = ({
   fixed,
   header,
   cell,
-  type,
   level2,
   children,
   ...columnProps
@@ -356,14 +360,15 @@ export const TableColumn: React.FC<TableColumnProps> = ({
     const columnDef: ColumnDef<IData> = {
       id: name,
       accessorKey: name,
+      fixed: fixed,
       header: header ? header as any : (({ column }) => <DataGridColumnHeader title={title || name} column={column as any} />),
-      cell: cell ? cell as any : DataCell({ name, type, children, ...columnProps }),
+      cell: cell ? cell as any : DataCell({ children, ...columnProps }),
       size: width as number | undefined,
       ...columnProps
     };
 
     columnContext.setColumn(name, columnDef);
-  }, [name, title, type, children, width, fixed, header, cell, level2, columnContext, columnProps]);
+  }, [name, title, children, width, fixed, header, cell, level2, columnContext, columnProps]);
 
   return null;
 };

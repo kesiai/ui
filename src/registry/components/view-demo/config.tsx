@@ -7,6 +7,7 @@ import Actions, { CreateAction } from '../view-actions/view-actions'
 import Tools from '../view-tools/view-tools'
 import BatchActions from '../view-batch/view-batch'
 import documentationMd from './view-demo.md?raw'
+import trans from './trans'
 
 export const viewDemoPropsConfig = [
   {
@@ -36,18 +37,25 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-6 overflow-auto">
       <div className="w-full max-w-5xl">
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
-        <ViewModel tableId={props.tableId} modelName={props.modelName}>
+        <ViewModel tableId={props.tableId} modelName={props.modelName} schemaTransform={model => {
+          const { schema, formSchema, tableSchema } = trans(model)
+          console.log(model, schema, formSchema, tableSchema)
+          return {
+            atoms: model.atoms,
+            ...schema,
+            formSchema,
+            tableSchema
+          }
+        }}>
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
             <div className="flex items-center justify-between">
               <CreateAction />
               <Tools tools={['count', 'pageSize', 'columns']} />
             </div>
             <ViewDataTable>
-              <TableColumn name="id" title="ID" width={180} />
-              <TableColumn name="name" title="任务姓名" />
-              <TableColumn name="email" title="邮箱" />
-              <TableColumn name="role" title="角色" />
-              <TableColumn name="createdAt" title="创建时间" />
+              <TableColumn name="text-2D6E" title="姓名" width={180} />
+              <TableColumn name="select-BAE0" title="年级" />
+              <TableColumn name="relate-table-2E3C" title="所属表" />
               <TableColumn name="__actions__" title=" " width={65} enableSorting={false} enableHiding={false} enableResizing={false}>
                 <Actions variant="dropdown" actions={props.actions || ['view', 'edit', 'delete']} />
               </TableColumn>

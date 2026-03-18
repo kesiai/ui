@@ -70,10 +70,10 @@ const DetailShow: React.FC<{
     setLoading(true)
     try {
       const schemaAPI = createAPI({ resource: 'core/t/schema', name: 'schema' })
-      const dataAPI = createAPI({ resource: `core/t/${schema?.relateSchema?.id}/d`, name: 'data' })
+      const dataAPI = createAPI({ resource: `core/t/${schema?.relate?.id}/d`, name: 'data' })
 
       // 获取关联表结构
-      const relateTable = await schemaAPI.get(schema?.relateSchema?.id) as any
+      const relateTable = await schemaAPI.get(schema?.relate?.id) as any
       if (!relateTable?.schema) {
         console.error('该表已被删除')
         setLoading(false)
@@ -186,7 +186,7 @@ const DetailShow: React.FC<{
       <span
         className="detail-span cursor-pointer text-blue-600 hover:underline inline-flex items-center gap-1"
         onClick={() => {
-          const url = `/app/table/${schema?.relateSchema?.id}/${value?.id}/detail`
+          const url = `/app/table/${schema?.relate?.id}/${value?.id}/detail`
           window.open(url, '_blank')
         }}
       >
@@ -249,8 +249,8 @@ export interface RelateShowProps {
 
 const RelateShow: React.FC<RelateShowProps> = ({ value, schema, inList }) => {
   // 数据表单选 (object type)
-  if (schema?.type === 'object' && schema?.relateSchema?.tableType === 'table') {
-    const field = schema.relateSchema.fields && schema.relateSchema.fields[0]
+  if (schema?.type === 'object' && schema?.relate?.tableType === 'table') {
+    const field = schema.relate.fields && schema.relate.fields[0]
     let v = value
     if (isString(value)) {
       try {
@@ -269,8 +269,8 @@ const RelateShow: React.FC<RelateShowProps> = ({ value, schema, inList }) => {
   }
 
   // 数据表多选 (array type)
-  if (schema?.type === 'array' && schema?.relateSchema?.tableType === 'table') {
-    const field = schema.relateSchema.fields && schema.relateSchema.fields[0]
+  if (schema?.type === 'array' && schema?.relate?.tableType === 'table') {
+    const field = schema.relate.fields && schema.relate.fields[0]
     let v = value
     if (isString(value)) {
       try {

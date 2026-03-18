@@ -47,7 +47,7 @@ const SCHEMA_CORE_FIELDS = [
   // 选择器字段（这些属性在formSchema中，不在schema中）
 
   // 关联字段
-  'relateSchema', 'showField', 'relateShowFields', 'insideFilter',
+  'relate', 'showField', 'relateShowFields', 'insideFilter',
 
   // 查找引用字段
   'searchRelate', 'searchCondition', 'computeMethod', 'sort',
@@ -196,12 +196,6 @@ function extractCoreSchema(fieldConfig: Record<string, any>): Record<string, any
   }
   if (fieldConfig.items) {
     result.items = fieldConfig.items;
-  }
-
-  // 特殊处理：关联字段 - relate 改为 relateSchema
-  if (fieldConfig.config === '关联字段' && fieldConfig.relate !== undefined) {
-    result.relateSchema = fieldConfig.relate;
-    delete result.relate;
   }
 
   // 特殊处理：选择器字段 - enum1 改为 enum，enum_title1 改为 enum_title

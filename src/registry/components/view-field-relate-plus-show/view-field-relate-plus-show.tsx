@@ -85,7 +85,7 @@ const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value, inList
   const [loading, setLoading] = React.useState(false)
 
   const getDetailData = async () => {
-    if (!value?.id || !schema?.relateSchema?.id) {
+    if (!value?.id || !schema?.relate?.id) {
       return
     }
 
@@ -93,7 +93,7 @@ const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value, inList
     try {
       // 先获取表结构
       const api = createAPI({ resource: 'core/t/schema' })
-      const relateTable = await api.get(schema.relateSchema.id)
+      const relateTable = await api.get(schema.relate.id)
 
       if (!relateTable?.schema) {
         console.error('该表已被删除')
@@ -102,7 +102,7 @@ const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value, inList
       }
 
       // 再获取数据详情
-      const dataApi = createAPI({ resource: `core/t/${schema.relateSchema.id}/d/` })
+      const dataApi = createAPI({ resource: `core/t/${schema.relate.id}/d/` })
       const data = await dataApi.get(value.id)
 
       setLoading(false)
@@ -146,7 +146,7 @@ const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value, inList
 
     if (showType === 'page') {
       // 跳转页面
-      const url = `/table/${schema?.relateSchema?.id}/${value.id}/detail`
+      const url = `/table/${schema?.relate?.id}/${value.id}/detail`
       window.open(url, '_blank')
     } else if (showType === 'popover') {
       // 先获取数据，然后显示 popover
@@ -253,8 +253,8 @@ const ItemShow: React.FC<{
   field?: any
   detailPage?: boolean
 }> = ({ relateSchema, val, field, detailPage }) => {
-  // 获取显示字段配置（从 schema.relateSchema.fields[0]）
-  const displayFieldConfig = relateSchema?.relateSchema?.fields?.[0]
+  // 获取显示字段配置（从 schema.relate.fields[0]）
+  const displayFieldConfig = relateSchema?.relate?.fields?.[0]
   const displayFieldKey = displayFieldConfig?.key
   const fieldSchema = displayFieldConfig?.fieldSchema
 
@@ -466,8 +466,8 @@ const RelatePlusShow: React.FC<RelatePlusShowProps> = ({ value, schema, inList }
 
   // select 模式 - 使用旧版逻辑
   if (showType === 'select') {
-    // 获取显示字段配置（从 schema.relateSchema.fields[0]）
-    const displayFieldConfig = schema?.relateSchema?.fields?.[0]
+    // 获取显示字段配置（从 schema.relate.fields[0]）
+    const displayFieldConfig = schema?.relate?.fields?.[0]
     const displayFieldKey = displayFieldConfig?.key
     const fieldSchema = displayFieldConfig?.fieldSchema
 

@@ -144,8 +144,12 @@ const FormField =
     const ContorlComponent = type && fieldMap[type] || Input
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
-    const fieldProps = { label, description, required, ...restProps, ...restProps.schema }
+    const fieldProps = { label, description, required, ...restProps }
 
+    if (type == 'relate-plus') {
+      fieldProps['relateSchema'] = { ...fieldProps, ...restProps.schema }
+    }
+  
     // 为 editable-table 类型创建自定义验证函数
     // 将表格内部字段的 need 属性转换为外层的验证规则
     const editableTableValidate = React.useMemo(() => {

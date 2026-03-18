@@ -74,6 +74,7 @@ const fieldMap: { [key: string]: React.ComponentType<any> } = {
   'number': wrapFormComponent(FormInputNumber),
   'select': wrapFormComponent(FormSelect),
   'checkbox': wrapFormComponent(FormCheckbox),
+  'boolean': wrapFormComponent(FormCheckbox),
   'date': wrapFormComponent(FormDate),
   'date-range': wrapFormComponent(FormDateRange),
   'time': wrapFormComponent(FormTime),
@@ -123,6 +124,9 @@ type FormFieldProps = {
   rules?: any
   className?: string
   classNames?: Record<'field' | 'label' | 'input' | 'description' | 'error', string>
+  relateSchema?: any
+  uploadType?: any
+  forms?: any
   [key: string]: any
 }
 
@@ -144,13 +148,16 @@ const FormField =
     const ContorlComponent = type && fieldMap[type] || Input
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
-    const fieldProps = { label, description, required, ...restProps }
+    let fieldProps = { label, description, required, ...restProps, ...restProps.schema }
 
+    // 关联字段组件需要relateSchema属性
     if (type == 'relate-plus') {
       fieldProps['relateSchema'] = { ...fieldProps, ...restProps.schema }
+    } else if (type == 'upload') {
+      // 上传附件使用相同组件 区分单和多
+      fieldProps['uploadType'] = fieldProps.type == 'object' ? 'upload_attachment' : 'upload_attachment_group'
     }
-  
-    // 为 editable-table 类型创建自定义验证函数
+
     // 将表格内部字段的 need 属性转换为外层的验证规则
     const editableTableValidate = React.useMemo(() => {
       const forms = fieldProps?.forms

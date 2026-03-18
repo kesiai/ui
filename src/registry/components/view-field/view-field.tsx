@@ -1,8 +1,3 @@
-import {
-  Field,
-  FieldDescription,
-  FieldLabel
-} from "@/components/ui/field"
 import type { ReactNode } from 'react'
 import React, { cloneElement } from 'react'
 import dayjs from 'dayjs'
@@ -796,7 +791,7 @@ export const ViewFieldRender = ({ value, schema, tableSchema, ...props }: any) =
   const fieldType = tableSchema?.fieldType || schema?.fieldType
 
   const mergeSchema = { ...schema, ...tableSchema }
-  // console.log(fieldType, mergeSchema)
+
   // 判断公式
   if (mergeSchema?.textContent === 'logic' || fieldType === '公式') {
     const FormulaComponent = fieldMap['formula']

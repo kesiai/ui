@@ -9,14 +9,14 @@ const CONFIG_TO_FIELD_TYPE_MAP: Record<string, string> = {
   '选择器': 'select',
   '时间': 'date',
   '日期范围': 'date-range',
-  '时间2': 'text',
+  '时间2': 'time',
   '富文本': 'rich-text',
   '布尔值': 'boolean',
   '查找引用': 'reference',
   '表格': 'editable-table',
   '附件': 'upload',
   '附件组': 'upload',
-  '区域': 'text',
+  '区域': 'area',
   '星级评价': 'rate',
   '定位': 'map',
   '链接': 'link',
@@ -53,7 +53,7 @@ const SCHEMA_CORE_FIELDS = [
   'searchRelate', 'searchCondition', 'computeMethod', 'sort',
 
   // 表格字段
-  'tableFields', 'minCount', 'maxCount', 'fieldRules',
+  'forms', 'minCount', 'maxCount', 'fieldRules',
 
   // 附件字段
   'base64', 'autoName', 'addToken',
@@ -196,6 +196,10 @@ function extractCoreSchema(fieldConfig: Record<string, any>): Record<string, any
   }
   if (fieldConfig.items) {
     result.items = fieldConfig.items;
+  }
+
+  if(fieldConfig.config == '表格'){
+    result.forms = fieldConfig.tableFields
   }
 
   // 特殊处理：选择器字段 - enum1 改为 enum，enum_title1 改为 enum_title

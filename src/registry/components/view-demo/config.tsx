@@ -39,7 +39,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
         <ViewModel tableId={props.tableId} modelName={props.modelName} schemaTransform={model => {
           const { schema, formSchema, tableSchema } = trans(model)
-          console.log(model, schema, formSchema, tableSchema)
+          // console.log(model, schema, formSchema, tableSchema)
           return {
             atoms: model.atoms,
             ...schema,

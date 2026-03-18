@@ -446,25 +446,24 @@ export interface FormUploadProps {
   defaultValType?: string
   key?: string
   filter?: any
-  cellKey?: string
-  type?: 'upload_attachment' | 'upload_attachment_group'
+  uploadType?: 'upload_attachment' | 'upload_attachment_group'
   meta?: any
   record?: any
 }
 
 const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
   (props, ref) => {
-    const { value, onChange, cellKey, type } = props
+    const { value, onChange, uploadType } = props
 
     const { user } = useUser()
     const api = createAPI({ name: 'media' })
 
-    const isSingleUpload = type === 'upload_attachment'
+    const isSingleUpload = uploadType === 'upload_attachment'
     const styleType = props.styleType || 'picture-card'
     const accept = getAccept(props.accept, styleType)
 
     // 上传地址
-    console.log('api', api, user)
+    // console.log('api', api, user)
     const uploadUrl = api.host + '/core/mediaLibrary/upload?action=' +
       (props.onlyCamera ? 'rename' : 'cover')
     const catalog = props.folderType === 'folder' ? ('&catalog=' + props.folder) : ''
@@ -512,7 +511,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
       })
     }, [isSingleUpload, value])
 
-    const cKey = props.key || cellKey
+    const cKey = props.key 
     const width = props.width
     const height = props.height
 

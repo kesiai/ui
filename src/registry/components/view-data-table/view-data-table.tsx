@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelCallback, useModelState, type ModelSchema } from '@airiot/client'
+import { useModelList, useModel, useModelState, type ModelSchema } from '@airiot/client'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
 import {
@@ -172,7 +172,14 @@ export function ViewDataTable({
       header: ({ column }) => {
         return <DataGridColumnHeader title={field.title || fieldName} column={column} />
       },
-      cell: DataCell({ name: fieldName, schema: baseSchema, tableSchema, type: field.type as string, ...field.column }),
+      cell: DataCell({
+        name: fieldName,
+        schema: baseSchema,
+        tableSchema,
+        inList: true,
+        type: field.type as string,
+        ...field.column
+      }),
       ...field.column
     })
 

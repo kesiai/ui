@@ -2,20 +2,18 @@ import * as React from 'react'
 import isArray from 'lodash/isArray'
 import isObject from 'lodash/isObject'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Crosshair, Loader2 } from 'lucide-react'
+import { Loader2, X, ChevronDown } from 'lucide-react'
 import { createAPI, useFormContext } from '@airiot/client'
 import { dealFilter } from '@/registry/lib/form-relate-utils'
 import type { RelateFieldOption } from '@/registry/lib/form-relate-types'
 import { getQueryFilter } from '@/registry/lib/filter-utils'
 import { Table2Context } from '@/registry/lib/table-context'
+import { cn } from '@/lib/utils'
 
 interface AsyncSelectProps {
   input?: {
@@ -82,15 +80,18 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   // 状态管理
   const [loading, setLoading] = React.useState(false)
   const [pageLoading, setPageLoading] = React.useState(false)
-  const [options, setOptions] = React.useState<RelateFieldOption[]>([])
   const [allOptions, setAllOptions] = React.useState<RelateFieldOption[]>([])
+  const [filteredOptions, setFilteredOptions] = React.useState<RelateFieldOption[]>([])
   const [page, setPage] = React.useState(0)
-  const [count, setCount] = React.useState(50)
-  const [precise, setPrecise] = React.useState(false)
-  const [searchValue, setSearchValue] = React.useState('')
+  const [hasMore, setHasMore] = React.useState(true)
+  const [open, setOpen] = React.useState(false)
+  const [inputSearchValue, setInputSearchValue] = React.useState('')
+  const [highlightedIndex, setHighlightedIndex] = React.useState(-1)
 
   const itemsRef = React.useRef<RelateFieldOption[]>([])
   const currentPageRef = React.useRef(0)
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
+  const dropdownRef = React.useRef<HTMLDivElement>(null)
 
   const form = useFormContext()
   const outTable = React.useContext(Table2Context)
@@ -101,25 +102,20 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
     }
   }
 
-  // 获取选项数据
+  // 获取选项数据（不根据搜索词过滤，加载所有数据）
   const loadOptions = React.useCallback(
-    async (inputValue: string = '', pageNum: number = 0): Promise<number> => {
+    async (pageNum: number = 0): Promise<number> => {
       if (currentPageRef.current >= pageNum && pageNum !== 0) {
         return 0
       }
       if (pageNum === 0) {
         itemsRef.current = []
         currentPageRef.current = 0
+        setAllOptions([])
       }
       currentPageRef.current = pageNum
 
       let filterObj: any = {}
-      if (inputValue) {
-        filterObj = precise
-          ? { [displayField]: inputValue }
-          : { [displayField]: { $like: inputValue } }
-      }
-
       dealFilter(filterObj, field, getFormState, outTable)
 
       setLoading(true)
@@ -134,8 +130,8 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
         const relateFieldKeys = relateShowFields?.map((f: { key: string }) => f.key) || []
         const { items } = await api.query(
           {
-            limit: 50,
-            skip: pageNum * 50,
+            limit: 100,
+            skip: pageNum * 100,
             fields: ['id', displayField, ...relateFieldKeys].filter(Boolean)
           },
           filterObj
@@ -149,37 +145,47 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
         }))
 
         itemsRef.current = [...itemsRef.current, ...newOptions]
-        setOptions(newOptions)
-        setCount(items.length || 0)
+
+        setAllOptions((prev) => {
+          // 使用 Map 去重（按 value/id 去重）
+          const optionMap = new Map<string, RelateFieldOption>()
+          // 先添加已有的选项
+          prev.forEach((opt: RelateFieldOption) => optionMap.set(opt.value, opt))
+          // 再添加新选项（会覆盖重复的）
+          newOptions.forEach((opt: RelateFieldOption) => optionMap.set(opt.value, opt))
+          return Array.from(optionMap.values())
+        })
+        setHasMore(items.length === 100)
 
         return items.length || 0
       } catch (error) {
         console.error('加载选项失败:', error)
-        setOptions([])
         return 0
       } finally {
         setLoading(false)
       }
     },
-    [JSON.stringify(field), displayField, schema, relateShowFields, precise]
+    [JSON.stringify(field), displayField, schema, relateShowFields]
   )
+
+  // 前端过滤选项
+  React.useEffect(() => {
+    if (!inputSearchValue) {
+      setFilteredOptions(allOptions)
+    } else {
+      const searchLower = inputSearchValue.toLowerCase()
+      const filtered = allOptions.filter((option) =>
+        option.label?.toLowerCase().includes(searchLower)
+      )
+      setFilteredOptions(filtered)
+    }
+    setHighlightedIndex(-1)
+  }, [inputSearchValue, allOptions])
 
   // 初始加载
   React.useEffect(() => {
     loadOptions()
   }, [loadOptions])
-
-  // 合并去重选项
-  React.useEffect(() => {
-    setAllOptions((before) => {
-      return before
-        .concat(options)
-        .filter(
-          (option, index, self) =>
-            index === self.findIndex((t) => t.value === option.value)
-        )
-    })
-  }, [options])
 
   // 多字段联动表单其他字段
   React.useEffect(() => {
@@ -193,55 +199,66 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
     })
   }, [JSON.stringify(propValue || {}), relateShowFields, field])
 
-  // 处理值变化
-  const handleChange = (selectedValue: string | string[]) => {
-    if (!selectedValue || (isArray(selectedValue) && selectedValue.length === 0)) {
-      onChange?.(mode === 'multiple' ? [] : {})
-      return
-    }
-
-    if (mode === 'multiple' && isArray(selectedValue)) {
-      const selectedOptions = selectedValue
-        .map((key) => {
-          const result = allOptions.find((item) => item.value === key)
-          return result || (isArray(propValue) && propValue.find((v: any) => v?.key === key)) || null
-        })
-        .filter(Boolean)
-
-      onChange?.(selectedOptions)
+  // 处理选项选择
+  const handleSelectOption = (option: RelateFieldOption) => {
+    if (mode === 'multiple' && isArray(propValue)) {
+      const isSelected = propValue.some((v: any) => v?.key === option.value)
+      let newSelected: RelateFieldOption[]
+      if (isSelected) {
+        newSelected = propValue.filter((v: any) => v?.key !== option.value)
+      } else {
+        newSelected = [...propValue, option]
+      }
+      onChange?.(newSelected)
     } else {
-      const selectedOption = allOptions.find((opt) => opt.value === selectedValue)
-      onChange?.(selectedOption || {})
+      onChange?.(option)
+      setOpen(false)
+      setInputSearchValue('')
     }
   }
 
-  // 处理搜索
-  const handleSearch = async (value: string) => {
-    setSearchValue(value)
-    const _count = await loadOptions(value, 0)
-    setCount(_count)
-    setPage(0)
+  // 处理清除
+  const handleClear = (e: React.MouseEvent<SVGSVGElement>) => {
+    e.stopPropagation()
+    onChange?.(mode === 'multiple' ? [] : {})
+    setInputSearchValue('')
   }
 
-  // 切换精确/模糊搜索
-  const togglePrecise = () => {
-    const _precise = !precise
-    setPrecise(_precise)
-    handleSearch(searchValue)
+  // 处理键盘事件
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setHighlightedIndex((prev: number) => {
+        const next = prev + 1
+        return next < filteredOptions.length ? next : prev
+      })
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setHighlightedIndex((prev: number) => {
+        const next = prev - 1
+        return next >= 0 ? next : 0
+      })
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (highlightedIndex >= 0 && highlightedIndex < filteredOptions.length) {
+        handleSelectOption(filteredOptions[highlightedIndex])
+      }
+    } else if (e.key === 'Escape') {
+      setOpen(false)
+    }
   }
 
   // 加载更多
   const loadMore = React.useCallback(async () => {
-    if (pageLoading || count < 50) return
+    if (pageLoading || !hasMore) return
 
     const nextPage = page + 1
     setPage(nextPage)
     setPageLoading(true)
 
-    const _count = await loadOptions(searchValue, nextPage)
-    setCount(_count)
+    await loadOptions(nextPage)
     setPageLoading(false)
-  }, [page, pageLoading, count, searchValue, loadOptions])
+  }, [page, pageLoading, hasMore, loadOptions])
 
   // 格式化显示值
   const formatDisplayValue = (val: any): string => {
@@ -258,80 +275,134 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
 
   return (
     <div style={{ position: 'relative', width: '100%', minWidth: 150, ...style }}>
-      <Select
-        value={currentValue}
-        onValueChange={handleChange}
-        disabled={disabled}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder={label}>
-            {mode === 'multiple' && isArray(propValue) && propValue.length > 0
-              ? propValue.map((v) => formatDisplayValue(v)).join(', ')
-              : formatDisplayValue(propValue)}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {loading && options.length === 0 ? (
-            <div className="flex items-center justify-center p-4">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="ml-2">加载中...</span>
+      <Popover open={open} onOpenChange={(newOpen: boolean) => {
+        setOpen(newOpen)
+        if (newOpen) {
+          setTimeout(() => searchInputRef.current?.focus(), 0)
+        } else {
+          setInputSearchValue('')
+        }
+      }}>
+        <PopoverTrigger asChild>
+          <div
+            className={cn(
+              'flex items-center justify-between w-full h-10 px-3 py-2 text-sm bg-background border border-input rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground',
+              disabled && 'cursor-not-allowed opacity-50'
+            )}
+            onClick={() => !disabled && setOpen(true)}
+          >
+            <span className={cn('flex-1 truncate', !propValue && 'text-muted-foreground')}>
+              {mode === 'multiple' && isArray(propValue) && propValue.length > 0
+                ? propValue.map((v) => formatDisplayValue(v)).join(', ')
+                : formatDisplayValue(propValue) || label}
+            </span>
+            <div className="flex items-center gap-1">
+              {(propValue || (mode === 'multiple' && isArray(propValue) && propValue.length > 0)) && !disabled && (
+                <X
+                  className="h-4 w-4 text-muted-foreground hover:text-foreground"
+                  onClick={handleClear}
+                />
+              )}
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
             </div>
-          ) : options.length === 0 ? (
-            <div className="p-4 text-center text-sm text-muted-foreground">暂无数据</div>
-          ) : (
-            <>
-              {options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-              {loading && page > 0 && (
-                <div className="flex items-center justify-center p-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-3 w-3 animate-spin mr-1" />
-                  加载中...
-                </div>
+          </div>
+        </PopoverTrigger>
+        <PopoverContent
+          className="p-0 w-full min-w-[200px]"
+          align="start"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <div className="p-2">
+            {/* 搜索输入框 */}
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={inputSearchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputSearchValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="搜索..."
+              className={cn(
+                'w-full h-9 px-3 py-1 text-sm bg-background border border-input rounded-md',
+                'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                'placeholder:text-muted-foreground'
               )}
-              {!loading && count < 50 && page > 0 && (
-                <div className="text-center p-2 text-sm text-muted-foreground">
-                  已加载全部
-                </div>
-              )}
-              {count === 50 && !loading && (
-                <div className="text-center p-2">
-                  <Button variant="ghost" size="sm" onClick={loadMore} disabled={pageLoading}>
-                    {pageLoading ? (
-                      <>
-                        <Loader2 className="h-3 w-3 animate-spin mr-1" />
-                        加载中...
-                      </>
-                    ) : (
-                      '加载更多'
-                    )}
-                  </Button>
-                </div>
-              )}
-            </>
-          )}
-        </SelectContent>
-      </Select>
+            />
 
-      {/* <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-8 top-1/2 -translate-y-1/2 h-6 w-6"
-              onClick={togglePrecise}
+            {/* 选项列表 */}
+            <div
+              ref={dropdownRef}
+              className="mt-1 max-h-60 overflow-y-auto"
             >
-              <Crosshair className={`h-3 w-3 ${precise ? 'text-green-600' : ''}`} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{precise ? '模糊搜索' : '精确搜索'}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider> */}
+              {loading && filteredOptions.length === 0 ? (
+                <div className="flex items-center justify-center p-4">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="ml-2 text-sm">加载中...</span>
+                </div>
+              ) : filteredOptions.length === 0 ? (
+                <div className="p-4 text-center text-sm text-muted-foreground">
+                  {inputSearchValue ? '未找到匹配项' : '暂无数据'}
+                </div>
+              ) : (
+                <>
+                  {filteredOptions.map((option: RelateFieldOption, index: number) => {
+                    const isSelected = mode === 'multiple'
+                      ? isArray(propValue) && propValue.some((v: any) => v?.key === option.value)
+                      : (propValue as any)?.key === option.value
+                    return (
+                      <div
+                        key={option.value}
+                        className={cn(
+                          'flex items-center px-3 py-2 text-sm cursor-pointer rounded-md',
+                          'hover:bg-accent hover:text-accent-foreground',
+                          highlightedIndex === index && 'bg-accent',
+                          isSelected && 'bg-accent text-accent-foreground'
+                        )}
+                        onClick={() => handleSelectOption(option)}
+                        onMouseEnter={() => setHighlightedIndex(index)}
+                      >
+                        {mode === 'multiple' && (
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            readOnly
+                            className="mr-2"
+                          />
+                        )}
+                        <span className="truncate">{option.label}</span>
+                      </div>
+                    )
+                  })}
+                  {loading && page > 0 && (
+                    <div className="flex items-center justify-center p-2 text-sm text-muted-foreground">
+                      <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                      加载中...
+                    </div>
+                  )}
+                  {!loading && !hasMore && page > 0 && (
+                    <div className="text-center p-2 text-sm text-muted-foreground">
+                      已加载全部
+                    </div>
+                  )}
+                  {hasMore && !loading && (
+                    <div className="text-center p-2">
+                      <Button variant="ghost" size="sm" onClick={loadMore} disabled={pageLoading} className="w-full">
+                        {pageLoading ? (
+                          <>
+                            <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                            加载中...
+                          </>
+                        ) : (
+                          '加载更多'
+                        )}
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   )
 }

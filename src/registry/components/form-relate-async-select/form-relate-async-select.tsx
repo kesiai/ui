@@ -331,7 +331,8 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
             {/* 选项列表 */}
             <div
               ref={dropdownRef}
-              className="mt-1 max-h-60 overflow-y-auto"
+              className="mt-1 max-h-60 overflow-y-scroll"
+              onWheel={(e) => e.stopPropagation()}
             >
               {loading && filteredOptions.length === 0 ? (
                 <div className="flex items-center justify-center p-4">

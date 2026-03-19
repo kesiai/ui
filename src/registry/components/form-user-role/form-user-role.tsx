@@ -270,7 +270,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
           />
 
           {/* 选项列表 */}
-          <div className="mt-1 max-h-60 overflow-y-auto">
+          <div className="mt-1 max-h-60 overflow-y-scroll" onWheel={(e) => e.stopPropagation()}>
             {loading && options.length === 0 ? (
               <div className="flex items-center justify-center p-4">
                 <Loader2 className="h-4 w-4 animate-spin" />

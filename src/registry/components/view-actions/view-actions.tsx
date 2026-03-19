@@ -14,6 +14,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Field,
+  FieldDescription,
+  FieldLabel
+} from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -46,7 +51,7 @@ interface ViewActionContentProps {
 
 const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
   const { data, loading, model } = useModelGet({ id: itemId })
-  const { fields } = useFormSchema({ schema: model, formSchema: model.form })
+  const { fields } = useFormSchema({ schema: model, formSchema: model.formSchema })
 
   return (
     <>
@@ -60,9 +65,31 @@ const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
       ) : data ? (
         <ScrollArea className="max-h-[70vh] pr-3">
           <div className="space-y-4 pr-4">
-            {fields.map((field) => (
-              <ViewField schema={field} value={data?.[field.name]} item={data} {...field} key={`formfield-${field.name}`} />
-            ))}
+            {fields.map((field) => {
+              const label = field.label
+              const description = field.description
+              const fieldValue = (<span className='w-fit'><ViewField
+                {...field}
+                schema={field}
+                value={data?.[field.name]}
+                item={data}
+                key={`formfield-${field.name}`}
+                className={'w-fit'}
+              /></span>)
+              return (label || description) ? (
+                <Field>
+                  {label && <FieldLabel>
+                    {label} :
+                  </FieldLabel>}
+                  {fieldValue}
+                  {description && (
+                    <FieldDescription>
+                      {description}
+                    </FieldDescription>
+                  )}
+                </Field>
+              ) : fieldValue
+            })}
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
@@ -346,7 +373,7 @@ interface BaseActionProps {
   children?: React.ReactNode
 }
 
-interface ViewActionProps extends BaseActionProps {}
+interface ViewActionProps extends BaseActionProps { }
 
 export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children }) => {
   const trigger = children || (
@@ -368,7 +395,7 @@ export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children }) => {
   )
 }
 
-interface EditActionProps extends BaseActionProps {}
+interface EditActionProps extends BaseActionProps { }
 
 export const EditAction: React.FC<EditActionProps> = ({ itemId, children }) => {
   const [open, setOpen] = useState(false)
@@ -512,7 +539,7 @@ export const ExportAction: React.FC<ExportActionProps> = ({
   )
 }
 
-interface CopyActionProps extends BaseActionProps {}
+interface CopyActionProps extends BaseActionProps { }
 
 export const CopyAction: React.FC<CopyActionProps> = ({ itemId, children }) => {
   const [open, setOpen] = useState(false)
@@ -555,7 +582,7 @@ const Actions: React.FC<ActionsProps> = ({
   variant = 'dropdown'
 }) => {
   const id = itemId || item?.id
-  if(!id) return null
+  if (!id) return null
   // Render as button group
   if (variant === 'buttons') {
     return (

@@ -54,32 +54,30 @@ const BatchDeleteContent: React.FC<BatchDeleteContentProps> = ({
 
   return (
     <>
-      <DialogHeader>
+      <DialogHeader className="shrink-0">
         <DialogTitle>确认批量删除</DialogTitle>
       </DialogHeader>
 
-      <div className="space-y-4 py-4">
-        <div className="text-sm text-slate-600 dark:text-slate-300">
-          确定要删除选中的 <Badge variant="destructive">{selected.length}</Badge> 项数据吗？此操作不可撤销。
-        </div>
-
-        {selected && selected.length > 0 && (
-          <ScrollArea className="max-h-[60vh] border rounded-lg">
-            <div className="p-4 space-y-2 pr-4">
-              {selected.map((item) => (
-                <div key={item.id} className="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded">
-                  <div className="flex-1 text-sm text-slate-800 dark:text-slate-200">
-                    {model.displayField && item[model.displayField] || item._label || item.name || item.id}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-        )}
+      <div className="text-sm text-slate-600 dark:text-slate-300 shrink-0 py-2">
+        确定要删除选中的 <Badge variant="destructive">{selected.length}</Badge> 项数据吗？此操作不可撤销。
       </div>
 
-      <DialogFooter>
+      {selected && selected.length > 0 && (
+        <ScrollArea className="h-[50vh] border rounded-lg">
+          <div className="p-4 space-y-2 pr-4">
+            {selected.map((item) => (
+              <div key={item.id} className="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded">
+                <div className="flex-1 text-sm text-slate-800 dark:text-slate-200">
+                  {model.displayField && item[model.displayField] || item._label || item.name || item.id}
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      )}
+
+      <DialogFooter className="shrink-0">
         <DialogClose asChild>
           <Button variant="outline" disabled={deleting}>
             取消
@@ -236,7 +234,7 @@ export const BatchChangeAction: React.FC<BaseBatchActionProps & { batchActionsSc
 export type BatchActionType = 'batch-delete' | 'batch-change'
 
 interface BatchActionsProps {
-  actions: BatchActionType[]
+  actions?: BatchActionType[]
   variant?: 'buttons' | 'dropdown'
   disabled?: boolean
   batchActionsSchema?: object

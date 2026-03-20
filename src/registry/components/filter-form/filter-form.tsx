@@ -14,8 +14,9 @@ type SchemaFormProps = UseFormPropsExtended & UseFormSchemaProps & {
 }
 
 const FilterSchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, ...props }: SchemaFormProps) => {
-  
+
   const { fields } = useFilterSchema({ schema, formSchema })
+
   const methods = useForm(props)
 
   return (
@@ -23,12 +24,12 @@ const FilterSchemaForm = ({ schema, formSchema, onSubmit, formId, children, clas
       <form id={formId} onSubmit={methods.handleSubmit(onSubmit)} className={classNames?.form}>
         <FieldGroup className={classNames?.group}>
           {fields.map(field => (
-            <FormField {...field} name={field.key || ''} key={field.key} />
+            <span className="w-fit"><FormField {...field} isFilter={true} name={field.key || ''} key={field.key} /></span>
           ))}
         </FieldGroup>
-        {children ? ( typeof children === 'function' ? children({
+        {children ? (typeof children === 'function' ? children({
           ...methods
-        }) : children ) : null}
+        }) : children) : null}
       </form>
     </FormProvider>
   )

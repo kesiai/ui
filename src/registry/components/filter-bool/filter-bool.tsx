@@ -37,7 +37,7 @@ const FilterBool = (props: any) => {
         onCheckedChange={onChange}
       />
       <span className="ml-2 text-sm text-muted-foreground">
-        {value ? (field.boolLabel?.[0] || '真') : (field.boolLabel?.[1] || '假')}
+        {value ? (field?.boolLabel?.[0] || '真') : (field?.boolLabel?.[1] || '假')}
       </span>
     </>
   )

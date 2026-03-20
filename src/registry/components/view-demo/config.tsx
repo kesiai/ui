@@ -4,6 +4,7 @@ import { ComponentConfig } from '@/app/config/types'
 import ViewDataTable, { TableColumn } from '../view-data-table/view-data-table'
 import ViewPagination from '../view-pagination/view-pagination'
 import Actions, { CreateAction } from '../view-actions/view-actions'
+import ViewFilter from '../view-filter/view-filter'
 import Tools from '../view-tools/view-tools'
 import BatchActions from '../view-batch/view-batch'
 import documentationMd from './view-demo.md?raw'
@@ -48,6 +49,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
           }
         }}>
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
+            <ViewFilter  />
             <div className="flex items-center justify-between">
               <CreateAction />
               <Tools tools={['count', 'pageSize', 'columns']} />

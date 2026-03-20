@@ -138,7 +138,7 @@ const Select = ({ value, schema }: { value: any; schema?: any }) => {
             <span
               key={index}
               className={cn(
-                "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white",
+                "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white !w-fit",
                 !color && "bg-gray-500"
               )}
               style={color ? { backgroundColor: color || 'gray' } : {}}
@@ -157,7 +157,7 @@ const Select = ({ value, schema }: { value: any; schema?: any }) => {
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white",
+        "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white !w-fit",
         !color && "bg-gray-500"
       )}
       style={color ? { backgroundColor: color || 'gray' } : {}}

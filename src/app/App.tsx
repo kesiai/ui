@@ -14,7 +14,7 @@ const apiHost = 'http://192.168.99.101:3031'
 const projectId = 'ljnew'
 
 // console.log('🔧 配置 @airiot/client:', { apiHost, projectId })
-console.log('🔧 配置 @airiot/client:', { componentCategories })
+// console.log('🔧 配置 @airiot/client:', { componentCategories })
 try {
   const { loadUser } = useUser()
   setConfig({

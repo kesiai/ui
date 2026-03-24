@@ -28,7 +28,7 @@ const FormRelatePlusDataSelect: React.FC<FormRelatePlusDataSelectProps> = (props
   // User/Role special handling would go here if needed
   // For now, we use RelateSelect/RelateMultiSelect/RelateModelSelect based on recordSelectType
 
-  if (relateSchema.recordSelectType === 'select') {
+  if (!relateSchema.recordSelectType || relateSchema.recordSelectType === 'select') {
     if (relateSchema.selectType === 'multiple') {
       SelectComponent = RelateMultiSelect
     } else {
@@ -69,7 +69,7 @@ const FormRelatePlusDataSelect: React.FC<FormRelatePlusDataSelectProps> = (props
     },
     ...extraProps,
   }
-
+  console.log(selectProps)
   return (
     <div className="flex flex-row w-full gap-2">
       <SelectComponent {...selectProps} />

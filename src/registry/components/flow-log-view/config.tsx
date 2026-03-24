@@ -23,7 +23,7 @@ export const flowLogViewDefaultProps = {
 }
 
 const renderFlowLogViewPreview = (props: Record<string, any>) => {
-  const Log = ({variables}: LogRender) => {
+  const Log = ({variables}: any) => {
     return <>执行结果：{JSON.stringify(variables || {})}</>
   }
   return (

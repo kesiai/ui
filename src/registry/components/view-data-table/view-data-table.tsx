@@ -256,6 +256,9 @@ export function ViewDataTable({
     className={className}
     tableLayout={tableLayout}
     gridOptions={{
+      loadingMode: 'spinner',
+      loadingMessage: '数据加载中...',
+      emptyMessage: '暂无数据',
       ...gridOptions,
       isLoading: loading
     }}

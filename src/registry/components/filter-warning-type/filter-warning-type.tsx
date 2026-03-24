@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getConfig } from '@airiot/client'
+import { getSettings } from '@airiot/client'
 import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Check, ChevronDown, X } from 'lucide-react'
@@ -18,11 +18,11 @@ interface FilterWarningTypeProps {
   }
 }
 
-const FilterWarningType: React.FC<FilterWarningTypeProps> = ({ value, onChange, schema }) => {
+const FilterWarningType: React.FC<FilterWarningTypeProps> = async ({ value, onChange, schema }) => {
   const [open, setOpen] = useState(false)
 
   // 从配置中获取报警类型列表
-  const settings = getConfig()?.settings
+  const settings = await getSettings()
   const warningKinds: WarningKindOption[] = settings?.warning?.warningkind || [{
     id:
       "ada21497-888f-4f6d-acc3-cb04250d8037", name: "超限报警"

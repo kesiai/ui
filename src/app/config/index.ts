@@ -15,7 +15,8 @@ const categoryConfig: Record<string, { name: string; icon: string; order: number
   'gis': { name: 'GIS组件', icon: '🗺️', order: 7 },
   'video': { name: '视频组件', icon: '📹', order: 8 },
   'mobile': { name: '移动端组件', icon: '📱', order: 9 },
-  '3d': { name: '三维组件', icon: '🌍', order: 9 }
+  '3d': { name: '三维组件', icon: '🌍', order: 9 },
+  'flow': { name: '流程组件', icon: '⚡', order: 10 }
 }
 
 // 根据组件 ID 判断分类
@@ -99,6 +100,10 @@ function getCategoryByComponentId(componentId: string): string {
 
   if (componentId.startsWith('model-3d')) {
     return '3d'
+  }
+
+  if (componentId.startsWith('flow-')) {
+    return 'flow'
   }
 
   // 默认归为业务组件

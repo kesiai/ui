@@ -344,7 +344,7 @@ async function buildRegistry() {
             // 计算在 registry 中的路径
             const relCssFromFolder = path.relative(absFolder, absCssPath);
             const registryCssPath = folder === 'components'
-              ? `registry/components/airiot/${relCssFromFolder.replace(/\\/g, '/')}`
+              ? `registry/components/kesi/${relCssFromFolder.replace(/\\/g, '/')}`
               : `registry/${folder}/${relCssFromFolder.replace(/\\/g, '/')}`;
 
             fileList.push({
@@ -372,7 +372,7 @@ async function buildRegistry() {
             // 计算在 registry 中的路径
             const relTsFromFolder = path.relative(absFolder, existingPath);
             const registryTsPath = folder === 'components'
-              ? `registry/components/airiot/${relTsFromFolder.replace(/\\/g, '/')}`
+              ? `registry/components/kesi/${relTsFromFolder.replace(/\\/g, '/')}`
               : `registry/${folder}/${relTsFromFolder.replace(/\\/g, '/')}`;
 
             // 避免重复添加（已经在 fileList 中的文件不再添加）

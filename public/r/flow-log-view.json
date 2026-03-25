@@ -3,7 +3,9 @@
   "type": "registry:component",
   "title": "Flow Log View",
   "description": "Flow Log View - 组件",
-  "dependencies": [],
+  "dependencies": [
+    "react-flow-renderer"
+  ],
   "registryDependencies": [
     "card"
   ],

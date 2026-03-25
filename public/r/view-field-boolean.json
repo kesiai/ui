@@ -1,0 +1,17 @@
+{
+  "name": "view-field-boolean",
+  "type": "registry:component",
+  "title": "View Field Boolean",
+  "description": "View Field Boolean - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-boolean/view-field-boolean.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport { CheckCircle2, XCircle } from 'lucide-react'\n\nconst BooleanIcon = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return value ? (\n    <CheckCircle2 className=\"h-5 w-5 text-green-500\" />\n  ) : (\n    <XCircle className=\"h-5 w-5 text-gray-400\" />\n  )\n}\n\nexport { BooleanIcon }\n"
+    }
+  ]
+}

@@ -31,7 +31,7 @@
 使用 content 属性设置默认文本。
 
 ```tsx
-import { TextArea } from '@/registry/components/airiot/textarea'
+import { TextArea } from '@/registry/components/kesi/textarea'
 
 function Example() {
   return (
@@ -167,7 +167,7 @@ function Example() {
 创建一个带验证的评论输入组件。
 
 ```tsx
-import { TextArea } from '@/registry/components/airiot/textarea'
+import { TextArea } from '@/registry/components/kesi/textarea'
 import { useState } from 'react'
 
 function CommentBox() {

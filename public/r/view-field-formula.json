@@ -1,0 +1,19 @@
+{
+  "name": "view-field-formula",
+  "type": "registry:component",
+  "title": "View Field Formula",
+  "description": "View Field Formula - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-formula/view-field-formula.tsx",
+      "type": "registry:component",
+      "content": "import isString from 'lodash/isString'\nimport isNumber from 'lodash/isNumber'\nimport isArray from 'lodash/isArray'\nimport isObject from 'lodash/isObject'\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from '@/components/ui/tooltip'\n\nconst Formula = ({ value }: { value: any }) => {\n  if (isString(value) || isNumber(value)) {\n    return <span>{value}</span>\n  } else if (isArray(value) && (isString(value[0]) || isNumber(value[0]))) {\n    return <span>{value.join(',')}</span>\n  } else if (isArray(value) || isObject(value)) {\n    let str = JSON.stringify(value)\n    if (str.length > 50) {\n      return (\n        <TooltipProvider>\n          <Tooltip>\n            <TooltipTrigger asChild>\n              <span className=\"cursor-help\">{str.substring(0, 50)}...</span>\n            </TooltipTrigger>\n            <TooltipContent>\n              <p className=\"max-w-md break-word\">{str}</p>\n            </TooltipContent>\n          </Tooltip>\n        </TooltipProvider>\n      )\n    }\n    return <span>{str}</span>\n  }\n  return <span></span>\n}\n\nexport { Formula }\n"
+    }
+  ]
+}

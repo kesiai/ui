@@ -90,8 +90,8 @@ interface PolygonStyle {
 在地图上绘制一条线段。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { PolygonViews } from '@/registry/components/airiot/gis-polygon-draw'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { PolygonViews } from '@/registry/components/kesi/gis-polygon-draw'
 
 function LineStringExample() {
   const data = [{
@@ -324,8 +324,8 @@ function WithToolbarExample() {
 创建一个完整的区域管理应用，支持区域显示、样式配置和切换。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { PolygonViews } from '@/registry/components/airiot/gis-polygon-draw'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { PolygonViews } from '@/registry/components/kesi/gis-polygon-draw'
 
 function RegionManagementApp() {
   const [regions, setRegions] = React.useState([

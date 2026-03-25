@@ -46,7 +46,7 @@ interface StatusConfig {
 根据字符串值匹配状态。
 
 ```tsx
-import { Status } from '@/registry/components/airiot/status'
+import { Status } from '@/registry/components/kesi/status'
 
 function Example() {
   const statuses = [

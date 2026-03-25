@@ -7,7 +7,7 @@
   "registryDependencies": [],
   "files": [
     {
-      "path": "registry/components/airiot/filter-area/filter-area.tsx",
+      "path": "registry/components/kesi/filter-area/filter-area.tsx",
       "type": "registry:component",
       "content": "import FormArea from \"../form-area/form-area\";\n\nconst FilterArea = (props: any) => {\n  return <FormArea {...props} defaultValue={undefined} />\n}\n\nexport { FilterArea }"
     },

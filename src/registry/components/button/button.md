@@ -41,7 +41,7 @@
 最简单的按钮使用，只显示默认文字。
 
 ```tsx
-import { Button } from '@/registry/components/airiot/button'
+import { Button } from '@/registry/components/kesi/button'
 
 function Example() {
   return <Button />
@@ -150,7 +150,7 @@ function Example() {
 创建一个表单提交场景，使用 isSubmit 属性与 FormContext 配合。
 
 ```tsx
-import { Button } from '@/registry/components/airiot/button'
+import { Button } from '@/registry/components/kesi/button'
 import { FormContext } from '@/registry/lib/form-context'
 
 function Example() {
@@ -196,7 +196,7 @@ function Example() {
 模拟异步操作场景，显示加载状态。
 
 ```tsx
-import { Button } from '@/registry/components/airiot/button'
+import { Button } from '@/registry/components/kesi/button'
 import { useState } from 'react'
 
 function Example() {
@@ -226,7 +226,7 @@ function Example() {
 创建一组不同样式的操作按钮。
 
 ```tsx
-import { Button } from '@/registry/components/airiot/button'
+import { Button } from '@/registry/components/kesi/button'
 
 function Example() {
   return (
@@ -261,7 +261,7 @@ function Example() {
 使用 icon 尺寸创建图标按钮（需要配合图标库使用）。
 
 ```tsx
-import { Button } from '@/registry/components/airiot/button'
+import { Button } from '@/registry/components/kesi/button'
 
 function Example() {
   return (

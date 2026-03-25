@@ -133,7 +133,7 @@
 ### 1. 查询所有消息
 
 ```tsx
-import { DatasourceMessage } from '@/registry/components/airiot/datasource-message'
+import { DatasourceMessage } from '@/registry/components/kesi/datasource-message'
 
 function AllMessages() {
   return (
@@ -364,7 +364,7 @@ function ManualRefreshMessages() {
 ### 10. 子组件获取数据
 
 ```tsx
-import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
+import { useContextProvider } from '@/registry/components/kesi/container-context-provider'
 
 function MessageDisplay() {
   const { data, loading } = useContextProvider()[0]
@@ -395,8 +395,8 @@ function MessageDisplay() {
 ### 消息统计仪表板
 
 ```tsx
-import { DatasourceMessage } from '@/registry/components/airiot/datasource-message'
-import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
+import { DatasourceMessage } from '@/registry/components/kesi/datasource-message'
+import { useContextProvider } from '@/registry/components/kesi/container-context-provider'
 
 function MessageDashboard() {
   return (

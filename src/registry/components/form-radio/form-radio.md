@@ -36,7 +36,7 @@
 ### 1. 基础单选框
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 
 function BasicRadio() {
   const options = [
@@ -148,7 +148,7 @@ function NumericRadio() {
 ### 性别选择
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 import { useState } from 'react'
 
 function GenderSelector() {
@@ -178,7 +178,7 @@ function GenderSelector() {
 ### 支付方式选择
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 import { useState } from 'react'
 
 function PaymentMethod() {
@@ -210,7 +210,7 @@ function PaymentMethod() {
 ### 配送方式
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 import { useState } from 'react'
 
 function DeliveryMethod() {
@@ -247,7 +247,7 @@ function DeliveryMethod() {
 ### 问卷单选
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 import { useState } from 'react'
 
 function QuestionRadio() {
@@ -283,7 +283,7 @@ function QuestionRadio() {
 ### 评分选择
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 
 function RatingSelector() {
   const ratingOptions = [
@@ -311,7 +311,7 @@ function RatingSelector() {
 ### 主题切换
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 import { useState } from 'react'
 
 function ThemeSwitcher() {
@@ -339,7 +339,7 @@ function ThemeSwitcher() {
 ### 动态选项
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 import { useState } from 'react'
 
 function DynamicRadio() {
@@ -380,7 +380,7 @@ function DynamicRadio() {
 ### 带描述的选项
 
 ```tsx
-import { FormRadio } from '@/registry/components/airiot/form-radio/form-radio'
+import { FormRadio } from '@/registry/components/kesi/form-radio/form-radio'
 
 function RadioWithDescription() {
   const options = [

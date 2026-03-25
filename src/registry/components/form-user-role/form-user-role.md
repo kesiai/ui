@@ -52,7 +52,7 @@ interface FormUserRoleOption {
 使用默认配置选择用户。
 
 ```tsx
-import { FormUserRole } from '@/registry/components/airiot/form-user-role'
+import { FormUserRole } from '@/registry/components/kesi/form-user-role'
 import { useState } from 'react'
 
 function Example() {
@@ -191,7 +191,7 @@ function Example() {
 分配任务给指定用户。
 
 ```tsx
-import { FormUserRole } from '@/registry/components/airiot/form-user-role'
+import { FormUserRole } from '@/registry/components/kesi/form-user-role'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'

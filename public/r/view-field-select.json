@@ -1,0 +1,17 @@
+{
+  "name": "view-field-select",
+  "type": "registry:component",
+  "title": "View Field Select",
+  "description": "View Field Select - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-select/view-field-select.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport isArray from 'lodash/isArray'\nimport { cn } from '@/lib/utils'\n\nconst Select = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  const getDisplayText = (val: any) => {\n    if (schema?.enum1 && schema?.enum_title1) {\n      const index = schema.enum1.indexOf(val)\n      return index >= 0 ? schema.enum_title1[index] : val\n    }\n    return val\n  }\n\n  const getColor = (val: any) => {\n    if (schema?.enum_color1 && schema?.enum1) {\n      const index = schema.enum1.indexOf(val)\n      return index >= 0 ? schema.enum_color1[index] : undefined\n    }\n    return undefined\n  }\n\n  // 多选\n  if (isArray(value)) {\n    return (\n      <div className=\"flex flex-wrap gap-1\">\n        {value.map((item, index) => {\n          const text = getDisplayText(item)\n          const color = getColor(item)\n          return (\n            <span\n              key={index}\n              className={cn(\n                \"inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white !w-fit\",\n                !color && \"bg-gray-500\"\n              )}\n              style={color ? { backgroundColor: color || 'gray' } : {}}\n            >\n              {text}\n            </span>\n          )\n        })}\n      </div>\n    )\n  }\n\n  // 单选\n  const text = getDisplayText(value)\n  const color = getColor(value)\n  return (\n    <span\n      className={cn(\n        \"inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white !w-fit\",\n        !color && \"bg-gray-500\"\n      )}\n      style={color ? { backgroundColor: color || 'gray' } : {}}\n    >\n      {text}\n    </span>\n  )\n}\n\nexport { Select }\n"
+    }
+  ]
+}

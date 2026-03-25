@@ -1,0 +1,17 @@
+{
+  "name": "view-field-link",
+  "type": "registry:component",
+  "title": "View Field Link",
+  "description": "View Field Link - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-link/view-field-link.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport { Link2 } from 'lucide-react'\n\nconst Link = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  const handleClick = () => {\n    if (schema?.linkType === 'in') {\n      // 内部跳转\n      console.log('Navigate to:', value)\n    } else {\n      window.open(value, '_blank')\n    }\n  }\n\n  return (\n    <a\n      href=\"javascript:void(0);\"\n      onClick={handleClick}\n      className=\"flex items-center gap-1 text-blue-600 hover:underline\"\n    >\n      <Link2 className=\"h-4 w-4\" />\n      {value}\n    </a>\n  )\n}\n\nexport { Link }\n"
+    }
+  ]
+}

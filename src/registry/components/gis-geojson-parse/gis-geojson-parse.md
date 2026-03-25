@@ -75,8 +75,8 @@ GeoJSON Feature 的属性会影响样式，支持的属性包括：
 从远程 URL 加载 GeoJSON 数据。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { GeoJson } from '@/registry/components/airiot/gis-geojson-parse'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { GeoJson } from '@/registry/components/kesi/gis-geojson-parse'
 
 function RemoteGeoJsonLayer() {
   return (
@@ -243,8 +243,8 @@ function DynamicGeoJsonLayer() {
 叠加多个 GeoJSON 图层，展示不同类型的地理数据。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { GeoJson } from '@/registry/components/airiot/gis-geojson-parse'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { GeoJson } from '@/registry/components/kesi/gis-geojson-parse'
 
 function MultiGeoJsonMap() {
   return (

@@ -55,8 +55,8 @@ interface FormClassNames {
 最简单的用法，使用所有 Model 字段生成筛选表单。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 
 function BasicFilter() {
   return (
@@ -72,8 +72,8 @@ function BasicFilter() {
 只显示指定的筛选字段，隐藏其他字段。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 
 function SpecifiedFieldsFilter() {
   const filters = [
@@ -95,8 +95,8 @@ function SpecifiedFieldsFilter() {
 使用 `classNames` 自定义表单样式。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 
 function CustomStyleFilter() {
   const filters = [
@@ -127,9 +127,9 @@ function CustomStyleFilter() {
 筛选组件通常与表格组件配合使用。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewDataTable } from '@/registry/components/airiot/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewDataTable } from '@/registry/components/kesi/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 
 function FilterWithTable() {
   const filters = [
@@ -160,9 +160,9 @@ function FilterWithTable() {
 使用预定义的布局样式快速构建美观的筛选表单。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
-import { layoutPresets } from '@/registry/components/airiot/form/config'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
+import { layoutPresets } from '@/registry/components/kesi/form/config'
 
 function PresetLayoutFilter() {
   const filters = [
@@ -196,8 +196,8 @@ function PresetLayoutFilter() {
 将筛选条件横向排列，适合字段较少的情况。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 
 function HorizontalFilter() {
   const filters = [
@@ -227,9 +227,9 @@ function HorizontalFilter() {
 创建一个完整的用户筛选页面，包含多种筛选条件。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewDataTable, TableColumn } from '@/registry/components/kesi/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 import { Card } from '@/components/ui/card'
 
 function UserFilterPage() {
@@ -284,9 +284,9 @@ function UserFilterPage() {
 创建一个任务筛选页面，配合统计信息展示。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewDataTable, TableColumn } from '@/registry/components/kesi/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 import { Badge } from '@/components/ui/badge'
 import { useModelList } from '@airiot/client'
 
@@ -354,9 +354,9 @@ function StatsCard({ title, value }: { title: string; value: number }) {
 创建一个订单筛选页面，支持多种筛选条件组合。
 
 ```tsx
-import { ViewFilter } from '@/registry/components/airiot/view-filter/view-filter'
-import { ViewDataTable, TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import { ViewModel } from '@/registry/components/airiot/view-model/view-model'
+import { ViewFilter } from '@/registry/components/kesi/view-filter/view-filter'
+import { ViewDataTable, TableColumn } from '@/registry/components/kesi/view-data-table/view-data-table'
+import { ViewModel } from '@/registry/components/kesi/view-model/view-model'
 
 function OrderFilterPage() {
   const filters = [

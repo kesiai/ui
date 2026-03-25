@@ -1,0 +1,17 @@
+{
+  "name": "view-field-form-info",
+  "type": "registry:component",
+  "title": "View Field Form Info",
+  "description": "View Field Form Info - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-form-info/view-field-form-info.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\n\nconst FormInfo = ({ value }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  // 简化版：直接显示值\n  return <span>{String(value)}</span>\n}\n\nexport { FormInfo }\n"
+    }
+  ]
+}

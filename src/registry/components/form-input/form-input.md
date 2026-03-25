@@ -71,7 +71,7 @@
 ### 1. 基础输入框
 
 ```tsx
-import { FormInput } from '@/registry/components/airiot/form-input/form-input'
+import { FormInput } from '@/registry/components/kesi/form-input/form-input'
 
 function BasicInput() {
   return <FormInput placeholder="请输入内容" />
@@ -242,7 +242,7 @@ function LimitedInput() {
 ### 登录表单
 
 ```tsx
-import { FormInput } from '@/registry/components/airiot/form-input/form-input'
+import { FormInput } from '@/registry/components/kesi/form-input/form-input'
 
 function LoginForm() {
   const [username, setUsername] = useState('')
@@ -294,7 +294,7 @@ function LoginForm() {
 ### 留言表单
 
 ```tsx
-import { FormInput } from '@/registry/components/airiot/form-input/form-input'
+import { FormInput } from '@/registry/components/kesi/form-input/form-input'
 
 function MessageForm() {
   return (
@@ -326,7 +326,7 @@ function MessageForm() {
 ### 搜索框
 
 ```tsx
-import { FormInput } from '@/registry/components/airiot/form-input/form-input'
+import { FormInput } from '@/registry/components/kesi/form-input/form-input'
 import { useState } from 'react'
 
 function SearchBox() {
@@ -366,7 +366,7 @@ function SearchBox() {
 ### 网址输入
 
 ```tsx
-import { FormInput } from '@/registry/components/airiot/form-input/form-input'
+import { FormInput } from '@/registry/components/kesi/form-input/form-input'
 
 function UrlInput() {
   return (

@@ -45,7 +45,7 @@
 最简单的图片展示，使用网络图片地址。
 
 ```tsx
-import { Image } from '@/registry/components/airiot/image'
+import { Image } from '@/registry/components/kesi/image'
 
 function Example() {
   return (
@@ -158,7 +158,7 @@ function Example() {
 创建一个产品展示卡片，包含产品图片。
 
 ```tsx
-import { Image } from '@/registry/components/airiot/image'
+import { Image } from '@/registry/components/kesi/image'
 
 function Example() {
   return (
@@ -184,7 +184,7 @@ function Example() {
 创建一个圆形头像展示。
 
 ```tsx
-import { Image } from '@/registry/components/airiot/image'
+import { Image } from '@/registry/components/kesi/image'
 
 function Example() {
   return (
@@ -204,7 +204,7 @@ function Example() {
 模拟动态加载图片的场景，使用 addParameters 避免缓存。
 
 ```tsx
-import { Image } from '@/registry/components/airiot/image'
+import { Image } from '@/registry/components/kesi/image'
 import { useState } from 'react'
 
 function Example() {
@@ -236,7 +236,7 @@ function Example() {
 展示多个 SVG 图标，带背景色。
 
 ```tsx
-import { Image } from '@/registry/components/airiot/image'
+import { Image } from '@/registry/components/kesi/image'
 
 function Example() {
   const icons = [
@@ -275,7 +275,7 @@ function Example() {
 创建一个图片画廊展示。
 
 ```tsx
-import { Image } from '@/registry/components/airiot/image'
+import { Image } from '@/registry/components/kesi/image'
 
 function Example() {
   const images = [
@@ -314,7 +314,7 @@ function Example() {
 展示图片未上传时的空状态。
 
 ```tsx
-import { Image } from '@/registry/components/airiot/image'
+import { Image } from '@/registry/components/kesi/image'
 
 function Example() {
   return (

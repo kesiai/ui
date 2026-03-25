@@ -44,7 +44,7 @@
 最简单的用法，使用下拉选择模式。
 
 ```tsx
-import { FormRelatePlus } from '@/registry/components/airiot/form-relate-plus/form-relate-plus'
+import { FormRelatePlus } from '@/registry/components/kesi/form-relate-plus/form-relate-plus'
 import { useState } from 'react'
 
 function Example() {
@@ -302,7 +302,7 @@ function Example() {
 创建一个完整的产品关联选择器，支持多种显示模式。
 
 ```tsx
-import { FormRelatePlus } from '@/registry/components/airiot/form-relate-plus/form-relate-plus'
+import { FormRelatePlus } from '@/registry/components/kesi/form-relate-plus/form-relate-plus'
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -415,7 +415,7 @@ function ProductRelateSelector() {
 创建用户团队关联管理界面。
 
 ```tsx
-import { FormRelatePlus } from '@/registry/components/airiot/form-relate-plus/form-relate-plus'
+import { FormRelatePlus } from '@/registry/components/kesi/form-relate-plus/form-relate-plus'
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 

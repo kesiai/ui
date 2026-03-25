@@ -55,7 +55,7 @@
 创建一个简单的顶部标签页。
 
 ```tsx
-import { Tabs } from '@/registry/components/airiot/container-tabs'
+import { Tabs } from '@/registry/components/kesi/container-tabs'
 import { useState } from 'react'
 
 function Example() {
@@ -267,7 +267,7 @@ function Example() {
 创建一个包含多个图表标签的数据分析面板。
 
 ```tsx
-import { Tabs } from '@/registry/components/airiot/container-tabs'
+import { Tabs } from '@/registry/components/kesi/container-tabs'
 import { useState } from 'react'
 
 function AnalyticsPanel() {
@@ -370,7 +370,7 @@ function AnalyticsPanel() {
 创建一个多标签的设置页面。
 
 ```tsx
-import { Tabs } from '@/registry/components/airiot/container-tabs'
+import { Tabs } from '@/registry/components/kesi/container-tabs'
 import { useState } from 'react'
 
 function SettingsPage() {

@@ -1,0 +1,17 @@
+{
+  "name": "view-field-bytes-array",
+  "type": "registry:component",
+  "title": "View Field Bytes Array",
+  "description": "View Field Bytes Array - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-bytes-array/view-field-bytes-array.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\n\nconst BytesArray = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span className=\"font-mono text-xs\">{value}</span>\n}\n\nexport { BytesArray }\n"
+    }
+  ]
+}

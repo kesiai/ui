@@ -1,0 +1,17 @@
+{
+  "name": "view-field-number",
+  "type": "registry:component",
+  "title": "View Field Number",
+  "description": "View Field Number - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-number/view-field-number.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport isNumber from 'lodash/isNumber'\n\nconst Number = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  let displayValue = value\n\n  // 小数位数格式化\n  if (isNumber(value) && schema?.decimal) {\n    displayValue = value.toFixed(schema.decimal)\n  }\n\n  // 千分位格式化\n  if (schema?.bitNum) {\n    try {\n      return <span>{new Intl.NumberFormat('zh-CN', { notation: schema.bitNum as any }).format(displayValue)}</span>\n    } catch (e) {\n      // 格式化失败，返回原值\n    }\n  }\n\n  return <span>{displayValue}</span>\n}\n\nexport { Number }\n"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "view-field-time",
+  "type": "registry:component",
+  "title": "View Field Time",
+  "description": "View Field Time - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-time/view-field-time.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\n\nconst TimeField = ({ value }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span>{value}</span>\n}\n\nexport { TimeField }\n"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "view-field-reference",
+  "type": "registry:component",
+  "title": "View Field Reference",
+  "description": "View Field Reference - 组件",
+  "dependencies": [
+    "lodash",
+    "dayjs"
+  ],
+  "registryDependencies": [
+    "http://localhost:3000/r/view-field-boolean.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-reference/view-field-reference.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport isArray from 'lodash/isArray'\nimport isNumber from 'lodash/isNumber'\nimport dayjs from 'dayjs'\nimport { BooleanIcon } from '@/registry/components/view-field-boolean/view-field-boolean'\n\nconst Reference = ({ value, schema }: { value: any; schema?: any }) => {\n  if (value === 'computing') {\n    return <span>计算中...</span>\n  }\n\n  if (isNil(value)) {\n    return <span className=\"text-muted-foreground\">空</span>\n  }\n\n  const fieldKey = schema?.searchRelate?.field?.key\n  const fSchema = schema?.searchRelate?.field?.fieldSchema\n\n  let displayValue = value\n\n  // 排序\n  if (['asc', 'desc'].includes(schema?.sort || '') && isArray(displayValue)) {\n    displayValue = [...displayValue].sort((a, b) => {\n      if (schema.sort === 'asc') return (a[fieldKey] || '') > (b[fieldKey] || '') ? 1 : -1\n      return (a[fieldKey] || '') < (b[fieldKey] || '') ? 1 : -1\n    })\n  }\n\n  // 条数限制\n  if (schema?.numberLimit > 0 && isArray(displayValue)) {\n    displayValue = displayValue.slice(0, schema.numberLimit)\n  }\n\n  // 数组渲染\n  if (isArray(displayValue)) {\n    return (\n      <div className=\"flex flex-wrap gap-1\">\n        {displayValue.map((v: any, index: number) => {\n          const val = v[fieldKey]\n          const nf = schema?.numberFormat\n\n          // 计数情况\n          if (schema?.computeMethod === 'count') {\n            return (\n              <span key={index} className=\"inline-block border rounded px-2 py-0.5 text-xs\">\n                {val}\n              </span>\n            )\n          }\n\n          // 数字格式化\n          if (nf && isNumber(val)) {\n            let formattedVal: any = val\n            if (nf === 'int') formattedVal = Math.round(val)\n            else if (nf === 'float1') formattedVal = val.toFixed(1)\n            else if (nf === 'float2') formattedVal = val.toFixed(2)\n            else if (nf === '%') formattedVal = Math.round(val * 100) + '%'\n            else if (nf === '%2') formattedVal = (val * 100) + '%'\n            else formattedVal = dayjs(val).format(nf)\n\n            return (\n              <span key={index} className=\"inline-block border rounded px-2 py-0.5 text-xs\">\n                {formattedVal}\n              </span>\n            )\n          }\n\n          // 日期格式化\n          if (nf) {\n            return (\n              <span key={index} className=\"inline-block border rounded px-2 py-0.5 text-xs\">\n                {dayjs(val).format(nf)}\n              </span>\n            )\n          }\n\n          // 布尔值\n          if (fSchema?.type === 'boolean') {\n            return (\n              <span key={index} className=\"inline-flex items-center\">\n                <BooleanIcon value={val} />\n              </span>\n            )\n          }\n\n          // 默认\n          return (\n            <span key={index} className=\"inline-block border rounded px-2 py-0.5 text-xs\">\n              {val}\n            </span>\n          )\n        })}\n      </div>\n    )\n  }\n\n  // 单值渲染\n  return <span>{displayValue}</span>\n}\n\nexport { Reference }\n"
+    }
+  ]
+}

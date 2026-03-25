@@ -1,0 +1,17 @@
+{
+  "name": "view-field-user-role",
+  "type": "registry:component",
+  "title": "View Field User Role",
+  "description": "View Field User Role - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-user-role/view-field-user-role.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport isArray from 'lodash/isArray'\n\nconst UserRole = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  if (isArray(value)) {\n    return (\n      <div className=\"flex flex-wrap gap-1\">\n        {value.map((item: any, index: number) => (\n          <span\n            key={index}\n            className=\"inline-block border rounded px-2 py-0.5 text-xs\"\n          >\n            {item?.name || item}\n          </span>\n        ))}\n      </div>\n    )\n  }\n\n  return <span>{value?.name || value}</span>\n}\n\nexport { UserRole }\n"
+    }
+  ]
+}

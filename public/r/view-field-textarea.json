@@ -1,0 +1,17 @@
+{
+  "name": "view-field-textarea",
+  "type": "registry:component",
+  "title": "View Field Textarea",
+  "description": "View Field Textarea - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-textarea/view-field-textarea.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport isObject from 'lodash/isObject'\n\nconst Textarea = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  // 处理对象类型的值\n  if (isObject(value) && !Array.isArray(value)) {\n    const obj = value as Record<string, any>\n    if ('name' in obj) return <div className=\"whitespace-pre-wrap break-word\">{obj.name}</div>\n    if ('id' in obj) return <div className=\"whitespace-pre-wrap break-word\">{obj.id}</div>\n    return <div className=\"whitespace-pre-wrap break-word\">{JSON.stringify(value)}</div>\n  }\n  return <div className=\"whitespace-pre-wrap break-word\">{value}</div>\n}\n\nexport { Textarea }\n"
+    }
+  ]
+}

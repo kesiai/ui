@@ -63,7 +63,7 @@ interface FilterRule {
 最简单的方式是通过 modelId 自动加载模型的字段定义。
 
 ```tsx
-import { ViewAdvancedFilter } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 
 function UserList() {
   return (
@@ -79,7 +79,7 @@ function UserList() {
 手动定义筛选字段，提供更灵活的配置。
 
 ```tsx
-import { ViewAdvancedFilter } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 
 function ProductFilter() {
   const fields = [
@@ -107,7 +107,7 @@ function ProductFilter() {
 通过 onFilterChange 回调获取筛选规则并执行查询。
 
 ```tsx
-import { ViewAdvancedFilter, FilterRule, LogicOperator } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter, FilterRule, LogicOperator } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 import { useSetModelState, useModelGetItems } from '@airiot/client'
 
 function OrderFilter() {
@@ -145,7 +145,7 @@ function OrderFilter() {
 通过 maxRules 属性限制用户可以添加的最大规则数。
 
 ```tsx
-import { ViewAdvancedFilter } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 
 function SimpleFilter() {
   return (
@@ -163,7 +163,7 @@ function SimpleFilter() {
 设置默认折叠以节省页面空间。
 
 ```tsx
-import { ViewAdvancedFilter } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 
 function CompactFilter() {
   return (
@@ -181,7 +181,7 @@ function CompactFilter() {
 当只有一个字段或固定字段时，可以隐藏字段选择器。
 
 ```tsx
-import { ViewAdvancedFilter } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 
 function SingleFieldFilter() {
   const fields = [
@@ -203,7 +203,7 @@ function SingleFieldFilter() {
 使用 date-range 类型进行日期范围查询。
 
 ```tsx
-import { ViewAdvancedFilter } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 
 function DateRangeFilter() {
   const fields = [
@@ -227,7 +227,7 @@ function DateRangeFilter() {
 完整的用户管理筛选功能，包含多种字段类型和查询逻辑。
 
 ```tsx
-import { ViewAdvancedFilter, FilterField } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter, FilterField } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 import { useSetModelState, useModelGetItems } from '@airiot/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -342,7 +342,7 @@ function UserAdvancedFilter() {
 订单管理系统中的复杂筛选功能。
 
 ```tsx
-import { ViewAdvancedFilter } from '@/registry/components/airiot/view-advanced-filter/view-advanced-filter'
+import { ViewAdvancedFilter } from '@/registry/components/kesi/view-advanced-filter/view-advanced-filter'
 import { useSetModelState, useModelGetItems } from '@airiot/client'
 import { Badge } from '@/components/ui/badge'
 

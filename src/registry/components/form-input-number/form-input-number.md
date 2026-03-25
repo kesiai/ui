@@ -46,7 +46,7 @@
 最简单的数字输入框，支持基本的数值输入。
 
 ```tsx
-import { FormInputNumber } from '@/registry/components/airiot/form-input-number'
+import { FormInputNumber } from '@/registry/components/kesi/form-input-number'
 
 function Example() {
   return (
@@ -159,7 +159,7 @@ function Example() {
 实现一个商品价格设置表单，包含价格、库存、折扣等字段。
 
 ```tsx
-import { FormInputNumber } from '@/registry/components/airiot/form-input-number'
+import { FormInputNumber } from '@/registry/components/kesi/form-input-number'
 import { Label } from '@/components/ui/label'
 import { useState } from 'react'
 

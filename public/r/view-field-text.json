@@ -1,0 +1,17 @@
+{
+  "name": "view-field-text",
+  "type": "registry:component",
+  "title": "View Field Text",
+  "description": "View Field Text - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-text/view-field-text.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport isArray from 'lodash/isArray'\nimport isObject from 'lodash/isObject'\n\nconst Text = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  // 处理对象类型的值\n  if (isObject(value) && !isArray(value)) {\n    const obj = value as Record<string, any>\n    // 优先显示 name，其次显示 id，最后显示 JSON\n    if ('name' in obj) return <span>{obj.name}</span>\n    if ('id' in obj) return <span>{obj.id}</span>\n    return <span>{JSON.stringify(value)}</span>\n  }\n  // 处理数组类型\n  if (isArray(value)) {\n    const displayValues = (value as any[]).map((item: any) => {\n      if (isObject(item)) {\n        const obj = item as Record<string, any>\n        return obj.name || obj.id || JSON.stringify(item)\n      }\n      return item\n    })\n    return <span>{displayValues.join(', ')}</span>\n  }\n  return <span>{value}</span>\n}\nexport { Text }"
+    }
+  ]
+}

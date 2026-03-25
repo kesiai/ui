@@ -11,7 +11,7 @@
   ],
   "files": [
     {
-      "path": "registry/components/airiot/filter-relate-select/filter-relate-select.tsx",
+      "path": "registry/components/kesi/filter-relate-select/filter-relate-select.tsx",
       "type": "registry:component",
       "content": "import React from 'react'\nimport AsyncSelect from '@/registry/components/form-relate-async-select/form-relate-async-select'\nimport _ from 'lodash'\n\ninterface FilterRelateSelectProps {\n  value?: any\n  onChange: (value: any) => void\n  name: string\n  label?: string\n  displayField?: string\n  originSchema?: {\n    selectType?: string\n  }\n}\n\nconst FilterRelateSelect: React.FC<FilterRelateSelectProps> = props => {\n  const { value, onChange, name, label, originSchema, ...restProps } = props\n  const multi = originSchema?.selectType === 'multiple'\n  let defaultValue\n  if (multi) {\n    defaultValue = value?.or?.map((v: any) => ({ key: v?.[name]?.$regex })) || []\n  } else {\n    defaultValue = value?.in?.map((v: any) => ({ key: v })) || []\n  }\n\n  return <>\n    {\n      React.useMemo(() => (\n        <AsyncSelect mode=\"multiple\"\n          value={defaultValue}\n          onChange={(options) => {\n            const ids = _.isArray(options) ? options.map((opt: any) => opt?.item?.id) : []\n            if (multi) {\n              onChange({\n                or: ids.map((id: string) => {\n                  return { [name]: { $regex: id } }\n                })\n              })\n            } else {\n              onChange({ in: ids })\n            }\n          }}\n          field={restProps}\n          {...restProps}\n          label={label}\n        />\n      ), [multi])\n    }\n  </>\n}\n\nexport { FilterRelateSelect }"
     }

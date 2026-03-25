@@ -92,7 +92,7 @@ codeOption = {
 创建一个简单的折线图，展示一周的数据趋势。
 
 ```tsx
-import { ChartEcharts } from '@/registry/components/airiot/chart-echarts'
+import { ChartEcharts } from '@/registry/components/kesi/chart-echarts'
 
 function BasicLineChart() {
   return (
@@ -129,7 +129,7 @@ function BasicLineChart() {
 创建一个分组柱状图，展示不同类别的数据对比。
 
 ```tsx
-import { ChartEcharts } from '@/registry/components/airiot/chart-echarts'
+import { ChartEcharts } from '@/registry/components/kesi/chart-echarts'
 
 function BarChartExample() {
   return (
@@ -179,7 +179,7 @@ function BarChartExample() {
 通过 chartCode 实现动态数据处理和图表配置。
 
 ```tsx
-import { ChartEcharts } from '@/registry/components/airiot/chart-echarts'
+import { ChartEcharts } from '@/registry/components/kesi/chart-echarts'
 
 function DynamicChart() {
   const chartCode = `
@@ -236,7 +236,7 @@ function DynamicChart() {
 使用 dataset 格式绑定数据，支持时间序列数据。
 
 ```tsx
-import { ChartEcharts } from '@/registry/components/airiot/chart-echarts'
+import { ChartEcharts } from '@/registry/components/kesi/chart-echarts'
 
 function DatasetChart() {
   const chartData = {
@@ -298,7 +298,7 @@ function DatasetChart() {
 创建一个包含多种图表类型的仪表盘，展示业务数据概览。
 
 ```tsx
-import { ChartEcharts } from '@/registry/components/airiot/chart-echarts'
+import { ChartEcharts } from '@/registry/components/kesi/chart-echarts'
 
 function DashboardOverview() {
   return (
@@ -390,7 +390,7 @@ function DashboardOverview() {
 实现一个实时更新的监控图表，模拟数据流。
 
 ```tsx
-import { ChartEcharts } from '@/registry/components/airiot/chart-echarts'
+import { ChartEcharts } from '@/registry/components/kesi/chart-echarts'
 import { useState, useEffect } from 'react'
 
 function RealTimeMonitor() {

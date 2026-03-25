@@ -37,7 +37,7 @@
 创建一个带标题的基础卡片容器。
 
 ```tsx
-import { Card } from '@/registry/components/airiot/container-card'
+import { Card } from '@/registry/components/kesi/container-card'
 
 function Example() {
   return (
@@ -149,7 +149,7 @@ function Example() {
 创建一个典型的仪表盘数据卡片，包含标题、统计数据和图表区域。
 
 ```tsx
-import { Card } from '@/registry/components/airiot/container-card'
+import { Card } from '@/registry/components/kesi/container-card'
 
 function DashboardCard() {
   return (
@@ -186,8 +186,8 @@ function DashboardCard() {
 使用卡片作为表单容器，提供清晰的视觉边界。
 
 ```tsx
-import { Card } from '@/registry/components/airiot/container-card'
-import { Button } from '@/registry/components/airiot/button'
+import { Card } from '@/registry/components/kesi/container-card'
+import { Button } from '@/registry/components/kesi/button'
 
 function FormCard() {
   return (
@@ -217,7 +217,7 @@ function FormCard() {
 创建一个详情页面卡片，展示详细信息。
 
 ```tsx
-import { Card } from '@/registry/components/airiot/container-card'
+import { Card } from '@/registry/components/kesi/container-card'
 
 function DetailCard() {
   return (

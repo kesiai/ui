@@ -60,7 +60,7 @@
 最简单的富文本编辑器，使用默认工具栏。
 
 ```tsx
-import { FormRichText } from '@/registry/components/airiot/form-rich-text'
+import { FormRichText } from '@/registry/components/kesi/form-rich-text'
 import { useState } from 'react'
 
 function Example() {
@@ -164,7 +164,7 @@ function Example() {
 用于创建和编辑文章内容的富文本编辑器。
 
 ```tsx
-import { FormRichText } from '@/registry/components/airiot/form-rich-text'
+import { FormRichText } from '@/registry/components/kesi/form-rich-text'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'

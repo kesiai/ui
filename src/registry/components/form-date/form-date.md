@@ -48,7 +48,7 @@
 最常用的日期选择器，用于选择具体日期。
 
 ```tsx
-import { FormDate } from '@/registry/components/airiot/form-date'
+import { FormDate } from '@/registry/components/kesi/form-date'
 
 function Example() {
   return (
@@ -207,7 +207,7 @@ function Example() {
 选择出生日期，使用日期选择器并设置合理范围。
 
 ```tsx
-import { FormDate } from '@/registry/components/airiot/form-date'
+import { FormDate } from '@/registry/components/kesi/form-date'
 
 function BirthdayPicker() {
   const [birthday, setBirthday] = useState('')
@@ -237,7 +237,7 @@ function BirthdayPicker() {
 选择日期和时间，适合预约系统使用。
 
 ```tsx
-import { FormDate } from '@/registry/components/airiot/form-date'
+import { FormDate } from '@/registry/components/kesi/form-date'
 
 function AppointmentPicker() {
   const [appointmentTime, setAppointmentTime] = useState('')

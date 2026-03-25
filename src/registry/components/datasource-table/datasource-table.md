@@ -165,7 +165,7 @@
 ### 1. 简单表数据查询
 
 ```tsx
-import { DatasourceTable } from '@/registry/components/airiot/datasource-table'
+import { DatasourceTable } from '@/registry/components/kesi/datasource-table'
 
 function SimpleTableQuery() {
   return (
@@ -367,7 +367,7 @@ function ManualRefreshTable() {
 ### 10. 子组件获取数据
 
 ```tsx
-import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
+import { useContextProvider } from '@/registry/components/kesi/container-context-provider'
 
 function TableDisplay() {
   const { data, loading } = useContextProvider()[0]
@@ -403,8 +403,8 @@ function TableDisplay() {
 ### 设备管理仪表板
 
 ```tsx
-import { DatasourceTable } from '@/registry/components/airiot/datasource-table'
-import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
+import { DatasourceTable } from '@/registry/components/kesi/datasource-table'
+import { useContextProvider } from '@/registry/components/kesi/container-context-provider'
 
 function DeviceManagementDashboard() {
   const [department, setDepartment] = useState('all')

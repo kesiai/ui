@@ -47,7 +47,7 @@
 最简单的方式是使用 Tools 容器组件，它会自动管理所有工具。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 
 function DataTable() {
   return (
@@ -61,7 +61,7 @@ function DataTable() {
 根据需要选择显示的工具。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 
 function SimpleTable() {
   return (
@@ -75,7 +75,7 @@ function SimpleTable() {
 单独使用记录数显示工具。
 
 ```tsx
-import { CountTool } from '@/registry/components/airiot/view-tools/view-tools'
+import { CountTool } from '@/registry/components/kesi/view-tools/view-tools'
 
 function RecordCount() {
   return (
@@ -92,7 +92,7 @@ function RecordCount() {
 单独使用分页设置工具。
 
 ```tsx
-import { PageSizeTool } from '@/registry/components/airiot/view-tools/view-tools'
+import { PageSizeTool } from '@/registry/components/kesi/view-tools/view-tools'
 
 function PageSizeSetting() {
   return (
@@ -106,7 +106,7 @@ function PageSizeSetting() {
 单独使用列显示控制工具。
 
 ```tsx
-import { ColumnsTool } from '@/registry/components/airiot/view-tools/view-tools'
+import { ColumnsTool } from '@/registry/components/kesi/view-tools/view-tools'
 
 function ColumnControl() {
   return (
@@ -120,7 +120,7 @@ function ColumnControl() {
 为工具组件添加自定义样式。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 
 function StyledTools() {
   return (
@@ -137,7 +137,7 @@ function StyledTools() {
 通过 children 添加自定义工具。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 import { Button } from '@/components/ui/button'
 import { Download } from 'lucide-react'
 
@@ -158,7 +158,7 @@ function ExtendedTools() {
 包含所有工具和自定义操作的工具栏。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 import { Button } from '@/components/ui/button'
 import { RefreshCw, Settings } from 'lucide-react'
 
@@ -198,8 +198,8 @@ function FullToolbar() {
 完整的用户管理界面工具栏。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
-import { CreateAction } from '@/registry/components/airiot/view-actions/view-actions'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
+import { CreateAction } from '@/registry/components/kesi/view-actions/view-actions'
 import { Button } from '@/components/ui/button'
 import { Plus, RefreshCw, Download } from 'lucide-react'
 
@@ -249,7 +249,7 @@ function UserManagementToolbar() {
 适合空间有限的紧凑型工具栏。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 import { Button } from '@/components/ui/button'
 import { MoreHorizontal } from 'lucide-react'
 
@@ -276,7 +276,7 @@ function CompactToolbar() {
 数据分析场景的工具栏配置。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
@@ -316,7 +316,7 @@ function AnalyticsPanel() {
 自定义列显示工具的样式和行为。
 
 ```tsx
-import { ColumnsTool } from '@/registry/components/airiot/view-tools/view-tools'
+import { ColumnsTool } from '@/registry/components/kesi/view-tools/view-tools'
 import { Button } from '@/components/ui/button'
 import { Columns3, Settings } from 'lucide-react'
 
@@ -339,7 +339,7 @@ function CustomColumnControl() {
 针对移动端优化的工具栏布局。
 
 ```tsx
-import { Tools } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools } from '@/registry/components/kesi/view-tools/view-tools'
 import { Button } from '@/components/ui/button'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
@@ -365,7 +365,7 @@ function ResponsiveToolbar() {
 在多个表格之间共享工具栏。
 
 ```tsx
-import { Tools, PageSizeTool } from '@/registry/components/airiot/view-tools/view-tools'
+import { Tools, PageSizeTool } from '@/registry/components/kesi/view-tools/view-tools'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 function MultiTableView() {

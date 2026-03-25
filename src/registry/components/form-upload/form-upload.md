@@ -60,7 +60,7 @@ interface WatermarkConfig {
 使用图片卡片样式上传图片。
 
 ```tsx
-import { FormUpload } from '@/registry/components/airiot/form-upload'
+import { FormUpload } from '@/registry/components/kesi/form-upload'
 
 function Example() {
   const [file, setFile] = useState(null)
@@ -278,7 +278,7 @@ function Example() {
 上传用户头像，限制为单个图片文件。
 
 ```tsx
-import { FormUpload } from '@/registry/components/airiot/form-upload'
+import { FormUpload } from '@/registry/components/kesi/form-upload'
 
 function AvatarUpload() {
   const [avatar, setAvatar] = useState(null)

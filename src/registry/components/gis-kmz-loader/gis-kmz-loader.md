@@ -46,8 +46,8 @@ interface LayerBase {
 从远程 URL 加载 KMZ 文件。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { Kmz } from '@/registry/components/airiot/gis-kmz-loader'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { Kmz } from '@/registry/components/kesi/gis-kmz-loader'
 
 function RemoteKmzLayer() {
   return (
@@ -231,8 +231,8 @@ function DynamicPropsKmzLayer() {
 叠加多个 KMZ 图层，展示不同类型的地理数据。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { Kmz } from '@/registry/components/airiot/gis-kmz-loader'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { Kmz } from '@/registry/components/kesi/gis-kmz-loader'
 
 function MultiKmzMap() {
   return (

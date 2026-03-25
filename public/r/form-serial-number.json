@@ -9,7 +9,7 @@
   ],
   "files": [
     {
-      "path": "registry/components/airiot/form-serial-number/form-serial-number.tsx",
+      "path": "registry/components/kesi/form-serial-number/form-serial-number.tsx",
       "type": "registry:component",
       "content": "import * as React from 'react'\nimport { Input } from '@/components/ui/input'\n\nexport interface FormSerialNumberProps {\n  value?: string\n  onChange?: (value: string) => void\n  serialRules?: Array<{\n    type: 'text' | 'time' | 'num'\n    text?: string\n    time?: string\n    num?: {\n      orderType?: 'random' | 'linear'\n      bitNum?: number\n      startNum?: number\n    }\n  }>\n  disabled?: boolean\n  meta?: any\n  record?: any\n}\n\nconst FormSerialNumber: React.FC<FormSerialNumberProps> = (props) => {\n  const { value, disabled = true } = props\n\n  return (\n    <Input\n      value={value || ''}\n      disabled={disabled}\n      placeholder=\"自动生成\"\n      className=\"bg-muted\"\n    />\n  )\n}\n\nexport { FormSerialNumber }\nexport default FormSerialNumber\n"
     }

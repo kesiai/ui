@@ -63,7 +63,7 @@ const [open, setOpen] = useState(false)
 创建一个带标题的基础弹窗，使用触发按钮打开。
 
 ```tsx
-import { Modal } from '@/registry/components/airiot/container-modal'
+import { Modal } from '@/registry/components/kesi/container-modal'
 import { useState } from 'react'
 
 function Example() {
@@ -233,8 +233,8 @@ function Example() {
 创建一个包含表单的弹窗，支持验证和提交。
 
 ```tsx
-import { Modal } from '@/registry/components/airiot/container-modal'
-import { Button } from '@/registry/components/airiot/button'
+import { Modal } from '@/registry/components/kesi/container-modal'
+import { Button } from '@/registry/components/kesi/button'
 import { useState } from 'react'
 
 function FormModal() {
@@ -330,7 +330,7 @@ function FormModal() {
 创建一个确认操作的对话框，包含警告信息。
 
 ```tsx
-import { Modal } from '@/registry/components/airiot/container-modal'
+import { Modal } from '@/registry/components/kesi/container-modal'
 import { useState } from 'react'
 
 function ConfirmModal() {
@@ -385,7 +385,7 @@ function ConfirmModal() {
 创建一个展示详细信息的弹窗。
 
 ```tsx
-import { Modal } from '@/registry/components/airiot/container-modal'
+import { Modal } from '@/registry/components/kesi/container-modal'
 import { useState } from 'react'
 
 function DetailModal() {

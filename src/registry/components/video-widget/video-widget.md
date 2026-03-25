@@ -124,7 +124,7 @@ WebRTC 播放器的配置：
 从设备表数据获取视频流并播放，适用于实时监控场景。
 
 ```tsx
-import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget'
+import { VideoWidget } from '@/registry/components/kesi/video-widget/video-widget'
 
 function Example() {
   const tableData = {
@@ -292,7 +292,7 @@ function Example() {
 创建一个包含多个视频播放器的监控中心界面。
 
 ```tsx
-import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget'
+import { VideoWidget } from '@/registry/components/kesi/video-widget/video-widget'
 import { useState } from 'react'
 
 function MonitoringCenter() {
@@ -337,7 +337,7 @@ function MonitoringCenter() {
 当报警触发时自动播放关联的摄像头视频。
 
 ```tsx
-import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget'
+import { VideoWidget } from '@/registry/components/kesi/video-widget/video-widget'
 import { useEffect, useState } from 'react'
 
 function AlarmLinkageVideo() {
@@ -381,7 +381,7 @@ function AlarmLinkageVideo() {
 支持日期和时间选择的视频回放功能。
 
 ```tsx
-import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget'
+import { VideoWidget } from '@/registry/components/kesi/video-widget/video-widget'
 import { useState } from 'react'
 
 function VideoPlayback() {
@@ -436,7 +436,7 @@ function VideoPlayback() {
 根据设备类型自动选择最佳播放协议。
 
 ```tsx
-import { VideoWidget } from '@/registry/components/airiot/video-widget/video-widget'
+import { VideoWidget } from '@/registry/components/kesi/video-widget/video-widget'
 
 function AdaptiveVideoPlayer() {
   const devices = [

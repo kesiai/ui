@@ -1,0 +1,19 @@
+{
+  "name": "view-field-rich-text",
+  "type": "registry:component",
+  "title": "View Field Rich Text",
+  "description": "View Field Rich Text - 组件",
+  "dependencies": [
+    "lodash"
+  ],
+  "registryDependencies": [
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-field-rich-text/view-field-rich-text.tsx",
+      "type": "registry:component",
+      "content": "import isNil from 'lodash/isNil'\nimport isString from 'lodash/isString'\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from '@/components/ui/tooltip'\n\nconst RichText = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  // 简化版：显示纯文本内容\n  const text = isString(value) ? value.replace(/<[^>]*>/g, '') : ''\n  if (text.length > 100) {\n    return (\n      <TooltipProvider>\n        <Tooltip>\n          <TooltipTrigger asChild>\n            <span className=\"cursor-help\">{text.substring(0, 100)}...</span>\n          </TooltipTrigger>\n          <TooltipContent>\n            <p className=\"max-w-md break-word\">{text}</p>\n          </TooltipContent>\n        </Tooltip>\n      </TooltipProvider>\n    )\n  }\n  return <span dangerouslySetInnerHTML={{ __html: value }} />\n}\n\nexport { RichText }\n"
+    }
+  ]
+}

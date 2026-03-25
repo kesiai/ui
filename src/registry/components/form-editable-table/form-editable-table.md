@@ -78,7 +78,7 @@
 最简单的用法，提供基础的表格编辑功能。
 
 ```tsx
-import { FormEditableTable } from '@/registry/components/airiot/form-editable-table/form-editable-table'
+import { FormEditableTable } from '@/registry/components/kesi/form-editable-table/form-editable-table'
 import { useState } from 'react'
 
 function Example() {
@@ -350,7 +350,7 @@ function Example() {
 创建一个完整的员工信息管理系统，支持多种字段类型。
 
 ```tsx
-import { FormEditableTable } from '@/registry/components/airiot/form-editable-table/form-editable-table'
+import { FormEditableTable } from '@/registry/components/kesi/form-editable-table/form-editable-table'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -471,7 +471,7 @@ function EmployeeManager() {
 创建一个产品库存管理界面，使用卡片布局显示。
 
 ```tsx
-import { FormEditableTable } from '@/registry/components/airiot/form-editable-table/form-editable-table'
+import { FormEditableTable } from '@/registry/components/kesi/form-editable-table/form-editable-table'
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -596,7 +596,7 @@ function InventoryManager() {
 创建一个采购订单明细管理，支持行数限制和验证。
 
 ```tsx
-import { FormEditableTable } from '@/registry/components/airiot/form-editable-table/form-editable-table'
+import { FormEditableTable } from '@/registry/components/kesi/form-editable-table/form-editable-table'
 import { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'

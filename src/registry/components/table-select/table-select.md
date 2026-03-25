@@ -31,7 +31,7 @@
 简单的表选择器。
 
 ```tsx
-import { TableSelect } from '@/registry/components/airiot/table-select'
+import { TableSelect } from '@/registry/components/kesi/table-select'
 
 function Example() {
   return <TableSelect />

@@ -23,7 +23,7 @@
 最简单的方式是直接使用 ViewDemo 组件，它会自动使用 task_def 表格。
 
 ```tsx
-import { ViewDemo } from '@/registry/components/airiot/view-demo/view-demo'
+import { ViewDemo } from '@/registry/components/kesi/view-demo/view-demo'
 
 function App() {
   return <ViewDemo />
@@ -35,7 +35,7 @@ function App() {
 为 ViewDemo 指定要显示的数据模型。
 
 ```tsx
-import { ViewDemo } from '@/registry/components/airiot/view-demo/view-demo'
+import { ViewDemo } from '@/registry/components/kesi/view-demo/view-demo'
 
 function App() {
   return <ViewDemo tableId="user" />
@@ -47,7 +47,7 @@ function App() {
 使用项目中预定义的内置模型。
 
 ```tsx
-import { ViewDemo } from '@/registry/components/airiot/view-demo/view-demo'
+import { ViewDemo } from '@/registry/components/kesi/view-demo/view-demo'
 
 function App() {
   return <ViewDemo modelName="user" tableId="user" />
@@ -61,12 +61,12 @@ function App() {
 基于 ViewDemo 的结构，创建一个自定义的用户管理界面。
 
 ```tsx
-import ViewModel from '@/registry/components/airiot/view-model/view-model'
-import ViewDataTable, { TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import ViewPagination from '@/registry/components/airiot/view-pagination/view-pagination'
-import Actions, { CreateAction } from '@/registry/components/airiot/view-actions/view-actions'
-import Tools from '@/registry/components/airiot/view-tools/view-tools'
-import BatchActions from '@/registry/components/airiot/view-batch/view-batch'
+import ViewModel from '@/registry/components/kesi/view-model/view-model'
+import ViewDataTable, { TableColumn } from '@/registry/components/kesi/view-data-table/view-data-table'
+import ViewPagination from '@/registry/components/kesi/view-pagination/view-pagination'
+import Actions, { CreateAction } from '@/registry/components/kesi/view-actions/view-actions'
+import Tools from '@/registry/components/kesi/view-tools/view-tools'
+import BatchActions from '@/registry/components/kesi/view-batch/view-batch'
 import { Card } from '@/components/ui/card'
 
 function UserManagement() {
@@ -124,12 +124,12 @@ function UserManagement() {
 基于 ViewDemo 结构的任务管理系统示例。
 
 ```tsx
-import ViewModel from '@/registry/components/airiot/view-model/view-model'
-import ViewDataTable, { TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import ViewPagination from '@/registry/components/airiot/view-pagination/view-pagination'
-import Actions, { CreateAction } from '@/registry/components/airiot/view-actions/view-actions'
-import Tools from '@/registry/components/airiot/view-tools/view-tools'
-import BatchActions from '@/registry/components/airiot/view-batch/view-batch'
+import ViewModel from '@/registry/components/kesi/view-model/view-model'
+import ViewDataTable, { TableColumn } from '@/registry/components/kesi/view-data-table/view-data-table'
+import ViewPagination from '@/registry/components/kesi/view-pagination/view-pagination'
+import Actions, { CreateAction } from '@/registry/components/kesi/view-actions/view-actions'
+import Tools from '@/registry/components/kesi/view-tools/view-tools'
+import BatchActions from '@/registry/components/kesi/view-batch/view-batch'
 import { Badge } from '@/components/ui/badge'
 
 function TaskManagement() {
@@ -219,11 +219,11 @@ function TaskManagement() {
 基于 ViewDemo 结构的设备监控面板示例。
 
 ```tsx
-import ViewModel from '@/registry/components/airiot/view-model/view-model'
-import ViewDataTable, { TableColumn } from '@/registry/components/airiot/view-data-table/view-data-table'
-import ViewPagination from '@/registry/components/airiot/view-pagination/view-pagination'
-import Actions from '@/registry/components/airiot/view-actions/view-actions'
-import Tools from '@/registry/components/airiot/view-tools/view-tools'
+import ViewModel from '@/registry/components/kesi/view-model/view-model'
+import ViewDataTable, { TableColumn } from '@/registry/components/kesi/view-data-table/view-data-table'
+import ViewPagination from '@/registry/components/kesi/view-pagination/view-pagination'
+import Actions from '@/registry/components/kesi/view-actions/view-actions'
+import Tools from '@/registry/components/kesi/view-tools/view-tools'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Activity } from 'lucide-react'

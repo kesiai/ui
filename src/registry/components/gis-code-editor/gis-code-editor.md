@@ -39,8 +39,8 @@ interface CodeParam {
 使用默认脚本创建 OpenStreetMap 图层。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { CodeEditorViews } from '@/registry/components/airiot/gis-code-editor'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { CodeEditorViews } from '@/registry/components/kesi/gis-code-editor'
 
 function OSMLayer() {
   const script = `(context, params) => {
@@ -205,8 +205,8 @@ function TransparentLayer() {
 叠加多个代码图层，实现复杂的地图效果。
 
 ```tsx
-import { MapContainer } from '@/registry/components/airiot/gis-map-core'
-import { CodeEditorViews } from '@/registry/components/airiot/gis-code-editor'
+import { MapContainer } from '@/registry/components/kesi/gis-map-core'
+import { CodeEditorViews } from '@/registry/components/kesi/gis-code-editor'
 
 function MultiCodeLayerMap() {
   const osmScript = `(context, params) => {

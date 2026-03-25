@@ -9,7 +9,7 @@
   "registryDependencies": [],
   "files": [
     {
-      "path": "registry/components/airiot/container-iteration/iteration.tsx",
+      "path": "registry/components/kesi/container-iteration/iteration.tsx",
       "type": "registry:component",
       "content": "'use client'\n\nimport { ReactNode } from 'react'\nimport { IterationContext } from '@airiot/client'\n\n// Props interface\nexport interface IterationProps {\n  children: ReactNode\n  iterationList: any[]\n}\n\n// Iteration Container Component\nexport function Iteration({\n  children,\n  iterationList = [],\n}: IterationProps) {\n  return (\n    <>\n      {iterationList.map((item, index) => (\n        <IterationContext.Provider key={index} value={{ value: item, index }}>\n          {children}\n        </IterationContext.Provider>\n      ))}\n    </>\n  )\n}\n"
     }

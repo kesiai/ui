@@ -297,7 +297,7 @@ async function buildRegistry() {
         const fileList = [
           {
             path: folder === 'components'
-              ? `registry/components/airiot/${file.replace(/\\/g, '/')}`
+              ? `registry/components/kesi/${file.replace(/\\/g, '/')}`
               : `registry/${folder}/${file.replace(/\\/g, '/')}`,
             type: type,
             content: fileContent,

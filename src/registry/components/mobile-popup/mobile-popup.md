@@ -34,7 +34,7 @@
 最简单的弹出框示例。
 
 ```tsx
-import { MobilePopup } from '@/registry/components/airiot/mobile-popup'
+import { MobilePopup } from '@/registry/components/kesi/mobile-popup'
 
 function Example() {
   return (
@@ -196,8 +196,8 @@ function Example() {
 创建一个完整的表单编辑弹出框。
 
 ```tsx
-import { MobilePopup } from '@/registry/components/airiot/mobile-popup'
-import { Input } from '@/registry/components/airiot/input/input'
+import { MobilePopup } from '@/registry/components/kesi/mobile-popup'
+import { Input } from '@/registry/components/kesi/input/input'
 import { useState } from 'react'
 
 function EditFormPopup() {
@@ -265,7 +265,7 @@ function EditFormPopup() {
 创建一个确认操作的对话框。
 
 ```tsx
-import { MobilePopup } from '@/registry/components/airiot/mobile-popup'
+import { MobilePopup } from '@/registry/components/kesi/mobile-popup'
 import { useState } from 'react'
 
 function ConfirmDialog() {

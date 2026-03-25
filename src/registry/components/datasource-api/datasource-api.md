@@ -123,7 +123,7 @@ url: 'http://localhost:8080/api/users'
 查询内部表数据，使用 `{table}` 占位符：
 
 ```tsx
-import { DatasourceApi } from '@/registry/components/airiot/datasource-api'
+import { DatasourceApi } from '@/registry/components/kesi/datasource-api'
 
 function TableDataExample() {
   return (
@@ -246,7 +246,7 @@ function ExternalApiExample() {
 子组件使用 `useContextProvider` 获取数据：
 
 ```tsx
-import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
+import { useContextProvider } from '@/registry/components/kesi/container-context-provider'
 
 function DataDisplay() {
   const { data, loading } = useContextProvider()[0]
@@ -286,8 +286,8 @@ function AnotherComponent() {
 ### 数据表格展示
 
 ```tsx
-import { DatasourceApi } from '@/registry/components/airiot/datasource-api'
-import { useContextProvider } from '@/registry/components/airiot/container-context-provider'
+import { DatasourceApi } from '@/registry/components/kesi/datasource-api'
+import { useContextProvider } from '@/registry/components/kesi/container-context-provider'
 
 function UserTable() {
   const { data, loading } = useContextProvider()[0]
@@ -334,7 +334,7 @@ function App() {
 ### 实时监控数据
 
 ```tsx
-import { DatasourceApi } from '@/registry/components/airiot/datasource-api'
+import { DatasourceApi } from '@/registry/components/kesi/datasource-api'
 
 function MonitorDashboard() {
   return (

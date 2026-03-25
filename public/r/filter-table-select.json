@@ -7,7 +7,7 @@
   "registryDependencies": [],
   "files": [
     {
-      "path": "registry/components/airiot/filter-table-select/filter-table-select.tsx",
+      "path": "registry/components/kesi/filter-table-select/filter-table-select.tsx",
       "type": "registry:component",
       "content": ""
     }

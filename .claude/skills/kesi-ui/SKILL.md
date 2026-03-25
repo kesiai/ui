@@ -58,6 +58,91 @@ npx shadcn@latest add @kesi/ComponentName
 - 📦 **组合系统** - 对于视图、GIS、3D、视频等组合系统，必须说明需要哪些核心组件
 - 🔗 **提供链接** - 如果有详细的系统指南文档，提供链接
 
+## 🏗️ 架构规则与层级关系
+
+### ⚠️ ViewModel 与 @airiot/client 的 Model/TableModel 的关系
+
+**核心原则**: ViewModel 是独立的视图层组件，不应依赖或嵌套在 `@airiot/client` 的数据模型中。
+
+#### 层级关系
+
+```
+┌─────────────────────────────────────────┐
+│         ViewModel (视图层容器)            │
+│  - @kesi/ViewModel 组件                  │
+│  - 负责UI展示和用户交互                   │
+│  - 独立的React组件                       │
+└──────────────┬──────────────────────────┘
+               │ 使用/引用
+               ▼
+┌─────────────────────────────────────────┐
+│    Model/TableModel (数据模型层)         │
+│  - @airiot/client 包                     │
+│  - 负责数据结构和类型定义                 │
+│  - 纯数据模型，不涉及UI                  │
+└─────────────────────────────────────────┘
+```
+
+#### ✅ 正确使用
+
+```tsx
+// ✅ 正确：ViewModel 作为视图容器，独立使用
+import { ViewModel } from '@/components/kesi/view-model/view-model';
+import { Model } from '@airiot/client'; // 仅用于类型定义
+
+function UserListView() {
+  return (
+    <ViewModel
+      config={{
+        dataSource: 'user_table',
+        // ViewModel 独立配置
+      }}
+    >
+      <ViewDataTable />
+    </ViewModel>
+  );
+}
+
+// ✅ 正确：Model/TableModel 仅用于类型定义或数据操作
+import { Model, TableModel } from '@airiot/client';
+
+type UserModel = Model<User>; // 类型使用
+const tableModel = new TableModel('users'); // 数据操作
+```
+
+#### ❌ 错误使用
+
+```tsx
+// ❌ 错误：将 ViewModel 放在 Model 内部
+<Model>
+  <ViewModel>...</ViewModel>
+</Model>
+
+// ❌ 错误：将 ViewModel 放在 TableModel 内部
+<TableModel>
+  <ViewModel>...</ViewModel>
+</TableModel>
+
+// ❌ 错误：ViewModel 依赖 Model 作为容器
+<ViewModel>
+  <Model>...</Model>
+</ViewModel>
+```
+
+#### 📋 使用规则
+
+1. **ViewModel 始终独立** - ViewModel 是 React 组件，应该作为独立的视图容器使用
+2. **数据模型用于类型** - `@airiot/client` 的 Model/TableModel 用于类型定义和数据操作，不应作为容器
+3. **单向引用** - ViewModel 可以引用 Model/TableModel 的类型，但不应嵌套在其内部
+4. **职责分离** - ViewModel 负责 UI，Model 负责数据结构，两者各司其职
+
+#### 💡 架构原因
+
+- **ViewModel** 是 Kesi UI 的视图容器组件，基于 React 构建的 UI 层
+- **Model/TableModel** 是 `@airiot/client` 的数据模型层，用于定义数据结构和业务逻辑
+- ViewModel 本身已经封装了对数据的处理，不需要再包装在数据模型中
+- 混用会导致架构混乱和组件职责不明确
+
 ## 🎯 功能特性
 
 - **智能需求分析** - 自动分析你的描述并推荐最合适的组件

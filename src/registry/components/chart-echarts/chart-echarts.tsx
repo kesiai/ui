@@ -63,4 +63,6 @@ const ChartEcharts: React.FC<ChartEchartsProps> = (props) => {
   )
 }
 
+export { ChartEcharts }
+
 export default ChartEcharts

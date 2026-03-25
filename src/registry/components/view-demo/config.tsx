@@ -8,7 +8,7 @@ import ViewFilter from '../view-filter/view-filter'
 import Tools from '../view-tools/view-tools'
 import BatchActions from '../view-batch/view-batch'
 import documentationMd from './view-demo.md?raw'
-import trans from './trans'
+
 
 export const viewDemoPropsConfig = [
   {
@@ -38,17 +38,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-6 overflow-auto">
       <div className="w-full max-w-5xl">
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
-        <ViewModel tableId={props.tableId} modelName={props.modelName} schemaTransform={model => {
-          const { schema, formSchema, tableSchema, filterSchema } = trans(model)
-          // console.log(model, schema, formSchema, tableSchema,filterSchema)
-          return {
-            atoms: model.atoms,
-            ...schema,
-            formSchema,
-            tableSchema,
-            filterSchema
-          }
-        }}>
+        <ViewModel tableId={props.tableId} modelName={props.modelName} isSchemaTransform={true}>
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
             <ViewFilter  />
             <div className="flex items-center justify-between">

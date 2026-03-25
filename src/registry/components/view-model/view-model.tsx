@@ -1,6 +1,6 @@
 import React from 'react'
 import { TableModel, Model } from '@airiot/client'
-
+import trans from '@/registry/lib/schema-trans'
 interface TableFilter {
   [key: string]: any
 }
@@ -17,7 +17,7 @@ type ViewModelProps = {
   initQuery?: boolean,
   children?: React.ReactNode
   table?: TableRef
-  schemaTransform?: (schema: any) => any
+  isSchemaTransform?: boolean
 
   queryFields?: string[]
   projectAll?: boolean
@@ -33,7 +33,7 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
   tableFilters,
   fieldOrder,
   interval,
-  schemaTransform,
+  isSchemaTransform,
 }: ViewModelProps) => {
   const [initialValues, setInitialValues] = React.useState<any | null>(null)
 
@@ -63,17 +63,27 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
     setInitialValues(values)
   }, [queryFields, projectAll, limit, tableFilters, fieldOrder, interval])
 
+  const schemaTransform = (model) => {
+    const { schema, formSchema, tableSchema, filterSchema } = trans(model)
+    return {
+      atoms: model.atoms,
+      ...schema,
+      formSchema,
+      tableSchema,
+      filterSchema
+    }
+  }
   if (initialValues === null) {
     return null
   } else if (modelName) {
     return (
-      <Model name={modelName} schemaTransform={schemaTransform} key={`table-model-view-${modelName}`} initialValues={initialValues}>
+      <Model name={modelName} schemaTransform={isSchemaTransform ? schemaTransform : null} key={`table-model-view-${modelName}`} initialValues={initialValues}>
         {children}
       </Model>
     )
   } else if (tableId) {
     return (
-      <TableModel tableId={tableId} key={`table-model-view-${tableId}`} schemaTransform={schemaTransform} loadingComponent={loadingComponent} initQuery={initQuery} initialValues={initialValues}>
+      <TableModel tableId={tableId} key={`table-model-view-${tableId}`} schemaTransform={isSchemaTransform ? schemaTransform : null} loadingComponent={loadingComponent} initQuery={initQuery} initialValues={initialValues}>
         {children}
       </TableModel>
     )

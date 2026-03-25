@@ -1,4 +1,3 @@
-
 import { FormArea } from '@/registry/components/form-area/form-area'
 import { FormSwitch } from '@/registry/components/form-switch/form-switch'
 import { FormUserRole } from '@/registry/components/form-user-role/form-user-role'
@@ -22,60 +21,78 @@ import { FormSlider } from '@/registry/components/form-slider/form-slider'
 import { TableSelect } from '@/registry/components/table-select/table-select'
 import TableDataSelect from '@/registry/components/table-data-select/table-data-select'
 
-const formConverter = (schema: any, filterSchema: any) => {
-  const controlType = filterSchema?.controlType || schema?.controlType
-  switch (controlType) {
-    case 'area':
-      return FormArea
-    case 'boolean':
-    case 'switch':
-      return FormSwitch
-    case 'user-role':
-      return FormUserRole
-    case 'date':
-      return FormDate
-    case 'date-range':
-      return FormDateRange
-    case 'link':
-      return FormLink
-    case 'map':
-      return FormMap
-    case 'number':
-      return FormInputNumber
-    case 'rate':
-      return FormRate
-    case 'relate':
-      return FormRelate
-    case 'select-string':
-    case 'select-number':
-    case 'select-array-string':
-    case 'select-array-number':
-      return FormSelect
-    case 'serial-number':
-      return FormSerialNumber
-    case 'editable-table':
-      return FormEditableTable
-    case 'text':
-      return FormInput
-    case 'time':
-      return FormTime
-    case 'upload':
-      return FormUpload
-    case 'rich-text':
-      return FormRichText
-    case 'bytes-array':
-      return FormBytesArray
-    case 'radio':
-      return FormRadio
-    case 'slider':
-      return FormSlider
-    case 'table-select':
-      return TableSelect
-    case 'table-data':
-      return TableDataSelect
+const formConverter = (schema: any, formSchema: any) => {
+  const controlType = formSchema?.controlType || schema?.controlType
+  if (!controlType) {
+    const type = schema.type
+    switch (type) {
+      case 'string':
+        return FormInput
+      case 'number':
+        return FormInputNumber
+      case 'boolean':
+        return FormSwitch
+      // case 'array':
+      //   return FormSwitch
+      // case 'object':
+      //   return FormSwitch
+      default:
+        return FormInput
+    }
+  } else {
+    switch (controlType) {
+      case 'area':
+        return FormArea
+      case 'boolean':
+      case 'switch':
+        return FormSwitch
+      case 'user-role':
+        return FormUserRole
+      case 'date':
+        return FormDate
+      case 'date-range':
+        return FormDateRange
+      case 'link':
+        return FormLink
+      case 'map':
+        return FormMap
+      case 'number':
+        return FormInputNumber
+      case 'rate':
+        return FormRate
+      case 'relate':
+        return FormRelate
+      case 'select-string':
+      case 'select-number':
+      case 'select-array-string':
+      case 'select-array-number':
+        return FormSelect
+      case 'serial-number':
+        return FormSerialNumber
+      case 'editable-table':
+        return FormEditableTable
+      case 'text':
+        return FormInput
+      case 'time':
+        return FormTime
+      case 'upload':
+        return FormUpload
+      case 'rich-text':
+        return FormRichText
+      case 'bytes-array':
+        return FormBytesArray
+      case 'radio':
+        return FormRadio
+      case 'slider':
+        return FormSlider
+      case 'table-select':
+        return TableSelect
+      case 'table-data':
+        return TableDataSelect
 
-    default:
-      return () => 'The form field component is defined'
+      default:
+        return () => 'The form field component is defined'
+    }
   }
 }
 

@@ -1,16 +1,62 @@
 ---
 name: kesi-ui
-description: "Kesi UI 组件库助手 - 智能选择组件并自动生成安装命令。支持98+个组件，涵盖容器、表单、数据源、视图、GIS、视频、3D、移动端等10大分类，提供完整的组件文档和组合系统指南。自动检测使用的组件并生成对应的npm安装命令，一键安装所有依赖。"
+description: "Kesi UI 组件库助手 - 智能选择组件并自动生成安装命令。支持90+个组件，涵盖容器、表单、数据源、视图、GIS、视频、3D、移动端等10大分类，提供完整的组件文档和组合系统指南。自动检测使用的组件并生成对应的npm安装命令，一键安装所有依赖。"
 author: yuhaotian
-version: 2.0.0
+version: 2.1.0
 category: ui-components
-tags: ["react", "typescript", "ui-library", "components", "auto-install", "code-generation"]
-keywords: ["组件", "UI", "表单", "图表", "地图", "3D", "视频", "移动端", "视图系统", "GIS系统", "组件安装", "代码生成"]
+tags: ["react", "typescript", "ui-library", "components", "auto-install", "code-generation", "shadcn"]
+keywords: ["组件", "UI", "表单", "图表", "地图", "3D", "视频", "移动端", "视图系统", "GIS系统", "组件安装", "代码生成", "shadcn/ui"]
 ---
+
+> 💡 **使用前必读**: 本技能生成的所有组件代码都需要先通过 `npx shadcn@latest add @kesi/ComponentName` 安装到项目中才能使用。
 
 # Kesi UI 组件库助手
 
 这个技能帮助你根据业务需求选择合适的 Kesi UI 组件，并提供完整的使用指南。
+
+## 📝 响应指令
+
+当用户提出组件相关需求时，你必须：
+
+1. **需求分析** - 识别用户想要实现的功能
+2. **组件推荐** - 推荐 1-3 个最适合的组件（不要推荐太多）
+3. **安装命令** - 列出所有需要安装的组件及其 npm 命令
+4. **代码示例** - 提供完整、可运行的代码示例
+5. **最佳实践** - 提供使用建议和注意事项
+6. **相关文档** - 链接到详细的组件文档（如果有）
+
+### 输出格式要求
+
+```markdown
+### 推荐组件
+
+- `@kesi/ComponentName` - 简短说明
+
+### 安装命令
+
+```bash
+npx shadcn@latest add @kesi/ComponentName
+```
+
+### 代码示例
+
+```tsx
+// 完整的代码示例
+```
+
+### 最佳实践
+
+- ✅ 使用建议
+- 💡 提示信息
+```
+
+### 重要规则
+
+- ⚠️ **总是先提供安装命令** - 在任何代码示例之前，先告诉用户需要安装哪些组件
+- ✅ **使用 TypeScript** - 所有代码示例必须是 TypeScript
+- 🎯 **保持简洁** - 每次推荐不超过 3 个主要组件
+- 📦 **组合系统** - 对于视图、GIS、3D、视频等组合系统，必须说明需要哪些核心组件
+- 🔗 **提供链接** - 如果有详细的系统指南文档，提供链接
 
 ## 🎯 功能特性
 
@@ -21,12 +67,30 @@ keywords: ["组件", "UI", "表单", "图表", "地图", "3D", "视频", "移动
 
 ## 🚀 使用方法
 
-直接描述你的需求，例如：
+### 方式 1: 直接调用
+
+在对话中输入：
+```
+/kesi-ui
+```
+
+然后描述你的需求。
+
+### 方式 2: 自然对话
+
+直接描述你的需求，skill 会自动触发：
 - "我需要一个用户登录表单"
 - "要展示数据表格，支持搜索和分页"
 - "需要实现一个地图展示功能"
 - "要做一个视频播放器"
 - "需要创建一个复杂的数据录入表单"
+- "使用 kesi-ui 组件创建一个数据看板"
+
+### 方式 3: 具体问题
+
+- "如何使用视图组件展示数据？"
+- "kesi-ui 中有哪些表单组件？"
+- "需要哪些组件来实现地图功能？"
 
 ## 📦 组件安装说明
 
@@ -88,9 +152,22 @@ function Example() {
 3. **shadcn/ui**: 确保你的项目已配置 shadcn/ui
 4. **组件文档**: 点击组件名链接可查看详细文档
 
+## 🚀 快速参考
+
+| 我想... | 使用组件 | 分类 |
+|---------|---------|------|
+| 展示数据表格 | `ViewModel` + `ViewDataTable` | 视图组件 |
+| 创建表单 | `FormInput`, `FormSelect`, `FormCheckbox` | 表单组件 |
+| 展示地图 | `GisMapCore` + 图层组件 | GIS组件 |
+| 显示图表 | `ChartEcharts` | 图表组件 |
+| 3D展示 | `Model3D` + 几何体组件 | 3D组件 |
+| 播放视频 | `VideoWidget` | 视频组件 |
+| 卡片展示 | `Card` | 容器组件 |
+| 获取API数据 | `DataSourceApi` | 数据源组件 |
+
 ## 📦 组件分类
 
-### 📦 容器组件 (8个)
+### 📦 容器组件 (7个)
 将相关内容组织在一起，提供不同的展示形式
 
 **用途**: 将一组相关的数据或业务组织在一起，提供不同的展示形式
@@ -101,13 +178,11 @@ function Example() {
 - 需要标签页切换不同内容
 - 需要弹窗显示内容
 - 需要浮层提示
-- 需要上下文共享
 - 需要迭代渲染列表
 
 **主要组件**:
 - [`Card`](data/container-card.md) - 卡片容器，支持标题、边框、内边距
 - [`Carousel`](data/container-carousel.md) - 轮播容器，支持自动播放、指示器
-- [`ContainerContextProvider`](data/container-context-provider.md) - 上下文提供者容器，跨组件共享状态
 - [`ContainerIteration`](data/container-iteration.md) - 迭代容器，循环渲染子组件
 - [`Modal`](data/container-modal.md) - 模态框容器，弹出式对话框
 - [`Panel`](data/container-panel.md) - 面板容器，手风琴式折叠展开
@@ -162,7 +237,7 @@ function Example() {
 - [`Text`](data/text.md) - 文本，基础文本展示
 - [`Textarea`](data/textarea.md) - 文本域，多行文本输入
 
-### 📝 表单组件 (16个)
+### 📝 表单组件 (25个)
 数据输入和表单处理
 
 **用途**: 数据输入和表单处理，包含基础字段和业务特定字段
@@ -193,8 +268,11 @@ function Example() {
 - [`FormMap`](data/form-map.md) - 地图选择，地理位置选择
 - [`FormRadio`](data/form-radio.md) - 单选框，单选输入
 - [`FormRate`](data/form-rate.md) - 评分，星级评分
+- [`FormReference`](data/form-reference.md) - 引用字段，关联数据
+- [`FormRelate`](data/form-relate.md) - 关联字段，一对一关联
+- [`FormRelatePlus`](data/form-relate-plus.md) - 高级关联，多表关联
 - [`FormRichText`](data/form-rich-text.md) - 富文本，富文本编辑
-- [`FormSchema`](data/schema-form.md) - 表单模式，JSON Schema驱动
+- [`FormSchema`](data/schema-form.md) - Schema表单，JSON Schema驱动
 - [`FormSelect`](data/form-select.md) - 选择器，下拉选择
 - [`FormSerialNumber`](data/form-serial-number.md) - 序列号，序号生成
 - [`FormSlider`](data/form-slider.md) - 滑块，范围选择
@@ -339,7 +417,7 @@ function Example() {
 - [`MobilePopup`](data/mobile-popup.md) - 弹出层，移动端弹窗
 - [`MobileScanQR`](data/mobile-scan-qr.md) - 扫描二维码，二维码扫描
 
-### 🌍 3D组件 (11个)
+### 🌍 3D组件 (9个)
 3D模型展示和交互
 
 **用途**: 3D模型展示和交互
@@ -365,6 +443,250 @@ function Example() {
 - [`Model3DGeometryTube`](data/model3d-geometry-tube.md) - 管道，3D管道
 - [`Model3DLayout3D`](data/model3d-layout3d.md) - 3D布局，3D空间布局
 - [`Model3DCard`](data/model3d-card.md) - 3D卡片，3D卡片展示
+
+## 📋 工作流程
+
+当你收到用户需求时，请按以下步骤进行：
+
+1. **需求分析** - 识别用户的核心需求（表单/表格/地图/图表/视频/3D等）
+2. **组件推荐** - 根据需求推荐合适的组件
+3. **生成安装命令** - 列出所有需要安装的组件
+4. **代码示例** - 提供完整可运行的代码示例
+5. **最佳实践** - 提供使用建议和注意事项
+
+## 💬 对话示例
+
+### 示例 1: 创建数据表格
+
+**用户输入**:
+> "我需要一个数据表格，支持搜索、过滤和分页"
+
+**你的输出**:
+
+根据你的需求，推荐使用 **视图组件系统**。
+
+### 推荐组件
+
+- `@kesi/ViewModel` - 视图容器（必需）
+- `@kesi/ViewDataTable` - 数据表格
+- `@kesi/ViewFilter` - 过滤器
+- `@kesi/ViewPagination` - 分页器
+
+### 安装命令
+
+```bash
+npx shadcn@latest add @kesi/ViewModel @kesi/ViewDataTable @kesi/ViewFilter @kesi/ViewPagination
+```
+
+### 代码示例
+
+```tsx
+import { ViewModel } from '@/components/kesi/view-model/view-model';
+import { ViewDataTable } from '@/components/kesi/view-data-table/view-data-table';
+import { ViewFilter } from '@/components/kesi/view-filter/view-filter';
+import { ViewPagination } from '@/components/kesi/view-pagination/view-pagination';
+
+function UserTable() {
+  return (
+    <ViewModel
+      config={{
+        dataSource: 'user_table',
+        fields: [
+          { name: 'id', label: 'ID', type: 'string' },
+          { name: 'name', label: '姓名', type: 'string' },
+          { name: 'email', label: '邮箱', type: 'string' },
+          { name: 'status', label: '状态', type: 'string' }
+        ]
+      }}
+    >
+      <ViewFilter />
+      <ViewDataTable />
+      <ViewPagination />
+    </ViewModel>
+  );
+}
+```
+
+### 最佳实践
+
+- ✅ ViewModel 必须作为最外层容器
+- ✅ 所有视图组件都必须放在 ViewModel 内部
+- ✅ 数据源配置要正确
+- 💡 查看 [视图系统完整指南](data/view-system.md) 了解更多组合方式
+
+---
+
+### 示例 2: 创建登录表单
+
+**用户输入**:
+> "创建一个用户登录表单"
+
+**你的输出**:
+
+根据你的需求，推荐使用 **表单组件**。
+
+### 推荐组件
+
+- `@kesi/FormInput` - 文本输入框（用户名）
+- `@kesi/FormInput` - 文本输入框（密码）
+
+### 安装命令
+
+```bash
+npx shadcn@latest add @kesi/FormInput
+```
+
+### 代码示例
+
+```tsx
+import { FormInput } from '@/components/kesi/form-input/form-input';
+
+function LoginForm() {
+  const handleSubmit = (data: any) => {
+    console.log('登录数据:', data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <FormInput
+        name="username"
+        label="用户名"
+        placeholder="请输入用户名"
+        required
+      />
+      <FormInput
+        name="password"
+        label="密码"
+        type="password"
+        placeholder="请输入密码"
+        required
+      />
+      <button type="submit">登录</button>
+    </form>
+  );
+}
+```
+
+### 最佳实践
+
+- ✅ 每个表单字段必须有唯一的 `name` 属性
+- ✅ 使用 `label` 提供清晰的字段说明
+- 💡 可以使用 `@kesi/Card` 组件包裹表单以获得更好的视觉效果
+
+---
+
+### 示例 3: 创建地图展示
+
+**用户输入**:
+> "需要展示一个地图，并绘制多边形区域"
+
+**你的输出**:
+
+根据你的需求，推荐使用 **GIS 组件系统**。
+
+### 推荐组件
+
+- `@kesi/GisMapCore` - 地图容器（必需）
+- `@kesi/GisPolygonDraw` - 多边形绘制工具
+- `@kesi/GisXyzTile` - 地图瓦片（底图）
+
+### 安装命令
+
+```bash
+npx shadcn@latest add @kesi/GisMapCore @kesi/GisPolygonDraw @kesi/GisXyzTile
+```
+
+### 代码示例
+
+```tsx
+import { GisMapCore } from '@/components/kesi/gis-map-core/gis-map-core';
+import { GisPolygonDraw } from '@/components/kesi/gis-polygon-draw/gis-polygon-draw';
+import { GisXyzTile } from '@/components/kesi/gis-xyz-tile/gis-xyz-tile';
+
+function MapView() {
+  return (
+    <GisMapCore
+      config={{
+        center: [116.404, 39.915],
+        zoom: 12
+      }}
+    >
+      <GisXyzTile
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <GisPolygonDraw
+        onDrawComplete={(polygon) => {
+          console.log('绘制的多边形:', polygon);
+        }}
+      />
+    </GisMapCore>
+  );
+}
+```
+
+### 最佳实践
+
+- ✅ GisMapCore 必须作为最外层容器
+- ✅ 地图瓦片提供底图显示
+- 💡 查看 [GIS系统完整指南](data/gis-system.md) 了解更多地图配置和图层组合方式
+
+---
+
+### 示例 4: 创建图表展示
+
+**用户输入**:
+> "需要展示销售数据的柱状图"
+
+**你的输出**:
+
+根据你的需求，推荐使用 **图表组件**。
+
+### 推荐组件
+
+- `@kesi/ChartEcharts` - ECharts 图表组件
+
+### 安装命令
+
+```bash
+npx shadcn@latest add @kesi/ChartEcharts
+```
+
+### 代码示例
+
+```tsx
+import { ChartEcharts } from '@/components/kesi/chart-echarts/chart-echarts';
+
+function SalesChart() {
+  const option = {
+    title: {
+      text: '销售数据统计'
+    },
+    xAxis: {
+      type: 'category',
+      data: ['一月', '二月', '三月', '四月', '五月', '六月']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      data: [120, 200, 150, 80, 70, 110],
+      type: 'bar'
+    }]
+  };
+
+  return (
+    <ChartEcharts option={option} style={{ height: '400px' }} />
+  );
+}
+```
+
+### 最佳实践
+
+- ✅ option 配置遵循 ECharts 标准格式
+- ✅ 建议设置明确的高度
+- 💡 支持所有 ECharts 图表类型（折线图、饼图、散点图等）
+
+---
 
 ## 📋 选择组件的步骤
 
@@ -392,22 +714,22 @@ function Example() {
 - **日期时间**: `FormDate`、`FormDateRange`、`FormTime`
 - **高级**: `FormRichText`、`FormUpload`
 
-### 场景3.1: 需要使用视图组件
+### 场景4: 需要使用视图组件
 - **选择**: 视图组件
 - **容器**: `ViewModel` 必须作为最外层容器
 - **内容**: 所有视图组件（ViewDataTable、ViewFilter等）都在 ViewModel 内使用
 
-### 场景4: 需要数据可视化
+### 场景5: 需要数据可视化
 - **选择**: 图表组件
 - **主要**: `ChartEcharts`
 - **支持**: 折线图、柱状图、饼图、散点图等所有ECharts类型
 
-### 场景5: 需要3D展示
+### 场景6: 需要3D展示
 - **选择**: 三维组件
 - **主要**: `Model3D` 作为3D场景容器
 - **搭配**: 各种几何体组件（`Model3DGeometryBox`、`Model3DGeometrySphere`等）
 
-### 场景6: 需要视频播放
+### 场景7: 需要视频播放
 - **选择**: 视频组件
 - **主要**: `VideoWidget` 作为视频播放器
 - **搭配**: `VideoButton` 控制按钮、`VideoPlaybackWidget` 播放控件
@@ -432,11 +754,30 @@ function Example() {
 
 ## 📊 统计信息
 
-- **总计组件**: 68+ 个
-- **覆盖分类**: 10个大类
+- **总计组件**: 90+ 个
+- **覆盖分类**: 10大类
+  - 📦 容器组件 (7个)
+  - 🔌 数据源组件 (7个)
+  - 🧩 基础组件 (9个)
+  - 📝 表单组件 (30个)
+  - 📊 图表组件 (1个)
+  - 💼 业务组件 (4个)
+  - ✳️ 视图组件 (11个)
+  - 🗺️ GIS组件 (10个)
+  - 📹 视频组件 (5个)
+  - 📱 移动端组件 (7个)
+  - 🌍 3D组件 (10个)
 - **支持语言**: TypeScript
+- **基于框架**: React + shadcn/ui
 - **更新频率**: 持续迭代更新
+
+## 🎓 学习资源
+
+- [视图系统完整指南](data/view-system.md) - 数据表格和视图组件的组合使用
+- [GIS系统完整指南](data/gis-system.md) - 地图和地理信息系统的组合使用
+- [3D系统完整指南](data/3d-system.md) - 3D场景和几何体的组合使用
+- [视频系统完整指南](data/video-system.md) - 视频播放和控制的组合使用
 
 ---
 
-*使用这个技能，让组件选择变得简单高效！*
+*使用这个技能，让组件选择变得简单高效！* 🚀

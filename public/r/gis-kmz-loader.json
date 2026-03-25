@@ -5,7 +5,9 @@
   "description": "Gis Kmz Loader - 组件",
   "dependencies": [
     "ol",
-    "jszip"
+    "jszip",
+    "react",
+    "gcoord"
   ],
   "registryDependencies": [],
   "files": [

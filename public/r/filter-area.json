@@ -3,7 +3,10 @@
   "type": "registry:component",
   "title": "Filter Area",
   "description": "Filter Area - 组件",
-  "dependencies": [],
+  "dependencies": [
+    "react",
+    "lucide-react"
+  ],
   "registryDependencies": [],
   "files": [
     {

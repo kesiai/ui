@@ -6,7 +6,8 @@
   "dependencies": [
     "@airiot/client",
     "lodash",
-    "dayjs"
+    "dayjs",
+    "lucide-react"
   ],
   "registryDependencies": [
     "badge"

@@ -4,7 +4,10 @@
   "title": "Video Widget",
   "description": "Video Widget - 组件",
   "dependencies": [
-    "@airiot/client"
+    "@airiot/client",
+    "react",
+    "lodash",
+    "ezuikit-js"
   ],
   "registryDependencies": [],
   "files": [

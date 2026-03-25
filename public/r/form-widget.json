@@ -4,7 +4,9 @@
   "title": "Form Widget",
   "description": "Form Widget - 组件",
   "dependencies": [
-    "lodash"
+    "lodash",
+    "react",
+    "lucide-react"
   ],
   "registryDependencies": [
     "http://localhost:3000/r/form-input.json",

@@ -4,7 +4,8 @@
   "title": "Gis Geoserver Wms",
   "description": "Gis Geoserver Wms - 组件",
   "dependencies": [
-    "ol"
+    "ol",
+    "react"
   ],
   "registryDependencies": [],
   "files": [

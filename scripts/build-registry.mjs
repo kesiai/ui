@@ -70,12 +70,20 @@ async function getThirdPartyDependencies() {
 
 // 从文件内容中提取第三方依赖
 function extractThirdPartyDepsFromContent(content, thirdPartyDeps) {
-  const importRegex = /import\s+[^'";]+['"]([^'";]+)['"]/g;
+  // 匹配各种 import 语句：
+  // 1. import xxx from 'package'
+  // 2. import * as xxx from 'package'
+  // 3. import 'package' (副作用导入)
+  // 4. import { xxx } from 'package'
+  const importRegex = /import\s+(?:(?:[^'";]+\s+from\s+)?['"]([^'";]+)['"]|[^'";]+['"]([^'";]+)['"])/g;
   const deps = new Set();
   let match;
 
   while ((match = importRegex.exec(content))) {
-    const dep = match[1];
+    // match[1] 或 match[2] 可能包含包名
+    const dep = match[1] || match[2];
+
+    if (!dep) continue;
 
     // 只处理顶层包，忽略相对路径和别名导入
     if (!dep.startsWith('.') && !dep.startsWith('@/')) {
@@ -362,6 +370,9 @@ async function buildRegistry() {
         // 添加相对导入的 TS/TSX 文件
         const tsAbsPaths = extractRelativeTsImports(fileContent, currentFileDir);
 
+        // 用于收集所有相对导入文件中的第三方依赖
+        const relativeFileDeps = new Set();
+
         for (const absTsPath of tsAbsPaths) {
           const existingPath = await findExistingFile(absTsPath);
           if (!existingPath) continue;
@@ -384,10 +395,18 @@ async function buildRegistry() {
               });
               console.log(`    📄 添加依赖文件: ${registryTsPath}`);
             }
+
+            // 提取相对导入文件中的第三方依赖
+            const relativeFileDepsArray = extractThirdPartyDepsFromContent(tsContent, thirdPartyDeps);
+            relativeFileDepsArray.forEach(dep => relativeFileDeps.add(dep));
           } catch (err) {
             console.warn(`  ⚠️  无法读取 TS/TSX 文件: ${existingPath} (被 ${file} 导入)`);
           }
         }
+
+        // 合并主文件和相对导入文件的第三方依赖
+        const allRelativeFileDeps = Array.from(relativeFileDeps);
+        const mergedDeps = [...new Set([...filteredDeps, ...allRelativeFileDeps])];
 
         // 构建注册表项
         // registryDeps: 来自 @/registry/ 的依赖，添加 URL 前缀
@@ -402,7 +421,7 @@ async function buildRegistry() {
           type,
           title: generateComponentTitle(name),
           description: `${generateComponentTitle(name)} - ${type === 'registry:component' ? '组件' : type === 'registry:lib' ? '工具库' : '区块'}`,
-          dependencies: filteredDeps,
+          dependencies: mergedDeps,
           registryDependencies: processedRegistryDeps,
           files: fileList,
         };
@@ -413,7 +432,7 @@ async function buildRegistry() {
         const componentJsonPath = path.join(OUTPUT_DIR, `${name}.json`);
         await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
 
-        console.log(`  ✓ ${name} (${filteredDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} component deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
+        console.log(`  ✓ ${name} (${mergedDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} component deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
       }
     } catch (e) {
       console.error(`  ⚠️  跳过文件夹 ${folder}:`, e.message);

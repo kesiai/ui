@@ -6,7 +6,8 @@
   "dependencies": [
     "lodash",
     "ol",
-    "@airiot/client"
+    "@airiot/client",
+    "react"
   ],
   "registryDependencies": [],
   "files": [

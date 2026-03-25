@@ -255,7 +255,8 @@
         "echarts",
         "echarts-stat",
         "element-resize-event",
-        "lodash"
+        "lodash",
+        "echarts-gl"
       ],
       "registryDependencies": [],
       "files": [
@@ -272,7 +273,12 @@
       "title": "Chart Echarts",
       "description": "Chart Echarts - 组件",
       "dependencies": [
-        "lodash"
+        "lodash",
+        "echarts",
+        "echarts-stat",
+        "react",
+        "element-resize-event",
+        "echarts-gl"
       ],
       "registryDependencies": [],
       "files": [
@@ -711,7 +717,10 @@
       "type": "registry:component",
       "title": "Filter Area",
       "description": "Filter Area - 组件",
-      "dependencies": [],
+      "dependencies": [
+        "react",
+        "lucide-react"
+      ],
       "registryDependencies": [],
       "files": [
         {
@@ -1116,7 +1125,9 @@
         "react-flow-renderer",
         "@airiot/client",
         "lodash",
-        "dayjs"
+        "dayjs",
+        "react",
+        "lucide-react"
       ],
       "registryDependencies": [
         "badge",
@@ -2051,7 +2062,9 @@
       "title": "Form Widget",
       "description": "Form Widget - 组件",
       "dependencies": [
-        "lodash"
+        "lodash",
+        "react",
+        "lucide-react"
       ],
       "registryDependencies": [
         "http://localhost:3000/r/form-input.json",
@@ -2102,7 +2115,8 @@
       "title": "Gis Code Editor",
       "description": "Gis Code Editor - 组件",
       "dependencies": [
-        "ol"
+        "ol",
+        "react"
       ],
       "registryDependencies": [],
       "files": [
@@ -2124,7 +2138,8 @@
       "title": "Gis Custom Layer",
       "description": "Gis Custom Layer - 组件",
       "dependencies": [
-        "ol"
+        "ol",
+        "react"
       ],
       "registryDependencies": [],
       "files": [
@@ -2146,7 +2161,9 @@
       "title": "Gis Geojson Parse",
       "description": "Gis Geojson Parse - 组件",
       "dependencies": [
-        "ol"
+        "ol",
+        "react",
+        "gcoord"
       ],
       "registryDependencies": [],
       "files": [
@@ -2173,7 +2190,8 @@
       "title": "Gis Geoserver Wms",
       "description": "Gis Geoserver Wms - 组件",
       "dependencies": [
-        "ol"
+        "ol",
+        "react"
       ],
       "registryDependencies": [],
       "files": [
@@ -2196,7 +2214,9 @@
       "description": "Gis Kmz Loader - 组件",
       "dependencies": [
         "ol",
-        "jszip"
+        "jszip",
+        "react",
+        "gcoord"
       ],
       "registryDependencies": [],
       "files": [
@@ -2240,7 +2260,8 @@
       "title": "Gis Polygon Draw",
       "description": "Gis Polygon Draw - 组件",
       "dependencies": [
-        "ol"
+        "ol",
+        "react"
       ],
       "registryDependencies": [],
       "files": [
@@ -2282,7 +2303,10 @@
       "dependencies": [
         "@airiot/client",
         "ol",
-        "lodash"
+        "lodash",
+        "react",
+        "react-dom",
+        "lucide-react"
       ],
       "registryDependencies": [],
       "files": [
@@ -2377,7 +2401,8 @@
       "dependencies": [
         "lodash",
         "ol",
-        "@airiot/client"
+        "@airiot/client",
+        "react"
       ],
       "registryDependencies": [],
       "files": [
@@ -2400,7 +2425,9 @@
       "description": "Gis Xyz Tile - 组件",
       "dependencies": [
         "ol",
-        "lodash"
+        "lodash",
+        "react",
+        "proj4"
       ],
       "registryDependencies": [],
       "files": [
@@ -2991,7 +3018,9 @@
       "title": "Video Widget",
       "description": "Video Widget - 组件",
       "dependencies": [
-        "@airiot/client"
+        "@airiot/client",
+        "react",
+        "lodash"
       ],
       "registryDependencies": [],
       "files": [
@@ -3043,7 +3072,10 @@
       "title": "Video Widget",
       "description": "Video Widget - 组件",
       "dependencies": [
-        "@airiot/client"
+        "@airiot/client",
+        "react",
+        "lodash",
+        "ezuikit-js"
       ],
       "registryDependencies": [],
       "files": [
@@ -3820,7 +3852,8 @@
       "dependencies": [
         "@airiot/client",
         "lodash",
-        "dayjs"
+        "dayjs",
+        "lucide-react"
       ],
       "registryDependencies": [
         "badge"

@@ -4,7 +4,12 @@
   "title": "Chart Echarts",
   "description": "Chart Echarts - 组件",
   "dependencies": [
-    "lodash"
+    "lodash",
+    "echarts",
+    "echarts-stat",
+    "react",
+    "element-resize-event",
+    "echarts-gl"
   ],
   "registryDependencies": [],
   "files": [

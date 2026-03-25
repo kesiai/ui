@@ -4,7 +4,9 @@
   "title": "Gis Geojson Parse",
   "description": "Gis Geojson Parse - 组件",
   "dependencies": [
-    "ol"
+    "ol",
+    "react",
+    "gcoord"
   ],
   "registryDependencies": [],
   "files": [

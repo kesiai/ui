@@ -4,7 +4,8 @@
   "title": "Gis Custom Layer",
   "description": "Gis Custom Layer - 组件",
   "dependencies": [
-    "ol"
+    "ol",
+    "react"
   ],
   "registryDependencies": [],
   "files": [

@@ -1,31 +1,36 @@
 import {
   FieldGroup
 } from "@/components/ui/field"
-import { FormProvider, useForm, useFilterSchema, type UseFormPropsExtended, type UseFormSchemaProps } from '@airiot/client'
+import { FormProvider, useForm, type UseFormPropsExtended } from '@airiot/client'
 import type { ReactNode } from 'react'
 import _ from "lodash"
 import FormField from "@/registry/components/form-field/form-field"
+import { filterConverter } from '@/registry/lib/view-filter-converter'
 
-type SchemaFormProps = UseFormPropsExtended & UseFormSchemaProps & {
-  formId: string
+type SchemaFormProps = UseFormPropsExtended & {
+  filterSchema: Array
   onSubmit: (data: any) => void
   children?: ReactNode | ((props: any) => ReactNode)
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const FilterSchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, ...props }: SchemaFormProps) => {
-
-  const { fields } = useFilterSchema({ schema, formSchema })
-
+const FilterForm = ({ schema, filterSchema, onSubmit, children, classNames, ...props }: SchemaFormProps) => {
   const methods = useForm(props)
-
+  const properties = schema.properties
   return (
     <FormProvider {...methods} classNames={classNames}>
-      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)} className={classNames?.form}>
+      <form id={schema.name || schema.key} onSubmit={methods.handleSubmit(onSubmit)} className={classNames?.form}>
         <FieldGroup className={classNames?.group}>
-          {fields.map(field => (
-            <span className="w-fit"><FormField {...field} isFilter={true} name={field.key || ''} key={field.key} /></span>
-          ))}
+          {(filterSchema || []).map(field => {
+            const baseSchema = properties?.[field.key]
+            const FieldController = filterConverter(baseSchema, field)
+            const megerSchema = { ...baseSchema, ...field }
+            return (
+              <FormField label={baseSchema.title} name={field.key} schema={megerSchema}>
+                <FieldController />
+              </FormField>
+            )
+          })}
         </FieldGroup>
         {children ? (typeof children === 'function' ? children({
           ...methods
@@ -35,4 +40,4 @@ const FilterSchemaForm = ({ schema, formSchema, onSubmit, formId, children, clas
   )
 }
 
-export default FilterSchemaForm
+export default FilterForm

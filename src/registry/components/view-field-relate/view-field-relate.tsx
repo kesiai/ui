@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronDown, ChevronUp, Table as TableIcon, ExternalLink } from 'lucide-react'
-import { ViewFieldRender } from '@/registry/components/view-field/view-field'
+import { tableConverter } from '@/registry/lib/view-table-converter'
 import { createAPI } from '@airiot/client'
 
 // ============================================
@@ -43,7 +43,7 @@ function parseJsonStrings(data: any): any {
 
     if (isObject(value) && value !== null) {
       Object.keys(value).forEach(key => {
-        ;(value as any)[key] = processValue((value as any)[key])
+        ; (value as any)[key] = processValue((value as any)[key])
       })
       return value
     }
@@ -78,11 +78,13 @@ interface DetailShowProps {
   inList?: boolean
 }
 
-const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value, inList }) => {
+const DetailShow: React.FC<DetailShowProps> = ({ children, schema, tableSchema, value, inList }) => {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [popoverOpen, setPopoverOpen] = React.useState(false)
   const [detailData, setDetailData] = React.useState<Array<{ title: string; value: any }>>([])
   const [loading, setLoading] = React.useState(false)
+
+  const FieldComponent = tableConverter(schema, tableSchema)
 
   const getDetailData = async () => {
     if (!value?.id || !schema?.relate?.id) {
@@ -121,9 +123,9 @@ const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value, inList
 
         let fieldValue: any
         if (s.fieldType === 'attachment' || s.fieldType === 'attachments') {
-          fieldValue = <ViewFieldRender value={data?.[key]} schema={s} type="upload" inList={false} />
+          fieldValue = <FieldComponent value={data?.[key]} schema={s} type="upload" inList={false} />
         } else {
-          fieldValue = <ViewFieldRender value={data?.[key]} schema={s} type={s.fieldType} inList={false} />
+          fieldValue = <FieldComponent value={data?.[key]} schema={s} type={s.fieldType} inList={false} />
         }
 
         result.push({
@@ -258,6 +260,8 @@ const ItemShow: React.FC<{
   const displayFieldKey = displayFieldConfig?.key
   const fieldSchema = displayFieldConfig?.fieldSchema
 
+  const FieldComponent = tableConverter(relateSchema, {})
+
   // 详情页模式 - 完整展示所有字段
   if (detailPage) {
     return (
@@ -270,7 +274,7 @@ const ItemShow: React.FC<{
           <div key={index} className="flex">
             <span className="w-24 text-slate-600 dark:text-slate-400">{f.title}：</span>
             <span className="flex-1">
-              <ViewFieldRender
+              <FieldComponent
                 value={val[f.key]}
                 schema={f.fieldSchema}
                 type={f.fieldSchema?.fieldType}
@@ -293,7 +297,7 @@ const ItemShow: React.FC<{
           <div key={index} className="text-xs text-slate-600 dark:text-slate-400 flex">
             <span className="w-20 shrink-0">{f.title}：</span>
             <span className="flex-1 truncate">
-              <ViewFieldRender
+              <FieldComponent
                 value={val[f.key]}
                 schema={f.fieldSchema}
                 type={f.fieldSchema?.fieldType}
@@ -330,7 +334,7 @@ const ItemShow: React.FC<{
 
     // 使用 ViewFieldRender 渲染字段值
     return (
-      <ViewFieldRender
+      <FieldComponent
         value={fieldValue}
         schema={fieldSchema}
         type={fieldSchema?.fieldType || 'text'}
@@ -419,18 +423,21 @@ const TableShow: React.FC<{
               <tbody>
                 {val.map((row: any, index: number) => (
                   <tr key={index}>
-                    {displayFields.map((field) => (
-                      <td
-                        key={field.key}
-                        className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm"
-                      >
-                        <ViewFieldRender
-                          value={row[field.key]}
-                          schema={{ title: field.title }}
-                          type="text"
-                        />
-                      </td>
-                    ))}
+                    {displayFields.map((field) => {
+                      const FieldComponent = tableConverter(relateSchema, {})
+                      return (
+                        <td
+                          key={field.key}
+                          className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm"
+                        >
+                          <FieldComponent
+                            value={row[field.key]}
+                            schema={{ title: field.title }}
+                            type="text"
+                          />
+                        </td>
+                      )
+                    })}
                   </tr>
                 ))}
               </tbody>
@@ -452,7 +459,7 @@ export interface RelatePlusShowProps {
   inList?: boolean
 }
 
-const RelatePlusShow: React.FC<RelatePlusShowProps> = ({ value, schema, inList }) => {
+export const Relate: React.FC<RelatePlusShowProps> = ({ value, schema, inList }) => {
   const [expand, setExpand] = React.useState(false)
 
   if (isNil(value)) {
@@ -644,5 +651,3 @@ const RelatePlusShow: React.FC<RelatePlusShowProps> = ({ value, schema, inList }
 
   return null
 }
-
-export default RelatePlusShow

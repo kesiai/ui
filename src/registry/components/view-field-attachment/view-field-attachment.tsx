@@ -18,7 +18,7 @@ import isString from 'lodash/isString'
 import JSZip from 'jszip'
 // @ts-ignore - file-saver doesn't have proper types
 import { saveAs } from 'file-saver'
-import './ShowAttachment.css'
+import './attachment.css'
 
 // ============================================
 // 工具函数
@@ -332,7 +332,7 @@ export interface ShowAttachmentProps {
   inList?: boolean
 }
 
-const ShowAttachment: React.FC<ShowAttachmentProps> = ({
+export const Attachment: React.FC<ShowAttachmentProps> = ({
   schema = {},
   value,
   item,
@@ -523,5 +523,3 @@ const ShowAttachment: React.FC<ShowAttachmentProps> = ({
     </div>
   )
 }
-
-export default ShowAttachment

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { cloneElement, useEffect, useMemo, useState } from 'react';
 import { useModelList, useModel, useModelState, type ModelSchema } from '@airiot/client'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
@@ -8,7 +8,6 @@ import {
   DataGridTableRowSelectAll,
 } from '@/components/reui/data-grid/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import ViewField from "@/registry/components/view-field/view-field"
 import {
   type ColumnDef, type TableOptions, type CellContext, type SortingState, type RowSelectionState,
   getCoreRowModel,
@@ -17,6 +16,7 @@ import {
   createColumnHelper,
 } from '@tanstack/react-table';
 import { cn } from '@/lib/utils';
+import { tableConverter } from '@/registry/lib/view-table-converter'
 
 interface IData {
   id: string;
@@ -50,15 +50,29 @@ const getFieldProp = (model: ModelSchema | null | undefined, field: string): any
   }, model)
 }
 
-const DataCell = ({ children, ...restProps }:
+const DataCell = ({ children, schema, tableSchema, ...restProps }:
   {
     children?: React.ReactNode | ((props: any) => React.ReactNode), [key: string]: any
   }) =>
   ({ getValue, row, column }: CellContext<IData, any>) => {
 
-    const schema = restProps.schema || column.columnDef?.field
+    const baseSchema = schema || column.columnDef?.field
 
-    return <ViewField {...restProps} value={getValue()} item={row.original} schema={schema}>{children}</ViewField>
+    const childrenProps = {
+      ...restProps,
+      value: getValue(),
+      item: row.original,
+      schema: { ...baseSchema, ...tableSchema },
+      tableSchema,
+    }
+
+    const FieldComponent = tableConverter(schema, tableSchema)
+
+    return (
+      children ? (typeof children === 'function' ? children(childrenProps) : cloneElement(children as React.ReactElement<any>, childrenProps)) : (
+        <FieldComponent {...childrenProps} />
+      )
+    )
   }
 
 export const DataTable = ({

@@ -14,8 +14,10 @@ export interface FormEditableTableProps {
     disabled?: boolean
     minCount?: number
     maxCount?: number
-    forms?: {
-      form?: string[]
+    items?: {
+      formSchema?: Array<{
+        key: string
+      }>
       properties?: Record<string, any>
     }
     defaultVal?: any[]
@@ -71,9 +73,9 @@ export interface FormEditableTableProps {
 }
 
 const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
-  const { meta } = props
-  const schema = { ...props, ...(props.schema || {}) }
+  const { meta, schema } = props
   const { onChange, value = [] } = props || {}
+
   const [dataSource, setDataSource] = React.useState<any[]>(value || schema?.defaultVal || [])
   const [selectedRows, setSelectedRows] = React.useState<any[]>([])
 
@@ -95,13 +97,12 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
 
   // 构建列配置
   const columns: FormTableViewColumn[] = React.useMemo(() => {
-    const forms = schema?.forms
-    if (!forms?.form) return []
-
-    const form = forms.form
-    const properties = forms.properties || {}
-
-    return form.map((key: string) => {
+    const items = schema?.items
+    const formSchema = items?.formSchema
+    if (!formSchema) return []
+    const properties = items.properties || {}
+    return formSchema.map(field => {
+      const key = field.key
       const item = properties[key] || {}
       return {
         key: item.key || key,
@@ -117,7 +118,7 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
         width: item.fieldType === 'attachments' ? 270 : 200,
       }
     })
-  }, [schema?.forms])
+  }, [schema?.items])
 
   if (!columns || columns.length === 0) {
     return (
@@ -147,7 +148,7 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
     selectedRows,
     setSelectedRows,
     setDataSource,
-    setErrors: () => {}, // TODO: 实现错误处理
+    setErrors: () => { }, // TODO: 实现错误处理
     meta,
     record: props.record,
   }

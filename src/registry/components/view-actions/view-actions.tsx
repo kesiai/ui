@@ -39,8 +39,8 @@ import {
 } from 'lucide-react'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
-import ViewField from '@/registry/components/view-field/view-field'
 import SchemaForm from '@/registry/components/schema-form/schema-form'
+import { tableConverter } from '@/registry/lib/view-table-converter'
 
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
@@ -51,8 +51,8 @@ interface ViewActionContentProps {
 
 const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
   const { data, loading, model } = useModelGet({ id: itemId })
-  const { fields } = useFormSchema({ schema: model, formSchema: model.formSchema })
-
+  const fields = model.formSchema
+  const properties = model.properties
   return (
     <>
       <DialogHeader>
@@ -66,16 +66,14 @@ const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
         <ScrollArea className="max-h-[70vh] pr-3">
           <div className="space-y-4 pr-4">
             {fields.map((field) => {
-              const label = field.label
-              const description = field.description
-              const fieldValue = (<span className='w-fit'><ViewField
-                {...field}
-                schema={field}
-                value={data?.[field.name]}
-                item={data}
-                key={`formfield-${field.name}`}
-                className={'w-fit'}
-              /></span>)
+              const baseSchame = properties?.[field.key] || {}
+              const fieldSchema = { ...baseSchame, ...field }
+              const label = fieldSchema.title
+              const description = fieldSchema.description
+              const FieldComponent = tableConverter(baseSchame, field)
+              const fieldValue = (<span className='w-fit'>
+                <FieldComponent value={data[field.key]} schema={fieldSchema}/>
+              </span>)
               return (label || description) ? (
                 <Field>
                   {label && <FieldLabel>

@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { NullInput, TextInput, VariateRangeTimeInput, getMethods } from '@/registry/components/query-editor-methods/query-editor-methods'
 import { convertProps } from '@/registry/lib/query-editor-util'
 import _ from 'lodash'
-import { useFilterSchema, useFormSchema } from '@airiot/client'
+// import { useFilterSchema, useFormSchema } from '@airiot/client'
 import FormField from '@/registry/components/form-field/form-field'
 import Form from '@/registry/components/form/form'
 
@@ -84,12 +84,12 @@ const getConvertCom = (fieldSchema: any, method: any, { fields, filterFields, mu
 
 const ValueComponent = ({ method, fieldSchema, fieldKey, ...restProps }: any) => {
   const schema = { type: 'object', properties: { [fieldKey]: { ...fieldSchema, name: fieldKey } } }
-  const params = { schema, formSchema: [{ name: fieldKey }] }
+  // const params = { schema, formSchema: [{ name: fieldKey }] }
   const multipleSchema = { items: schema, ...fieldSchema, selectType: 'multiple', type: 'array' }
   const multipleParams = { schema: multipleSchema, formSchema: [{ name: fieldKey }] }
-  const { fields } = useFormSchema(params)
-  const { fields: filterFields } = useFilterSchema(params)
-  const { fields: multipleFields } = useFormSchema(multipleParams)
+  const fields = schema.formSchema
+  const filterFields = schema.filterSchema
+  const multipleFields = multipleParams.formSchema
 
   const Com = () => getConvertCom(fieldSchema, method, { fields, filterFields, multipleFields }) || TextInput
   const [FieldComponent, setFieldComponent] = useState<any>(Com)

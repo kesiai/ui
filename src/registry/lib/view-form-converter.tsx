@@ -1,0 +1,82 @@
+
+import { FormArea } from '@/registry/components/form-area/form-area'
+import { FormSwitch } from '@/registry/components/form-switch/form-switch'
+import { FormUserRole } from '@/registry/components/form-user-role/form-user-role'
+import { FormDate } from '@/registry/components/form-date/form-date'
+import { FormDateRange } from '@/registry/components/form-date-range/form-date-range'
+import { FormLink } from '@/registry/components/form-link/form-link'
+import { FormMap } from '@/registry/components/form-map/form-map'
+import { FormInputNumber } from '@/registry/components/form-input-number/form-input-number'
+import FormRate from '@/registry/components/form-rate/form-rate'
+import { FormRelate } from '@/registry/components/form-relate/form-relate'
+import { FormSelect } from '@/registry/components/form-select/form-select'
+import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
+import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
+import { FormInput } from '@/registry/components/form-input/form-input'
+import { FormTime } from '@/registry/components/form-time/form-time'
+import { FormUpload } from '@/registry/components/form-upload/form-upload'
+import { FormRichText } from '@/registry/components/form-rich-text/form-rich-text'
+import { FormBytesArray } from '@/registry/components/form-bytes-array/form-bytes-array'
+import { FormRadio } from '@/registry/components/form-radio/form-radio'
+import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { TableSelect } from '@/registry/components/table-select/table-select'
+import TableDataSelect from '@/registry/components/table-data-select/table-data-select'
+
+const formConverter = (schema: any, filterSchema: any) => {
+  const controlType = filterSchema?.controlType || schema?.controlType
+  switch (controlType) {
+    case 'area':
+      return FormArea
+    case 'boolean':
+    case 'switch':
+      return FormSwitch
+    case 'user-role':
+      return FormUserRole
+    case 'date':
+      return FormDate
+    case 'date-range':
+      return FormDateRange
+    case 'link':
+      return FormLink
+    case 'map':
+      return FormMap
+    case 'number':
+      return FormInputNumber
+    case 'rate':
+      return FormRate
+    case 'relate':
+      return FormRelate
+    case 'select-string':
+    case 'select-number':
+    case 'select-array-string':
+    case 'select-array-number':
+      return FormSelect
+    case 'serial-number':
+      return FormSerialNumber
+    case 'editable-table':
+      return FormEditableTable
+    case 'text':
+      return FormInput
+    case 'time':
+      return FormTime
+    case 'upload':
+      return FormUpload
+    case 'rich-text':
+      return FormRichText
+    case 'bytes-array':
+      return FormBytesArray
+    case 'radio':
+      return FormRadio
+    case 'slider':
+      return FormSlider
+    case 'table-select':
+      return TableSelect
+    case 'table-data':
+      return TableDataSelect
+
+    default:
+      return () => 'The form field component is defined'
+  }
+}
+
+export { formConverter }

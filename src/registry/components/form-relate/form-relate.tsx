@@ -14,17 +14,15 @@ import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
  * - RelateModelSelect: 弹窗表格选择 (有 relateShowFields)
  */
 const FormRelate: React.FC<RelateFieldProps> = (props) => {
-  const { input, field = {}, meta, record, disabled, label } = props
+  const { field = {}, schema, value, onChange, meta, record, disabled, label } = props
 
-  // 解析 schema 中的配置
-  const schema = field.schema || {}
-  const fieldSchema = field.fieldSchema || schema
+  const input = { value, onChange }
 
   // 判断是否为内部表关联
-  const isInternalTable = field.internalTable !== false
+  const isInternalTable = schema.internalTable !== false
 
   // 获取选择类型
-  const selectType = schema.selectType || fieldSchema?.selectType || 'single'
+  const selectType = schema.selectType || 'single'
 
   // 判断是否有多个展示字段（使用弹窗表格选择器）
   const hasMultiFields = schema.relateShowFields && schema.relateShowFields.length > 0

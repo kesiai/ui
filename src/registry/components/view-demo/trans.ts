@@ -1,9 +1,55 @@
-// Schema转换方法：将旧版本格式转换为新版本格式
-
 /**
- * Config 值到 fieldType 的映射规则
+ * 将旧版本的 schema 格式转换为新的分离格式
  */
-const CONFIG_TO_FIELD_TYPE_MAP: Record<string, string> = {
+
+// 类型定义
+interface OldSchemaField {
+  type: string;
+  key: string;
+  title: string;
+  config: string;
+  [key: string]: any;
+}
+
+interface OldSchema {
+  type: string;
+  name?: string;
+  title: string;
+  key: string;
+  properties: Record<string, OldSchemaField>;
+  required?: string[];
+  form?: string[];
+  listFields?: string[];
+}
+
+interface NewSchemaField {
+  type?: string;
+  title?: string;
+  key?: string;
+  controlType?: string;
+  [key: string]: any;
+}
+
+interface SchemaItem {
+  key: string;
+  [key: string]: any;
+}
+
+interface NewSchema {
+  schema: {
+    type: string;
+    title: string;
+    key: string;
+    properties: Record<string, NewSchemaField>;
+    required?: string[];
+  };
+  tableSchema: SchemaItem[];
+  formSchema: SchemaItem[];
+  filterSchema: SchemaItem[];
+}
+
+// config 到 controlType 的基础映射
+const configToControlType: Record<string, string> = {
   '文本': 'text',
   '数字': 'number',
   '选择器': 'select',
@@ -27,350 +73,196 @@ const CONFIG_TO_FIELD_TYPE_MAP: Record<string, string> = {
   '关联字段': 'relate-plus',
 };
 
-/**
- * 旧版本Schema属性分类
- * Schema中保留的核心属性（数据模型相关）
- */
-const SCHEMA_CORE_FIELDS = [
-  // 基础属性
-  'type', 'key', 'title', 'name', 'properties', 'items', 'required',
-
-  // 文本字段
-  'textContent', 'jsLogic', 'minLength', 'maxLength',
-
-  // 数字字段
-  'dbType', 'decimal', 'min', 'max', 'metricStore',
-
-  // 日期/时间字段
-  'createForm', 'dateType', 'format', 'dateFormat', 'NullShow', 'timeFormat',
-
-  // 选择器字段（这些属性在formSchema中，不在schema中）
-
-  // 关联字段
+// 基础 schema 需要保留的属性
+const baseSchemaProps = new Set<string>([
+  'type', 'title', 'minLength', 'maxLength',
+  'textContent', 'languageType', 'defaultVal', 'description', 'unique',
+  'jsLogic', 'need', 'dbType', 'bitNum', 'decimal', 'min', 'max', 'unit', 'enum',
+  'enumNames', // enum_title 转换后
+  'metricStore', 'properties', 'items',
   'relate', 'showField', 'relateShowFields', 'insideFilter',
+  'searchRelate', 'searchCondition', 'computeMethod', 'sort', 'numberLimit', 'numberFormat',
+  'maxCount', 'minCount',
+  'styleType', 'accept', 'uploadPosition', 'mediaDelete', 'autoZip', 'size', 'folderType', 'folder', 'watermark', 'base64', 'autoName', 'addToken',
+  'maxUploadNum', 'pattern', 'serialRules', 'relateTo', 'userType',
+  'controlType', // 新增
+]);
 
-  // 查找引用字段
-  'searchRelate', 'searchCondition', 'computeMethod', 'sort',
+// tableSchema 需要保留的属性
+const tableSchemaProps = new Set<string>([
+  'listFields', 'canOrder', 'tableFixed', 'NullShow', 'recordDetail',
+  'previewSize', 'listShow', 'showNum', 'lngLat', 'positionName',
+]);
 
-  // 表格字段
-  'forms', 'minCount', 'maxCount', 'fieldRules',
+// formSchema 需要保留的属性
+const formSchemaProps = new Set<string>([
+  'afterNow', 'timeFormat', 'allowSelectOld', 'allowAdd',
+  'highTableFields', 'btnText', 'displayForm', 'cardLayout', 'showPagination', 'uniqueRow',
+  'uniqueFields', 'fieldRules', 'createAddBtn', 'editAddBtn', 'createDelBtn', 'editDelBtn',
+  'onlyCamera', 'canDownload', 'areaType', 'count', 'showType', 'canEdit',
+  'linkType', 'placeholder', 'checkedChildren', 'unCheckedChildren', 'manualChange',
+  'selectType', 'selectFace', 'treeMark', 'recordSelectType',
+  'dateFormat', 'dateType', 'format', 'filedFormat', 'filterMode',
+  'width', 'height', 'sort', 'widthInForm',
+]);
 
-  // 附件字段
-  'base64', 'autoName', 'addToken',
-
-  // 附件组字段
-  'maxUploadNum',
-
-  // 区域字段
-
-  // 星级评价
-  'count',
-
-  // 定位字段
-
-  // 链接字段
-  'linkType', 'pattern',
-
-  // 编号字段
-  'serialRules',
-
-  // 用户字段
-  'userType', 'relateTo',
-
-  // 选择器
-  'enum', 'enum_title', 'enum1', 'enum_title1'
-];
+// filterSchema 需要保留的属性
+const filterSchemaProps = new Set<string>([
+  'filterFields',
+  'filterFormat',
+]);
 
 /**
- * FormSchema中保留的属性（表单UI相关）
+ * 主转换函数
+ * @param oldSchema - 旧版本的 schema 对象
+ * @returns 新格式的 schema 对象
  */
-const FORM_SCHEMA_FIELDS = [
-  // 基础表单属性
-  'key', 'name', 'type', 'fieldType',
-
-  // 表单显示控制
-  'createShow', 'editShow', 'detailNotShow', 'createDisabled', 'editDisabled',
-
-  // 表单UI配置
-  'defaultVal', 'placeholder', 'description', 'descriptionType',
-  'widthInForm', 'size', 'unique',
-
-  // 文本字段表单配置
-  'textType', 'numRange', 'delBlank', 'languageType',
-
-  // 数字字段表单配置
-  'bitNum', 'unit', 'allScript',
-
-  // 选择器字段表单配置
-  'selectType', 'selectFace', 'dataType', 'select', 'numRange', 'allScript',
-
-  // 日期字段表单配置
-  'afterNow', 'allScript',
-
-  // 布尔值字段表单配置
-  'displayForm', 'manualChange', 'checkedChildren', 'unCheckedChildren', 'allScript',
-
-  // 关联字段表单配置
-  'selectType', 'recordSelectType', 'showType', 'allowSelectOld', 'allowAdd',
-  'treeMark', 'recordDetail', 'allScript',
-
-  // 表格字段表单配置
-  'highTableFields', 'btnText', 'displayForm', 'cardLayout', 'showPagination',
-  'uniqueRow', 'uniqueFields', 'createAddBtn', 'editAddBtn', 'createDelBtn', 'editDelBtn', 'allScript',
-
-  // 附件字段表单配置
-  'styleType', 'uploadPosition', 'mediaDelete', 'autoZip', 'size', 'width', 'height',
-  'folderType', 'folder', 'onlyCamera', 'watermark', 'allScript',
-
-  // 附件组字段表单配置
-  'styleType', 'accept', 'uploadPosition', 'sort', 'canDownload', 'allScript',
-
-  // 区域字段表单配置
-  'areaType', 'placeholder', 'allScript',
-
-  // 定位字段表单配置
-  'showType', 'canEdit', 'allScript',
-
-  // 编号字段表单配置
-  'placeholder',
-
-  // 过滤表单相关配置
-  'filterFields', 'filterType', 'filterByRes', 'filterMode', 'filterFormat',
-];
-
-/**
- * TableSchema中保留的属性（列表UI相关）
- */
-const TABLE_SCHEMA_FIELDS = [
-  'key',
-  'listFields', 'editableFields', 'batchChangeFields', 'canOrder', 'tableFixed',
-  'filedFormat', 'numberLimit', 'numberFormat', 'showType', 'previewSize',
-  'listShow', 'showNum', 'lngLat', 'positionName',
-];
-
-/**
- * 提取核心Schema字段
- */
-function extractCoreSchema(fieldConfig: Record<string, any>): Record<string, any> {
-  const result: Record<string, any> = {};
-
-  for (const key of SCHEMA_CORE_FIELDS) {
-    if (fieldConfig[key] !== undefined) {
-      result[key] = fieldConfig[key];
-    }
-  }
-
-  // 特殊处理：size 属性
-  // 对于附件字段，size 是文件大小限制，应在 schema 中
-  if (fieldConfig.styleType || fieldConfig.maxUploadNum) {
-    // 附件或附件组字段
-    if (fieldConfig.size !== undefined) {
-      result.size = fieldConfig.size;
-    }
-  }
-
-  // 特殊处理：accept 属性
-  // 对于附件字段，accept 是允许的文件格式，应在 schema 中
-  // 但对于附件组字段（maxUploadNum 存在），accept 不在 schema 中
-  if (fieldConfig.accept && !fieldConfig.maxUploadNum) {
-    result.accept = fieldConfig.accept;
-  }
-
-  // 特殊处理：sort 属性
-  // 对于附件组字段（maxUploadNum 存在），sort 不在 schema 中
-  if (fieldConfig.maxUploadNum && fieldConfig.sort !== undefined) {
-    delete result.sort;
-  }
-
-  // 特殊处理：need 属性
-  // 区域字段（areaType）不应该在 schema 中包含 need
-  if (fieldConfig.areaType) {
-    delete result.need;
-  } else if (fieldConfig.need !== undefined) {
-    result.need = fieldConfig.need;
-  }
-
-  // 特殊处理：保留 properties 和 items（如果是对象或数组类型）
-  if (fieldConfig.properties) {
-    result.properties = fieldConfig.properties;
-  }
-  if (fieldConfig.items) {
-    result.items = fieldConfig.items;
-  }
-
-  if(fieldConfig.config == '表格'){
-    result.forms = fieldConfig.tableFields
-  }
-
-  // 特殊处理：选择器字段 - enum1 改为 enum，enum_title1 改为 enum_title
-  if (fieldConfig.config === '选择器') {
-    if (fieldConfig.enum1 !== undefined) {
-      result.enum = fieldConfig.enum1;
-      delete result.enum1;
-    }
-    if (fieldConfig.enum_title1 !== undefined) {
-      result.enum_title = fieldConfig.enum_title1;
-      delete result.enum_title1;
-    }
-    // 删除旧的 enum 和 enum_title（如果存在）
-    if (fieldConfig.enum !== undefined && fieldConfig.enum1 !== undefined) {
-      delete result.enum;
-    }
-    if (fieldConfig.enum_title !== undefined && fieldConfig.enum_title1 !== undefined) {
-      delete result.enum_title;
-    }
-  }
-
-  return result;
-}
-
-/**
- * 根据 config 值获取 fieldType
- */
-function getFieldTypeFromConfig(config: string | undefined): string {
-  if (!config) {
-    return 'text'; // 默认值
-  }
-  return CONFIG_TO_FIELD_TYPE_MAP[config] || config;
-}
-
-/**
- * 提取FormSchema字段
- */
-function extractFormSchema(fieldConfig: Record<string, any>, isFirstField: boolean): Record<string, any> {
-  const result: Record<string, any> = {};
-
-  for (const key of FORM_SCHEMA_FIELDS) {
-    if (fieldConfig[key] !== undefined) {
-      result[key] = fieldConfig[key];
-    }
-  }
-
-  // 确保有 key
-  if (!result.key && fieldConfig.key) {
-    result.key = fieldConfig.key;
-  }
-
-  // 设置 fieldType，基于 config 值
-  result.fieldType = getFieldTypeFromConfig(fieldConfig.config);
-
-  // type 可以设置为 fieldType 的值，或者根据需要保持原样
-  // 这里我们保持原样，让用户根据需要处理
-
-  // name 属性：只有第一个字段保留 name，其他字段删除
-  if (isFirstField) {
-    result.name = fieldConfig.name || fieldConfig.key;
-    // 第一个字段中，如果 allScript 为 null，则删除
-    if (result.allScript === null) {
-      delete result.allScript;
-    }
-  } else {
-    delete result.name;
-  }
-
-  // 清理 undefined 值，保留 null 值
-  for (const key of Object.keys(result)) {
-    if (result[key] === undefined) {
-      delete result[key];
-    }
-  }
-
-  return result;
-}
-
-/**
- * 提取TableSchema字段
- */
-function extractTableSchema(fieldConfig: Record<string, any>): Record<string, any> {
-  const result: Record<string, any> = {};
-
-  for (const key of TABLE_SCHEMA_FIELDS) {
-    if (fieldConfig[key] !== undefined) {
-      result[key] = fieldConfig[key];
-    }
-  }
-
-  // 确保有 key
-  if (!result.key && fieldConfig.key) {
-    result.key = fieldConfig.key;
-  }
-
-  // 添加 fieldType 基于配置
-  result.fieldType = getFieldTypeFromConfig(fieldConfig.config);
-
-  return result;
-}
-
-/**
- * 转换Schema方法
- * @param oldSchema 旧版本的schema对象
- * @returns 新版本的schema对象，包含 schema, formSchema, tableSchema 三个部分
- */
-export default function transformSchema(oldSchema: any): {
-  schema: any;
-  formSchema: any[];
-  tableSchema: any[];
-} {
-  // 从旧schema中提取数据
-  const { properties, form, listFields } = oldSchema;
-
-  const result = {
+function transformSchema(oldSchema: OldSchema): NewSchema {
+  const result: NewSchema = {
     schema: {
-      type: oldSchema.type,
-      name: oldSchema.name,
-      title: oldSchema.title,
-      key: oldSchema.key,
+      type: 'object',
+      title: oldSchema?.title || oldSchema.title || '',
+      key: oldSchema?.key || oldSchema.key || '',
       properties: {},
-      required: oldSchema.required || [],
     },
-    formSchema: [] as any[],
-    tableSchema: [] as any[],
+    tableSchema: [],
+    formSchema: [],
+    filterSchema: [],
   };
 
-  // 转换每个字段
-  for (let i = 0; i < Object.keys(properties || {}).length; i++) {
-    const [fieldKey, fieldConfig] = Object.entries(properties || {})[i];
-    const config = fieldConfig as Record<string, any>;
-    const isFirstField = i === 0;
+  // 保存原 schema 的 required
+  if (oldSchema?.required) {
+    result.schema.required = oldSchema.required;
+  }
 
-    // 1. 提取核心Schema字段
-    result.schema.properties[fieldKey] = extractCoreSchema(config);
+  // 获取字段顺序配置
+  const formOrder = oldSchema?.form || [];
+  const listFieldsOrder = oldSchema?.listFields || [];
 
-    // 2. 提取FormSchema字段
-    const formSchemaItem = extractFormSchema(config, isFirstField);
-    if (formSchemaItem.key) {
-      result.formSchema.push(formSchemaItem);
+  // 遍历所有属性进行转换
+  Object.entries(oldSchema?.properties || {}).forEach(([key, fieldValue]) => {
+    const baseField: NewSchemaField = {};
+    const tableField: SchemaItem = { key };
+    const formField: SchemaItem = { key };
+    const filterField: SchemaItem = { key };
+
+    // 处理 controlType 转换
+    let controlType = configToControlType[fieldValue.config];
+
+    // 特殊规则: 文本
+    if (fieldValue.config === '文本') {
+      if (fieldValue.textType === 'input') {
+        controlType = 'text';
+      } else if (fieldValue.textType === 'textArea') {
+        controlType = 'text-area';
+      }
     }
 
-    // 3. 提取TableSchema字段
-    const tableSchemaItem = extractTableSchema(config);
-    if (tableSchemaItem.key) {
-      result.tableSchema.push(tableSchemaItem);
+    // 特殊规则: 选择器
+    if (fieldValue.config === '选择器') {
+      if (fieldValue.type === 'number') {
+        controlType = 'select-number';
+      } else if (fieldValue.type === 'string') {
+        controlType = 'select-string';
+      } else if (fieldValue.type === 'array') {
+        if (fieldValue.items?.type === 'number') {
+          controlType = 'select-array-number';
+        } else if (fieldValue.items?.type === 'string') {
+          controlType = 'select-array-string';
+        }
+      }
     }
-  }
 
-  // 按 form 中的顺序排序 formSchema
-  if (form && Array.isArray(form)) {
-    result.formSchema = sortByKeyOrder(result.formSchema, form);
-  }
+    // 特殊规则: 关联字段
+    if (fieldValue.config === '关联字段') {
+      if (fieldValue.type === 'object') {
+        controlType = 'relate';
+      } else if (fieldValue.type === 'array') {
+        controlType = 'relate-multiple';
+      }
+    }
 
-  // 按 listFields 中的顺序排序 tableSchema
-  if (listFields && Array.isArray(listFields)) {
-    result.tableSchema = sortByKeyOrder(result.tableSchema, listFields);
-  }
+    // 遍历字段的所有属性进行分类
+    Object.entries(fieldValue).forEach(([propKey, propValue]) => {
+      // 属性重命名映射
+      const renamedKey: string = {
+        'enum_title1': 'enumNames',
+        'enum_title': 'enumNames',
+        'enum1': 'enum',
+        'tableFields': 'items',
+      }[propKey] || propKey;
+
+      // 跳过 config，已经转换为 controlType
+      if (propKey === 'config') return;
+      // 分配到对应的 schema
+      if (baseSchemaProps.has(renamedKey)) {
+        if (renamedKey == 'items') {
+          const { schema, formSchema } = transformSchema(propValue)
+          baseField[renamedKey] = { ...schema, formSchema }
+        } else {
+          baseField[renamedKey] = propValue;
+        }
+      } else if (tableSchemaProps.has(propKey)) {
+        tableField[propKey] = propValue;
+      } else if (formSchemaProps.has(propKey)) {
+        formField[propKey] = propValue;
+      } else if (filterSchemaProps.has(propKey)) {
+        filterField[propKey] = propValue;
+      }
+    });
+
+    // 设置 controlType
+    if (controlType) {
+      baseField.controlType = controlType;
+    }
+
+    // 保留 type, title, key
+    baseField.type = fieldValue.type;
+    baseField.title = fieldValue.title;
+    baseField.key = fieldValue.key;
+
+    // 添加到 schema.properties
+    result.schema.properties[key] = baseField;
+
+    // 如果字段在 form 中，添加到 formSchema
+    if (formOrder.includes(key)) {
+      // 只保留非空属性
+      const cleanFormField = Object.fromEntries(
+        Object.entries(formField).filter(([_, v]) => v !== undefined && v !== null)
+      ) as SchemaItem;
+      if (Object.keys(cleanFormField).length >= 1) {
+        result.formSchema.push(cleanFormField);
+      }
+    }
+
+    // 如果字段在 listFields 中，添加到 tableSchema
+    if (listFieldsOrder.includes(key)) {
+      // 只保留非空属性
+      const cleanTableField = Object.fromEntries(
+        Object.entries(tableField).filter(([_, v]) => v !== undefined && v !== null)
+      ) as SchemaItem;
+      if (Object.keys(cleanTableField).length >= 1) {
+        result.tableSchema.push(cleanTableField);
+      }
+    }
+
+    // 如果 filterFields 为 true，添加到 filterSchema
+    if (fieldValue.filterFields === true) {
+      // 移除 filterFields 和 key 属性（它们是标志位）
+      const { filterFields, ...cleanFilterField } = filterField as any;
+      // 只保留非空属性
+      const finalFilterField = Object.fromEntries(
+        Object.entries(cleanFilterField).filter(([_, v]) => v !== undefined && v !== null)
+      ) as SchemaItem;
+      result.filterSchema.push(finalFilterField);
+    }
+  });
+
+  // 按 form 和 listFields 的顺序排序
+  result.formSchema.sort((a, b) => formOrder.indexOf(a.fieldKey) - formOrder.indexOf(b.fieldKey));
+  result.tableSchema.sort((a, b) => listFieldsOrder.indexOf(a.fieldKey) - listFieldsOrder.indexOf(b.fieldKey));
 
   return result;
 }
 
-/**
- * 根据key顺序对数组进行排序
- */
-function sortByKeyOrder(items: any[], keyOrder: string[]): any[] {
-  const orderMap = new Map(keyOrder.map((key, index) => [key, index]));
-
-  return [...items].sort((a, b) => {
-    const aOrder = orderMap.get(a.key) ?? 9999;
-    const bOrder = orderMap.get(b.key) ?? 9999;
-    return aOrder - bOrder;
-  });
-}
+export default transformSchema;

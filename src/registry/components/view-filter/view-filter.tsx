@@ -1,14 +1,14 @@
 import React from 'react'
 import { useModel, useSetModelState, useModelGetItems } from '@airiot/client'
-import FilterSchemaForm from '@/registry/components/filter-form/filter-form'
-import mapValues from 'lodash/mapValues'
-import isEmpty from 'lodash/isEmpty'
+import FilterForm from '@/registry/components/filter-form/filter-form'
+
 interface ViewFilterProps {
   filters?: Array<{
     name: string
   }>
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
+
 
 const ViewFilter: React.FC<ViewFilterProps> = ({
   filters = [],
@@ -18,13 +18,10 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   const setWheres = useSetModelState('wheres')
   const { getItems } = useModelGetItems()
 
-  const properties = mapValues(model.properties || {}, (prop, key) => ({ ...prop, name: key }))
+  const filterSchema = filters && filters.length > 0 ? filters : model.filterSchema
 
-  const modelFilter = model?.formSchema?.filter((formField: { filterFields: boolean, name: string }) => formField?.filterFields)
-
-  const formSchema = ((filters && !isEmpty(filters) ? filters : modelFilter) || []).filter((f: any) => properties[f.name || f.key || f])
- 
   const onSubmit = (value: any) => {
+    console.log(value)
     setWheres((w: any) => {
       return { ...w, filter: { ...w.filter, ...value } }
     });
@@ -42,7 +39,7 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   }
 
   return (
-    <FilterSchemaForm formId={model.name || ''} schema={{ ...model, properties }} formSchema={formSchema} classNames={classNames} onSubmit={onSubmit} >
+    <FilterForm schema={model} filterSchema={filterSchema} classNames={classNames} onSubmit={onSubmit} >
       {(methods) => (
         <div className="mt-4 flex justify-center gap-3">
           <button
@@ -61,7 +58,7 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
           </button>
         </div>
       )}
-    </FilterSchemaForm>
+    </FilterForm>
   )
 }
 

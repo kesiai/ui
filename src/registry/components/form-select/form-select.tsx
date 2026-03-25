@@ -11,6 +11,11 @@ import {
 } from "@/components/ui/select"
 import { X } from "lucide-react"
 
+interface Schema {
+  enum?: string[]
+  enumNames?: Record<string, string>
+}
+
 export interface FormSelectProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus"> {
   /**
@@ -28,7 +33,7 @@ export interface FormSelectProps
   /**
    * 选项列表
    */
-  options?: Array<{ value: string; label?: string, name?: string; disabled?: boolean }>
+  options?: Array<{ value: string; label?: string; name?: string; disabled?: boolean }>
   /**
    * 尺寸
    */
@@ -81,6 +86,7 @@ export interface FormSelectProps
    * 获得焦点时的回调
    */
   onFocus?: () => void
+  schema?: Schema
 }
 
 const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
@@ -90,7 +96,6 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     value,
     defaultValue,
     placeholder = "请选择",
-    options = [],
     disabled = false,
     readOnly = false,
     bordered = true,
@@ -103,12 +108,23 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     onChange,
     onBlur,
     onFocus,
+    schema,
     ...props
   }, ref) => {
     const [internalValue, setInternalValue] = React.useState(defaultValue || "")
     const [isOpen, setIsOpen] = React.useState(defaultOpen)
     const [searchValue, setSearchValue] = React.useState("")
     const selectRef = React.useRef<HTMLButtonElement>(null)
+
+    let options: Array<{ value: string; label?: string; name?: string; disabled?: boolean }> = []
+    if (props?.options) {
+      options = props.options
+    } else if (schema?.enum) {
+      options = schema.enum.map((k: string) => {
+        const names = schema.enumNames
+        return { label: names?.[k] || k, value: k }
+      })
+    }
 
     const handleValueChange = (newValue: string) => {
       if (readOnly) return

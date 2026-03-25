@@ -9,16 +9,28 @@ import { z } from 'zod'
 import FormField from "@/registry/components/form-field/form-field"
 import { formConverter } from '@/registry/lib/view-form-converter'
 
+interface ModelSchema {
+  name?: string
+  key?: string
+  title?: string
+  icon?: string
+  properties?: Record<string, any>
+  [key: string]: any
+}
 type SchemaFormProps = UseFormPropsExtended & {
   formId: string
-  schema: object,
-  formSchema: Array,
-  onSubmit: (data: any) => void
+  schema: ModelSchema,
+  formSchema: Array<{
+    key: string,
+    controlType?: string
+  }>,
+  schameConvert?: (schema: any, field: object) => void,
+  onSubmit?: (data: any) => void
   children?: ReactNode | ((props: any) => ReactNode)
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, ...props }: SchemaFormProps) => {
+const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, schameConvert, ...props }: SchemaFormProps) => {
 
   const fields = formSchema || []
 
@@ -172,8 +184,8 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames
 
               return validateFn
             }, [type, baseSchema?.items])
-            const FieldController = formConverter(baseSchema, field)
-            const megerSchema = { ...baseSchema, ...field }
+            const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
+            const megerSchema = { ...baseSchema, ...field, }
             return (
               <FormField name={field.key} label={baseSchema?.title} schema={megerSchema} validate={editableTableValidate}>
                 <FieldController />

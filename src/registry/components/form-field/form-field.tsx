@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/field"
 import { Controller, useFieldUIStateValue, useFormContext } from '@airiot/client'
 import type { ReactNode } from 'react'
+import { Input } from "@/components/ui/input"
 import React, { cloneElement } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -43,7 +44,7 @@ const FormField =
     const ui = useFieldUIStateValue(name)
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
-    const fieldProps = { label, description, required, schema }
+    const fieldProps = { label, description, required, schema, readonly:true }
     const controllerRules = { required, ...rules, validate }
 
     return ui.visible ? (
@@ -70,7 +71,7 @@ const FormField =
                 ...fieldProps,
                 className: cn(formClassNames?.input, classNames?.input),
                 'aria-invalid': fieldState.invalid
-              })) : null
+              })) : <Input />
             }
             {description && (
               <FieldDescription className={cn(formClassNames?.description, classNames?.description)}>

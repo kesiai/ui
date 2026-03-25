@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useModelGet, useModelSave, useModelDelete, useFormSchema, useModelGetItems } from '@airiot/client'
+import { useModelGet, useModelSave, useModelDelete, useModelGetItems } from '@airiot/client'
 import {
   Dialog,
   DialogContent,
@@ -14,11 +14,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {
-  Field,
-  FieldDescription,
-  FieldLabel
-} from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -40,71 +35,13 @@ import {
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
 import SchemaForm from '@/registry/components/schema-form/schema-form'
-import { tableConverter } from '@/registry/lib/view-table-converter'
 
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
 
-interface ViewActionContentProps {
-  itemId: string
-}
+import ViewDetailContent from '@/registry/components/view-detail/view-detail'
 
-const ViewActionContent: React.FC<ViewActionContentProps> = ({ itemId }) => {
-  const { data, loading, model } = useModelGet({ id: itemId })
-  const fields = model.formSchema
-  const properties = model.properties
-  return (
-    <>
-      <DialogHeader>
-        <DialogTitle>{data ? (model.displayField && data[model.displayField] || data?._label || data?.name) : model.title}</DialogTitle>
-      </DialogHeader>
-      {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-primary" />
-        </div>
-      ) : data ? (
-        <ScrollArea className="max-h-[70vh] pr-3">
-          <div className="space-y-4 pr-4">
-            {fields.map((field) => {
-              const baseSchame = properties?.[field.key] || {}
-              const fieldSchema = { ...baseSchame, ...field }
-              const label = fieldSchema.title
-              const description = fieldSchema.description
-              const FieldComponent = tableConverter(baseSchame, field)
-              const fieldValue = (<span className='w-fit'>
-                <FieldComponent value={data[field.key]} schema={fieldSchema}/>
-              </span>)
-              return (label || description) ? (
-                <Field>
-                  {label && <FieldLabel>
-                    {label} :
-                  </FieldLabel>}
-                  {fieldValue}
-                  {description && (
-                    <FieldDescription>
-                      {description}
-                    </FieldDescription>
-                  )}
-                </Field>
-              ) : fieldValue
-            })}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      ) : (
-        <div className="flex items-center justify-center py-12 text-slate-500">
-          暂无数据
-        </div>
-      )}
-
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button variant="outline">关闭</Button>
-        </DialogClose>
-      </DialogFooter>
-    </>
-  )
-}
+const ViewActionContent = ViewDetailContent
 
 interface EditActionContentProps {
   itemId: string

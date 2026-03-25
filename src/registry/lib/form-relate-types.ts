@@ -10,10 +10,8 @@ export interface RelateFieldOption {
 }
 
 export interface RelateFieldProps {
-  input: {
-    value?: any
-    onChange?: (value: any) => void
-  }
+  value?: any
+  onChange?: (value: any) => void
   field?: {
     schema?: Record<string, any>
     filter?: any

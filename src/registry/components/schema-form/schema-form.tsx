@@ -17,13 +17,16 @@ interface ModelSchema {
   properties?: Record<string, any>
   [key: string]: any
 }
+type FormSchemaItem = {
+  key: string,
+  controlType?: string
+  [key: string]: any
+} | '*'
+
 type SchemaFormProps = UseFormPropsExtended & {
   formId: string
   schema: ModelSchema,
-  formSchema: Array<{
-    key: string,
-    controlType?: string
-  }>,
+  formSchema: FormSchemaItem[],
   schameConvert?: (schema: any, field: object) => void,
   onSubmit?: (data: any) => void
   children?: ReactNode | ((props: any) => ReactNode)
@@ -32,7 +35,30 @@ type SchemaFormProps = UseFormPropsExtended & {
 
 const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, schameConvert, ...props }: SchemaFormProps) => {
 
-  const fields = formSchema || []
+  // 处理 formSchema，展开 '*' 通配符
+  const processedFormSchema = React.useMemo(() => {
+    const allPropertyKeys = Object.keys(schema?.properties || {})
+    const result: Array<{ key: string, controlType?: string, [key: string]: any }> = []
+    const explicitKeys = new Set<string>()
+
+    for (const item of formSchema || []) {
+      if (item === '*') {
+        // 展开通配符：添加所有未显式指定的字段
+        const remainingKeys = allPropertyKeys.filter(key => !explicitKeys.has(key))
+        for (const key of remainingKeys) {
+          result.push({ key })
+        }
+      } else {
+        // 普通字段项
+        result.push(item)
+        explicitKeys.add(item.key)
+      }
+    }
+
+    return result
+  }, [schema, formSchema])
+
+  const fields = processedFormSchema
 
   const zodSchema = React.useMemo(() => {
     try {
@@ -117,14 +143,14 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames
       return
     }
 
-    onSubmit(data)
+    onSubmit?.(data)
   }
 
   return (
     <FormProvider {...methods} classNames={classNames}>
       <form id={formId} onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
         <FieldGroup className={classNames?.group}>
-          {formSchema.map(field => {
+          {processedFormSchema.map(field => {
             const baseSchema = schema?.properties?.[field.key]
             const type = field?.controlType || baseSchema?.controlType
             // 将表格内部字段的 need 属性转换为外层的验证规则

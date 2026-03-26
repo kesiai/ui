@@ -47,7 +47,7 @@ interface ContextProviderContextValue {
 创建上下文提供者并访问数据。
 
 ```tsx
-import { ContextProvider, useContextProvider } from '@/registry/components/kesi/container-context-provider/context-provider'
+import { ContextProvider, useContextProvider } from '@/components/kesi/container-context-provider/context-provider'
 
 function ChildComponent() {
   const { table, tableData, data } = useContextProvider()
@@ -205,7 +205,7 @@ function Level1Child() {
 创建一个完整的表格详情展示页面。
 
 ```tsx
-import { ContextProvider, useContextProvider } from '@/registry/components/kesi/container-context-provider/context-provider'
+import { ContextProvider, useContextProvider } from '@/components/kesi/container-context-provider/context-provider'
 import { useState, useEffect } from 'react'
 
 // 表格信息组件
@@ -296,7 +296,7 @@ function TableDetailPage() {
 结合 API 请求动态加载数据。
 
 ```tsx
-import { ContextProvider, useContextProvider } from '@/registry/components/kesi/container-context-provider/context-provider'
+import { ContextProvider, useContextProvider } from '@/components/kesi/container-context-provider/context-provider'
 import { useState, useEffect } from 'react'
 
 function DataDisplay() {

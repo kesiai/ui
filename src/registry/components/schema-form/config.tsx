@@ -96,7 +96,19 @@ export const schemaFormDefaultProps = {
       },
       photo: {
         type: 'array',
-        items: {},
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              title: '参数名',
+              type: 'string'
+            },
+            value: {
+              title: '参数值',
+              type: 'string'
+            }
+          }
+        },
         title: '照片'
       },
       rating: {
@@ -340,14 +352,14 @@ const renderSchemaFormPreview = (props: Record<string, any>) => {
   // 根据 layout 选择对应的预设样式
   const layoutStyles = layoutPresets[props.layout] || layoutPresets.default
   const classNames = props.classNames ||
-    {
-      group: layoutStyles.container,
-      field: layoutStyles.field,
-      label: layoutStyles.label,
-      input: layoutStyles.input,
-      description: layoutStyles.descriptionClass,
-      error: layoutStyles.error
-    }
+  {
+    group: layoutStyles.container,
+    field: layoutStyles.field,
+    label: layoutStyles.label,
+    input: layoutStyles.input,
+    description: layoutStyles.descriptionClass,
+    error: layoutStyles.error
+  }
 
   return (
     <div className="h-full flex items-center justify-center p-8 overflow-auto">

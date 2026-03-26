@@ -20,6 +20,7 @@ import { FormRadio } from '@/registry/components/form-radio/form-radio'
 import { FormSlider } from '@/registry/components/form-slider/form-slider'
 import { TableSelect } from '@/registry/components/table-select/table-select'
 import { TableSelect as TableDataSelect } from '@/registry/components/table-data-select/table-data-select'
+import { FormArray } from '@/registry/components/form-array/form-array'
 
 const formConverter = (schema: any, formSchema: any) => {
   const controlType = formSchema?.controlType || schema?.controlType
@@ -32,10 +33,8 @@ const formConverter = (schema: any, formSchema: any) => {
         return FormInputNumber
       case 'boolean':
         return FormSwitch
-      // case 'array':
-      //   return FormSwitch
-      // case 'object':
-      //   return FormSwitch
+      case 'array':
+        return FormArray
       default:
         return FormInput
     }
@@ -89,6 +88,8 @@ const formConverter = (schema: any, formSchema: any) => {
         return TableSelect
       case 'table-data':
         return TableDataSelect
+      case 'array':
+        return FormArray
 
       default:
         return () => 'The form field component is defined'

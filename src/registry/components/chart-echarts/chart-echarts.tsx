@@ -55,14 +55,11 @@ const ChartEcharts: React.FC<ChartEchartsProps> = (props) => {
 
   return (
     <BaseChart
-      cellKey={cellKey}
       option={StrToFunction(newOption || option)}
       chartCode={chartCode}
       {...props}
     />
   )
 }
-
-export { ChartEcharts }
 
 export { ChartEcharts }

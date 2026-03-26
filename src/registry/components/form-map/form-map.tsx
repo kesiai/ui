@@ -16,11 +16,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { MapPin, Edit } from 'lucide-react'
-import { getConfig } from '@airiot/client'
 import AMapLoader from '@amap/amap-jsapi-loader'
 import isEmpty from 'lodash/isEmpty'
 
-const config = getConfig()
 
 export interface FormMapProps {
   value?: {
@@ -474,5 +472,4 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
 
 FormMap.displayName = 'FormMap'
 
-export { FormMap }
 export { FormMap }

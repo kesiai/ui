@@ -99,4 +99,3 @@ const FormTime = React.forwardRef<HTMLInputElement, FormTimeProps>(
 FormTime.displayName = 'FormTime'
 
 export { FormTime }
-export { FormTime }

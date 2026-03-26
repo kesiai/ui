@@ -147,4 +147,3 @@ const EditCell: React.FC<{
 }
 
 export { FormTableView }
-export { FormTableView }

@@ -128,4 +128,3 @@ const FormRelate: React.FC<RelateFieldProps> = (props) => {
 }
 
 export { FormRelate }
-export { FormRelate }

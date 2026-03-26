@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { FormField } from "@/registry/components/form-field/form-field"
 import { formConverter } from '@/registry/lib/view-form-converter'
 
-interface ModelSchema {
+export interface ModelSchema {
   name?: string
   key?: string
   title?: string
@@ -17,7 +17,7 @@ interface ModelSchema {
   properties?: Record<string, any>
   [key: string]: any
 }
-type FormSchemaItem = {
+export type FormSchemaItem = {
   key: string,
   controlType?: string
   [key: string]: any
@@ -29,11 +29,12 @@ type SchemaFormProps = UseFormPropsExtended & {
   formSchema: FormSchemaItem[],
   schameConvert?: (schema: any, field: object) => void,
   onSubmit?: (data: any) => void
+  isValid?: boolean
   children?: ReactNode | ((props: any) => ReactNode)
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames, schameConvert, ...props }: SchemaFormProps) => {
+const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = true, classNames, schameConvert, ...props }: SchemaFormProps) => {
 
   // 处理 formSchema，展开 '*' 通配符
   const processedFormSchema = React.useMemo(() => {
@@ -74,9 +75,9 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames
   }, [zodSchema])
 
   const methods = useForm({
-    resolver: resolver, ...props
+    resolver: isValid ? resolver : null,
+    ...props
   } as any)
-
 
   // 手动验证 editable-table 类型的字段
   const validateEditableTableFields = (data: any): string | true => {
@@ -151,7 +152,9 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames
       <form id={formId} onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
         <FieldGroup className={classNames?.group}>
           {processedFormSchema.map(field => {
-            const baseSchema = schema?.properties?.[field.key]
+            const fieldKey = typeof field === 'string' ? field : field.key
+            const fieldSchame = typeof field === 'string' ? { key: field } : field
+            const baseSchema = schema?.properties?.[fieldKey as string]
             const type = field?.controlType || baseSchema?.controlType
             // 将表格内部字段的 need 属性转换为外层的验证规则
             const editableTableValidate = React.useMemo(() => {
@@ -211,7 +214,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames
               return validateFn
             }, [type, baseSchema?.items])
             const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
-            const megerSchema = { ...baseSchema, ...field, }
+            const megerSchema = { ...baseSchema, ...fieldSchame }
             return (
               <FormField name={field.key} label={baseSchema?.title} schema={megerSchema} validate={editableTableValidate}>
                 <FieldController />

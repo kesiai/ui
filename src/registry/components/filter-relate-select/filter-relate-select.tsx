@@ -4,8 +4,8 @@ import _ from 'lodash'
 
 interface FilterRelateSelectProps {
   value?: any
-  onChange: (value: any) => void
-  name: string
+  onChange?: (value: any) => void
+  name?: string
   label?: string
   displayField?: string
   originSchema?: {

@@ -80,7 +80,7 @@ classNames: {
 最简单的用法，创建一个文本输入字段。
 
 ```tsx
-import FormField from '@/registry/components/kesi/form-field/form-field'
+import { FormField } from '@/registry/components/kesi/form-field/form-field'
 import { Form } from '@airiot/client'
 
 function Example() {
@@ -232,7 +232,7 @@ function Example() {
 创建一个完整的用户注册表单，包含多种字段类型。
 
 ```tsx
-import FormField from '@/registry/components/kesi/form-field/form-field'
+import { FormField } from '@/registry/components/kesi/form-field/form-field'
 import { Form } from '@airiot/client'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -336,7 +336,7 @@ function RegistrationForm() {
 创建产品信息录入表单，使用增强型字段。
 
 ```tsx
-import FormField from '@/registry/components/kesi/form-field/form-field'
+import { FormField } from '@/registry/components/kesi/form-field/form-field'
 import { Form } from '@airiot/client'
 
 function ProductForm() {

@@ -70,7 +70,7 @@
 通过 config 对象配置字段。
 
 ```tsx
-import FormWidget from '@/registry/components/kesi/form-widget/form-widget'
+import { FormWidget } from '@/registry/components/kesi/form-widget/form-widget'
 import { useState } from 'react'
 
 function Example() {
@@ -258,7 +258,7 @@ function Example() {
 创建一个动态表单，根据配置自动生成字段。
 
 ```tsx
-import FormWidget from '@/registry/components/kesi/form-widget/form-widget'
+import { FormWidget } from '@/registry/components/kesi/form-widget/form-widget'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 

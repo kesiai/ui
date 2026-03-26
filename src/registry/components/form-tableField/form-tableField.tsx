@@ -111,4 +111,4 @@ const FormForm = React.forwardRef<HTMLDivElement, FormFormProps>(
 
 FormForm.displayName = "FormForm"
 
-export default FormForm
+export { FormForm }

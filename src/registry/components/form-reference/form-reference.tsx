@@ -104,4 +104,4 @@ function isEmpty(obj: any) {
 }
 
 export { FormReference }
-export default FormReference
+export { FormReference }

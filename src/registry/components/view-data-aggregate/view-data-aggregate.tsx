@@ -402,4 +402,4 @@ const ViewDataTableAggregate: React.FC<ViewDataAggregateProps> = ({
   )
 }
 
-export default ViewDataTableAggregate
+export { ViewDataTableAggregate }

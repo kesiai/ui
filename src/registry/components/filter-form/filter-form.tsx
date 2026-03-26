@@ -40,4 +40,4 @@ const FilterForm = ({ schema, filterSchema, onSubmit, children, classNames, ...p
   )
 }
 
-export default FilterForm
+export { FilterForm }

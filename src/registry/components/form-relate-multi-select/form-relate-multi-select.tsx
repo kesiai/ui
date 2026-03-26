@@ -68,4 +68,4 @@ const RelateMultiSelect: React.FC<RelateFieldProps> = (props) => {
   )
 }
 
-export default RelateMultiSelect
+export { RelateMultiSelect }

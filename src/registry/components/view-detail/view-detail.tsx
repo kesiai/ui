@@ -59,4 +59,4 @@ const ViewDetailContent: React.FC<ViewDetailContentProps> = ({ itemId }) => {
   )
 }
 
-export default ViewDetailContent
+export { ViewDetailContent }

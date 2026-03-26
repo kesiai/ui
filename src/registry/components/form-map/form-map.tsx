@@ -475,4 +475,4 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
 FormMap.displayName = 'FormMap'
 
 export { FormMap }
-export default FormMap
+export { FormMap }

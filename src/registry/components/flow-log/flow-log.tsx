@@ -179,4 +179,4 @@ const FlowLog: React.FC<FlowLogProps> = ({ task, taskId, jobs, logNodeRenderMap 
   )
 }
 
-export default FlowLog
+export { FlowLog }

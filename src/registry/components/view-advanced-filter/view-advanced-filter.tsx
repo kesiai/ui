@@ -86,4 +86,4 @@ const ViewAdvancedFilter: React.FC<ViewAdvancedFilterProps> = ({
   )
 }
 
-export default ViewAdvancedFilter
+export { ViewAdvancedFilter }

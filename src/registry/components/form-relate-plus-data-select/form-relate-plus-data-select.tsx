@@ -78,4 +78,4 @@ const FormRelatePlusDataSelect: React.FC<FormRelatePlusDataSelectProps> = (props
 }
 
 export { FormRelatePlusDataSelect }
-export default FormRelatePlusDataSelect
+export { FormRelatePlusDataSelect }

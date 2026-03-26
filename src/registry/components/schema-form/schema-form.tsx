@@ -229,4 +229,4 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, classNames
   )
 }
 
-export default SchemaForm
+export { SchemaForm }

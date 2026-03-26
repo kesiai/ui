@@ -275,4 +275,4 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
 }
 
 export { FormRelatePlusDataShow }
-export default FormRelatePlusDataShow
+export { FormRelatePlusDataShow }

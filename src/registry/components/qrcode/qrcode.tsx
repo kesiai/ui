@@ -41,4 +41,4 @@ const QRCodeComp: React.FC<QRCodeCompProps> = ({
   return <canvas ref={canvasRef} id={`${cellKey}-QRCode`} />;
 };
 
-export default QRCodeComp;
+export { QRCodeComp };

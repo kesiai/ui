@@ -592,7 +592,7 @@ const getMethods = (schema: any, fieldKey: string) => {
   }
 }
 
-export default METHODS
+export { METHODS }
 
 export {
   NullInput,

@@ -325,4 +325,4 @@ const ChartEcharts: React.FC<ChartEchartsProps> = (props) => {
 
 ChartEcharts.displayName = 'ChartEcharts'
 
-export default ChartEcharts
+export { ChartEcharts }

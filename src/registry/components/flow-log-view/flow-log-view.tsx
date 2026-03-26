@@ -550,4 +550,4 @@ interface LogCardProps {
   )
 }
 
-export default RecordView
+export { RecordView }

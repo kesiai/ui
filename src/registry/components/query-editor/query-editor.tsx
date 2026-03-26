@@ -700,5 +700,5 @@ const QueryEditor = (props: QueryEditorProps) => {
   }
 }
 
-export default QueryEditor
+export { QueryEditor }
 export { QueryEditor, QueryItem, QueryForm, QueryFieldSelect, QueryItemFrom }

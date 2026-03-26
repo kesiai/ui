@@ -203,4 +203,4 @@ const ViewPagination: React.FC<ViewPaginationProps> = ({
   )
 }
 
-export default ViewPagination
+export { ViewPagination }

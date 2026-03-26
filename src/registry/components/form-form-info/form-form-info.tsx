@@ -82,4 +82,4 @@ const FormFormInfo: React.FC<FormFormInfoProps> = ({ schema, args = [], outProps
 }
 
 export { FormFormInfo }
-export default FormFormInfo
+export { FormFormInfo }

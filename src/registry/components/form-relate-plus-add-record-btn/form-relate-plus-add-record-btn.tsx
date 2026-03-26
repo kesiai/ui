@@ -123,4 +123,4 @@ const FormRelatePlusAddRecordBtn: React.FC<FormRelatePlusAddRecordBtnProps> = (p
 }
 
 export { FormRelatePlusAddRecordBtn }
-export default FormRelatePlusAddRecordBtn
+export { FormRelatePlusAddRecordBtn }

@@ -87,4 +87,4 @@ const FormField =
     ) : null
   }
 
-export default FormField
+export { FormField }

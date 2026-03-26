@@ -197,4 +197,4 @@ const FormRichText = React.forwardRef<HTMLDivElement, FormRichTextProps>(
 FormRichText.displayName = 'FormRichText'
 
 export { FormRichText }
-export default FormRichText
+export { FormRichText }

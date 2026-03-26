@@ -66,4 +66,4 @@ const FormLink = React.forwardRef<HTMLDivElement, FormLinkProps>(
 FormLink.displayName = 'FormLink'
 
 export { FormLink }
-export default FormLink
+export { FormLink }

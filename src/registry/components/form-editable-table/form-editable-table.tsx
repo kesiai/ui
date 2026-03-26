@@ -195,4 +195,4 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
 }
 
 export { FormEditableTable }
-export default FormEditableTable
+export { FormEditableTable }

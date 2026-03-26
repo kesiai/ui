@@ -88,4 +88,4 @@ const FormRelatePlus: React.FC<FormRelatePlusProps> = (props) => {
 }
 
 export { FormRelatePlus }
-export default FormRelatePlus
+export { FormRelatePlus }

@@ -814,4 +814,4 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
 FormUpload.displayName = 'FormUpload'
 
 export { FormUpload }
-export default FormUpload
+export { FormUpload }

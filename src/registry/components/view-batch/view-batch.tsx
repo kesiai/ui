@@ -321,4 +321,4 @@ const BatchActions: React.FC<BatchActionsProps> = ({
   )
 }
 
-export default BatchActions
+export { BatchActions }

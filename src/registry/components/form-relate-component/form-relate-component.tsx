@@ -112,4 +112,4 @@ const FormRelate: React.FC<FormRelateProps> = (props) => {
 }
 
 export { FormRelate }
-export default FormRelate
+export { FormRelate }

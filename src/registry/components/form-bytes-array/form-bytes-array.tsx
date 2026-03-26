@@ -30,4 +30,4 @@ const FormBytesArray: React.FC<FormBytesArrayProps> = (props) => {
 }
 
 export { FormBytesArray }
-export default FormBytesArray
+export { FormBytesArray }

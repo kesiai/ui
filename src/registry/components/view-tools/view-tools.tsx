@@ -192,4 +192,4 @@ export const Tools: React.FC<ToolsProps> = ({
   )
 }
 
-export default Tools
+export { Tools }

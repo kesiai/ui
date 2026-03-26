@@ -123,4 +123,4 @@ const FieldCell: React.FC<{
 }
 
 export { FormEditableCard }
-export default FormEditableCard
+export { FormEditableCard }

@@ -128,4 +128,4 @@ const Rate = React.forwardRef<HTMLDivElement, RateProps>(
 
 Rate.displayName = "Rate"
 
-export default Rate
+export { Rate }

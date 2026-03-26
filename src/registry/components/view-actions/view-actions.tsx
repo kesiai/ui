@@ -626,4 +626,4 @@ const Actions: React.FC<ActionsProps> = ({
   )
 }
 
-export default Actions
+export { Actions }

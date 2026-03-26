@@ -269,5 +269,5 @@ const DateRange = React.forwardRef<HTMLDivElement, DateRangeProps>(
 
 DateRange.displayName = "DateRange"
 
-export default DateRange
+export { DateRange }
 export { DateRange as FormDateRange }

@@ -299,5 +299,3 @@ const CarouselComponent = (props: CarouselProps) => {
 
 export { CarouselComponent as Carousel }
 export type { CarouselProps }
-
-export default CarouselComponent

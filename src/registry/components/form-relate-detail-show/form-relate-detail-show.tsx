@@ -252,4 +252,4 @@ const DetailShow: React.FC<DetailShowProps> = ({
   return <>{children || ''}</>
 }
 
-export default DetailShow
+export { DetailShow }

@@ -334,4 +334,4 @@ const FormUserRole: React.FC<FormUserRoleProps> = (props) => {
 }
 
 export { FormUserRole }
-export default FormUserRole
+export { FormUserRole }

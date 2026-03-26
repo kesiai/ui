@@ -382,4 +382,4 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
   )
 }
 
-export default RelateModelSelect
+export { RelateModelSelect }

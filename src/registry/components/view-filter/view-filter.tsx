@@ -62,4 +62,4 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   )
 }
 
-export default ViewFilter
+export { ViewFilter }

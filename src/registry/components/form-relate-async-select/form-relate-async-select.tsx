@@ -408,4 +408,4 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   )
 }
 
-export default AsyncSelect
+export { AsyncSelect }

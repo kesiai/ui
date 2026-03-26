@@ -419,4 +419,4 @@ FormWidget.displayName = "FormWidget"
 
 export { FieldComponentSelector }
 
-export default FormWidget
+export { FormWidget }

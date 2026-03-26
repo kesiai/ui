@@ -92,4 +92,4 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
   }
 }
 
-export default ViewModel
+export { ViewModel }

@@ -20,4 +20,4 @@ const Form = ({ formId, children, onSubmit, onEffect, classNames, ...props } : F
   )
 }
 
-export default Form
+export { Form }

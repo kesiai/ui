@@ -397,4 +397,4 @@ export const TableColumn: React.FC<TableColumnProps> = ({
   return null;
 };
 
-export default ViewDataTable;
+export { ViewDataTable };

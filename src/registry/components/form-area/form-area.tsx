@@ -443,5 +443,5 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
 
 FormArea.displayName = "FormArea";
 
-export default FormArea
+export { FormArea }
 export { FormArea }

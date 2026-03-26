@@ -550,4 +550,4 @@ interface LogCardProps {
   )
 }
 
-export { RecordView }
+export { RecordView, RecordView as FlowLogView }

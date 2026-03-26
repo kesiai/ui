@@ -1,5 +1,5 @@
 import * as React from "react"
-import DateRange from '@/registry/components/form-date-range/form-date-range.tsx'
+import { DateRange } from '@/registry/components/form-date-range/form-date-range.tsx'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form-date-range.md?raw'
 

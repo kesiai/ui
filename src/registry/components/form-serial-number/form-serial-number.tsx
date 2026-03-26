@@ -33,4 +33,3 @@ const FormSerialNumber: React.FC<FormSerialNumberProps> = (props) => {
 }
 
 export { FormSerialNumber }
-export { FormSerialNumber }

@@ -1,7 +1,7 @@
 import * as React from 'react'
-import RelateSelect from '@/registry/components/form-relate-select/form-relate-select'
-import RelateMultiSelect from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
-import RelateModelSelect from '@/registry/components/form-relate-model-select/form-relate-model-select'
+import { RelateSelect } from '@/registry/components/form-relate-select/form-relate-select'
+import { RelateMultiSelect } from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
+import { RelateModelSelect } from '@/registry/components/form-relate-model-select/form-relate-model-select'
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 export interface FormRelatePlusDataSelectProps extends RelateFieldProps {
@@ -77,5 +77,4 @@ const FormRelatePlusDataSelect: React.FC<FormRelatePlusDataSelectProps> = (props
   )
 }
 
-export { FormRelatePlusDataSelect }
 export { FormRelatePlusDataSelect }

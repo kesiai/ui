@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
-import SchemaForm from '@/registry/components/schema-form/schema-form'
+import { SchemaForm } from '@/registry/components/schema-form/schema-form'
 import { tableConverter } from "@/registry/lib/view-table-converter";
 interface ViewDetailContentProps {
   itemId: string

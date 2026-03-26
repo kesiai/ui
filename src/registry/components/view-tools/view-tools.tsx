@@ -191,5 +191,3 @@ export const Tools: React.FC<ToolsProps> = ({
     </div>
   )
 }
-
-export { Tools }

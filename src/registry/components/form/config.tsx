@@ -2,8 +2,8 @@ import React from 'react'
 import {
   FieldGroup
 } from "@/components/ui/field"
-import Form from '@/registry/components/form/form'
-import FormField from '@/registry/components/form-field/form-field'
+import { Form } from '@/registry/components/form/form'
+import { FormField } from '@/registry/components/form-field/form-field'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form.md?raw'
 
@@ -257,7 +257,7 @@ const renderFormCodePreview = (props: Record<string, any>) => {
   const classNamesStr = JSON.stringify(classNames, null, 2)
 
   return `import { Form } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
+import { FormField } from '@/registry/components/form-field/form-field'
 import { layoutPresets } from '@/registry/components/form/config'
 
 const MyForm = () => {

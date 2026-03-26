@@ -1,6 +1,6 @@
 import React from 'react'
-import FormField from '@/registry/components/form-field/form-field'
-import Form from '@/registry/components/form/form'
+import { FormField } from '@/registry/components/form-field/form-field'
+import { Form } from '@/registry/components/form/form'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form-field.md?raw'
 
@@ -232,7 +232,7 @@ const renderFormFieldCodePreview = (props: Record<string, any>) => {
     : ''
 
   return `import { Form } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
+import { FormField } from '@/registry/components/form-field/form-field'
 
 const MyForm = () => {
   const handleSubmit = (data: any) => {

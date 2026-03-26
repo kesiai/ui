@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import SchemaForm from '@/registry/components/schema-form/schema-form'
+import { SchemaForm } from '@/registry/components/schema-form/schema-form'
 import { toast } from 'sonner'
 import {
   AlertDialog,

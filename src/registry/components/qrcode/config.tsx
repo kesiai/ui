@@ -1,4 +1,4 @@
-import QRCodeComp from './qrcode'
+import { QRCodeComp } from './qrcode'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './qrcode.md?raw'
 

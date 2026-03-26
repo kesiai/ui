@@ -592,9 +592,8 @@ const getMethods = (schema: any, fieldKey: string) => {
   }
 }
 
-export { METHODS }
-
 export {
+  METHODS,
   NullInput,
   TextInput,
   VariateRangeTimeInput,

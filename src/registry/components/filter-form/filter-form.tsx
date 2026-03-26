@@ -4,7 +4,7 @@ import {
 import { FormProvider, useForm, type UseFormPropsExtended } from '@airiot/client'
 import type { ReactNode } from 'react'
 import _ from "lodash"
-import FormField from "@/registry/components/form-field/form-field"
+import { FormField } from "@/registry/components/form-field/form-field"
 import { filterConverter } from '@/registry/lib/view-filter-converter'
 
 type SchemaFormProps = UseFormPropsExtended & {

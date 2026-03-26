@@ -1,6 +1,6 @@
-import ViewModel from '@/registry/components/view-model/view-model'
+import { ViewModel } from '@/registry/components/view-model/view-model'
 import React from 'react'
-import ViewFilter from './view-filter'
+import { ViewFilter } from './view-filter'
 import { ComponentConfig } from '@/app/config/types'
 import { layoutPresets } from '@/registry/components/form/config'
 import documentationMd from './view-filter.md?raw'

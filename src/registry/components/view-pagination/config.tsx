@@ -1,6 +1,6 @@
-import ViewModel from '../view-model/view-model'
+import { ViewModel } from '../view-model/view-model'
 import React from 'react'
-import ViewPagination from './view-pagination'
+import { ViewPagination } from './view-pagination'
 import { ComponentConfig } from '@/app/config/types'
 import { useModelGetItems } from '@airiot/client'
 import { Button } from "@/components/ui/button"

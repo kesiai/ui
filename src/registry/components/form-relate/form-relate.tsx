@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { FormRelate as FormRelateComponent } from '@/registry/components/form-relate-component/form-relate-component'
-import RelateSelect from '@/registry/components/form-relate-select/form-relate-select'
-import RelateMultiSelect from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
-import RelateModelSelect from '@/registry/components/form-relate-model-select/form-relate-model-select'
+import { RelateSelect } from '@/registry/components/form-relate-select/form-relate-select'
+import { RelateMultiSelect } from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
+import { RelateModelSelect } from '@/registry/components/form-relate-model-select/form-relate-model-select'
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 /**

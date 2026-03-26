@@ -6,7 +6,7 @@ import { FormDateRange } from '@/registry/components/form-date-range/form-date-r
 import { FormLink } from '@/registry/components/form-link/form-link'
 import { FormMap } from '@/registry/components/form-map/form-map'
 import { FormInputNumber } from '@/registry/components/form-input-number/form-input-number'
-import FormRate from '@/registry/components/form-rate/form-rate'
+import { Rate } from '@/registry/components/form-rate/form-rate'
 import { FormRelate } from '@/registry/components/form-relate/form-relate'
 import { FormSelect } from '@/registry/components/form-select/form-select'
 import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
@@ -19,7 +19,7 @@ import { FormBytesArray } from '@/registry/components/form-bytes-array/form-byte
 import { FormRadio } from '@/registry/components/form-radio/form-radio'
 import { FormSlider } from '@/registry/components/form-slider/form-slider'
 import { TableSelect } from '@/registry/components/table-select/table-select'
-import TableDataSelect from '@/registry/components/table-data-select/table-data-select'
+import { TableSelect as TableDataSelect } from '@/registry/components/table-data-select/table-data-select'
 
 const formConverter = (schema: any, formSchema: any) => {
   const controlType = formSchema?.controlType || schema?.controlType
@@ -59,7 +59,7 @@ const formConverter = (schema: any, formSchema: any) => {
       case 'number':
         return FormInputNumber
       case 'rate':
-        return FormRate
+        return Rate
       case 'relate':
         return FormRelate
       case 'select-string':

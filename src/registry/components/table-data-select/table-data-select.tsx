@@ -222,5 +222,3 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
 }
 
 TableSelect.displayName = 'TableSelect'
-
-export { TableSelect }

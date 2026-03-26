@@ -7,8 +7,8 @@ import { NullInput, TextInput, VariateRangeTimeInput, getMethods } from '@/regis
 import { convertProps } from '@/registry/lib/query-editor-util'
 import _ from 'lodash'
 // import { useFilterSchema, useFormSchema } from '@airiot/client'
-import FormField from '@/registry/components/form-field/form-field'
-import Form from '@/registry/components/form/form'
+import { FormField } from '@/registry/components/form-field/form-field'
+import { Form } from '@/registry/components/form/form'
 
 interface QueryItemFromProps {
   value: any
@@ -700,5 +700,4 @@ const QueryEditor = (props: QueryEditorProps) => {
   }
 }
 
-export { QueryEditor }
 export { QueryEditor, QueryItem, QueryForm, QueryFieldSelect, QueryItemFrom }

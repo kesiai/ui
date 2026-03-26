@@ -1,6 +1,6 @@
 import React from 'react'
 import { useModel, useSetModelState, useModelGetItems } from '@airiot/client'
-import FilterForm from '@/registry/components/filter-form/filter-form'
+import { FilterForm } from '@/registry/components/filter-form/filter-form'
 
 interface ViewFilterProps {
   filters?: Array<{

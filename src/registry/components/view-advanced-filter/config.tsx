@@ -1,6 +1,6 @@
 import React from 'react'
-import ViewAdvancedFilter from './view-advanced-filter'
-import ViewModel from '../view-model/view-model'
+import { ViewAdvancedFilter } from './view-advanced-filter'
+import { ViewModel } from '../view-model/view-model'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './view-advanced-filter.md?raw'
 

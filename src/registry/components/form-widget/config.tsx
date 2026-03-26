@@ -1,5 +1,5 @@
 import * as React from "react"
-import FormWidget from '@/registry/components/form-widget/form-widget'
+import { FormWidget } from '@/registry/components/form-widget/form-widget'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form-widget.md?raw'
 

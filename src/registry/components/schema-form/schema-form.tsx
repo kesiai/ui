@@ -6,7 +6,7 @@ import React, { type ReactNode } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Resolver } from 'react-hook-form'
 import { z } from 'zod'
-import FormField from "@/registry/components/form-field/form-field"
+import { FormField } from "@/registry/components/form-field/form-field"
 import { formConverter } from '@/registry/lib/view-form-converter'
 
 interface ModelSchema {

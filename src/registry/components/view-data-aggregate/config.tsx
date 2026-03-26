@@ -1,6 +1,6 @@
-import ViewModel from '../view-model/view-model'
+import { ViewModel } from '../view-model/view-model'
 import React from 'react'
-import ViewDataTableAggregate from './view-data-aggregate'
+import { ViewDataTableAggregate } from './view-data-aggregate'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './view-data-aggregate.md?raw'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import FlowLogView from './flow-log-view'
+import { FlowLogView } from './flow-log-view'
 import { ComponentConfig } from '@/app/config/types'
 
 export const flowLogViewPropsConfig = [

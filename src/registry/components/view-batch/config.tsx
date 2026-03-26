@@ -1,6 +1,6 @@
-import ViewModel from '../view-model/view-model'
+import { ViewModel } from '../view-model/view-model'
 import React from 'react'
-import BatchActions from './view-batch'
+import { BatchActions } from './view-batch'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './view-batch.md?raw'
 

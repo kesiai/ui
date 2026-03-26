@@ -1,5 +1,5 @@
-import ViewModel from '../view-model/view-model'
-import Tools from './view-tools'
+import { ViewModel } from '../view-model/view-model'
+import { Tools } from './view-tools'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './view-tools.md?raw'
 

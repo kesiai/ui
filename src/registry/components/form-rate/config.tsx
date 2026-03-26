@@ -1,5 +1,5 @@
 import * as React from "react"
-import Rate from '@/registry/components/form-rate/form-rate.tsx'
+import { Rate } from '@/registry/components/form-rate/form-rate.tsx'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form-rate.md?raw'
 

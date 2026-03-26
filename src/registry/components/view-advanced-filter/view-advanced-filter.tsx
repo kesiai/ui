@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import QueryEditor from '@/registry/components/query-editor/query-editor'
+import { QueryEditor } from '@/registry/components/query-editor/query-editor'
 import { useModel, useModelGetItems, useSetModelState } from '@airiot/client'
 import _ from 'lodash'
 import {

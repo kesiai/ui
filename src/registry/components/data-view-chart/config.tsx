@@ -1,5 +1,5 @@
 import * as React from 'react'
-import ChartEcharts from '@/registry/components/data-view-chart/data-view-chart'
+import { ChartEcharts } from '@/registry/components/data-view-chart/data-view-chart'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './data-view-chart.md?raw'
 
@@ -52,7 +52,7 @@ const renderDataViewChartPreview = (props: Record<string, any>) => {
 const renderDataViewChartCodePreview = (props: Record<string, any>) => {
   const echartOptionStr = JSON.stringify(props.echartOption || dataViewChartDefaultProps.echartOption, null, 2)
 
-  return `import ChartEcharts from '@/registry/components/data-view-chart/data-view-chart'
+  return `import { ChartEcharts } from '@/registry/components/data-view-chart/data-view-chart'
 
 <ChartEcharts
   view={{

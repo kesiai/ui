@@ -1,4 +1,4 @@
-import ChartEcharts from '@/registry/components/chart-echarts/chart-echarts'
+import { ChartEcharts } from '@/registry/components/chart-echarts/chart-echarts'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './chart-echarts.md?raw'
 

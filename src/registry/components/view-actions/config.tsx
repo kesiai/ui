@@ -1,6 +1,6 @@
-import ViewModel from '../view-model/view-model'
+import { ViewModel } from '../view-model/view-model'
 import React from 'react'
-import Actions from './view-actions'
+import { Actions } from './view-actions'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './view-actions.md?raw'
 

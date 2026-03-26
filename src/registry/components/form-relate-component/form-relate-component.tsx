@@ -2,7 +2,7 @@ import * as React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import isArray from 'lodash/isArray'
 import isObject from 'lodash/isObject'
-import AsyncSelect from '@/registry/components/form-relate-async-select/form-relate-async-select'
+import { AsyncSelect } from '@/registry/components/form-relate-async-select/form-relate-async-select'
 
 export interface FormRelateProps {
   input?: {

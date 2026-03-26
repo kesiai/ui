@@ -5,8 +5,37 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/compon
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandSeparator } from '@/components/ui/command';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Check, ChevronsUpDown, X, FolderPlus, Folder, ArrowLeft } from 'lucide-react';
-import { loadPCAData } from './pca';
 
+const pcaMock = [
+  {
+    "value": "11",
+    "label": "北京市",
+    "children": [
+      {
+        "value": "1101",
+        "label": "市辖区",
+        "children": [
+          { "value": "110101", "label": "东城区" },
+          { "value": "110102", "label": "西城区" },
+          { "value": "110105", "label": "朝阳区" },
+          { "value": "110106", "label": "丰台区" },
+          { "value": "110107", "label": "石景山区" },
+          { "value": "110108", "label": "海淀区" },
+          { "value": "110109", "label": "门头沟区" },
+          { "value": "110111", "label": "房山区" },
+          { "value": "110112", "label": "通州区" },
+          { "value": "110113", "label": "顺义区" },
+          { "value": "110114", "label": "昌平区" },
+          { "value": "110115", "label": "大兴区" },
+          { "value": "110116", "label": "怀柔区" },
+          { "value": "110117", "label": "平谷区" },
+          { "value": "110118", "label": "密云区" },
+          { "value": "110119", "label": "延庆区" }
+        ]
+      }
+    ]
+  }
+]
 // ====================== 核心类型定义 ======================
 /** 省市区数据结构类型 */
 interface PCAItem {
@@ -57,7 +86,7 @@ export interface FormAreaProps
   /**
    * 单元格键值
    */
-  cellKey?: string;
+  pcaData: []
 }
 
 // ====================== 工具函数（带类型注解） ======================
@@ -156,6 +185,7 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
       value: controlledValue,
       defaultValue,
       config = {},
+      pcaData = pcaMock,
       onChange
     }
   ) => {
@@ -165,7 +195,7 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
     const [internalValue, setInternalValue] = useState<string | string[]>(
       multiple && Array.isArray(defaultValue) ? defaultValue : (defaultValue as string || '')
     );
-    const [pcaData, setPcaData] = useState<PCAItem[]>([]);
+
     const [selectedValues, setSelectedValues] = useState<string[]>([]); // 多选选中值
     const [open, setOpen] = useState(false); // 下拉面板开关
     const [expandedKeys, setExpandedKeys] = useState<string[]>([]); // 展开的层级key
@@ -179,21 +209,17 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
 
     // 加载省市区数据
     useEffect(() => {
-      loadPCAData().then((res: PCAItem[]) => {
-        setPcaData(res);
-        // 初始化多选选中值
-        if (multiple) {
-          setSelectedValues(convertToMultipleFormat(value));
-        }
-        // 初始化单选选中路径
-        if (!multiple) {
-          const rawValue = value as string;
-          const displayValue = dealOldData(rawValue, res) || '';
-          const path = displayValue.split('/').filter(Boolean);
-          setSelectedPath(path);
-          setCurrentLevel(path.length > 0 ? path.length - 1 : 0);
-        }
-      });
+      if (multiple) {
+        setSelectedValues(convertToMultipleFormat(value));
+      }
+      // 初始化单选选中路径
+      if (!multiple) {
+        const rawValue = value as string;
+        const displayValue = dealOldData(rawValue, res) || '';
+        const path = displayValue.split('/').filter(Boolean);
+        setSelectedPath(path);
+        setCurrentLevel(path.length > 0 ? path.length - 1 : 0);
+      }
     }, [value, multiple]);
 
     // 切换层级展开/折叠

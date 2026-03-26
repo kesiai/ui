@@ -11,7 +11,7 @@
     {
       "path": "registry/components/kesi/form-bytes-array/form-bytes-array.tsx",
       "type": "registry:component",
-      "content": "import * as React from 'react'\nimport { Input } from '@/components/ui/input'\n\nexport interface FormBytesArrayProps {\n  value?: string\n  onChange?: (value: string) => void\n  placeholder?: string\n  defaultVal?: string\n  disabled?: boolean\n  filter?: any\n  meta?: any\n  record?: any\n}\n\nconst FormBytesArray: React.FC<FormBytesArrayProps> = (props) => {\n  const { value, onChange, placeholder, disabled } = props\n\n  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    onChange?.(e.target.value)\n  }\n\n  return (\n    <Input\n      value={value || ''}\n      onChange={handleChange}\n      placeholder={placeholder || '请输入内容'}\n      disabled={disabled}\n    />\n  )\n}\n\nexport { FormBytesArray }\nexport default FormBytesArray\n"
+      "content": "import * as React from 'react'\nimport { Input } from '@/components/ui/input'\n\nexport interface FormBytesArrayProps {\n  value?: string\n  onChange?: (value: string) => void\n  placeholder?: string\n  defaultVal?: string\n  disabled?: boolean\n  filter?: any\n  meta?: any\n  record?: any\n}\n\nconst FormBytesArray: React.FC<FormBytesArrayProps> = (props) => {\n  const { value, onChange, placeholder, disabled } = props\n\n  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    onChange?.(e.target.value)\n  }\n\n  return (\n    <Input\n      value={value || ''}\n      onChange={handleChange}\n      placeholder={placeholder || '请输入内容'}\n      disabled={disabled}\n    />\n  )\n}\n\nexport { FormBytesArray }\n"
     }
   ]
 }

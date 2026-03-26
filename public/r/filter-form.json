@@ -3,19 +3,15 @@
   "type": "registry:component",
   "title": "Filter Form",
   "description": "Filter Form - 组件",
-  "dependencies": [
-    "@airiot/client",
-    "lodash"
-  ],
+  "dependencies": [],
   "registryDependencies": [
-    "http://localhost:3000/r/form-field.json",
-    "field"
+    "http://localhost:3000/r/schema-form.json"
   ],
   "files": [
     {
       "path": "registry/components/kesi/filter-form/filter-form.tsx",
       "type": "registry:component",
-      "content": "import {\n  FieldGroup\n} from \"@/components/ui/field\"\nimport { FormProvider, useForm, type UseFormPropsExtended } from '@airiot/client'\nimport type { ReactNode } from 'react'\nimport _ from \"lodash\"\nimport FormField from \"@/registry/components/form-field/form-field\"\nimport { filterConverter } from '@/registry/lib/view-filter-converter'\n\ntype SchemaFormProps = UseFormPropsExtended & {\n  filterSchema: Array\n  onSubmit: (data: any) => void\n  children?: ReactNode | ((props: any) => ReactNode)\n  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>\n}\n\nconst FilterForm = ({ schema, filterSchema, onSubmit, children, classNames, ...props }: SchemaFormProps) => {\n  const methods = useForm(props)\n  const properties = schema.properties\n  return (\n    <FormProvider {...methods} classNames={classNames}>\n      <form id={schema.name || schema.key} onSubmit={methods.handleSubmit(onSubmit)} className={classNames?.form}>\n        <FieldGroup className={classNames?.group}>\n          {(filterSchema || []).map(field => {\n            const baseSchema = properties?.[field.key]\n            const FieldController = filterConverter(baseSchema, field)\n            const megerSchema = { ...baseSchema, ...field }\n            return (\n              <FormField label={baseSchema.title} name={field.key} schema={megerSchema}>\n                <FieldController />\n              </FormField>\n            )\n          })}\n        </FieldGroup>\n        {children ? (typeof children === 'function' ? children({\n          ...methods\n        }) : children) : null}\n      </form>\n    </FormProvider>\n  )\n}\n\nexport default FilterForm"
+      "content": "import { SchemaForm, type ModelSchema, type FormSchemaItem } from \"@/registry/components/schema-form/schema-form\"\nimport { filterConverter } from '@/registry/lib/view-filter-converter'\n\ntype SchemaFormProps = {\n  schema: ModelSchema\n  filterSchema: FormSchemaItem[]\n  formId: string\n  onSubmit: (data: any) => void\n}\n\nconst FilterForm = ({ schema, filterSchema, formId, onSubmit, ...props }: SchemaFormProps) => {\n  return (\n    <SchemaForm\n      formId={formId}\n      schema={schema}\n      onSubmit={onSubmit}\n      isValid={false}\n      formSchema={filterSchema}\n      schameConvert={filterConverter}\n      {...props}\n    />\n  )\n}\n\nexport { FilterForm }"
     },
     {
       "path": "registry/lib/view-filter-converter.tsx",

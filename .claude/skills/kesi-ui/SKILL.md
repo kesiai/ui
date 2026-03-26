@@ -183,7 +183,7 @@ function Example() {
 **主要组件**:
 - [`Card`](data/container-card.md) - 卡片容器，支持标题、边框、内边距
 - [`Carousel`](data/container-carousel.md) - 轮播容器，支持自动播放、指示器
-- [`ContainerIteration`](data/container-iteration.md) - 迭代容器，循环渲染子组件
+- [`Iteration`](data/container-iteration.md) - 迭代容器，循环渲染子组件
 - [`Modal`](data/container-modal.md) - 模态框容器，弹出式对话框
 - [`Panel`](data/container-panel.md) - 面板容器，手风琴式折叠展开
 - [`Popover`](data/container-popover.md) - 浮层容器，点击/悬停触发

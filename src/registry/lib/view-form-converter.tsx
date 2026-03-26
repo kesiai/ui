@@ -21,6 +21,7 @@ import { FormSlider } from '@/registry/components/form-slider/form-slider'
 import { TableSelect } from '@/registry/components/table-select/table-select'
 import { TableSelect as TableDataSelect } from '@/registry/components/table-data-select/table-data-select'
 import { FormArray } from '@/registry/components/form-array/form-array'
+import { FormObject } from '@/registry/components/form-object/form-object'
 
 const formConverter = (schema: any, formSchema: any) => {
   const controlType = formSchema?.controlType || schema?.controlType
@@ -35,6 +36,8 @@ const formConverter = (schema: any, formSchema: any) => {
         return FormSwitch
       case 'array':
         return FormArray
+      case 'object':
+        return FormObject
       default:
         return FormInput
     }
@@ -90,6 +93,8 @@ const formConverter = (schema: any, formSchema: any) => {
         return TableDataSelect
       case 'array':
         return FormArray
+      case 'object':
+        return FormObject
 
       default:
         return () => 'The form field component is defined'

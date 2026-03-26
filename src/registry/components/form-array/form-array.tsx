@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
-import { Plus, Trash2, ChevronDown, ChevronRight, Edit } from 'lucide-react'
+import { Plus, Trash2, ChevronDown, ChevronRight, Edit, X } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
@@ -62,6 +62,8 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
 
   const items = schema?.items
   const properties = items?.properties || {}
+  // 判断 items 是否为基础类型（非对象类型）
+  const isPrimitiveItem = items?.type && items.type !== 'object'
   // 如果没有 formSchema，从 properties 的 keys 中自动生成
   const formSchema = items?.formSchema || Object.keys(properties).map(key => ({
     key,
@@ -71,11 +73,14 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
   // 从 FormProvider 获取 control
   const { control } = useFormContext()
 
-  // 使用 useFieldArray 管理数组字段
+  // 使用 useFieldArray 管理数组字段（适用于基础类型和对象类型）
   const { fields, append, remove, update } = useFieldArray({
     name: name || schema?.key || 'items',
     control,
   })
+
+  // 获取当前数组值（用于基础类型）
+  const fieldName = name || schema?.key || 'items'
 
   // 获取按钮文本
   const getBtnText = (key: 'add' | 'clear' | 'edit' | 'delete' | 'confirm' | 'cancel', defaultValue: string) => {
@@ -87,10 +92,15 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
     if (schema?.maxCount && fields.length >= schema.maxCount) {
       return
     }
-    // append 会自动生成唯一的 id（内部使用），不影响表单数据
-    // 如果你的 schema 中有 id 字段，可以在这里初始化：
-    // append({ id: generateYourId() })
-    append({})
+    // 根据类型添加不同的默认值
+    if (isPrimitiveItem) {
+      // 基础类型：添加空值
+      const defaultValue = items?.type === 'number' ? 0 : items?.type === 'boolean' ? false : ''
+      append(defaultValue)
+    } else {
+      // 对象类型：添加空对象
+      append({})
+    }
   }
 
   // 清空所有元素
@@ -143,122 +153,164 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
   const canClear = !schema?.minCount || schema.minCount === 0
 
   return (
-    <div id={`FormArray-${schema?.key}`} className="w-full space-y-4">
-      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <CollapsibleTrigger asChild>
-          <Button
-            variant="outline"
-            className="w-full justify-between"
-            type="button"
-          >
-            <span className="flex items-center gap-2">
-              {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-              {schema?.title || schema?.key || '数组'}
-              <span className="text-muted-foreground">({fields.length})</span>
-            </span>
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-4 pt-4">
-          {schema?.description && (
-            <p className="text-sm text-muted-foreground">{schema.description}</p>
-          )}
+    <div id={`FormArray-${schema?.key}`} className="w-full">
+      <Card>
+        <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              className="w-full justify-between rounded-t-lg hover:bg-muted/50"
+              type="button"
+            >
+              <span className="flex items-center gap-2">
+                {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                {schema?.title || schema?.key || '数组'}
+                <span className="text-muted-foreground">({fields.length})</span>
+              </span>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent className="pt-4 space-y-4">
+              {schema?.description && (
+                <p className="text-sm text-muted-foreground">{schema.description}</p>
+              )}
 
-          {/* 操作按钮 */}
-          <div className="flex gap-2">
-            {canAdd && (
-              <Button
-                onClick={handleAdd}
-                type="button"
-                variant="default"
-                size="sm"
-                disabled={schema?.disabled}
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                {getBtnText('add', '添加')}
-              </Button>
-            )}
-            {canClear && fields.length > 0 && (
-              <Button
-                onClick={handleClear}
-                variant="outline"
-                size="sm"
-                disabled={schema?.disabled}
-              >
-                <Trash2 className="h-4 w-4 mr-1" />
-                {getBtnText('clear', '清空')}
-              </Button>
-            )}
-          </div>
+              {/* 操作按钮 */}
+              <div className="flex gap-2">
+                {canAdd && (
+                  <Button
+                    onClick={handleAdd}
+                    type="button"
+                    variant="default"
+                    size="sm"
+                    disabled={schema?.disabled}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    {getBtnText('add', '添加')}
+                  </Button>
+                )}
+                {canClear && fields.length > 0 && (
+                  <Button
+                    onClick={handleClear}
+                    variant="outline"
+                    size="sm"
+                    disabled={schema?.disabled}
+                  >
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    {getBtnText('clear', '清空')}
+                  </Button>
+                )}
+              </div>
 
-          {/* 卡片列表 */}
-          {fields.length === 0 ? (
-            <div className="text-sm text-muted-foreground p-8 border border-dashed rounded-lg text-center bg-muted/30">
-              暂无数据，点击"添加"按钮添加新项目
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {fields.map((field: any, index: number) => (
-                <Card key={field.id} className="relative hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-semibold">
-                      {getCardTitle(field, index)}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 p-3 pt-0">
-                    {/* 显示摘要信息 */}
-                    <div className="space-y-1.5">
-                      {formSchema.slice(0, 3).map((formField) => {
-                        const fieldKey = formField.key
-                        const fieldValue = field?.[fieldKey]
-                        if (fieldValue === undefined || fieldValue === null || fieldValue === '') {
-                          return null
-                        }
-                        return (
-                          <div key={fieldKey} className="text-sm flex justify-between items-center py-1 border-b border-border/40 last:border-0">
-                            <span className="text-muted-foreground font-medium">
-                              {formField.title || fieldKey}
-                            </span>
-                            <span className="font-medium truncate ml-2 max-w-[60%]">{String(fieldValue)}</span>
-                          </div>
-                        )
-                      })}
-                    </div>
+              {/* 卡片列表 */}
+              {fields.length === 0 ? (
+                <div className="text-sm text-muted-foreground p-8 border border-dashed rounded-lg text-center bg-muted/30">
+                  暂无数据，点击"添加"按钮添加新项目
+                </div>
+              ) : isPrimitiveItem ? (
+                /* 基础类型数组：使用 formConverter 渲染组件 */
+                <div className="space-y-3">
+                  {fields.map((field: any, index: number) => {
+                    const FormComponent = formConverter(items, { controlType: items?.controlType })
+                    return (
+                      <div key={field.id} className="flex gap-2 items-center">
+                        <div className="flex-1">
+                          <FormField
+                            name={`${fieldName}.${index}`}
+                            schema={items}
+                            label={false}
+                          >
+                            <FormComponent
+                              schema={items}
+                              input={{
+                                value: undefined, // FormField 会自动处理
+                                onChange: (value: any) => update(index, value),
+                              }}
+                              meta={{}}
+                            />
+                          </FormField>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(index)}
+                          disabled={schema?.disabled || (schema?.minCount && fields.length <= schema.minCount)}
+                          className="h-9 w-9 p-0 shrink-0"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                /* 对象类型数组：卡片网格 */
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {fields.map((field: any, index: number) => (
+                    <Card key={field.id} className="relative hover:shadow-md transition-shadow flex flex-col">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base font-semibold">
+                          {getCardTitle(field, index)}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2 p-3 pt-0 flex-1 flex flex-col">
+                        {/* 显示摘要信息 */}
+                        <div className="space-y-1.5 flex-1">
+                          {formSchema.slice(0, 3).map((formField) => {
+                            const fieldKey = formField.key
+                            const fieldValue = field?.[fieldKey]
+                            if (fieldValue === undefined || fieldValue === null || fieldValue === '') {
+                              return null
+                            }
+                            return (
+                              <div key={fieldKey} className="text-sm flex justify-between items-center py-1 border-b border-border/40 last:border-0">
+                                <span className="text-muted-foreground font-medium">
+                                  {formField.title || fieldKey}
+                                </span>
+                                <span className="font-medium truncate ml-2 max-w-[60%]">{String(fieldValue)}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
 
-                    {/* 操作按钮 */}
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(index)}
-                        disabled={schema?.disabled}
-                        className="flex-1 justify-center"
-                      >
-                        <Edit className="h-3.5 w-3.5" />
-                        <span className="ml-1.5">{getBtnText('edit', '修改')}</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(index)}
-                        disabled={schema?.disabled || (schema?.minCount && fields.length <= schema.minCount)}
-                        className="flex-1 justify-center"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        <span className="ml-1.5">{getBtnText('delete', '删除')}</span>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+                        {/* 操作按钮 */}
+                        <div className="flex gap-2 pt-2 mt-auto">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(index)}
+                            disabled={schema?.disabled}
+                            className="flex-1 h-7 px-2 text-xs"
+                          >
+                            <Edit className="h-3 w-3" />
+                            <span className="ml-1">{getBtnText('edit', '修改')}</span>
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDelete(index)}
+                            disabled={schema?.disabled || (schema?.minCount && fields.length <= schema.minCount)}
+                            className="flex-1 h-7 px-2 text-xs"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                            <span className="ml-1">{getBtnText('delete', '删除')}</span>
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
 
-          {/* 错误信息 */}
-          {meta?.error && (
-            <p className="text-sm text-destructive">{meta.error}</p>
-          )}
-        </CollapsibleContent>
-      </Collapsible>
+              {/* 错误信息 */}
+              {meta?.error && (
+                <p className="text-sm text-destructive">{meta.error}</p>
+              )}
+            </CardContent>
+          </CollapsibleContent>
+        </Collapsible>
+      </Card>
 
       {/* 编辑弹窗 */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -336,7 +388,7 @@ const EditItemForm: React.FC<EditItemFormProps> = ({
               key={fieldKey}
               name={fieldKey}
               schema={fieldSchema}
-              label={field.title || fieldKey}
+              label={fieldSchema.title || field.title || fieldKey}
             >
               <FormComponent
                 schema={fieldSchema}

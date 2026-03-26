@@ -1,6 +1,6 @@
-import React from 'react'
-import { useModel, useSetModelState, useModelGetItems } from '@airiot/client'
-import { FilterForm } from '@/registry/components/filter-form/filter-form'
+import React from 'react';
+import { useModel, useSetModelState, useModelGetItems } from '@airiot/client';
+import { FilterForm } from '@/registry/components/filter-form/filter-form';
 
 interface ViewFilterProps {
   filters?: Array<{
@@ -39,7 +39,17 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   }
 
   return (
-    <FilterForm schema={model} filterSchema={filterSchema} classNames={classNames} onSubmit={onSubmit} >
+    <FilterForm
+      formId={model?.name + 'view-filter'}
+      schema={model}
+      filterSchema={filterSchema}
+      classNames={classNames ? classNames : {
+        group: 'grid grid-cols-3 gap-4',
+        field: 'flex flex-row items-center gap-2 min-w-0',
+        label: '!w-20 flex-shrink-0 text-right',
+        input: 'flex-1 min-w-0',
+      }}
+      onSubmit={onSubmit}>
       {(methods) => (
         <div className="mt-4 flex justify-center gap-3">
           <button
@@ -62,4 +72,4 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   )
 }
 
-export { ViewFilter }
+export { ViewFilter };

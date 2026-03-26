@@ -155,28 +155,6 @@ const getHierarchyData = (areaType: 'p' | 'pc' | 'pca', pcaData: PCAItem[]): any
   return pcaData.map(item => buildItem(item)).filter(Boolean) as any[];
 };
 
-/** 处理旧数据格式（-分隔转/分隔） */
-const dealOldData = (v: string | undefined, pcaData: PCAItem[]): string | undefined => {
-  if (!v) return undefined;
-  const list = v.split('-');
-  if (list.length === 0) return v;
-
-  const result: string[] = [];
-  const province = pcaData.find(p => p.value === list[0]);
-  if (province) {
-    result.push(province.label);
-    const city = province.children?.find(c => c.value === list[1]);
-    if (city) {
-      result.push(city.label);
-      const district = city.children?.find(d => d.value === list[2]);
-      if (district) {
-        result.push(district.label);
-      }
-    }
-  }
-  return result.length > 0 ? result.join('/') : v;
-};
-
 // ====================== 核心组件 ======================
 const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
   (
@@ -215,7 +193,7 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
       // 初始化单选选中路径
       if (!multiple) {
         const rawValue = value as string;
-        const displayValue = dealOldData(rawValue, res) || '';
+        const displayValue = rawValue || '';
         const path = displayValue.split('/').filter(Boolean);
         setSelectedPath(path);
         setCurrentLevel(path.length > 0 ? path.length - 1 : 0);
@@ -265,7 +243,7 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
     // ====================== 单选级联逻辑 ======================
     const renderSingleSelect = () => {
       const rawValue = value as string;
-      const displayValue = dealOldData(rawValue, pcaData) || '';
+      const displayValue = rawValue || '';
       // 当前层级的数据源
       const currentData = getCurrentLevelData();
       // 当前层级的选中值

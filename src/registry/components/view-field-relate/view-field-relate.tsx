@@ -71,6 +71,10 @@ function parseValue(value: any): any {
 // DetailShow 组件 - 点击查看关联数据详情
 // ============================================
 
+const ViewFieldRender = ({ value, schema }: { value: any, schema: any }) => {
+  const FieldComponent = tableConverter(schema, {})
+  return <FieldComponent value={value} schema={schema} />
+}
 interface DetailShowProps {
   children: React.ReactNode
   schema: any
@@ -505,7 +509,6 @@ export const Relate: React.FC<RelatePlusShowProps> = ({ value, schema, inList })
           <ViewFieldRender
             value={fieldValue}
             schema={fieldSchema}
-            type={fieldSchema?.fieldType || 'text'}
           />
         )
       }
@@ -550,7 +553,6 @@ export const Relate: React.FC<RelatePlusShowProps> = ({ value, schema, inList })
             <ViewFieldRender
               value={fieldValue}
               schema={fieldSchema}
-              type={fieldSchema?.fieldType || 'text'}
             />
           )
         }

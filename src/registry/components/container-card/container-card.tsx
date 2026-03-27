@@ -3,22 +3,9 @@ import { cn } from "@/lib/utils"
 import { Card as ShadcnCard, CardHeader, CardTitle } from "@/components/ui/card"
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * 卡片标题
-   */
   cardTitle?: string
-  /**
-   * 是否有边框
-   */
-  cardBordered?: boolean
-  /**
-   * 边距
-   */
-  cardPadding?: number
-  /**
-   * 子元素
-   */
   children?: React.ReactNode
+  className?: string
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
@@ -26,8 +13,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     {
       className,
       cardTitle = '',
-      cardBordered = true,
-      cardPadding = 24,
       children,
       ...props
     },
@@ -45,33 +30,14 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       }
     }, [cardTitle])
 
-    // 计算内容区域高度（减去标题高度）
-    const contentStyle = {
-      height: 'calc(100% - 73px)', // 默认标题高度约为 73px
-      padding: cardPadding ? `${cardPadding}px` : undefined,
-      position: 'relative' as const,
-      overflow: 'auto' as const
-    }
-
     return (
       <ShadcnCard
         ref={ref}
-        className={cn("dashboard-container-card", className)}
-        style={{
-          width: '100%',
-          height: '100%',
-          border: cardBordered ? undefined : 'none'
-        }}
+        className={cn("dashboard-container-card w-full max-w-sm", className)}
         {...props}
       >
-        {title && (
-          <CardHeader className="pb-3">
-            <CardTitle>{title}</CardTitle>
-          </CardHeader>
-        )}
-        <div style={contentStyle}>
-          {children}
-        </div>
+        {title && <CardHeader><CardTitle>{title}</CardTitle></CardHeader>}
+        {children}
       </ShadcnCard>
     )
   }

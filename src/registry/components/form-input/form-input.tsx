@@ -128,7 +128,6 @@ export interface InputProps
   /**
    * 单元格键值
    */
-  cellKey?: string
 }
 
 const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
@@ -168,7 +167,7 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
     const [internalValue, setInternalValue] = React.useState(defaultValue)
     const isControlled = controlledValue !== undefined
     const value = isControlled ? controlledValue : internalValue
-
+    console.log(className)
     const handleClear = React.useCallback(() => {
       const newValue = ""
       if (!isControlled) {
@@ -285,11 +284,11 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
 
     // 单行输入框
     return (
-      <ButtonGroup>
+      <ButtonGroup className={className}>
         {addonBefore && <Button variant="outline">{addonBefore}</Button>}
         <InputGroup
           ref={ref}
-          className={cn(!bordered && "border-0", inputVariants({ variant, size }), className)}
+          className={cn(!bordered && "border-0", inputVariants({ variant, size }))}
           style={style}
         >
           {prefix && (

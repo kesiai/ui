@@ -35,11 +35,12 @@ export interface FormObjectProps {
     submitFailed?: boolean
     error?: string
   }
+  className?: string
   record?: any
 }
 
 const FormObject: React.FC<FormObjectProps> = (props) => {
-  const { meta, schema, name } = props
+  const { meta, schema, name, className } = props
   const [isOpen, setIsOpen] = React.useState(false)
 
   const properties = schema?.properties || {}
@@ -55,7 +56,7 @@ const FormObject: React.FC<FormObjectProps> = (props) => {
   const currentValue = watch(fieldName) || {}
 
   return (
-    <div id={`FormObject-${schema?.key}`} className="w-full">
+    <div id={`FormObject-${schema?.key}`} className={`w-full ${className}`}>
       <Card>
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <CollapsibleTrigger asChild>

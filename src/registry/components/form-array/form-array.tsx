@@ -56,11 +56,12 @@ export interface FormArrayProps {
     submitFailed?: boolean
     error?: string
   }
+  className?: string,
   record?: any
 }
 
 const FormArray: React.FC<FormArrayProps> = (props) => {
-  const { meta, schema, name } = props
+  const { meta, schema, name, className } = props
   const [isOpen, setIsOpen] = React.useState(false)
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null)
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -158,7 +159,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
   const canClear = !schema?.minCount || schema.minCount === 0
 
   return (
-    <div id={`FormArray-${schema?.key}`} className="w-full">
+    <div id={`FormArray-${schema?.key}`} className={`w-full ${className}`}>
       <Card>
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <CollapsibleTrigger asChild>

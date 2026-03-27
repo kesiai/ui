@@ -73,7 +73,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
   const resolver = React.useMemo<Resolver<any, any>>(() => {
     return zodResolver(zodSchema as any)
   }, [zodSchema])
-
+  
   const methods = useForm({
     resolver: isValid ? resolver : null,
     ...props

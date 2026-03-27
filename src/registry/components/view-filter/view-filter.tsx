@@ -44,10 +44,13 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
       schema={model}
       filterSchema={filterSchema}
       classNames={classNames ? classNames : {
+        form: '',
         group: 'grid grid-cols-3 gap-4',
         field: 'flex flex-row items-center gap-2 min-w-0',
         label: '!w-20 flex-shrink-0 text-right',
         input: 'flex-1 min-w-0',
+        description: '',
+        error: ''
       }}
       onSubmit={onSubmit}>
       {(methods) => (

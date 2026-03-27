@@ -13,9 +13,10 @@ import { SchemaForm } from '@/registry/components/schema-form/schema-form'
 import { tableConverter } from "@/registry/lib/view-table-converter";
 interface ViewDetailContentProps {
   itemId: string
+  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const ViewDetailContent: React.FC<ViewDetailContentProps> = ({ itemId }) => {
+const ViewDetail: React.FC<ViewDetailContentProps> = ({ itemId, classNames }) => {
   const { data, loading, model } = useModelGet({ id: itemId })
 
   const formId = `view-form-${itemId}`
@@ -39,6 +40,15 @@ const ViewDetailContent: React.FC<ViewDetailContentProps> = ({ itemId }) => {
             formId={formId}
             defaultValues={data}
             schema={model}
+            classNames={classNames ? classNames : {
+              form: '',
+              group: 'grid grid-cols-2 gap-4',
+              field: 'w-fit gap-2 min-w-0',
+              label: 'flex-shrink-0 text-right',
+              input: 'flex-1 min-w-0',
+              description: '',
+              error: ''
+            }}
             schameConvert={tableConverter}
             formSchema={model.formSchema}
           />
@@ -59,4 +69,4 @@ const ViewDetailContent: React.FC<ViewDetailContentProps> = ({ itemId }) => {
   )
 }
 
-export { ViewDetailContent }
+export { ViewDetail }

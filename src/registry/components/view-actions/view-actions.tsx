@@ -39,9 +39,7 @@ import { SchemaForm } from '@/registry/components/schema-form/schema-form'
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
 
-import { ViewDetailContent } from '@/registry/components/view-detail/view-detail'
-
-const ViewActionContent = ViewDetailContent
+import { ViewDetail } from '@/registry/components/view-detail/view-detail'
 
 interface EditActionContentProps {
   itemId: string
@@ -324,7 +322,7 @@ export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children }) => {
         {trigger}
       </DialogTrigger>
       <DialogContent className="max-w-4xl">
-        <ViewActionContent itemId={itemId} />
+        <ViewDetail itemId={itemId} />
       </DialogContent>
     </Dialog>
   )

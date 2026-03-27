@@ -13,7 +13,7 @@ import { FormSerialNumber } from '@/registry/components/form-serial-number/form-
 import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
 import { FormInput } from '@/registry/components/form-input/form-input'
 import { FormTime } from '@/registry/components/form-time/form-time'
-import { FormUpload } from '@/registry/components/form-upload/form-upload'
+import { FormUpload, FormUploadGroup } from '@/registry/components/form-upload/form-upload'
 import { FormRichText } from '@/registry/components/form-rich-text/form-rich-text'
 import { FormBytesArray } from '@/registry/components/form-bytes-array/form-bytes-array'
 import { FormRadio } from '@/registry/components/form-radio/form-radio'
@@ -81,7 +81,7 @@ const formConverter = (schema: any, formSchema: any) => {
       case 'upload':
         return FormUpload
       case 'upload-group':
-        return FormUpload
+        return FormUploadGroup
       case 'rich-text':
         return FormRichText
       case 'bytes-array':

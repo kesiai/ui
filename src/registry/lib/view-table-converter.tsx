@@ -58,7 +58,6 @@ const tableConverter = (schema: any, tableSchame: any) => {
     case 'map':
       return Map
     case 'upload':
-      return Attachment
     case 'upload-group':
       return Attachment
     case 'link':

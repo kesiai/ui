@@ -6,9 +6,9 @@ import { Check, ChevronDown, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const FilterEnum = (props: any) => {
-  const { value, onChange, ...field } = props
-  const placeholder = field && field.placeholder
-  const titleMap = field && field.titleMap
+  const { value, onChange, schema } = props
+  const placeholder = schema && schema.placeholder
+  const titleMap = schema && schema.enum ? schema.enum.map((k: string) => ({ value: k, name: schema.enumNames[k] || k })) : []
   const [open, setOpen] = useState(false)
 
   // 初始化选中的值

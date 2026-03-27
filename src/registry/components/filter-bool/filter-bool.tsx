@@ -9,7 +9,7 @@ const FilterBool = (props: any) => {
   const disabled = (value === null || value === undefined || value === '')
 
   return (
-    <div className='w-40! flex items-center justify-around'>
+    <div className='w-25! flex items-center justify-around'>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>

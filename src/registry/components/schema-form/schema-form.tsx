@@ -216,7 +216,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
             const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
             const megerSchema = { ...baseSchema, ...fieldSchame }
             return (
-              <FormField name={field.key} label={baseSchema?.title} schema={megerSchema} validate={editableTableValidate}>
+              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} validate={editableTableValidate}>
                 <FieldController />
               </FormField>
             )

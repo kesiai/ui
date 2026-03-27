@@ -167,7 +167,7 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
     const [internalValue, setInternalValue] = React.useState(defaultValue)
     const isControlled = controlledValue !== undefined
     const value = isControlled ? controlledValue : internalValue
-    console.log(className)
+
     const handleClear = React.useCallback(() => {
       const newValue = ""
       if (!isControlled) {

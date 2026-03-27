@@ -12,7 +12,7 @@ const DateRange = ({ value, schema }: { value: any; schema?: any }) => {
   const [startDateString, endDateString] = (value || '').split(' - ')
   const endShow = endDateString
     ? dayjs(endDateString).format(format)
-    : (schema?.NullShow === 'forever' ? '长期' : '至今')
+    : ((schema?.NullShow === 'forever' || schema?.nullShow === 'forever') ? '长期' : '至今')
 
   return (
     <span>

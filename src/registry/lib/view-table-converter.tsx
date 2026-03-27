@@ -59,6 +59,8 @@ const tableConverter = (schema: any, tableSchame: any) => {
       return Map
     case 'upload':
       return Attachment
+    case 'upload-group':
+      return Attachment
     case 'link':
       return Link
     case 'serial-number':
@@ -76,6 +78,8 @@ const tableConverter = (schema: any, tableSchame: any) => {
     case 'reference':
       return Reference
     case 'relate':
+      return Relate
+    case 'relate-multiple':
       return Relate
     default:
       return Text

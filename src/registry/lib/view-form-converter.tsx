@@ -63,6 +63,7 @@ const formConverter = (schema: any, formSchema: any) => {
       case 'rate':
         return Rate
       case 'relate':
+      case 'relate-multiple':
         return FormRelate
       case 'select-string':
       case 'select-number':
@@ -78,6 +79,8 @@ const formConverter = (schema: any, formSchema: any) => {
       case 'time':
         return FormTime
       case 'upload':
+        return FormUpload
+      case 'upload-group':
         return FormUpload
       case 'rich-text':
         return FormRichText

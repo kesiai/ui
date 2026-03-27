@@ -30,6 +30,7 @@ const filterConverter = (schema: any, filterSchema: any) => {
     case 'number':
       return FilterNumber
     case 'relate':
+    case 'relate-multiple':
       return FilterRelateSelect
     case 'select-string':
     case 'select-number':

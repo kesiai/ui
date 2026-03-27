@@ -8,7 +8,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   Collapsible,
@@ -18,6 +17,9 @@ import {
 import { FormField } from '@/registry/components/form-field/form-field'
 import { formConverter } from '@/registry/lib/view-form-converter'
 import { useForm, FormProvider, useFieldArray, useFormContext } from '@airiot/client'
+
+// 用于生成唯一的空值占位符
+const EMPTY_PLACEHOLDER = Symbol('empty')
 
 export interface FormArrayProps {
   onChange?: (value: any[] | null) => void
@@ -31,6 +33,9 @@ export interface FormArrayProps {
     minCount?: number
     maxCount?: number
     items?: {
+      type?: string
+      controlType?: string
+      pcaData?: []
       formSchema?: Array<{
         key: string
         title?: string
@@ -94,12 +99,12 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
     }
     // 根据类型添加不同的默认值
     if (isPrimitiveItem) {
-      // 基础类型：添加空值
-      const defaultValue = items?.type === 'number' ? 0 : items?.type === 'boolean' ? false : ''
-      append(defaultValue)
+      // 基础类型：使用 Symbol 作为唯一占位符，确保可以添加多个空值
+      const defaultValue = items?.type === 'number' ? 0 : items?.type === 'boolean' ? false : EMPTY_PLACEHOLDER
+      append(defaultValue, { shouldFocus: false })
     } else {
       // 对象类型：添加空对象
-      append({})
+      append({}, { shouldFocus: false })
     }
   }
 
@@ -224,7 +229,11 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
                               schema={items}
                               input={{
                                 value: undefined, // FormField 会自动处理
-                                onChange: (value: any) => update(index, value),
+                                onChange: (value: any) => {
+                                  // 将空字符串或 Symbol 转换为 null
+                                  const normalizedValue = value === '' || value === EMPTY_PLACEHOLDER ? null : value
+                                  update(index, normalizedValue)
+                                },
                               }}
                               meta={{}}
                             />
@@ -235,7 +244,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDelete(index)}
-                          disabled={schema?.disabled || (schema?.minCount && fields.length <= schema.minCount)}
+                          disabled={Boolean(schema?.disabled || (schema?.minCount && fields.length <= schema.minCount))}
                           className="h-9 w-9 p-0 shrink-0"
                         >
                           <X className="h-4 w-4" />
@@ -290,7 +299,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
                             variant="outline"
                             size="sm"
                             onClick={() => handleDelete(index)}
-                            disabled={schema?.disabled || (schema?.minCount && fields.length <= schema.minCount)}
+                            disabled={Boolean(schema?.disabled || (schema?.minCount && fields.length <= schema.minCount))}
                             className="flex-1 h-7 px-2 text-xs"
                           >
                             <Trash2 className="h-3 w-3" />

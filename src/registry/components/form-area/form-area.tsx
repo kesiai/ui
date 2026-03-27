@@ -6,7 +6,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Checkbox } from '@/components/ui/checkbox';
 import { Check, ChevronsUpDown, X, FolderPlus, Folder, ArrowLeft } from 'lucide-react';
 
-const pcaMock = [
+const pcaData = [
   {
     "value": "11",
     "label": "北京市",
@@ -86,7 +86,6 @@ export interface FormAreaProps
   /**
    * 单元格键值
    */
-  pcaData: []
 }
 
 // ====================== 工具函数（带类型注解） ======================
@@ -163,7 +162,6 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
       value: controlledValue,
       defaultValue,
       config = {},
-      pcaData = pcaMock,
       onChange
     }
   ) => {

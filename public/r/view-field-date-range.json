@@ -12,7 +12,7 @@
     {
       "path": "registry/components/kesi/view-field-date-range/view-field-date-range.tsx",
       "type": "registry:component",
-      "content": "import isNil from 'lodash/isNil'\nimport dayjs from 'dayjs'\n\nconst DateRange = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  let format = 'YYYY-MM-DD'\n  if (schema?.filedFormat) {\n    format = schema.filedFormat\n  }\n\n  const [startDateString, endDateString] = (value || '').split(' - ')\n  const endShow = endDateString\n    ? dayjs(endDateString).format(format)\n    : (schema?.NullShow === 'forever' ? '长期' : '至今')\n\n  return (\n    <span>\n      {dayjs(startDateString).format(format)} - {endShow}\n    </span>\n  )\n}\n\nexport { DateRange }\n"
+      "content": "import isNil from 'lodash/isNil'\nimport dayjs from 'dayjs'\n\nconst DateRange = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  let format = 'YYYY-MM-DD'\n  if (schema?.filedFormat) {\n    format = schema.filedFormat\n  }\n\n  const [startDateString, endDateString] = (value || '').split(' - ')\n  const endShow = endDateString\n    ? dayjs(endDateString).format(format)\n    : ((schema?.NullShow === 'forever' || schema?.nullShow === 'forever') ? '长期' : '至今')\n\n  return (\n    <span>\n      {dayjs(startDateString).format(format)} - {endShow}\n    </span>\n  )\n}\n\nexport { DateRange }\n"
     }
   ]
 }

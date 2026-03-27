@@ -473,7 +473,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
     const getHeaders = () => {
       const headers = (api as any).headers || {}
       // 移除 Content-Type 让浏览器自动设置（FormData 需要）
-      const { 'Content-Type': _, ...rest } = headers as any
+      const { 'Content-Type': _contentType, ...rest } = headers as Record<string, string>
       return rest
     }
 
@@ -606,8 +606,9 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
 
         // 自动重命名
         if (props.autoName) {
-          const ext = file.name.split('.')?.[1]
-          const newName = Math.random().toString(36).substring(2, 18) + '.' + ext
+          const parts = file.name.split('.')
+          const ext = parts.length > 1 ? parts[parts.length - 1] : ''
+          const newName = Math.random().toString(36).substring(2, 18) + (ext ? '.' + ext : '')
           processedFile = new File([processedFile], newName, { type: processedFile.type })
         }
 

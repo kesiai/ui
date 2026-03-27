@@ -9,14 +9,15 @@ import {
 import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
-import { SchemaForm } from '@/registry/components/schema-form/schema-form'
+import { FormSchemaItem, SchemaForm } from '@/registry/components/schema-form/schema-form'
 import { tableConverter } from "@/registry/lib/view-table-converter";
 interface ViewDetailContentProps {
   itemId: string
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
+  formSchema?: FormSchemaItem[]
 }
 
-const ViewDetail: React.FC<ViewDetailContentProps> = ({ itemId, classNames }) => {
+const ViewDetail: React.FC<ViewDetailContentProps> = ({ itemId, classNames, formSchema }) => {
   const { data, loading, model } = useModelGet({ id: itemId })
 
   const formId = `view-form-${itemId}`
@@ -50,7 +51,7 @@ const ViewDetail: React.FC<ViewDetailContentProps> = ({ itemId, classNames }) =>
               error: ''
             }}
             schameConvert={tableConverter}
-            formSchema={model.formSchema}
+            formSchema={formSchema || model.formSchema || model.form}
           />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>

@@ -34,19 +34,21 @@ import {
 } from 'lucide-react'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
-import { SchemaForm } from '@/registry/components/schema-form/schema-form'
+import { FormSchemaItem, SchemaForm } from '@/registry/components/schema-form/schema-form'
 
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
 
 import { ViewDetail } from '@/registry/components/view-detail/view-detail'
+import { create } from 'lodash'
 
 interface EditActionContentProps {
   itemId: string
   onClose?: () => void
+  formSchema?: FormSchemaItem[]
 }
 
-const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose }) => {
+const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, formSchema }) => {
   const { title, data, loading, model } = useModelGet({ id: itemId })
   const { getItems } = useModelGetItems()
   const { saveItem } = useModelSave()
@@ -76,7 +78,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose }
         </div>
       ) : (
         <ScrollArea className="max-h-[70vh] pr-3">
-          <SchemaForm formId={formId} defaultValues={data} schema={model} formSchema={model.formSchema} onSubmit={handleSave} />
+          <SchemaForm formId={formId} defaultValues={data} schema={model} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}
@@ -188,9 +190,10 @@ const ExportActionContent: React.FC<ExportActionContentProps> = ({ itemId, forma
 
 interface CreateActionContentProps {
   onClose?: () => void
+  formSchema?: FormSchemaItem[]
 }
 
-const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose }) => {
+const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, formSchema }) => {
   const { getItems, model } = useModelGetItems()
   const { saveItem } = useModelSave()
   const [saving, setSaving] = useState(false)
@@ -214,7 +217,7 @@ const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose }) =>
         <DialogTitle>新建 {model.title}</DialogTitle>
       </DialogHeader>
       <ScrollArea className="max-h-[70vh] pr-3">
-        <SchemaForm formId={formId} schema={model} formSchema={model.form} onSubmit={handleSave} />
+        <SchemaForm formId={formId} schema={model} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
@@ -306,9 +309,11 @@ interface BaseActionProps {
   children?: React.ReactNode
 }
 
-interface ViewActionProps extends BaseActionProps { }
+interface ViewActionProps extends BaseActionProps {
+  formSchema?: FormSchemaItem[]
+}
 
-export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children }) => {
+export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children, formSchema }) => {
   const trigger = children || (
     <Button variant="ghost" size="sm">
       <Eye className="h-4 w-4" />
@@ -322,15 +327,17 @@ export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children }) => {
         {trigger}
       </DialogTrigger>
       <DialogContent className="max-w-4xl">
-        <ViewDetail itemId={itemId} />
+        <ViewDetail itemId={itemId} formSchema={formSchema} />
       </DialogContent>
     </Dialog>
   )
 }
 
-interface EditActionProps extends BaseActionProps { }
+interface EditActionProps extends BaseActionProps {
+  formSchema?: FormSchemaItem[]
+}
 
-export const EditAction: React.FC<EditActionProps> = ({ itemId, children }) => {
+export const EditAction: React.FC<EditActionProps> = ({ itemId, children, formSchema }) => {
   const [open, setOpen] = useState(false)
 
   const trigger = children || (
@@ -346,7 +353,7 @@ export const EditAction: React.FC<EditActionProps> = ({ itemId, children }) => {
         {trigger}
       </DialogTrigger>
       <DialogContent className="max-w-4xl">
-        <EditActionContent itemId={itemId} onClose={() => setOpen(false)} />
+        <EditActionContent itemId={itemId} onClose={() => setOpen(false)} formSchema={formSchema} />
       </DialogContent>
     </Dialog>
   )
@@ -354,9 +361,10 @@ export const EditAction: React.FC<EditActionProps> = ({ itemId, children }) => {
 
 interface CreateActionProps {
   children?: React.ReactNode
+  formSchema?: FormSchemaItem[]
 }
 
-export const CreateAction: React.FC<CreateActionProps> = ({ children }) => {
+export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema }) => {
   const [open, setOpen] = useState(false)
 
   const trigger = children || (
@@ -372,7 +380,7 @@ export const CreateAction: React.FC<CreateActionProps> = ({ children }) => {
         {trigger}
       </DialogTrigger>
       <DialogContent className="max-w-4xl">
-        <CreateActionContent onClose={() => setOpen(false)} />
+        <CreateActionContent onClose={() => setOpen(false)} formSchema={formSchema} />
       </DialogContent>
     </Dialog>
   )
@@ -506,13 +514,19 @@ interface ActionsProps {
   modelId?: string
   actions: ActionType[]
   variant?: 'buttons' | 'dropdown'
+  createFormSchema?: FormSchemaItem[]
+  editFormSchema?: FormSchemaItem[]
+  viewFormSchema?: FormSchemaItem[]
 }
 
 const Actions: React.FC<ActionsProps> = ({
   itemId,
   item,
   actions = ['view', 'edit'],
-  variant = 'dropdown'
+  variant = 'dropdown',
+  createFormSchema,
+  editFormSchema,
+  viewFormSchema
 }) => {
   const id = itemId || item?.id
   if (!id) return null
@@ -522,13 +536,13 @@ const Actions: React.FC<ActionsProps> = ({
       <div className="flex items-center gap-2">
         {actions.map((action) => (
           action === 'create' ? (
-            <CreateAction key={action} />
+            <CreateAction key={action} formSchema={createFormSchema} />
           ) : action === 'delete' ? (
             <DeleteAction key={action} itemId={id!} />
           ) : action === 'view' ? (
-            <ViewAction key={action} itemId={id!} />
+            <ViewAction key={action} itemId={id!} formSchema={viewFormSchema} />
           ) : action === 'edit' ? (
-            <EditAction key={action} itemId={id!} />
+            <EditAction key={action} itemId={id!} formSchema={editFormSchema} />
           ) : action === 'export' ? (
             <ExportAction key={action} itemId={id!} />
           ) : action === 'copy' ? (
@@ -570,7 +584,7 @@ const Actions: React.FC<ActionsProps> = ({
         {actions.map((action, index) => (
           <React.Fragment key={action}>
             {action === 'create' ? (
-              <CreateAction>
+              <CreateAction formSchema={createFormSchema}>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   {actionIcons[action]}
                   {actionLabels[action]}
@@ -588,14 +602,14 @@ const Actions: React.FC<ActionsProps> = ({
                 </DropdownMenuItem>
               </DeleteAction>
             ) : action === 'view' ? (
-              <ViewAction itemId={id!}>
+              <ViewAction itemId={id!} formSchema={viewFormSchema}>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   {actionIcons[action]}
                   {actionLabels[action]}
                 </DropdownMenuItem>
               </ViewAction>
             ) : action === 'edit' ? (
-              <EditAction itemId={id!}>
+              <EditAction itemId={id!} formSchema={editFormSchema}>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   {actionIcons[action]}
                   {actionLabels[action]}

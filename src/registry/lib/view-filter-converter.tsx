@@ -16,28 +16,43 @@ import { FilterRelateSelect } from '@/registry/components/filter-relate-select/f
 
 const filterConverter = (schema: any, filterSchema: any) => {
   const controlType = filterSchema?.controlType || schema?.controlType
-  switch (controlType) {
-    case 'text':
-    case 'link':
-    case 'serial-number':
-      return FilterText
-    case 'area':
-      return FilterArea
-    case 'boolean':
-      return FilterBool
-    case 'date':
-      return FilterDate
-    case 'number':
-      return FilterNumber
-    case 'relate':
-      return FilterRelateSelect
-    case 'select-string':
-    case 'select-number':
-    case 'select-array-string':
-    case 'select-array-number':
-      return FilterEnum
-    default:
-      return () => 'The filter component is defined'
+  if (!controlType) {
+    const type = schema.type
+    switch (type) {
+      case 'string':
+        return FilterText
+      case 'number':
+        return FilterNumber
+      case 'boolean':
+        return FilterBool
+      default:
+        return FilterText
+    }
+  } else {
+    switch (controlType) {
+      case 'text':
+      case 'link':
+      case 'serial-number':
+        return FilterText
+      case 'area':
+        return FilterArea
+      case 'boolean':
+        return FilterBool
+      case 'date':
+        return FilterDate
+      case 'number':
+        return FilterNumber
+      case 'relate':
+      case 'relate-multiple':
+        return FilterRelateSelect
+      case 'select-string':
+      case 'select-number':
+      case 'select-array-string':
+      case 'select-array-number':
+        return FilterEnum
+      default:
+        return () => 'The filter component is defined'
+    }
   }
 }
 

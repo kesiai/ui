@@ -298,10 +298,10 @@ const addWatermark = (
         const text = opt.contentType === 'time'
           ? new Date().toLocaleString('zh-CN')
           : opt.contentType === 'user'
-          ? user?.username
-          : opt.contentType === 'text'
-          ? (opt.content || 'Airiot')
-          : 'Airiot'
+            ? user?.username
+            : opt.contentType === 'text'
+              ? (opt.content || 'Airiot')
+              : 'Airiot'
 
         const textWidth = ctx.measureText(text)?.width || 0
         const textHeight = opt.fontSize || 100
@@ -319,13 +319,13 @@ const addWatermark = (
           const x = pst[0] === 'left'
             ? 20
             : pst[0] === 'center'
-            ? imgW / 2 - textWidth / 2
-            : imgW - textWidth - 20
+              ? imgW / 2 - textWidth / 2
+              : imgW - textWidth - 20
           const y = pst[1] === 'top'
             ? textHeight + 20
             : pst[1] === 'center'
-            ? imgH / 2 + textHeight / 2
-            : imgH - 20
+              ? imgH / 2 + textHeight / 2
+              : imgH - 20
           ctx.fillText(text, x, y)
         }
 
@@ -346,10 +346,10 @@ const getAccept = (ac: string | undefined, styleType: string): string => {
     styleType === 'text'
       ? '*'
       : styleType === 'video'
-      ? 'video/*'
-      : styleType === 'audio'
-      ? 'audio/*'
-      : 'image/*'
+        ? 'video/*'
+        : styleType === 'audio'
+          ? 'audio/*'
+          : 'image/*'
   )
 
   if (res === 'video/*') {
@@ -473,7 +473,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
     const getHeaders = () => {
       const headers = (api as any).headers || {}
       // 移除 Content-Type 让浏览器自动设置（FormData 需要）
-      const { 'Content-Type': _, ...rest } = headers as any
+      const { 'Content-Type': _contentType, ...rest } = headers as Record<string, string>
       return rest
     }
 
@@ -511,7 +511,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
       })
     }, [isSingleUpload, value])
 
-    const cKey = props.key 
+    const cKey = props.key
     const width = props.width
     const height = props.height
 
@@ -606,8 +606,9 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
 
         // 自动重命名
         if (props.autoName) {
-          const ext = file.name.split('.')?.[1]
-          const newName = Math.random().toString(36).substring(2, 18) + '.' + ext
+          const parts = file.name.split('.')
+          const ext = parts.length > 1 ? parts[parts.length - 1] : ''
+          const newName = Math.random().toString(36).substring(2, 18) + (ext ? '.' + ext : '')
           processedFile = new File([processedFile], newName, { type: processedFile.type })
         }
 
@@ -735,7 +736,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
               {/* 媒体库上传 - TODO */}
               {!props.disabled && (
                 <div className="text-sm text-slate-400 flex items-center justify-center border-2 border-dashed rounded"
-                     style={{ width: defaultWidth, height: defaultHeight }}>
+                  style={{ width: defaultWidth, height: defaultHeight }}>
                   <div className="text-center p-2">
                     <ImageIcon className="h-8 w-8 mx-auto mb-1 text-slate-400" />
                     <div className="text-xs">等待 MediaModal 迁移</div>
@@ -813,4 +814,8 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
 
 FormUpload.displayName = 'FormUpload'
 
-export { FormUpload }
+const FormUploadGroup = (props: FormUploadProps) => {
+  return <FormUpload {...props} uploadType='upload_attachment_group' />
+}
+
+export { FormUpload, FormUploadGroup }

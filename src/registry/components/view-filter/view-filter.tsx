@@ -40,7 +40,7 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
 
   return (
     <FilterForm
-      formId={model?.name + 'view-filter'}
+      formId={model?.key + 'view-filter'}
       schema={model}
       filterSchema={filterSchema}
       classNames={classNames ? classNames : {

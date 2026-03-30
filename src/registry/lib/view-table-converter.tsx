@@ -58,6 +58,7 @@ const tableConverter = (schema: any, tableSchame: any) => {
     case 'map':
       return Map
     case 'upload':
+    case 'upload-group':
       return Attachment
     case 'link':
       return Link
@@ -76,6 +77,8 @@ const tableConverter = (schema: any, tableSchame: any) => {
     case 'reference':
       return Reference
     case 'relate':
+      return Relate
+    case 'relate-multiple':
       return Relate
     default:
       return Text

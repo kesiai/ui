@@ -141,13 +141,13 @@ export const schemaFormDefaultProps = {
       radioio: {
         type: 'string',
         enum: ['option1', 'option2', 'option3'],
-        enum_title: ['选项一', '选项二', '选项三'],
+        enumNames: ['选项一', '选项二', '选项三'],
         title: '单选'
       },
       checkboxF: {
         type: 'string',
         enum: ['option1', 'option2', 'option3'],
-        enum_title: ['选项一', '选项二', '选项三'],
+        enumNames: ['选项一', '选项二', '选项三'],
         title: '多选'
       },
       areaF: {
@@ -169,7 +169,7 @@ export const schemaFormDefaultProps = {
       country: {
         type: 'string',
         enum: ['china', 'usa', 'japan'],
-        enum_title: ['中国', '美国', '日本'],
+        enumNames: ['中国', '美国', '日本'],
         title: '国家'
       },
       birthDate: {
@@ -217,130 +217,129 @@ export const schemaFormDefaultProps = {
       },
       tableData: {
         type: 'array',
-        items: {},
-        title: '可编辑表格'
+        title: '可编辑表格',
+        items: {
+          formSchema: ['field1', 'field2'],
+          properties: {
+            field1: {
+              key: 'field1',
+              title: '字段1',
+              type: 'object',
+              fieldType: 'map'
+            },
+            field2: {
+              key: 'field2',
+              title: '字段2',
+              type: 'number'
+            }
+          }
+        }
       },
       relate: {
         type: 'object',
         properties: {},
-        title: '关联'
+        title: '关联',
+        relateSchema: {
+          allowAdd: false,
+          allowSelectOld: true,
+          canOrder: false,
+          config: "关联字段",
+          createShow: true,
+          defaultVal: null,
+          descriptionType: "tooltip",
+          editShow: true,
+          insideFilter: [],
+          invalid: false,
+          key: "relate-table-6A5F",
+          listFields: true,
+          need: false,
+          properties: {},
+          recordSelectType: 'select',
+          relate: {
+            fields: [
+              {
+                fieldSchema: {
+                  canOrder: false,
+                  config: "文本",
+                  createShow: true,
+                  descriptionType: "tooltip",
+                  editShow: true,
+                  fieldType: "input",
+                  invalid: false,
+                  key: "text-60CF",
+                  listFields: true,
+                  need: false,
+                  rowKey: "B5EE",
+                  size: "middle",
+                  textContent: "text",
+                  textType: "input",
+                  title: "批号",
+                  type: "string",
+                  widthInForm: "8"
+                },
+                key: "text-60CF",
+                title: "批号"
+              }
+            ],
+            function: [
+              "formschema",
+              "fieldRules",
+              "tablePermission",
+              "gis"
+            ],
+            i18nProp: {},
+            id: "文本时间",
+            tableMajorType: "normal",
+            tableType: "table",
+            title: "文本时间",
+            tt: "normal"
+          },
+          relateShowFields: null,
+          selectType: "single",
+          showField: null,
+          showType: "select",
+          size: "middle",
+          title: "关联字段",
+          type: "object",
+          widthInForm: "24"
+        }
       }
     },
     required: ['username']
   },
   formSchema: [
-    { key: "username", name: "username", type: 'text' },
-    { key: "age", name: "age", type: 'number' },
-    { key: "photo", name: "photo", type: 'upload' },
+    { key: "username", name: "username", controlType: 'text' },
+    { key: "age", name: "age", controlType: 'number' },
+    { key: "photo", name: "photo", controlType: 'upload' },
     { key: 'object' },
     { key: 'arraystring' },
-    { key: "rating", name: "rating", type: 'rate', count: 10 },
-    { key: "radioio", name: "radioio", type: 'radio' },
-    { key: "checkboxF", name: "checkboxF", type: 'checkbox' },
-    { key: "areaF", name: "areaF", type: 'area' },
-    { key: "switchF", name: "switchF", type: 'switch' },
-    { key: "sliderF", name: "sliderF", type: 'slider' },
-    { key: "bio", name: "bio", type: 'textarea' },
-    { key: "country", name: "country", type: 'select' },
-    { key: "birthDate", name: "birthDate", type: 'date' },
-    { key: "dateRange", name: "dateRange", type: 'date-range' },
-    { key: "meetingTime", name: "meetingTime", type: 'time' },
-    { key: "content", name: "content", type: 'rich-text' },
-    { key: "location", name: "location", type: 'map' },
-    { key: "website", name: "website", type: 'link' },
-    { key: "serialNo", name: "serialNo", type: 'serial-number' },
-    { key: "role", name: "role", type: 'user-role' },
-    { key: "referenceF", name: "referenceF", type: 'reference' },
-    { key: "formInfo", name: "formInfo", type: 'form-info' },
+    { key: "rating", name: "rating", controlType: 'rate', count: 10 },
+    { key: "radioio", name: "radioio", controlType: 'radio' },
+    { key: "checkboxF", name: "checkboxF", controlType: 'checkbox' },
+    { key: "areaF", name: "areaF", controlType: 'area' },
+    { key: "switchF", name: "switchF", controlType: 'switch' },
+    { key: "sliderF", name: "sliderF", controlType: 'slider' },
+    { key: "bio", name: "bio", controlType: 'textarea' },
+    { key: "country", name: "country", controlType: 'select-string' },
+    { key: "birthDate", name: "birthDate", controlType: 'date' },
+    { key: "dateRange", name: "dateRange", controlType: 'date-range' },
+    { key: "meetingTime", name: "meetingTime", controlType: 'time' },
+    { key: "content", name: "content", controlType: 'rich-text' },
+    { key: "location", name: "location", controlType: 'map' },
+    { key: "website", name: "website", controlType: 'link' },
+    { key: "serialNo", name: "serialNo", controlType: 'serial-number' },
+    { key: "role", name: "role", controlType: 'user-role' },
+    { key: "referenceF", name: "referenceF", controlType: 'reference' },
+    { key: "formInfo", name: "formInfo", controlType: 'form-info' },
     {
       key: "tableData",
       name: "tableData",
-      type: 'editable-table',
-      forms: {
-        form: ['field1', 'field2'],
-        properties: {
-          field1: {
-            key: 'field1',
-            title: '字段1',
-            type: 'object',
-            fieldType: 'map'
-          },
-          field2: {
-            key: 'field2',
-            title: '字段2',
-            type: 'number'
-          }
-        }
-      }
+      controlType: 'editable-table',
     },
     {
       key: "relate",
       name: "relate",
-      type: 'relate',
-      relateSchema: {
-        allowAdd: false,
-        allowSelectOld: true,
-        canOrder: false,
-        config: "关联字段",
-        createShow: true,
-        defaultVal: null,
-        descriptionType: "tooltip",
-        editShow: true,
-        insideFilter: [],
-        invalid: false,
-        key: "relate-table-6A5F",
-        listFields: true,
-        need: false,
-        properties: {},
-        recordSelectType: 'select',
-        relate: {
-          fields: [
-            {
-              fieldSchema: {
-                canOrder: false,
-                config: "文本",
-                createShow: true,
-                descriptionType: "tooltip",
-                editShow: true,
-                fieldType: "input",
-                invalid: false,
-                key: "text-60CF",
-                listFields: true,
-                need: false,
-                rowKey: "B5EE",
-                size: "middle",
-                textContent: "text",
-                textType: "input",
-                title: "批号",
-                type: "string",
-                widthInForm: "8"
-              },
-              key: "text-60CF",
-              title: "批号"
-            }
-          ],
-          function: [
-            "formschema",
-            "fieldRules",
-            "tablePermission",
-            "gis"
-          ],
-          i18nProp: {},
-          id: "文本时间",
-          tableMajorType: "normal",
-          tableType: "table",
-          title: "文本时间",
-          tt: "normal"
-        },
-        relateShowFields: null,
-        selectType: "single",
-        showField: null,
-        showType: "select",
-        size: "middle",
-        title: "关联字段",
-        type: "object",
-        widthInForm: "24"
-      }
+      controlType: 'relate'
     }
   ],
   showExample: true

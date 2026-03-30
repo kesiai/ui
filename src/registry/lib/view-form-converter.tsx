@@ -75,6 +75,7 @@ const formConverter = (schema: any, formSchema: any) => {
       case 'editable-table':
         return FormEditableTable
       case 'text':
+      case 'textarea':
         return FormInput
       case 'time':
         return FormTime

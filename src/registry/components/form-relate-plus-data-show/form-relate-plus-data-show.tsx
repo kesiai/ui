@@ -75,12 +75,15 @@ function parseJsonStrings(data: any): any {
 // Single item display in card format
 const ItemShow: React.FC<{
   relateSchema: FormRelatePlusDataShowProps['relateSchema']
-  val: any
+  val: object
   field?: FormRelatePlusDataShowProps['field']
   detailPage?: boolean
-}> = ({ relateSchema, val, field, detailPage }) => {
+  relateTableData?: Array<Object>
+}> = ({ relateSchema, val, field, detailPage, relateTableData }) => {
   const displayField = field?.displayField || relateSchema.showField || 'name'
   const showFields = relateSchema.relateShowFields || []
+
+  const value = { ...val || {}, ...(relateTableData?.find(item => item.id === val.id) || {}) }
 
   if (detailPage) {
     return (
@@ -88,12 +91,12 @@ const ItemShow: React.FC<{
         <CardContent className="p-4">
           <div className="grid grid-cols-[5fr_19fr] gap-2 text-sm">
             <div className="text-muted-foreground">记录编号：</div>
-            <div>{val.id}</div>
+            <div>{value.id}</div>
             {showFields.map((f) => (
               <React.Fragment key={f.key}>
                 <div className="text-muted-foreground">{f.title}：</div>
                 <div>
-                  {fieldRender(val[f.key], f.fieldSchema)}
+                  {fieldRender(value[f.key], f.fieldSchema)}
                 </div>
               </React.Fragment>
             ))}
@@ -107,12 +110,12 @@ const ItemShow: React.FC<{
     return (
       <Card className="inline-block w-[calc(50%-5px)] mr-[5px] mt-[5px] bg-muted/50 rounded-md">
         <CardContent className="p-3">
-          <div className="mb-2">{val[displayField]}</div>
+          <div className="mb-2">{value[displayField]}</div>
           {showFields.map((f) => (
-            <div key={f.key} className="text-xs text-muted-foreground grid grid-cols-[4fr_18fr] gap-1">
-              <span>{f.title}：</span>
-              <span>
-                {fieldRender(val[f.key], f.fieldSchema)}
+            <div key={f.key} className="text-xs text-muted-foreground grid grid-cols-[auto_1fr] gap-x-2 gap-y-1">
+              <span className="whitespace-nowrap">{f.title}：</span>
+              <span className="break-all">
+                {fieldRender(value[f.key], f.fieldSchema)}
               </span>
             </div>
           ))}
@@ -123,7 +126,7 @@ const ItemShow: React.FC<{
 
   return (
     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mr-1 mt-1">
-      {val[displayField]}
+      {value[displayField]}
     </span>
   )
 }
@@ -210,10 +213,45 @@ const TableShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
 // Main DataShow component
 const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
   const { relateSchema, input } = props
+
+  const [relateTableData, setRelateTableData] = React.useState<Array<Object>>(null)
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => { // 关联关联字段时后端只有ID，前端需要请求一次数据才能展示
+    const rsf = relateSchema?.relateShowFields || []
+    const relateFields = rsf.filter((f: any) => f.fieldSchema?.config === '关联字段')
+    if (relateFields.length > 0) {
+      const api = createAPI({ resource: relateSchema.name })
+
+      // 使用 api.query 查询数据
+      const relateFieldKeys = relateFields?.map((f: { key: string }) => f.key) || []
+      api.query(
+        {
+          limit: 99999,
+          fields: ['id', ...relateFieldKeys].filter(Boolean)
+        }
+      ).then(({ items }: any) => {
+        setRelateTableData(items)
+      }).finally(() => {
+        setLoading(false)
+      })
+    } else {
+      setLoading(false)
+    }
+  })
+
   const [expand, setExpand] = React.useState(false)
 
   if (relateSchema.showType === 'select') {
     return null
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-4">
+        <div className="text-sm text-muted-foreground">加载中...</div>
+      </div>
+    )
   }
 
   if (relateSchema.showType === 'card') {
@@ -226,7 +264,7 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
       return (
         <div className="mt-2 space-y-1">
           {items?.map((v) => (
-            <ItemShow key={v.id} {...props} val={v} />
+            <ItemShow key={v.id} {...props} val={v} relateTableData={relateTableData} />
           ))}
           {parsedValue?.length > 6 && !expand && (
             <Button
@@ -259,7 +297,7 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
     if (parsedValue) {
       return (
         <div className="mt-2">
-          <ItemShow {...props} val={parsedValue} />
+          <ItemShow {...props} val={parsedValue} relateTableData={relateTableData} />
         </div>
       )
     }
@@ -275,3 +313,4 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
 }
 
 export { FormRelatePlusDataShow }
+export default FormRelatePlusDataShow

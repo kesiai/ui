@@ -12,19 +12,24 @@ import { FormSelect } from '@/registry/components/form-select/form-select'
 import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
 import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
 import { FormInput } from '@/registry/components/form-input/form-input'
+import { FormTextarea } from '@/registry/components/form-textarea/form-textarea'
 import { FormTime } from '@/registry/components/form-time/form-time'
 import { FormUpload, FormUploadGroup } from '@/registry/components/form-upload/form-upload'
 import { FormRichText } from '@/registry/components/form-rich-text/form-rich-text'
 import { FormBytesArray } from '@/registry/components/form-bytes-array/form-bytes-array'
 import { FormRadio } from '@/registry/components/form-radio/form-radio'
+import { FormCheckbox } from '@/registry/components/form-checkbox/form-checkbox'
 import { FormSlider } from '@/registry/components/form-slider/form-slider'
+import { FormFormInfo } from '@/registry/components/form-form-info/form-form-info'
 import { TableSelect } from '@/registry/components/table-select/table-select'
 import { TableSelect as TableDataSelect } from '@/registry/components/table-data-select/table-data-select'
 import { FormArray } from '@/registry/components/form-array/form-array'
 import { FormObject } from '@/registry/components/form-object/form-object'
+import { FormReference } from '@/registry/components/form-reference/form-reference'
 
 const formConverter = (schema: any, formSchema: any) => {
   const controlType = formSchema?.controlType || schema?.controlType
+
   if (!controlType) {
     const type = schema.type
     switch (type) {
@@ -75,8 +80,9 @@ const formConverter = (schema: any, formSchema: any) => {
       case 'editable-table':
         return FormEditableTable
       case 'text':
-      case 'textarea':
         return FormInput
+      case 'textarea':
+        return FormTextarea
       case 'time':
         return FormTime
       case 'upload':
@@ -89,17 +95,22 @@ const formConverter = (schema: any, formSchema: any) => {
         return FormBytesArray
       case 'radio':
         return FormRadio
+      case 'checkbox':
+        return FormCheckbox
       case 'slider':
         return FormSlider
       case 'table-select':
         return TableSelect
       case 'table-data':
         return TableDataSelect
+      case 'form-info':
+        return FormFormInfo
+      case 'reference':
+        return FormReference
       case 'array':
         return FormArray
       case 'object':
         return FormObject
-
       default:
         return () => 'The form field component is defined'
     }

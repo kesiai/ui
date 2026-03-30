@@ -33,6 +33,11 @@ export interface FormCheckboxConfig {
   checkAllSeparate?: boolean
 }
 
+interface CheckboxSchema {
+  enum?: string[]
+  enumNames?: string[]
+}
+
 export interface FormCheckboxProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   /**
@@ -48,6 +53,10 @@ export interface FormCheckboxProps
    */
   options?: CheckboxOption[]
   /**
+   * Schema（包含 enum 和 enumNames）
+   */
+  schema?: CheckboxSchema
+  /**
    * 配置项
    */
   config?: FormCheckboxConfig
@@ -55,10 +64,6 @@ export interface FormCheckboxProps
    * 值变化回调
    */
   onChange?: (value: string | string[]) => void
-  /**
-   * 单元格键值
-   */
-  cellKey?: string
   /**
    * 单选框标签（当 options 为空时使用）
    */
@@ -72,15 +77,27 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
       value: controlledValue,
       defaultValue,
       options = [],
+      schema,
       config = {},
       onChange,
-      cellKey,
       label,
       ...props
     },
     ref
   ) => {
-    const isMulti = options.length > 1
+    const mergedOptions = React.useMemo(() => {
+      if (options.length > 0) return options
+      if (schema?.enum) {
+        const names = schema.enumNames
+        return schema.enum.map((val, index) => ({
+          name: names?.[index] || val,
+          value: val
+        }))
+      }
+      return []
+    }, [options, schema])
+
+    const isMulti = mergedOptions.length > 1
     const defaultList = defaultValue && Array.isArray(defaultValue) ? defaultValue : []
     const [internalValue, setInternalValue] = React.useState<string | string[]>(
       isMulti ? defaultList : (defaultValue as string) || ""
@@ -90,7 +107,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
 
     // 处理布尔值：当 options 为空时，value 可能是布尔值
     const getBooleanValue = () => {
-      if (options.length === 0 && typeof value === 'boolean') {
+      if (mergedOptions.length === 0 && typeof value === 'boolean') {
         return value ? ['checked'] : []
       }
       return value
@@ -106,8 +123,8 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
     // 更新全选/半选状态
     React.useEffect(() => {
       if (isMulti) {
-        setCheckAll(getBooleanValue().length === options.length)
-        setIndeterminate(getBooleanValue().length > 0 && getBooleanValue().length < options.length)
+        setCheckAll(getBooleanValue().length === mergedOptions.length)
+        setIndeterminate(getBooleanValue().length > 0 && getBooleanValue().length < mergedOptions.length)
       }
     }, [getBooleanValue, options.length, isMulti])
 
@@ -148,7 +165,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
     const handleCheckAllChange = React.useCallback(
       (checked: string | boolean) => {
         const isChecked = checked === true || checked === "on"
-        const newValues = isChecked ? options.map((item) => item.value) : []
+        const newValues = isChecked ? mergedOptions.map((item) => item.value) : []
         if (!isControlled) {
           setInternalValue(newValues)
         }
@@ -168,7 +185,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
         )}
         {...props}
       >
-        {options.length === 0 ? (
+        {mergedOptions.length === 0 ? (
           // options 为空时，显示单个 checkbox（输出布尔值）
           label ? (
             <label className="flex items-center gap-2 cursor-pointer">
@@ -202,7 +219,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
                 config?.checkAllSeparate ? "w-full" : "flex-wrap flex-row"
               )}
             >
-              {options.map((option) => (
+              {mergedOptions.map((option) => (
                 <label
                   key={option.value}
                   className="flex items-center gap-2 cursor-pointer"

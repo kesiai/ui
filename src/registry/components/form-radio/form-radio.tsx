@@ -27,6 +27,11 @@ const radioVariants = cva(
   }
 )
 
+interface RadioSchema {
+  enum?: string[]
+  enumNames?: string[]
+}
+
 export interface RadioProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
     VariantProps<typeof radioVariants> {
@@ -34,6 +39,10 @@ export interface RadioProps
    * 数据项
    */
   options?: Array<{ name: string; value: string | number }>
+  /**
+   * Schema（包含 enum 和 enumNames）
+   */
+  schema?: RadioSchema
   /**
    * 当前值
    */
@@ -61,6 +70,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
     {
       className,
       options = [],
+      schema,
       value: controlledValue,
       defaultValue,
       disabled = false,
@@ -72,6 +82,18 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
     },
     ref
   ) => {
+    const mergedOptions = React.useMemo(() => {
+      if (options.length > 0) return options
+      if (schema?.enum) {
+        const names = schema.enumNames
+        return schema.enum.map((val, index) => ({
+          name: names?.[index] || val,
+          value: val
+        }))
+      }
+      return []
+    }, [options, schema])
+
     const [internalValue, setInternalValue] = React.useState<string | number>(
       defaultValue ?? ""
     )
@@ -108,7 +130,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
           className="flex flex-col space-y-2"
           aria-invalid
         >
-          {options.map((option) => (
+          {mergedOptions.map((option) => (
             <div key={option.value} className="flex items-center space-x-2">
               <RadioGroupItem value={String(option.value)} id={String(option.value)} />
               <label

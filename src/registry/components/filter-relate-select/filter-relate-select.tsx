@@ -29,7 +29,7 @@ const FilterRelateSelect: React.FC<FilterRelateSelectProps> = props => {
         <AsyncSelect mode="multiple"
           value={defaultValue}
           onChange={(options) => {
-            const ids = _.isArray(options) ? options.map((opt: any) => opt?.item?.id) : []
+            const ids = _.isArray(options) ? options.map((opt: any) => opt?.item?.id || opt?.key) : []
             if (multi) {
               onChange({
                 or: ids.map((id: string) => {
@@ -44,7 +44,7 @@ const FilterRelateSelect: React.FC<FilterRelateSelectProps> = props => {
           {...restProps}
           label={label}
         />
-      ), [multi])
+      ), [multi, defaultValue?.map((v: any) => v?.key).join(',')])
     }
   </>
 }

@@ -75,7 +75,8 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
     style,
   } = props
 
-  const { displayField = 'name', schema, relateShowFields } = field
+  const { schema, relateShowFields } = field
+  const displayField = field.displayField || schema?.relate?.fields?.[0]?.key || 'name'
 
   // 状态管理
   const [loading, setLoading] = React.useState(false)
@@ -262,10 +263,11 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
 
   // 格式化显示值
   const formatDisplayValue = (val: any): string => {
-    if (!val) return ''
-    if (typeof val === 'string') return val
-    if (isObject(val) && (val as any).label) return (val as any).label
-    return String(val)
+    if (isObject(val)) {
+      return allOptions.find((opt) => opt.value === val.key)?.item?.[displayField] || val.key
+    } else {
+      return '空'
+    }
   }
 
   const currentValue: any =
@@ -294,10 +296,10 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
             <span className={cn('flex-1 truncate', !propValue && 'text-muted-foreground')}>
               {mode === 'multiple' && isArray(propValue) && propValue.length > 0
                 ? propValue.map((v) => formatDisplayValue(v)).join(', ')
-                : formatDisplayValue(propValue) || label}
+                : formatDisplayValue(propValue)}
             </span>
             <div className="flex items-center gap-1">
-              {(propValue || (mode === 'multiple' && isArray(propValue) && propValue.length > 0)) && !disabled && (
+              {(mode === 'multiple' && isArray(propValue) && propValue.length > 0) && !disabled && (
                 <X
                   className="h-4 w-4 text-muted-foreground hover:text-foreground"
                   onClick={handleClear}

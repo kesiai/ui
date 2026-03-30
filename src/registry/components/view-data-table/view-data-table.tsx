@@ -18,6 +18,63 @@ import {
 import { cn } from '@/lib/utils';
 import { tableConverter } from '@/registry/lib/view-table-converter'
 
+declare module '@tanstack/react-table' {
+  interface ColumnDefBase<TData, TValue> {
+    field?: Record<string, any>;
+  }
+}
+
+interface TableFieldSchema {
+  key: string
+  title?: string
+  type?: string
+  width?: number
+  height?: number
+  sort?: number
+  widthInForm?: number
+  tableFixed?: boolean | 'left' | 'right'
+  canOrder?: boolean
+  level2?: string
+  column?: Record<string, any>
+  afterNow?: boolean | string
+  timeFormat?: string
+  allowSelectOld?: boolean | string
+  allowAdd?: boolean | string
+  highTableFields?: any
+  btnText?: string
+  displayForm?: any
+  cardLayout?: any
+  showPagination?: boolean | string
+  uniqueRow?: boolean | string
+  uniqueFields?: string[]
+  fieldRules?: any
+  createAddBtn?: boolean | string
+  editAddBtn?: boolean | string
+  createDelBtn?: boolean | string
+  editDelBtn?: boolean | string
+  onlyCamera?: boolean | string
+  canDownload?: boolean | string
+  areaType?: string
+  count?: number
+  showType?: string
+  canEdit?: boolean | string
+  linkType?: string
+  placeholder?: string
+  checkedChildren?: string
+  unCheckedChildren?: string
+  manualChange?: boolean | string
+  selectType?: string
+  selectFace?: string
+  treeMark?: boolean | string
+  recordSelectType?: string
+  dateFormat?: string
+  dateType?: string
+  format?: string
+  filedFormat?: string
+  filterMode?: string
+  [key: string]: any
+}
+
 interface IData {
   id: string;
   [key: string]: any;
@@ -172,7 +229,8 @@ export function ViewDataTable({
   const columnHelper = createColumnHelper<IData>()
   const columns: ColumnDef<IData>[] = []
 
-  fields.forEach((tableSchema) => {
+  fields.forEach((tableSchema: string | TableFieldSchema) => {
+    if (typeof tableSchema === 'string') tableSchema = { key: tableSchema }
     const fieldName = tableSchema.key
     const baseSchema = getFieldProp(model, fieldName)
     const field = { ...baseSchema, ...tableSchema }
@@ -366,7 +424,6 @@ export const TableColumn: React.FC<TableColumnProps> = ({
   name,
   title,
   width,
-  fixed,
   header,
   cell,
   level2,
@@ -384,7 +441,6 @@ export const TableColumn: React.FC<TableColumnProps> = ({
     const columnDef: ColumnDef<IData> = {
       id: name,
       accessorKey: name,
-      fixed: fixed,
       header: header ? header as any : (({ column }) => <DataGridColumnHeader title={title || name} column={column as any} />),
       cell: cell ? cell as any : DataCell({ children, ...columnProps }),
       size: width as number | undefined,
@@ -392,7 +448,7 @@ export const TableColumn: React.FC<TableColumnProps> = ({
     };
 
     columnContext.setColumn(name, columnDef);
-  }, [name, title, children, width, fixed, header, cell, level2, columnContext, columnProps]);
+  }, [name, title, children, width, header, cell, level2, columnContext, columnProps]);
 
   return null;
 };

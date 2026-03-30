@@ -86,7 +86,7 @@ function ComponentDetailPage() {
   }
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full relative">
       {/* 左侧：组件预览区和文档区 */}
       <div className="flex-1 overflow-auto flex flex-col">
         {/* 组件预览区 */}

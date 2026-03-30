@@ -10,7 +10,54 @@ const projectRoot = new URL(import.meta.url).pathname.split('/scripts')[0];
 const sourceDir = path.join(projectRoot, 'src', 'registry', 'components');
 
 // 目标目录：.claude/skills/airiot-ui/data/
-const targetDir = path.join(projectRoot, '.claude', 'skills', 'airiot-ui', 'data');
+const targetDir = path.join(projectRoot, '.claude', 'skills', 'kesi-ui', 'data');
+
+/**
+ * 前缀映射配置
+ * key: 前缀类别
+ * value: 需要加此前缀的组件 ID 列表（即源目录名）
+ *
+ * 不在映射中的组件保持原始名称（如 view-*、form-*、gis-* 等已有分类前缀的）
+ */
+const prefixMap = {
+  base: [
+    'bar',
+    'button',
+    'image',
+    'status',
+    'text',
+    'svg',
+  ],
+  biz: [
+    'connect-widget',
+    'data-point',
+    'data-view-chart',
+    'events',
+    'iframe',
+    'player',
+    'qrcode',
+  ],
+  form: [
+    'schema-form',
+    'table-data-select',
+    'table-select',
+    'textarea',
+  ],
+};
+
+/**
+ * 构建组件 ID → 目标文件名的映射
+ * @param {string} componentId - 源组件目录名
+ * @returns {string} 目标文件名（不含 .md）
+ */
+function getTargetFileName(componentId) {
+  for (const [prefix, ids] of Object.entries(prefixMap)) {
+    if (ids.includes(componentId)) {
+      return `${prefix}-${componentId}`;
+    }
+  }
+  return componentId;
+}
 
 /**
  * 复制所有组件文档到技能数据目录
@@ -32,29 +79,36 @@ function copyComponentDocs() {
   console.log(`找到 ${componentDirs.length} 个组件目录`);
 
   let copiedCount = 0;
+  let skippedCount = 0;
   let errorCount = 0;
 
-  componentDirs.forEach(componentDir => {
+  componentDirs.forEach(componentId => {
     try {
       // 源文件路径：src/registry/components/{component}/{component}.md
-      const sourceFile = path.join(sourceDir, componentDir, `${componentDir}.md`);
+      const sourceFile = path.join(sourceDir, componentId, `${componentId}.md`);
 
       // 检查源文件是否存在
       if (!fs.existsSync(sourceFile)) {
         console.log(`⚠️  文件不存在: ${sourceFile}`);
-        errorCount++;
+        skippedCount++;
         return;
       }
 
-      // 目标文件路径：.claude/skills/airiot-ui/data/{component}.md
-      const targetFile = path.join(targetDir, `${componentDir}.md`);
+      // 计算目标文件名（加前缀）
+      const targetName = getTargetFileName(componentId);
+      const targetFile = path.join(targetDir, `${targetName}.md`);
 
       // 复制文件
       fs.copyFileSync(sourceFile, targetFile);
-      console.log(`✅ 已复制: ${componentDir}.md`);
+
+      // 显示变更信息
+      const renamed = targetName !== componentId;
+      const tag = renamed ? `${componentId} → ${targetName}` : componentId;
+      console.log(`✅ ${tag}`);
+
       copiedCount++;
     } catch (error) {
-      console.error(`❌ 复制失败 ${componentDir}:`, error.message);
+      console.error(`❌ 失败 ${componentId}:`, error.message);
       errorCount++;
     }
   });
@@ -62,6 +116,7 @@ function copyComponentDocs() {
   console.log('\n复制完成！');
   console.log(`📁 总共处理: ${componentDirs.length} 个组件`);
   console.log(`✅ 成功复制: ${copiedCount} 个文件`);
+  console.log(`⏭️  跳过: ${skippedCount} 个文件`);
   console.log(`❌ 失败: ${errorCount} 个文件`);
 }
 
@@ -70,4 +125,4 @@ if (import.meta.main) {
   copyComponentDocs();
 }
 
-export { copyComponentDocs };
+export { copyComponentDocs, getTargetFileName, prefixMap };

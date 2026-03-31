@@ -1,6 +1,5 @@
 import { ChartEcharts } from '@/registry/components/chart-echarts/chart-echarts'
 import { ComponentConfig } from '@/app/config/types'
-import documentationMd from './chart-echarts.md?raw'
 
 export const chartEchartsPropsConfig = [
   {
@@ -74,7 +73,7 @@ const renderChartEchartsCodePreview = (props: Record<string, any>) => {
 
 export const chartEchartsConfig: ComponentConfig = {
   id: 'chart-echarts',
-  name: 'ChartEcharts echarts图表',
+  name: '图表',
   propsConfig: chartEchartsPropsConfig,
   defaultProps: chartEchartsDefaultProps,
   renderPreview: renderChartEchartsPreview,

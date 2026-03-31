@@ -154,7 +154,7 @@ function HomePage() {
             <div>
               <Link to="/" className="hover:opacity-80 transition-opacity">
                 <h1 className="text-2xl font-bold text-slate-900">
-                  Component Library
+                  KESI UI Library
                 </h1>
                 <p className="text-sm text-slate-600 mt-1">
                   组件展示与配置平台
@@ -228,7 +228,7 @@ function HomePage() {
                               to={`/component/${component.id}`}
                               className="w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors block text-slate-600 hover:bg-blue-50 hover:text-blue-700"
                             >
-                              {config?.name || component.id}
+                              {config?.name?.split(' ').slice(1).join(' ') || component.id}
                             </Link>
                           )
                         })}

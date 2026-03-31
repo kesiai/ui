@@ -164,7 +164,7 @@ const renderButtonCustomForm = (props: Record<string, any>, _onChange: (name: st
 
 export const buttonConfig: ComponentConfig = {
   id: 'button',
-  name: 'Button 按钮',
+  name: '按钮',
   propsConfig: buttonPropsConfig,
   defaultProps: buttonDefaultProps,
   renderPreview: renderButtonPreview,

@@ -17,14 +17,83 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group'
 import { format } from 'date-fns'
-import _ from 'lodash'
+import isNil from 'lodash/isNil'
+import omit from 'lodash/omit'
+import get from 'lodash/get'
+import find from 'lodash/find'
 import { FilterDatetime } from '@/registry/components/filter-datetime/filter-datetime'
+import { FilterDate } from '@/registry/components/filter-date/filter-date'
 import { convertProps } from '@/registry/lib/query-editor-util'
+
+// --- Type Definitions ---
+
+interface FilterFieldSchema {
+  enum?: string[]
+  enum1?: string[]
+  enum_title?: string[]
+  enum_title1?: string[]
+  format?: string
+  formatType?: string
+  timeFormat?: string
+}
+
+interface RangeInputValue {
+  gte?: number | string
+  lte?: number | string
+}
+
+interface VariateRangeTimeValue {
+  type?: string
+  count?: number | null
+  unit?: string
+  fromNow?: boolean
+}
+
+interface MethodItem {
+  name: string
+  key: string
+  component?: React.ComponentType
+  type?: string
+  useCustomCom?: boolean
+}
+
+interface EnumInputProps {
+  value?: string | { $in?: string[]; in?: string[] }
+  onChange?: (value: string | string[]) => void
+  schema?: FilterFieldSchema
+  mode?: string
+}
+
+interface PropItem {
+  key?: string
+  id?: string
+  type?: string
+  selectType?: string
+  format?: string
+  timeFormat?: string
+  controlType?: string
+  related?: string
+  relateTo?: string
+  relate?: string
+  enum?: unknown[]
+  enum1?: unknown[]
+  field?: { component?: string }
+  component?: string
+  filterMethodFn?: (methods: MethodItem[]) => MethodItem[]
+  [key: string]: unknown
+}
+
+interface FilterSchema {
+  properties?: Record<string, unknown>
+  formSchema?: PropItem[]
+}
+
+// --- Components ---
 
 const NullInput = () => null
 
 // 文本输入组件（支持多标签）
-const TextInput = ({ value, onChange, placeholder }: { value?: any; onChange?: (value: any) => void; placeholder?: string }) => {
+const TextInput = ({ value, onChange, placeholder }: { value?: string | string[]; onChange?: (value: string[]) => void; placeholder?: string }) => {
   const initialValue = Array.isArray(value) ? value : (value ? [value] : [])
   const [inputValue, setInputValue] = useState('')
   const [tags, setTags] = useState<string[]>(initialValue)
@@ -124,7 +193,7 @@ const TextInput = ({ value, onChange, placeholder }: { value?: any; onChange?: (
 }
 
 // 数字输入组件
-const NumberInput = ({ value, onChange }: { value?: any; onChange?: (value: any) => void }) => {
+const NumberInput = ({ value, onChange }: { value?: number; onChange?: (value: number | null) => void }) => {
   return (
     <Input
       type="number"
@@ -136,7 +205,7 @@ const NumberInput = ({ value, onChange }: { value?: any; onChange?: (value: any)
 }
 
 // 布尔输入组件
-const BooleanInput = ({ value, onChange }: { value?: any; onChange?: (value: any) => void }) => {
+const BooleanInput = ({ value, onChange }: { value?: boolean; onChange?: (value: boolean) => void }) => {
   return (
     <RadioGroup
       value={value?.toString()}
@@ -156,26 +225,23 @@ const BooleanInput = ({ value, onChange }: { value?: any; onChange?: (value: any
 }
 
 // 枚举输入组件
-const EnumInput = ({ value, onChange, schema, mode }: {
-  value?: any
-  onChange?: (value: any) => void
-  schema?: any
-  mode?: string
-}) => {
-  const currentValue = value?.['$in'] || value?.in || value
+const EnumInput = ({ value, onChange, schema, mode }: EnumInputProps) => {
+  const currentValue = typeof value === 'object' && value !== null
+    ? (value.$in || value.in)
+    : value
 
   const enum_title = schema?.enum_title || schema?.enum_title1 || []
   const enums = schema?.enum || schema?.enum1 || []
   return (
     <Select
-      value={mode == 'multiple' ? (currentValue?.[0] || '') : (currentValue || '')}
+      value={mode == 'multiple' ? (currentValue?.[0] || '') : ((currentValue as string) || '')}
       onValueChange={(v) => onChange?.(mode == 'multiple' ? [v] : v)}
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="请选择" />
       </SelectTrigger>
       <SelectContent>
-        {enums?.map((item: any, index: number) => {
+        {enums?.map((item, index) => {
           return (
             <SelectItem key={item} value={item}>
               {enum_title[index] || item}
@@ -188,7 +254,7 @@ const EnumInput = ({ value, onChange, schema, mode }: {
 }
 
 // 范围输入组件
-const RangeInput = ({ value, onChange }: { value?: any; onChange?: (value: any) => void }) => {
+const RangeInput = ({ value, onChange }: { value?: RangeInputValue; onChange?: (value: RangeInputValue) => void }) => {
   const handleChange = (val: string, type: 'gte' | 'lte') => {
     onChange?.({ ...value, [type]: val })
   }
@@ -216,9 +282,9 @@ const RangeInput = ({ value, onChange }: { value?: any; onChange?: (value: any) 
 
 // 变化范围时间输入组件
 const VariateRangeTimeInput = ({ value, onChange, schema }: {
-  value?: any
-  onChange?: (value: any, expression?: string | null) => void
-  schema?: any
+  value?: VariateRangeTimeValue
+  onChange?: (value: VariateRangeTimeValue, expression?: string | null) => void
+  schema?: FilterFieldSchema
 }) => {
   const fmt = schema?.format || schema?.formatType
   const timeFormat = schema?.timeFormat || (fmt == 'time' ? 'HH:mm:ss' : fmt == 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss')
@@ -249,11 +315,11 @@ const VariateRangeTimeInput = ({ value, onChange, schema }: {
     return arr.indexOf(item.value) > -1
   })
 
-  const handleChange = (v: any) => {
+  const handleChange = (v: Partial<VariateRangeTimeValue>) => {
     const timeRange = { ...value, ...v }
     const start = timeRange.fromNow ? 'now' : 'nowzero'
     const mid = timeRange.type == 'forward' ? ' - ' : timeRange.type == 'backward' ? ' + ' : ''
-    const end = timeRange.unit && !_.isNil(timeRange.count) ? timeRange.count + timeRange.unit : ''
+    const end = timeRange.unit && !isNil(timeRange.count) ? timeRange.count + timeRange.unit : ''
     const newTime = timeRange.unit
       ? (timeRange.type == 'now' ? 'now ' + timeRange.unit : (end && mid ? start + mid + end : null))
       : null
@@ -315,21 +381,22 @@ const VariateRangeTimeInput = ({ value, onChange, schema }: {
 
 // 时间输入组件
 const TimeInput = ({ value, onChange, schema }: {
-  value?: any
-  onChange?: (value: any) => void
-  schema?: any
+  value?: string
+  onChange?: (value: string | null) => void
+  schema?: FilterFieldSchema
 }) => {
   const fmt = schema?.format || schema?.formatType
   const timeFormat = schema?.timeFormat || (fmt == 'time' ? 'HH:mm:ss' : fmt == 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss')
 
   const handleChange = (val: Date | undefined) => {
-    onChange?.(val ? format(val, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd')) : val)
+    onChange?.(val ? format(val, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd')) : null)
   }
 
   if (fmt == 'time' || schema?.timeFormat) {
+    const _value = value ? new Date(`${dayjs().format('YYYY-MM-DD')} ${value}`) : new Date()
     return (
       <TimePicker
-        value={value || undefined}
+        value={_value}
         onChange={handleChange}
       />
     )
@@ -371,7 +438,7 @@ const TimeInput = ({ value, onChange, schema }: {
     setTempDate(newDate)
   }
 
-  const handleConfirm = () => {    
+  const handleConfirm = () => {
     if (tempDate) {
       const formatted = format(tempDate, timeFormat.replace('YYYY', 'yyyy').replace('DD', 'dd'))
       onChange?.(formatted)
@@ -449,8 +516,37 @@ const TimeInput = ({ value, onChange, schema }: {
   )
 }
 
+const RangeTime = (props: {
+  value?: any
+  onChange?: (value: any | null) => void
+  schema?: FilterFieldSchema
+}) => {
+  const { value, onChange, schema } = props
+  console.log(1233, props.value);
+  
+  if (schema?.timeFormat) {
+    const startValue = value?.gte    
+    const endValue = value?.lte
+
+    const onTimeChange = (val: string | null, type: 'gte' | 'lte') => {
+      const newValue = { ...value, [type]: val }
+      onChange?.(newValue)
+    }
+
+    return <div className="flex items-center gap-2">
+      <TimeInput schema={schema} value={startValue} onChange={(val) => onTimeChange(val, 'gte')} />
+      <span className="text-muted-foreground">到</span>
+      <TimeInput schema={schema} value={endValue} onChange={(val) => onTimeChange(val, 'lte')} />
+    </div>
+  }
+  if (schema?.format == 'date') {
+    return <FilterDate {...props} />
+  }
+  return <FilterDatetime {...props} />
+}
+
 // 导出方法和组件
-const METHODS = {
+const METHODS: Record<string, MethodItem[]> = {
   'string': [
     { name: '等于', key: 'eq', component: TextInput },
     { name: '不等于', key: 'ne', component: TextInput },
@@ -487,8 +583,8 @@ const METHODS = {
     { name: '晚于', key: 'gt', component: TimeInput },
     { name: '早于等于', key: 'lte', component: TimeInput },
     { name: '晚于等于', key: 'gte', component: TimeInput },
-    { name: '在范围内', key: 'range', component: FilterDatetime },
-    { name: '不在范围内', key: 'notRange', component: FilterDatetime },
+    { name: '在范围内', key: 'range', component: RangeTime },
+    { name: '不在范围内', key: 'notRange', component: RangeTime },
     { name: '为空', key: 'isNull', component: NullInput },
     { name: '不为空', key: 'notNull', component: NullInput },
   ],
@@ -507,8 +603,8 @@ const METHODS = {
   'enum': [
     { name: '等于', key: 'eq', component: EnumInput },
     { name: '不等于', key: 'ne', component: EnumInput },
-    { name: '包含其中一个', key: 'in', type: 'multipleSelect', component: (props: any) => <EnumInput {...props} mode='multiple' /> },
-    { name: '不包含任何一个', key: 'nin', type: 'multipleSelect', component: (props: any) => <EnumInput {...props} mode='multiple' /> },
+    { name: '包含其中一个', key: 'in', type: 'multipleSelect', component: (props: EnumInputProps) => <EnumInput {...props} mode='multiple' /> },
+    { name: '不包含任何一个', key: 'nin', type: 'multipleSelect', component: (props: EnumInputProps) => <EnumInput {...props} mode='multiple' /> },
     { name: '为空', key: 'isNull', component: NullInput },
     { name: '不为空', key: 'notNull', component: NullInput },
   ],
@@ -545,46 +641,44 @@ const METHODS = {
   ]
 }
 
-const getMethods = (schema: any, fieldKey: string) => {
-  const filters = schema.filters ? _.map(schema.filters, (val: any) => val)?.reduce((a: any, b: any) => a.concat(b)) : []
-  const filterSchema = filters.find((v: any) => v.key == fieldKey && v.component)
+const getMethods = (schema: FilterSchema, fieldKey: string): MethodItem[] => {
   const f = fieldKey.replace('.', '.properties.')
-  const fieldSchema = _.omit(_.get(schema.properties, f), 'filterByRes') || {}
-  const properties = convertProps(schema.properties)
-  const ops = properties.filter((item: any) => item.key != 'model' && item.key != 'dashboard')
-  const prop = _.find(ops, (v: any) => (v.key || v.id) == fieldKey)
-  let methods: Array<Object>
+  const fieldSchema = (omit(get(schema.properties, f) as object, 'filterByRes') || {}) as PropItem
+  const properties: PropItem[] = convertProps(schema.properties)
+  const ops = properties.filter((item) => item.key != 'model' && item.key != 'dashboard')
+  const field = schema.formSchema?.find((f) => f.key == fieldKey)
+  const _prop = find(ops, (v) => (v.key || v.id) == fieldKey) as PropItem | undefined
+  const prop: PropItem = { ...(_prop || {}), ...(field || {}) }
+  let methods: MethodItem[]
   if (prop) {
     if ((prop.enum || prop.enum1) && prop.type == 'string') { // 区域 和单选选择器
       methods = METHODS['enum']
-    } else if (prop.type == 'array' && (fieldSchema.fieldType || fieldSchema.component || fieldSchema.field?.component || fieldSchema.relateTo || fieldSchema.relate)) {
+    } else if (prop.type == 'array' && (fieldSchema.controlType || fieldSchema.component || fieldSchema.field?.component || fieldSchema.relateTo || fieldSchema.relate)) {
       methods = METHODS['relateArray']
-    } else if (prop.selectType == 'multiple' || ['attachments', 'attachment', 'map', 'parentnode'].indexOf(fieldSchema.fieldType) > -1) { // 定位、附件、附件组等特殊类型
+    } else if (prop.selectType == 'multiple' || ['upload', 'upload-group', 'map', 'parentnode'].indexOf(fieldSchema.controlType || '') > -1) { // 定位、附件、附件组等特殊类型
       methods = METHODS['other']
-    } else if ((prop.type == 'object' && fieldSchema.fieldType) || fieldSchema.relateTo) {
+    } else if ((prop.type == 'object' && fieldSchema.controlType) || fieldSchema.relateTo) {
       methods = METHODS['relateTo']
-    } else if (prop.type == 'object' && (fieldSchema.fieldType || fieldSchema.component || fieldSchema.relateTo || fieldSchema.relate)) {
+    } else if (prop.type == 'object' && (fieldSchema.controlType || fieldSchema.component || fieldSchema.relateTo || fieldSchema.relate)) {
       methods = METHODS['relateTo']
-    } else if (filterSchema) {
-      methods = METHODS['relate']
-    } else if (fieldSchema.fieldType === 'area') { // 区域 和单选选择器
+    } else if (fieldSchema.controlType === 'area') { // 区域 和单选选择器
       methods = METHODS['area']
-    } else if (fieldSchema.fieldType === 'textEditor') { // 富文本
-      methods = METHODS['string'].filter((m: any) => ['contains', 'notContains', 'isNull', 'notNull'].indexOf(m.key) > -1)
+    } else if (fieldSchema.controlType === 'rich-text') { // 富文本
+      methods = METHODS['string'].filter((m) => ['contains', 'notContains', 'isNull', 'notNull'].indexOf(m.key) > -1)
     } else {
       const format = ['date', 'datetime', 'date-time', 'time']
-      if (format.includes(prop.format) || prop.timeFormat || prop.fieldType == 'datePicker' || prop.fieldType == 'timePicker') {
+      if (format.includes(prop.format || '') || prop.timeFormat || prop.controlType == 'date' || prop.controlType == 'time') {
         methods = METHODS['date']
       } else {
-        methods = METHODS[prop.type as keyof typeof METHODS] || METHODS['other']
+        methods = METHODS[prop.type as string] || METHODS['other']
       }
     }
     if (prop.related == 'department') {
-      methods = methods?.filter((m: any) => m.key !== 'isNull' && m.key !== 'notNull')
+      methods = methods?.filter((m) => m.key !== 'isNull' && m.key !== 'notNull')
     }
     if (fieldSchema.filterMethodFn) {
       const filterMethods = fieldSchema.filterMethodFn(methods)
-      return filterMethods.map((m: any) => !methods.some((m1: any) => m1.key == m.key) && m.component ? { ...m, useCustomCom: true } : m)
+      return filterMethods.map((m) => !methods.some((m1) => m1.key == m.key) && m.component ? { ...m, useCustomCom: true } : m)
     }
     return methods
   } else {
@@ -599,3 +693,5 @@ export {
   VariateRangeTimeInput,
   getMethods
 }
+
+export type { MethodItem }

@@ -10,7 +10,6 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group'
 import { CalendarIcon, XIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { TimePicker } from '@/registry/ui/time-picker'
 
 interface FilterDatetimeProps {
@@ -20,7 +19,6 @@ interface FilterDatetimeProps {
 }
 
 const FilterDatetime: React.FC<FilterDatetimeProps> = ({ value, onChange, datetimeFormat }) => {
-  const format = datetimeFormat || 'YYYY-MM-DD HH:mm:ss'
 
   const startValueStr = value?.gte
   const endValueStr = value?.lte

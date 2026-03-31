@@ -301,7 +301,7 @@ export function TimePicker({
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal={modal}>
+    <Popover open={open} onOpenChange={open => !disabled && setOpen(open)} modal={modal}>
       <PopoverTrigger>
         <div
           role="combobox"

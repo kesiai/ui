@@ -1,6 +1,6 @@
 import React from 'react'
 import { AsyncSelect } from '@/registry/components/form-relate-async-select/form-relate-async-select'
-import _ from 'lodash'
+import isArray from 'lodash/isArray'
 
 interface FilterRelateSelectProps {
   value?: any
@@ -8,14 +8,11 @@ interface FilterRelateSelectProps {
   name?: string
   label?: string
   displayField?: string
-  originSchema?: {
-    selectType?: string
-  }
 }
 
 const FilterRelateSelect: React.FC<FilterRelateSelectProps> = props => {
-  const { value, onChange, name, label, originSchema, ...restProps } = props
-  const multi = originSchema?.selectType === 'multiple'
+  const { value, onChange, name, label, ...restProps } = props
+  const multi = restProps.schema?.type === 'array'
   let defaultValue
   if (multi) {
     defaultValue = value?.or?.map((v: any) => ({ key: v?.[name]?.$regex })) || []
@@ -29,7 +26,7 @@ const FilterRelateSelect: React.FC<FilterRelateSelectProps> = props => {
         <AsyncSelect mode="multiple"
           value={defaultValue}
           onChange={(options) => {
-            const ids = _.isArray(options) ? options.map((opt: any) => opt?.item?.id || opt?.key) : []
+            const ids = isArray(options) ? options.map((opt: any) => opt?.item?.id || opt?.key) : []
             if (multi) {
               onChange({
                 or: ids.map((id: string) => {

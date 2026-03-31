@@ -22,7 +22,7 @@ const useTextFilter = (props: any) => {
 
   const onChange = ({ value, like }: { value: any; like: boolean }) => {
     if (like) {
-      props.onChange({ like: value })
+      props.onChange(value !== undefined ? { like: value } : value)
     } else {
       props.onChange(value)
     }
@@ -83,7 +83,7 @@ const TextFilter = (props: any) => {
     <div className="relative">
       <Input
         value={value}
-        onChange={(e) => onValueChange(e.target.value)}
+        onChange={(e) => onValueChange(e.target.value || undefined)}
         onKeyDown={onKeyPress}
         placeholder={label}
         className="pr-8"

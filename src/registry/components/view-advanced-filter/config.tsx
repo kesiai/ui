@@ -75,7 +75,7 @@ const renderViewAdvancedFilterPreview = (props: Record<string, any>) => {
             <div className="border-t border-slate-200 pt-6">
               <p className="text-sm text-slate-600 mb-4">组件预览：</p>
               <div className="bg-slate-50 rounded-lg p-6">
-                <ViewModel tableId={props.tableId} modelName={props.modelName}>
+                <ViewModel tableId={props.tableId} modelName={props.modelName} isSchemaTransform={true}>
                   <ViewAdvancedFilter title={props.title} />
                 </ViewModel>
               </div>

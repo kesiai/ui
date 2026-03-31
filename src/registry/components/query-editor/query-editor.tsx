@@ -3,21 +3,114 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
-import { NullInput, TextInput, VariateRangeTimeInput, getMethods } from '@/registry/components/query-editor-methods/query-editor-methods'
+import { NullInput, TextInput, VariateRangeTimeInput, getMethods, type MethodItem } from '@/registry/components/query-editor-methods/query-editor-methods'
 import { convertProps } from '@/registry/lib/query-editor-util'
-import _ from 'lodash'
-// import { useFilterSchema, useFormSchema } from '@airiot/client'
 import { FormField } from '@/registry/components/form-field/form-field'
-import { Form } from '@/registry/components/form/form'
+import { formConverter } from '@/registry/lib/view-form-converter'
+import { filterConverter } from '@/registry/lib/view-filter-converter'
+import { FormProvider, useForm, } from '@airiot/client'
+import isNil from 'lodash/isNil'
+import omit from 'lodash/omit'
+import get from 'lodash/get'
+import set from 'lodash/set'
+import find from 'lodash/find'
+import isEmpty from 'lodash/isEmpty'
+import cloneDeep from 'lodash/cloneDeep'
+
+// --- Type Definitions ---
+
+/** Query condition value */
+interface QueryCondition {
+  field?: string
+  method?: string
+  value?: unknown
+  timeRange?: {
+    rangeType?: string
+    [key: string]: unknown
+  }
+  valid?: boolean
+}
+
+/** Related field definition */
+interface RelateField {
+  key: string
+  title?: string
+  label?: string
+  fieldSchema?: FieldSchema
+}
+
+/** Field schema definition */
+interface FieldSchema {
+  key: string
+  id?: string
+  type?: string
+  controlType?: string
+  format?: string
+  timeFormat?: string
+  formatType?: string
+  enum?: unknown[]
+  enum1?: unknown[]
+  title?: string
+  name?: string
+  relateTo?: string
+  relate?: {
+    fields?: RelateField[]
+  }
+  relateShowFields?: RelateField[]
+  component?: React.ComponentType
+  selectType?: string
+  selectFace?: string
+  config?: string
+  userType?: string
+  fieldType?: string
+  filterByRes?: unknown
+  filterMethodFn?: (methods: MethodItem[]) => MethodItem[]
+  field?: { component?: string }
+  [key: string]: unknown
+}
+
+/** Schema definition */
+interface SchemaDef {
+  properties: Record<string, FieldSchema>
+  formSchema?: FormSchemaItem[]
+  form?: string[] | string
+  name?: string
+}
+
+/** Form schema item */
+interface FormSchemaItem {
+  key: string
+  [key: string]: unknown
+}
+
+/** Property item from convertProps */
+interface PropItem {
+  key: string
+  title?: string
+  id?: string
+  name?: string
+  type?: string
+  controlType?: string
+  config?: string
+  relate?: { fields?: RelateField[] }
+  relateShowFields?: RelateField[]
+  selectType?: string
+  component?: React.ComponentType
+  enum?: unknown[]
+  enum1?: unknown[]
+  [key: string]: unknown
+}
+
+// --- Interfaces ---
 
 interface QueryItemFromProps {
-  value: any
-  schema: any
+  value: QueryCondition
+  schema: SchemaDef
   fieldKey: string
-  onChange: (value: any) => void
+  onChange: (value: QueryCondition) => void
   unbind?: boolean
   timeRangeQuery?: boolean
-  DataWrap?: any
+  DataWrap?: React.ComponentType
   showValidBtn?: boolean
   relation?: string
   ifOnlyOr?: boolean
@@ -28,86 +121,99 @@ interface QueryItemFromProps {
   onlyOneType?: boolean
 }
 
-const FieldCom = ({ fieldKey, ...restProps }: { fieldKey: string, restProps: any }) => {
-  return <Form formId={fieldKey} onSubmit={() => null}>
-    <FormField className="w-full" {...restProps} label={null} name={fieldKey} />
-  </Form>
-}
-
-const getFieldCom = (fSchema: any, method: any, { fields, filterFields, multipleFields }: any) => {
-  let field: any
-  if (!fSchema.fieldType && !fSchema.relateTo && !fSchema.relate && !fSchema.enum && !fSchema.enum1) return
+const getFieldCom = (fSchema: FieldSchema, method: MethodItem | undefined) => {
+  let FieldController: React.ComponentType
+  const fieldSchame = { key: fSchema.key }
+  if (!fSchema.controlType && !fSchema.relateTo && !fSchema.relate && !fSchema.enum && !fSchema.enum1) return
   if (method?.type == 'multipleSelect') {
     if (fSchema.type == 'array') {
-      field = fields?.[0]
+      FieldController = formConverter(fSchema, fieldSchame)
     } else {
-      field = multipleFields?.[0]
+      const schema = { type: 'object', properties: { [fSchema.key]: { ...fSchema, name: fSchema.key } } }
+      const multipleSchema = { items: schema, ...fSchema, selectType: 'multiple', type: 'array' }
+      FieldController = formConverter(multipleSchema, fieldSchame)
     }
-    field = field.type == 'array' ? filterFields?.[0] : field
-  } else if (fSchema.type == 'object' && ['eq', 'ne'].indexOf(method?.key) > -1 && (fSchema.relateTo || fSchema.relate)) {
-    field = fields?.[0]
+    FieldController = fSchema?.type == 'array' ? filterConverter(fSchema, fieldSchame) : formConverter(fSchema, fieldSchame)
+  } else if (fSchema.type == 'object' && ['eq', 'ne'].indexOf(method?.key || '') > -1 && (fSchema.relateTo || fSchema.relate)) {
+    FieldController = formConverter(fSchema, fieldSchame)
   } else {
-    field = filterFields?.[0]
+    FieldController = fSchema?.type == 'array' ? filterConverter(fSchema, fieldSchame) : formConverter(fSchema, fieldSchame)
   }
-  return field?.type ? (props: any) => <FieldCom {...props} {...field} /> : null
+  return (props: Record<string, unknown>) => {
+    const methods = useForm({
+      resolver: null
+    } as unknown as Parameters<typeof useForm>[0])
+    return (
+      <FormProvider {...methods}>
+        <form id={fSchema.key}>
+          <FormField name={fSchema.key} schema={fSchema}>
+            <FieldController {...props} />
+          </FormField>
+        </form>
+      </FormProvider>
+    )
+  }
 }
 
-const getConvertCom = (fieldSchema: any, method: any, { fields, filterFields, multipleFields }: any) => {
+const getConvertCom = (fieldSchema: FieldSchema, method: MethodItem | undefined): React.ComponentType | undefined => {
   if (!method) return NullInput
-  const FieldTypeCom = getFieldCom(fieldSchema, method, { fields, filterFields, multipleFields })
+  const FieldTypeCom = getFieldCom(fieldSchema, method)
   if (fieldSchema?.selectFace) fieldSchema.selectFace = 'select'
   if (method?.useCustomCom || method?.key == 'isNull' || method?.key == 'notNull') {
     return method.component
   }
+  if (fieldSchema?.controlType == 'select-number') {
+    return (method?.key == 'range' || method?.key == 'notRange') ? method.component : FieldTypeCom
+  }
   if (method?.key == 'eq' || method?.key == 'ne') {
     if (fieldSchema.component) {
       return fieldSchema.component
-    } else if (fieldSchema?.type === 'string' && fieldSchema.fieldType == 'input') {
+    } else if (fieldSchema?.format || fieldSchema?.timeFormat || fieldSchema?.controlType === 'text' || fieldSchema?.type === 'boolean') {
       return method.component
-    } else if (!fieldSchema?.format && fieldSchema?.type !== 'number') {
-      return FieldTypeCom || method.component
     }
-    return method.component
+    return FieldTypeCom || method.component
   }
   if (method?.type == 'multipleSelect' && ['in', 'nin'].indexOf(method?.key) > -1) {
     if (fieldSchema.enum) return method.component
     return FieldTypeCom || fieldSchema.component || method?.component || TextInput
   }
-  if (fieldSchema.fieldType && (fieldSchema.enum || fieldSchema.enum1) || fieldSchema.relateTo || fieldSchema.fieldType === 'area') {
+  if (fieldSchema.controlType && (fieldSchema.enum || fieldSchema.enum1) || fieldSchema.relateTo || fieldSchema.controlType === 'area') {
     return fieldSchema.component || FieldTypeCom || TextInput
   }
   if (method?.type == 'multipleSelect' && fieldSchema.type == 'array') {
-    return fieldSchema.component || method?.component || FieldTypeCom || fieldSchema.field?.component || TextInput
+    return fieldSchema.component || method?.component || FieldTypeCom || (fieldSchema.field?.component as unknown as React.ComponentType) || TextInput
   }
   return fieldSchema.component || method?.component || FieldTypeCom || TextInput
 }
 
-const ValueComponent = ({ method, fieldSchema, fieldKey, ...restProps }: any) => {
-  const schema = { type: 'object', properties: { [fieldKey]: { ...fieldSchema, name: fieldKey } } }
-  // const params = { schema, formSchema: [{ name: fieldKey }] }
-  const multipleSchema = { items: schema, ...fieldSchema, selectType: 'multiple', type: 'array' }
-  const multipleParams = { schema: multipleSchema, formSchema: [{ name: fieldKey }] }
-  const fields = schema.formSchema
-  const filterFields = schema.filterSchema
-  const multipleFields = multipleParams.formSchema
+const ValueComponent = ({ method, fieldSchema, fieldKey, ...restProps }: {
+  method?: MethodItem
+  fieldSchema: FieldSchema
+  fieldKey: string
+  value?: unknown
+  onChange?: (v: unknown) => void
+  label?: string
+  schema?: FieldSchema
+}) => {
 
-  const Com = () => getConvertCom(fieldSchema, method, { fields, filterFields, multipleFields }) || TextInput
-  const [FieldComponent, setFieldComponent] = useState<any>(Com)
+  const Com = () => getConvertCom(fieldSchema, method) || TextInput
+  const [FieldComponent, setFieldComponent] = useState<React.ComponentType>(Com)
   React.useEffect(() => {
     setFieldComponent(Com)
   }, [fieldKey, method])
 
-  return <FieldComponent fieldKey={fieldKey} {...restProps} />
+  const Comp = FieldComponent || NullInput
+  return <Comp fieldKey={fieldKey} schema={fieldSchema} {...restProps} />
 }
 
 const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, showValidBtn }: QueryItemFromProps) => {
-  const [methods, setMethods] = useState<any[]>()
+  const [methods, setMethods] = useState<MethodItem[]>()
   const [isTime, setIsTime] = useState<boolean>()
   const [containerWidth, setContainerWidth] = useState(0)
   const containerRef = React.useRef<HTMLDivElement>(null)
   const [rangeType, setRangeTypeState] = useState(value?.timeRange?.rangeType)
 
-  const selectMethod = value?.method
+  const selectMethod = value?.method ?? undefined
   const isRange = ['range', 'notRange'].indexOf(selectMethod as string) > -1
 
   const setRangeType = (v: string) => {
@@ -170,9 +276,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
 
   // 检查是否为关联字段的子字段（格式为 "parentField.childField"）
   const isNestedField = fieldKey.includes('.')
-  let fieldSchema: any = {}
-  const filters = schema.filters ? _.map(schema.filters, (val: any) => val)?.reduce((a: any, b: any) => a.concat(b)) : []
-  const filterSchema = filters.find((v: any) => v.key == fieldKey && v.component)
+  let fieldSchema: FieldSchema = { key: fieldKey }
 
   if (isNestedField) {
     // 解析父字段和子字段
@@ -180,26 +284,26 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
     const parentSchema = schema.properties[parentKey]
 
     // 从父字段的 relate.fields 和 relateShowFields 中查找子字段
-    let childField: any = null
+    let childField: RelateField | null = null
 
     // 先从 relate.fields 中查找
     if (parentSchema?.relate?.fields) {
-      childField = parentSchema.relate.fields.find((field: any) => field.key === childKey)
+      childField = parentSchema.relate.fields.find((field: RelateField) => field.key === childKey) || null
     }
 
     // 如果在 relate.fields 中没找到，则从 relateShowFields 中查找
     if (!childField && parentSchema?.relateShowFields) {
-      childField = parentSchema.relateShowFields.find((field: any) => field.key === childKey)
+      childField = parentSchema.relateShowFields.find((field: RelateField) => field.key === childKey) || null
     }
 
     // 如果找到了子字段，使用其 fieldSchema
     if (childField) {
-      fieldSchema = childField.fieldSchema || {}
+      fieldSchema = childField.fieldSchema || { key: childKey }
     }
   } else {
     // 对于非嵌套字段，使用原来的逻辑
     const f = fieldKey.replace('.', '.properties.')
-    fieldSchema = _.omit(_.get(schema.properties, f), 'filterByRes') || {}
+    fieldSchema = (omit(get(schema.properties, f), 'filterByRes') || { key: fieldKey }) as FieldSchema
   }
 
   const defaultType = isRange ? 'fixed' : null
@@ -220,47 +324,49 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
         setMethods(ms)
 
         // 检查是否为时间字段
-        if (['date', 'datetime', 'date-time'].includes(fieldSchema?.format) || fieldSchema?.fieldType === 'datePicker') {
+        if (['date', 'datetime', 'date-time'].includes(fieldSchema?.format || '') || fieldSchema?.controlType === 'date') {
           setIsTime(true)
         }
       } else {
         // 如果不是标准的关联字段格式，回退到原始实现
         const ms = getMethods(schema, fieldKey)
         setMethods(ms)
-        if (['date', 'datetime', 'date-time'].includes(schema.properties[fieldKey]?.format) || schema.properties[fieldKey]?.fieldType == 'datePicker') setIsTime(true)
+        if (['date', 'datetime', 'date-time'].includes(schema.properties[fieldKey]?.format || '') || schema.properties[fieldKey]?.controlType == 'date') setIsTime(true)
       }
     } else {
       // 非嵌套字段使用原始逻辑
       const ms = getMethods(schema, fieldKey)
       setMethods(ms)
-      if (['date', 'datetime', 'date-time'].includes(schema.properties[fieldKey]?.format) || schema.properties[fieldKey]?.fieldType == 'datePicker') setIsTime(true)
+      if (['date', 'datetime', 'date-time'].includes(schema.properties[fieldKey]?.format || '') || schema.properties[fieldKey]?.controlType == 'date') setIsTime(true)
     }
   }, [schema, fieldKey])
 
   const onMethodChange = (key: string) => {
-    onChange({ ..._.omit(value, 'timeRange'), method: key, value: null })
+    onChange({ ...omit(value, 'timeRange'), method: key, value: null })
   }
 
-  const onValueChange = (v: any) => {
-    onChange({ ...value, value: v?.target ? v.target.value : v })
+  const onValueChange = (v: unknown) => {
+    onChange({ ...value, value: (v as { target?: { value?: unknown } })?.target ? (v as { target: { value: unknown } }).target.value : v })
   }
 
-  const onTimeRangeChange = (timeRange: any, v: any) => {
-    onChange({ ...value, timeRange, value: v })
+  const onTimeRangeChange = (timeRange: unknown, v: unknown) => {
+    onChange({ ...value, timeRange: timeRange as QueryCondition['timeRange'], value: v })
   }
 
   const onValidChange = (v: boolean) => {
     onChange({ ...value, valid: v })
   }
 
-  const method = _.find(methods, m => m.key == selectMethod) || (methods && methods[0])
+  const method = find(methods, m => m.key == selectMethod) || (methods && methods[0])
   const type = schema?.properties?.[fieldKey]?.type
 
   // 根据容器宽度决定布局方式
   const isNarrowLayout = containerWidth > 0 && containerWidth < 300
+  const field = schema.formSchema?.find((s: FormSchemaItem) => s.key == fieldKey)
+  const megerSchema = { ...fieldSchema, ...field } as FieldSchema
 
   return (
-    _.isEmpty(methods) ? null :
+    isEmpty(methods) ? null :
       <div ref={containerRef} className={isNarrowLayout ? 'mb-4' : ''}>
         {isNarrowLayout ? (
           // 窄屏布局：三行显示
@@ -286,7 +392,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
                 <div className="mb-2 w-full">
                   {
                     ['range', 'notRange', 'gt', 'lt'].indexOf(selectMethod as string) > -1 && timeRangeQuery && isTime ?
-                      <Select value={rangeType || defaultType} onValueChange={setRangeType}>
+                      <Select value={rangeType || defaultType || ''} onValueChange={setRangeType}>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="请选择" />
                         </SelectTrigger>
@@ -295,7 +401,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
                         </SelectContent>
                       </Select> :
                       <div className="w-full">
-                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={{ ...filterSchema, ...fieldSchema }} label={fieldSchema.title} />
+                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} label={fieldSchema.title} />
                       </div>
                   }
                 </div>
@@ -303,7 +409,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
                 {showValidBtn ?
                   <div className="mb-2">
                     <Switch
-                      checked={_.isNil(value?.valid) || value?.valid}
+                      checked={isNil(value?.valid) || value?.valid}
                       onCheckedChange={onValidChange}
                     />
                   </div>
@@ -338,7 +444,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
                   `}>
                     {
                       ['range', 'notRange', 'gt', 'lt'].indexOf(selectMethod as string) > -1 && timeRangeQuery && isTime ?
-                        <Select value={rangeType || defaultType} onValueChange={setRangeType}>
+                        <Select value={rangeType || defaultType || ''} onValueChange={setRangeType}>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="请选择" />
                           </SelectTrigger>
@@ -346,13 +452,13 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
                             {ops.map(op => <SelectItem key={op.value} value={op.value}>{op.label}</SelectItem>)}
                           </SelectContent>
                         </Select> :
-                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={{ ...filterSchema, ...fieldSchema }} />
+                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} />
                     }
                   </div>
                   {showValidBtn ?
                     <div className="shrink-0 min-w-15">
                       <Switch
-                        checked={_.isNil(value?.valid) || value?.valid}
+                        checked={isNil(value?.valid) || value?.valid}
                         onCheckedChange={onValidChange}
                       />
                     </div>
@@ -368,22 +474,22 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
           (rangeType == 'dynamic' ? <VariateRangeTimeInput {...fieldSchema} value={value?.timeRange} onChange={onTimeRangeChange} label={fieldSchema.title}></VariateRangeTimeInput> :
             rangeType == 'fixed' || defaultType == 'fixed' ?
               <div className="mb-2">
-                <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={{ ...filterSchema, ...fieldSchema }} />
+                <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} />
               </div> : null)
         }
       </div>
   )
 }
 
-const getType = (item: any) => {
+const getType = (item: Record<string, unknown>): string => {
   // 工作表显示字段类型，不显示数据类型
-  if (item.config) return item.config
-  const typeList: any = { string: '字符串', number: '数字', integer: '整数', boolean: '布尔', object: '对象', array: '数组' }
-  return typeList[item.type] || '字符串'
+  if (item.config) return item.config as string
+  const typeList: Record<string, string> = { string: '字符串', number: '数字', integer: '整数', boolean: '布尔', object: '对象', array: '数组' }
+  return typeList[item.type as string] || '字符串'
 }
 
 interface QueryFieldSelectProps {
-  schema: any
+  schema: SchemaDef
   value: string
   onChange: (value: string) => void
   placeholder?: string
@@ -391,7 +497,7 @@ interface QueryFieldSelectProps {
 
 const QueryFieldSelect = ({ schema, value, onChange, placeholder }: QueryFieldSelectProps) => {
   const properties = schema?.properties ? convertProps(schema.properties, schema.form) : []
-  const ops = properties.filter((item: any) => item.key != 'model' && item.key != 'dashboard' && item.fieldType !== 'editableTable')
+  const ops = (properties as PropItem[]).filter((item) => item.key != 'model' && item.key != 'dashboard' && item.controlType !== 'editable-table')
 
   // Handle field selection, supporting nested selections
   const handleFieldChange = (selectedValue: string) => {
@@ -407,8 +513,8 @@ const QueryFieldSelect = ({ schema, value, onChange, placeholder }: QueryFieldSe
         <SelectValue placeholder={placeholder || "选择过滤字段"} />
       </SelectTrigger>
       <SelectContent>
-        {ops.map((item: any) => {
-          const key = item.key || item.id
+        {ops.map((item: PropItem) => {
+          const key = item.key || item.id || ''
           const title = item.title || item.name
 
           // Check if this is a relate field
@@ -421,22 +527,22 @@ const QueryFieldSelect = ({ schema, value, onChange, placeholder }: QueryFieldSe
                 </SelectItem>
 
                 {/* Add options from relate.fields with indentation */}
-                {(item.relate?.fields || []).map((relateField: any) => {
+                {(item.relate?.fields || []).map((relateField: RelateField) => {
                   const relateKey = `${key}.${relateField.key}`
                   return (
                     <SelectItem key={relateKey} value={relateKey}>
                       <span className="pl-5">
-                        <span className="text-muted-foreground">[{getType(relateField.fieldSchema)}]</span> {relateField.title}
+                        <span className="text-muted-foreground">[{getType(relateField.fieldSchema || {})}]</span> {relateField.title}
                       </span>
                     </SelectItem>
                   )
                 })}
 
                 {/* Add options from relateShowFields with indentation */}
-                {(item.relateShowFields || []).map((relateField: any) => {
+                {(item.relateShowFields || []).map((relateField: RelateField) => {
                   const relateKey = `${key}.${relateField.key}`
                   // Check if this field is already included in relate.fields
-                  const isDuplicate = item.relate?.fields?.some((f: any) => f.key === relateField.key)
+                  const isDuplicate = item.relate?.fields?.some((f: RelateField) => f.key === relateField.key)
                   // 处理relateField.fieldSchema为空时显示错误问题
                   if (!isDuplicate && relateField?.fieldSchema) {
                     return (
@@ -467,15 +573,15 @@ const QueryFieldSelect = ({ schema, value, onChange, placeholder }: QueryFieldSe
 }
 
 interface QueryItemProps {
-  value: any
-  schema: any
-  onChange: (value: any) => void
+  value: QueryCondition
+  schema: SchemaDef
+  onChange: (value: QueryCondition) => void
   onDelete: () => void
   selectHide?: boolean
   fieldPlaceholder?: string
   unbind?: boolean
   timeRangeQuery?: boolean
-  DataWrap?: any
+  DataWrap?: React.ComponentType
   showValidBtn?: boolean
   relation?: string
   ifOnlyOr?: boolean
@@ -511,9 +617,9 @@ const QueryItem = (props: QueryItemProps) => {
 }
 
 interface QueryFormProps {
-  query: any[]
-  schema: any
-  onChange: (query: any[]) => void
+  query: QueryCondition[]
+  schema: SchemaDef
+  onChange: (query: QueryCondition[]) => void
   relation?: string
   ifOnlyOr?: boolean
   allowAndOp?: boolean
@@ -521,19 +627,19 @@ interface QueryFormProps {
   fieldPlaceholder?: string
   unbind?: boolean
   timeRangeQuery?: boolean
-  DataWrap?: any
+  DataWrap?: React.ComponentType
   showValidBtn?: boolean
 }
 
 const QueryForm = (props: QueryFormProps) => {
   const { query, schema, onChange, relation, ifOnlyOr } = props
 
-  let error: any = {}
+  let error: Record<string, string> = {}
 
-  const onItemChange = (i: number) => (value: any) => {
-    const f = value.field.replace('.', '.properties.')
-    if (_.get(schema.properties, f)?.type == 'boolean') {
-      if (_.isNil(value?.value)) {
+  const onItemChange = (i: number) => (value: QueryCondition) => {
+    const f = (value.field || '').replace('.', '.properties.')
+    if (get(schema.properties, f)?.type == 'boolean') {
+      if (isNil(value?.value)) {
         value['value'] = true
       }
     }
@@ -558,7 +664,7 @@ const QueryForm = (props: QueryFormProps) => {
   // 使用 findLastIndex 的替代方案
   const getErrorIndex = () => {
     for (let i = query.length - 1; i >= 0; i--) {
-      if (query[i]?.field && error[query[i].field]) {
+      if (query[i]?.field && error[query[i].field || '']) {
         return i
       }
     }
@@ -568,12 +674,12 @@ const QueryForm = (props: QueryFormProps) => {
   return (
     <>
       {query.map((item, i) => {
-        const errorIndex = error[item.field] ? getErrorIndex() : -1
+        const errorIndex = error[item.field || ''] ? getErrorIndex() : -1
         const key = item.field ? (item.field + (item.method || '') + i) : i
         return (
           <span key={key}>
             <QueryItem {...props} onChange={onItemChange(i)} onDelete={onItemDelete(i)} value={item} />
-            {errorIndex == i && <div className="text-xs text-destructive">{error[item.field]}</div>}
+            {errorIndex == i && <div className="text-xs text-destructive">{error[item.field || '']}</div>}
             {(!relation || relation == 'and') && !ifOnlyOr ?
               i == query.length - 1 ? (
                 <Button type="button" onClick={onAddQuery}>+ {'且'}</Button>
@@ -588,15 +694,15 @@ const QueryForm = (props: QueryFormProps) => {
 }
 
 interface QueryEditorProps {
-  value?: any[]
-  onChange?: (value: any[]) => void
+  value?: QueryCondition[][]
+  onChange?: (value: QueryCondition[][]) => void
   relation?: string
   unbind?: boolean
   style?: React.CSSProperties
-  DataWrap?: any
+  DataWrap?: React.ComponentType
   btnName?: string
   onlyOneType?: boolean
-  schema?: any
+  schema?: SchemaDef
   selectHide?: boolean
   fieldPlaceholder?: string
   timeRangeQuery?: boolean
@@ -624,8 +730,8 @@ const QueryEditor = (props: QueryEditorProps) => {
   const { value = [], onChange, relation, style, btnName, onlyOneType, schema } = props
   const [queries, setQueries] = useState(value)
 
-  const saveQueries = (qs: any[]) => {
-    const filtered = qs.filter(q => !_.isEmpty(q))
+  const saveQueries = (qs: QueryCondition[][]) => {
+    const filtered = qs.filter(q => !isEmpty(q))
     setQueries(filtered)
     onChange && onChange(filtered)
   }
@@ -640,7 +746,7 @@ const QueryEditor = (props: QueryEditorProps) => {
       ...query,
       { field: '' }
     ]
-    saveQueries([..._.set(queries, i, newQuery)])
+    saveQueries([...set(queries, i, newQuery)])
   }, [queries])
 
   const onAddOrQuery = useCallback(() => {
@@ -650,10 +756,10 @@ const QueryEditor = (props: QueryEditorProps) => {
     ])
   }, [queries])
 
-  const setQuery = (i: number) => (query: any[]) => {
-    const newQuerys = _.cloneDeep(queries)
+  const setQuery = (i: number) => (query: QueryCondition[]) => {
+    const newQuerys = cloneDeep(queries)
     if (newQuerys?.length) newQuerys[i] = query
-    if (_.isEmpty(query)) {
+    if (isEmpty(query)) {
       saveQueries([...queries.slice(0, i), ...queries.slice(i + 1)])
     } else {
       saveQueries(newQuerys)
@@ -662,12 +768,13 @@ const QueryEditor = (props: QueryEditorProps) => {
 
   if (schema?.name == "warning") {
     schema.properties['recoveryTime'] = {
+      key: 'recoveryTime',
       title: '报警恢复时间',
       type: 'string',
       format: "date-time"
     }
   }
-  if (_.isEmpty(queries)) {
+  if (isEmpty(queries)) {
     return <Button type="button" onClick={() => addQuery(0)}>{btnName || '添加过滤条件'}</Button>
   } else {
     const ifOnlyAnd = onlyOneType && queries[0]?.length > 1 // 只使用且，不用或

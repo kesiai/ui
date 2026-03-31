@@ -167,7 +167,7 @@ const renderFormDateCodePreview = (props: Record<string, any>) => {
 
 export const formDateConfig: ComponentConfig = {
   id: 'form-date',
-  name: 'Form.Date 日期选择器',
+  name: '日期',
   propsConfig: formDatePropsConfig,
   defaultProps: formDateDefaultProps,
   renderPreview: renderFormDatePreview,

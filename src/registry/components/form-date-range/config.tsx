@@ -107,7 +107,7 @@ const renderDateRangeCodePreview = (props: Record<string, any>) => {
 
 export const dateRangeConfig: ComponentConfig = {
   id: 'form-date-range',
-  name: 'DateRange 日期范围选择器',
+  name: '日期范围',
   propsConfig: dateRangePropsConfig,
   defaultProps: dateRangeDefaultProps,
   renderPreview: renderDateRangePreview,

@@ -73,7 +73,7 @@ const renderChartEchartsCodePreview = (props: Record<string, any>) => {
 
 export const chartEchartsConfig: ComponentConfig = {
   id: 'chart-echarts',
-  name: 'ChartEcharts echarts图表',
+  name: 'Echarts图表',
   propsConfig: chartEchartsPropsConfig,
   defaultProps: chartEchartsDefaultProps,
   renderPreview: renderChartEchartsPreview,

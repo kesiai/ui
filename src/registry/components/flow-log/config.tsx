@@ -132,7 +132,7 @@ const MyFlowLog = () => {
 
 export const flowLogConfig: ComponentConfig = {
   id: 'flow-log',
-  name: 'FlowLog 流程日志',
+  name: '流程日志',
   category: 'view',
   propsConfig: flowLogPropsConfig,
   defaultProps: flowLogDefaultProps,

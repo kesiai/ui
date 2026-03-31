@@ -228,7 +228,7 @@ const renderFlowLogViewCustomForm = () => {
 
 export const flowLogViewConfig: ComponentConfig = {
   id: 'flow-log-view',
-  name: 'FlowLogView 流程图视图',
+  name: '流程图视图',
   propsConfig: flowLogViewPropsConfig,
   defaultProps: flowLogViewDefaultProps,
   renderPreview: renderFlowLogViewPreview,

@@ -117,7 +117,7 @@ const renderFormMapCodePreview = (props: Record<string, any>) => {
 
 export const formMapConfig: ComponentConfig = {
   id: 'form-map',
-  name: 'Form.Map 地图定位',
+  name: '地图定位',
   propsConfig: formMapPropsConfig,
   defaultProps: formMapDefaultProps,
   renderPreview: renderFormMapPreview,

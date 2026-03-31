@@ -148,7 +148,7 @@ const renderDatasourceApiCodePreview = (props: Record<string, any>) => {
 
 export const apiDataSourceConfig: ComponentConfig = {
   id: 'datasource-api',
-  name: 'DatasourceApi API 数据源组件',
+  name: 'API数据源',
   propsConfig: apiDataSourcePropsConfig,
   defaultProps: apiDataSourceDefaultProps,
   renderPreview: renderDatasourceApiPreview,

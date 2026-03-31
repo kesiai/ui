@@ -91,7 +91,7 @@ const renderFormRichTextCodePreview = (props: Record<string, any>) => {
 
 export const formRichTextConfig: ComponentConfig = {
   id: 'form-rich-text',
-  name: 'Form.RichText 富文本',
+  name: '富文本',
   propsConfig: formRichTextPropsConfig,
   defaultProps: formRichTextDefaultProps,
   renderPreview: renderFormRichTextPreview,

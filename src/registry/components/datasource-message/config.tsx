@@ -132,7 +132,7 @@ const renderDatasourceMessageCodePreview = (props: Record<string, any>) => {
 
 export const messageDataSourceConfig: ComponentConfig = {
   id: 'datasource-message',
-  name: 'DatasourceMessage 消息数据源组件',
+  name: '消息数据源',
   propsConfig: messageDataSourcePropsConfig,
   defaultProps: messageDataSourceDefaultProps,
   renderPreview: renderDatasourceMessagePreview,

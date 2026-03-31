@@ -260,7 +260,7 @@ const MyForm = () => {
 
 export const formFieldConfig: ComponentConfig = {
   id: 'form-field',
-  name: 'FormField 表单字段',
+  name: '表单字段',
   propsConfig: formFieldPropsConfig,
   defaultProps: formFieldDefaultProps,
   renderPreview: renderFormFieldPreview,

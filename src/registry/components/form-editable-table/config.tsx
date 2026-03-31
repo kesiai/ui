@@ -123,7 +123,7 @@ const renderFormEditableTableCodePreview = (props: Record<string, any>) => {
 
 export const formEditableTableConfig: ComponentConfig = {
   id: 'form-editable-table',
-  name: 'Form.EditableTable 可编辑表格',
+  name: '可编辑表格',
   propsConfig: formEditableTablePropsConfig,
   defaultProps: formEditableTableDefaultProps,
   renderPreview: renderFormEditableTablePreview,

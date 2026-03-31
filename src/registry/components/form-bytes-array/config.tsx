@@ -72,7 +72,7 @@ const renderFormBytesArrayCodePreview = (props: Record<string, any>) => {
 
 export const formBytesArrayConfig: ComponentConfig = {
   id: 'form-bytes-array',
-  name: 'Form.BytesArray 字节数组',
+  name: '字节数组',
   propsConfig: formBytesArrayPropsConfig,
   defaultProps: formBytesArrayDefaultProps,
   renderPreview: renderFormBytesArrayPreview,

@@ -66,7 +66,7 @@ const renderFormSwitchCodePreview = (props: Record<string, any>) => {
 
 export const formSwitchConfig: ComponentConfig = {
   id: 'form-switch',
-  name: 'Form.Switch 开关组件',
+  name: '开关',
   propsConfig: formSwitchPropsConfig,
   defaultProps: formSwitchDefaultProps,
   renderPreview: renderFormSwitchPreview,

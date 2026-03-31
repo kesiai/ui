@@ -73,7 +73,7 @@ const renderFormUserRoleCodePreview = (props: Record<string, any>) => {
 
 export const formUserRoleConfig: ComponentConfig = {
   id: 'form-user-role',
-  name: 'Form.UserRole 用户角色',
+  name: '用户角色',
   propsConfig: formUserRolePropsConfig,
   defaultProps: formUserRoleDefaultProps,
   renderPreview: renderFormUserRolePreview,

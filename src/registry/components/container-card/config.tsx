@@ -41,7 +41,7 @@ const renderCardCodePreview = (props: Record<string, any>) => {
 
 export const cardConfig: ComponentConfig = {
   id: 'container-card',
-  name: 'Card 卡片',
+  name: '卡片',
   propsConfig: cardPropsConfig,
   defaultProps: cardDefaultProps,
   renderPreview: renderCardPreview,

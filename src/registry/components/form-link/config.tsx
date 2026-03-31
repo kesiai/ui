@@ -85,7 +85,7 @@ const renderFormLinkCodePreview = (props: Record<string, any>) => {
 
 export const formLinkConfig: ComponentConfig = {
   id: 'form-link',
-  name: 'Form.Link 链接',
+  name: '链接',
   propsConfig: formLinkPropsConfig,
   defaultProps: formLinkDefaultProps,
   renderPreview: renderFormLinkPreview,

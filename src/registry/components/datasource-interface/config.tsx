@@ -101,7 +101,7 @@ const renderDatasourceInterfaceCodePreview = (props: Record<string, any>) => {
 
 export const interfaceDataSourceConfig: ComponentConfig = {
   id: 'datasource-interface',
-  name: 'DatasourceInterface 接口数据源组件',
+  name: '接口数据源',
   propsConfig: interfaceDataSourcePropsConfig,
   defaultProps: interfaceDataSourceDefaultProps,
   renderPreview: renderDatasourceInterfacePreview,

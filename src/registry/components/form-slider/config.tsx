@@ -160,7 +160,7 @@ const renderFormSliderCodePreview = (props: Record<string, any>) => {
 
 export const formSliderConfig: ComponentConfig = {
   id: 'form-slider',
-  name: 'Form.Slider 滑动输入条组件',
+  name: '滑动输入条',
   propsConfig: formSliderPropsConfig,
   defaultProps: formSliderDefaultProps,
   renderPreview: renderFormSliderPreview,

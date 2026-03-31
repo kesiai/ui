@@ -91,7 +91,7 @@ const renderFormTimeCodePreview = (props: Record<string, any>) => {
 
 export const formTimeConfig: ComponentConfig = {
   id: 'form-time',
-  name: 'Form.Time 时间选择器',
+  name: '时间',
   propsConfig: formTimePropsConfig,
   defaultProps: formTimeDefaultProps,
   renderPreview: renderFormTimePreview,

@@ -297,7 +297,7 @@ const MyForm = () => {
 
 export const formConfig: ComponentConfig = {
   id: 'form',
-  name: 'Form 表单容器',
+  name: '表单容器',
   propsConfig: formPropsConfig,
   defaultProps: formDefaultProps,
   renderPreview: renderFormPreview,

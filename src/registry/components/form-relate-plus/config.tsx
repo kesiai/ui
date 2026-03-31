@@ -169,7 +169,7 @@ const renderFormRelatePlusCodePreview = (props: Record<string, any>) => {
 
 export const formRelatePlusConfig: ComponentConfig = {
   id: 'form-relate-plus',
-  name: 'Form.RelatePlus 关联字段Plus',
+  name: '关联字段Plus',
   propsConfig: formRelatePlusPropsConfig,
   defaultProps: formRelatePlusDefaultProps,
   renderPreview: renderFormRelatePlusPreview,

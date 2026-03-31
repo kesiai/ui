@@ -106,7 +106,7 @@ const renderDataPointCodePreview = (props: Record<string, any>) => {
 
 export const dataPointConfig: ComponentConfig = {
   id: 'data-point',
-  name: 'DataPoint 数据点',
+  name: '数据点',
   propsConfig: dataPointPropsConfig,
   defaultProps: dataPointDefaultProps,
   renderPreview: renderDataPointPreview,

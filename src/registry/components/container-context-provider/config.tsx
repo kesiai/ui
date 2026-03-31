@@ -193,7 +193,7 @@ function App() {
 
 export const contextProviderConfig: ComponentConfig = {
   id: 'container-context-provider',
-  name: 'ContextProvider 上下文容器',
+  name: '上下文',
   propsConfig: contextProviderPropsConfig,
   defaultProps: contextProviderDefaultProps,
   renderPreview: renderContextProviderPreview,

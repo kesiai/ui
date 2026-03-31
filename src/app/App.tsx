@@ -228,7 +228,7 @@ function HomePage() {
                               to={`/component/${component.id}`}
                               className="w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors block text-slate-600 hover:bg-blue-50 hover:text-blue-700"
                             >
-                              {config?.name?.split(' ').slice(1).join(' ') || component.id}
+                              {config?.name|| component.id}
                             </Link>
                           )
                         })}

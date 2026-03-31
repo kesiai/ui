@@ -56,7 +56,7 @@ const renderFormReferenceCodePreview = (props: Record<string, any>) => {
 
 export const formReferenceConfig: ComponentConfig = {
   id: 'form-reference',
-  name: 'Form.Reference 查找引用',
+  name: '查找引用',
   propsConfig: formReferencePropsConfig,
   defaultProps: formReferenceDefaultProps,
   renderPreview: renderFormReferencePreview,

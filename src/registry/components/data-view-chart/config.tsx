@@ -15,12 +15,6 @@ export const dataViewChartPropsConfig = [
     label: 'ECharts 配置',
     type: 'object' as const,
     description: 'ECharts 图表配置'
-  },
-  {
-    name: 'chartCode',
-    label: '图表代码',
-    type: 'code' as const,
-    description: '图表类型代码'
   }
 ]
 
@@ -30,7 +24,7 @@ export const dataViewChartDefaultProps = {
     "datasetId": "c806173d-00ed-4ea5-af2e-342055cc88c5",
     "name": "EE数据视图",
   },
-  chartCode: ''
+  echartOption:{}
 }
 
 const renderDataViewChartPreview = (props: Record<string, any>) => {
@@ -68,7 +62,7 @@ const renderDataViewChartCodePreview = (props: Record<string, any>) => {
 
 export const dataViewChartConfig: ComponentConfig = {
   id: 'data-view-chart',
-  name: 'DataViewChart 数据视图图表组件',
+  name: '数据视图图表组件',
   propsConfig: dataViewChartPropsConfig,
   defaultProps: dataViewChartDefaultProps,
   renderPreview: renderDataViewChartPreview,

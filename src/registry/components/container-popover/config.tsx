@@ -149,7 +149,7 @@ const renderPopoverCustomForm = (props: Record<string, any>, _onChange: (name: s
 
 export const popoverConfig: ComponentConfig = {
   id: 'container-popover',
-  name: 'Popover 气泡卡片',
+  name: '气泡卡片',
   propsConfig: popoverPropsConfig,
   defaultProps: popoverDefaultProps,
   renderPreview: renderPopoverPreview,

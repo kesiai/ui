@@ -184,7 +184,7 @@ const renderFormSelectCodePreview = (props: Record<string, any>) => {
 
 export const formSelectConfig: ComponentConfig = {
   id: 'form-select',
-  name: 'Form.Select 下拉框',
+  name: '下拉框',
   propsConfig: formSelectPropsConfig,
   defaultProps: formSelectDefaultProps,
   renderPreview: renderFormSelectPreview,

@@ -123,7 +123,7 @@ const renderFormTextareaCodePreview = (props: Record<string, any>) => {
 
 export const formTextareaConfig: ComponentConfig = {
   id: 'form-textarea',
-  name: 'Form.Textarea 多行文本框',
+  name: '多行文本框',
   propsConfig: formTextareaPropsConfig,
   defaultProps: formTextareaDefaultProps,
   renderPreview: renderFormTextareaPreview,

@@ -41,7 +41,7 @@ const renderFormFormInfoCodePreview = (props: Record<string, any>) => {
 
 export const formFormInfoConfig: ComponentConfig = {
   id: 'form-form-info',
-  name: 'Form.FormInfo 表单信息',
+  name: '表单信息',
   propsConfig: formFormInfoPropsConfig,
   defaultProps: formFormInfoDefaultProps,
   renderPreview: renderFormFormInfoPreview,

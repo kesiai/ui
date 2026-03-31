@@ -192,7 +192,7 @@ const renderFormInputNumberCodePreview = (props: Record<string, any>) => {
 
 export const formInputNumberConfig: ComponentConfig = {
   id: 'form-input-number',
-  name: 'Form.InputNumber 数字输入框',
+  name: '数字输入框',
   propsConfig: formInputNumberPropsConfig,
   defaultProps: formInputNumberDefaultProps,
   renderPreview: renderFormInputNumberPreview,

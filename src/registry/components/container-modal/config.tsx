@@ -186,7 +186,7 @@ const renderModalCustomForm = (props: Record<string, any>, _onChange: (name: str
 
 export const modalConfig: ComponentConfig = {
   id: 'container-modal',
-  name: 'Modal 弹窗',
+  name: '弹窗',
   propsConfig: modalPropsConfig,
   defaultProps: modalDefaultProps,
   renderPreview: renderModalPreview,

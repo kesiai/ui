@@ -151,7 +151,7 @@ const renderTabsCustomForm = (props: Record<string, any>, _onChange: (name: stri
 
 export const tabsConfig: ComponentConfig = {
   id: 'container-tabs',
-  name: 'Tabs 标签页',
+  name: '标签页',
   propsConfig: tabsPropsConfig,
   defaultProps: tabsDefaultProps,
   renderPreview: renderTabsPreview,

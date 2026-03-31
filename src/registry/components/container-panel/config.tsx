@@ -130,7 +130,7 @@ const renderPanelCustomForm = (props: Record<string, any>, _onChange: (name: str
 
 export const panelConfig: ComponentConfig = {
   id: 'container-panel',
-  name: 'Panel 折叠面板',
+  name: '折叠面板',
   propsConfig: panelPropsConfig,
   defaultProps: panelDefaultProps,
   renderPreview: renderPanelPreview,

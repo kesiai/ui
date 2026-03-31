@@ -53,7 +53,7 @@ const renderFormSerialNumberCodePreview = (props: Record<string, any>) => {
 
 export const formSerialNumberConfig: ComponentConfig = {
   id: 'form-serial-number',
-  name: 'Form.SerialNumber 序列号',
+  name: '序列号',
   propsConfig: formSerialNumberPropsConfig,
   defaultProps: formSerialNumberDefaultProps,
   renderPreview: renderFormSerialNumberPreview,

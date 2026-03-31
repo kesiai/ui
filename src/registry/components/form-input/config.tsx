@@ -208,7 +208,7 @@ const renderFormInputCodePreview = (props: Record<string, any>) => {
 
 export const formInputConfig: ComponentConfig = {
   id: 'form-input',
-  name: 'Form.Input 输入框组件',
+  name: '输入框',
   propsConfig: formInputPropsConfig,
   defaultProps: formInputDefaultProps,
   renderPreview: renderFormInputPreview,

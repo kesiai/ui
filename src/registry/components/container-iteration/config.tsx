@@ -78,7 +78,7 @@ const renderIterationCodePreview = (props: Record<string, any>) => {
 
 export const iterationConfig: ComponentConfig = {
   id: 'container-iteration',
-  name: 'Iteration 迭代组件',
+  name: '迭代',
   propsConfig: iterationPropsConfig,
   defaultProps: iterationDefaultProps,
   renderPreview: renderIterationPreview,

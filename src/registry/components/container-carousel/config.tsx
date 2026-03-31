@@ -192,7 +192,7 @@ const renderCarouselCodePreview = (props: Record<string, any>) => {
 
 export const carouselConfig: ComponentConfig = {
   id: 'container-carousel',
-  name: 'Carousel 轮播容器',
+  name: '轮播',
   propsConfig: carouselPropsConfig,
   defaultProps: carouselDefaultProps,
   renderPreview: renderCarouselPreview,

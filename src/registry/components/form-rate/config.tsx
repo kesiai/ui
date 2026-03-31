@@ -110,7 +110,7 @@ const renderRateCodePreview = (props: Record<string, any>) => {
 
 export const rateConfig: ComponentConfig = {
   id: 'form-rate',
-  name: 'Rate 星级评价',
+  name: '星级评价',
   propsConfig: ratePropsConfig,
   defaultProps: rateDefaultProps,
   renderPreview: renderRatePreview,

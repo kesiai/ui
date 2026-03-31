@@ -63,7 +63,7 @@ const renderAreaCodePreview = (props: Record<string, any>) => {
 
 export const areaConfig: ComponentConfig = {
   id: 'form-area',
-  name: 'Area 区域',
+  name: '区域',
   propsConfig: areaPropsConfig,
   defaultProps: areaDefaultProps,
   renderPreview: renderAreaPreview,

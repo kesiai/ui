@@ -40,7 +40,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
         <ViewModel tableId={props.tableId} modelName={props.modelName} isSchemaTransform={true}>
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
-            <ViewFilter  />
+            <ViewFilter />
             <div className="flex items-center justify-between">
               <CreateAction />
               <Tools tools={['count', 'pageSize', 'columns']} />
@@ -50,7 +50,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
               <TableColumn name="select-BAE0" title="年级" />
               <TableColumn name="relate-table-2E3C" title="所属表" />
               <TableColumn name="__actions__" title=" " width={65} enableSorting={false} enableHiding={false} enableResizing={false}>
-                <Actions variant="dropdown" actions={props.actions || ['view', 'edit', 'delete']} />
+                <Actions actions={props.actions || ['view', 'edit', 'delete']} />
               </TableColumn>
             </ViewDataTable>
             <div className="flex items-center justify-between">

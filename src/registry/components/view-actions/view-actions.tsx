@@ -35,13 +35,8 @@ import {
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
 import { FormSchemaItem, SchemaForm } from '@/registry/components/schema-form/schema-form'
-
-// ==================== Content Components ====================
-// 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
-
 import { ViewDetail } from '@/registry/components/view-detail/view-detail'
-import { create } from 'lodash'
-
+import { HasPermission } from '@/registry/components/view-permission/view-permission'
 interface EditActionContentProps {
   itemId: string
   onClose?: () => void
@@ -517,6 +512,7 @@ interface ActionsProps {
   createFormSchema?: FormSchemaItem[]
   editFormSchema?: FormSchemaItem[]
   viewFormSchema?: FormSchemaItem[]
+  permission?: { create: string; view: string; edit: string; delete: string; export: string; copy: string }
 }
 
 const Actions: React.FC<ActionsProps> = ({
@@ -526,7 +522,8 @@ const Actions: React.FC<ActionsProps> = ({
   variant = 'dropdown',
   createFormSchema,
   editFormSchema,
-  viewFormSchema
+  viewFormSchema,
+  permission
 }) => {
   const id = itemId || item?.id
   if (!id) return null
@@ -536,17 +533,17 @@ const Actions: React.FC<ActionsProps> = ({
       <div className="flex items-center gap-2">
         {actions.map((action) => (
           action === 'create' ? (
-            <CreateAction key={action} formSchema={createFormSchema} />
+            <HasPermission key={action} permission={permission?.create}><CreateAction formSchema={createFormSchema} /></HasPermission>
           ) : action === 'delete' ? (
-            <DeleteAction key={action} itemId={id!} />
+            <HasPermission key={action} permission={permission?.delete}><DeleteAction itemId={id!} /></HasPermission>
           ) : action === 'view' ? (
-            <ViewAction key={action} itemId={id!} formSchema={viewFormSchema} />
+            <HasPermission key={action} permission={permission?.view}><ViewAction itemId={id!} formSchema={viewFormSchema} /></HasPermission>
           ) : action === 'edit' ? (
-            <EditAction key={action} itemId={id!} formSchema={editFormSchema} />
+            <HasPermission key={action} permission={permission?.edit}><EditAction itemId={id!} formSchema={editFormSchema} /></HasPermission>
           ) : action === 'export' ? (
-            <ExportAction key={action} itemId={id!} />
+            <HasPermission key={action} permission={permission?.export}><ExportAction itemId={id!} /></HasPermission>
           ) : action === 'copy' ? (
-            <CopyAction key={action} itemId={id!} />
+            <HasPermission key={action} permission={permission?.copy}><CopyAction itemId={id!} /></HasPermission>
           ) : null
         ))}
       </div>
@@ -584,51 +581,63 @@ const Actions: React.FC<ActionsProps> = ({
         {actions.map((action, index) => (
           <React.Fragment key={action}>
             {action === 'create' ? (
-              <CreateAction formSchema={createFormSchema}>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  {actionIcons[action]}
-                  {actionLabels[action]}
-                </DropdownMenuItem>
-              </CreateAction>
+              <HasPermission permission={permission?.create}>
+                <CreateAction formSchema={createFormSchema}>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    {actionIcons[action]}
+                    {actionLabels[action]}
+                  </DropdownMenuItem>
+                </CreateAction>
+              </HasPermission>
             ) : action === 'delete' ? (
-              <DeleteAction itemId={id!}>
-                <DropdownMenuItem
-                  onSelect={(e) => {
-                    e.preventDefault()
-                  }}
-                >
-                  {actionIcons[action]}
-                  {actionLabels[action]}
-                </DropdownMenuItem>
-              </DeleteAction>
+              <HasPermission permission={permission?.delete}>
+                <DeleteAction itemId={id!}>
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault()
+                    }}
+                  >
+                    {actionIcons[action]}
+                    {actionLabels[action]}
+                  </DropdownMenuItem>
+                </DeleteAction>
+              </HasPermission>
             ) : action === 'view' ? (
-              <ViewAction itemId={id!} formSchema={viewFormSchema}>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  {actionIcons[action]}
-                  {actionLabels[action]}
-                </DropdownMenuItem>
-              </ViewAction>
+              <HasPermission permission={permission?.view}>
+                <ViewAction itemId={id!} formSchema={viewFormSchema}>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    {actionIcons[action]}
+                    {actionLabels[action]}
+                  </DropdownMenuItem>
+                </ViewAction>
+              </HasPermission>
             ) : action === 'edit' ? (
-              <EditAction itemId={id!} formSchema={editFormSchema}>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  {actionIcons[action]}
-                  {actionLabels[action]}
-                </DropdownMenuItem>
-              </EditAction>
+              <HasPermission permission={permission?.edit}>
+                <EditAction itemId={id!} formSchema={editFormSchema}>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    {actionIcons[action]}
+                    {actionLabels[action]}
+                  </DropdownMenuItem>
+                </EditAction>
+              </HasPermission>
             ) : action === 'export' ? (
-              <ExportAction itemId={id!}>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  {actionIcons[action]}
-                  {actionLabels[action]}
-                </DropdownMenuItem>
-              </ExportAction>
+              <HasPermission permission={permission?.export}>
+                <ExportAction itemId={id!}>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    {actionIcons[action]}
+                    {actionLabels[action]}
+                  </DropdownMenuItem>
+                </ExportAction>
+              </HasPermission>
             ) : action === 'copy' ? (
-              <CopyAction itemId={id!}>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  {actionIcons[action]}
-                  {actionLabels[action]}
-                </DropdownMenuItem>
-              </CopyAction>
+              <HasPermission permission={permission?.copy}>
+                <CopyAction itemId={id!}>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    {actionIcons[action]}
+                    {actionLabels[action]}
+                  </DropdownMenuItem>
+                </CopyAction>
+              </HasPermission>
             ) : null}
             {index < actions.length - 1 && <DropdownMenuSeparator />}
           </React.Fragment>

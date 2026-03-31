@@ -116,7 +116,7 @@ export function DocumentationViewer({ content }: DocumentationViewerProps) {
             </td>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-slate-300 pl-4 py-2 my-4 bg-slate-50 italic text-slate-600 flex items-center">
+            <blockquote className="border-l-4 border-slate-300 pl-4 py-2 my-4 bg-slate-50 italic text-slate-600 flex items-center [&>p]:mb-0">
               {children}
             </blockquote>
           ),

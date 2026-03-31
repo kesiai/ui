@@ -22,6 +22,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, Trash2, Edit } from 'lucide-react'
 import { SchemaForm } from '@/registry/components/schema-form/schema-form'
+import type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
 
 // ==================== Content Components ====================
 // 这些组件只有在 Dialog 打开时才会渲染，从而触发数据加载
@@ -92,8 +93,13 @@ const BatchDeleteContent: React.FC<BatchDeleteContentProps> = ({
   )
 }
 
+interface BatchActionsSchema {
+  schema: ModelSchema
+  formSchema: FormSchemaItem[]
+}
+
 interface BatchChangeContentProps {
-  batchActionsSchema?: object
+  batchActionsSchema?: BatchActionsSchema
   onClose?: () => void
 }
 
@@ -201,7 +207,7 @@ export const BatchDeleteAction: React.FC<BaseBatchActionProps> = ({
   )
 }
 
-export const BatchChangeAction: React.FC<BaseBatchActionProps & { batchActionsSchema?: object }> = ({
+export const BatchChangeAction: React.FC<BaseBatchActionProps & { batchActionsSchema?: BatchActionsSchema }> = ({
   children,
   batchActionsSchema
 }) => {
@@ -237,7 +243,7 @@ interface BatchActionsProps {
   actions?: BatchActionType[]
   variant?: 'buttons' | 'dropdown'
   disabled?: boolean
-  batchActionsSchema?: object
+  batchActionsSchema?: BatchActionsSchema
   children?: React.ReactNode
 }
 

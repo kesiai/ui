@@ -1,5 +1,6 @@
 import React, { cloneElement, useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelState, type ModelSchema } from '@airiot/client'
+import { useModelList, useModel, useModelState } from '@airiot/client'
+import type { FieldProperty, ModelSchema } from '@/registry/lib/model-types'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
 import {
@@ -100,7 +101,7 @@ export interface TableLayoutProps {
   rowsDraggable?: boolean;
 }
 
-const getFieldProp = (model: ModelSchema | null | undefined, field: string): any => {
+const getFieldProp = (model: ModelSchema | null | undefined, field: string): FieldProperty | undefined => {
   if (!model) return undefined
   return field.split('.').reduce((obj: any, f: string) => {
     return obj && obj.properties && obj.properties[f]

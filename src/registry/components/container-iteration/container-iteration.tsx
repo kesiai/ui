@@ -17,7 +17,7 @@ export function Iteration({
   return (
     <>
       {iterationList.map((item, index) => (
-        <IterationContext.Provider key={index} value={{ value: item, index }}>
+        <IterationContext.Provider key={index} value={{ value: item, index } as any}>
           {children}
         </IterationContext.Provider>
       ))}

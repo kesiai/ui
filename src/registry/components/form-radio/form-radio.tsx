@@ -34,11 +34,11 @@ interface RadioSchema {
 
 export interface RadioProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
-    VariantProps<typeof radioVariants> {
+  VariantProps<typeof radioVariants> {
   /**
    * 数据项
    */
-  options?: Array<{ name: string; value: string | number }>
+  options?: Array<{ name: string; label: string; value: string | number }>
   /**
    * Schema（包含 enum 和 enumNames）
    */
@@ -88,6 +88,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
         const names = schema.enumNames
         return schema.enum.map((val, index) => ({
           name: names?.[index] || val,
+          label: names?.[index] || val,
           value: val
         }))
       }
@@ -137,7 +138,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
                 htmlFor={String(option.value)}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                {option.name}
+                {option.name || option.label}
               </label>
             </div>
           ))}

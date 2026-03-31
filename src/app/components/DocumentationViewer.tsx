@@ -1,6 +1,29 @@
-import React from 'react'
+import { useState, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { Check, Copy } from 'lucide-react'
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }, [text])
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="inline-flex items-center justify-center w-5 h-5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
+      title="复制"
+    >
+      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+    </button>
+  )
+}
 
 interface DocumentationViewerProps {
   content?: string
@@ -20,7 +43,6 @@ export function DocumentationViewer({ content }: DocumentationViewerProps) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          // 自定义样式
           h1: ({ children }) => (
             <h1 className="text-2xl font-bold text-slate-900 mb-4 mt-0">{children}</h1>
           ),
@@ -35,14 +57,21 @@ export function DocumentationViewer({ content }: DocumentationViewerProps) {
           ),
           code: ({ className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '')
-            return match ? (
-              <code className="block bg-slate-100 rounded-lg p-3 my-2 text-sm overflow-x-auto" {...props}>
-                {children}
-              </code>
-            ) : (
-              <code className="bg-slate-100 px-1.5 py-0.5 rounded text-sm text-red-600" {...props}>
-                {children}
-              </code>
+            if (match) {
+              return (
+                <code className="block bg-slate-100 rounded-lg p-3 my-2 text-sm overflow-x-auto" {...props}>
+                  {children}
+                </code>
+              )
+            }
+            const codeText = String(children).replace(/\n$/, '')
+            return (
+              <span className="inline-flex items-center gap-1">
+                <code className="bg-slate-100 px-1.5 py-0.5 rounded text-sm text-red-600" {...props}>
+                  {children}
+                </code>
+                {codeText?.indexOf('npx shadcn@latest add') >= 0 && <CopyButton text={codeText} />}
+              </span>
             )
           },
           pre: ({ children }) => (
@@ -87,7 +116,7 @@ export function DocumentationViewer({ content }: DocumentationViewerProps) {
             </td>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-slate-300 pl-4 py-2 my-4 bg-slate-50 italic text-slate-600">
+            <blockquote className="border-l-4 border-slate-300 pl-4 py-2 my-4 bg-slate-50 italic text-slate-600 flex items-center">
               {children}
             </blockquote>
           ),

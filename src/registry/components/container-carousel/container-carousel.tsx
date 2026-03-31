@@ -276,7 +276,7 @@ const CarouselComponent = (props: CarouselProps) => {
 
       {/* Custom dots indicator */}
       {!hideDots && filteredChildren.length > 1 && (
-        <div className="flex gap-2 justify-center mt-4 flex-shrink-0">
+        <div className="flex gap-2 justify-center mt-4 shrink-0">
           {filteredChildren.map((_, index) => (
             <button
               key={index}

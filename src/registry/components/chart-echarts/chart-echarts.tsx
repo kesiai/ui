@@ -34,7 +34,7 @@ export interface ChartEchartsProps extends Omit<BaseChartProps, 'option'> {
 }
 
 const ChartEcharts: React.FC<ChartEchartsProps> = (props) => {
-  const { option, chartCode, chartData, seriesOption, cellKey, title } = props
+  const { option, chartCode, chartData, seriesOption} = props
 
   let newOption = option || { series: [seriesOption] }
 

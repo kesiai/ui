@@ -154,7 +154,7 @@ function HomePage() {
             <div>
               <Link to="/" className="hover:opacity-80 transition-opacity">
                 <h1 className="text-2xl font-bold text-slate-900">
-                  KESI UI Library
+                  Kesi UI
                 </h1>
                 <p className="text-sm text-slate-600 mt-1">
                   组件展示与配置平台

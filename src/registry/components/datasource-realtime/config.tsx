@@ -87,7 +87,7 @@ const renderDatasourceRealtimeCodePreview = (props: Record<string, any>) => {
 
 export const realtimeDataSourceConfig: ComponentConfig = {
   id: 'datasource-realtime',
-  name: '实时数据源',
+  name: 'DatasourceRealtime 实时数据源组件',
   propsConfig: realtimeDataSourcePropsConfig,
   defaultProps: realtimeDataSourceDefaultProps,
   renderPreview: renderDatasourceRealtimePreview,

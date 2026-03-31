@@ -118,7 +118,7 @@ const renderDatasourceTableCodePreview = (props: Record<string, any>) => {
 
 export const tableDataSourceConfig: ComponentConfig = {
   id: 'datasource-table',
-  name: '表数据源',
+  name: 'DatasourceTable 表数据源组件',
   propsConfig: tableDataSourcePropsConfig,
   defaultProps: tableDataSourceDefaultProps,
   renderPreview: renderDatasourceTablePreview,

@@ -65,7 +65,7 @@ const renderTableSelectCodePreview = (props: Record<string, any>) => {
 
 export const tableSelectConfig: ComponentConfig = {
   id: 'table-data-select',
-  name: _r('表记录选择器'),
+  name: 'TableDataSelect 表记录选择器',
   propsConfig: tableSelectPropsConfig,
   defaultProps: tableSelectDefaultProps,
   renderPreview: renderTableSelectPreview,

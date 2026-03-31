@@ -140,7 +140,7 @@ const renderFormUploadCodePreview = (props: Record<string, any>) => {
 
 export const formUploadConfig: ComponentConfig = {
   id: 'form-upload',
-  name: 'Form.Upload 上传',
+  name: 'Form.Upload 文件上传',
   propsConfig: formUploadPropsConfig,
   defaultProps: formUploadDefaultProps,
   renderPreview: renderFormUploadPreview,

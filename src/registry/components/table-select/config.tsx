@@ -73,7 +73,7 @@ const renderTableSelectCodePreview = (props: Record<string, any>) => {
 
 export const tableSelectConfig: ComponentConfig = {
   id: 'table-select',
-  name: _r('表选择器'),
+  name: 'TableSelect 表选择器',
   propsConfig: tableSelectPropsConfig,
   defaultProps: tableSelectDefaultProps,
   renderPreview: renderTableSelectPreview,

@@ -141,7 +141,7 @@ const renderDatasourceViewCodePreview = (props: Record<string, any>) => {
 
 export const viewDataSourceConfig: ComponentConfig = {
   id: 'datasource-view',
-  name: '视图数据源',
+  name: 'DatasourceView 视图数据源组件',
   propsConfig: viewDataSourcePropsConfig,
   defaultProps: viewDataSourceDefaultProps,
   renderPreview: renderDatasourceViewPreview,

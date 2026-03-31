@@ -85,7 +85,7 @@ const renderFormRadioCodePreview = (props: Record<string, any>) => {
 
 export const formRadioConfig: ComponentConfig = {
   id: 'form-radio',
-  name: 'Form.Radio 单选框',
+  name: 'Form.Radio 单选框组件',
   propsConfig: formRadioPropsConfig,
   defaultProps: formRadioDefaultProps,
   renderPreview: renderFormRadioPreview,

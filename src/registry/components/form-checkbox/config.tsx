@@ -102,7 +102,7 @@ const renderFormCheckboxCodePreview = (props: Record<string, any>) => {
 
 export const formCheckboxConfig: ComponentConfig = {
   id: 'form-checkbox',
-  name: 'Form.Checkbox 多选框',
+  name: 'Form.Checkbox 多选框组件',
   propsConfig: formCheckboxPropsConfig,
   defaultProps: formCheckboxDefaultProps,
   renderPreview: renderFormCheckboxPreview,

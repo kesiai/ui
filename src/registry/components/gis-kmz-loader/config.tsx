@@ -90,7 +90,7 @@ const renderKmzCodePreview = (props: Record<string, any>) => {
 
 export const kmzConfig: ComponentConfig = {
     id: 'gis-kmz-loader',
-    name: 'kmz层',
+    name: 'KMZ 层',
     propsConfig: kmzPropsConfig,
     defaultProps: kmzDefaultProps,
     renderPreview: renderKmzPreview,

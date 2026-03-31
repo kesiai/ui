@@ -134,7 +134,7 @@ const renderBarCustomForm = (props: Record<string, any>, _onChange: (name: strin
 
 export const barConfig: ComponentConfig = {
   id: 'bar',
-  name: '进度条',
+  name: 'Bar 进度条',
   propsConfig: barPropsConfig,
   defaultProps: barDefaultProps,
   renderPreview: renderBarPreview,

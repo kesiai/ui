@@ -133,7 +133,7 @@ const renderDatasourceHistoryCodePreview = (props: Record<string, any>) => {
 
 export const historyDataSourceConfig: ComponentConfig = {
   id: 'datasource-history',
-  name: '历史数据源',
+  name: 'DatasourceHistory 历史数据源组件',
   propsConfig: historyDataSourcePropsConfig,
   defaultProps: historyDataSourceDefaultProps,
   renderPreview: renderDatasourceHistoryPreview,

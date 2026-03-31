@@ -54,8 +54,8 @@ const FormField =
         rules={controllerRules}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}
-            className={cn(className, formClassNames?.field, classNames?.field, schema.classNames?.field)}>
-            {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema.classNames?.label)}>
+            className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
+            {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
               {label} : {required && <span className="text-red-500">*</span>}
             </FieldLabel>}
             {
@@ -71,15 +71,15 @@ const FormField =
                 ...fieldProps,
                 className: cn(formClassNames?.input, classNames?.input, schema.classNames?.input),
                 'aria-invalid': fieldState.invalid
-              })) : <Input className={cn(formClassNames?.input, classNames?.input, schema.classNames?.input)} />
+              })) : <Input className={cn(formClassNames?.input, classNames?.input, schema?.classNames?.input)} />
             }
             {description && (
-              <FieldDescription className={cn(formClassNames?.description, classNames?.description, schema.classNames?.description)}>
+              <FieldDescription className={cn(formClassNames?.description, classNames?.description, schema?.classNames?.description)}>
                 {description}
               </FieldDescription>
             )}
             {fieldState.invalid && (
-              <FieldError errors={[fieldState.error]} className={cn(formClassNames?.error, classNames?.error, schema.classNames?.error)} />
+              <FieldError errors={[fieldState.error]} className={cn(formClassNames?.error, classNames?.error, schema?.classNames?.error)} />
             )}
           </Field>
         )}

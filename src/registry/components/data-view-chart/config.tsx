@@ -68,7 +68,7 @@ const renderDataViewChartCodePreview = (props: Record<string, any>) => {
 
 export const dataViewChartConfig: ComponentConfig = {
   id: 'data-view-chart',
-  name: 'DataViewChart 数据视图展示图表',
+  name: 'DataViewChart 数据视图图表组件',
   propsConfig: dataViewChartPropsConfig,
   defaultProps: dataViewChartDefaultProps,
   renderPreview: renderDataViewChartPreview,

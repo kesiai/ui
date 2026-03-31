@@ -4,17 +4,9 @@ import { cn } from "@/lib/utils"
 import { Checkbox } from "@/components/ui/checkbox"
 
 export interface CheckboxOption {
-  /**
-   * 显示文字
-   */
-  name: string
-  /**
-   * 选项值
-   */
+  name?: string
+  label?: string
   value: string
-  /**
-   * 是否默认选中
-   */
   isDefault?: boolean
 }
 
@@ -85,18 +77,20 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
     },
     ref
   ) => {
+
     const mergedOptions = React.useMemo(() => {
       if (options.length > 0) return options
       if (schema?.enum) {
         const names = schema.enumNames
         return schema.enum.map((val, index) => ({
           name: names?.[index] || val,
+          label: names?.[index] || val,
           value: val
         }))
       }
       return []
     }, [options, schema])
-
+  
     const isMulti = mergedOptions.length > 1
     const defaultList = defaultValue && Array.isArray(defaultValue) ? defaultValue : []
     const [internalValue, setInternalValue] = React.useState<string | string[]>(
@@ -230,7 +224,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
                     onCheckedChange={(checked) => handleCheckboxChange(option.value, checked)}
                     aria-invalid={props['aria-invalid']}
                   />
-                  <span className="text-sm">{option.name}</span>
+                  <span className="text-sm">{option.name || option.label}</span>
                 </label>
               ))}
             </div>

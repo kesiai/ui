@@ -82,13 +82,13 @@ interface DetailShowProps {
   inList?: boolean
 }
 
-const DetailShow: React.FC<DetailShowProps> = ({ children, schema, tableSchema, value, inList }) => {
+const DetailShow: React.FC<DetailShowProps> = ({ children, schema, value }) => {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [popoverOpen, setPopoverOpen] = React.useState(false)
   const [detailData, setDetailData] = React.useState<Array<{ title: string; value: any }>>([])
   const [loading, setLoading] = React.useState(false)
 
-  const FieldComponent = tableConverter(schema, tableSchema)
+  const FieldComponent = tableConverter(schema, {})
 
   const getDetailData = async () => {
     if (!value?.id || !schema?.relate?.id) {
@@ -127,9 +127,9 @@ const DetailShow: React.FC<DetailShowProps> = ({ children, schema, tableSchema, 
 
         let fieldValue: any
         if (s.fieldType === 'attachment' || s.fieldType === 'attachments') {
-          fieldValue = <FieldComponent value={data?.[key]} schema={s} type="upload" inList={false} />
+          fieldValue = <FieldComponent value={data?.[key]} schema={s} inList={false} />
         } else {
-          fieldValue = <FieldComponent value={data?.[key]} schema={s} type={s.fieldType} inList={false} />
+          fieldValue = <FieldComponent value={data?.[key]} schema={s} inList={false} />
         }
 
         result.push({
@@ -187,7 +187,7 @@ const DetailShow: React.FC<DetailShowProps> = ({ children, schema, tableSchema, 
             {children}
           </span>
         </PopoverTrigger>
-        <PopoverContent className="w-[500px] max-h-[400px] overflow-y-auto">
+        <PopoverContent className="w-125 max-h-100 overflow-y-auto">
           {loading ? (
             <div className="flex justify-center py-4">加载中...</div>
           ) : (
@@ -281,7 +281,6 @@ const ItemShow: React.FC<{
               <FieldComponent
                 value={val[f.key]}
                 schema={f.fieldSchema}
-                type={f.fieldSchema?.fieldType}
               />
             </span>
           </div>
@@ -304,7 +303,6 @@ const ItemShow: React.FC<{
               <FieldComponent
                 value={val[f.key]}
                 schema={f.fieldSchema}
-                type={f.fieldSchema?.fieldType}
               />
             </span>
           </div>
@@ -341,7 +339,6 @@ const ItemShow: React.FC<{
       <FieldComponent
         value={fieldValue}
         schema={fieldSchema}
-        type={fieldSchema?.fieldType || 'text'}
       />
     )
   }
@@ -437,7 +434,6 @@ const TableShow: React.FC<{
                           <FieldComponent
                             value={row[field.key]}
                             schema={{ title: field.title }}
-                            type="text"
                           />
                         </td>
                       )
@@ -465,7 +461,7 @@ export interface RelatePlusShowProps {
 
 export const Relate: React.FC<RelatePlusShowProps> = ({ value, schema, inList }) => {
   const [expand, setExpand] = React.useState(false)
-
+  console.log('ViewFieldRelate value:', value)
   if (isNil(value)) {
     return <span className="text-muted-foreground">空</span>
   }

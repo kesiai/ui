@@ -115,7 +115,7 @@ const DataCell = ({ children, schema, tableSchema, ...restProps }:
   ({ getValue, row, column }: CellContext<IData, any>) => {
 
     const baseSchema = schema || column.columnDef?.field
-
+    console.log(restProps,'DataCell render, schema:', schema, 'tableSchema:', tableSchema, 'column.field:', column.columnDef?.field)
     const childrenProps = {
       ...restProps,
       value: getValue(),
@@ -125,7 +125,7 @@ const DataCell = ({ children, schema, tableSchema, ...restProps }:
     }
 
     const FieldComponent = tableConverter(schema, tableSchema)
-
+    
     return (
       children ? (typeof children === 'function' ? children(childrenProps) : cloneElement(children as React.ReactElement<any>, childrenProps)) : (
         <FieldComponent {...childrenProps} />
@@ -443,7 +443,6 @@ export const TableColumn: React.FC<TableColumnProps> = ({
       id: name,
       accessorKey: name,
       header: header ? header as any : (({ column }) => <DataGridColumnHeader title={title || name} column={column as any} />),
-      cell: cell ? cell as any : DataCell({ children, ...columnProps }),
       size: width as number | undefined,
       ...columnProps
     };

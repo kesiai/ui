@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
-import { FieldComponentSelector } from '@/registry/components/form-widget/form-widget'
 import { TC2Provider } from '@/registry/lib/table-context'
-
+import { formConverter } from '@/registry/lib/view-form-converter'
+import { FormProvider, useForm } from '@airiot/client'
 export interface FormTableViewColumn {
   key: string
   dataIndex: string
@@ -67,7 +67,7 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
         <thead className="bg-muted/50">
           <tr>
             {/* 总是显示复选框列 */}
-            <th className="w-[50px] px-4 py-2 text-left border-b">
+            <th className="w-12.5 px-4 py-2 text-left border-b">
               <Checkbox
                 checked={isAllSelected}
                 onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
@@ -136,14 +136,18 @@ const EditCell: React.FC<{
     onSave(updatedRecord)
   }
 
-  return <TC2Provider editingSchema={record}>
-    <FieldComponentSelector
-      schema={disabled ? { ...schema, disabled: true } : schema}
-      input={{ value, onChange: handleChange }}
-      meta={{}}
-      record={record}
-    />
-  </TC2Provider>
+  const FieldController = formConverter(schema, {})
+
+  const methods = useForm()
+
+  return (
+    <FormProvider {...methods} >
+      <TC2Provider editingSchema={record}>
+        <FieldController value={value} record={record} schema={{ ...schema, disabled }} onChange={handleChange} />
+      </TC2Provider>
+    </FormProvider>
+  )
+
 }
 
 export { FormTableView }

@@ -60,19 +60,22 @@ const renderFormEditableTablePreview = (props: Record<string, any>) => {
   ])
 
   const mockSchema = {
+    type: 'array',
+    key: 'editableTable',
     disabled: props.disabled,
     minCount: props.minCount,
     maxCount: props.maxCount,
     displayForm: props.displayForm,
     cardLayout: props.cardLayout,
-    forms: {
-      form: ['field1', 'field2'],
+    items: {
+      type: 'object',
+      formSchema: [{ key: 'field1' }, { key: 'field2' }],
       properties: {
         field1: {
           key: 'field1',
           title: '字段1',
           type: 'object',
-          fieldType: 'map'
+          controlType: 'map',
         },
         field2: {
           key: 'field2',
@@ -87,10 +90,8 @@ const renderFormEditableTablePreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-4xl bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormEditableTable
-          input={{
-            value,
-            onChange: setValue
-          }}
+          value={value}
+          onChange={(val) => setValue(val ?? [])}
           schema={mockSchema}
         />
       </div>
@@ -100,20 +101,19 @@ const renderFormEditableTablePreview = (props: Record<string, any>) => {
 
 const renderFormEditableTableCodePreview = (props: Record<string, any>) => {
   return `<FormEditableTable
-  input={{
-    value: value,
-    onChange: (value) => setValue(value)
-  }}
+  value={value},
+  onChange={(value) => setValue(value)}
   schema={{
     disabled: ${props.disabled},
     minCount: ${props.minCount},
     maxCount: ${props.maxCount},
     displayForm: "${props.displayForm}",
     cardLayout: "${props.cardLayout}",
-    forms: {
-      form: ['field1', 'field2'],
+    items: {
+      type: 'object',
+      formSchema: [{ key: 'field1' }, { key: 'field2' }],
       properties: {
-        field1: { key: 'field1', title: '字段1', type: 'object', fieldType: 'map' },
+        field1: { key: 'field1', title: '字段1', type: 'object', controlType: 'map' },
         field2: { key: 'field2', title: '字段2', type: 'number' }
       }
     }

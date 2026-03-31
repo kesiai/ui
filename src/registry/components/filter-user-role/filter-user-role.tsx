@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import _ from 'lodash'
+import unionWith from 'lodash/unionWith'
+import isEqual from 'lodash/isEqual'
 import { createAPI, useModel } from '@airiot/client'
 import { ChevronDown, Check, X, Loader2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -120,7 +121,7 @@ const FilterUserRole: React.FC<FilterUserRoleProps> = (props) => {
 
       itemsRef.current = [...itemsRef.current, ...newOptions]
       setOptions(itemsRef.current)
-      setAllOptions(prev => _.unionWith(prev, itemsRef.current, _.isEqual))
+      setAllOptions(prev => unionWith(prev, itemsRef.current, isEqual))
 
       // 如果返回少于50条，说明没有更多数据了
       setHasMore(items.length >= 50)

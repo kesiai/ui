@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+
 import { Target } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'

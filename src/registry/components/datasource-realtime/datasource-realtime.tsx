@@ -1,7 +1,10 @@
 'use client'
 
 import { useMemo, useEffect, useState, useCallback, type ReactNode } from 'react'
-import _ from 'lodash'
+import isNumber from 'lodash/isNumber'
+import isNil from 'lodash/isNil'
+import isPlainObject from 'lodash/isPlainObject'
+import cloneDeep from 'lodash/cloneDeep'
 import { api, useWS } from '@airiot/client'
 import { useDatasetSet } from '@airiot/client'
 import dayjs from 'dayjs'
@@ -60,7 +63,7 @@ export const defaultRealtimeConfig: RealtimeDataConfig = {
  * 数字保留指定小数位
  */
 const toFixed = (value: number, precision: number = 2): number | null => {
-  if (!_.isNumber(value)) {
+  if (!isNumber(value)) {
     return value
   }
   return Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision)
@@ -300,7 +303,7 @@ function useRealtimeData(config: RealtimeDataConfig) {
             tag?.id || item?.id
           )
           const value = data[key].length > 0
-            ? toFixed(data[key][0][1], !_.isNil(item?.fixed) ? item?.fixed : 3)
+            ? toFixed(data[key][0][1], !isNil(item?.fixed) ? item?.fixed : 3)
             : null
           const time = data?.[key]?.[0]?.[0] || null
 
@@ -331,7 +334,7 @@ function useRealtimeData(config: RealtimeDataConfig) {
             ],
             source: data[key].map(d => [
               formatTime(d[0], xFormat),
-              toFixed(d[1], !_.isNil(item?.fixed) ? item?.fixed : 3),
+              toFixed(d[1], !isNil(item?.fixed) ? item?.fixed : 3),
               d[2]
             ])
           }
@@ -357,7 +360,7 @@ function useRealtimeData(config: RealtimeDataConfig) {
 
     const payload: Array<{ key: string; value: number; time: Date | string }> = []
 
-    if (data && _.isPlainObject(data)) {
+    if (data && isPlainObject(data)) {
       const tableDataId = data.tableDataId || data.id
       const fields = data.fields
       const time = new Date(data?.time || Date.now())
@@ -383,7 +386,7 @@ function useRealtimeData(config: RealtimeDataConfig) {
         let newD = { ...d }
         payload.forEach(p => {
           if (p.key === d.key || !d.key) {
-            const source = _.cloneDeep(d.source || []) as any[][]
+            const source = cloneDeep(d.source || []) as any[][]
             if (source.length > 0) {
               source.shift()
               source.push([p.time, p.value, findTagName(subTags, p.key), p.key])

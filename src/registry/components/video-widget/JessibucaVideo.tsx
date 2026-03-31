@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
-import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import isFunction from 'lodash/isFunction'
+import isBoolean from 'lodash/isBoolean'
 import { getConfig, createAPI } from '@airiot/client'
 const config = getConfig()
 
@@ -108,7 +110,7 @@ const JessibucaVideo: React.FC<JessibucaVideoProps> = (props) => {
   }
 
   const deleteElement = (jessibuca: any) => {
-    if (!_.isEmpty(jessConfigute?.showPerformance) && container.current && jessibuca && props?.cellKey) {
+    if (!isEmpty(jessConfigute?.showPerformance) && container.current && jessibuca && props?.cellKey) {
         // Implementation for showing performance stats overlaid on video
         // Simplified for this port
     }
@@ -122,9 +124,9 @@ const JessibucaVideo: React.FC<JessibucaVideoProps> = (props) => {
     jessibuca.on('fullscreen', function (value: boolean) {
       // Fullscreen logic
       if (props?.videoAction == 'preview' && fullscreenStreamType) {
-        if (value && videoData?.streamType == 'sub' && _.isFunction(props?.resetStreamType)) {
+        if (value && videoData?.streamType == 'sub' && isFunction(props?.resetStreamType)) {
           props?.resetStreamType('main')
-        } else if (!value && props?.streamType && _.isFunction(props?.resetStreamType)) {
+        } else if (!value && props?.streamType && isFunction(props?.resetStreamType)) {
           props?.resetStreamType(props?.streamType)
         }
       }
@@ -248,14 +250,14 @@ const JessibucaVideo: React.FC<JessibucaVideoProps> = (props) => {
           audio: jessConfigute?.operateBtns?.audio,
           record: jessConfigute?.operateBtns?.record
         },
-        showPerformance: !_.isEmpty(jessConfigute?.showPerformance) && (jessConfigute?.showPerformance?.showAll === true || Object.keys(jessConfigute?.showPerformance)?.filter(key => key !== 'showAll' && jessConfigute?.showPerformance[key] === true)?.length) ? true : false,
-        forceNoOffscreen: _.isBoolean(jessConfigute?.forceNoOffscreen) ? jessConfigute?.forceNoOffscreen : true,
+        showPerformance: !isEmpty(jessConfigute?.showPerformance) && (jessConfigute?.showPerformance?.showAll === true || Object.keys(jessConfigute?.showPerformance)?.filter(key => key !== 'showAll' && jessConfigute?.showPerformance[key] === true)?.length) ? true : false,
+        forceNoOffscreen: isBoolean(jessConfigute?.forceNoOffscreen) ? jessConfigute?.forceNoOffscreen : true,
         isNotMute: jessConfigute?.isNotMute || false,
         useMSE: jessConfigute?.useMSE || false,
         useSIMD: jessConfigute?.useSIMD || false,
         useWCS: jessConfigute?.useWCS || false,
         wcsUseVideoRender: jessConfigute?.wcsUseVideoRender || false,
-        autoWasm: _.isBoolean(jessConfigute?.autoWasm) ? jessConfigute?.autoWasm : true,
+        autoWasm: isBoolean(jessConfigute?.autoWasm) ? jessConfigute?.autoWasm : true,
         hiddenAutoPause: jessConfigute?.hiddenAutoPause || false,
         isFlv: jessConfigute?.isFlv || false,
         timeout: jessConfigute?.timeout || 10,
@@ -476,7 +478,7 @@ const JessibucaVideo: React.FC<JessibucaVideoProps> = (props) => {
         wsUrl = appendQuery(wsUrl, 'x-driver-instance-id', driverInstanceId)
       }
       setVideoUrl(wsUrl)
-    } else if (_.isEmpty(videoAction) || videoAction == 'preview') {
+    } else if (isEmpty(videoAction) || videoAction == 'preview') {
       let tableDataObj = tableData
       if (tableDataObj?.id) {
         getVideoUrl(tableData)

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import _ from 'lodash'
+import isPlainObject from 'lodash/isPlainObject'
 import { format, parse } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -61,7 +61,7 @@ const FilterDate = (props: any) => {
   let value = props.value
   let dateRange: { from: Date; to: Date } | undefined = undefined
 
-  if (_.isPlainObject(value) && value.gte && value.lte) {
+  if (isPlainObject(value) && value.gte && value.lte) {
     try {
       const fromDate = parse(value.gte as string, dateFormat, new Date())
       const toDate = parse(value.lte as string, dateFormat, new Date())

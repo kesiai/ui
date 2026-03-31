@@ -1,5 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import isEmpty from 'lodash/isEmpty'
+import isString from 'lodash/isString'
+
 import { ChevronDown, Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -78,7 +81,7 @@ const FilterLogType = ({ value, onChange, multiple = true }: FilterLogTypeProps)
     api.fetch('', {})
       .then(({ json }) => {
         const _data = language === 'zh_Hans' || language === 'zh-CN' ? json?.data : json?.[language]?.data
-        const logJson = _.cloneDeep(_data)
+        const logJson = cloneDeep(_data)
 
         const nochildren = logJson?.reduce((arr: LogTypeItem[], item: LogTypeItem) => {
           if (!item.children) {
@@ -92,7 +95,7 @@ const FilterLogType = ({ value, onChange, multiple = true }: FilterLogTypeProps)
           : []
         const combinedData = filteredData?.concat(processedResult)
 
-        logSaveRule?.checked && !_.isEmpty(processedResult)
+        logSaveRule?.checked && !isEmpty(processedResult)
           ? setData(combinedData)
           : setData(logJson || [])
       })
@@ -101,7 +104,7 @@ const FilterLogType = ({ value, onChange, multiple = true }: FilterLogTypeProps)
   // 获取选中的值
   const selectedValues = useMemo(() => {
     if (!value) return []
-    if (_.isString(value)) return [value]
+    if (isString(value)) return [value]
     if (value.$in) return value.$in
     return []
   }, [value])

@@ -2,7 +2,8 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
-import _ from 'lodash'
+import isFunction from 'lodash/isFunction'
+import isPlainObject from 'lodash/isPlainObject'
 // @ts-ignore
 import VectorSource from 'ol/source/Vector'
 // @ts-ignore
@@ -561,7 +562,7 @@ const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
             const unsubscribe = subscribe('warning', wsParams)
 
             return () => {
-                if (unsubscribe && _.isFunction(unsubscribe)) {
+                if (unsubscribe && isFunction(unsubscribe)) {
                     unsubscribe()
                 }
             }
@@ -570,7 +571,7 @@ const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
         // 处理报警推送数据
         useEffect(() => {
             const handleWarningData = (data: any) => {
-                if (!data || !_.isPlainObject(data)) return
+                if (!data || !isPlainObject(data)) return
 
                 const { id, recoveryTime, status, processed } = data
 

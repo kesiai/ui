@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import _ from 'lodash'
+import isString from 'lodash/isString'
+import omit from 'lodash/omit'
 import { useModel, createAPI } from '@airiot/client'
 import {
   Select,
@@ -28,7 +29,7 @@ const FilterInputSelect: React.FC<FilterInputSelectProps> = ({ name, schema, val
   const getValue = () => {
     if (!value) return undefined
     // 支持多种查询格式
-    if (_.isString(value)) return value
+    if (isString(value)) return value
     if (value.$eq) return value.$eq
     if (value.$in) return value.$in[0]
     return undefined
@@ -54,7 +55,7 @@ const FilterInputSelect: React.FC<FilterInputSelectProps> = ({ name, schema, val
     // 构建查询参数
     const groupBy = { [name]: `$${name}` }
     // 移除当前字段的过滤，避免影响选项加载
-    const filter = name ? _.omit({}, [name]) : {}
+    const filter = name ? omit({}, [name]) : {}
     const query = { groupBy, filter, withCount: true }
 
     const api = createAPI({

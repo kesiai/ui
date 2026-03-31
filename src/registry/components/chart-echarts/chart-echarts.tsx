@@ -1,12 +1,16 @@
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
+import isEmpty from 'lodash/isEmpty'
+import merge from 'lodash/merge'
 import React from 'react'
 import { BaseChart, BaseChartProps } from './BaseChart'
 
 // 递归，字符串转函数
 const StrToFunction = (obj: any): any => {
-  const result = _.cloneDeep(obj)
+  const result = cloneDeep(obj)
   for (const key in result) {
-    if (_.isString(result[key]) && result[key].indexOf(' => ') > -1) {
+    if (isString(result[key]) && result[key].indexOf(' => ') > -1) {
       try {
         const func = new Function(`return ${result[key]}`)
         result[key] = func()
@@ -14,7 +18,7 @@ const StrToFunction = (obj: any): any => {
         console.error(`字符串转函数失败: ${result[key]}`, e)
         result[key] = result[key]
       }
-    } else if (_.isObject(result[key])) {
+    } else if (isObject(result[key])) {
       result[key] = StrToFunction(result[key])
     }
   }
@@ -34,7 +38,7 @@ const ChartEcharts: React.FC<ChartEchartsProps> = (props) => {
 
   let newOption = option || { series: [seriesOption] }
 
-  if (chartData && !_.isEmpty(chartData)) {
+  if (chartData && !isEmpty(chartData)) {
     const dataset = chartData
     newOption = {
       ...newOption,
@@ -43,7 +47,7 @@ const ChartEcharts: React.FC<ChartEchartsProps> = (props) => {
 
     const d = chartData?.dimensions
     if (d && d[0] && d[0]?.type == 'time') {
-      if (newOption.xAxis) newOption = _.merge(newOption, { xAxis: { type: 'time' } })
+      if (newOption.xAxis) newOption = merge(newOption, { xAxis: { type: 'time' } })
       newOption.series = newOption.series.slice(0, d.length - 1).map((s: any, i: number) => {
         return ['bar', 'line'].indexOf(s.type) > -1 ? { ...s, encode: { x: 0, y: i + 1 } } : s
       })

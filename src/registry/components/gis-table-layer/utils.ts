@@ -3,7 +3,8 @@ import Feature from 'ol/Feature'
 import * as geom from 'ol/geom'
 import * as style from 'ol/style'
 import { fromLonLat } from 'ol/proj'
-import _ from 'lodash'
+import isString from 'lodash/isString'
+import merge from 'lodash/merge'
 
 // 简化的 mapMaxResolution
 const mapMaxResolution = 156543.03392804097;
@@ -138,7 +139,7 @@ export function parseIconScript({ iconScript, record, tags, style }: any) {
       }
     `);
         let result = scriptFn(record, tags, style)
-        if (_.isString(result)) {
+        if (isString(result)) {
             // 假设 /rest 开头是相对路径，否则补上前缀（这里简化处理，直接返回）
             // result = result.startsWith('/rest') ? result : config('mediaUrl') + result
         }
@@ -272,7 +273,7 @@ export const createStyleClass = ({
     let iconStyle = icon || {}
     let textStyle = text || {}
 
-    if (textSetting) { textStyle = _.merge(textSetting, textStyle) }
+    if (textSetting) { textStyle = merge(textSetting, textStyle) }
     if (backgroundFill && !textStyle.fill) { textStyle['fill'] = backgroundFill }
 
     if (markerType == 'Point') {
@@ -280,7 +281,7 @@ export const createStyleClass = ({
             iconStyle.iconSrc = iconUrl || {}
         }
         if (iconSetting) {
-            iconStyle = _.merge(iconSetting, iconStyle || {})
+            iconStyle = merge(iconSetting, iconStyle || {})
         }
         return new style.Style({
             image: createIconClass(iconStyle || {}, zoomScale),

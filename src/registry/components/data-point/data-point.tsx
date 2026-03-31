@@ -1,6 +1,10 @@
 import * as React from "react"
 import dayjs from "dayjs"
-import _ from "lodash"
+import isNil from 'lodash/isNil'
+import isEmpty from 'lodash/isEmpty'
+import isString from 'lodash/isString'
+import isNull from 'lodash/isNull'
+import isNumber from 'lodash/isNumber'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { convertValue, valueFormat, type DataPointConfig } from "@/registry/lib/data-point-utils"
@@ -158,7 +162,7 @@ const LatestValue: React.FC<{
   const [state, setState] = React.useState<any>(null)
 
   React.useEffect(() => {
-    if (!_.isNil(value)) {
+    if (!isNil(value)) {
       setState(value)
     }
   }, [value])
@@ -168,7 +172,7 @@ const LatestValue: React.FC<{
   return (
     <p>
       <strong>最新有效值: </strong>
-      {!_.isNil(val) ? val : null}
+      {!isNil(val) ? val : null}
     </p>
   )
 }
@@ -210,12 +214,12 @@ const PopoverContentComponent: React.FC<PopoverContentProps> = ({
           {interval}秒
         </p>
       ) : null}
-      {warningState && !_.isEmpty(warningState) ? (
+      {warningState && !isEmpty(warningState) ? (
         <div className="text-sm">
           Warning State: {JSON.stringify(warningState)}
         </div>
       ) : null}
-      {!_.isString(value) && (
+      {!isString(value) && (
         <p className="text-center">
           <button
             onClick={() => setVisible(false)}
@@ -302,10 +306,10 @@ const DefaultRender: React.FC<{
           <span className="text-muted-foreground">-</span>
         ) : val == 0 ? (
           val
-        ) : val === undefined || value === '' || _.isNull(val) ? (
+        ) : val === undefined || value === '' || isNull(val) ? (
           <span className="text-muted-foreground">-</span>
         ) : (
-          <>{animated && _.isNumber(val) ? <AnimatedNumber value={val} /> : val}</>
+          <>{animated && isNumber(val) ? <AnimatedNumber value={val} /> : val}</>
         )}
       </span>
     )

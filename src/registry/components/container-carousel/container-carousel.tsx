@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import _ from 'lodash'
 import {
   Carousel,
   CarouselContent,

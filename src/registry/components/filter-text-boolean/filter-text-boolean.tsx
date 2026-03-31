@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import has from 'lodash/has'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { cn } from '@/lib/utils'
@@ -36,9 +36,9 @@ const FilterTextBoolean = ({ field, input: { value, onChange } }: FilterTextBool
 
   let radioValue = '1'
 
-  if (_.has(value, '$or')) {
+  if (has(value, '$or')) {
     radioValue = '2'
-  } else if (_.has(value, '$and')) {
+  } else if (has(value, '$and')) {
     radioValue = '3'
   }
 

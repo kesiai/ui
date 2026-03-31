@@ -1,7 +1,10 @@
 'use client'
 
 import { useMemo, useEffect, useState, useCallback, useRef, type ReactNode } from 'react'
-import _ from 'lodash'
+import isPlainObject from 'lodash/isPlainObject'
+import isArray from 'lodash/isArray'
+import keys from 'lodash/keys'
+import union from 'lodash/union'
 import { api } from '@airiot/client'
 import { useDatasetSet } from '@airiot/client'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
@@ -43,23 +46,23 @@ const filterResult = (json: any): { dimensions: string[]; source: any[][] } => {
   let dimensions: string[] = []
   let source: any[][] = []
 
-  if (_.isPlainObject(_json)) {
+  if (isPlainObject(_json)) {
     _json = [_json]
-  } else if (!_.isArray(_json)) {
+  } else if (!isArray(_json)) {
     _json = [{ result: _json }]
   }
 
   // 提取所有维度
   _json.forEach((item: any) => {
-    const keys = _.keys(item)
-    dimensions = _.union(dimensions, keys)
+    const keys = keys(item)
+    dimensions = union(dimensions, keys)
   })
 
   // 构建数据源
   _json.forEach((item: any) => {
     const values: any[] = []
     dimensions.forEach(key => {
-      values.push(_.isArray(item[key]) ? JSON.stringify(item[key]) : item[key])
+      values.push(isArray(item[key]) ? JSON.stringify(item[key]) : item[key])
     })
     source.push(values)
   })

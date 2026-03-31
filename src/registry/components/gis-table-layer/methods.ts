@@ -1,6 +1,7 @@
 
 import { createAPI } from '@airiot/client'
-import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import set from 'lodash/set'
 
 export const getGISTable = (ids?: string[]) => {
     const api = createAPI({ resource: 'core/t/schema' })
@@ -61,14 +62,14 @@ export const getTableRecordDataPoint = (where: any[]) => {
         body: JSON.stringify(where)
     })
         .then(({ json }: any) => {
-            if (json && !_.isEmpty(json)) {
+            if (json && !isEmpty(json)) {
                 const payload: any = {}
                 json.forEach((item: any) => {
                     const id = item.tableDataId || item.id
                     const tagId = item.tagId
-                    _.set(payload, `${id}.tableId`, item.tableId)
-                    _.set(payload, `${id}.id`, id)
-                    _.set(payload, `${id}.${tagId}`, item.value)
+                    set(payload, `${id}.tableId`, item.tableId)
+                    set(payload, `${id}.id`, id)
+                    set(payload, `${id}.${tagId}`, item.value)
                 })
                 return Object.keys(payload).map(key => payload[key])
             }

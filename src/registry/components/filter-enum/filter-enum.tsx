@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import _ from 'lodash'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
+
 import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Check, ChevronDown, X } from 'lucide-react'
@@ -14,8 +16,8 @@ const FilterEnum = (props: any) => {
   // 初始化选中的值
   let selected: string[] = []
   if (value && value != '') {
-    if (_.isString(value)) selected = [value]
-    if (_.isObject(value)) selected = (value as { $in?: string[] }).$in || []
+    if (isString(value)) selected = [value]
+    if (isObject(value)) selected = (value as { $in?: string[] }).$in || []
   }
   const [selectedValues, setSelectedValues] = useState<string[]>(selected)
 

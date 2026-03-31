@@ -1,7 +1,15 @@
 'use client'
 
 import { useMemo, useEffect, useState, useRef, useCallback, type ReactNode } from 'react'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import keys from 'lodash/keys'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
+import isEmpty from 'lodash/isEmpty'
+import isUndefined from 'lodash/isUndefined'
+import isNull from 'lodash/isNull'
+import get from 'lodash/get'
+import isFunction from 'lodash/isFunction'
 import { api, useDatasetSet } from '@airiot/client'
 import { toast } from 'sonner'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
@@ -161,9 +169,9 @@ const fetchSchema = async ({ id, selectType }: { id?: string; selectType?: strin
   try {
     if (selectType === 'dataset') {
       const { json } = await api({ name: `ds/dataset/jst/schema/${id}` }).fetch('')
-      const schema = _.cloneDeep(json?.schema || {})
+      const schema = cloneDeep(json?.schema || {})
 
-      for (const key of _.keys(schema.properties)) {
+      for (const key of keys(schema.properties)) {
         const item = schema.properties[key]
         if (item?.tableName) {
           item.title = `${item.title}(${item.tableName})`
@@ -226,7 +234,7 @@ const dealExtraSchema = async (
 }
 
 const makeDateOperation = ({ dateOperator, field }: GroupItemConfig): any => {
-  const fieldId = _.isObject(field) ? (field as FieldConfig).id : field
+  const fieldId = isObject(field) ? (field as FieldConfig).id : field
   if (!fieldId) return null
 
   const $field = '$' + fieldId
@@ -270,7 +278,7 @@ const buildQuery = (
   group.forEach(g => {
     if (!g.field) return
 
-    const field = _.isPlainObject(g.field)
+    const field = isPlainObject(g.field)
       ? (g.field as FieldConfig).type === 'tag'
         ? 'param-' + (g.field as FieldConfig).id
         : (g.field as FieldConfig).id || (g.field as FieldConfig).key
@@ -285,7 +293,7 @@ const buildQuery = (
       key = key.split('.').join('.properties.')
     }
 
-    const fieldTitle = _.get(properties, `${field}.title`)
+    const fieldTitle = get(properties, `${field}.title`)
     const name = field === 'fields.id' ? '数据点标识' : (typeof fieldTitle === 'string' ? fieldTitle : fieldTitle?.title) || '未命名'
 
     if (g.dateOperator) {
@@ -304,7 +312,7 @@ const buildQuery = (
     if (column.accumulator === '$count') {
       groupFields[String(name)] = { $sum: 1 }
     } else if (column.field || column.expression) {
-      const field = _.isPlainObject(column.field)
+      const field = isPlainObject(column.field)
         ? (column.field as FieldConfig).type === 'tag'
           ? 'param-' + (column.field as FieldConfig).id
           : (column.field as FieldConfig).id
@@ -437,7 +445,7 @@ function useTableData(config: TableDataConfig) {
 
     if (Array.isArray(group)) {
       group.forEach(g => {
-        const key = _.isString(g?.field) ? g.field : g?.field?.id
+        const key = isString(g?.field) ? g.field : g?.field?.id
         if (!key) return
 
         let normalizedKey = key
@@ -445,8 +453,8 @@ function useTableData(config: TableDataConfig) {
           normalizedKey = normalizedKey.split('.').join('.properties.')
         }
 
-        const field = _.get(schema?.properties, normalizedKey)
-        if (field?.transform && _.isFunction(field.transform)) {
+        const field = get(schema?.properties, normalizedKey)
+        if (field?.transform && isFunction(field.transform)) {
           transforms[field.title || ''] = field.transform
         }
       })
@@ -497,11 +505,11 @@ function useTableData(config: TableDataConfig) {
 
       let groupKeys: string[] = []
 
-      if (isGroup || _.isUndefined(isGroup)) {
+      if (isGroup || isUndefined(isGroup)) {
         const { groupBy, groupFields } = buildQuery(group, columns, schema)
-        groupKeys = _.keys(groupBy)
+        groupKeys = keys(groupBy)
 
-        if (_.isEmpty(groupFields)) {
+        if (isEmpty(groupFields)) {
           setDataset([])
           return
         }
@@ -530,7 +538,7 @@ function useTableData(config: TableDataConfig) {
         query.skip = skip
       }
 
-      if (!_.isNull(statsBySingle)) {
+      if (!isNull(statsBySingle)) {
         query.statsBySingle = statsBySingle
       }
 

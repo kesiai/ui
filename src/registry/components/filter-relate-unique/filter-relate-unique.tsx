@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import _ from 'lodash'
+import isString from 'lodash/isString'
+import isEmpty from 'lodash/isEmpty'
 import { createAPI, useModel } from '@airiot/client'
 import {
   Select,
@@ -41,7 +42,7 @@ const FilterRelateUnique: React.FC<FilterRelateUniqueProps> = (props) => {
     if (!value) return []
     if (value.ne) return [] // 排除条件不显示
     if (internalTable) {
-      return _.isString(value) ? [value] : []
+      return isString(value) ? [value] : []
     }
     // 多选模式
     if (value.in) return value.in
@@ -67,7 +68,7 @@ const FilterRelateUnique: React.FC<FilterRelateUniqueProps> = (props) => {
     api.query({ fields: [key] }, {})
       .then(({ items }) => {
         // 过滤掉空值并去重
-        const arr = items.filter(v => v[key] && !_.isEmpty(v[key]))
+        const arr = items.filter(v => v[key] && !isEmpty(v[key]))
         const optionList = arr.reduce((prev, cur) => {
           const id = cur[key]?.id
           return prev.map((v: { value: string }) => v.value).includes(id) ? prev : [...prev, cur]

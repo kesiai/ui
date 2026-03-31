@@ -33,7 +33,17 @@ import {
     ViewPanel,
     getGeometryCenter
 } from './overlay-utils'
-import _ from 'lodash'
+import isBoolean from 'lodash/isBoolean'
+import merge from 'lodash/merge'
+import cloneDeep from 'lodash/cloneDeep'
+import set from 'lodash/set'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
+import isNumber from 'lodash/isNumber'
+import debounce from 'lodash/debounce'
+import keyBy from 'lodash/keyBy'
+import isEmpty from 'lodash/isEmpty'
+import omit from 'lodash/omit'
 // @ts-ignore
 import * as olStyle from 'ol/style'
 
@@ -474,7 +484,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             const visible = feature.get('visible')
 
             // 检查可见性
-            if (_.isBoolean(visible) && visible === false) {
+            if (isBoolean(visible) && visible === false) {
                 return null
             }
 
@@ -493,10 +503,10 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             }
 
             // 选中样式合并 - 与 record.js 保持一致
-            const viewStyle = (selected ? _.merge(_.cloneDeep(marker), highlightRef.current) : marker) || {}
+            const viewStyle = (selected ? merge(cloneDeep(marker), highlightRef.current) : marker) || {}
             const zIndex = selected ? 9 : 0
-            const style = markerInitStyle ? _.merge({}, markerInitStyle, viewStyle) : viewStyle
-            _.set(style, 'text.text', markerLabel)
+            const style = markerInitStyle ? merge({}, markerInitStyle, viewStyle) : viewStyle
+            set(style, 'text.text', markerLabel)
 
             if (markerType === 'Point') {
                 // 如果设置了图标脚本（最高优先级）
@@ -509,9 +519,9 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     })
                     // 如果脚本返回字符串，替换iconsrc；如果返回Style类，直接使用
                     if (result != null) {
-                        if (_.isString(result)) {
-                            _.set(style, 'icon.iconSrc', result)
-                        } else if (_.isObject(result)) {
+                        if (isString(result)) {
+                            set(style, 'icon.iconSrc', result)
+                        } else if (isObject(result)) {
                             return result
                         }
                     }
@@ -519,15 +529,15 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     // 处理记录在线图标（第二优先级）
                     if (markerInitStyle?.onlineIcon && markerInitStyle.onlineIcon.length > 0) {
                         if (markerRecord?.online) {
-                            _.set(style, 'icon.iconSrc', markerInitStyle.onlineIcon)
+                            set(style, 'icon.iconSrc', markerInitStyle.onlineIcon)
                         } else {
-                            _.set(style, 'icon.iconSrc', markerInitStyle.iconUrl)
+                            set(style, 'icon.iconSrc', markerInitStyle.iconUrl)
                         }
                     } else {
                         // 向后兼容：将旧的 marker.point.src 映射到 icon.iconSrc
                         // 只有在没有使用新格式 icon.iconSrc 时才进行转换
                         if (viewStyle.point?.src && !viewStyle.icon?.iconSrc) {
-                            _.set(style, 'icon.iconSrc', viewStyle.point.src)
+                            set(style, 'icon.iconSrc', viewStyle.point.src)
                         }
                     }
                 }
@@ -537,9 +547,9 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 const direction = directionField ? markerTags?.course : markerTags?.direction
 
                 // 图标按 direction 数据点方向旋转
-                _.set(style, 'icon.rotateWithView', true)
-                if (_.isNumber(direction)) {
-                    _.set(style, 'icon.rotation', direction * (Math.PI / 180))
+                set(style, 'icon.rotateWithView', true)
+                if (isNumber(direction)) {
+                    set(style, 'icon.rotation', direction * (Math.PI / 180))
                 }
             }
 
@@ -671,7 +681,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 if (updaters[featureId]) {
                     updaters[featureId].cancel()
                 }
-                updaters[featureId] = _.debounce(() => {
+                updaters[featureId] = debounce(() => {
                     try {
                         const mergedData = pendingUpdates[featureId]
                         if (!mergedData) return
@@ -758,7 +768,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 if (!source || !data?._opsDataType) return
 
                 if (data._opsDataType === 'add') {
-                    const current = _.cloneDeep(tableRef.current)
+                    const current = cloneDeep(tableRef.current)
                     const tid = data?._table || data?.tableId || data?.table
                     if (!current[tid]) return
 
@@ -829,7 +839,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
                     // 获取表配置
                     const tableList = await getGISTable(uniqueTableIds)
-                    const tableMap = _.keyBy(tableList, 'id')
+                    const tableMap = keyBy(tableList, 'id')
 
                     // 按表分组数据
                     const dataByTable: Record<string, any[]> = {}
@@ -891,7 +901,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
                     const tableConfig = tableList[0]
 
-                    if (!tableConfig.gis || _.isEmpty(tableConfig.gis)) {
+                    if (!tableConfig.gis || isEmpty(tableConfig.gis)) {
                         return { features: [], tableRecords: [] }
                     }
 
@@ -900,7 +910,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     // 应用部门过滤
                     if (department && department.length > 0) {
                         const tableDepartmentFilter = await getTableDepartmentFilter([table.id], department)
-                        const filter = _.omit(tableDepartmentFilter[table.id], 'NoDepart')
+                        const filter = omit(tableDepartmentFilter[table.id], 'NoDepart')
                         if (tableDepartmentFilter[table.id]?.NoDepart) {
                             // 该表不可访问
                             return { features: [], tableRecords: [] }
@@ -909,7 +919,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     }
 
                     // 应用查询过滤器
-                    if (tableFilters && !_.isEmpty(tableFilters)) {
+                    if (tableFilters && !isEmpty(tableFilters)) {
                         const tableFilterObj = getQueryFilter ? getQueryFilter(tableFilters, tableConfig.schema) : tableFilters
                         rfilter = { ...rfilter, ...tableFilterObj }
                     }
@@ -975,7 +985,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     tableListAvailable.forEach((t: any) => {
                         let filter = {}
                         if (department && department.length > 0 && departmentFilters[t.id]) {
-                            filter = _.omit(departmentFilters[t.id], 'NoDepart')
+                            filter = omit(departmentFilters[t.id], 'NoDepart')
                         }
                         promiseFns.push(getTableRecord(t, filter))
                     })
@@ -1031,7 +1041,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
                 if (subTags.length > 0) {
                     const dataPoints = await getTableRecordDataPoint(subTags)
-                    const dataMap = _.keyBy(dataPoints, (d: any) => `${d.id}`)
+                    const dataMap = keyBy(dataPoints, (d: any) => `${d.id}`)
 
                     recordList.forEach((r: any) => {
                         const dpLat = dataMap[r.id]?.[tableGisConfig.lat]
@@ -1078,10 +1088,10 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         gisSource.location.data.forEach((d: any) => {
                             let mergedStyle = { ...tableGisConfig[d.type] }
                             if (gisSource.location.geometryStyle) {
-                                mergedStyle = _.merge({}, mergedStyle, gisSource.location.geometryStyle)
+                                mergedStyle = merge({}, mergedStyle, gisSource.location.geometryStyle)
                             }
                             if (d.style) {
-                                mergedStyle = _.merge({}, mergedStyle, d.style)
+                                mergedStyle = merge({}, mergedStyle, d.style)
                             }
 
                             const f = createFeature({
@@ -1107,7 +1117,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
         }
 
         // 防抖数据初始化
-        const debouncedInit = React.useMemo(() => _.debounce(async () => {
+        const debouncedInit = React.useMemo(() => debounce(async () => {
             if (!map) return
             const source = sourceRef.current
             if (!source) return

@@ -1,4 +1,10 @@
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import has from 'lodash/has'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
+import isEmpty from 'lodash/isEmpty'
+import isNaN from 'lodash/isNaN'
+import merge from 'lodash/merge'
 import React from 'react'
 import dayjs from 'dayjs'
 import { BaseChart, BaseChartProps } from '@/registry/components/chart-echarts/BaseChart'
@@ -61,10 +67,10 @@ interface ChartData {
 
 // 递归，字符串转函数
 const StrToFunction = (obj: any): any => {
-  const result = _.cloneDeep(obj)
+  const result = cloneDeep(obj)
   for (const key in result) {
-    if (_.has(result, key)) {
-      if (_.isString(result[key]) && result[key].indexOf(' => ') > -1) {
+    if (has(result, key)) {
+      if (isString(result[key]) && result[key].indexOf(' => ') > -1) {
         try {
           const func = new Function(`return ${result[key]}`)
           result[key] = func()
@@ -72,7 +78,7 @@ const StrToFunction = (obj: any): any => {
           console.error(`字符串转函数失败: ${result[key]}`, e)
           result[key] = result[key]
         }
-      } else if (_.isObject(result[key])) {
+      } else if (isObject(result[key])) {
         result[key] = StrToFunction(result[key])
       }
     }
@@ -95,7 +101,7 @@ const getAliasLang = async (item: ChartField | undefined) => {
 
 // 格式化时间
 const formatTime = (datas: any[], chart: ChartData): any[] => {
-  if (_.isEmpty(datas)) return datas
+  if (isEmpty(datas)) return datas
   const fs = chart.fields || []
   const ds = chart.style?.dimension || []
   return datas.map((d, i) => {
@@ -179,7 +185,7 @@ const getStackBarOption = (chart: ChartData): any => {
 
 // 获取通用图表配置
 const getCommonOption = (chart: ChartData): any => {
-  if (_.isEmpty(chart) || !chart.stat) {
+  if (isEmpty(chart) || !chart.stat) {
     return undefined
   }
   const n = chart.stat.nCategories || 0
@@ -213,7 +219,7 @@ const getCommonOption = (chart: ChartData): any => {
 
   if (chart.stat?.grouped && current?.echartType === 'pie') {
     source.forEach((s) => {
-      if (!_.isNaN(Number(s[nValues]))) {
+      if (!isNaN(Number(s[nValues]))) {
         s[nValues] = Number(s[nValues])
       }
     })
@@ -272,7 +278,7 @@ const getChartOption = (data: ChartData | null, echartOption: any): any => {
   if (!data) return echartOption
   const eOption = echartOption || data?.style?.baseValue?.option || {}
   const chartOption = data?.stat?.stacked ? getStackBarOption(data) : getCommonOption(data)
-  return chartOption ? _.merge({}, chartOption, JSON.parse(JSON.stringify(eOption))) : eOption
+  return chartOption ? merge({}, chartOption, JSON.parse(JSON.stringify(eOption))) : eOption
 }
 
 export interface View {

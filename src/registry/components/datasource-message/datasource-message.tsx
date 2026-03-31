@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useMemo, useState, useRef, useCallback } from 'react'
-import _ from 'lodash'
+import isObject from 'lodash/isObject'
 import { api } from '@airiot/client'
 import { useDatasetSet } from '@airiot/client'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
@@ -106,7 +106,7 @@ const messageList = [
  * 生成日期操作
  */
 const makeDateOperation = ({ dateOperator, field }: GroupItemConfig): any => {
-  const fieldId = _.isObject(field) ? (field as any).id : field
+  const fieldId = isObject(field) ? (field as any).id : field
   if (!fieldId) return null
 
   const $field = '$' + fieldId

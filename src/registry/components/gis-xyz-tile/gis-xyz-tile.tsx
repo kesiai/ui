@@ -9,7 +9,8 @@ import { XYZ as XYZSource } from 'ol/source'
 import * as style from 'ol/style'
 import type Map from 'ol/Map'
 import { useMap } from '../gis-map-core/gis-map-core'
-import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import isPlainObject from 'lodash/isPlainObject'
 import { getProjection, getMapCoordinateType } from './utils'
 
 
@@ -119,9 +120,9 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
 
           // Handle array vs object for canvasSetting
           let initValue: CanvasSetting | undefined
-          if (Array.isArray(canvasSetting) && !_.isEmpty(canvasSetting)) {
+          if (Array.isArray(canvasSetting) && !isEmpty(canvasSetting)) {
             initValue = canvasSetting[0]
-          } else if (_.isPlainObject(canvasSetting) && !_.isEmpty(canvasSetting)) {
+          } else if (isPlainObject(canvasSetting) && !isEmpty(canvasSetting)) {
             initValue = canvasSetting as CanvasSetting
           }
 

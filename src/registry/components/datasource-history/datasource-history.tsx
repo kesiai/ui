@@ -1,7 +1,14 @@
 'use client'
 
 import { ReactNode, useEffect, useMemo, useState, useRef, useCallback } from 'react'
-import _ from 'lodash'
+import isNumber from 'lodash/isNumber'
+import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
+import keys from 'lodash/keys'
+import isNull from 'lodash/isNull'
+import cloneDeep from 'lodash/cloneDeep'
+import last from 'lodash/last'
+import slice from 'lodash/slice'
 import { api } from '@airiot/client'
 import { useDatasetSet } from '@airiot/client'
 import dayjs from 'dayjs'
@@ -101,7 +108,7 @@ export const defaultHistoryConfig: HistoryDataConfig = {
  * 数字保留指定小数位
  */
 const toFixed = (value: number, precision: number = 2): number | null => {
-  if (!_.isNumber(value)) {
+  if (!isNumber(value)) {
     return value
   }
   return Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision)
@@ -301,7 +308,7 @@ const makeQuery = (
     }
   }
 
-  if (statisType && statisType === 'moment' && type && !_.isEmpty(startTime)) {
+  if (statisType && statisType === 'moment' && type && !isEmpty(startTime)) {
     query.type = type
     query.startTime = startTime
   }
@@ -363,7 +370,7 @@ const queryData = async (
             const col1 = item?.tags?.[groupType || ''] || item?.tags?.[itemGroup || '']
             item?.values.forEach((vs: any) => {
               const col2 = xFormat ? dayjs(new Date(vs[0])).format(xFormat) : new Date(vs[0])
-              const col3 = toFixed(vs[1], !_.isNil(fixed) ? fixed : 3)
+              const col3 = toFixed(vs[1], !isNil(fixed) ? fixed : 3)
               newseries.push([col1, col2, col3])
             })
           })
@@ -372,7 +379,7 @@ const queryData = async (
           prev[key!] = result.series.map((item: any) => {
             return [
               item?.tags?.[groupType || ''] || item?.tags?.[itemGroup || ''],
-              toFixed(item?.values?.[0]?.[1], !_.isNil(fixed) ? fixed : 3)
+              toFixed(item?.values?.[0]?.[1], !isNil(fixed) ? fixed : 3)
             ]
           })
         }
@@ -380,9 +387,9 @@ const queryData = async (
         prev[key!] = (result && result.series)
           ? result.series[0]?.values.map((vs: any) => {
             if (xFormat) {
-              return [dayjs(new Date(vs[0])).format(xFormat), toFixed(vs[1], !_.isNil(fixed) ? fixed : 3)]
+              return [dayjs(new Date(vs[0])).format(xFormat), toFixed(vs[1], !isNil(fixed) ? fixed : 3)]
             } else {
-              return [new Date(vs[0]), toFixed(vs[1], !_.isNil(fixed) ? fixed : 3)]
+              return [new Date(vs[0]), toFixed(vs[1], !isNil(fixed) ? fixed : 3)]
             }
           })
           : []
@@ -393,10 +400,10 @@ const queryData = async (
 
     if (noTime) {
       // 统计数据
-      const source = _.keys(series).map(key => {
+      const source = keys(series).map(key => {
         const item = items.find(i => i.key === key)
         if (series[key] && series[key].length > 0) {
-          return [item?.title || item?.name, !_.isNil(series[key][0][1]) ? series[key][0][1] : null, key]
+          return [item?.title || item?.name, !isNil(series[key][0][1]) ? series[key][0][1] : null, key]
         } else {
           return null
         }
@@ -417,9 +424,9 @@ const queryData = async (
       const source = times?.map((t: any, i: number) => {
         return [
           t,
-          ..._.keys(series).map(key => {
+          ...keys(series).map(key => {
             if (series[key]) {
-              const val = !_.isNil(series[key][i]) ? series[key][i][1] : null
+              const val = !isNil(series[key][i]) ? series[key][i][1] : null
               return val == null || val == undefined ? null : val
             } else {
               return null
@@ -432,7 +439,7 @@ const queryData = async (
         return {
           dimensions: [
             { name: 'time', title: '时间', type: 'ordinal' },
-            ..._.keys(series).map(key => {
+            ...keys(series).map(key => {
               const item = items.find(i => i.key === key)
               return { name: item?.title || item?.name || key || '', type: 'number' as const, tag: item?.key }
             })
@@ -443,7 +450,7 @@ const queryData = async (
         return {
           dimensions: [
             { name: 'time', title: '时间', type: 'time' },
-            ..._.keys(series).map(key => {
+            ...keys(series).map(key => {
               const item = items.find(i => i.key === key)
               return { name: item?.title || item?.name || key || '', type: 'number' as const, tag: item?.key }
             })
@@ -453,7 +460,7 @@ const queryData = async (
       }
     } else {
       // 返回多个dataset
-      return _.keys(series).map(key => {
+      return keys(series).map(key => {
         const item = items.find(i => i.key === key)
         const title = item?.name
         const dimensions: Array<{ name: string; title?: string; type: string; tag?: string }> = [
@@ -671,15 +678,15 @@ function useHistoryData(config: HistoryDataConfig) {
   }, [interval])
 
   // 过滤空数据
-  const filterDataset = dataset ? _.cloneDeep(dataset) : null
+  const filterDataset = dataset ? cloneDeep(dataset) : null
 
   if (emptyDataFilter && filterDataset) {
     if ('source' in filterDataset && filterDataset.source) {
-      const lastData = _.last(filterDataset.source)
+      const lastData = last(filterDataset.source)
       if (Array.isArray(lastData)) {
-        const empty = lastData?.slice(1).every(d => _.isNull(d))
+        const empty = lastData?.slice(1).every(d => isNull(d))
         if (empty) {
-          filterDataset.source = _.slice(filterDataset.source, 0, -1)
+          filterDataset.source = slice(filterDataset.source, 0, -1)
         }
       }
     }

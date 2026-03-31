@@ -2,7 +2,8 @@ import * as echarts from 'echarts'
 import * as echartsStat from 'echarts-stat'
 import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import elementResizeEvent from 'element-resize-event'
-import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import merge from 'lodash/merge'
 
 // 注册 echarts-stat 的转换器
 echarts.registerTransform(echartsStat.transform.regression)
@@ -10,7 +11,7 @@ import 'echarts-gl'
 
 // 判断 dataset 格式是否正确
 const dataValid = (data: any): boolean => {
-  if (_.isEmpty(data)) return true
+  if (isEmpty(data)) return true
   if (data.source) return true
   if (data[0]?.source) return true
   return false
@@ -110,7 +111,7 @@ export const BaseChart: React.FC<BaseChartProps> = (props) => {
         let chartOption: any = {}
 
         try {
-          if (!_.isEmpty(chartCode)) {
+          if (!isEmpty(chartCode)) {
             const res = new Function('myChart', 'dataset', 'props', 'let option,codeOption; ' + chartCode + ';\n return { option, codeOption }')(myChart, dataset, props)
             if (res.option) chartOption = res.option
             if (res.codeOption) codeOption = res.codeOption
@@ -122,12 +123,12 @@ export const BaseChart: React.FC<BaseChartProps> = (props) => {
         }
 
         let op = {
-          ..._.merge(option, codeOption),
+          ...merge(option, codeOption),
           dataset: codeOption?.dataset || option?.dataset
         }
 
         // 只有当 chartOption 明显是完整配置时才完全替换（有 series 或 xAxis/yAxis 等核心配置）
-        if (!_.isEmpty(chartOption) && (chartOption.series || chartOption.xAxis || chartOption.yAxis)) {
+        if (!isEmpty(chartOption) && (chartOption.series || chartOption.xAxis || chartOption.yAxis)) {
           op = chartOption
           op['dataset'] = op.dataset || chartOption?.dataset
         }

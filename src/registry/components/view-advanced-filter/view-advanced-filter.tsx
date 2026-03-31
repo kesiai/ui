@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { QueryEditor } from '@/registry/components/query-editor/query-editor'
 import { useModel, useModelGetItems, useSetModelState } from '@airiot/client'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import {
   Dialog,
   DialogClose,
@@ -68,7 +68,7 @@ const ViewAdvancedFilter: React.FC<ViewAdvancedFilterProps> = ({
           <DialogTitle>高级筛选</DialogTitle>
         </DialogHeader>
         <QueryEditor
-          schema={_.cloneDeep(viewSchema)}
+          schema={cloneDeep(viewSchema)}
           value={editValue}
           onChange={(v: any) => setEditValue(v)}
           timeRangeQuery={true}

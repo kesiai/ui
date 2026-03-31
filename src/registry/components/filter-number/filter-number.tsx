@@ -1,18 +1,21 @@
 import React from 'react'
-import _ from 'lodash'
+import isNil from 'lodash/isNil'
+import pickBy from 'lodash/pickBy'
+import isNumber from 'lodash/isNumber'
+import isEmpty from 'lodash/isEmpty'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
 const FilterNumber = (props: any) => {
   const { name, value, onBlur, onChange, ...inputProps } = props
 
-  const gte = !_.isNil(value?.gte) ? value.gte : ''
-  const lte = !_.isNil(value?.lte) ? value.lte : ''
+  const gte = !isNil(value?.gte) ? value.gte : ''
+  const lte = !isNil(value?.lte) ? value.lte : ''
 
   const inputChange = (v: any, k: 'gte' | 'lte') => {
     const num = v === '' ? null : Number(v)
-    const vs = _.pickBy({ ...value, [k]: num }, _.isNumber)
-    onChange(_.isEmpty(vs) ? null : vs)
+    const vs = pickBy({ ...value, [k]: num }, isNumber)
+    onChange(isEmpty(vs) ? null : vs)
   }
 
   return (

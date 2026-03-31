@@ -147,7 +147,7 @@ export const DataTable = ({
   tableOptions?: Omit<TableOptions<IData>, 'data' | 'columns' | 'getCoreRowModel'>,
   columns?: ColumnDef<IData>[]
   gridOptions: Omit<React.ComponentProps<typeof DataGrid>, 'table' | 'recordCount' | 'tableLayout'>
-  children?: React.ReactElement[] | undefined
+  children?: React.ReactElement[] | React.ReactElement| undefined
 }) => {
   const { withColumns, getColumns } = useTableContainer(children);
   const defColumns: ColumnDef<IData>[] = getColumns();
@@ -215,7 +215,7 @@ export function ViewDataTable({
   tableOptions?: Omit<TableOptions<IData>, 'data' | 'columns' | 'getCoreRowModel'>,
   columns?: ColumnDef<IData>[]
   gridOptions?: Omit<React.ComponentProps<typeof DataGrid>, 'table' | 'recordCount' | 'tableLayout'>
-  children?: React.ReactElement[] | undefined
+  children?: React.ReactElement[] | React.ReactElement | undefined
 }) {
   const { items, loading, fields } = useModelList()
   const { model, atoms } = useModel()
@@ -233,7 +233,7 @@ export function ViewDataTable({
     if (typeof tableSchema === 'string') tableSchema = { key: tableSchema }
     const fieldName = tableSchema.key
     const baseSchema = getFieldProp(model, fieldName)
-    const field = { ...baseSchema, ...tableSchema }
+    const field = { ...baseSchema, ...(typeof tableSchema === 'object' ? tableSchema : { key: tableSchema }) }
     if (!field) return
     const column: ColumnDef<IData> = columnHelper.accessor(fieldName, {
       id: fieldName,
@@ -379,7 +379,7 @@ interface ColumnContextValue {
 
 const ColumnContext = React.createContext<ColumnContextValue | null>(null);
 
-const useTableContainer = (children: React.ReactElement[] | undefined) => {
+const useTableContainer = (children: React.ReactElement[] | React.ReactElement | undefined) => {
   const columns = React.useRef<Map<string, ColumnDef<IData>>>(new Map());
   const [inited, setInited] = React.useState<boolean>(false);
 

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/video-periods-widget`
+
 # 录制计划
 
 ## 简介

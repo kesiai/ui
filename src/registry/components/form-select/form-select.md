@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-select`
+
 # Form.Select 下拉框
 
 ## 简介

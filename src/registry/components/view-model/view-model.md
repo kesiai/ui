@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-model`
+
 # ViewModel 模型视图容器
 
 ## 简介

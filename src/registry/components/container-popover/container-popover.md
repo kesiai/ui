@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/container-popover`
+
 # Popover 气泡卡片
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/text`
+
 # Text 文本
 
 ## 简介

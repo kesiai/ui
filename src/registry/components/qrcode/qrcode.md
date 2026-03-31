@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/qrcode`
+
 # QRCode 二维码
 
 ## 简介

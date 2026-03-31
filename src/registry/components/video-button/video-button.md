@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/video-button`
+
 # 云台控制
 
 ## 简介

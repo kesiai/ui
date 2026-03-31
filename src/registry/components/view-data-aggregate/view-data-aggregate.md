@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-data-aggregate`
+
 # ViewDataAggregate 数据统计组件
 
 ## 简介

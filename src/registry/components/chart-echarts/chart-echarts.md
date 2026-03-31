@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/chart-echarts`
+
 # ChartEcharts echarts图表
 
 ## 简介

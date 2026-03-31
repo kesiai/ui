@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-xyz-tile`
+
 # xyz层
 
 ## 简介

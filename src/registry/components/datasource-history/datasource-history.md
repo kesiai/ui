@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/datasource-history`
+
 # DatasourceHistory 历史数据源组件
 
 ## 简介

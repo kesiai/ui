@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/textarea`
+
 # TextArea 多行文本
 
 ## 简介

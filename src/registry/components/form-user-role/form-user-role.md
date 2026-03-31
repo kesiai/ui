@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-user-role`
+
 # Form.UserRole 用户角色
 
 ## 简介

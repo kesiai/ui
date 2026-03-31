@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-table-layer`
+
 # 数据表层
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-polygon-draw`
+
 # 区域层
 
 ## 简介

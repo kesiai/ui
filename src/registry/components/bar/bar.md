@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/bar`
+
 # Bar 进度条
 
 ## 简介

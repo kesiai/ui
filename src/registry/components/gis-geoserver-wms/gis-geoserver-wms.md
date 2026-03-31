@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-geoserver-wms`
+
 # geoserver-wms层
 
 ## 简介

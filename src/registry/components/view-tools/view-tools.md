@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-tools`
+
 # ViewTools 工具组件集合
 
 ## 简介

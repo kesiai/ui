@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form`
+
 # Form 表单容器
 
 ## 简介

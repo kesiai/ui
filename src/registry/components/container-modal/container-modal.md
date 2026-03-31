@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/container-modal`
+
 # Modal 弹窗
 
 ## 简介

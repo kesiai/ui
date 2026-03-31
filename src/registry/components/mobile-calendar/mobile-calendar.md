@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/mobile-calendar`
+
 # MobileCalendar 日历
 
 ## 简介

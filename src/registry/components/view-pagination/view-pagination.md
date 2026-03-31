@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-pagination`
+
 # ViewPagination 分页组件
 
 ## 简介

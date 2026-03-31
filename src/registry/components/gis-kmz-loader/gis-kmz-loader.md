@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-kmz-loader`
+
 # KMZ 层
 
 ## 简介

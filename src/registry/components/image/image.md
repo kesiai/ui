@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/image`
+
 # Image 图片
 
 ## 简介

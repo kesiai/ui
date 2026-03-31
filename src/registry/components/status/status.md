@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/status`
+
 # Status 状态指示器
 
 ## 简介

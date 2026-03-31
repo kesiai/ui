@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-date-range`
+
 # DateRange 日期范围选择器
 
 ## 简介

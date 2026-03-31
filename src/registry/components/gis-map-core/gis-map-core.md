@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-map-core`
+
 # 2D地图
 
 ## 简介

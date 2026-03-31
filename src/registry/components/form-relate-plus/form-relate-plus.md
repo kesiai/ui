@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-relate-plus`
+
 # Form.RelatePlus 关联字段Plus
 
 ## 简介

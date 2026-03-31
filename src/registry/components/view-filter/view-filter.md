@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-filter`
+
 # ViewFilter 筛选组件
 
 ## 简介

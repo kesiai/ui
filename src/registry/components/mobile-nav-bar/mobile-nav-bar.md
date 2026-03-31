@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/mobile-nav-bar`
+
 # MobileNavBar 标题栏
 
 ## 简介

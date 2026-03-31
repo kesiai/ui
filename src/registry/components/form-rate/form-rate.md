@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-rate`
+
 # Rate 星级评价
 
 ## 简介

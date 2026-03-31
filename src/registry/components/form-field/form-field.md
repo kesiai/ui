@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-field`
+
 # FormField 表单字段
 
 ## 简介

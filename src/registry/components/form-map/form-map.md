@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-map`
+
 # Form.Map 地图定位
 
 ## 简介

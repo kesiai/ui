@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-custom-layer`
+
 # 自定义层
 
 ## 简介

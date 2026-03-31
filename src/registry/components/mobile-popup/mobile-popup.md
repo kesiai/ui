@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/mobile-popup`
+
 # MobilePopup 弹出框
 
 ## 简介

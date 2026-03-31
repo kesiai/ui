@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-radio`
+
 # Form.Radio 单选框组件
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/iframe`
+
 # Iframe 嵌入
 
 ## 简介

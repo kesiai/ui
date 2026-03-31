@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-batch`
+
 # BatchActions 批量操作组件
 
 ## 简介

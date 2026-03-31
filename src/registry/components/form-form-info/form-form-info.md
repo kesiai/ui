@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-form-info`
+
 # Form.FormInfo 表单信息
 
 ## 简介

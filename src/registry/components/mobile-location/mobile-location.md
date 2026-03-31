@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/mobile-location`
+
 # MobileLocation 定位
 
 ## 简介

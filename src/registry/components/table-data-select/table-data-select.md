@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/table-data-select`
+
 # TableDataSelect 表记录选择器
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-demo`
+
 # ViewDemo 综合演示
 
 ## 简介

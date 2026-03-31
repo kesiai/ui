@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-geojson-parse`
+
 # GeoJSON 层
 
 ## 简介

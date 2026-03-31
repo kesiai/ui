@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-area`
+
 # Area 区域
 
 ## 简介

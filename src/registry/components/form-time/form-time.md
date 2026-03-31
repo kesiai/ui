@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-time`
+
 # Form.Time 时间选择器
 
 ## 简介

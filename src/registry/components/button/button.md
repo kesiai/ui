@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/button`
+
 # Button 按钮
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/container-card`
+
 # Card 卡片
 
 ## 简介

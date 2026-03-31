@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-rich-text`
+
 # Form.RichText 富文本
 
 ## 简介

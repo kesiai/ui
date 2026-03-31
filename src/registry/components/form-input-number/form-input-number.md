@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-input-number`
+
 # Form.InputNumber 数字输入框
 
 ## 简介

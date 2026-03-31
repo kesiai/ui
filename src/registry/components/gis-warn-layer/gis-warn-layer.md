@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-warn-layer`
+
 # 报警层
 
 ## 简介

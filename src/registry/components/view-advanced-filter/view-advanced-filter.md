@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-advanced-filter`
+
 # ViewAdvancedFilter 高级筛选组件
 
 ## 简介

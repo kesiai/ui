@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/video-time-axis`
+
 # 视频时间轴
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/data-point`
+
 # DataPoint 数据点
 
 ## 简介

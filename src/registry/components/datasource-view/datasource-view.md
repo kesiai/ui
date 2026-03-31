@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/datasource-view`
+
 # DatasourceView 视图数据源组件
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/container-carousel`
+
 # Carousel 轮播容器
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/container-iteration`
+
 # Iteration 迭代组件
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/mobile-picker`
+
 # MobilePicker 移动端选择器
 
 ## 简介

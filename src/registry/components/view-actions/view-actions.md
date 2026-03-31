@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-actions`
+
 # ViewActions 操作组件集合
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-widget`
+
 # FormWidget 表字段映射
 
 ## 简介

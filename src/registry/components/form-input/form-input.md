@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-input`
+
 # Form.Input 输入框组件
 
 ## 简介

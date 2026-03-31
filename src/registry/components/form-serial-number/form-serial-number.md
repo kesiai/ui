@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-serial-number`
+
 # Form.SerialNumber 序列号
 
 ## 简介

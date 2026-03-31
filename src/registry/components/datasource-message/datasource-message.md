@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/datasource-message`
+
 # DatasourceMessage 消息数据源组件
 
 ## 简介

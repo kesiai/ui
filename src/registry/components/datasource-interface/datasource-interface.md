@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/datasource-interface`
+
 # DatasourceInterface 接口数据源组件
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/view-data-table`
+
 # ViewDataTable 数据表格
 
 ## 简介

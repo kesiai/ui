@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-editable-table`
+
 # Form.EditableTable 可编辑表格
 
 ## 简介

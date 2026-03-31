@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/connect-widget`
+
 # 连线
 
 ## 简介

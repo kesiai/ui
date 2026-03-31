@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/mobile-scan-qr`
+
 # MobileScanQR 二维码扫描
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-switch`
+
 # Form.Switch 开关组件
 
 ## 简介

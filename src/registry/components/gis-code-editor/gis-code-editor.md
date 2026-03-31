@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/gis-code-editor`
+
 # 代码图层
 
 ## 简介

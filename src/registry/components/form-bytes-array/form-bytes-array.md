@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-bytes-array`
+
 # Form.BytesArray 字节数组
 
 ## 简介

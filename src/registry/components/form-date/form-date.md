@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-date`
+
 # Form.Date 日期选择器
 
 ## 简介

@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/schema-form`
+
 # SchemaForm JSON Schema 表单
 
 ## 简介

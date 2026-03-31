@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/video-widget`
+
 # 视频播放器
 
 ## 简介

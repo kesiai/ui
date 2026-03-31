@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/container-panel`
+
 # Panel 折叠面板
 
 ## 简介

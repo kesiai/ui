@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-checkbox`
+
 # Form.Checkbox 多选框组件
 
 ## 简介

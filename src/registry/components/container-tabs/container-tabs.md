@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/container-tabs`
+
 # Tabs 标签页
 
 ## 简介

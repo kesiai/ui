@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/video-playback-widget`
+
 # 视频回放
 
 ## 简介

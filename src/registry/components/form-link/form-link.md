@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-link`
+
 # Form.Link 链接
 
 ## 简介

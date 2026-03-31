@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-upload`
+
 # Form.Upload 文件上传
 
 ## 简介

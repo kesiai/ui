@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/data-view-chart`
+
 # DataViewChart 数据视图图表组件
 
 ## 简介

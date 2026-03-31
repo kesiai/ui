@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/player`
+
 # Player 音频播放器
 
 ## 简介

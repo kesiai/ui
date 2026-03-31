@@ -1,3 +1,5 @@
+> **安装命令**: `npx shadcn@latest add @kesi/form-slider`
+
 # Form.Slider 滑动输入条组件
 
 ## 简介

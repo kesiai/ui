@@ -29,7 +29,7 @@ export const viewDemoPropsConfig = [
 
 export const viewDemoDefaultProps = {
   modelName: null,
-  tableId: '主表'
+  tableId: 'asset_lifecycle_log'
 }
 
 const renderViewDemoPreview = (props: Record<string, any>) => {

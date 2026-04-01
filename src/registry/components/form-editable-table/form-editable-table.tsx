@@ -7,7 +7,6 @@ import { FormEditableCard } from '@/registry/components/form-editable-card/form-
 
 export interface FormEditableTableProps {
   onChange?: (value: any[] | null) => void
-  name?: string
   value?: any[]
   schema?: {
     key?: string
@@ -56,24 +55,11 @@ export interface FormEditableTableProps {
     }
     cardLayout?: '1' | '2' | '3'
   }
-  batchOption?: boolean
-  inline?: boolean
-  option?: {
-    form?: {
-      getState?: () => {
-        values?: any
-      }
-    }
-  }
-  meta?: {
-    submitFailed?: boolean
-  }
   record?: any
-  antdForm?: any
 }
 
 const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
-  const { meta, schema } = props
+  const { schema } = props
   const { onChange, value = [] } = props || {}
 
   const [dataSource, setDataSource] = React.useState<any[]>(value || schema?.defaultVal || [])
@@ -142,14 +128,12 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
   const tableProps = {
     value: dataSource,
     onChange: handleChange,
-    name: props.name,
     schema,
     columns,
     selectedRows,
     setSelectedRows,
     setDataSource,
     setErrors: () => { }, // TODO: 实现错误处理
-    meta,
     record: props.record,
   }
 

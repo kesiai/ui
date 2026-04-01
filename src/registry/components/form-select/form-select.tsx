@@ -1,5 +1,4 @@
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 import {
@@ -11,88 +10,45 @@ import {
 } from "@/components/ui/select"
 import { X } from "lucide-react"
 
-interface Schema {
-  enum?: string[]
-  enumNames?: Record<string, string>
-}
-
 export interface FormSelectProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus"> {
-  /**
-   * 当前值
-   */
+  /** 当前值 */
   value?: string
-  /**
-   * 默认值
-   */
+  /** 默认值 */
   defaultValue?: string
-  /**
-   * 占位符
-   */
+  /** 占位符 */
   placeholder?: string
-  /**
-   * 选项列表
-   */
+  /** 选项列表 */
   options?: Array<{ value: string; label?: string; name?: string; disabled?: boolean }>
-  /**
-   * 尺寸
-   */
-  size?: "sm" | "default" | undefined
-  /**
-   * 是否禁用
-   */
+  /** 是否禁用 */
   disabled?: boolean
-  /**
-   * 是否只读
-   */
+  /** 是否只读 */
   readOnly?: boolean
-  /**
-   * 是否显示边框
-   */
+  /** 是否显示边框 */
   bordered?: boolean
-  /**
-   * 是否显示清除按钮
-   */
+  /** 是否显示清除按钮 */
   allowClear?: boolean
-  /**
-   * 是否支持搜索
-   */
+  /** 是否支持搜索 */
   showSearch?: boolean
-  /**
-   * 是否显示下拉箭头
-   */
+  /** 是否显示下拉箭头 */
   showArrow?: boolean
-  /**
-   * 是否自动获取焦点
-   */
+  /** 是否自动获取焦点 */
   autoFocus?: boolean
-  /**
-   * 默认是否展开
-   */
+  /** 默认是否展开 */
   defaultOpen?: boolean
-  /**
-   * 下拉菜单和选择器同宽
-   */
+  /** 下拉菜单和选择器同宽 */
   dropdownMatchSelectWidth?: boolean
-  /**
-   * 值改变时的回调
-   */
+  /** 值改变时的回调 */
   onChange?: (value: string) => void
-  /**
-   * 失去焦点时的回调
-   */
+  /** 失去焦点时的回调 */
   onBlur?: () => void
-  /**
-   * 获得焦点时的回调
-   */
+  /** 获得焦点时的回调 */
   onFocus?: () => void
-  schema?: Schema
 }
 
 const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
   ({
     className,
-    size,
     value,
     defaultValue,
     placeholder = "请选择",
@@ -108,7 +64,6 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     onChange,
     onBlur,
     onFocus,
-    schema,
     ...props
   }, ref) => {
     const [internalValue, setInternalValue] = React.useState(defaultValue || "")
@@ -116,15 +71,8 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     const [searchValue, setSearchValue] = React.useState("")
     const selectRef = React.useRef<HTMLButtonElement>(null)
 
-    let options: Array<{ value: string; label?: string; name?: string; disabled?: boolean }> = []
-    if (props?.options) {
-      options = props.options
-    } else if (schema?.enum) {
-      options = schema.enum.map((k: string) => {
-        const names = schema.enumNames
-        return { label: names?.[k] || k, value: k }
-      })
-    }
+    // TODO: schema.enum 选项生成逻辑已移除，请通过 options prop 传入选项
+    let options: Array<{ value: string; label?: string; name?: string; disabled?: boolean }> = props?.options || []
 
     const handleValueChange = (newValue: string) => {
       if (readOnly) return
@@ -185,7 +133,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
               !bordered && "border-transparent",
               className
             )}
-            size={size}
+            size="default"
             aria-invalid={props['aria-invalid']}
           >
             <SelectValue placeholder={placeholder} />

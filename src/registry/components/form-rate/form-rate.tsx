@@ -3,38 +3,18 @@ import { Star } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export interface RateProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * 当前值
-   */
+  /** 当前值 */
   value?: number
-  /**
-   * 星星总数
-   */
+  /** 星星总数 */
   count?: number
-  /**
-   * 是否禁用
-   */
+  /** 是否禁用 */
   disabled?: boolean
-  /**
-   * 是否允许清除
-   */
+  /** 是否允许清除 */
   allowClear?: boolean
-  /**
-   * 变化回调
-   */
+  /** 变化回调 */
   onChange?: (value: number) => void
-  /**
-   * 单元格键值
-   */
-  cellKey?: string
-  /**
-   * 是否显示分数
-   */
+  /** 是否显示分数 */
   showScore?: boolean
-  /**
-   * 大小
-   */
-  size?: 'sm' | 'md' | 'lg'
 }
 
 const Rate = React.forwardRef<HTMLDivElement, RateProps>(
@@ -45,9 +25,7 @@ const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       disabled = false,
       allowClear = true,
       onChange,
-      cellKey,
       showScore = false,
-      size = 'md',
       className,
       ...props
     },
@@ -85,12 +63,6 @@ const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       return 'text-gray-300'
     }
 
-    const sizeClasses = {
-      sm: 'w-4 h-4',
-      md: 'w-6 h-6',
-      lg: 'w-8 h-8'
-    }
-
     return (
       <div
         ref={ref}
@@ -110,7 +82,7 @@ const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           <Star
             key={index}
             className={cn(
-              sizeClasses[size],
+              "w-6 h-6",
               "transition-all duration-200",
               getStarColor(index),
               !disabled && "cursor-pointer hover:scale-110"

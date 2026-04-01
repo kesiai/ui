@@ -28,10 +28,6 @@ export interface TextareaProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus" | "onInput" | "prefix">,
   VariantProps<typeof textareaVariants> {
   /**
-   * 内容类型
-   */
-  textContent?: 'text' | 'password' | 'email' | 'url' | 'tel'
-  /**
    * 当前值
    */
   value?: string
@@ -91,10 +87,6 @@ export interface TextareaProps
    * 输入回调
    */
   onInput?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
-  /**
-   * 单元格键值
-   */
-  cellKey?: string
 }
 
 const FormTextarea = React.forwardRef<HTMLDivElement, TextareaProps>(
@@ -116,8 +108,6 @@ const FormTextarea = React.forwardRef<HTMLDivElement, TextareaProps>(
       onFocus,
       onInput,
       variant,
-      cellKey,
-      style,
       ...props
     },
     ref
@@ -178,7 +168,6 @@ const FormTextarea = React.forwardRef<HTMLDivElement, TextareaProps>(
       <InputGroup
         ref={ref}
         className={cn(!bordered && "border-0", textareaVariants({ variant }), className)}
-        style={style}
         {...props}
       >
         <InputGroupTextarea

@@ -6,12 +6,11 @@ import { formConverter } from '@/registry/lib/view-form-converter'
 import { FormProvider, useForm } from '@airiot/client'
 
 export interface FormEditableCardProps {
+  /** 当前值 */
   value?: any[]
+  /** 值变化回调 */
   onChange?: (value: any[] | null) => void
-  name?: string
-  disabled?: boolean
-  minCount?: number
-  cardLayout?: '1' | '2' | '3'
+  /** 列配置 */
   columns?: Array<{
     key: string
     dataIndex: string
@@ -19,11 +18,9 @@ export interface FormEditableCardProps {
     schema: any
     editable: boolean
   }>
+  /** 是否显示删除按钮 */
   showDelBtn?: boolean
-  setDataSource?: (data: any[]) => void
-  setErrors?: (errors: any) => void
-  meta?: any
-  record?: any
+  /** 字段配置 */
   schema?: any
 }
 

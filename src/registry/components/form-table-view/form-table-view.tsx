@@ -14,20 +14,22 @@ export interface FormTableViewColumn {
 }
 
 export interface FormTableViewProps {
+  /** 当前值 */
   value?: any[]
+  /** 值变化回调 */
   onChange?: (value: any[]) => void
-  name?: string
+  /** 列配置 */
   columns?: FormTableViewColumn[]
+  /** 选中的行 */
   selectedRows?: any[]
+  /** 设置选中行 */
   setSelectedRows?: (rows: any[]) => void
-  setDataSource?: (data: any[]) => void
-  setErrors?: (errors: any) => void
-  meta?: any
+  /** 字段配置 */
   schema?: any
 }
 
 const FormTableView: React.FC<FormTableViewProps> = (props) => {
-  const { value, onChange, schema, columns, selectedRows, setSelectedRows } = props
+  const { value, onChange, schema, columns, selectedRows, setSelectedRows } = props || {}
 
   const handleSave = (row: any) => {
     const newValue = value.map((d: any) => (d?.key === row?.key ? row : d))

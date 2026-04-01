@@ -44,48 +44,21 @@ interface PCAItem {
   children?: PCAItem[];
 }
 
-/** Form Area 配置类型 */
-export interface FormAreaConfig {
-  /**
-   * 区域类型：p=省 | pc=省市 | pca=省市区
-   */
-  areaType?: 'p' | 'pc' | 'pca';
-  /**
-   * 是否多选
-   */
-  multiple?: boolean;
-  /**
-   * 尺寸
-   */
-  size?: 'sm' | 'md' | 'lg';
-  /**
-   * 是否禁用
-   */
-  disabled?: boolean;
-}
-
 /** Form Area Props 类型 */
 export interface FormAreaProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /**
-   * 当前值（多选时为数组）
-   */
+  /** 当前值（多选时为数组） */
   value?: string | string[];
-  /**
-   * 默认值
-   */
+  /** 默认值 */
   defaultValue?: string | string[];
-  /**
-   * 配置项
-   */
-  config?: FormAreaConfig;
-  /**
-   * 值变化回调
-   */
+  /** 区域类型：p=省 | pc=省市 | pca=省市区 */
+  areaType?: 'p' | 'pc' | 'pca';
+  /** 是否多选 */
+  multiple?: boolean;
+  /** 是否禁用 */
+  disabled?: boolean;
+  /** 值变化回调 */
   onChange?: (value: string | string[]) => void;
-  /**
-   * 单元格键值
-   */
 }
 
 // ====================== 工具函数（带类型注解） ======================
@@ -161,12 +134,12 @@ const FormArea = forwardRef<HTMLDivElement, FormAreaProps>(
       className,
       value: controlledValue,
       defaultValue,
-      config = {},
+      areaType = 'pca',
+      multiple = false,
+      disabled = false,
       onChange
     }
   ) => {
-    const { areaType = 'pca', multiple = false, disabled = false } = config;
-
     // 状态管理
     const [internalValue, setInternalValue] = useState<string | string[]>(
       multiple && Array.isArray(defaultValue) ? defaultValue : (defaultValue as string || '')

@@ -13,19 +13,29 @@ import MyUploadAdapterPlugin from './RichTextUploadAdapter'
 // import './form-rich-text.css'
 
 export interface FormRichTextProps {
+  /** 当前值 */
   value?: string
+  /** 值变化回调 */
   onChange?: (value: string) => void
+  /** 占位文本 */
   placeholder?: string
+  /** 是否禁用 */
   disabled?: boolean
+  /** 默认值 */
   defaultVal?: string
+  /** 默认值类型 */
   defaultValType?: 'fixed' | 'logic'
+  /** 是否在列表中 */
   inList?: boolean
+  /** 键名 */
   key?: string
+  /** 标题 */
   title?: string
+  /** 编辑表单 */
   ediforms?: boolean
+  /** 工具栏配置 */
   toolbar?: any
-  filter?: any
-  meta?: any
+  /** 表单记录数据 */
   record?: any
   [key: string]: any
 }

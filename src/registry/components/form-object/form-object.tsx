@@ -12,9 +12,10 @@ import { formConverter } from '@/registry/lib/view-form-converter'
 import { useFormContext } from '@airiot/client'
 
 export interface FormObjectProps {
-  onChange?: (value: any) => void
+  /** 字段名 */
   name?: string
-  value?: any
+  /** 值变化回调 */
+  onChange?: (value: any) => void
   schema?: {
     key?: string
     title?: string
@@ -36,7 +37,6 @@ export interface FormObjectProps {
     error?: string
   }
   className?: string
-  record?: any
 }
 
 const FormObject: React.FC<FormObjectProps> = (props) => {
@@ -91,20 +91,7 @@ const FormObject: React.FC<FormObjectProps> = (props) => {
                       schema={fieldSchema}
                       label={fieldSchema.title || field.title || fieldKey}
                     >
-                      <FormComponent
-                        schema={fieldSchema}
-                        input={{
-                          value: currentValue?.[fieldKey],
-                          onChange: (value: any) => {
-                            const newValue = { ...currentValue, [fieldKey]: value }
-                            setValue(fieldName, newValue)
-                            if (props.onChange) {
-                              props.onChange(newValue)
-                            }
-                          },
-                        }}
-                        meta={{}}
-                      />
+                      <FormComponent />
                     </FormField>
                   )
                 })}

@@ -3,14 +3,16 @@ import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 
 export interface FormLinkProps {
+  /** 当前值 */
   value?: string
+  /** 值变化回调 */
   onChange?: (value: string) => void
+  /** 占位文本 */
   placeholder?: string
+  /** 是否禁用 */
   disabled?: boolean
+  /** 链接类型 */
   linkType?: 'in' | 'out'
-  size?: string
-  meta?: any
-  record?: any
 }
 
 const MenuItemSelect: React.FC<{

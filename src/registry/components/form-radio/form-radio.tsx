@@ -27,41 +27,20 @@ const radioVariants = cva(
   }
 )
 
-interface RadioSchema {
-  enum?: string[]
-  enumNames?: string[]
-}
-
 export interface RadioProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
   VariantProps<typeof radioVariants> {
-  /**
-   * 数据项
-   */
+  /** 数据项 */
   options?: Array<{ name: string; label: string; value: string | number }>
-  /**
-   * Schema（包含 enum 和 enumNames）
-   */
-  schema?: RadioSchema
-  /**
-   * 当前值
-   */
+  /** 当前值 */
   value?: string | number
-  /**
-   * 默认值
-   */
+  /** 默认值 */
   defaultValue?: string | number
-  /**
-   * 是否禁用
-   */
+  /** 是否禁用 */
   disabled?: boolean
-  /**
-   * 是否只读
-   */
+  /** 是否只读 */
   readOnly?: boolean
-  /**
-   * 值变化回调
-   */
+  /** 值变化回调 */
   onChange?: (value: string | number) => void
 }
 
@@ -70,30 +49,20 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
     {
       className,
       options = [],
-      schema,
       value: controlledValue,
       defaultValue,
       disabled = false,
       readOnly = false,
       onChange,
       variant,
-      size,
       ...props
     },
     ref
   ) => {
     const mergedOptions = React.useMemo(() => {
-      if (options.length > 0) return options
-      if (schema?.enum) {
-        const names = schema.enumNames
-        return schema.enum.map((val, index) => ({
-          name: names?.[index] || val,
-          label: names?.[index] || val,
-          value: val
-        }))
-      }
-      return []
-    }, [options, schema])
+      // TODO: schema.enum 选项生成逻辑已移除，请通过 options prop 传入选项
+      return options
+    }, [options])
 
     const [internalValue, setInternalValue] = React.useState<string | number>(
       defaultValue ?? ""
@@ -118,7 +87,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
       <div
         ref={ref}
         className={cn(
-          radioVariants({ variant, size }),
+          radioVariants({ variant }),
           className
         )}
         {...props}

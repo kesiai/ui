@@ -2,21 +2,10 @@ import * as React from 'react'
 import { Input } from '@/components/ui/input'
 
 export interface FormSerialNumberProps {
+  /** 当前值 */
   value?: string
-  onChange?: (value: string) => void
-  serialRules?: Array<{
-    type: 'text' | 'time' | 'num'
-    text?: string
-    time?: string
-    num?: {
-      orderType?: 'random' | 'linear'
-      bitNum?: number
-      startNum?: number
-    }
-  }>
+  /** 是否禁用 */
   disabled?: boolean
-  meta?: any
-  record?: any
 }
 
 const FormSerialNumber: React.FC<FormSerialNumberProps> = (props) => {

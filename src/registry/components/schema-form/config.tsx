@@ -126,6 +126,24 @@ export const schemaFormDefaultProps = {
         },
         formSchema: [{ key: 'name' }, { key: 'value' }]
       },
+      arraydefault: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              title: '参数名',
+              type: 'string'
+            },
+            value: {
+              title: '参数值',
+              type: 'string'
+            }
+          },
+          formSchema: [{ key: 'name' }, { key: 'value' }]
+        },
+        title: '数组'
+      },
       arraystring: {
         type: 'array',
         items: {
@@ -312,6 +330,7 @@ export const schemaFormDefaultProps = {
     { key: "age", name: "age", controlType: 'number' },
     { key: "photo", name: "photo", controlType: 'upload' },
     { key: 'object' },
+    { key: 'arraydefault' },
     { key: 'arraystring' },
     { key: "rating", name: "rating", controlType: 'rate', count: 10 },
     { key: "radioio", name: "radioio", controlType: 'radio' },

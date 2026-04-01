@@ -2,14 +2,14 @@ import * as React from 'react'
 import { Input } from '@/components/ui/input'
 
 export interface FormBytesArrayProps {
+  /** 当前值 */
   value?: string
+  /** 值变化回调 */
   onChange?: (value: string) => void
+  /** 占位文本 */
   placeholder?: string
-  defaultVal?: string
+  /** 是否禁用 */
   disabled?: boolean
-  filter?: any
-  meta?: any
-  record?: any
 }
 
 const FormBytesArray: React.FC<FormBytesArrayProps> = (props) => {

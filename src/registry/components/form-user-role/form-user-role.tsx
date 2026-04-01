@@ -17,24 +17,31 @@ export interface FormUserRoleOption {
 }
 
 export interface FormUserRoleProps {
+  /** 当前值 */
   value?: any
+  /** 值变化回调 */
   onChange?: (value: any) => void
+  /** 字段名 */
   name?: string
+  /** 显示字段 */
   displayField?: string
+  /** 展示字段 */
   showField?: string
+  /** 是否忽略管理员 */
   ignoreAdmin?: boolean
-  size?: string
+  /** 字段配置 */
   fieldSchema?: {
     enum?: string[]
     enum_title?: string[]
     enum1?: string[]
     enum_title1?: string[]
   }
+  /** 标签 */
   label?: string
+  /** 是否禁用 */
   disabled?: boolean
+  /** 模式 */
   mode?: 'single' | 'multiple'
-  meta?: any
-  record?: any
 }
 
 const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
@@ -45,7 +52,6 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
     displayField = 'name',
     showField,
     ignoreAdmin = false,
-    size,
     fieldSchema,
     label,
     disabled,

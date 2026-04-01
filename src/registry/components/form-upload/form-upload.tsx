@@ -420,35 +420,58 @@ const uploadFile = async (
 export { fileType, imageType, videoType, audioType }
 
 export interface FormUploadProps {
+  /** 当前值 */
   value?: any
+  /** 值变化回调 */
   onChange?: (value: any) => void
+  /** 展示样式类型 */
   styleType?: 'picture-card' | 'text' | 'video' | 'audio'
+  /** 接受的文件类型 */
   accept?: string
+  /** 文件大小限制(MB) */
   size?: number
+  /** 宽度 */
   width?: number
+  /** 高度 */
   height?: number
+  /** 最大上传数量 */
   maxUploadNum?: number
+  /** 是否禁用 */
   disabled?: boolean
+  /** 仅相机 */
   onlyCamera?: boolean
+  /** 上传位置 */
   uploadPosition?: 'media' | 'local'
+  /** 上传文件夹 */
   uploadFolder?: boolean
+  /** 文件夹类型 */
   folderType?: 'folder' | 'upload'
+  /** 文件夹路径 */
   folder?: string
+  /** 是否 base64 编码 */
   base64?: boolean
+  /** 是否自动压缩 */
   autoZip?: boolean
+  /** 是否自动命名 */
   autoName?: boolean
+  /** 水印配置 */
   watermark?: any
+  /** 排序方式 */
   sort?: 'asc' | 'desc'
+  /** 是否允许删除媒体 */
   mediaDelete?: boolean
+  /** 是否 FTP 上传 */
   ftp?: boolean
+  /** 文本转音频 */
   textToAudio?: boolean
+  /** 默认值 */
   defaultVal?: any
+  /** 默认值类型 */
   defaultValType?: string
+  /** 键名 */
   key?: string
-  filter?: any
+  /** 上传类型 */
   uploadType?: 'upload_attachment' | 'upload_attachment_group'
-  meta?: any
-  record?: any
 }
 
 const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(

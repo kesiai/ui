@@ -153,8 +153,6 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
       onFocus,
       onInput,
       variant,
-      size,
-      style,
       ...props
     },
     ref
@@ -299,13 +297,12 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
           <InputGroup
             ref={ref}
             className={cn(
-              inputNumberVariants({ variant, size }),
+              inputNumberVariants({ variant }),
               !bordered && "border-transparent",
               disabled && "opacity-50 cursor-not-allowed",
               readOnly && "cursor-default",
               className
             )}
-            style={style}
           >
             <div className="relative flex flex-1">
               {prefix && (
@@ -331,13 +328,12 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
       <InputGroup
         ref={ref}
         className={cn(
-          inputNumberVariants({ variant, size }),
+          inputNumberVariants({ variant }),
           !bordered && "border-transparent",
           disabled && "opacity-50 cursor-not-allowed",
           readOnly && "cursor-default",
           className
         )}
-        style={style}
         {...props}
       >
         {prefix && (

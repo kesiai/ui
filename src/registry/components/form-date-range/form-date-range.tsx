@@ -7,30 +7,18 @@ import { format as formatFn } from "date-fns"
 import { zhCN } from "date-fns/locale"
 
 export interface DateRangeProps {
-  /**
-   * 日期格式：date-日期, datetime-日期时间, time-时间
-   */
+  /** 日期格式：date-日期, datetime-日期时间, time-时间 */
   format?: 'date' | 'datetime' | 'time'
-  /**
-   * 是否禁用
-   */
+  /** 是否禁用 */
   disabled?: boolean
-  /**
-   * 值
-   */
+  /** 值 */
   value?: string
-  /**
-   * 变化回调
-   */
+  /** 变化回调 */
   onChange?: (value: string | null) => void
-  /**
-   * 占位符
-   */
+  /** 占位符 */
   placeholder?: string
-  /**
-   * 单元格键值
-   */
-  cellKey?: string
+  /** 自定义样式类名 */
+  className?: string
 }
 
 const DateRange = React.forwardRef<HTMLDivElement, DateRangeProps>(
@@ -41,7 +29,6 @@ const DateRange = React.forwardRef<HTMLDivElement, DateRangeProps>(
       value,
       onChange,
       placeholder = '请选择日期范围',
-      cellKey,
       className,
       ...props
     },

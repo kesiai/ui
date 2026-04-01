@@ -4,18 +4,18 @@ import { cn } from '@/lib/utils'
 import moment from 'moment'
 
 export interface FormTimeProps {
+  /** 当前值 */
   value?: string
+  /** 值变化回调 */
   onChange?: (value: string | null) => void
+  /** 时间格式 */
   timeFormat?: string
+  /** 是否禁用 */
   disabled?: boolean
+  /** 默认值 */
   defaultVal?: string
+  /** 默认值类型 */
   defaultValType?: 'fixed' | 'logic'
-  size?: 'small' | 'middle' | 'large'
-  filter?: any
-  meta?: any
-  style?: React.CSSProperties
-  record?: any
-  [key: string]: any
 }
 
 const FormTime = React.forwardRef<HTMLInputElement, FormTimeProps>(
@@ -27,9 +27,6 @@ const FormTime = React.forwardRef<HTMLInputElement, FormTimeProps>(
       disabled = false,
       defaultVal,
       defaultValType = 'fixed',
-      size = 'middle',
-      meta,
-      style
     } = props
 
     // 默认值生效
@@ -62,12 +59,6 @@ const FormTime = React.forwardRef<HTMLInputElement, FormTimeProps>(
       }
     }
 
-    const sizeClasses = {
-      small: 'h-8 px-2 py-1 text-sm',
-      middle: 'h-10 px-3 py-2',
-      large: 'h-12 px-4 py-3 text-lg'
-    }
-
     // 转换 value 格式以适配 input type="time"
     const getInputValue = () => {
       if (!value) return ''
@@ -89,8 +80,7 @@ const FormTime = React.forwardRef<HTMLInputElement, FormTimeProps>(
         value={getInputValue()}
         onChange={handleTimeChange}
         disabled={disabled}
-        className={cn(sizeClasses[size], 'w-full')}
-        style={style}
+        className={cn('w-full')}
       />
     )
   }

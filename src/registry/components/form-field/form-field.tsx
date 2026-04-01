@@ -15,16 +15,13 @@ import { cn } from '@/lib/utils'
 type FormFieldProps = {
   name: string
   label?: ReactNode
-  type?: string
   description?: ReactNode
   children?: ReactNode | ((props: any) => ReactNode)
   required?: boolean
   rules?: any
   className?: string
   classNames?: Record<'field' | 'label' | 'input' | 'description' | 'error', string>
-  relateSchema?: any
-  uploadType?: any
-  forms?: any
+  validate?: any
   [key: string]: any
 }
 
@@ -44,7 +41,7 @@ const FormField =
     const ui = useFieldUIStateValue(name)
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
-    const fieldProps = { label, description, required, schema, readonly:true }
+    const fieldProps = { label, description, required, schema, ...schema }
     const controllerRules = { required, ...rules, validate }
 
     return ui.visible ? (

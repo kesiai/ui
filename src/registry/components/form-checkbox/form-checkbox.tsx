@@ -10,55 +10,23 @@ export interface CheckboxOption {
   isDefault?: boolean
 }
 
-export interface FormCheckboxConfig {
-  /**
-   * 是否禁用
-   */
-  disabled?: boolean
-  /**
-   * 是否显示全选
-   */
-  isCheckAll?: boolean
-  /**
-   * 全选框是否单独一行
-   */
-  checkAllSeparate?: boolean
-}
-
-interface CheckboxSchema {
-  enum?: string[]
-  enumNames?: string[]
-}
-
 export interface FormCheckboxProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
-  /**
-   * 当前值（多选时为数组）
-   */
+  /** 当前值（多选时为数组） */
   value?: string | string[]
-  /**
-   * 默认值
-   */
+  /** 默认值 */
   defaultValue?: string | string[]
-  /**
-   * 选项列表
-   */
+  /** 是否禁用 */
+  disabled?: boolean
+  /** 选项列表 */
   options?: CheckboxOption[]
-  /**
-   * Schema（包含 enum 和 enumNames）
-   */
-  schema?: CheckboxSchema
-  /**
-   * 配置项
-   */
-  config?: FormCheckboxConfig
-  /**
-   * 值变化回调
-   */
+  /** 是否显示全选 */
+  isCheckAll?: boolean
+  /** 全选框是否单独一行 */
+  checkAllSeparate?: boolean
+  /** 值变化回调 */
   onChange?: (value: string | string[]) => void
-  /**
-   * 单选框标签（当 options 为空时使用）
-   */
+  /** 单选框标签（当 options 为空时使用） */
   label?: string
 }
 
@@ -68,9 +36,10 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
       className,
       value: controlledValue,
       defaultValue,
+      disabled = false,
       options = [],
-      schema,
-      config = {},
+      isCheckAll = false,
+      checkAllSeparate = false,
       onChange,
       label,
       ...props
@@ -79,17 +48,9 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
   ) => {
 
     const mergedOptions = React.useMemo(() => {
-      if (options.length > 0) return options
-      if (schema?.enum) {
-        const names = schema.enumNames
-        return schema.enum.map((val, index) => ({
-          name: names?.[index] || val,
-          label: names?.[index] || val,
-          value: val
-        }))
-      }
-      return []
-    }, [options, schema])
+      // TODO: schema.enum 选项生成逻辑已移除，请通过 options prop 传入选项
+      return options
+    }, [options])
   
     const isMulti = mergedOptions.length > 1
     const defaultList = defaultValue && Array.isArray(defaultValue) ? defaultValue : []
@@ -173,8 +134,8 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
         ref={ref}
         className={cn(
           "widget-checkbox",
-          !config?.checkAllSeparate ? "flex" : "grid",
-          !config?.checkAllSeparate ? "gap-2" : "",
+          !checkAllSeparate ? "flex" : "grid",
+          !checkAllSeparate ? "gap-2" : "",
           className
         )}
         {...props}
@@ -185,7 +146,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
             <label className="flex items-center gap-2 cursor-pointer">
               <Checkbox
                 checked={!!value}
-                disabled={config?.disabled}
+                disabled={disabled}
                 onCheckedChange={(checked) => {
                   onChange?.(checked as any)
                 }}
@@ -196,11 +157,11 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
           ) : null
         ) : (
           <>
-            {config?.isCheckAll && isMulti && (
+            {isCheckAll && isMulti && (
               <label className="flex items-center gap-2 check-all">
                 <Checkbox
                   checked={checkAll}
-                  disabled={config?.disabled}
+                  disabled={disabled}
                   onCheckedChange={handleCheckAllChange}
                   className={indeterminate ? "data-[state=checked]:bg-indeterminate-500" : ""}
                 />
@@ -210,7 +171,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
             <div
               className={cn(
                 "flex flex-col gap-2",
-                config?.checkAllSeparate ? "w-full" : "flex-wrap flex-row"
+                checkAllSeparate ? "w-full" : "flex-wrap flex-row"
               )}
             >
               {mergedOptions.map((option) => (
@@ -220,7 +181,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
                 >
                   <Checkbox
                     checked={getBooleanValue().includes(option.value)}
-                    disabled={config?.disabled}
+                    disabled={disabled}
                     onCheckedChange={(checked) => handleCheckboxChange(option.value, checked)}
                     aria-invalid={props['aria-invalid']}
                   />

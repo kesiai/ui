@@ -22,9 +22,7 @@ import { useForm, FormProvider, useFieldArray, useFormContext } from '@airiot/cl
 const EMPTY_PLACEHOLDER = Symbol('empty')
 
 export interface FormArrayProps {
-  onChange?: (value: any[] | null) => void
   name?: string
-  value?: any[]
   schema?: {
     key?: string
     title?: string
@@ -57,7 +55,6 @@ export interface FormArrayProps {
     error?: string
   }
   className?: string,
-  record?: any
 }
 
 const FormArray: React.FC<FormArrayProps> = (props) => {
@@ -143,15 +140,16 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
   }
 
   // 生成卡片标题
-  const getCardTitle = (field: any, index: number) => {
+  const getCardTitle = (field: any, index: number, properties: any) => {
     // 尝试从第一个字段获取标题
     if (formSchema.length > 0) {
       const firstKey = formSchema[0].key
       const firstValue = field?.[firstKey]
       if (firstValue !== undefined && firstValue !== null && firstValue !== '') {
-        return `${formSchema[0].title || firstKey}: ${firstValue}`
+        return `${formSchema[0].title || properties?.[firstKey]?.title || firstKey}: ${firstValue}`
       }
     }
+    console.log(properties)
     return `项目 ${index + 1}`
   }
 
@@ -226,18 +224,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
                             schema={items}
                             label={false}
                           >
-                            <FormComponent
-                              schema={items}
-                              input={{
-                                value: undefined, // FormField 会自动处理
-                                onChange: (value: any) => {
-                                  // 将空字符串或 Symbol 转换为 null
-                                  const normalizedValue = value === '' || value === EMPTY_PLACEHOLDER ? null : value
-                                  update(index, normalizedValue)
-                                },
-                              }}
-                              meta={{}}
-                            />
+                            <FormComponent />
                           </FormField>
                         </div>
                         <Button
@@ -261,7 +248,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
                     <Card key={field.id} className="relative hover:shadow-md transition-shadow flex flex-col">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-base font-semibold">
-                          {getCardTitle(field, index)}
+                          {getCardTitle(field, index, properties)}
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2 p-3 pt-0 flex-1 flex flex-col">
@@ -276,7 +263,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
                             return (
                               <div key={fieldKey} className="text-sm flex justify-between items-center py-1 border-b border-border/40 last:border-0">
                                 <span className="text-muted-foreground font-medium">
-                                  {formField.title || fieldKey}
+                                  {formField.title || properties[fieldKey]?.title || fieldKey}
                                 </span>
                                 <span className="font-medium truncate ml-2 max-w-[60%]">{String(fieldValue)}</span>
                               </div>
@@ -328,7 +315,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
           <DialogHeader>
             <DialogTitle>
               {editingIndex !== null
-                ? `${getBtnText('edit', '修改')} - ${getCardTitle(fields[editingIndex], editingIndex)}`
+                ? `${getBtnText('edit', '修改')}`
                 : getBtnText('edit', '修改')}
             </DialogTitle>
             <DialogDescription>
@@ -400,14 +387,7 @@ const EditItemForm: React.FC<EditItemFormProps> = ({
               schema={fieldSchema}
               label={fieldSchema.title || field.title || fieldKey}
             >
-              <FormComponent
-                schema={fieldSchema}
-                input={{
-                  value: methods.watch(fieldKey),
-                  onChange: (value: any) => methods.setValue(fieldKey, value),
-                }}
-                meta={{}}
-              />
+              <FormComponent />
             </FormField>
           )
         })}

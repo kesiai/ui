@@ -22,17 +22,9 @@ export interface FormSwitchProps
    */
   autoFocus?: boolean
   /**
-   * 尺寸
-   */
-  size?: "default" | "small"
-  /**
    * 值变化回调
    */
   onChange?: (checked: boolean) => void
-  /**
-   * 单元格键值
-   */
-  cellKey?: string
 }
 
 const FormSwitch = React.forwardRef<HTMLButtonElement, FormSwitchProps>(
@@ -43,9 +35,7 @@ const FormSwitch = React.forwardRef<HTMLButtonElement, FormSwitchProps>(
       defaultChecked = false,
       disabled = false,
       autoFocus = false,
-      size = "default",
       onChange,
-      cellKey,
       ...props
     },
     ref
@@ -69,9 +59,6 @@ const FormSwitch = React.forwardRef<HTMLButtonElement, FormSwitchProps>(
         <Switch
           ref={ref}
           className={cn(
-            size === "small" && "h-5 w-9",
-            size === "small" && "[&>[data-radix-switch-thumb]]:h-4 [&>[data-radix-switch-thumb]]:w-4",
-            size === "small" && "[&>[data-radix-switch-thumb]]:data-[state=checked]:translate-x-4",
             className
           )}
           checked={checked}

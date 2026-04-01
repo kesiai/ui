@@ -139,7 +139,7 @@ const getFieldCom = (fSchema: FieldSchema, method: MethodItem | undefined) => {
   } else {
     FieldController = fSchema?.type == 'array' ? filterConverter(fSchema, fieldSchame) : formConverter(fSchema, fieldSchame)
   }
-  return (props: Record<string, unknown>) => {
+  return () => {
     const methods = useForm({
       resolver: null
     } as unknown as Parameters<typeof useForm>[0])
@@ -147,7 +147,7 @@ const getFieldCom = (fSchema: FieldSchema, method: MethodItem | undefined) => {
       <FormProvider {...methods}>
         <form id={fSchema.key}>
           <FormField name={fSchema.key} schema={fSchema}>
-            <FieldController {...props} />
+            <FieldController />
           </FormField>
         </form>
       </FormProvider>

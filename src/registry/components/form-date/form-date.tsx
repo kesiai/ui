@@ -49,10 +49,6 @@ export interface FormDateProps
    */
   placeholder?: string
   /**
-   * 尺寸
-   */
-  size?: "large" | "medium" | "small"
-  /**
    * 12小时制
    */
   use12Hours?: boolean
@@ -404,7 +400,6 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
       picker = "date",
       isCalendar = false,
       placeholder = "请选择日期",
-      size = "medium",
       use12Hours = false,
       value,
       defaultValue,
@@ -607,18 +602,6 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
       }
     }
 
-    // 获取尺寸样式
-    const getSizeClass = () => {
-      switch (size) {
-        case "large":
-          return "h-12 px-4 text-base"
-        case "small":
-          return "h-8 px-2 text-sm"
-        default:
-          return "h-10 px-3 text-sm"
-      }
-    }
-
     // 如果是日历展开模式，直接显示日历
     if (isCalendar) {
       return (
@@ -705,7 +688,7 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <div className="w-full">
-                  <InputGroup className={cn(bordered ? "" : "border-0!", getSizeClass())}>
+                  <InputGroup className={cn(bordered ? "" : "border-0!", "h-10 px-3 text-sm")}>
                     <InputGroupInput
                       ref={inputRef}
                       value={inputValue}

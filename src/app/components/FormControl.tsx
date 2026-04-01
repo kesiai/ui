@@ -27,7 +27,7 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
           // 查询所有设备表
           const response = await api({ name: 'core/t/schema' }).query(
             { fields: ['id', 'title', 'name', 'isDevice'] },
-            { where: { isDevice: true } } // 只获取设备表
+            // { where: { isDevice: true } } // 只获取设备表
           )
 
           // .query() 方法返回的数据在 items 或直接在 response 中

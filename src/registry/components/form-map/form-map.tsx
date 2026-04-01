@@ -21,25 +21,30 @@ import isEmpty from 'lodash/isEmpty'
 
 
 export interface FormMapProps {
+  /** 当前值 */
   value?: {
     name?: string
     lng?: number
     lat?: number
   }
+  /** 值变化回调 */
   onChange?: (value: { name?: string; lng: number; lat: number } | null) => void
+  /** 占位文本 */
   placeholder?: string
+  /** 是否显示经纬度 */
   lngLat?: boolean
+  /** 是否显示位置名称 */
   positionName?: boolean
+  /** 是否可编辑 */
   canEdit?: boolean
+  /** 是否可手动输入 */
   canHand?: boolean
+  /** 默认值 */
   defaultVal?: { name?: string; lng: number; lat: number }
+  /** 展示类型 */
   showType?: 'map' | 'modal'
-  size?: 'small' | 'middle' | 'large'
+  /** 是否禁用 */
   disabled?: boolean
-  filter?: any
-  meta?: any
-  record?: any
-  [key: string]: any
 }
 
 // 地图组件占位符 - 等待GIS部分迁移
@@ -88,7 +93,6 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
       canHand = true,
       defaultVal,
       showType = 'modal',
-      size = 'middle',
       disabled = false
     } = props
 
@@ -286,12 +290,6 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
       initAMap('tipinput')
     }
 
-    const sizeClasses = {
-      small: 'h-8 px-2 py-1 text-sm',
-      middle: 'h-10 px-3 py-2',
-      large: 'h-12 px-4 py-3 text-lg'
-    }
-
     // showType === 'map' 直接展示地图，不用弹窗
     if (showType === 'map') {
       return (
@@ -331,7 +329,7 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
             allowClear
             onChange={handleChange}
             placeholder={placeholder}
-            className={sizeClasses[size as 'small' | 'middle' | 'large']}
+            className="h-10 px-3 py-2"
           />
           {canEdit && (
             <>

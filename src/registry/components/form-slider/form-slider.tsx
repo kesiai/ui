@@ -107,8 +107,6 @@ const FormSlider = React.forwardRef<HTMLDivElement, SliderProps>(
       onChange,
       onAfterChange,
       variant,
-      size,
-      style,
       ...props
     },
     ref
@@ -182,10 +180,9 @@ const FormSlider = React.forwardRef<HTMLDivElement, SliderProps>(
       <div
         ref={ref}
         className={cn(
-          sliderVariants({ variant, size }),
+          sliderVariants({ variant }),
           className
         )}
-        style={style}
         {...props}
       >
         <Slider

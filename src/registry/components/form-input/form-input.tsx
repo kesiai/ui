@@ -125,9 +125,6 @@ export interface InputProps
    * 输入回调
    */
   onInput?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-  /**
-   * 单元格键值
-   */
 }
 
 const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
@@ -157,9 +154,6 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
       onFocus,
       onInput,
       variant,
-      size,
-      cellKey,
-      style,
       ...props
     },
     ref
@@ -232,7 +226,6 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
         <InputGroup
           ref={ref}
           className={cn(!bordered && "border-0", inputVariants({ variant }), className)}
-          style={style}
           {...props}
         >
           <InputGroupTextarea
@@ -288,8 +281,7 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
         {addonBefore && <Button variant="outline">{addonBefore}</Button>}
         <InputGroup
           ref={ref}
-          className={cn(!bordered && "border-0", inputVariants({ variant, size }))}
-          style={style}
+          className={cn(!bordered && "border-0", inputVariants({ variant }))}
         >
           {prefix && (
             <InputGroupAddon align="inline-start">

@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { FormField } from "@/registry/components/form-field/form-field"
 import { formConverter } from '@/registry/lib/view-form-converter'
 
-export type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
+import type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
 
 type SchemaFormProps = UseFormPropsExtended & {
   formId: string

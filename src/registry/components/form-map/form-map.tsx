@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 import {
   Dialog,
   DialogContent,
@@ -20,7 +21,7 @@ import AMapLoader from '@amap/amap-jsapi-loader'
 import isEmpty from 'lodash/isEmpty'
 
 
-export interface FormMapProps {
+export interface FormMapProps extends Omit<BaseFormFieldProps, 'value' | 'onChange'> {
   /** 当前值 */
   value?: {
     name?: string

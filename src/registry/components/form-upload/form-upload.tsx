@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 import {
   Dialog,
   DialogContent,
@@ -419,11 +420,7 @@ const uploadFile = async (
 // 导出类型供外部使用
 export { fileType, imageType, videoType, audioType }
 
-export interface FormUploadProps {
-  /** 当前值 */
-  value?: any
-  /** 值变化回调 */
-  onChange?: (value: any) => void
+export interface FormUploadProps extends BaseFormFieldProps {
   /** 展示样式类型 */
   styleType?: 'picture-card' | 'text' | 'video' | 'audio'
   /** 接受的文件类型 */

@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import type { BaseFormFieldProps } from "@/registry/lib/base-form-props"
 
 import { cn } from "@/lib/utils"
 import {
@@ -35,7 +36,8 @@ const inputVariants = cva(
 )
 
 export interface InputProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus" | "onInput" | "prefix">,
+  extends Omit<BaseFormFieldProps, 'value' | 'onChange' | 'onBlur'>,
+  Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus" | "onInput" | "prefix">,
   VariantProps<typeof inputVariants> {
   /**
    * 输入框类型

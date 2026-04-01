@@ -1,4 +1,5 @@
 import * as React from "react"
+import type { BaseFormFieldProps, FormOption } from "@/registry/lib/base-form-props"
 
 import { cn } from "@/lib/utils"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -11,7 +12,8 @@ export interface CheckboxOption {
 }
 
 export interface FormCheckboxProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  extends Omit<BaseFormFieldProps, "value" | "onChange">,
+  Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur"> {
   /** 当前值（多选时为数组） */
   value?: string | string[]
   /** 默认值 */
@@ -19,7 +21,7 @@ export interface FormCheckboxProps
   /** 是否禁用 */
   disabled?: boolean
   /** 选项列表 */
-  options?: CheckboxOption[]
+  options?: FormOption[]
   /** 是否显示全选 */
   isCheckAll?: boolean
   /** 全选框是否单独一行 */
@@ -48,7 +50,6 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
   ) => {
 
     const mergedOptions = React.useMemo(() => {
-      // TODO: schema.enum 选项生成逻辑已移除，请通过 options prop 传入选项
       return options
     }, [options])
   

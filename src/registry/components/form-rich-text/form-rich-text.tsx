@@ -1,4 +1,5 @@
 import * as React from 'react'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
@@ -12,7 +13,7 @@ import MyUploadAdapterPlugin from './RichTextUploadAdapter'
 // 导入样式
 // import './form-rich-text.css'
 
-export interface FormRichTextProps {
+export interface FormRichTextProps extends Omit<BaseFormFieldProps, 'value' | 'onChange'> {
   /** 当前值 */
   value?: string
   /** 值变化回调 */

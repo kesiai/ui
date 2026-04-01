@@ -1,10 +1,12 @@
 import * as React from "react"
+import type { BaseFormFieldProps } from "@/registry/lib/base-form-props"
 
 import { cn } from "@/lib/utils"
 import { Switch } from "@/components/ui/switch"
 
 export interface FormSwitchProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof Switch>, "onChange"> {
+  extends Omit<BaseFormFieldProps, 'value' | 'onChange'>,
+  Omit<React.ComponentPropsWithoutRef<typeof Switch>, "onChange"> {
   /**
    * 当前值
    */

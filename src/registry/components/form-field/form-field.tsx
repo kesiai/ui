@@ -41,7 +41,17 @@ const FormField =
     const ui = useFieldUIStateValue(name)
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
-    const fieldProps = { label, description, required, schema, ...schema }
+    const fieldProps = React.useMemo(() => {
+      const converted: Record<string, any> = { schema }
+      // enum → options 转换（仅当 schema 没有 options 时）
+      if (schema?.enum && !schema?.options) {
+        converted.options = schema.enum.map((val: any, index: number) => ({
+          value: val,
+          label: schema.enumNames?.[index] ?? schema.enum_title?.[index] ?? val,
+        }))
+      }
+      return { ...converted, ...schema }
+    }, [schema])
     const controllerRules = { required, ...rules, validate }
 
     return ui.visible ? (

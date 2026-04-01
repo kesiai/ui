@@ -1,6 +1,7 @@
 import * as React from 'react'
 import isArray from 'lodash/isArray'
 import { createAPI } from '@airiot/client'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 import {
   Popover,
   PopoverContent,
@@ -16,11 +17,7 @@ export interface FormUserRoleOption {
   item?: any
 }
 
-export interface FormUserRoleProps {
-  /** 当前值 */
-  value?: any
-  /** 值变化回调 */
-  onChange?: (value: any) => void
+export interface FormUserRoleProps extends Omit<BaseFormFieldProps, 'value' | 'onChange'> {
   /** 字段名 */
   name?: string
   /** 显示字段 */

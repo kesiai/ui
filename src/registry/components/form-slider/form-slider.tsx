@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import type { BaseFormFieldProps } from "@/registry/lib/base-form-props"
 
 import { cn } from "@/lib/utils"
 import { Slider } from "@/components/ui/slider"
@@ -28,7 +29,8 @@ const sliderVariants = cva(
 )
 
 export interface SliderProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">,
+  extends Omit<BaseFormFieldProps, 'value' | 'onChange'>,
+    Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">,
     VariantProps<typeof sliderVariants> {
   /**
    * 当前值

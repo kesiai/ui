@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Input } from '@/components/ui/input'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 
-export interface FormSerialNumberProps {
+export interface FormSerialNumberProps extends Omit<BaseFormFieldProps, 'value'> {
   /** 当前值 */
   value?: string
   /** 是否禁用 */

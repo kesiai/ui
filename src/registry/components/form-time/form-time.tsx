@@ -2,8 +2,9 @@ import * as React from 'react'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import moment from 'moment'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 
-export interface FormTimeProps {
+export interface FormTimeProps extends Omit<BaseFormFieldProps, 'value' | 'onChange'> {
   /** 当前值 */
   value?: string
   /** 值变化回调 */

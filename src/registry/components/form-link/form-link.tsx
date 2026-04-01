@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 
-export interface FormLinkProps {
+export interface FormLinkProps extends Omit<BaseFormFieldProps, 'value' | 'onChange'> {
   /** 当前值 */
   value?: string
   /** 值变化回调 */

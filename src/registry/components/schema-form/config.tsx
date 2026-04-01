@@ -142,7 +142,7 @@ export const schemaFormDefaultProps = {
           },
           formSchema: [{ key: 'name' }, { key: 'value' }]
         },
-        title: '数组'
+        title: '数组-对象'
       },
       arraystring: {
         type: 'array',

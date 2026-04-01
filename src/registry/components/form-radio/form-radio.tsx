@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import type { BaseFormFieldProps, FormOption } from "@/registry/lib/base-form-props"
 
 import { cn } from "@/lib/utils"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -28,10 +29,10 @@ const radioVariants = cva(
 )
 
 export interface RadioProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
+  extends Omit<BaseFormFieldProps, "value" | "onChange">,
   VariantProps<typeof radioVariants> {
   /** 数据项 */
-  options?: Array<{ name: string; label: string; value: string | number }>
+  options?: FormOption[]
   /** 当前值 */
   value?: string | number
   /** 默认值 */
@@ -60,7 +61,6 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
     ref
   ) => {
     const mergedOptions = React.useMemo(() => {
-      // TODO: schema.enum 选项生成逻辑已移除，请通过 options prop 传入选项
       return options
     }, [options])
 

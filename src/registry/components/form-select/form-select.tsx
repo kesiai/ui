@@ -1,4 +1,5 @@
 import * as React from "react"
+import type { BaseFormFieldProps, FormOption } from "@/registry/lib/base-form-props"
 
 import { cn } from "@/lib/utils"
 import {
@@ -11,7 +12,8 @@ import {
 import { X } from "lucide-react"
 
 export interface FormSelectProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus"> {
+  extends Omit<BaseFormFieldProps, "value" | "onChange">,
+  Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus"> {
   /** 当前值 */
   value?: string
   /** 默认值 */
@@ -19,7 +21,7 @@ export interface FormSelectProps
   /** 占位符 */
   placeholder?: string
   /** 选项列表 */
-  options?: Array<{ value: string; label?: string; name?: string; disabled?: boolean }>
+  options?: FormOption[]
   /** 是否禁用 */
   disabled?: boolean
   /** 是否只读 */
@@ -71,7 +73,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     const [searchValue, setSearchValue] = React.useState("")
     const selectRef = React.useRef<HTMLButtonElement>(null)
 
-    // TODO: schema.enum 选项生成逻辑已移除，请通过 options prop 传入选项
+    // options 由 FormField 从 schema.enum 自动转换，或通过 options prop 显式传入
     let options: Array<{ value: string; label?: string; name?: string; disabled?: boolean }> = props?.options || []
 
     const handleValueChange = (newValue: string) => {

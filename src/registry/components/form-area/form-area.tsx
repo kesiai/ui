@@ -1,4 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react';
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -46,7 +47,8 @@ interface PCAItem {
 
 /** Form Area Props 类型 */
 export interface FormAreaProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+  extends Omit<BaseFormFieldProps, 'value' | 'onChange' | 'onBlur'>,
+  Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onBlur'> {
   /** 当前值（多选时为数组） */
   value?: string | string[];
   /** 默认值 */

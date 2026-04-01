@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Input } from '@/components/ui/input'
+import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 
-export interface FormBytesArrayProps {
+export interface FormBytesArrayProps extends Omit<BaseFormFieldProps, 'value' | 'onChange'> {
   /** 当前值 */
   value?: string
   /** 值变化回调 */

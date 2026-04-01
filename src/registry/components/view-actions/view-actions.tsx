@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useModelGet, useModelSave, useModelDelete, useModelGetItems } from '@airiot/client'
+import { useModelGet, useModelSave, useModelDelete, useModelGetItems, useModel } from '@airiot/client'
 import {
   Dialog,
   DialogContent,
@@ -306,9 +306,10 @@ interface BaseActionProps {
 
 interface ViewActionProps extends BaseActionProps {
   formSchema?: FormSchemaItem[]
+  permission?: string
 }
 
-export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children, formSchema }) => {
+export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children, formSchema, permission }) => {
   const trigger = children || (
     <Button variant="ghost" size="sm">
       <Eye className="h-4 w-4" />
@@ -317,22 +318,25 @@ export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children, formSc
   )
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
-      <DialogContent className="max-w-4xl">
-        <ViewDetail itemId={itemId} formSchema={formSchema} />
-      </DialogContent>
-    </Dialog>
+    <HasPermission permission={permission}>
+      <Dialog>
+        <DialogTrigger asChild>
+          {trigger}
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl">
+          <ViewDetail itemId={itemId} formSchema={formSchema} />
+        </DialogContent>
+      </Dialog>
+    </HasPermission>
   )
 }
 
 interface EditActionProps extends BaseActionProps {
   formSchema?: FormSchemaItem[]
+  permission?: string
 }
 
-export const EditAction: React.FC<EditActionProps> = ({ itemId, children, formSchema }) => {
+export const EditAction: React.FC<EditActionProps> = ({ itemId, children, formSchema, permission }) => {
   const [open, setOpen] = useState(false)
 
   const trigger = children || (
@@ -343,14 +347,16 @@ export const EditAction: React.FC<EditActionProps> = ({ itemId, children, formSc
   )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
-      <DialogContent className="max-w-4xl">
-        <EditActionContent itemId={itemId} onClose={() => setOpen(false)} formSchema={formSchema} />
-      </DialogContent>
-    </Dialog>
+    <HasPermission permission={permission}>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          {trigger}
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl">
+          <EditActionContent itemId={itemId} onClose={() => setOpen(false)} formSchema={formSchema} />
+        </DialogContent>
+      </Dialog>
+    </HasPermission>
   )
 }
 
@@ -358,7 +364,7 @@ interface CreateActionProps {
   children?: React.ReactNode
   formSchema?: FormSchemaItem[]
   permission?: string
-} 
+}
 
 export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema, permission }) => {
   const [open, setOpen] = useState(false)
@@ -386,12 +392,14 @@ export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema
 
 interface DeleteActionProps extends BaseActionProps {
   confirmMessage?: string
+  permission?: string
 }
 
 export const DeleteAction: React.FC<DeleteActionProps> = ({
   itemId,
   children,
-  confirmMessage = '确定要删除这条数据吗？'
+  confirmMessage = '确定要删除这条数据吗？',
+  permission
 }) => {
   const { deleteItem } = useModelDelete()
   const [open, setOpen] = useState(false)
@@ -415,49 +423,53 @@ export const DeleteAction: React.FC<DeleteActionProps> = ({
   )
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        {trigger}
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-4" side='top' align="end">
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-destructive" />
-            <p className="text-sm">{confirmMessage}</p>
+    <HasPermission permission={permission}>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          {trigger}
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-4" side='top' align="end">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-destructive" />
+              <p className="text-sm">{confirmMessage}</p>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setOpen(false)}
+                disabled={deleting}
+              >
+                取消
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                确认删除
+              </Button>
+            </div>
           </div>
-          <div className="flex gap-2 justify-end">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setOpen(false)}
-              disabled={deleting}
-            >
-              取消
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={handleDelete}
-              disabled={deleting}
-            >
-              {deleting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              确认删除
-            </Button>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
+        </PopoverContent>
+      </Popover>
+    </HasPermission>
   )
 }
 
 interface ExportActionProps extends BaseActionProps {
   format?: 'json' | 'csv' | 'excel'
+  permission?: string
 }
 
 export const ExportAction: React.FC<ExportActionProps> = ({
   itemId,
   children,
-  format = 'json'
+  format = 'json',
+  permission
 }) => {
   const trigger = children || (
     <Button variant="ghost" size="sm">
@@ -467,20 +479,24 @@ export const ExportAction: React.FC<ExportActionProps> = ({
   )
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
-      <DialogContent className="md">
-        <ExportActionContent itemId={itemId} format={format} />
-      </DialogContent>
-    </Dialog>
+    <HasPermission permission={permission}>
+      <Dialog>
+        <DialogTrigger asChild>
+          {trigger}
+        </DialogTrigger>
+        <DialogContent className="md">
+          <ExportActionContent itemId={itemId} format={format} />
+        </DialogContent>
+      </Dialog>
+    </HasPermission>
   )
 }
 
-interface CopyActionProps extends BaseActionProps { }
+interface CopyActionProps extends BaseActionProps {
+  permission?: string
+}
 
-export const CopyAction: React.FC<CopyActionProps> = ({ itemId, children }) => {
+export const CopyAction: React.FC<CopyActionProps> = ({ itemId, children, permission }) => {
   const [open, setOpen] = useState(false)
 
   const trigger = children || (
@@ -491,14 +507,16 @@ export const CopyAction: React.FC<CopyActionProps> = ({ itemId, children }) => {
   )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
-      <DialogContent className="md">
-        <CopyActionContent itemId={itemId} onClose={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
+    <HasPermission permission={permission}>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          {trigger}
+        </DialogTrigger>
+        <DialogContent className="md">
+          <CopyActionContent itemId={itemId} onClose={() => setOpen(false)} />
+        </DialogContent>
+      </Dialog>
+    </HasPermission>
   )
 }
 
@@ -529,24 +547,37 @@ const Actions: React.FC<ActionsProps> = ({
   permission
 }) => {
   const id = itemId || item?.id
+  const { model } = useModel()
+
   if (!id) return null
+
+  const modelKey = model?.key
+  const defaultPermissions = {
+    create: `ext_${modelKey}.edit`,
+    view: `ext_${modelKey}.view`,
+    edit: `ext_${modelKey}.edit`,
+    delete: `ext_${modelKey}.delete`,
+    export: `ext_${modelKey}.view`,
+    copy: `ext_${modelKey}.view`
+  }
+  const finalPermission = permission || defaultPermissions
   // Render as button group
   if (variant === 'buttons') {
     return (
       <div className="flex items-center gap-2">
         {actions.map((action) => (
           action === 'create' ? (
-            <CreateAction formSchema={createFormSchema} permission={permission?.create} />
+            <CreateAction formSchema={createFormSchema} permission={finalPermission?.create} />
           ) : action === 'delete' ? (
-            <DeleteAction itemId={id!} permission={permission?.delete} />
+            <DeleteAction itemId={id!} permission={finalPermission?.delete} />
           ) : action === 'view' ? (
-            <ViewAction itemId={id!} formSchema={viewFormSchema} permission={permission?.view} />
+            <ViewAction itemId={id!} formSchema={viewFormSchema} permission={finalPermission?.view} />
           ) : action === 'edit' ? (
-            <EditAction itemId={id!} formSchema={editFormSchema} permission={permission?.edit} />
+            <EditAction itemId={id!} formSchema={editFormSchema} permission={finalPermission?.edit} />
           ) : action === 'export' ? (
-            <ExportAction itemId={id!} permission={permission?.export} />
+            <ExportAction itemId={id!} permission={finalPermission?.export} />
           ) : action === 'copy' ? (
-            <CopyAction itemId={id!} permission={permission?.copy} />
+            <CopyAction itemId={id!} permission={finalPermission?.copy} />
           ) : null
         ))}
       </div>
@@ -584,63 +615,51 @@ const Actions: React.FC<ActionsProps> = ({
         {actions.map((action, index) => (
           <React.Fragment key={action}>
             {action === 'create' ? (
-              <HasPermission permission={permission?.create}>
-                <CreateAction formSchema={createFormSchema}>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    {actionIcons[action]}
-                    {actionLabels[action]}
-                  </DropdownMenuItem>
-                </CreateAction>
-              </HasPermission>
+              <CreateAction formSchema={createFormSchema} permission={permission?.create}>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  {actionIcons[action]}
+                  {actionLabels[action]}
+                </DropdownMenuItem>
+              </CreateAction>
             ) : action === 'delete' ? (
-              <HasPermission permission={permission?.delete}>
-                <DeleteAction itemId={id!}>
-                  <DropdownMenuItem
-                    onSelect={(e) => {
-                      e.preventDefault()
-                    }}
-                  >
-                    {actionIcons[action]}
-                    {actionLabels[action]}
-                  </DropdownMenuItem>
-                </DeleteAction>
-              </HasPermission>
+              <DeleteAction itemId={id!} permission={permission?.delete}>
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault()
+                  }}
+                >
+                  {actionIcons[action]}
+                  {actionLabels[action]}
+                </DropdownMenuItem>
+              </DeleteAction>
             ) : action === 'view' ? (
-              <HasPermission permission={permission?.view}>
-                <ViewAction itemId={id!} formSchema={viewFormSchema}>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    {actionIcons[action]}
-                    {actionLabels[action]}
-                  </DropdownMenuItem>
-                </ViewAction>
-              </HasPermission>
+              <ViewAction itemId={id!} formSchema={viewFormSchema} permission={permission?.view}>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  {actionIcons[action]}
+                  {actionLabels[action]}
+                </DropdownMenuItem>
+              </ViewAction>
             ) : action === 'edit' ? (
-              <HasPermission permission={permission?.edit}>
-                <EditAction itemId={id!} formSchema={editFormSchema}>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    {actionIcons[action]}
-                    {actionLabels[action]}
-                  </DropdownMenuItem>
-                </EditAction>
-              </HasPermission>
+              <EditAction itemId={id!} formSchema={editFormSchema} permission={permission?.edit}>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  {actionIcons[action]}
+                  {actionLabels[action]}
+                </DropdownMenuItem>
+              </EditAction>
             ) : action === 'export' ? (
-              <HasPermission permission={permission?.export}>
-                <ExportAction itemId={id!}>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    {actionIcons[action]}
-                    {actionLabels[action]}
-                  </DropdownMenuItem>
-                </ExportAction>
-              </HasPermission>
+              <ExportAction itemId={id!} permission={permission?.export}>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  {actionIcons[action]}
+                  {actionLabels[action]}
+                </DropdownMenuItem>
+              </ExportAction>
             ) : action === 'copy' ? (
-              <HasPermission permission={permission?.copy}>
-                <CopyAction itemId={id!}>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    {actionIcons[action]}
-                    {actionLabels[action]}
-                  </DropdownMenuItem>
-                </CopyAction>
-              </HasPermission>
+              <CopyAction itemId={id!} permission={permission?.copy}>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  {actionIcons[action]}
+                  {actionLabels[action]}
+                </DropdownMenuItem>
+              </CopyAction>
             ) : null}
             {index < actions.length - 1 && <DropdownMenuSeparator />}
           </React.Fragment>

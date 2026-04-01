@@ -45,7 +45,7 @@ export function HasPermission({
   ...props
 }: HasPermissionProps & Record<string, unknown>): React.ReactElement {
   const { user } = useUser()
-  console.log("User permissions:", user)
+  // console.log("User permissions:", user)
   if (!permission || checkPermission(user, permission)) {
     return Object.keys(props).length > 0
       ? React.cloneElement(children, props)

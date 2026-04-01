@@ -357,9 +357,10 @@ export const EditAction: React.FC<EditActionProps> = ({ itemId, children, formSc
 interface CreateActionProps {
   children?: React.ReactNode
   formSchema?: FormSchemaItem[]
-}
+  permission?: string
+} 
 
-export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema }) => {
+export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema, permission }) => {
   const [open, setOpen] = useState(false)
 
   const trigger = children || (
@@ -370,14 +371,16 @@ export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema
   )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
-      <DialogContent className="max-w-4xl">
-        <CreateActionContent onClose={() => setOpen(false)} formSchema={formSchema} />
-      </DialogContent>
-    </Dialog>
+    <HasPermission permission={permission}>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          {trigger}
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl">
+          <CreateActionContent onClose={() => setOpen(false)} formSchema={formSchema} />
+        </DialogContent>
+      </Dialog>
+    </HasPermission>
   )
 }
 
@@ -533,17 +536,17 @@ const Actions: React.FC<ActionsProps> = ({
       <div className="flex items-center gap-2">
         {actions.map((action) => (
           action === 'create' ? (
-            <HasPermission key={action} permission={permission?.create}><CreateAction formSchema={createFormSchema} /></HasPermission>
+            <CreateAction formSchema={createFormSchema} permission={permission?.create} />
           ) : action === 'delete' ? (
-            <HasPermission key={action} permission={permission?.delete}><DeleteAction itemId={id!} /></HasPermission>
+            <DeleteAction itemId={id!} permission={permission?.delete} />
           ) : action === 'view' ? (
-            <HasPermission key={action} permission={permission?.view}><ViewAction itemId={id!} formSchema={viewFormSchema} /></HasPermission>
+            <ViewAction itemId={id!} formSchema={viewFormSchema} permission={permission?.view} />
           ) : action === 'edit' ? (
-            <HasPermission key={action} permission={permission?.edit}><EditAction itemId={id!} formSchema={editFormSchema} /></HasPermission>
+            <EditAction itemId={id!} formSchema={editFormSchema} permission={permission?.edit} />
           ) : action === 'export' ? (
-            <HasPermission key={action} permission={permission?.export}><ExportAction itemId={id!} /></HasPermission>
+            <ExportAction itemId={id!} permission={permission?.export} />
           ) : action === 'copy' ? (
-            <HasPermission key={action} permission={permission?.copy}><CopyAction itemId={id!} /></HasPermission>
+            <CopyAction itemId={id!} permission={permission?.copy} />
           ) : null
         ))}
       </div>

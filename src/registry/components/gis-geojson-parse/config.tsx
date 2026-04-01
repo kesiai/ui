@@ -125,7 +125,7 @@ const renderGeoJsonCodePreview = (props: Record<string, any>) => {
 
 export const geoJsonConfig: ComponentConfig = {
     id: 'gis-geojson-parse',
-    name: 'GeoJSON 层',
+    name: 'GeoJSON层',
     propsConfig: geoJsonPropsConfig,
     defaultProps: geoJsonDefaultProps,
     renderPreview: renderGeoJsonPreview,

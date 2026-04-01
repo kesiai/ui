@@ -218,7 +218,7 @@ const renderModel3dCardCodePreview = (props: Record<string, any>) => {
 
 export const model3dCardConfig: ComponentConfig = {
   id: 'model-3d-card',
-  name: 'Model3dCard 3D卡片',
+  name: '3D卡片',
   propsConfig: model3dCardPropsConfig,
   defaultProps: model3dCardDefaultProps,
   renderPreview: renderModel3dCardPreview,

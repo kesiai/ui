@@ -226,7 +226,7 @@ const renderModel3dLayout3dCodePreview = (props: Record<string, any>) => {
 
 export const model3dLayout3dConfig: ComponentConfig = {
   id: 'model-3d-layout-3d',
-  name: 'Model3dLayout3d 三维布局',
+  name: '三维布局',
   propsConfig: model3dLayout3dPropsConfig,
   defaultProps: model3dLayout3dDefaultProps,
   renderPreview: renderModel3dLayout3dPreview,

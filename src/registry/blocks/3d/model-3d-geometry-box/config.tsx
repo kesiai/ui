@@ -180,7 +180,7 @@ const renderModel3dGeometryBoxCodePreview = (props: Record<string, any>) => {
 
 export const model3dGeometryBoxConfig: ComponentConfig = {
   id: 'model-3d-geometry-box',
-  name: 'Model3dGeometryBox 立方体',
+  name: '立方体',
   propsConfig: model3dGeometryBoxPropsConfig,
   defaultProps: model3dGeometryBoxDefaultProps,
   renderPreview: renderModel3dGeometryBoxPreview,

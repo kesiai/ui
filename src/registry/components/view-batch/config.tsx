@@ -172,7 +172,7 @@ const MyBatchOperation = () => {
 
 export const viewBatchOperationConfig: ComponentConfig = {
   id: 'view-batch',
-  name: 'BatchActions 批量操作组件',
+  name: '批量操作',
   propsConfig: viewBatchOperationPropsConfig,
   defaultProps: viewBatchOperationDefaultProps,
   renderPreview: renderViewBatchOperationPreview,

@@ -108,7 +108,7 @@ const renderTextCodePreview = (props: Record<string, any>) => {
 
 export const textConfig: ComponentConfig = {
   id: 'text',
-  name: 'Text 文本',
+  name: '文本',
   propsConfig: textPropsConfig,
   defaultProps: textDefaultProps,
   renderPreview: renderTextPreview,

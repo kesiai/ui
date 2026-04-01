@@ -242,7 +242,7 @@ const renderPlayerCustomForm = (props: Record<string, any>, _onChange: (name: st
 
 export const playerConfig: ComponentConfig = {
   id: 'player',
-  name: 'Player 音频播放器',
+  name: '音频播放器',
   propsConfig: playerPropsConfig,
   defaultProps: playerDefaultProps,
   renderPreview: renderPlayerPreview,

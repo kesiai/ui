@@ -114,7 +114,7 @@ const renderImageCustomForm = (props: Record<string, any>, _onChange: (name: str
 
 export const imageConfig: ComponentConfig = {
   id: 'image',
-  name: 'Image 图片',
+  name: '图片',
   propsConfig: imagePropsConfig,
   defaultProps: imageDefaultProps,
   renderPreview: renderImagePreview,

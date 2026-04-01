@@ -120,7 +120,7 @@ const renderSvgEditorCustomForm = () => {
 // 组件配置
 export const svgConfig: ComponentConfig = {
   id: 'svg',
-  name: 'SVG 展示组件',
+  name: 'SVG',
   propsConfig: svgEditorPropsConfig,
   defaultProps: svgEditorDefaultProps,
   renderPreview: renderSvgEditorPreview,

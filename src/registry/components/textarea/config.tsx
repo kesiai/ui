@@ -89,7 +89,7 @@ const renderTextareaCodePreview = (props: Record<string, any>) => {
 
 export const textareaConfig: ComponentConfig = {
   id: 'textarea',
-  name: 'TextArea 多行文本',
+  name: '多行文本',
   propsConfig: textareaPropsConfig,
   defaultProps: textareaDefaultProps,
   renderPreview: renderTextareaPreview,

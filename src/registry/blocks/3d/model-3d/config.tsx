@@ -220,7 +220,7 @@ const renderModel3dCodePreview = (props: Record<string, any>) => {
 
 export const model3dConfig: ComponentConfig = {
   id: 'model-3d',
-  name: 'Model.3d 三维空间容器',
+  name: '三维空间容器',
   propsConfig: model3dPropsConfig,
   defaultProps: model3dDefaultProps,
   renderPreview: renderModel3dPreview,

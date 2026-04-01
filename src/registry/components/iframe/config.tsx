@@ -83,7 +83,7 @@ const renderIframeCustomForm = (props: Record<string, any>, _onChange: (name: st
 
 export const iframeConfig: ComponentConfig = {
   id: 'iframe',
-  name: 'Iframe 嵌入',
+  name: 'Iframe嵌入',
   propsConfig: iframePropsConfig,
   defaultProps: iframeDefaultProps,
   renderPreview: renderIframePreview,

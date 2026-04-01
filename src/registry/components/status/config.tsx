@@ -195,7 +195,7 @@ const renderStatusCustomForm = (props: Record<string, any>, _onChange: (name: st
 
 export const statusConfig: ComponentConfig = {
   id: 'status',
-  name: 'Status 状态指示器',
+  name: '状态指示器',
   propsConfig: statusPropsConfig,
   defaultProps: statusDefaultProps,
   renderPreview: renderStatusPreview,

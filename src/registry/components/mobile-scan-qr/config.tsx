@@ -47,7 +47,7 @@ const renderMobileScanQRCodePreview = (props: Record<string, any>) => {
 
 export const mobileScanQRConfig: ComponentConfig = {
   id: 'mobile-scan-qr',
-  name: 'MobileScanQR 二维码扫描',
+  name: '二维码扫描',
   propsConfig: mobileScanQRPropsConfig,
   defaultProps: mobileScanQRDefaultProps,
   renderPreview: renderMobileScanQRPreview,

@@ -100,7 +100,7 @@ const renderMobileCalendarCodePreview = (props: Record<string, any>) => {
 
 export const mobileCalendarConfig: ComponentConfig = {
   id: 'mobile-calendar',
-  name: 'MobileCalendar 日历',
+  name: '日历',
   propsConfig: mobileCalendarPropsConfig,
   defaultProps: mobileCalendarDefaultProps,
   renderPreview: renderMobileCalendarPreview,

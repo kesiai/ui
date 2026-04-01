@@ -191,7 +191,7 @@ const MyActions = ({ itemId, modelId }: { itemId?: string, modelId: string }) =>
 
 export const viewActionsConfig: ComponentConfig = {
   id: 'view-actions',
-  name: 'ViewActions 操作组件集合',
+  name: '操作集合',
   propsConfig: viewActionsPropsConfig,
   defaultProps: viewActionsDefaultProps,
   renderPreview: renderViewActionsPreview,

@@ -180,7 +180,7 @@ const renderModel3dGeometryConeCodePreview = (props: Record<string, any>) => {
 
 export const model3dGeometryConeConfig: ComponentConfig = {
   id: 'model-3d-geometry-cone',
-  name: 'Model3dGeometryCone 圆锥体',
+  name: '圆锥体',
   propsConfig: model3dGeometryConePropsConfig,
   defaultProps: model3dGeometryConeDefaultProps,
   renderPreview: renderModel3dGeometryConePreview,

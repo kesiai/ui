@@ -215,7 +215,7 @@ const renderXYZCodePreview = (props: Record<string, any>) => {
 
 export const xyzConfig: ComponentConfig = {
     id: 'gis-xyz-tile',
-    name: 'xyz层',
+    name: 'XYZ层',
     propsConfig: xyzPropsConfig,
     defaultProps: xyzDefaultProps,
     renderPreview: renderXYZPreview,

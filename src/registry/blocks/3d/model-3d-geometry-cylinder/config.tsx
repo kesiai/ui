@@ -180,7 +180,7 @@ const renderModel3dGeometryCylinderCodePreview = (props: Record<string, any>) =>
 
 export const model3dGeometryCylinderConfig: ComponentConfig = {
   id: 'model-3d-geometry-cylinder',
-  name: 'Model3dGeometryCylinder 圆柱体',
+  name: '圆柱体',
   propsConfig: model3dGeometryCylinderPropsConfig,
   defaultProps: model3dGeometryCylinderDefaultProps,
   renderPreview: renderModel3dGeometryCylinderPreview,

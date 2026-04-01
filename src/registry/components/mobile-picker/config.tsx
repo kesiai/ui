@@ -184,7 +184,7 @@ const renderMobilePickerCustomForm = (props: Record<string, any>, onChange: (nam
 
 export const mobilePickerConfig: ComponentConfig = {
   id: 'mobile-picker',
-  name: 'MobilePicker 移动端选择器',
+  name: '选择器',
   propsConfig: mobilePickerPropsConfig,
   defaultProps: mobilePickerDefaultProps,
   renderPreview: renderMobilePickerPreview,

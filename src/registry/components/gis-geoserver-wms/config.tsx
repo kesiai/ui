@@ -137,7 +137,7 @@ const renderGeoserverWmsCodePreview = (props: Record<string, any>) => {
 
 export const geoserverWmsConfig: ComponentConfig = {
     id: 'gis-geoserver-wms',
-    name: 'geoserver-wms层',
+    name: 'WMS层',
     propsConfig: geoserverWmsPropsConfig,
     defaultProps: geoserverWmsDefaultProps,
     renderPreview: renderGeoserverWmsPreview,

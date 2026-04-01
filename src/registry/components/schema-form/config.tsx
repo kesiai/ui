@@ -483,7 +483,7 @@ const MySchemaForm = () => {
 
 export const schemaFormConfig: ComponentConfig = {
   id: 'schema-form',
-  name: 'SchemaForm JSON Schema 表单',
+  name: 'SchemaForm表单',
   propsConfig: schemaFormPropsConfig,
   defaultProps: schemaFormDefaultProps,
   renderPreview: renderSchemaFormPreview,

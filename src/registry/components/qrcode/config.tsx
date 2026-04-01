@@ -80,7 +80,7 @@ const renderQRCodeCodePreview = (props: Record<string, any>) => {
 
 export const qrcodeConfig: ComponentConfig = {
   id: 'qrcode',
-  name: 'QRCode 二维码',
+  name: '二维码',
   propsConfig: qrcodePropsConfig,
   defaultProps: qrcodeDefaultProps,
   renderPreview: renderQRCodePreview,

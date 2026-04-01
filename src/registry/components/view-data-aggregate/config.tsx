@@ -230,7 +230,7 @@ const MyDataAggregate = () => {
 
 export const viewDataAggregateConfig: ComponentConfig = {
   id: 'view-data-aggregate',
-  name: 'ViewDataAggregate 数据统计组件',
+  name: '数据统计',
   propsConfig: viewDataAggregatePropsConfig,
   defaultProps: viewDataAggregateDefaultProps,
   renderPreview: renderViewDataAggregatePreview,

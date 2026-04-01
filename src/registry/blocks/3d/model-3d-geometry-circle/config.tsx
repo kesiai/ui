@@ -180,7 +180,7 @@ const renderModel3dGeometryCircleCodePreview = (props: Record<string, any>) => {
 
 export const model3dGeometryCircleConfig: ComponentConfig = {
   id: 'model-3d-geometry-circle',
-  name: 'Model3dGeometryCircle 圆形',
+  name: '圆形',
   propsConfig: model3dGeometryCirclePropsConfig,
   defaultProps: model3dGeometryCircleDefaultProps,
   renderPreview: renderModel3dGeometryCirclePreview,

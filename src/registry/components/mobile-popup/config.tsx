@@ -103,7 +103,7 @@ const renderMobilePopupCodePreview = (props: Record<string, any>) => {
 
 export const mobilePopupConfig: ComponentConfig = {
   id: 'mobile-popup',
-  name: 'MobilePopup 弹出框',
+  name: '弹出框',
   propsConfig: mobilePopupPropsConfig,
   defaultProps: mobilePopupDefaultProps,
   renderPreview: renderMobilePopupPreview,

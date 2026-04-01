@@ -181,7 +181,7 @@ const renderModel3dGeometrySphereCodePreview = (props: Record<string, any>) => {
 
 export const model3dGeometrySphereConfig: ComponentConfig = {
   id: 'model-3d-geometry-sphere',
-  name: 'Model3dGeometrySphere 球体',
+  name: '球体',
   propsConfig: model3dGeometrySpherePropsConfig,
   defaultProps: model3dGeometrySphereDefaultProps,
   renderPreview: renderModel3dGeometrySpherePreview,

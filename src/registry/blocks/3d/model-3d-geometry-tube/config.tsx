@@ -181,7 +181,7 @@ const renderModel3dGeometryTubeCodePreview = (props: Record<string, any>) => {
 
 export const model3dGeometryTubeConfig: ComponentConfig = {
   id: 'model-3d-geometry-tube',
-  name: 'Model3dGeometryTube 管状体',
+  name: '管状体',
   propsConfig: model3dGeometryTubePropsConfig,
   defaultProps: model3dGeometryTubeDefaultProps,
   renderPreview: renderModel3dGeometryTubePreview,

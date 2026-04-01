@@ -75,7 +75,7 @@ const renderMobileNavBarCodePreview = (props: Record<string, any>) => {
 
 export const mobileNavBarConfig: ComponentConfig = {
   id: 'mobile-nav-bar',
-  name: 'MobileNavBar 标题栏',
+  name: '标题栏',
   propsConfig: mobileNavBarPropsConfig,
   defaultProps: mobileNavBarDefaultProps,
   renderPreview: renderMobileNavBarPreview,

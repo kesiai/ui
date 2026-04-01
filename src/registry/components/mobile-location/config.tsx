@@ -71,7 +71,7 @@ const renderMobileLocationCodePreview = (props: Record<string, any>) => {
 
 export const mobileLocationConfig: ComponentConfig = {
   id: 'mobile-location',
-  name: 'MobileLocation 定位',
+  name: '定位',
   propsConfig: mobileLocationPropsConfig,
   defaultProps: mobileLocationDefaultProps,
   renderPreview: renderMobileLocationPreview,

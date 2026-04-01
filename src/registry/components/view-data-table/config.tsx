@@ -321,7 +321,7 @@ const MyDataTable = () => {
 
 export const viewDataTableConfig: ComponentConfig = {
   id: 'view-data-table',
-  name: 'ViewDataTable 数据表格',
+  name: '数据表格',
   propsConfig: viewDataTablePropsConfig,
   defaultProps: viewDataTableDefaultProps,
   renderPreview: renderViewDataTablePreview,

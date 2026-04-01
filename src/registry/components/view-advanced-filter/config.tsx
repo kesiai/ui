@@ -122,7 +122,7 @@ const MyAdvancedFilter = () => {
 
 export const viewAdvancedFilterConfig: ComponentConfig = {
   id: 'view-advanced-filter',
-  name: 'ViewAdvancedFilter 高级筛选组件',
+  name: '高级筛选',
   propsConfig: viewAdvancedFilterPropsConfig,
   defaultProps: viewAdvancedFilterDefaultProps,
   renderPreview: renderViewAdvancedFilterPreview,

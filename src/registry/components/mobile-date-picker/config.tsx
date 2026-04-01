@@ -96,7 +96,7 @@ const renderMobileDatePickerCodePreview = (props: Record<string, any>) => {
 
 export const mobileDatePickerConfig: ComponentConfig = {
   id: 'mobile-date-picker',
-  name: 'MobileDatePicker 时间选择器',
+  name: '时间',
   propsConfig: mobileDatePickerPropsConfig,
   defaultProps: mobileDatePickerDefaultProps,
   renderPreview: renderMobileDatePickerPreview,

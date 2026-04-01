@@ -180,7 +180,7 @@ const renderModel3dGeometryPlaneCodePreview = (props: Record<string, any>) => {
 
 export const model3dGeometryPlaneConfig: ComponentConfig = {
   id: 'model-3d-geometry-plane',
-  name: 'Model3dGeometryPlane 平面',
+  name: '平面',
   propsConfig: model3dGeometryPlanePropsConfig,
   defaultProps: model3dGeometryPlaneDefaultProps,
   renderPreview: renderModel3dGeometryPlanePreview,

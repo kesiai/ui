@@ -113,7 +113,7 @@ const renderVideoPlaybackPreview = (props: Record<string, any>) => {
 
 // 代码预览
 const renderVideoPlaybackCodePreview = (props: Record<string, any>) => {
-  return `import { VideoPlaybackWidget } from '@/registry/blocks/video/video-playback-widget/video-playback-widget'
+  return `import { VideoPlaybackWidget } from '@/registry/components/video-playback-widget/video-playback-widget'
 import { useState } from 'react'
 
 // 视频记录数据

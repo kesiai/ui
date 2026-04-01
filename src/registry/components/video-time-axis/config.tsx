@@ -134,7 +134,7 @@ const renderTimeAxisPreview = (props: Record<string, any>) => {
 
 // 代码预览
 const renderTimeAxisCodePreview = (props: Record<string, any>) => {
-  return `import { TimeAxisWidget } from '@/registry/blocks/video/time-axis/time-axis'
+  return `import { TimeAxisWidget } from '@/registry/components/video-time-axis/video-time-axis'
 
 // 视频记录数据
 const videoRecords = [

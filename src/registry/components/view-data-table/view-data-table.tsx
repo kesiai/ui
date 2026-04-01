@@ -120,11 +120,11 @@ const DataCell = ({ children, schema, tableSchema, ...restProps }:
       ...restProps,
       value: getValue(),
       item: row.original,
-      schema: { ...baseSchema, ...tableSchema },
+      schema: { ...baseSchema, ...(tableSchema || {}) },
       tableSchema,
     }
 
-    const FieldComponent = tableConverter(schema, tableSchema)
+    const FieldComponent = tableConverter(baseSchema, tableSchema)
 
     return (
       children ? (typeof children === 'function' ? children(childrenProps) : cloneElement(children as React.ReactElement<any>, childrenProps)) : (

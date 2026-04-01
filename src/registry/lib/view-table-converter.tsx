@@ -24,6 +24,7 @@ import { Relate } from '@/registry/components/view-field-relate/view-field-relat
 
 const tableConverter = (schema: any, tableSchame: any) => {
   const controlType = tableSchame?.controlType || schema?.controlType
+
   switch (controlType) {
     case 'text':
       return Text

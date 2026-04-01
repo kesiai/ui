@@ -46,9 +46,7 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
               <Tools tools={['count', 'pageSize', 'columns']} />
             </div>
             <ViewDataTable>
-              <TableColumn name="text-2D6E" title="姓名" width={180} />
-              <TableColumn name="select-BAE0" title="年级" />
-              <TableColumn name="relate-table-2E3C" title="所属表" />
+              <TableColumn name="first" title='我给改名字了' />
               <TableColumn name="__actions__" title=" " width={65} enableSorting={false} enableHiding={false} enableResizing={false}>
                 <Actions actions={props.actions || ['view', 'edit', 'delete']} />
               </TableColumn>

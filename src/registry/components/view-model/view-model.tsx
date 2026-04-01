@@ -67,6 +67,7 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
 
   const schemaTransform = (model: ModelSchema) => {
     const { schema, formSchema, tableSchema, filterSchema } = trans(model)
+    
     return {
       atoms: model.atoms,
       ...schema,

@@ -461,7 +461,7 @@ export interface RelatePlusShowProps {
 
 export const Relate: React.FC<RelatePlusShowProps> = ({ value, schema, inList }) => {
   const [expand, setExpand] = React.useState(false)
-  console.log('ViewFieldRelate value:', value)
+
   if (isNil(value)) {
     return <span className="text-muted-foreground">空</span>
   }

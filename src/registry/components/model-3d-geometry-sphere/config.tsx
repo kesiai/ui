@@ -1,9 +1,9 @@
-import { Model3dCard } from '@/registry/blocks/3d/model-3d-card/model-3d-card'
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3dGeometrySphere } from '@/registry/components/model-3d-geometry-sphere/model-3d-geometry-sphere'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
-const defaultModel3dCardProps = {
+const defaultModel3dGeometrySphereProps = {
   meshConfig: {
     visible: true,
     position: { x: 0, y: 0, z: 0 },
@@ -12,90 +12,59 @@ const defaultModel3dCardProps = {
     opacity: 1,
     color: '#FFFFFF'
   },
-  isSprite: false,
-  isFixd: false,
-  cardConfig: {
-    cardWidth: '200px',
-    lineWidth: '100px',
-    lineHeight: '100px'
+  materialsConfig: {
+    materials: []
   },
-  dataConfig: {
-    lineCount: 1,
-    dataList: [
-      { label: '标签1', value: '值1' },
-      { label: '标签2', value: '值2' }
-    ]
-  },
-  cellKey: '',
   editMode: false,
-  className: ''
+  name: '',
+  onClick: undefined,
+  args: [100, 32, 32]
 }
 
-export const model3dCardPropsConfig = [
+export const model3dGeometrySpherePropsConfig = [
   {
     name: 'meshConfig',
     label: '网格配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dCardProps.meshConfig)
+    default: JSON.stringify(defaultModel3dGeometrySphereProps.meshConfig)
   },
   {
-    name: 'isSprite',
-    label: '精灵图模式',
-    type: 'boolean' as const,
-    default: defaultModel3dCardProps.isSprite
-  },
-  {
-    name: 'isFixd',
-    label: '固定位置',
-    type: 'boolean' as const,
-    default: defaultModel3dCardProps.isFixd
-  },
-  {
-    name: 'cardConfig',
-    label: '卡片配置',
+    name: 'materialsConfig',
+    label: '材质配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dCardProps.cardConfig)
-  },
-  {
-    name: 'dataConfig',
-    label: '数据配置',
-    type: 'text' as const,
-    default: JSON.stringify(defaultModel3dCardProps.dataConfig)
-  },
-  {
-    name: 'cellKey',
-    label: '单元格键',
-    type: 'text' as const,
-    default: defaultModel3dCardProps.cellKey,
-    placeholder: '请输入单元格键'
+    default: JSON.stringify(defaultModel3dGeometrySphereProps.materialsConfig)
   },
   {
     name: 'editMode',
     label: '编辑模式',
     type: 'boolean' as const,
-    default: defaultModel3dCardProps.editMode
+    default: defaultModel3dGeometrySphereProps.editMode
   },
   {
-    name: 'className',
-    label: 'CSS类名',
+    name: 'name',
+    label: '名称',
     type: 'text' as const,
-    default: defaultModel3dCardProps.className,
-    placeholder: '请输入CSS类名'
+    default: defaultModel3dGeometrySphereProps.name,
+    placeholder: '请输入几何体名称'
+  },
+  {
+    name: 'args',
+    label: '尺寸参数',
+    type: 'text' as const,
+    default: JSON.stringify(defaultModel3dGeometrySphereProps.args),
+    description: '参数格式: [半径, 宽度分段, 高度分段]'
   }
 ]
 
-export const model3dCardDefaultProps = {
-  meshConfig: JSON.stringify(defaultModel3dCardProps.meshConfig),
-  isSprite: defaultModel3dCardProps.isSprite,
-  isFixd: defaultModel3dCardProps.isFixd,
-  cardConfig: JSON.stringify(defaultModel3dCardProps.cardConfig),
-  dataConfig: JSON.stringify(defaultModel3dCardProps.dataConfig),
-  cellKey: defaultModel3dCardProps.cellKey,
-  editMode: defaultModel3dCardProps.editMode,
-  className: defaultModel3dCardProps.className
+export const model3dGeometrySphereDefaultProps = {
+  meshConfig: JSON.stringify(defaultModel3dGeometrySphereProps.meshConfig),
+  materialsConfig: JSON.stringify(defaultModel3dGeometrySphereProps.materialsConfig),
+  editMode: defaultModel3dGeometrySphereProps.editMode,
+  name: defaultModel3dGeometrySphereProps.name,
+  args: JSON.stringify(defaultModel3dGeometrySphereProps.args)
 }
 
-const renderModel3dCardPreview = (props: Record<string, any>) => {
+const renderModel3dGeometrySpherePreview = (props: Record<string, any>) => {
   // 解析 JSON 配置，解析失败返回 undefined
   const parseJson = (str: string) => {
     try {
@@ -106,8 +75,8 @@ const renderModel3dCardPreview = (props: Record<string, any>) => {
   }
 
   const meshConfig = parseJson(props.meshConfig)
-  const cardConfig = parseJson(props.cardConfig)
-  const dataConfig = parseJson(props.dataConfig)
+  const materialsConfig = parseJson(props.materialsConfig)
+  const args = parseJson(props.args)
 
   // 用于示例展示的简化 Model3d 配置
   const exampleModel3dConfig = {
@@ -142,15 +111,12 @@ const renderModel3dCardPreview = (props: Record<string, any>) => {
       <div className="w-full h-96 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center">
         <div className="w-full h-full flex items-center justify-center p-4">
           <Model3d {...exampleModel3dConfig}>
-            <Model3dCard
+            <Model3dGeometrySphere
               meshConfig={meshConfig}
-              isSprite={props.isSprite}
-              isFixd={props.isFixd}
-              cardConfig={cardConfig}
-              dataConfig={dataConfig}
-              cellKey={props.cellKey}
+              materialsConfig={materialsConfig}
               editMode={props.editMode}
-              className={props.className}
+              name={props.name}
+              args={args}
             />
           </Model3d>
         </div>
@@ -159,7 +125,7 @@ const renderModel3dCardPreview = (props: Record<string, any>) => {
   )
 }
 
-const renderModel3dCardCodePreview = (props: Record<string, any>) => {
+const renderModel3dGeometrySphereCodePreview = (props: Record<string, any>) => {
   const parseJson = (str: string) => {
     try {
       return JSON.parse(str)
@@ -169,8 +135,8 @@ const renderModel3dCardCodePreview = (props: Record<string, any>) => {
   }
 
   const meshConfig = parseJson(props.meshConfig)
-  const cardConfig = parseJson(props.cardConfig)
-  const dataConfig = parseJson(props.dataConfig)
+  const materialsConfig = parseJson(props.materialsConfig)
+  const args = parseJson(props.args)
 
   // 用于示例展示的简化 Model3d 配置
   const exampleModel3dConfig = {
@@ -200,15 +166,12 @@ const renderModel3dCardCodePreview = (props: Record<string, any>) => {
     }
   }
 
-  let innerCode = `<Model3dCard`
+  let innerCode = `<Model3dGeometrySphere`
   if (props.meshConfig && meshConfig !== undefined) innerCode += `\n    meshConfig={${JSON.stringify(meshConfig)}}`
-  if (props.isSprite) innerCode += `\n    isSprite`
-  if (props.isFixd) innerCode += `\n    isFixd`
-  if (props.cardConfig && cardConfig !== undefined) innerCode += `\n    cardConfig={${JSON.stringify(cardConfig)}}`
-  if (props.dataConfig && dataConfig !== undefined) innerCode += `\n    dataConfig={${JSON.stringify(dataConfig)}}`
-  if (props.cellKey) innerCode += `\n    cellKey="${props.cellKey}"`
+  if (props.materialsConfig && materialsConfig !== undefined) innerCode += `\n    materialsConfig={${JSON.stringify(materialsConfig)}}`
   if (props.editMode) innerCode += `\n    editMode`
-  if (props.className) innerCode += `\n    className="${props.className}"`
+  if (props.name) innerCode += `\n    name="${props.name}"`
+  if (props.args && args !== undefined) innerCode += `\n    args={${JSON.stringify(args)}}`
   innerCode += `\n  />`
 
   let code = `<Model3d\n  sceneConfig={${JSON.stringify(exampleModel3dConfig.sceneConfig)}}\n  cameraConfig={${JSON.stringify(exampleModel3dConfig.cameraConfig)}}\n  controlConfig={${JSON.stringify(exampleModel3dConfig.controlConfig)}}\n  environmentConfig={${JSON.stringify(exampleModel3dConfig.environmentConfig)}}\n  lightConfig={${JSON.stringify(exampleModel3dConfig.lightConfig)}}\n  helperConfig={${JSON.stringify(exampleModel3dConfig.helperConfig)}}\n>\n  ${innerCode}\n</Model3d>`
@@ -216,11 +179,11 @@ const renderModel3dCardCodePreview = (props: Record<string, any>) => {
   return code
 }
 
-export const model3dCardConfig: ComponentConfig = {
-  id: 'model-3d-card',
-  name: '3D卡片',
-  propsConfig: model3dCardPropsConfig,
-  defaultProps: model3dCardDefaultProps,
-  renderPreview: renderModel3dCardPreview,
-  renderCodePreview: renderModel3dCardCodePreview
+export const model3dGeometrySphereConfig: ComponentConfig = {
+  id: 'model-3d-geometry-sphere',
+  name: '球体',
+  propsConfig: model3dGeometrySpherePropsConfig,
+  defaultProps: model3dGeometrySphereDefaultProps,
+  renderPreview: renderModel3dGeometrySpherePreview,
+  renderCodePreview: renderModel3dGeometrySphereCodePreview
 }

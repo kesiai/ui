@@ -8,11 +8,11 @@
   "dependencies": [],
   "files": [
     {
-      "path": "blocks/gis/warn-views/warn-views.tsx",
+      "path": "components/gis-warn-layer/warn-views.tsx",
       "type": "registry:component"
     },
     {
-      "path": "blocks/gis/warn-views/config.tsx",
+      "path": "components/gis-warn-layer/config.tsx",
       "type": "registry:component"
     }
   ]

@@ -1,9 +1,9 @@
-import { Model3dLayout3d } from '@/registry/blocks/3d/model-3d-layout-3d/model-3d-layout-3d'
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3dCard } from '@/registry/components/model-3d-card/model-3d-card'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
-const defaultModel3dLayout3dProps = {
+const defaultModel3dCardProps = {
   meshConfig: {
     visible: true,
     position: { x: 0, y: 0, z: 0 },
@@ -14,80 +14,88 @@ const defaultModel3dLayout3dProps = {
   },
   isSprite: false,
   isFixd: false,
-  layoutWidth: 400,
-  layoutHeight: 250,
+  cardConfig: {
+    cardWidth: '200px',
+    lineWidth: '100px',
+    lineHeight: '100px'
+  },
+  dataConfig: {
+    lineCount: 1,
+    dataList: [
+      { label: '标签1', value: '值1' },
+      { label: '标签2', value: '值2' }
+    ]
+  },
   cellKey: '',
   editMode: false,
   className: ''
 }
 
-export const model3dLayout3dPropsConfig = [
+export const model3dCardPropsConfig = [
   {
     name: 'meshConfig',
     label: '网格配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dLayout3dProps.meshConfig)
+    default: JSON.stringify(defaultModel3dCardProps.meshConfig)
   },
   {
     name: 'isSprite',
     label: '精灵图模式',
     type: 'boolean' as const,
-    default: defaultModel3dLayout3dProps.isSprite
+    default: defaultModel3dCardProps.isSprite
   },
   {
     name: 'isFixd',
     label: '固定位置',
     type: 'boolean' as const,
-    default: defaultModel3dLayout3dProps.isFixd
+    default: defaultModel3dCardProps.isFixd
   },
   {
-    name: 'layoutWidth',
-    label: '布局宽度',
+    name: 'cardConfig',
+    label: '卡片配置',
     type: 'text' as const,
-    default: defaultModel3dLayout3dProps.layoutWidth.toString(),
-    placeholder: '请输入布局宽度'
+    default: JSON.stringify(defaultModel3dCardProps.cardConfig)
   },
   {
-    name: 'layoutHeight',
-    label: '布局高度',
+    name: 'dataConfig',
+    label: '数据配置',
     type: 'text' as const,
-    default: defaultModel3dLayout3dProps.layoutHeight.toString(),
-    placeholder: '请输入布局高度'
+    default: JSON.stringify(defaultModel3dCardProps.dataConfig)
   },
   {
     name: 'cellKey',
     label: '单元格键',
     type: 'text' as const,
-    default: defaultModel3dLayout3dProps.cellKey,
+    default: defaultModel3dCardProps.cellKey,
     placeholder: '请输入单元格键'
   },
   {
     name: 'editMode',
     label: '编辑模式',
     type: 'boolean' as const,
-    default: defaultModel3dLayout3dProps.editMode
+    default: defaultModel3dCardProps.editMode
   },
   {
     name: 'className',
     label: 'CSS类名',
     type: 'text' as const,
-    default: defaultModel3dLayout3dProps.className,
+    default: defaultModel3dCardProps.className,
     placeholder: '请输入CSS类名'
   }
 ]
 
-export const model3dLayout3dDefaultProps = {
-  meshConfig: JSON.stringify(defaultModel3dLayout3dProps.meshConfig),
-  isSprite: defaultModel3dLayout3dProps.isSprite,
-  isFixd: defaultModel3dLayout3dProps.isFixd,
-  layoutWidth: defaultModel3dLayout3dProps.layoutWidth.toString(),
-  layoutHeight: defaultModel3dLayout3dProps.layoutHeight.toString(),
-  cellKey: defaultModel3dLayout3dProps.cellKey,
-  editMode: defaultModel3dLayout3dProps.editMode,
-  className: defaultModel3dLayout3dProps.className
+export const model3dCardDefaultProps = {
+  meshConfig: JSON.stringify(defaultModel3dCardProps.meshConfig),
+  isSprite: defaultModel3dCardProps.isSprite,
+  isFixd: defaultModel3dCardProps.isFixd,
+  cardConfig: JSON.stringify(defaultModel3dCardProps.cardConfig),
+  dataConfig: JSON.stringify(defaultModel3dCardProps.dataConfig),
+  cellKey: defaultModel3dCardProps.cellKey,
+  editMode: defaultModel3dCardProps.editMode,
+  className: defaultModel3dCardProps.className
 }
 
-const renderModel3dLayout3dPreview = (props: Record<string, any>) => {
+const renderModel3dCardPreview = (props: Record<string, any>) => {
   // 解析 JSON 配置，解析失败返回 undefined
   const parseJson = (str: string) => {
     try {
@@ -98,8 +106,8 @@ const renderModel3dLayout3dPreview = (props: Record<string, any>) => {
   }
 
   const meshConfig = parseJson(props.meshConfig)
-  const layoutWidth = props.layoutWidth ? parseInt(props.layoutWidth) : defaultModel3dLayout3dProps.layoutWidth
-  const layoutHeight = props.layoutHeight ? parseInt(props.layoutHeight) : defaultModel3dLayout3dProps.layoutHeight
+  const cardConfig = parseJson(props.cardConfig)
+  const dataConfig = parseJson(props.dataConfig)
 
   // 用于示例展示的简化 Model3d 配置
   const exampleModel3dConfig = {
@@ -134,29 +142,16 @@ const renderModel3dLayout3dPreview = (props: Record<string, any>) => {
       <div className="w-full h-96 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center">
         <div className="w-full h-full flex items-center justify-center p-4">
           <Model3d {...exampleModel3dConfig}>
-            <Model3dLayout3d
+            <Model3dCard
               meshConfig={meshConfig}
               isSprite={props.isSprite}
               isFixd={props.isFixd}
-              layoutWidth={layoutWidth}
-              layoutHeight={layoutHeight}
+              cardConfig={cardConfig}
+              dataConfig={dataConfig}
               cellKey={props.cellKey}
               editMode={props.editMode}
               className={props.className}
-              setMeshs={() => {}} // 提供空函数，避免组件显示"请放入三维空间中使用"
-            >
-              <div style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#f0f0f0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px dashed #ccc'
-              }}>
-                <span style={{ color: '#666' }}>三维布局容器</span>
-              </div>
-            </Model3dLayout3d>
+            />
           </Model3d>
         </div>
       </div>
@@ -164,7 +159,7 @@ const renderModel3dLayout3dPreview = (props: Record<string, any>) => {
   )
 }
 
-const renderModel3dLayout3dCodePreview = (props: Record<string, any>) => {
+const renderModel3dCardCodePreview = (props: Record<string, any>) => {
   const parseJson = (str: string) => {
     try {
       return JSON.parse(str)
@@ -174,8 +169,8 @@ const renderModel3dLayout3dCodePreview = (props: Record<string, any>) => {
   }
 
   const meshConfig = parseJson(props.meshConfig)
-  const layoutWidth = props.layoutWidth || defaultModel3dLayout3dProps.layoutWidth
-  const layoutHeight = props.layoutHeight || defaultModel3dLayout3dProps.layoutHeight
+  const cardConfig = parseJson(props.cardConfig)
+  const dataConfig = parseJson(props.dataConfig)
 
   // 用于示例展示的简化 Model3d 配置
   const exampleModel3dConfig = {
@@ -205,30 +200,27 @@ const renderModel3dLayout3dCodePreview = (props: Record<string, any>) => {
     }
   }
 
-  let innerCode = `<Model3dLayout3d`
+  let innerCode = `<Model3dCard`
   if (props.meshConfig && meshConfig !== undefined) innerCode += `\n    meshConfig={${JSON.stringify(meshConfig)}}`
   if (props.isSprite) innerCode += `\n    isSprite`
   if (props.isFixd) innerCode += `\n    isFixd`
-  if (props.layoutWidth) innerCode += `\n    layoutWidth={${layoutWidth}}`
-  if (props.layoutHeight) innerCode += `\n    layoutHeight={${layoutHeight}}`
+  if (props.cardConfig && cardConfig !== undefined) innerCode += `\n    cardConfig={${JSON.stringify(cardConfig)}}`
+  if (props.dataConfig && dataConfig !== undefined) innerCode += `\n    dataConfig={${JSON.stringify(dataConfig)}}`
   if (props.cellKey) innerCode += `\n    cellKey="${props.cellKey}"`
   if (props.editMode) innerCode += `\n    editMode`
   if (props.className) innerCode += `\n    className="${props.className}"`
-  innerCode += `\n    setMeshs={() => {}}`
-  innerCode += `\n  >`
-  innerCode += `\n    {/* 子组件内容 */}`
-  innerCode += `\n  </Model3dLayout3d>`
+  innerCode += `\n  />`
 
   let code = `<Model3d\n  sceneConfig={${JSON.stringify(exampleModel3dConfig.sceneConfig)}}\n  cameraConfig={${JSON.stringify(exampleModel3dConfig.cameraConfig)}}\n  controlConfig={${JSON.stringify(exampleModel3dConfig.controlConfig)}}\n  environmentConfig={${JSON.stringify(exampleModel3dConfig.environmentConfig)}}\n  lightConfig={${JSON.stringify(exampleModel3dConfig.lightConfig)}}\n  helperConfig={${JSON.stringify(exampleModel3dConfig.helperConfig)}}\n>\n  ${innerCode}\n</Model3d>`
 
   return code
 }
 
-export const model3dLayout3dConfig: ComponentConfig = {
-  id: 'model-3d-layout-3d',
-  name: '三维布局',
-  propsConfig: model3dLayout3dPropsConfig,
-  defaultProps: model3dLayout3dDefaultProps,
-  renderPreview: renderModel3dLayout3dPreview,
-  renderCodePreview: renderModel3dLayout3dCodePreview
+export const model3dCardConfig: ComponentConfig = {
+  id: 'model-3d-card',
+  name: '3D卡片',
+  propsConfig: model3dCardPropsConfig,
+  defaultProps: model3dCardDefaultProps,
+  renderPreview: renderModel3dCardPreview,
+  renderCodePreview: renderModel3dCardCodePreview
 }

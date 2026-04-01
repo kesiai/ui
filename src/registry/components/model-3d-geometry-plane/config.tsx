@@ -1,9 +1,9 @@
-import { Model3dGeometrySphere } from '@/registry/blocks/3d/model-3d-geometry-sphere/model-3d-geometry-sphere'
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3dGeometryPlane } from '@/registry/components/model-3d-geometry-plane/model-3d-geometry-plane'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
-const defaultModel3dGeometrySphereProps = {
+const defaultModel3dGeometryPlaneProps = {
   meshConfig: {
     visible: true,
     position: { x: 0, y: 0, z: 0 },
@@ -17,54 +17,53 @@ const defaultModel3dGeometrySphereProps = {
   },
   editMode: false,
   name: '',
-  onClick: undefined,
-  args: [100, 32, 32]
+  args: [100, 100, 1, 1]
 }
 
-export const model3dGeometrySpherePropsConfig = [
+export const model3dGeometryPlanePropsConfig = [
   {
     name: 'meshConfig',
     label: '网格配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometrySphereProps.meshConfig)
+    default: JSON.stringify(defaultModel3dGeometryPlaneProps.meshConfig)
   },
   {
     name: 'materialsConfig',
     label: '材质配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometrySphereProps.materialsConfig)
+    default: JSON.stringify(defaultModel3dGeometryPlaneProps.materialsConfig)
   },
   {
     name: 'editMode',
     label: '编辑模式',
     type: 'boolean' as const,
-    default: defaultModel3dGeometrySphereProps.editMode
+    default: defaultModel3dGeometryPlaneProps.editMode
   },
   {
     name: 'name',
     label: '名称',
     type: 'text' as const,
-    default: defaultModel3dGeometrySphereProps.name,
+    default: defaultModel3dGeometryPlaneProps.name,
     placeholder: '请输入几何体名称'
   },
   {
     name: 'args',
     label: '尺寸参数',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometrySphereProps.args),
-    description: '参数格式: [半径, 宽度分段, 高度分段]'
+    default: JSON.stringify(defaultModel3dGeometryPlaneProps.args),
+    description: '参数格式: [宽度, 高度, 宽度分段, 高度分段]'
   }
 ]
 
-export const model3dGeometrySphereDefaultProps = {
-  meshConfig: JSON.stringify(defaultModel3dGeometrySphereProps.meshConfig),
-  materialsConfig: JSON.stringify(defaultModel3dGeometrySphereProps.materialsConfig),
-  editMode: defaultModel3dGeometrySphereProps.editMode,
-  name: defaultModel3dGeometrySphereProps.name,
-  args: JSON.stringify(defaultModel3dGeometrySphereProps.args)
+export const model3dGeometryPlaneDefaultProps = {
+  meshConfig: JSON.stringify(defaultModel3dGeometryPlaneProps.meshConfig),
+  materialsConfig: JSON.stringify(defaultModel3dGeometryPlaneProps.materialsConfig),
+  editMode: defaultModel3dGeometryPlaneProps.editMode,
+  name: defaultModel3dGeometryPlaneProps.name,
+  args: JSON.stringify(defaultModel3dGeometryPlaneProps.args)
 }
 
-const renderModel3dGeometrySpherePreview = (props: Record<string, any>) => {
+const renderModel3dGeometryPlanePreview = (props: Record<string, any>) => {
   // 解析 JSON 配置，解析失败返回 undefined
   const parseJson = (str: string) => {
     try {
@@ -111,7 +110,7 @@ const renderModel3dGeometrySpherePreview = (props: Record<string, any>) => {
       <div className="w-full h-96 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center">
         <div className="w-full h-full flex items-center justify-center p-4">
           <Model3d {...exampleModel3dConfig}>
-            <Model3dGeometrySphere
+            <Model3dGeometryPlane
               meshConfig={meshConfig}
               materialsConfig={materialsConfig}
               editMode={props.editMode}
@@ -125,7 +124,7 @@ const renderModel3dGeometrySpherePreview = (props: Record<string, any>) => {
   )
 }
 
-const renderModel3dGeometrySphereCodePreview = (props: Record<string, any>) => {
+const renderModel3dGeometryPlaneCodePreview = (props: Record<string, any>) => {
   const parseJson = (str: string) => {
     try {
       return JSON.parse(str)
@@ -166,7 +165,7 @@ const renderModel3dGeometrySphereCodePreview = (props: Record<string, any>) => {
     }
   }
 
-  let innerCode = `<Model3dGeometrySphere`
+  let innerCode = `<Model3dGeometryPlane`
   if (props.meshConfig && meshConfig !== undefined) innerCode += `\n    meshConfig={${JSON.stringify(meshConfig)}}`
   if (props.materialsConfig && materialsConfig !== undefined) innerCode += `\n    materialsConfig={${JSON.stringify(materialsConfig)}}`
   if (props.editMode) innerCode += `\n    editMode`
@@ -179,11 +178,11 @@ const renderModel3dGeometrySphereCodePreview = (props: Record<string, any>) => {
   return code
 }
 
-export const model3dGeometrySphereConfig: ComponentConfig = {
-  id: 'model-3d-geometry-sphere',
-  name: '球体',
-  propsConfig: model3dGeometrySpherePropsConfig,
-  defaultProps: model3dGeometrySphereDefaultProps,
-  renderPreview: renderModel3dGeometrySpherePreview,
-  renderCodePreview: renderModel3dGeometrySphereCodePreview
+export const model3dGeometryPlaneConfig: ComponentConfig = {
+  id: 'model-3d-geometry-plane',
+  name: '平面',
+  propsConfig: model3dGeometryPlanePropsConfig,
+  defaultProps: model3dGeometryPlaneDefaultProps,
+  renderPreview: renderModel3dGeometryPlanePreview,
+  renderCodePreview: renderModel3dGeometryPlaneCodePreview
 }

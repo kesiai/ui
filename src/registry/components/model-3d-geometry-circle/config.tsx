@@ -1,9 +1,9 @@
-import { Model3dGeometryCylinder } from '@/registry/blocks/3d/model-3d-geometry-cylinder/model-3d-geometry-cylinder'
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3dGeometryCircle } from '@/registry/components/model-3d-geometry-circle/model-3d-geometry-circle'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
-const defaultModel3dGeometryCylinderProps = {
+const defaultModel3dGeometryCircleProps = {
   meshConfig: {
     visible: true,
     position: { x: 0, y: 0, z: 0 },
@@ -17,53 +17,53 @@ const defaultModel3dGeometryCylinderProps = {
   },
   editMode: false,
   name: '',
-  args: [100, 100, 100, 32]
+  args: [100, 32]
 }
 
-export const model3dGeometryCylinderPropsConfig = [
+export const model3dGeometryCirclePropsConfig = [
   {
     name: 'meshConfig',
     label: '网格配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometryCylinderProps.meshConfig)
+    default: JSON.stringify(defaultModel3dGeometryCircleProps.meshConfig)
   },
   {
     name: 'materialsConfig',
     label: '材质配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometryCylinderProps.materialsConfig)
+    default: JSON.stringify(defaultModel3dGeometryCircleProps.materialsConfig)
   },
   {
     name: 'editMode',
     label: '编辑模式',
     type: 'boolean' as const,
-    default: defaultModel3dGeometryCylinderProps.editMode
+    default: defaultModel3dGeometryCircleProps.editMode
   },
   {
     name: 'name',
     label: '名称',
     type: 'text' as const,
-    default: defaultModel3dGeometryCylinderProps.name,
+    default: defaultModel3dGeometryCircleProps.name,
     placeholder: '请输入几何体名称'
   },
   {
     name: 'args',
     label: '尺寸参数',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometryCylinderProps.args),
-    description: '参数格式: [顶部半径, 底部半径, 高度, 径向分段]'
+    default: JSON.stringify(defaultModel3dGeometryCircleProps.args),
+    description: '参数格式: [半径, 分段数]'
   }
 ]
 
-export const model3dGeometryCylinderDefaultProps = {
-  meshConfig: JSON.stringify(defaultModel3dGeometryCylinderProps.meshConfig),
-  materialsConfig: JSON.stringify(defaultModel3dGeometryCylinderProps.materialsConfig),
-  editMode: defaultModel3dGeometryCylinderProps.editMode,
-  name: defaultModel3dGeometryCylinderProps.name,
-  args: JSON.stringify(defaultModel3dGeometryCylinderProps.args)
+export const model3dGeometryCircleDefaultProps = {
+  meshConfig: JSON.stringify(defaultModel3dGeometryCircleProps.meshConfig),
+  materialsConfig: JSON.stringify(defaultModel3dGeometryCircleProps.materialsConfig),
+  editMode: defaultModel3dGeometryCircleProps.editMode,
+  name: defaultModel3dGeometryCircleProps.name,
+  args: JSON.stringify(defaultModel3dGeometryCircleProps.args)
 }
 
-const renderModel3dGeometryCylinderPreview = (props: Record<string, any>) => {
+const renderModel3dGeometryCirclePreview = (props: Record<string, any>) => {
   // 解析 JSON 配置，解析失败返回 undefined
   const parseJson = (str: string) => {
     try {
@@ -110,7 +110,7 @@ const renderModel3dGeometryCylinderPreview = (props: Record<string, any>) => {
       <div className="w-full h-96 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center">
         <div className="w-full h-full flex items-center justify-center p-4">
           <Model3d {...exampleModel3dConfig}>
-            <Model3dGeometryCylinder
+            <Model3dGeometryCircle
               meshConfig={meshConfig}
               materialsConfig={materialsConfig}
               editMode={props.editMode}
@@ -124,7 +124,7 @@ const renderModel3dGeometryCylinderPreview = (props: Record<string, any>) => {
   )
 }
 
-const renderModel3dGeometryCylinderCodePreview = (props: Record<string, any>) => {
+const renderModel3dGeometryCircleCodePreview = (props: Record<string, any>) => {
   const parseJson = (str: string) => {
     try {
       return JSON.parse(str)
@@ -165,7 +165,7 @@ const renderModel3dGeometryCylinderCodePreview = (props: Record<string, any>) =>
     }
   }
 
-  let innerCode = `<Model3dGeometryCylinder`
+  let innerCode = `<Model3dGeometryCircle`
   if (props.meshConfig && meshConfig !== undefined) innerCode += `\n    meshConfig={${JSON.stringify(meshConfig)}}`
   if (props.materialsConfig && materialsConfig !== undefined) innerCode += `\n    materialsConfig={${JSON.stringify(materialsConfig)}}`
   if (props.editMode) innerCode += `\n    editMode`
@@ -178,11 +178,11 @@ const renderModel3dGeometryCylinderCodePreview = (props: Record<string, any>) =>
   return code
 }
 
-export const model3dGeometryCylinderConfig: ComponentConfig = {
-  id: 'model-3d-geometry-cylinder',
-  name: '圆柱体',
-  propsConfig: model3dGeometryCylinderPropsConfig,
-  defaultProps: model3dGeometryCylinderDefaultProps,
-  renderPreview: renderModel3dGeometryCylinderPreview,
-  renderCodePreview: renderModel3dGeometryCylinderCodePreview
+export const model3dGeometryCircleConfig: ComponentConfig = {
+  id: 'model-3d-geometry-circle',
+  name: '圆形',
+  propsConfig: model3dGeometryCirclePropsConfig,
+  defaultProps: model3dGeometryCircleDefaultProps,
+  renderPreview: renderModel3dGeometryCirclePreview,
+  renderCodePreview: renderModel3dGeometryCircleCodePreview
 }

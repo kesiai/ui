@@ -1,4 +1,4 @@
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置，基于 ../3d/src/Space/initParam.js（简化版）

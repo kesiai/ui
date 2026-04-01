@@ -1,5 +1,5 @@
-import { Model3dGeometryTube } from '@/registry/blocks/3d/model-3d-geometry-tube/model-3d-geometry-tube'
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3dGeometryTube } from '@/registry/components/model-3d-geometry-tube/model-3d-geometry-tube'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置

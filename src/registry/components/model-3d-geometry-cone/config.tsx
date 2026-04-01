@@ -1,5 +1,5 @@
-import { Model3dGeometryCone } from '@/registry/blocks/3d/model-3d-geometry-cone/model-3d-geometry-cone'
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3dGeometryCone } from '@/registry/components/model-3d-geometry-cone/model-3d-geometry-cone'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置

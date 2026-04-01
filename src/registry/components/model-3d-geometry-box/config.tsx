@@ -1,9 +1,9 @@
-import { Model3dGeometryPlane } from '@/registry/blocks/3d/model-3d-geometry-plane/model-3d-geometry-plane'
-import { Model3d } from '@/registry/blocks/3d/model-3d/model-3d'
+import { Model3dGeometryBox } from '@/registry/components/model-3d-geometry-box/model-3d-geometry-box'
+import { Model3d } from '@/registry/components/model-3d/model-3d'
 import { ComponentConfig } from '@/app/config/types'
 
 // 默认配置
-const defaultModel3dGeometryPlaneProps = {
+const defaultModel3dGeometryBoxProps = {
   meshConfig: {
     visible: true,
     position: { x: 0, y: 0, z: 0 },
@@ -17,53 +17,53 @@ const defaultModel3dGeometryPlaneProps = {
   },
   editMode: false,
   name: '',
-  args: [100, 100, 1, 1]
+  args: [100, 100, 100]
 }
 
-export const model3dGeometryPlanePropsConfig = [
+export const model3dGeometryBoxPropsConfig = [
   {
     name: 'meshConfig',
     label: '网格配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometryPlaneProps.meshConfig)
+    default: JSON.stringify(defaultModel3dGeometryBoxProps.meshConfig)
   },
   {
     name: 'materialsConfig',
     label: '材质配置',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometryPlaneProps.materialsConfig)
+    default: JSON.stringify(defaultModel3dGeometryBoxProps.materialsConfig)
   },
   {
     name: 'editMode',
     label: '编辑模式',
     type: 'boolean' as const,
-    default: defaultModel3dGeometryPlaneProps.editMode
+    default: defaultModel3dGeometryBoxProps.editMode
   },
   {
     name: 'name',
     label: '名称',
     type: 'text' as const,
-    default: defaultModel3dGeometryPlaneProps.name,
+    default: defaultModel3dGeometryBoxProps.name,
     placeholder: '请输入几何体名称'
   },
   {
     name: 'args',
     label: '尺寸参数',
     type: 'text' as const,
-    default: JSON.stringify(defaultModel3dGeometryPlaneProps.args),
-    description: '参数格式: [宽度, 高度, 宽度分段, 高度分段]'
+    default: JSON.stringify(defaultModel3dGeometryBoxProps.args),
+    description: '参数格式: [宽度, 高度, 深度]'
   }
 ]
 
-export const model3dGeometryPlaneDefaultProps = {
-  meshConfig: JSON.stringify(defaultModel3dGeometryPlaneProps.meshConfig),
-  materialsConfig: JSON.stringify(defaultModel3dGeometryPlaneProps.materialsConfig),
-  editMode: defaultModel3dGeometryPlaneProps.editMode,
-  name: defaultModel3dGeometryPlaneProps.name,
-  args: JSON.stringify(defaultModel3dGeometryPlaneProps.args)
+export const model3dGeometryBoxDefaultProps = {
+  meshConfig: JSON.stringify(defaultModel3dGeometryBoxProps.meshConfig),
+  materialsConfig: JSON.stringify(defaultModel3dGeometryBoxProps.materialsConfig),
+  editMode: defaultModel3dGeometryBoxProps.editMode,
+  name: defaultModel3dGeometryBoxProps.name,
+  args: JSON.stringify(defaultModel3dGeometryBoxProps.args)
 }
 
-const renderModel3dGeometryPlanePreview = (props: Record<string, any>) => {
+const renderModel3dGeometryBoxPreview = (props: Record<string, any>) => {
   // 解析 JSON 配置，解析失败返回 undefined
   const parseJson = (str: string) => {
     try {
@@ -110,7 +110,7 @@ const renderModel3dGeometryPlanePreview = (props: Record<string, any>) => {
       <div className="w-full h-96 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center">
         <div className="w-full h-full flex items-center justify-center p-4">
           <Model3d {...exampleModel3dConfig}>
-            <Model3dGeometryPlane
+            <Model3dGeometryBox
               meshConfig={meshConfig}
               materialsConfig={materialsConfig}
               editMode={props.editMode}
@@ -124,7 +124,7 @@ const renderModel3dGeometryPlanePreview = (props: Record<string, any>) => {
   )
 }
 
-const renderModel3dGeometryPlaneCodePreview = (props: Record<string, any>) => {
+const renderModel3dGeometryBoxCodePreview = (props: Record<string, any>) => {
   const parseJson = (str: string) => {
     try {
       return JSON.parse(str)
@@ -165,7 +165,7 @@ const renderModel3dGeometryPlaneCodePreview = (props: Record<string, any>) => {
     }
   }
 
-  let innerCode = `<Model3dGeometryPlane`
+  let innerCode = `<Model3dGeometryBox`
   if (props.meshConfig && meshConfig !== undefined) innerCode += `\n    meshConfig={${JSON.stringify(meshConfig)}}`
   if (props.materialsConfig && materialsConfig !== undefined) innerCode += `\n    materialsConfig={${JSON.stringify(materialsConfig)}}`
   if (props.editMode) innerCode += `\n    editMode`
@@ -178,11 +178,11 @@ const renderModel3dGeometryPlaneCodePreview = (props: Record<string, any>) => {
   return code
 }
 
-export const model3dGeometryPlaneConfig: ComponentConfig = {
-  id: 'model-3d-geometry-plane',
-  name: '平面',
-  propsConfig: model3dGeometryPlanePropsConfig,
-  defaultProps: model3dGeometryPlaneDefaultProps,
-  renderPreview: renderModel3dGeometryPlanePreview,
-  renderCodePreview: renderModel3dGeometryPlaneCodePreview
+export const model3dGeometryBoxConfig: ComponentConfig = {
+  id: 'model-3d-geometry-box',
+  name: '立方体',
+  propsConfig: model3dGeometryBoxPropsConfig,
+  defaultProps: model3dGeometryBoxDefaultProps,
+  renderPreview: renderModel3dGeometryBoxPreview,
+  renderCodePreview: renderModel3dGeometryBoxCodePreview
 }

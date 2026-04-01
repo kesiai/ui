@@ -24,6 +24,5 @@ export interface BaseFormFieldProps {
 export interface FormOption {
   value: string | number
   label?: string
-  name?: string
   disabled?: boolean
 }

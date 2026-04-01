@@ -28,7 +28,6 @@
 | `field.schema.size` | `'sm' \| 'md' \| 'lg'` | 否 | `'md'` | 尺寸 |
 | `meta` | `object` | 否 | - | 元数据 |
 | `meta.data.disabled` | `boolean` | 否 | `false` | 是否禁用 |
-| `cellKey` | `string` | 否 | - | 单元格键名 |
 | `areaType` | `'p' \| 'pc' \| 'pca'` | 是 | - | 区域类型（优先于 field.schema.areaType） |
 
 ### areaType

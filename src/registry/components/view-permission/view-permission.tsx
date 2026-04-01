@@ -10,7 +10,7 @@ type FailureComponent =
 
 interface HasPermissionProps {
   permission?: Permission
-  FailureComponent?: FailureComponent
+  failureComponent?: FailureComponent
   children: React.ReactElement
 }
 
@@ -40,7 +40,7 @@ function renderFailure(FailureComponent: FailureComponent): React.ReactNode {
 
 export function HasPermission({
   permission,
-  FailureComponent = "NoPermission",
+  failureComponent = "NoPermission",
   children,
   ...props
 }: HasPermissionProps & Record<string, unknown>): React.ReactElement {
@@ -52,5 +52,5 @@ export function HasPermission({
       : children
   }
 
-  return renderFailure(FailureComponent) as React.ReactElement
+  return renderFailure(failureComponent) as React.ReactElement
 }

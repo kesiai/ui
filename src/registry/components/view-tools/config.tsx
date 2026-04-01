@@ -141,7 +141,7 @@ const MyTools = () => {
 
 export const viewToolsConfig: ComponentConfig = {
   id: 'view-tools',
-  name: 'ViewTools 工具组件集合',
+  name: '工具集合',
   propsConfig: viewToolsPropsConfig,
   defaultProps: viewToolsDefaultProps,
   renderPreview: renderViewToolsPreview,

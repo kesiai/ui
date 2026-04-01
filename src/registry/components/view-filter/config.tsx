@@ -167,7 +167,7 @@ const MyFilter = () => {
 
 export const viewFilterConfig: ComponentConfig = {
   id: 'view-filter',
-  name: 'ViewFilter 筛选组件',
+  name: '筛选',
   propsConfig: viewFilterPropsConfig,
   defaultProps: viewFilterDefaultProps,
   renderPreview: renderViewFilterPreview,

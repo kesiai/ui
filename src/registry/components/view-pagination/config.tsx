@@ -194,7 +194,7 @@ const MyPagination = () => {
 
 export const viewPaginationConfig: ComponentConfig = {
   id: 'view-pagination',
-  name: 'ViewPagination 分页组件',
+  name: '视图分页',
   propsConfig: viewPaginationPropsConfig,
   defaultProps: viewPaginationDefaultProps,
   renderPreview:  renderViewPaginationPreviewWrap,

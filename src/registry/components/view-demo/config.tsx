@@ -88,7 +88,7 @@ const MyActions = ({ itemId }: { itemId: string }) => {
 
 export const viewDemoConfig: ComponentConfig = {
   id: 'view-demo',
-  name: "ViewDemo 综合演示",
+  name: "综合演示",
   propsConfig: viewDemoPropsConfig,
   defaultProps: viewDemoDefaultProps,
   renderPreview: renderViewDemoPreview,

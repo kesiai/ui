@@ -258,7 +258,7 @@ const MyViewModel = () => {
 
 export const viewModelConfig: ComponentConfig = {
   id: 'view-model',
-  name: 'ViewModel 模型视图容器',
+  name: '模型视图',
   propsConfig: viewModelPropsConfig,
   defaultProps: viewModelDefaultProps,
   renderPreview: renderViewModelPreview,

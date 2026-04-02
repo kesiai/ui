@@ -149,7 +149,7 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
         return `${formSchema[0].title || properties?.[firstKey]?.title || firstKey}: ${firstValue}`
       }
     }
-    console.log(properties)
+    // console.log(properties)
     return `项目 ${index + 1}`
   }
 

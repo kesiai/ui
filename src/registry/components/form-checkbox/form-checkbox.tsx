@@ -62,11 +62,11 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
     const value = isControlled ? controlledValue : internalValue
 
     // 处理布尔值：当 options 为空时，value 可能是布尔值
-    const getBooleanValue = () => {
-      if (mergedOptions.length === 0 && typeof value === 'boolean') {
-        return value ? ['checked'] : []
-      }
-      return value
+    const getCheckedValues = (): string[] => {
+      if (Array.isArray(value)) return value
+      if (typeof value === 'string' && value) return [value]
+      if (typeof value === 'boolean') return value ? ['checked'] : []
+      return []
     }
 
     // 全选状态
@@ -74,15 +74,14 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
     // 半选状态
     const [indeterminate, setIndeterminate] = React.useState(false)
 
-    const currentValues = Array.isArray(getBooleanValue()) ? getBooleanValue() : getBooleanValue() ? [getBooleanValue()] : []
-
     // 更新全选/半选状态
     React.useEffect(() => {
       if (isMulti) {
-        setCheckAll(getBooleanValue().length === mergedOptions.length)
-        setIndeterminate(getBooleanValue().length > 0 && getBooleanValue().length < mergedOptions.length)
+        const checked = getCheckedValues()
+        setCheckAll(checked.length === mergedOptions.length)
+        setIndeterminate(checked.length > 0 && checked.length < mergedOptions.length)
       }
-    }, [getBooleanValue, options.length, isMulti])
+    }, [value, mergedOptions.length, isMulti])
 
     // 单个 checkbox 变化
     const handleCheckboxChange = React.useCallback(
@@ -95,7 +94,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
           newValues = isChecked ? [optionValue] : []
         } else {
           // 多选模式
-          newValues = [...getBooleanValue()]
+          newValues = [...getCheckedValues()]
           if (isChecked) {
             if (!newValues.includes(optionValue)) {
               newValues.push(optionValue)
@@ -112,9 +111,10 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
         if (!isControlled) {
           setInternalValue(newValues)
         }
+        console.log("handleCheckboxChange", { optionValue, checked, newValues, resultValue })
         onChange?.(resultValue)
       },
-      [isMulti, currentValues, isControlled, onChange]
+      [isMulti, value, isControlled, onChange]
     )
 
     // 全选变化
@@ -181,7 +181,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <Checkbox
-                    checked={getBooleanValue().includes(String(option.value))}
+                    checked={getCheckedValues().includes(String(option.value))}
                     disabled={disabled}
                     onCheckedChange={(checked) => handleCheckboxChange(String(option.value), checked)}
                     aria-invalid={props['aria-invalid']}

@@ -164,7 +164,10 @@ export const schemaFormDefaultProps = {
       },
       checkboxF: {
         type: 'array',
-        items: { type: 'string' },
+        items: {
+          type: 'string',
+          enum: ['option1', 'option2', 'option3'],
+        },
         enum: ['option1', 'option2', 'option3'],
         enumNames: ['选项一', '选项二', '选项三'],
         title: '多选'

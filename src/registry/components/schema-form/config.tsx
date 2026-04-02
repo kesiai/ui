@@ -240,18 +240,19 @@ export const schemaFormDefaultProps = {
         type: 'array',
         title: '可编辑表格',
         items: {
-          formSchema: ['field1', 'field2'],
+          formSchema: [{ key: 'field1' }, { key: 'field2 ' }],
           properties: {
             field1: {
               key: 'field1',
               title: '字段1',
               type: 'object',
-              fieldType: 'map'
+              controlType: 'map'
             },
             field2: {
               key: 'field2',
               title: '字段2',
-              type: 'number'
+              type: 'number',
+              controlType: 'number'
             }
           }
         }

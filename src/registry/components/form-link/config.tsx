@@ -48,18 +48,11 @@ const renderFormLinkPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormLink
-          input={{
-            value,
-            onChange: setValue
-          }}
-          field={{
-            schema: {
-              linkType: props.linkType,
-              placeholder: props.placeholder,
-              defaultVal: props.defaultVal,
-              disabled: props.disabled
-            }
-          }}
+          value={value}
+          onChange={setValue}
+          linkType={props.linkType}
+          placeholder={props.placeholder}
+          disabled={props.disabled}
         />
       </div>
     </div>

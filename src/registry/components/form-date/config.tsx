@@ -142,7 +142,6 @@ const renderFormDatePreview = (props: Record<string, any>) => {
           picker={props.picker}
           isCalendar={props.isCalendar}
           placeholder={props.placeholder}
-          size={props.size}
           use12Hours={props.use12Hours}
         />
       </div>

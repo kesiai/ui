@@ -79,7 +79,9 @@ const renderFormCheckboxPreview = (props: Record<string, any>) => {
       <div className="w-full max-w-md bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormCheckbox
           options={props.options}
-          config={config}
+          disabled={config.disabled}
+          isCheckAll={config.isCheckAll}
+          checkAllSeparate={config.checkAllSeparate}
         />
       </div>
     </div>

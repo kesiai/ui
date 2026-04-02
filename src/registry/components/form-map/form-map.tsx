@@ -109,7 +109,7 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
       }
     }
 
-    const getShowName = (v: any) => {
+    const getShowName = (v: { name?: string; lng?: number; lat?: number } | null) => {
       let result = ''
       if (v) {
         result = (positionName ? (v.name || '') : '') + (lngLat ? `(${v.lng},${v.lat})` : '')
@@ -255,9 +255,10 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
     }
 
     const handleOk = () => {
-      if (point) {
-        setDisplayValue(getShowName(point))
-        onChange?.(point)
+      if (point && point.lng !== undefined && point.lat !== undefined) {
+        const p: { name?: string; lng: number; lat: number } = { name: point.name, lng: point.lng, lat: point.lat }
+        setDisplayValue(getShowName(p))
+        onChange?.(p)
       }
       setVisible(false)
     }
@@ -268,7 +269,7 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
           name: handForm.name,
           lng: Number(handForm.lng),
           lat: Number(handForm.lat)
-        }
+        } as { name?: string; lng: number; lat: number }
         setDisplayValue(getShowName(newPoint))
         onChange?.(newPoint)
         setHandVisible(false)
@@ -327,7 +328,6 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
           <Input
             value={displayValue}
             ref={ref}
-            allowClear
             onChange={handleChange}
             placeholder={placeholder}
             className="h-10 px-3 py-2"

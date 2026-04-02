@@ -2,7 +2,7 @@ import * as React from "react"
 import { Star } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export interface RateProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface RateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   /** 当前值 */
   value?: number
   /** 星星总数 */

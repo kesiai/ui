@@ -288,7 +288,6 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
         max={max}
         step={step}
         className={cn(!bordered && "border-0")}
-        {...props}
       />
     )
 

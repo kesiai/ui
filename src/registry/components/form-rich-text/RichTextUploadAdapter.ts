@@ -66,6 +66,7 @@ class MyUploadAdapter {
 }
 
 class MyUploadAdapterPlugin {
+  static readonly pluginName = 'MyUploadAdapterPlugin'
   editor: any
 
   constructor(editor: any) {
@@ -79,7 +80,5 @@ class MyUploadAdapterPlugin {
     }
   }
 }
-
-MyUploadAdapterPlugin.pluginName = 'MyUploadAdapterPlugin'
 
 export default MyUploadAdapterPlugin

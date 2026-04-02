@@ -55,8 +55,8 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
   
     const isMulti = mergedOptions.length > 1
     const defaultList = defaultValue && Array.isArray(defaultValue) ? defaultValue : []
-    const [internalValue, setInternalValue] = React.useState<string | string[]>(
-      isMulti ? defaultList : (defaultValue as string) || ""
+    const [internalValue, setInternalValue] = React.useState<string[]>(
+      isMulti ? defaultList : []
     )
     const isControlled = controlledValue !== undefined
     const value = isControlled ? controlledValue : internalValue
@@ -110,7 +110,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
 
         const resultValue = isMulti ? newValues : (newValues[0] || "")
         if (!isControlled) {
-          setInternalValue(resultValue)
+          setInternalValue(newValues)
         }
         onChange?.(resultValue)
       },
@@ -121,7 +121,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
     const handleCheckAllChange = React.useCallback(
       (checked: string | boolean) => {
         const isChecked = checked === true || checked === "on"
-        const newValues = isChecked ? mergedOptions.map((item) => item.value) : []
+        const newValues = isChecked ? mergedOptions.map((item) => String(item.value)) : []
         if (!isControlled) {
           setInternalValue(newValues)
         }
@@ -181,12 +181,12 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <Checkbox
-                    checked={getBooleanValue().includes(option.value)}
+                    checked={getBooleanValue().includes(String(option.value))}
                     disabled={disabled}
-                    onCheckedChange={(checked) => handleCheckboxChange(option.value, checked)}
+                    onCheckedChange={(checked) => handleCheckboxChange(String(option.value), checked)}
                     aria-invalid={props['aria-invalid']}
                   />
-                  <span className="text-sm">{option.name || option.label}</span>
+                  <span className="text-sm">{option.label}</span>
                 </label>
               ))}
             </div>

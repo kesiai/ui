@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { Switch } from "@/components/ui/switch"
 
 export interface FormSwitchProps
-  extends Omit<BaseFormFieldProps, 'value' | 'onChange'>,
+  extends Omit<BaseFormFieldProps, 'value' | 'onChange' | 'onBlur' | 'name' | 'ref' | 'id' | 'schema' | 'record'>,
   Omit<React.ComponentPropsWithoutRef<typeof Switch>, "onChange"> {
   /**
    * 当前值

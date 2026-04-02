@@ -20,6 +20,10 @@ export interface FormUserRoleOption {
 export interface FormUserRoleProps extends Omit<BaseFormFieldProps, 'value' | 'onChange'> {
   /** 字段名 */
   name?: string
+  /** 当前值 */
+  value?: any
+  /** 值变化回调 */
+  onChange?: (value: any) => void
   /** 显示字段 */
   displayField?: string
   /** 展示字段 */
@@ -49,7 +53,6 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
     displayField = 'name',
     showField,
     ignoreAdmin = false,
-    fieldSchema,
     label,
     disabled,
     mode = 'single'
@@ -320,7 +323,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
 }
 
 const FormUserRole: React.FC<FormUserRoleProps> = (props) => {
-  const { value, onChange, mode = 'single', disabled, label, name, displayField, showField, ignoreAdmin, fieldSchema } = props
+  const { value, onChange, mode = 'single', disabled, label, name, displayField, showField, ignoreAdmin } = props
 
   return <FormUserRoleSelect
     value={value}
@@ -332,7 +335,6 @@ const FormUserRole: React.FC<FormUserRoleProps> = (props) => {
     displayField={displayField}
     showField={showField}
     ignoreAdmin={ignoreAdmin}
-    fieldSchema={fieldSchema}
   />
 }
 

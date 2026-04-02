@@ -22,8 +22,8 @@ const MenuItemSelect: React.FC<{
   placeholder?: string
   disabled?: boolean
 }> = (props) => {
-  const { value, onChange, placeholder, disabled } = props
-  const [loading, setLoading] = React.useState(false)
+  const { placeholder } = props
+  const [loading] = React.useState(false)
 
   return (
     <div className="space-y-2">
@@ -41,7 +41,7 @@ const MenuItemSelect: React.FC<{
 }
 
 const FormLink = React.forwardRef<HTMLDivElement, FormLinkProps>(
-  (props, ref) => {
+  (props, _ref) => {
     const { value, onChange, placeholder, disabled, linkType } = props
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

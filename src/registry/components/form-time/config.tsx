@@ -54,18 +54,10 @@ const renderFormTimePreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormTime
-          input={{
-            value,
-            onChange: setValue
-          }}
-          field={{
-            schema: {
-              timeFormat: props.timeFormat,
-              defaultVal: props.defaultVal,
-              disabled: props.disabled,
-              size: props.size
-            }
-          }}
+          value={value}
+          onChange={setValue}
+          timeFormat={props.timeFormat}
+          disabled={props.disabled}
         />
       </div>
     </div>

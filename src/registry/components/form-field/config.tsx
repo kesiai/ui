@@ -1,4 +1,3 @@
-import React from 'react'
 import { FormField } from '@/registry/components/form-field/form-field'
 import { Form } from '@/registry/components/form/form'
 import { ComponentConfig } from '@/app/config/types'

@@ -14,8 +14,7 @@ export const DateRangePreview: React.FC<{ props: Record<string, any> }> = ({ pro
           disabled={props.disabled}
           placeholder={props.placeholder}
           value={value}
-          onChange={setValue}
-          cellKey="preview"
+          onChange={(v) => { if (v) setValue(v) }}
         />
       </div>
     </div>

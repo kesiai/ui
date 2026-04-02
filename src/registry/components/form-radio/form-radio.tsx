@@ -31,6 +31,8 @@ const radioVariants = cva(
 export interface RadioProps
   extends Omit<BaseFormFieldProps, "value" | "onChange">,
   VariantProps<typeof radioVariants> {
+  /** 自定义样式类名 */
+  className?: string
   /** 数据项 */
   options?: FormOption[]
   /** 当前值 */
@@ -107,7 +109,7 @@ const FormRadio = React.forwardRef<HTMLDivElement, RadioProps>(
                 htmlFor={String(option.value)}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                {option.name || option.label}
+                {option.label}
               </label>
             </div>
           ))}

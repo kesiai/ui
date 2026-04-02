@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { FormFormInfo } from '@/registry/components/form-form-info/form-form-info'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './form-form-info.md?raw'

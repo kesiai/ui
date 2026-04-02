@@ -51,9 +51,9 @@ const FormObject: React.FC<FormObjectProps> = (props) => {
   }))
 
   // 从 FormProvider 获取当前的值
-  const { watch, setValue } = useFormContext()
+  const { watch } = useFormContext()
   const fieldName = name || schema?.key || 'object'
-  const currentValue = watch(fieldName) || {}
+  watch(fieldName)
 
   return (
     <div id={`FormObject-${schema?.key}`} className={`w-full ${className}`}>

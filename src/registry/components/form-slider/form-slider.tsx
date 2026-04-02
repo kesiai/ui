@@ -29,7 +29,7 @@ const sliderVariants = cva(
 )
 
 export interface SliderProps
-  extends Omit<BaseFormFieldProps, 'value' | 'onChange'>,
+  extends Omit<BaseFormFieldProps, 'value' | 'onChange' | 'onBlur' | 'name' | 'ref' | 'id' | 'schema' | 'record'>,
     Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">,
     VariantProps<typeof sliderVariants> {
   /**

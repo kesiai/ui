@@ -14,10 +14,8 @@ export const RatePreview: React.FC<{ props: Record<string, any> }> = ({ props })
           disabled={props.disabled}
           allowClear={props.allowClear}
           showScore={props.showScore}
-          size={props.size}
           value={value}
           onChange={setValue}
-          cellKey="preview"
         />
         <p className="mt-4 text-sm text-slate-600">
           当前评分: {value}

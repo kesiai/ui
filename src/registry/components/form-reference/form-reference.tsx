@@ -89,7 +89,7 @@ const FormReference: React.FC<FormReferenceProps> = (props) => {
     )
   }
 
-  const displayValue = val?.[field?.key || schema?.key]
+  const displayValue = val?.[field?.key || schema?.key || '']
   const fieldSchema = schema?.searchRelate?.field?.fieldSchema
 
   return (

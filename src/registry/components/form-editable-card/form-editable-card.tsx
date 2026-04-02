@@ -28,13 +28,13 @@ const FormEditableCard: React.FC<FormEditableCardProps> = (props) => {
   const { value, onChange, schema, columns, showDelBtn } = props
 
   const handleDelete = (key: string | number) => {
-    const data = value.filter((item: any) => item?.key !== key)
+    const data = value?.filter((item: any) => item?.key !== key) || []
     onChange?.(data.length ? data : null)
   }
 
   const handleFieldChange = (record: any, fieldKey: string, newValue: any) => {
     const updatedRecord = { ...record, [fieldKey]: newValue }
-    const newData = value.map((d: any) => (d?.key === record?.key ? updatedRecord : d))
+    const newData = value?.map((d: any) => (d?.key === record?.key ? updatedRecord : d)) || []
     onChange?.(newData)
   }
 
@@ -46,7 +46,7 @@ const FormEditableCard: React.FC<FormEditableCardProps> = (props) => {
     )
   }
 
-  if (value.length === 0) {
+  if (!value || value.length === 0) {
     return (
       <div className="text-sm text-muted-foreground p-4 border rounded-md">
         暂无数据
@@ -56,14 +56,14 @@ const FormEditableCard: React.FC<FormEditableCardProps> = (props) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {value.map((record: any, index: number) => (
+      {value?.map((record: any, index: number) => (
         <Card key={record?.key || index} className="relative">
           {showDelBtn && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleDelete(record?.key || index)}
-              disabled={!!(schema?.disabled || (schema?.minCount && value.length <= schema.minCount))}
+              disabled={!!(schema?.disabled || (schema?.minCount && (value?.length ?? 0) <= schema.minCount))}
               className="absolute top-2 right-2 z-10"
             >
               <Trash2 className="h-4 w-4" />

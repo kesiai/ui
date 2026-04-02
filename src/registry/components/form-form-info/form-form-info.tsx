@@ -12,38 +12,7 @@ export interface FormFormInfoProps {
   outProps?: Record<string, any>
 }
 
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode; FallbackComponent?: React.ComponentType<{ error: Error }> },
-  { hasError: boolean; error: Error | null }
-> {
-  constructor(props: any) {
-    super(props)
-    this.state = { hasError: false, error: null }
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    console.error(error)
-    return { hasError: true, error }
-  }
-
-  render() {
-    if (this.state.hasError) {
-      const { FallbackComponent } = this.props
-      if (FallbackComponent) {
-        return <FallbackComponent error={this.state.error!} />
-      }
-      return (
-        <p style={{ color: 'red' }}>
-          运行时错误: {this.state.error?.message}
-        </p>
-      )
-    }
-
-    return this.props.children
-  }
-}
-
-const FormFormInfo: React.FC<FormFormInfoProps> = ({ schema, args = [], outProps = {} }) => {
+const FormFormInfo: React.FC<FormFormInfoProps> = ({ schema, args = [] }) => {
   const code = schema?.widgetContent
 
   // TODO: LazyBabelTransformedCode 组件待迁移

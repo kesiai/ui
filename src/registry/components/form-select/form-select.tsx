@@ -67,7 +67,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     onBlur,
     onFocus,
     ...props
-  }, ref) => {
+  }, _ref) => {
     const [internalValue, setInternalValue] = React.useState(defaultValue || "")
     const [isOpen, setIsOpen] = React.useState(defaultOpen)
     const [searchValue, setSearchValue] = React.useState("")
@@ -106,9 +106,9 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
         return options
       }
       return options.filter(option => {
-        const label = option.label || option.name || ''
+        const label = option.label || ''
         return label.toLowerCase().includes(searchValue.toLowerCase()) ||
-          option.value.toLowerCase().includes(searchValue.toLowerCase())
+          String(option.value).toLowerCase().includes(searchValue.toLowerCase())
       })
     }, [options, searchValue, showSearch])
 
@@ -166,11 +166,11 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
           {filteredOptions.length > 0 ? (
             filteredOptions.map((option) => (
               <SelectItem
-                key={option.value}
-                value={option.value}
+                key={String(option.value)}
+                value={String(option.value)}
                 disabled={option.disabled}
               >
-                {option.label || option.name}
+                {option.label}
               </SelectItem>
             ))
           ) : (

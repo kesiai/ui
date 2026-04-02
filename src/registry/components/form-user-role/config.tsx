@@ -34,16 +34,9 @@ const renderFormUserRolePreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormUserRole
-          input={{
-            value,
-            onChange: setValue
-          }}
-          field={{
-            schema: {
-              name: 'core/user'
-            },
-            displayField: 'name'
-          }}
+          value={value}
+          onChange={setValue}
+          name="core/user"
           label="用户"
           mode={props.mode}
           disabled={props.disabled}

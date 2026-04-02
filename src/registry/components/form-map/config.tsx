@@ -68,27 +68,24 @@ export const formMapDefaultProps = {
 }
 
 const renderFormMapPreview = (props: Record<string, any>) => {
-  const [value, setValue] = React.useState<{ name?: string; lng: number; lat: number } | null>(null)
+  const [value, setValue] = React.useState<{ name?: string; lng?: number; lat?: number } | undefined>(undefined)
+
+  const handleChange = React.useCallback((v: { name?: string; lng: number; lat: number } | null) => {
+    setValue(v ?? undefined)
+  }, [])
 
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormMap
-          input={{
-            value,
-            onChange: setValue
-          }}
-          field={{
-            schema: {
-              placeholder: props.placeholder,
-              lngLat: props.lngLat,
-              positionName: props.positionName,
-              canEdit: props.canEdit,
-              canHand: props.canHand,
-              showType: props.showType,
-              size: props.size
-            }
-          }}
+          value={value}
+          onChange={handleChange}
+          placeholder={props.placeholder}
+          lngLat={props.lngLat}
+          positionName={props.positionName}
+          canEdit={props.canEdit}
+          canHand={props.canHand}
+          showType={props.showType}
         />
       </div>
     </div>

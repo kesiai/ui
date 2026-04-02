@@ -18,19 +18,13 @@ export const formSerialNumberDefaultProps = {
 }
 
 const renderFormSerialNumberPreview = (props: Record<string, any>) => {
-  const [value, setValue] = React.useState('SN-20240203-0001')
+  const [value] = React.useState('SN-20240203-0001')
 
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormSerialNumber
-          input={{
-            value,
-            onChange: setValue
-          }}
-          field={{
-            schema: {}
-          }}
+          value={value}
           disabled={props.disabled}
         />
       </div>
@@ -38,7 +32,7 @@ const renderFormSerialNumberPreview = (props: Record<string, any>) => {
   )
 }
 
-const renderFormSerialNumberCodePreview = (props: Record<string, any>) => {
+const renderFormSerialNumberCodePreview = (_props: Record<string, any>) => {
   return `<FormSerialNumber
   input={{
     value: value,

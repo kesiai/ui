@@ -304,7 +304,6 @@ const FormInput = React.forwardRef<HTMLDivElement, InputProps>(
             autoFocus={autoFocus}
             type={textContent}
             className="focus-visible:ring-ring focus-visible:ring-offset-0"
-            {...props}
           />
           {allowClear && value && !disabled && !readOnly && (
             <button

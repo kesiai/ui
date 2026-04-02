@@ -110,9 +110,7 @@ const FormRichText = React.forwardRef<HTMLDivElement, FormRichTextProps>(
       inList = false,
       key: fieldKey,
       title,
-      ediforms = true,
       toolbar,
-      record
     } = props
 
     const editorRef = React.useRef<any>(null)
@@ -154,11 +152,11 @@ const FormRichText = React.forwardRef<HTMLDivElement, FormRichTextProps>(
               const toolbarElement = editor.ui.view.toolbar.element
               const editableElement = editor.ui.getEditableElement()
               if (editableElement && editableElement.parentElement) {
-                editableElement.parentElement.insertBefore(toolbarElement, editableElement)
+                editableElement.parentElement.insertBefore(toolbarElement as Node, editableElement as Node)
               }
             }
           }}
-          onChange={(event, editor) => {
+          onChange={(_event, editor) => {
             const data = editor.getData()
             onChange?.(data)
           }}

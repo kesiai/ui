@@ -1,6 +1,5 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import Field from "@/components/src/form/field"
 
 export interface FormFormProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -91,11 +90,11 @@ const FormForm = React.forwardRef<HTMLDivElement, FormFormProps>(
           </label>
         )}
 
-        <Field
-          type={type}
-          render={render}
-          schema={fieldSchema}
-        />
+        {render ? render(fieldSchema) : (
+          <div className="text-sm text-muted-foreground">
+            字段类型: {type}
+          </div>
+        )}
 
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>

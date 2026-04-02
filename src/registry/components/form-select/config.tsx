@@ -150,7 +150,6 @@ const renderFormSelectPreview = (props: Record<string, any>) => {
         <FormSelect
           placeholder={props.placeholder}
           options={props.options}
-          size={props.size}
           disabled={props.disabled}
           readOnly={props.readOnly}
           bordered={props.bordered}

@@ -48,7 +48,6 @@ const renderFormSwitchPreview = (props: Record<string, any>) => {
           defaultChecked={props.defaultChecked}
           disabled={props.disabled}
           autoFocus={props.autoFocus}
-          size={props.size}
         />
       </div>
     </div>

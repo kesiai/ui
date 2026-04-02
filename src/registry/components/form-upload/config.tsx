@@ -91,24 +91,18 @@ const renderFormUploadPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full max-w-2xl bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <FormUpload
-          input={{
-            value,
-            onChange: setValue
-          }}
-          field={{
-            schema: {
-              styleType: props.styleType,
-              accept: props.accept,
-              size: props.size,
-              width: props.width,
-              height: props.height,
-              maxUploadNum: props.maxUploadNum,
-              disabled: props.disabled,
-              autoZip: props.autoZip,
-              autoName: props.autoName
-            }
-          }}
-          type="upload_attachment"
+          value={value}
+          onChange={setValue}
+          styleType={props.styleType}
+          accept={props.accept}
+          size={props.size}
+          width={props.width}
+          height={props.height}
+          maxUploadNum={props.maxUploadNum}
+          disabled={props.disabled}
+          autoZip={props.autoZip}
+          autoName={props.autoName}
+          uploadType="upload_attachment"
         />
       </div>
     </div>

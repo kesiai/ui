@@ -11,11 +11,8 @@ export const AreaPreview: React.FC<{ props: Record<string, any> }> = ({ props })
       <div className="w-full" style={{ maxWidth: `${props.width || 100}%` }}>
         <FormArea
           value={value}
-          onChange={setValue}
-          config={{
-            areaType: props.areaType,
-          }}
-          cellKey="preview"
+          onChange={(v) => { if (typeof v === 'string') setValue(v) }}
+          areaType={props.areaType}
         />
       </div>
     </div>

@@ -29,7 +29,7 @@ export interface FormTableViewProps {
 }
 
 const FormTableView: React.FC<FormTableViewProps> = (props) => {
-  const { value, onChange, schema, columns, selectedRows, setSelectedRows } = props || {}
+  const { value = [], onChange, schema, columns, selectedRows, setSelectedRows } = props || {}
 
   const handleSave = (row: any) => {
     const newValue = value.map((d: any) => (d?.key === row?.key ? row : d))
@@ -84,14 +84,14 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
           </tr>
         </thead>
         <tbody>
-          {value.length === 0 ? (
+          {value?.length === 0 ? (
             <tr>
               <td className="px-4 py-8 text-center text-muted-foreground" colSpan={columns.length + 1}>
                 暂无数据
               </td>
             </tr>
           ) : (
-            value.map((record: any, rowIndex: number) => (
+            value?.map((record: any, rowIndex: number) => (
               <tr key={record?.key || rowIndex} className="border-b hover:bg-muted/30">
                 {/* 总是显示复选框 */}
                 <td className="px-4 py-2">

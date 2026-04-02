@@ -252,7 +252,7 @@ export const schemaFormDefaultProps = {
               key: 'field2',
               title: '字段2',
               type: 'number',
-              controlType: 'number'
+              controlType: 'slider'
             }
           }
         }

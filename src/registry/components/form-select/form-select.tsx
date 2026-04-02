@@ -74,7 +74,7 @@ const FormSelect = React.forwardRef<HTMLDivElement, FormSelectProps>(
     const selectRef = React.useRef<HTMLButtonElement>(null)
 
     // options 由 FormField 从 schema.enum 自动转换，或通过 options prop 显式传入
-    let options: Array<{ value: string; label?: string; name?: string; disabled?: boolean }> = props?.options || []
+    let options: FormOption[] = props?.options || []
 
     const handleValueChange = (newValue: string) => {
       if (readOnly) return

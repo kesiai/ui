@@ -49,14 +49,33 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
 
   const fields = processedFormSchema
 
+  // 预处理 schema：当 type=array 且顶层有 enum 时，将 enum 移入 items
+  const preprocessSchema = React.useCallback((schema: any): any => {
+    if (!schema?.properties) return schema
+    const processed = { ...schema, properties: { ...schema.properties } }
+    for (const [key, prop] of Object.entries(processed.properties) as [string, any][]) {
+      if (prop?.type === 'array' && prop?.enum && prop?.items) {
+        const { enum: _, ...rest } = prop
+        processed.properties[key] = {
+          ...rest,
+          items: {
+            ...prop.items,
+            enum: prop.enum,
+          },
+        }
+      }
+    }
+    return processed
+  }, [])
+
   const zodSchema = React.useMemo(() => {
     try {
-      return z.fromJSONSchema(schema as any)
+      return z.fromJSONSchema(preprocessSchema(schema) as any)
     } catch (e) {
       console.error('Failed to convert schema to Zod:', e)
       return z.object({})
     }
-  }, [schema])
+  }, [schema, preprocessSchema])
 
   const resolver = React.useMemo<Resolver<any, any>>(() => {
     return zodResolver(zodSchema as any)

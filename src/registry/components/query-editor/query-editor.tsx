@@ -122,7 +122,7 @@ interface QueryItemFromProps {
 }
 
 const getFieldCom = (fSchema: FieldSchema, method: MethodItem | undefined) => {
-  let FieldController: React.ComponentType
+  let FieldController
   const fieldSchame = { key: fSchema.key }
   if (!fSchema.controlType && !fSchema.relateTo && !fSchema.relate && !fSchema.enum && !fSchema.enum1) return
   if (method?.type == 'multipleSelect') {
@@ -139,17 +139,11 @@ const getFieldCom = (fSchema: FieldSchema, method: MethodItem | undefined) => {
   } else {
     FieldController = fSchema?.type == 'array' ? filterConverter(fSchema, fieldSchame) : formConverter(fSchema, fieldSchame)
   }
-  return () => {
-    const methods = useForm({
-      resolver: null
-    } as unknown as Parameters<typeof useForm>[0])
+  return ({ value, onChange }: { value?: any, onChange?: (v: any) => void }) => {
+    const methods = useForm()
     return (
       <FormProvider {...methods}>
-        <form id={fSchema.key}>
-          <FormField name={fSchema.key} schema={fSchema}>
-            <FieldController />
-          </FormField>
-        </form>
+         <FieldController schema={fSchema} value={value} onChange={onChange} />
       </FormProvider>
     )
   }

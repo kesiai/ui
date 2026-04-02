@@ -522,8 +522,7 @@ const RangeTime = (props: {
   schema?: FilterFieldSchema
 }) => {
   const { value, onChange, schema } = props
-  console.log(1233, props.value);
-  
+    
   if (schema?.timeFormat) {
     const startValue = value?.gte    
     const endValue = value?.lte

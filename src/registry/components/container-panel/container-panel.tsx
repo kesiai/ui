@@ -18,7 +18,7 @@ export interface PanelConfig {
   forceRender?: boolean
 }
 
-export interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PanelProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
   /**
    * 是否手风琴模式（只允许一个面板展开）
    * @default true
@@ -60,7 +60,7 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
       accordion = true,
       collapsible = false,
       panels,
-      defaultValue = 0,
+      defaultValue = '0',
       value,
       onValueChange,
       children,
@@ -75,11 +75,18 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
         if (typeof defaultValue === "number") {
           return `panel-${defaultValue}`
         }
+        if (Array.isArray(defaultValue) && defaultValue.length > 0) {
+          // 取第一个作为默认展开
+          return `panel-${defaultValue[0]}`
+        }
         return `panel-0`
       } else {
         // 多开模式：数组
         if (Array.isArray(defaultValue)) {
           return defaultValue.map((i) => `panel-${i}`)
+        }
+        if (typeof defaultValue === "number") {
+          return [`panel-${defaultValue}`]
         }
         return [`panel-0`]
       }
@@ -99,7 +106,7 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
           <AccordionItem key={panelValue} value={panelValue}>
             <AccordionTrigger>{panel.title || `面板 ${index + 1}`}</AccordionTrigger>
             <AccordionContent
-              forceMount={panel.forceRender}
+              forceMount={panel.forceRender ? true : undefined}
             >
               {childrenArray[index] || (
                 <div className="flex items-center justify-center h-full text-slate-400">
@@ -123,16 +130,28 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
         className={cn("panel-container", className)}
         {...props}
       >
-        <Accordion
-          type={accordion ? "single" : "multiple"}
-          {...(collapsible && { collapsible: true })}
-          defaultValue={getDefaultValue()}
-          value={value}
-          onValueChange={onValueChange}
-          className="w-full"
-        >
-          {panels && panels.length > 0 ? renderConfigPanels() : renderChildrenPanels()}
-        </Accordion>
+        {accordion ? (
+          <Accordion
+            type="single"
+            collapsible={collapsible || undefined}
+            defaultValue={getDefaultValue() as string | undefined}
+            value={typeof value === "string" ? value : undefined}
+            onValueChange={onValueChange}
+            className="w-full"
+          >
+            {panels && panels.length > 0 ? renderConfigPanels() : renderChildrenPanels()}
+          </Accordion>
+        ) : (
+          <Accordion
+            type="multiple"
+            defaultValue={getDefaultValue() as string[] | undefined}
+            value={Array.isArray(value) ? value : undefined}
+            onValueChange={onValueChange}
+            className="w-full"
+          >
+            {panels && panels.length > 0 ? renderConfigPanels() : renderChildrenPanels()}
+          </Accordion>
+        )}
       </div>
     )
   }

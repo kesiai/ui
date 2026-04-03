@@ -439,17 +439,21 @@ const getFlowNodeData = (item: FlowElement, logRender?: Element | React.ReactNod
       const revertUsers = map(revertUser, (u: any) => u?.['#$user']?.name || u?.name)
       return revertUsers.join('、') + '-' + '回退' + '-' + variables.revertMessage
     }
-    return approvalReasonList?.map((item: any) => {
-      const agreeUsers = map(agreeUser, (u: any) => u?.['#$user'] || u)
-      const disagreeUsers = map(disagreeUser, (u: any) => u?.['#$user'] || u)
-      let status = ''
-      if (approvalStatus == 'agree') {
-        status = agreeUsers?.some((u: any) => u.id == item.id) ? '通过' : '拒绝'
-      } else if (approvalStatus == 'disagree') {
-        status = disagreeUsers?.some((u: any) => u.id == item.id) ? '拒绝' : '通过'
-      }
-      return `${item.name}-${status}${item.approvalReason ? '-' + item.approvalReason : ''}；`
-    }) || ''
+    const agreeUsers = map(agreeUser, (u: any) => u?.['#$user'] || u)
+    const disagreeUsers = map(disagreeUser, (u: any) => u?.['#$user'] || u)
+    if (approvalReasonList?.length) {
+      return approvalReasonList?.map((item: any) => {
+        let status = ''
+        if (approvalStatus == 'agree') {
+          status = agreeUsers?.some((u: any) => u.id == item.id) ? '通过' : '拒绝'
+        } else if (approvalStatus == 'disagree') {
+          status = disagreeUsers?.some((u: any) => u.id == item.id) ? '拒绝' : '通过'
+        }
+        return `${item.name}-${status}${item.approvalReason ? '-' + item.approvalReason : ''}；`
+      }) || ''
+    } else {
+      return approvalStatus == 'agree' ? agreeUsers?.map(u => u?.name)?.join('、') + '-通过' : disagreeUsers?.map(u => u?.name)?.join('、') + '-拒绝'
+    }
   } else if (item.type == 'alarmNode') {
     const warning_type = config.warning_type == 'device' ? '设备表记录报警' : config.warning_type == 'general' ? '其他数据报警' : ''
     return `${warning_type} 报警描述: ${variables.desc ?? ''}`

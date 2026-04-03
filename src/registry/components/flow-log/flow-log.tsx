@@ -76,6 +76,10 @@ const FlowLog: React.FC<FlowLogProps> = ({ task, taskId, jobs, logNodeRenderMap 
     (async () => {
       if (!isEmpty(task)) {
         setTaskData(task)
+        setLoading(true)
+        const els = await fetchJobLogs(task)
+        setElements(els)
+        setLoading(false)
       } else if (taskId) {
         setLoading(true)
         const flowTaskApi = createAPI({ name: 'flow/flowTask' })

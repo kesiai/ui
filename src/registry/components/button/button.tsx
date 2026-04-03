@@ -66,9 +66,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       }
       if (
         disable === '1' ||
-        disable === 'true' ||
-        disable === 1 ||
-        disable === true
+        disable === 'true'
       ) {
         return true
       }

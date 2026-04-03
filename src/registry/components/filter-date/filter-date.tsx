@@ -107,7 +107,7 @@ const FilterDate = (props: any) => {
           <Calendar
             mode="range"
             selected={tempRange?.from ? { from: tempRange.from, to: tempRange.to } : (dateRange ? { from: dateRange.from, to: dateRange.to } : undefined)}
-            onSelect={(range, selectedDate, modifiers, e) => {
+            onSelect={(range, _selectedDate, _modifiers, e) => {
               e?.stopPropagation()
               e?.preventDefault()
               onRangeChange(range)

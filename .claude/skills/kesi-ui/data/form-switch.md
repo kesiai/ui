@@ -7,7 +7,6 @@
 `FormSwitch` 是一个开关切换组件，用于在两个互斥状态之间切换。
 
 - **简单直观**：开关形式清晰展示当前状态
-- **两种尺寸**：支持标准和小尺寸
 - **受控/非受控**：支持受控和非受控两种模式
 - **禁用控制**：支持禁用状态
 - **自动聚焦**：支持自动获取焦点
@@ -28,15 +27,7 @@
 | `defaultChecked` | `boolean` | 否 | `false` | 默认状态（非受控模式） |
 | `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 | `autoFocus` | `boolean` | 否 | `false` | 自动聚焦 |
-| `size` | `'default' \| 'small'` | 否 | `'default'` | 尺寸 |
 | `onChange` | `(checked: boolean) => void` | 否 | - | 状态变化回调 |
-
-## 尺寸规格
-
-| 尺寸 | 宽度 | 高度 | 滑块大小 |
-|------|------|------|---------|
-| `default` | 44px | 24px | 20px |
-| `small` | 36px | 20px | 16px |
 
 ## 基本用法
 
@@ -91,15 +82,7 @@ function DisabledSwitch() {
 }
 ```
 
-### 5. 小尺寸
-
-```tsx
-function SmallSwitch() {
-  return <FormSwitch size="small" />
-}
-```
-
-### 6. 带标签
+### 5. 带标签
 
 ```tsx
 function SwitchWithLabel() {
@@ -434,7 +417,6 @@ function PermissionManagement() {
             <FormSwitch
               checked={value}
               onChange={(checked) => handlePermissionChange(key, checked)}
-              size="small"
             />
           </div>
         ))}
@@ -476,7 +458,6 @@ function AutoSaveExample() {
           <FormSwitch
             checked={autoSave}
             onChange={setAutoSave}
-            size="small"
           />
         </div>
       </div>
@@ -512,11 +493,7 @@ function AutoSaveExample() {
    - 禁用时开关无法切换
    - 禁用状态下仍会显示当前状态，但不可交互
 
-4. **尺寸选择**：
-   - `default`：标准尺寸，适合大多数场景
-   - `small`：小尺寸，适合紧凑布局
-
-5. **自动聚焦**：
+4. **自动聚焦**：
    - `autoFocus` 会让开关在组件挂载时自动获取焦点
    - 适合用在需要快速操作的表单中
 

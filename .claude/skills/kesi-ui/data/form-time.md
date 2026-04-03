@@ -8,32 +8,19 @@
 
 - **原生体验**：使用浏览器原生时间控件，性能优异
 - **格式灵活**：支持时:分和时:分:秒两种格式
-- **尺寸可调**：提供小、中、大三种尺寸
 - **自动格式化**：根据配置自动格式化输出
-- **默认值支持**：支持配置默认值
+- **默认值支持**：支持配置默认值及默认值类型
 
 ## Props 参数说明
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `{ value?: string; onChange?: (value: string \| null) => void }` | 是 | - | 输入值和变更回调 |
-| `field` | `{ schema?: TimeSchema }` | 否 | - | 字段配置 |
-| `field.schema.timeFormat` | `'HH:mm' \| 'HH:mm:ss'` | 否 | `'HH:mm:ss'` | 时间格式 |
-| `field.schema.disabled` | `boolean` | 否 | `false` | 是否禁用 |
-| `field.schema.defaultVal` | `string` | 否 | - | 默认值 |
-| `field.schema.size` | `'small' \| 'middle' \| 'large'` | 否 | `'middle'` | 组件尺寸 |
-| `style` | `React.CSSProperties` | 否 | - | 自定义样式 |
-
-### input 输入对象
-
-组件通过 `input` 属性接收值和变更回调：
-
-```typescript
-interface InputProps {
-  value?: string      // 当前时间值
-  onChange?: (value: string | null) => void  // 值变更回调
-}
-```
+| `value` | `string` | 否 | - | 当前值 |
+| `onChange` | `(value: string \| null) => void` | 否 | - | 值变化回调 |
+| `timeFormat` | `string` | 否 | `'HH:mm:ss'` | 时间格式，支持 `HH:mm` 或 `HH:mm:ss` |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用 |
+| `defaultVal` | `string` | 否 | - | 默认值 |
+| `defaultValType` | `'fixed' \| 'logic'` | 否 | `'fixed'` | 默认值类型，`fixed` 表示固定默认值，`logic` 表示逻辑默认值（不自动填充） |
 
 ## 基本用法
 
@@ -49,10 +36,8 @@ function Example() {
 
   return (
     <FormTime
-      input={{
-        value: time,
-        onChange: setTime
-      }}
+      value={time}
+      onChange={setTime}
     />
   )
 }
@@ -68,69 +53,15 @@ function Example() {
 
   return (
     <FormTime
-      input={{
-        value: time,
-        onChange: setTime
-      }}
-      field={{
-        schema: {
-          timeFormat: 'HH:mm'
-        }
-      }}
+      value={time}
+      onChange={setTime}
+      timeFormat="HH:mm"
     />
   )
 }
 ```
 
-### 3. 小尺寸
-
-使用小尺寸的时间选择器。
-
-```tsx
-function Example() {
-  const [time, setTime] = useState('')
-
-  return (
-    <FormTime
-      input={{
-        value: time,
-        onChange: setTime
-      }}
-      field={{
-        schema: {
-          size: 'small'
-        }
-      }}
-    />
-  )
-}
-```
-
-### 4. 大尺寸
-
-使用大尺寸的时间选择器。
-
-```tsx
-function Example() {
-  const [time, setTime] = useState('')
-
-  return (
-    <FormTime
-      input={{
-        value: time,
-        onChange: setTime
-      }}
-      field={{
-        schema: {
-          size: 'large'
-        }
-      }}
-    />
-  )
-}
-```
-
-### 5. 禁用状态
+### 3. 禁用状态
 
 禁用时间选择器。
 
@@ -140,23 +71,17 @@ function Example() {
 
   return (
     <FormTime
-      input={{
-        value: time,
-        onChange: setTime
-      }}
-      field={{
-        schema: {
-          disabled: true
-        }
-      }}
+      value={time}
+      onChange={setTime}
+      disabled
     />
   )
 }
 ```
 
-### 6. 带默认值
+### 4. 带默认值
 
-设置默认时间值。
+设置默认时间值，组件挂载时自动填充。
 
 ```tsx
 function Example() {
@@ -164,15 +89,28 @@ function Example() {
 
   return (
     <FormTime
-      input={{
-        value: time,
-        onChange: setTime
-      }}
-      field={{
-        schema: {
-          defaultVal: '09:00:00'
-        }
-      }}
+      value={time}
+      onChange={setTime}
+      defaultVal="09:00:00"
+    />
+  )
+}
+```
+
+### 5. 逻辑默认值
+
+使用 `defaultValType="logic"` 时，默认值不会自动填充到输入框。
+
+```tsx
+function Example() {
+  const [time, setTime] = useState('')
+
+  return (
+    <FormTime
+      value={time}
+      onChange={setTime}
+      defaultVal="00:00:00"
+      defaultValType="logic"
     />
   )
 }
@@ -196,32 +134,16 @@ function WorkTimeTracker() {
       <div>
         <label className="block text-sm font-medium mb-2">上班时间</label>
         <FormTime
-          input={{
-            value: startTime,
-            onChange: setStartTime
-          }}
-          field={{
-            schema: {
-              timeFormat: 'HH:mm:ss',
-              placeholder: '请选择上班时间'
-            }
-          }}
+          value={startTime}
+          onChange={setStartTime}
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium mb-2">下班时间</label>
         <FormTime
-          input={{
-            value: endTime,
-            onChange: setEndTime
-          }}
-          field={{
-            schema: {
-              timeFormat: 'HH:mm:ss',
-              placeholder: '请选择下班时间'
-            }
-          }}
+          value={endTime}
+          onChange={setEndTime}
         />
       </div>
 
@@ -249,16 +171,9 @@ function MeetingScheduler() {
     <div className="w-full max-w-md">
       <label className="block text-sm font-medium mb-2">会议开始时间</label>
       <FormTime
-        input={{
-          value: meetingTime,
-          onChange: setMeetingTime
-        }}
-        field={{
-          schema: {
-            timeFormat: 'HH:mm',
-            size: 'large'
-          }
-        }}
+        value={meetingTime}
+        onChange={setMeetingTime}
+        timeFormat="HH:mm"
       />
       {meetingTime && (
         <p className="mt-2 text-sm text-gray-600">
@@ -295,16 +210,9 @@ function ScheduledTask() {
       <div>
         <label className="block text-sm font-medium mb-2">执行时间</label>
         <FormTime
-          input={{
-            value: executeTime,
-            onChange: setExecuteTime
-          }}
-          field={{
-            schema: {
-              timeFormat: 'HH:mm:ss',
-              defaultVal: '00:00:00'
-            }
-          }}
+          value={executeTime}
+          onChange={setExecuteTime}
+          defaultVal="00:00:00"
         />
       </div>
 
@@ -333,30 +241,18 @@ function BusinessHours() {
         <div>
           <label className="block text-sm font-medium mb-2">开门时间</label>
           <FormTime
-            input={{
-              value: openTime,
-              onChange: setOpenTime
-            }}
-            field={{
-              schema: {
-                timeFormat: 'HH:mm'
-              }
-            }}
+            value={openTime}
+            onChange={setOpenTime}
+            timeFormat="HH:mm"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium mb-2">打烊时间</label>
           <FormTime
-            input={{
-              value: closeTime,
-              onChange: setCloseTime
-            }}
-            field={{
-              schema: {
-                timeFormat: 'HH:mm'
-              }
-            }}
+            value={closeTime}
+            onChange={setCloseTime}
+            timeFormat="HH:mm"
           />
         </div>
       </div>
@@ -377,18 +273,14 @@ function BusinessHours() {
 
 2. **格式转换**：内部会将输入值转换为配置的格式输出，即使 `timeFormat` 是 `HH:mm:ss`，输入界面也只显示到分钟
 
-3. **默认值生效**：`defaultVal` 会在组件挂载后自动生效，但仅在当前值为空时设置
+3. **默认值生效**：`defaultVal` 会在组件挂载后自动生效，但仅在当前值为空且 `defaultValType` 为 `fixed` 时设置
 
 4. **清空处理**：当用户清空输入时，`onChange` 回调会接收到 `null` 而不是空字符串
 
-5. **样式定制**：可以通过 `style` 属性自定义组件样式，但会影响原生时间选择器的样式
+5. **时区处理**：组件不处理时区问题，所有时间都视为本地时间
 
-6. **尺寸限制**：尺寸属性只影响组件高度和内边距，不影响时间选择器本身的尺寸
+6. **验证提示**：组件本身不包含验证功能，需要在外部实现输入验证
 
-7. **时区处理**：组件不处理时区问题，所有时间都视为本地时间
+7. **moment.js 依赖**：组件内部使用 moment.js 处理时间格式化，确保项目中已安装该依赖
 
-8. **验证提示**：组件本身不包含验证功能，需要在外部实现输入验证
-
-9. **moment.js 依赖**：组件内部使用 moment.js 处理时间格式化，确保项目中已安装该依赖
-
-10. **受控模式**：必须通过 `input.value` 和 `input.onChange` 控制组件状态
+8. **受控模式**：使用 `value` 和 `onChange` 控制组件状态

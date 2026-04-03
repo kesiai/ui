@@ -10,7 +10,7 @@
 - **可清空**：支持点击已选星星清空评分
 - **悬停预览**：鼠标悬停时预览评分效果
 - **分数显示**：可选显示当前分数
-- **三种尺寸**：提供小、中、大三种尺寸
+- **三种尺寸**：提供小、中、大三种尺寸（通过 CSS 覆盖实现）
 
 ## Props 参数说明
 
@@ -21,9 +21,7 @@
 | `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 | `allowClear` | `boolean` | 否 | `true` | 是否允许清除 |
 | `showScore` | `boolean` | 否 | `false` | 是否显示分数 |
-| `size` | `'sm' \| 'md' \| 'lg'` | 否 | `'md'` | 星星尺寸 |
 | `onChange` | `(value: number) => void` | 否 | - | 评分改变时的回调 |
-| `cellKey` | `string` | 否 | - | 单元格键值 |
 
 ## 基本用法
 
@@ -115,27 +113,7 @@ function Example() {
 }
 ```
 
-### 6. 不同尺寸
-
-使用不同尺寸的星星。
-
-```tsx
-function Example() {
-  const [rating1, setRating1] = useState(0)
-  const [rating2, setRating2] = useState(0)
-  const [rating3, setRating3] = useState(0)
-
-  return (
-    <div className="space-y-4">
-      <Rate value={rating1} onChange={setRating1} size="sm" />
-      <Rate value={rating2} onChange={setRating2} size="md" />
-      <Rate value={rating3} onChange={setRating3} size="lg" />
-    </div>
-  )
-}
-```
-
-### 7. 半星效果（模拟）
+### 6. 半星效果（模拟）
 
 通过设置不同的星星数量实现半星效果。
 
@@ -180,7 +158,6 @@ function ProductRating() {
           value={rating}
           onChange={setRating}
           showScore
-          size="lg"
         />
       </div>
 
@@ -298,7 +275,6 @@ function RestaurantReview() {
           <Rate
             value={rating[aspect.key]}
             onChange={(value) => setRating(prev => ({ ...prev, [aspect.key]: value }))}
-            cellKey={`restaurant-${aspect.key}`}
           />
         </div>
       ))}
@@ -350,7 +326,6 @@ function SkillRating() {
               onChange={(value) => updateSkill(index, value)}
               count={10}
               showScore
-              cellKey={`skill-${skill.name}`}
             />
           </div>
         </div>
@@ -372,7 +347,6 @@ function RatingDisplay({ rating, count }: { rating: number; count: number }) {
         value={rating}
         count={count}
         disabled
-        size="sm"
       />
       <span className="text-sm font-medium">{rating}.{count}</span>
     </div>
@@ -414,7 +388,7 @@ function RatingHistory() {
         <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
           <span className="text-sm text-gray-600">{item.date}</span>
           <div className="flex items-center gap-2">
-            <Rate value={item.rating} disabled size="sm" />
+            <Rate value={item.rating} disabled />
             <span className="text-sm font-medium">{item.rating}.0</span>
           </div>
         </div>
@@ -442,6 +416,4 @@ function RatingHistory() {
 
 8. **小数评分**：组件本身不支持半星，但可以通过增加星星数量来模拟（如设置为 10 颗星表示 5.0 分制）
 
-9. **cellKey 用途**：在表格等场景中用于唯一标识组件实例
-
-10. **尺寸限制**：只提供三种预设尺寸，自定义尺寸需要通过 CSS 覆盖
+9. **尺寸限制**：自定义尺寸需要通过 CSS 覆盖

@@ -8,37 +8,14 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Loader2, X, ChevronDown } from 'lucide-react'
-import { createAPI, useFormContext } from '@airiot/client'
-import { dealFilter } from '@/registry/lib/form-relate-utils'
+import { createAPI } from '@airiot/client'
 import type { RelateFieldOption } from '@/registry/lib/form-relate-types'
-import { getQueryFilter } from '@/registry/lib/filter-utils'
-import { Table2Context } from '@/registry/lib/table-context'
 import { cn } from '@/lib/utils'
 
 interface AsyncSelectProps {
   input?: {
     value?: any
     onChange?: (value: any) => void
-  }
-  field?: {
-    schema?: Record<string, any>
-    filter?: any
-    meta?: any
-    key?: string
-    displayField?: string
-    tableID?: string
-    relateShowFields?: Array<{
-      key: string
-      title: string
-      mapToCurrent?: boolean
-      mapField?: string
-      fieldSchema?: any
-    }>
-    option?: {
-      form?: {
-        change: (field: string, value: any) => void
-      }
-    }
   }
   meta?: any
   record?: any
@@ -58,6 +35,11 @@ interface AsyncSelectProps {
   isOptionSelected?: (option: RelateFieldOption) => boolean
   style?: React.CSSProperties
   onChange?: (value: any) => void
+  /**
+   * 外部传入的过滤器对象
+   * 组件变为纯组件后，由父组件负责构建 filterObj
+   */
+  filterObj?: Record<string, any>
 }
 
 /**
@@ -66,17 +48,18 @@ interface AsyncSelectProps {
  */
 const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   const {
-    field = {},
+    schema = {},
     label = '请选择',
     disabled = false,
     mode,
     value: propValue,
     onChange,
     style,
+    filterObj = {},
   } = props
 
-  const { schema, relateShowFields } = field
-  const displayField = field.displayField || schema?.relate?.fields?.[0]?.key || 'name'
+  const { relateShowFields } = schema
+  const displayField = schema?.relate?.fields?.[0]?.key || 'name'
 
   // 状态管理
   const [loading, setLoading] = React.useState(false)
@@ -94,15 +77,6 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const dropdownRef = React.useRef<HTMLDivElement>(null)
 
-  const form = useFormContext()
-  const outTable = React.useContext(Table2Context)
-
-  const getFormState = () => {
-    if (form) {
-      return form.getValues()
-    }
-  }
-
   // 获取选项数据（不根据搜索词过滤，加载所有数据）
   const loadOptions = React.useCallback(
     async (pageNum: number = 0): Promise<number> => {
@@ -116,12 +90,9 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
       }
       currentPageRef.current = pageNum
 
-      let filterObj: any = {}
-      dealFilter(filterObj, field, getFormState, outTable)
-
       setLoading(true)
       try {
-        const s = schema || field.schema
+        const s = schema
         const resource = s?.name ? s?.name : `core/t/${s?.relate?.id}/d`
 
         // 创建 API 实例
@@ -137,7 +108,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
           },
           filterObj
         )
-        
+
         const newOptions = items.map((item: any) => ({
           value: item.id,
           label: item[displayField] || item.name || item.id,
@@ -166,7 +137,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
         setLoading(false)
       }
     },
-    [JSON.stringify(field), displayField, schema, relateShowFields]
+    [displayField, schema, relateShowFields, JSON.stringify(filterObj)]
   )
 
   // 前端过滤选项
@@ -187,18 +158,6 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   React.useEffect(() => {
     loadOptions()
   }, [loadOptions])
-
-  // 多字段联动表单其他字段
-  React.useEffect(() => {
-    relateShowFields?.forEach((rsf) => {
-      if (rsf.mapToCurrent && rsf.mapField) {
-        const itemValue = isArray(propValue) ? propValue[0]?.item?.[rsf.key] : (propValue as any)?.item?.[rsf.key]
-        if (itemValue) {
-          field?.option?.form?.change(rsf.mapField, itemValue)
-        }
-      }
-    })
-  }, [JSON.stringify(propValue || {}), relateShowFields, field])
 
   // 处理选项选择
   const handleSelectOption = (option: RelateFieldOption) => {

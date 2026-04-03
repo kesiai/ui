@@ -32,6 +32,7 @@ export interface RelateFieldProps {
       }
     }
   }
+  schema?: Record<string, any>
   meta?: any
   record?: any
   antdForm?: any

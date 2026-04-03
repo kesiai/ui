@@ -262,68 +262,65 @@ export const schemaFormDefaultProps = {
         properties: {},
         title: '关联',
         relateSchema: {
-          allowAdd: false,
-          allowSelectOld: true,
-          canOrder: false,
-          config: "关联字段",
-          createShow: true,
-          defaultVal: null,
-          descriptionType: "tooltip",
-          editShow: true,
-          insideFilter: [],
-          invalid: false,
-          key: "relate-table-6A5F",
-          listFields: true,
-          need: false,
-          properties: {},
-          recordSelectType: 'select',
-          relate: {
-            fields: [
+          "allowAdd": false,
+          "allowSelectOld": true,
+          "canOrder": false,
+          "config": "关联字段",
+          "createShow": true,
+          "defaultVal": null,
+          "descriptionType": "tooltip",
+          "editShow": true,
+          "filterFields": true,
+          "invalid": false,
+          "key": "asset_id",
+          "listFields": true,
+          "need": true,
+          "properties": {},
+          "recordSelectType": "select",
+          "relate": {
+            "fields": [
               {
-                fieldSchema: {
-                  canOrder: false,
-                  config: "文本",
-                  createShow: true,
-                  descriptionType: "tooltip",
-                  editShow: true,
-                  fieldType: "input",
-                  invalid: false,
-                  key: "text-60CF",
-                  listFields: true,
-                  need: false,
-                  rowKey: "B5EE",
-                  size: "middle",
-                  textContent: "text",
-                  textType: "input",
-                  title: "批号",
-                  type: "string",
-                  widthInForm: "8"
+                "fieldSchema": {
+                  "canOrder": false,
+                  "config": "文本",
+                  "createShow": true,
+                  "descriptionType": "tooltip",
+                  "editShow": true,
+                  "fieldType": "input",
+                  "invalid": false,
+                  "key": "name",
+                  "listFields": true,
+                  "need": false,
+                  "size": "middle",
+                  "textContent": "text",
+                  "textType": "input",
+                  "title": "资产名称",
+                  "type": "string",
+                  "widthInForm": "24"
                 },
-                key: "text-60CF",
-                title: "批号"
+                "key": "name",
+                "title": "资产名称"
               }
             ],
-            function: [
+            "function": [
               "formschema",
-              "fieldRules",
-              "tablePermission",
-              "gis"
+              "tableClear"
             ],
-            i18nProp: {},
-            id: "文本时间",
-            tableMajorType: "normal",
-            tableType: "table",
-            title: "文本时间",
-            tt: "normal"
+            "i18nProp": {},
+            "id": "资产",
+            "tableMajorType": "normal",
+            "tableType": "table",
+            "title": "资产",
+            "tt": "normal"
           },
-          relateShowFields: null,
-          selectType: "single",
-          showField: null,
-          showType: "select",
-          size: "middle",
-          title: "关联字段",
-          type: "object",
-          widthInForm: "24"
+          "relateShowFields": null,
+          "selectType": "single",
+          "showField": null,
+          "showType": "select",
+          "size": "middle",
+          "title": "调拨资产",
+          "type": "object",
+          "widthInForm": "24"
         }
       }
     },

@@ -23,16 +23,22 @@ export interface FormRelateProps {
   meta?: any
   record?: any
   disabled?: boolean
+  /**
+   * 外部传入的过滤器对象
+   * 组件变为纯组件后，由父组件负责构建 filterObj
+   */
+  filterObj?: Record<string, any>
 }
 
 /**
- * FormRelate - 简单关联字段组件
+ * FormRelate - 简单关联字段组件（纯组件版本）
  * 用于内部表关联（同一个表内的字段关联）
+ *
+ * 这是一个纯组件，不依赖 useFormContext 或 Table2Context
+ * filterObj 由父组件传入
  */
 const FormRelate: React.FC<FormRelateProps> = (props) => {
-  const { input, field = {}, meta, record, disabled: propsDisabled } = props
-  const { onChange, value } = input || {}
-  const { displayField = 'name', schema, internalTable = true } = field
+  const { onChange, value, field = {}, meta, record, disabled: propsDisabled, filterObj, displayField = 'name', schema, internalTable = true } = props
 
   const disabled = propsDisabled || meta?.data?.disabled || false
 
@@ -102,11 +108,13 @@ const FormRelate: React.FC<FormRelateProps> = (props) => {
         }
       }}
       field={field}
+      schema={schema}
       label={`请选择${(schema as any)?.title || '关联字段'}`}
       disabled={disabled}
       mode={internalTable ? undefined : 'multiple'}
       meta={meta}
       record={record}
+      filterObj={filterObj}
     />
   )
 }

@@ -4,6 +4,9 @@ import { RelateSelect } from '@/registry/components/form-relate-select/form-rela
 import { RelateMultiSelect } from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
 import { RelateModelSelect } from '@/registry/components/form-relate-model-select/form-relate-model-select'
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
+import { useFormContext } from '@airiot/client'
+import { Table2Context } from '@/registry/lib/table-context'
+import { dealFilter } from '@/registry/lib/form-relate-utils'
 
 /**
  * FormRelate - 关联字段容器组件
@@ -12,11 +15,11 @@ import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
  * - RelateSelect: 外部工作表单选 (默认单选)
  * - RelateMultiSelect: 外部工作表多选 (selectType='multiple')
  * - RelateModelSelect: 弹窗表格选择 (有 relateShowFields)
+ *
+ * 对于内部表关联，此组件负责构建 filterObj 并传递给纯组件 FormRelateComponent
  */
 const FormRelate: React.FC<RelateFieldProps> = (props) => {
-  const { field = {}, schema, value, onChange, meta, record, disabled, label } = props
-
-  const input = { value, onChange }
+  const { field = {}, relateSchema: schema = {}, value, onChange, meta, record, disabled, label } = props
 
   // 判断是否为内部表关联
   const isInternalTable = schema.internalTable !== false
@@ -29,6 +32,23 @@ const FormRelate: React.FC<RelateFieldProps> = (props) => {
 
   // 判断是否为详情展示模式
   const isDetailShow = schema.recordSelectType === 'show'
+
+  // 获取表单和表格上下文（用于构建 filterObj）
+  const form = useFormContext()
+  const outTable = React.useContext(Table2Context)
+
+  const getFormState = () => {
+    if (form) {
+      return form.getValues()
+    }
+  }
+
+  // 构建过滤器对象
+  const filterObj = React.useMemo(() => {
+    const result: Record<string, any> = {}
+    dealFilter(result, field, getFormState, outTable)
+    return result
+  }, [field, form, outTable])
 
   // ==================== 分发逻辑 ====================
 
@@ -43,11 +63,14 @@ const FormRelate: React.FC<RelateFieldProps> = (props) => {
   if (isInternalTable) {
     return (
       <FormRelateComponent
-        input={input}
+        value={value}
+        onChange={onChange}
         field={field}
+        schema={schema}
         meta={meta}
         record={record}
         disabled={disabled}
+        filterObj={filterObj}
       />
     )
   }
@@ -63,7 +86,7 @@ const FormRelate: React.FC<RelateFieldProps> = (props) => {
         ...schema,
         name: schema.relate?.id ? `core/t/${schema.relate.id}/d` : undefined,
       },
-      displayField: field.displayField || schema.relate?.fields?.[0]?.key || 'name',
+      displayField: schema.relate?.fields?.[0]?.key || 'name',
     }
 
     return (
@@ -86,7 +109,7 @@ const FormRelate: React.FC<RelateFieldProps> = (props) => {
   if (selectType === 'multiple') {
     const multiSelectField = {
       ...field,
-      displayField: field.displayField || schema.relate?.fields?.[0]?.key || 'name',
+      displayField: schema.relate?.fields?.[0]?.key || 'name',
       schema: {
         ...schema,
         name: schema.relate?.id ? `core/t/${schema.relate.id}/d` : undefined,
@@ -108,7 +131,7 @@ const FormRelate: React.FC<RelateFieldProps> = (props) => {
   // 3.3 默认单选模式 - 使用 RelateSelect
   const selectField = {
     ...field,
-    displayField: field.displayField || schema.relate?.fields?.[0]?.key || 'name',
+    displayField: schema.relate?.fields?.[0]?.key || 'name',
     schema: {
       ...schema,
       name: schema.relate?.id ? `core/t/${schema.relate.id}/d` : undefined,

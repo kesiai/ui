@@ -111,7 +111,7 @@ const FormCheckbox = React.forwardRef<HTMLDivElement, FormCheckboxProps>(
         if (!isControlled) {
           setInternalValue(newValues)
         }
-        console.log("handleCheckboxChange", { optionValue, checked, newValues, resultValue })
+        // console.log("handleCheckboxChange", { optionValue, checked, newValues, resultValue })
         onChange?.(resultValue)
       },
       [isMulti, value, isControlled, onChange]

@@ -16,20 +16,18 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 是 | - | 表单输入对象 |
-| `input.value` | `object` | 否 | - | 当前位置值 { name, lng, lat } |
-| `input.onChange` | `(value: object \| null) => void` | 否 | - | 值变化回调 |
-| `field` | `object` | 否 | - | 字段配置对象 |
-| `field.schema` | `object` | 否 | - | 字段 schema 配置 |
-| `field.schema.placeholder` | `string` | 否 | `'请选择位置'` | 占位提示文本 |
-| `field.schema.lngLat` | `boolean` | 否 | `true` | 是否显示经纬度 |
-| `field.schema.positionName` | `boolean` | 否 | `true` | 是否显示位置名称 |
-| `field.schema.canEdit` | `boolean` | 否 | `true` | 是否可编辑 |
-| `field.schema.canHand` | `boolean` | 否 | `true` | 是否可手动输入 |
-| `field.schema.showType` | `'map' \| 'modal'` | 否 | `'modal'` | 展示方式 |
-| `field.schema.size` | `'small' \| 'middle' \| 'large'` | 否 | `'middle'` | 尺寸 |
-| `field.schema.defaultVal` | `object` | 否 | - | 默认位置值 |
-| `field.schema.disabled` | `boolean` | 否 | `false` | 是否禁用 |
+| `value` | `{ name?: string; lng?: number; lat?: number }` | 否 | - | 当前位置值 |
+| `onChange` | `(value: { name?: string; lng: number; lat: number } \| null) => void` | 否 | - | 值变化回调 |
+| `placeholder` | `string` | 否 | `'请选择位置'` | 占位提示文本 |
+| `lngLat` | `boolean` | 否 | `true` | 是否显示经纬度 |
+| `positionName` | `boolean` | 否 | `true` | 是否显示位置名称 |
+| `canEdit` | `boolean` | 否 | `true` | 是否可编辑 |
+| `canHand` | `boolean` | 否 | `true` | 是否可手动输入 |
+| `defaultVal` | `{ name?: string; lng: number; lat: number }` | 否 | - | 默认位置值 |
+| `showType` | `'map' \| 'modal'` | 否 | `'modal'` | 展示方式 |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用 |
+
+> 组件继承自 `BaseFormFieldProps`，额外支持 `onBlur`、`name`、`ref`、`id`、`schema`、`record` 等 base props。
 
 ### 值格式 (Value Format)
 
@@ -65,15 +63,9 @@ function Example() {
 
   return (
     <FormMap
-      input={{
-        value: location,
-        onChange: setLocation
-      }}
-      field={{
-        schema: {
-          placeholder: '请选择位置'
-        }
-      }}
+      value={location}
+      onChange={setLocation}
+      placeholder="请选择位置"
     />
   )
 }
@@ -89,15 +81,9 @@ function Example() {
 
   return (
     <FormMap
-      input={{
-        value: location,
-        onChange: setLocation
-      }}
-      field={{
-        schema: {
-          showType: 'map'
-        }
-      }}
+      value={location}
+      onChange={setLocation}
+      showType="map"
     />
   )
 }
@@ -113,16 +99,10 @@ function Example() {
 
   return (
     <FormMap
-      input={{
-        value: location,
-        onChange: setLocation
-      }}
-      field={{
-        schema: {
-          lngLat: false,
-          positionName: true
-        }
-      }}
+      value={location}
+      onChange={setLocation}
+      lngLat={false}
+      positionName
     />
   )
 }
@@ -138,41 +118,28 @@ function Example() {
 
   return (
     <FormMap
-      input={{
-        value: location,
-        onChange: setLocation
-      }}
-      field={{
-        schema: {
-          canHand: false
-        }
-      }}
+      value={location}
+      onChange={setLocation}
+      canHand={false}
     />
   )
 }
 ```
 
-### 5. 不同尺寸
+### 5. 禁用状态
 
-支持 small、middle、large 三种尺寸。
+禁用状态下无法打开地图选择器或手动输入。
 
 ```tsx
 function Example() {
+  const [location, setLocation] = useState(null)
+
   return (
-    <div className="space-y-2">
-      <FormMap
-        input={{ value: null, onChange: () => {} }}
-        field={{ schema: { size: 'small' } }}
-      />
-      <FormMap
-        input={{ value: null, onChange: () => {} }}
-        field={{ schema: { size: 'middle' } }}
-      />
-      <FormMap
-        input={{ value: null, onChange: () => {} }}
-        field={{ schema: { size: 'large' } }}
-      />
-    </div>
+    <FormMap
+      value={location}
+      onChange={setLocation}
+      disabled
+    />
   )
 }
 ```
@@ -207,18 +174,12 @@ function StoreLocationForm() {
       <div className="space-y-2">
         <Label>门店位置</Label>
         <FormMap
-          input={{
-            value: location,
-            onChange: setLocation
-          }}
-          field={{
-            schema: {
-              placeholder: '请选择门店位置',
-              lngLat: true,
-              positionName: true,
-              canHand: true
-            }
-          }}
+          value={location}
+          onChange={setLocation}
+          placeholder="请选择门店位置"
+          lngLat
+          positionName
+          canHand
         />
       </div>
 
@@ -247,18 +208,12 @@ function DeliveryRangeForm() {
       <div className="space-y-2">
         <Label>配送中心位置</Label>
         <FormMap
-          input={{
-            value: centerPoint,
-            onChange: setCenterPoint
-          }}
-          field={{
-            schema: {
-              placeholder: '请选择配送中心',
-              showType: 'map',
-              lngLat: true,
-              positionName: true
-            }
-          }}
+          value={centerPoint}
+          onChange={setCenterPoint}
+          placeholder="请选择配送中心"
+          showType="map"
+          lngLat
+          positionName
         />
       </div>
 
@@ -289,19 +244,12 @@ function InspectionPointForm() {
   return (
     <div className="space-y-4">
       <FormMap
-        input={{
-          value: point.location,
-          onChange: (location) => setPoint({ ...point, location })
-        }}
-        field={{
-          schema: {
-            placeholder: '请选择巡检点位',
-            lngLat: true,
-            positionName: true,
-            canHand: true,
-            size: 'middle'
-          }
-        }}
+        value={point.location}
+        onChange={(location) => setPoint({ ...point, location })}
+        placeholder="请选择巡检点位"
+        lngLat
+        positionName
+        canHand
       />
 
       {point.location && (

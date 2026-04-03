@@ -8,7 +8,7 @@
 
 - **简单易用**：提供基础的文本输入界面，操作直观
 - **灵活配置**：支持占位符、默认值、禁用状态等多种配置
-- **表单集成**：通过 input 和 field 属性与表单状态无缝集成
+- **表单集成**：支持 react-hook-form 等表单库无缝集成
 - **状态同步**：自动处理值的变更和同步
 - **禁用控制**：支持组件级别的禁用状态控制
 
@@ -16,43 +16,16 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 否 | - | 输入对象，包含 value 和 onChange |
-| `input.value` | `string` | 否 | - | 当前输入值 |
-| `input.onChange` | `(value: string) => void` | 否 | - | 值变化回调函数 |
-| `field` | `object` | 否 | - | 字段配置对象 |
-| `field.schema` | `object` | 否 | - | 字段的 schema 配置 |
-| `field.schema.placeholder` | `string` | 否 | `'请输入内容'` | 输入框占位符 |
-| `field.schema.defaultVal` | `string` | 否 | - | 默认值 |
-| `field.schema.disabled` | `boolean` | 否 | - | schema 级别的禁用状态 |
-| `disabled` | `boolean` | 否 | `false` | 组件级别的禁用状态 |
-| `meta` | `any` | 否 | - | 元数据对象 |
-| `record` | `any` | 否 | - | 记录数据对象 |
-
-### input 对象
-
-input 对象用于连接表单状态，包含以下属性：
-
-```tsx
-input={{
-  value: string,        // 当前值
-  onChange: (value: string) => void  // 变化回调
-}}
-```
-
-### field 对象
-
-field 对象用于配置字段行为和显示：
-
-```tsx
-field={{
-  schema: {
-    placeholder: string,    // 占位符文本
-    defaultVal: string,     // 默认值
-    disabled: boolean       // 是否禁用
-  },
-  filter: any             // 过滤器配置
-}}
-```
+| `value` | `string` | 否 | - | 当前值 |
+| `onChange` | `(value: string) => void` | 否 | - | 值变化回调函数 |
+| `placeholder` | `string` | 否 | `'请输入内容'` | 输入框占位符 |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用 |
+| `onBlur` | `() => void` | 否 | - | 失焦回调（react-hook-form） |
+| `name` | `string` | 否 | - | 字段名（react-hook-form） |
+| `ref` | `Ref<any>` | 否 | - | ref 引用（react-hook-form） |
+| `id` | `string` | 否 | - | 字段 ID（FormField 生成） |
+| `schema` | `Record<string, any>` | 否 | - | 表单 schema |
+| `record` | `any` | 否 | - | 表单记录数据 |
 
 ## 基本用法
 
@@ -69,10 +42,8 @@ function Example() {
 
   return (
     <FormBytesArray
-      input={{
-        value,
-        onChange: setValue
-      }}
+      value={value}
+      onChange={setValue}
     />
   )
 }
@@ -88,15 +59,9 @@ function Example() {
 
   return (
     <FormBytesArray
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          placeholder: '请输入字节数组数据'
-        }
-      }}
+      value={value}
+      onChange={setValue}
+      placeholder="请输入字节数组数据"
     />
   )
 }
@@ -112,10 +77,8 @@ function Example() {
 
   return (
     <FormBytesArray
-      input={{
-        value,
-        onChange: setValue
-      }}
+      value={value}
+      onChange={setValue}
       disabled
     />
   )
@@ -124,82 +87,23 @@ function Example() {
 
 ### 4. 设置默认值
 
-通过 schema 配置默认值。
+通过 useState 初始值设置默认值。
 
 ```tsx
 function Example() {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('默认字节数据')
 
   return (
     <FormBytesArray
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          defaultVal: '默认字节数据',
-          placeholder: '请输入内容'
-        }
-      }}
+      value={value}
+      onChange={setValue}
+      placeholder="请输入内容"
     />
   )
 }
 ```
 
-### 5. 使用 schema 控制禁用
-
-通过 schema.disabled 属性控制禁用状态。
-
-```tsx
-function Example() {
-  const [value, setValue] = useState('数据内容')
-
-  return (
-    <FormBytesArray
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          placeholder: '已禁用的输入框',
-          disabled: true
-        }
-      }}
-    />
-  )
-}
-```
-
-### 6. 禁用优先级示例
-
-演示组件级 disabled 和 schema.disabled 的优先级。
-
-```tsx
-function Example() {
-  const [value, setValue] = useState('测试数据')
-
-  // schema.disabled 为 true，但组件 disabled 为 false
-  // 结果：启用（组件级别优先级更高）
-  return (
-    <FormBytesArray
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          disabled: true
-        }
-      }}
-      disabled={false}
-    />
-  )
-}
-```
-
-### 7. 在表单中使用
+### 5. 在表单中使用
 
 配合表单组件使用，处理表单提交。
 
@@ -216,15 +120,9 @@ function Example() {
   return (
     <div>
       <FormBytesArray
-        input={{
-          value: formData.bytesField,
-          onChange: (value) => setFormData({ ...formData, bytesField: value })
-        }}
-        field={{
-          schema: {
-            placeholder: '请输入字节数组'
-          }
-        }}
+        value={formData.bytesField}
+        onChange={(value) => setFormData({ ...formData, bytesField: value })}
+        placeholder="请输入字节数组"
       />
       <button onClick={handleSubmit}>提交</button>
     </div>
@@ -282,47 +180,28 @@ function BytesArrayForm() {
       <div className="space-y-2">
         <label className="text-sm font-medium">主键数据</label>
         <FormBytesArray
-          input={{
-            value: formData.primaryKey,
-            onChange: (value) => handleChange('primaryKey', value)
-          }}
-          field={{
-            schema: {
-              placeholder: '请输入主键字节数据',
-              defaultVal: ''
-            }
-          }}
+          value={formData.primaryKey}
+          onChange={(value) => handleChange('primaryKey', value)}
+          placeholder="请输入主键字节数据"
         />
       </div>
 
       <div className="space-y-2">
         <label className="text-sm font-medium">次键数据</label>
         <FormBytesArray
-          input={{
-            value: formData.secondaryKey,
-            onChange: (value) => handleChange('secondaryKey', value)
-          }}
-          field={{
-            schema: {
-              placeholder: '请输入次键字节数据'
-            }
-          }}
+          value={formData.secondaryKey}
+          onChange={(value) => handleChange('secondaryKey', value)}
+          placeholder="请输入次键字节数据"
         />
       </div>
 
       <div className="space-y-2">
         <label className="text-sm font-medium">元数据（只读）</label>
         <FormBytesArray
-          input={{
-            value: formData.metadata,
-            onChange: (value) => handleChange('metadata', value)
-          }}
-          field={{
-            schema: {
-              placeholder: '自动生成的元数据',
-              disabled: true
-            }
-          }}
+          value={formData.metadata}
+          onChange={(value) => handleChange('metadata', value)}
+          placeholder="自动生成的元数据"
+          disabled
         />
       </div>
 
@@ -392,18 +271,11 @@ function DynamicBytesEditor() {
       <div className="space-y-2">
         <label className="text-sm font-medium">字节数组内容</label>
         <FormBytesArray
-          input={{
-            value,
-            onChange: setValue
-          }}
-          field={{
-            schema: {
-              placeholder: useCustomPlaceholder
-                ? '请输入十六进制字节数据 (例如: 0x1A2B3C)'
-                : '请输入内容',
-              defaultVal: ''
-            }
-          }}
+          value={value}
+          onChange={setValue}
+          placeholder={useCustomPlaceholder
+            ? '请输入十六进制字节数据 (例如: 0x1A2B3C)'
+            : '请输入内容'}
           disabled={isDisabled}
         />
       </div>
@@ -413,9 +285,9 @@ function DynamicBytesEditor() {
           <strong>当前配置：</strong>
         </p>
         <ul className="text-xs mt-2 space-y-1">
-          <li>• 禁用状态: {isDisabled ? '是' : '否'}</li>
-          <li>• 自定义占位符: {useCustomPlaceholder ? '是' : '否'}</li>
-          <li>• 当前值长度: {value.length} 字符</li>
+          <li>禁用状态: {isDisabled ? '是' : '否'}</li>
+          <li>自定义占位符: {useCustomPlaceholder ? '是' : '否'}</li>
+          <li>当前值长度: {value.length} 字符</li>
         </ul>
       </div>
     </div>
@@ -425,18 +297,14 @@ function DynamicBytesEditor() {
 
 ## 注意事项
 
-1. **禁用状态优先级**：组件的 `disabled` 属性优先级高于 `field.schema.disabled`，当两者同时存在时，以组件的 `disabled` 为准。
+1. **值类型**：该组件处理的是字符串类型的值，如果需要处理二进制数据，需要在业务层进行编码/解码（如 Base64、Hex 等）。
 
-2. **值类型**：该组件处理的是字符串类型的值，如果需要处理二进制数据，需要在业务层进行编码/解码（如 Base64、Hex 等）。
+2. **受控组件**：组件是受控组件，必须通过 `value` 和 `onChange` 来管理值，不要尝试直接修改值。
 
-3. **受控组件**：组件是受控组件，必须通过 `input.value` 和 `input.onChange` 来管理值，不要尝试直接修改值。
+3. **占位符默认值**：如果不配置 `placeholder`，组件会使用默认值 `'请输入内容'`。
 
-4. **占位符默认值**：如果不配置 `field.schema.placeholder`，组件会使用默认值 `'请输入内容'`。
+4. **空值处理**：当 `value` 为空或 `undefined` 时，输入框会显示为空，这是正常行为。
 
-5. **空值处理**：当 `input.value` 为空或 `undefined` 时，输入框会显示为空，这是正常行为。
+5. **onChange 回调**：`onChange` 回调接收的是字符串类型的值，确保接收方正确处理字符串类型。
 
-6. **onChange 回调**：`onChange` 回调接收的是字符串类型的值，确保接收方正确处理字符串类型。
-
-7. **field 对象可选**：`field` 参数是可选的，如果不提供，组件会使用默认配置。
-
-8. **meta 和 record**：这两个参数用于高级场景，通常在表单上下文中自动传递，手动使用时可以忽略。
+6. **react-hook-form 集成**：`onBlur`、`name`、`ref` 等属性用于 react-hook-form 集成，手动使用时通常不需要传递这些属性。

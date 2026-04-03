@@ -18,11 +18,11 @@
 |------|------|------|--------|------|
 | `name` | `string` | 是 | - | 字段名称，用于表单数据绑定 |
 | `label` | `ReactNode` | 否 | - | 字段标签文本 |
-| `type` | `string` | 否 | `'text'` | 字段类型（见下方支持的类型） |
 | `description` | `ReactNode` | 否 | - | 字段描述文本 |
 | `children` | `ReactNode \| function` | 否 | - | 自定义渲染函数或子组件 |
 | `required` | `boolean` | 否 | `false` | 是否必填 |
 | `rules` | `object` | 否 | - | 验证规则对象 |
+| `validate` | `any` | 否 | - | 自定义验证函数 |
 | `className` | `string` | 否 | - | 容器的自定义 className |
 | `classNames` | `object` | 否 | - | 各部分的自定义 className |
 

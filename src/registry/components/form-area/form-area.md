@@ -16,19 +16,12 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 是 | - | 表单输入对象 |
-| `input.value` | `string \| string[]` | 否 | - | 当前选中的区域值 |
-| `input.onChange` | `(value: string \| string[]) => void` | 否 | - | 值变化回调 |
-| `field` | `object` | 是 | - | 字段配置对象 |
-| `field.schema` | `object` | 否 | - | 字段 schema 配置 |
-| `field.schema.areaType` | `'p' \| 'pc' \| 'pca'` | 否 | `'pca'` | 区域类型 |
-| `field.schema.defaultVal` | `string \| string[]` | 否 | - | 默认值 |
-| `field.schema.defaultValType` | `string` | 否 | - | 默认值类型 |
-| `field.schema.multiple` | `boolean` | 否 | `false` | 是否多选 |
-| `field.schema.size` | `'sm' \| 'md' \| 'lg'` | 否 | `'md'` | 尺寸 |
-| `meta` | `object` | 否 | - | 元数据 |
-| `meta.data.disabled` | `boolean` | 否 | `false` | 是否禁用 |
-| `areaType` | `'p' \| 'pc' \| 'pca'` | 是 | - | 区域类型（优先于 field.schema.areaType） |
+| `value` | `string \| string[]` | 否 | - | 当前值（多选时为数组，受控模式） |
+| `defaultValue` | `string \| string[]` | 否 | - | 默认值（非受控模式） |
+| `areaType` | `'p' \| 'pc' \| 'pca'` | 否 | `'pca'` | 区域类型 |
+| `multiple` | `boolean` | 否 | `false` | 是否多选 |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用 |
+| `onChange` | `(value: string \| string[]) => void` | 否 | - | 值变化回调 |
 
 ### areaType
 
@@ -69,23 +62,17 @@
 默认模式，完整的省、市、区三级选择。
 
 ```tsx
-import { Area } from '@/components/kesi/form-area/form-area'
+import { FormArea } from '@/components/kesi/form-area/form-area'
 import { useState } from 'react'
 
 function Example() {
   const [value, setValue] = useState('')
 
   return (
-    <Area
+    <FormArea
       areaType="pca"
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {}
-      }}
-      meta={{}}
+      value={value}
+      onChange={setValue}
     />
   )
 }
@@ -100,16 +87,10 @@ function Example() {
   const [value, setValue] = useState('')
 
   return (
-    <Area
+    <FormArea
       areaType="p"
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {}
-      }}
-      meta={{}}
+      value={value}
+      onChange={setValue}
     />
   )
 }
@@ -124,16 +105,10 @@ function Example() {
   const [value, setValue] = useState('')
 
   return (
-    <Area
+    <FormArea
       areaType="pc"
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {}
-      }}
-      meta={{}}
+      value={value}
+      onChange={setValue}
     />
   )
 }
@@ -145,21 +120,14 @@ function Example() {
 
 ```tsx
 function Example() {
-  const [value, setValue] = useState([])
+  const [value, setValue] = useState<string[]>([])
 
   return (
-    <Area
+    <FormArea
       areaType="pca"
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          multiple: true
-        }
-      }}
-      meta={{}}
+      multiple
+      value={value}
+      onChange={setValue}
     />
   )
 }
@@ -174,20 +142,11 @@ function Example() {
   const [value] = useState('浙江省/杭州市')
 
   return (
-    <Area
+    <FormArea
       areaType="pca"
-      input={{
-        value,
-        onChange: () => {}
-      }}
-      field={{
-        schema: {}
-      }}
-      meta={{
-        data: {
-          disabled: true
-        }
-      }}
+      value={value}
+      onChange={() => {}}
+      disabled
     />
   )
 }
@@ -200,7 +159,7 @@ function Example() {
 用户收货地址的省市区选择。
 
 ```tsx
-import { Area } from '@/components/kesi/form-area/form-area'
+import { FormArea } from '@/components/kesi/form-area/form-area'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
@@ -229,16 +188,10 @@ function UserAddressForm() {
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>所在地区</Label>
-        <Area
+        <FormArea
           areaType="pca"
-          input={{
-            value: areaValue,
-            onChange: handleAreaChange
-          }}
-          field={{
-            schema: {}
-          }}
-          meta={{}}
+          value={areaValue}
+          onChange={handleAreaChange}
         />
       </div>
 
@@ -273,18 +226,11 @@ function BusinessScopeForm() {
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>业务覆盖区域</Label>
-        <Area
+        <FormArea
           areaType="pca"
-          input={{
-            value: areas,
-            onChange: setAreas
-          }}
-          field={{
-            schema: {
-              multiple: true
-            }
-          }}
-          meta={{}}
+          multiple
+          value={areas}
+          onChange={setAreas}
         />
       </div>
 
@@ -336,16 +282,10 @@ function DataStatisticsFilter() {
 
       <div className="space-y-2">
         <Label>选择区域</Label>
-        <Area
+        <FormArea
           areaType={filter.type === 'province' ? 'p' : 'pc'}
-          input={{
-            value: filter.area,
-            onChange: (area) => setFilter({ ...filter, area })
-          }}
-          field={{
-            schema: {}
-          }}
-          meta={{}}
+          value={filter.area}
+          onChange={(area) => setFilter({ ...filter, area })}
         />
       </div>
 
@@ -361,26 +301,18 @@ function DataStatisticsFilter() {
 
 ## 注意事项
 
-1. **数据加载**：省市区数据通过 `loadPCAData()` 函数异步加载，确保 `./pca.ts` 文件存在并正确导出数据。
+1. **数据加载**：省市区数据内嵌于组件中，无需额外加载外部数据源。
 
-2. **旧数据兼容**：组件会自动检测并转换旧版数据格式（使用 `-` 分隔）为新版格式（使用 `/` 分隔），无需手动处理。
+2. **单选级联导航**：单选模式采用逐级导航的方式，选择省后自动进入市级列表，选择市后自动进入区级列表，支持返回上一级。
 
-3. **默认值生效**：当没有值且有 `defaultVal` 时，组件会自动设置默认值，但 `defaultValType` 为 `'logic'` 时除外。
+3. **多选树形结构**：多选模式使用类似树形结构的层级展示，支持展开/折叠子级，可以独立选择任意层级的区域。
 
-4. **单选级联导航**：单选模式采用逐级导航的方式，选择省后自动进入市级列表，选择市后自动进入区级列表，支持返回上一级。
+4. **值格式一致性**：无论单选还是多选，返回的值都使用 `/` 分隔的完整路径，便于后续处理和展示。
 
-5. **多选树形结构**：多选模式使用类似树形结构的层级展示，支持展开/折叠子级，可以独立选择任意层级的区域。
+5. **禁用状态**：禁用状态下，单选模式的下拉菜单无法打开，多选模式的复选框无法点击。
 
-6. **值格式一致性**：无论单选还是多选，返回的值都使用 `/` 分隔的完整路径，便于后续处理和展示。
+6. **性能考虑**：省市区数据量较大，数据内嵌于组件中，无需异步加载。
 
-7. **禁用状态**：禁用状态下，单选模式的下拉菜单无法打开，多选模式的复选框无法点击。
+7. **清空选择**：单选模式下，输入框清空时，`onChange` 会传入空字符串；多选模式下，清空按钮会传入空数组。
 
-8. **性能考虑**：省市区数据量较大，首次加载需要一定时间，但加载后会缓存在组件状态中，后续使用无需重复加载。
-
-9. **尺寸配置**：`field.schema.size` 可以配置为 `'sm'`、`'md'`、`'lg'`，但此配置在当前版本中可能未完全实现样式差异。
-
-10. **与表单集成**：组件设计为在表单系统中使用，`input`、`field`、`meta` 参数通常由表单框架自动传入，手动使用时需要按照规范传递这些参数。
-
-11. **areaType 优先级**：组件外部的 `areaType` 属性优先于 `field.schema.areaType`，建议直接使用外部属性设置区域类型。
-
-12. **清空选择**：单选模式下，输入框清空时，`onChange` 会传入空字符串；多选模式下，清空按钮会传入空数组。
+8. **受控与非受控**：支持受控模式（传入 `value` 和 `onChange`）和非受控模式（传入 `defaultValue`），请勿同时使用。

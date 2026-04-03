@@ -20,7 +20,6 @@
 | `defaultValue` | `string` | 否 | - | 默认值 |
 | `picker` | `'time' \| 'date' \| 'dateTime' \| 'week' \| 'month' \| 'quarter' \| 'year'` | 否 | `'date'` | 选择器类型 |
 | `placeholder` | `string` | 否 | `'请选择日期'` | 占位符文本 |
-| `size` | `'large' \| 'medium' \| 'small'` | 否 | `'medium'` | 组件尺寸 |
 | `allowClear` | `boolean` | 否 | `true` | 是否显示清除按钮 |
 | `autoFocus` | `boolean` | 否 | `false` | 是否自动获取焦点 |
 | `bordered` | `boolean` | 否 | `true` | 是否显示边框 |
@@ -186,22 +185,6 @@ function Example() {
 }
 ```
 
-### 10. 不同尺寸
-
-使用 `size` 属性调整组件大小。
-
-```tsx
-function Example() {
-  return (
-    <div className="space-y-4">
-      <FormDate size="small" placeholder="小尺寸" />
-      <FormDate size="medium" placeholder="中尺寸" />
-      <FormDate size="large" placeholder="大尺寸" />
-    </div>
-  )
-}
-```
-
 ## 完整示例
 
 ### 生日选择器
@@ -222,7 +205,6 @@ function BirthdayPicker() {
         onChange={setBirthday}
         picker="date"
         placeholder="请选择出生日期"
-        size="medium"
       />
       {birthday && (
         <p className="mt-2 text-sm text-gray-600">
@@ -252,7 +234,6 @@ function AppointmentPicker() {
         onChange={setAppointmentTime}
         picker="dateTime"
         placeholder="请选择预约日期和时间"
-        size="large"
         allowClear
       />
       {appointmentTime && (
@@ -284,7 +265,6 @@ function MonthlyReportFilter() {
           onChange={setMonth}
           picker="month"
           placeholder="请选择月份"
-          size="medium"
           allowClear
         />
       </div>
@@ -312,7 +292,6 @@ function QuarterTarget() {
         onChange={setQuarter}
         picker="quarter"
         placeholder="请选择季度"
-        size="medium"
       />
       {quarter && (
         <div className="mt-4 p-4 bg-green-50 rounded-md">
@@ -347,7 +326,6 @@ function MeetingScheduler() {
           picker="dateTime"
           placeholder="请选择会议时间"
           use12Hours
-          size="large"
         />
       </div>
 

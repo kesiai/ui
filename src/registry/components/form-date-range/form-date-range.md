@@ -21,7 +21,7 @@
 | `format` | `'date' \| 'datetime' \| 'time'` | 否 | `'date'` | 日期格式 |
 | `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 | `placeholder` | `string` | 否 | `'请选择日期范围'` | 占位符文本 |
-| `cellKey` | `string` | 否 | - | 单元格键值 |
+| `className` | `string` | 否 | - | 自定义样式类名 |
 
 ### format 格式说明
 
@@ -159,7 +159,6 @@ function OrderFilter() {
             value={dateRange}
             onChange={setDateRange}
             placeholder="选择订单日期范围"
-            cellKey="order-date"
           />
         </div>
         <button
@@ -198,7 +197,6 @@ function AttendanceFilter() {
         value={timeRange}
         onChange={setTimeRange}
         placeholder="选择打卡时间范围"
-        cellKey="attendance-time"
       />
 
       {timeRange && (
@@ -236,7 +234,6 @@ function BusinessHoursSetting() {
           value={hours}
           onChange={setHours}
           placeholder="设置营业时间"
-          cellKey="business-hours"
         />
       </div>
 
@@ -294,7 +291,6 @@ function ProjectPeriod() {
           value={period}
           onChange={setPeriod}
           placeholder="选择项目起止日期"
-          cellKey="project-period"
         />
       </div>
 
@@ -346,7 +342,6 @@ function ReportGenerator() {
           value={range}
           onChange={setRange}
           placeholder="选择统计时间范围"
-          cellKey="report-range"
         />
       </div>
 
@@ -379,6 +374,4 @@ function ReportGenerator() {
 
 8. **输入限制**：组件不直接支持手动输入，必须通过日期选择器选择
 
-9. **cellKey 用途**：`cellKey` 用于唯一标识组件实例，在表格等场景中使用
-
-10. **范围验证**：组件本身不验证开始时间是否小于结束时间，需要在外部处理
+9. **范围验证**：组件本身不验证开始时间是否小于结束时间，需要在外部处理

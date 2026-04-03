@@ -7,7 +7,6 @@
 `FormSelect` 是一个功能丰富的下拉选择组件，用于在表单中选择单个选项。
 
 - **多种样式变体**：支持默认、边框、填充、幽灵四种样式风格
-- **灵活的尺寸**：提供小、中、大三种尺寸以适应不同场景
 - **搜索功能**：内置搜索功能，可快速过滤选项
 - **清除功能**：支持一键清除已选内容
 - **完全可控**：支持受控和非受控模式
@@ -19,7 +18,7 @@
 | `value` | `string` | 否 | - | 当前选中的值 |
 | `defaultValue` | `string` | 否 | - | 默认选中的值 |
 | `placeholder` | `string` | 否 | `'请选择'` | 占位符文本 |
-| `options` | `Array<{value: string; label: string; disabled?: boolean}>` | 否 | `[]` | 选项列表 |
+| `options` | `FormOption[]` | 否 | `[]` | 选项列表 |
 | `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 | `readOnly` | `boolean` | 否 | `false` | 是否只读 |
 | `bordered` | `boolean` | 否 | `true` | 是否显示边框 |
@@ -29,8 +28,6 @@
 | `autoFocus` | `boolean` | 否 | `false` | 是否自动获取焦点 |
 | `defaultOpen` | `boolean` | 否 | `false` | 是否默认展开下拉菜单 |
 | `dropdownMatchSelectWidth` | `boolean` | 否 | `true` | 下拉菜单是否与选择器同宽 |
-| `variant` | `'default' \| 'outline' \| 'filled' \| 'ghost'` | 否 | `'default'` | 样式变体 |
-| `size` | `'sm' \| 'md' \| 'lg'` | 否 | `'md'` | 组件尺寸 |
 | `onChange` | `(value: string) => void` | 否 | - | 值改变时的回调 |
 | `onBlur` | `() => void` | 否 | - | 失去焦点时的回调 |
 | `onFocus` | `() => void` | 否 | - | 获得焦点时的回调 |
@@ -145,40 +142,7 @@ function Example() {
 }
 ```
 
-### 5. 不同尺寸
-
-使用 `size` 属性调整组件大小。
-
-```tsx
-function Example() {
-  return (
-    <div className="space-y-4">
-      <FormSelect size="sm" placeholder="小尺寸" options={[]} />
-      <FormSelect size="md" placeholder="中尺寸" options={[]} />
-      <FormSelect size="lg" placeholder="大尺寸" options={[]} />
-    </div>
-  )
-}
-```
-
-### 6. 不同样式变体
-
-使用 `variant` 属性改变组件外观。
-
-```tsx
-function Example() {
-  return (
-    <div className="space-y-4">
-      <FormSelect variant="default" placeholder="默认样式" options={[]} />
-      <FormSelect variant="outline" placeholder="边框样式" options={[]} />
-      <FormSelect variant="filled" placeholder="填充样式" options={[]} />
-      <FormSelect variant="ghost" placeholder="幽灵样式" options={[]} />
-    </div>
-  )
-}
-```
-
-### 7. 禁用和只读状态
+### 5. 禁用和只读状态
 
 禁用或只读状态下用户无法修改选择。
 
@@ -281,7 +245,6 @@ function FilterPanel() {
           ]}
           placeholder="全部状态"
           allowClear
-          size="sm"
         />
       </div>
 
@@ -297,7 +260,6 @@ function FilterPanel() {
           ]}
           placeholder="全部优先级"
           allowClear
-          size="sm"
         />
       </div>
     </div>
@@ -315,8 +277,6 @@ function FilterPanel() {
 
 4. **清除功能**：`allowClear` 只在有值且非禁用、非只读状态下显示清除按钮
 
-5. **样式定制**：使用 `variant` 和 `size` 属性可以快速调整组件外观，无需额外编写样式
+5. **禁用选项**：可以通过设置 `disabled: true` 来禁用单个选项，禁用的选项无法被选中
 
-6. **禁用选项**：可以通过设置 `disabled: true` 来禁用单个选项，禁用的选项无法被选中
-
-7. **默认展开**：`defaultOpen` 仅在组件初始化时生效，用户交互后由组件内部状态控制
+6. **默认展开**：`defaultOpen` 仅在组件初始化时生效，用户交互后由组件内部状态控制

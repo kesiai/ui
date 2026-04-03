@@ -27,25 +27,21 @@
 |------|------|------|--------|------|
 | `value` | `string \| string[]` | 否 | - | 当前值（受控模式） |
 | `defaultValue` | `string \| string[]` | 否 | - | 默认值（非受控模式） |
-| `options` | `CheckboxOption[]` | 否 | `[]` | 选项列表 |
-| `config` | `FormCheckboxConfig` | 否 | `{}` | 配置项 |
+| `options` | `FormOption[]` | 否 | `[]` | 选项列表 |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用 |
+| `isCheckAll` | `boolean` | 否 | `false` | 是否显示全选框 |
+| `checkAllSeparate` | `boolean` | 否 | `false` | 全选框是否单独一行 |
+| `label` | `string` | 否 | - | 单选框标签（当 options 为空时使用） |
 | `onChange` | `(value: string \| string[]) => void` | 否 | - | 值变化回调 |
 
-### CheckboxOption 选项结构
+### FormOption 选项结构
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
 | `label` | `string` | 是 | - | 显示文字 |
-| `value` | `string` | 是 | - | 选项值 |
+| `value` | `string \| number` | 是 | - | 选项值 |
 | `isDefault` | `boolean` | 否 | `false` | 是否默认选中 |
-
-### FormCheckboxConfig 配置项
-
-| 参数 | 类型 | 必填 | 默认值 | 说明 |
-|------|------|------|--------|------|
-| `disabled` | `boolean` | 否 | `false` | 是否禁用所有选项 |
-| `isCheckAll` | `boolean` | 否 | `false` | 是否显示全选框 |
-| `checkAllSeparate` | `boolean` | 否 | `false` | 全选框是否单独一行 |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 
 ## 基本用法
 
@@ -132,7 +128,7 @@ function CheckboxWithCheckAll() {
   return (
     <FormCheckbox
       options={options}
-      config={{ isCheckAll: true }}
+      isCheckAll
     />
   )
 }
@@ -151,10 +147,8 @@ function CheckboxWithSeparateCheckAll() {
   return (
     <FormCheckbox
       options={options}
-      config={{
-        isCheckAll: true,
-        checkAllSeparate: true
-      }}
+      isCheckAll
+      checkAllSeparate
     />
   )
 }
@@ -173,7 +167,7 @@ function DisabledCheckbox() {
   return (
     <FormCheckbox
       options={options}
-      config={{ disabled: true }}
+      disabled
     />
   )
 }
@@ -206,7 +200,7 @@ function HobbiesSelector() {
         value={hobbies}
         onChange={setHobbies}
         options={hobbiesOptions}
-        config={{ isCheckAll: true }}
+        isCheckAll
       />
       <p className="mt-4 text-sm text-gray-600">
         已选择: {hobbies.length > 0 ? hobbies.join(', ') : '无'}
@@ -238,7 +232,7 @@ function PermissionConfig() {
         <h4 className="text-sm font-medium mb-2">用户管理</h4>
         <FormCheckbox
           options={permissions}
-          config={{ isCheckAll: true, checkAllSeparate: true }}
+          isCheckAll checkAllSeparate
         />
       </div>
 
@@ -246,7 +240,7 @@ function PermissionConfig() {
         <h4 className="text-sm font-medium mb-2">内容管理</h4>
         <FormCheckbox
           options={permissions}
-          config={{ isCheckAll: true, checkAllSeparate: true }}
+          isCheckAll checkAllSeparate
         />
       </div>
     </div>
@@ -293,7 +287,7 @@ function BatchOperation() {
         value={selectedItems}
         onChange={setSelectedItems}
         options={items}
-        config={{ isCheckAll: true }}
+        isCheckAll
       />
     </div>
   )
@@ -360,7 +354,7 @@ function TagFilter() {
         value={selectedTags}
         onChange={setSelectedTags}
         options={tags}
-        config={{ isCheckAll: true }}
+        isCheckAll
       />
       <div className="mt-3 flex gap-2">
         {selectedTags.map(tag => (
@@ -411,7 +405,7 @@ function DynamicCheckbox() {
         value={value}
         onChange={setValue}
         options={options}
-        config={{ isCheckAll: true }}
+        isCheckAll
       />
     </div>
   )
@@ -438,7 +432,7 @@ function DynamicCheckbox() {
    - 半选时点击全选框会选中所有选项
 
 5. **禁用控制**：
-   - `config.disabled` 会禁用所有选项包括全选框
+   - `disabled` 会禁用所有选项包括全选框
    - 禁用状态下所有选项都不可交互
 
 6. **布局选项**：

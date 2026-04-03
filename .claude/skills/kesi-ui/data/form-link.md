@@ -16,22 +16,16 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 否 | - | 表单输入对象 |
-| `input.value` | `string` | 否 | - | 当前链接值 |
-| `input.onChange` | `(value: string) => void` | 否 | - | 值变化回调 |
-| `field` | `object` | 否 | - | 字段配置对象 |
-| `field.schema` | `object` | 否 | - | 字段 schema 配置 |
-| `field.schema.linkType` | `'in' \| 'out'` | 否 | `'out'` | 链接类型：内部链接/外部链接 |
-| `field.schema.placeholder` | `string` | 否 | `'请输入链接'` | 占位提示文本 |
-| `field.schema.defaultVal` | `string` | 否 | - | 默认值 |
-| `field.schema.disabled` | `boolean` | 否 | `false` | 是否禁用 |
-| `disabled` | `boolean` | 否 | `false` | 是否禁用（优先级低于 schema.disabled） |
-| `meta` | `any` | 否 | - | 元数据 |
-| `record` | `any` | 否 | - | 记录数据 |
-
-### field.schema
-
-Schema 配置对象，用于定义组件的行为和默认值。
+| `value` | `string` | 否 | - | 当前链接值 |
+| `onChange` | `(value: string) => void` | 否 | - | 值变化回调 |
+| `placeholder` | `string` | 否 | - | 占位提示文本 |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用 |
+| `linkType` | `'in' \| 'out'` | 否 | `'out'` | 链接类型：内部链接/外部链接 |
+| `onBlur` | `() => void` | 否 | - | 失焦回调 |
+| `name` | `string` | 否 | - | 字段名（react-hook-form） |
+| `id` | `string` | 否 | - | 字段 ID（FormField 生成） |
+| `schema` | `Record<string, any>` | 否 | - | 表单 schema |
+| `record` | `any` | 否 | - | 表单记录数据 |
 
 ### linkType
 
@@ -48,22 +42,17 @@ Schema 配置对象，用于定义组件的行为和默认值。
 
 ```tsx
 import { FormLink } from '@/components/kesi/form-link'
+import { useState } from 'react'
 
 function Example() {
   const [value, setValue] = useState('')
 
   return (
     <FormLink
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          linkType: 'out',
-          placeholder: '请输入链接地址'
-        }
-      }}
+      value={value}
+      onChange={setValue}
+      linkType="out"
+      placeholder="请输入链接地址"
     />
   )
 }
@@ -79,16 +68,10 @@ function Example() {
 
   return (
     <FormLink
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          linkType: 'in',
-          placeholder: '选择系统内置的菜单项'
-        }
-      }}
+      value={value}
+      onChange={setValue}
+      linkType="in"
+      placeholder="选择系统内置的菜单项"
     />
   )
 }
@@ -104,16 +87,10 @@ function Example() {
 
   return (
     <FormLink
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          linkType: 'out',
-          disabled: true
-        }
-      }}
+      value={value}
+      onChange={setValue}
+      linkType="out"
+      disabled
     />
   )
 }
@@ -129,17 +106,10 @@ function Example() {
 
   return (
     <FormLink
-      input={{
-        value,
-        onChange: setValue
-      }}
-      field={{
-        schema: {
-          linkType: 'out',
-          placeholder: '请输入链接',
-          defaultVal: 'https://example.com'
-        }
-      }}
+      value={value}
+      onChange={setValue}
+      linkType="out"
+      placeholder="请输入链接"
     />
   )
 }
@@ -174,18 +144,12 @@ function NavigationMenuForm() {
       <div className="space-y-2">
         <Label>链接地址</Label>
         <FormLink
-          input={{
-            value: linkValue,
-            onChange: setLinkValue
-          }}
-          field={{
-            schema: {
-              linkType,
-              placeholder: linkType === 'out'
-                ? '请输入完整的 URL 地址'
-                : '选择系统内置的菜单项'
-            }
-          }}
+          value={linkValue}
+          onChange={setLinkValue}
+          linkType={linkType}
+          placeholder={linkType === 'out'
+            ? '请输入完整的 URL 地址'
+            : '选择系统内置的菜单项'}
         />
       </div>
     </div>
@@ -207,16 +171,10 @@ function ButtonLinkConfig() {
   return (
     <div className="space-y-4">
       <FormLink
-        input={{
-          value: config.url,
-          onChange: (url) => setConfig({ ...config, url })
-        }}
-        field={{
-          schema: {
-            linkType: config.linkType,
-            placeholder: '请输入目标链接'
-          }
-        }}
+        value={config.url}
+        onChange={(url) => setConfig({ ...config, url })}
+        linkType={config.linkType}
+        placeholder="请输入目标链接"
       />
 
       <div className="text-sm text-gray-500">
@@ -244,22 +202,16 @@ function LinkManager() {
         <div key={link.id} className="space-y-2">
           <div className="font-medium">链接 {index + 1}</div>
           <FormLink
-            input={{
-              value: link.value,
-              onChange: (value) => {
-                const newLinks = [...links]
-                newLinks[index].value = value
-                setLinks(newLinks)
-              }
+            value={link.value}
+            onChange={(value) => {
+              const newLinks = [...links]
+              newLinks[index].value = value
+              setLinks(newLinks)
             }}
-            field={{
-              schema: {
-                linkType: link.type,
-                placeholder: link.type === 'out'
-                  ? '请输入外部链接'
-                  : '选择内部菜单项'
-              }
-            }}
+            linkType={link.type}
+            placeholder={link.type === 'out'
+              ? '请输入外部链接'
+              : '选择内部菜单项'}
           />
         </div>
       ))}
@@ -272,11 +224,11 @@ function LinkManager() {
 
 1. **内部链接功能待迁移**：当 `linkType` 设置为 `'in'` 时，菜单项选择器功能尚未完全实现，目前显示为占位状态，等待后续从旧版本迁移。
 
-2. **禁用优先级**：`disabled` 属性和 `field.schema.disabled` 都可以控制禁用状态，但 `field.schema.disabled` 的优先级更高。
+2. **禁用状态**：通过 `disabled` 属性控制禁用状态，防止用户修改链接值。
 
 3. **值格式**：外部链接需要输入完整的 URL 地址（包括协议头，如 `https://`），内部链接则是系统菜单项的唯一标识。
 
-4. **与表单集成**：该组件设计为在表单系统中使用，`input` 和 `field` 参数通常由表单框架自动传入，手动使用时需要按照规范传递这些参数。
+4. **与表单集成**：该组件可直接使用 `value` 和 `onChange` 进行受控绑定，也可通过 `FormField` 组件自动注入表单状态。
 
 5. **onChange 回调**：当用户修改链接值时，`onChange` 回调会返回新的字符串值，父组件需要更新状态以保持同步。
 

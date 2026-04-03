@@ -14,56 +14,19 @@
 
 ## Props 参数说明
 
+继承自 `BaseFormFieldProps`（`value` 被重写为 `string` 类型）。
+
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 否 | - | 输入对象，包含 value 和 onChange |
-| `input.value` | `string` | 否 | - | 序列号的值 |
-| `input.onChange` | `(value: string) => void` | 否 | - | 值变化回调函数 |
-| `field` | `object` | 否 | - | 字段配置对象 |
-| `field.schema` | `object` | 否 | - | 字段的 schema 配置 |
-| `field.schema.serialRules` | `Array<SerialRule>` | 否 | - | 序列号生成规则数组 |
+| `value` | `string` | 否 | - | 当前值 |
 | `disabled` | `boolean` | 否 | `true` | 是否禁用（默认禁用） |
-| `meta` | `any` | 否 | - | 元数据对象 |
-| `record` | `any` | 否 | - | 记录数据对象 |
-
-### SerialRule 类型
-
-序列号生成规则对象，定义序列号的各个组成部分：
-
-```tsx
-type SerialRule =
-  | {
-      type: 'text'
-      text: string  // 固定文本
-    }
-  | {
-      type: 'time'
-      time: string  // 时间格式（如：YYYYMMDD）
-    }
-  | {
-      type: 'num'
-      num: {
-        orderType: 'random' | 'linear'  // 随机数或线性递增
-        bitNum: number                   // 数字位数
-        startNum: number                 // 起始数字
-      }
-    }
-```
-
-### 序列号规则示例
-
-```tsx
-// 示例：生成 SN-20240210-0001 格式的序列号
-const serialRules = [
-  { type: 'text', text: 'SN-' },                    // 固定前缀
-  { type: 'time', time: 'YYYYMMDD' },               // 日期部分
-  { type: 'num', num: {                             // 数字部分
-    orderType: 'linear',
-    bitNum: 4,
-    startNum: 1
-  }}
-]
-```
+| `onChange` | `(value: any) => void` | 否 | - | 值变更回调（继承自 BaseFormFieldProps） |
+| `onBlur` | `() => void` | 否 | - | 失焦回调（继承自 BaseFormFieldProps） |
+| `name` | `string` | 否 | - | 字段名（继承自 BaseFormFieldProps） |
+| `ref` | `Ref<any>` | 否 | - | ref 引用（继承自 BaseFormFieldProps） |
+| `id` | `string` | 否 | - | 字段 ID（继承自 BaseFormFieldProps） |
+| `schema` | `Record<string, any>` | 否 | - | 表单 schema（继承自 BaseFormFieldProps） |
+| `record` | `any` | 否 | - | 表单记录数据（继承自 BaseFormFieldProps） |
 
 ## 基本用法
 
@@ -79,10 +42,8 @@ function Example() {
 
   return (
     <FormSerialNumber
-      input={{
-        value: serialNumber,
-        onChange: setSerialNumber
-      }}
+      value={serialNumber}
+      onChange={setSerialNumber}
     />
   )
 }
@@ -94,15 +55,10 @@ function Example() {
 
 ```tsx
 function Example() {
-  const [serialNumber] = useState('SN-20240210-0001')
+  const serialNumber = 'SN-20240210-0001'
 
   return (
-    <FormSerialNumber
-      input={{
-        value: serialNumber,
-        onChange: () => {}  // 只读，不需要 onChange
-      }}
-    />
+    <FormSerialNumber value={serialNumber} />
   )
 }
 ```
@@ -117,51 +73,15 @@ function Example() {
 
   return (
     <FormSerialNumber
-      input={{
-        value: serialNumber,
-        onChange: setSerialNumber
-      }}
-      disabled={false}  // 启用编辑
+      value={serialNumber}
+      onChange={setSerialNumber}
+      disabled={false}
     />
   )
 }
 ```
 
-### 4. 配置序列号规则
-
-通过 schema 配置序列号生成规则。
-
-```tsx
-function Example() {
-  const [serialNumber, setSerialNumber] = useState('')
-
-  const serialRules = [
-    { type: 'text' as const, text: 'ORDER-' },
-    { type: 'time' as const, time: 'YYYY-MM-DD' },
-    { type: 'num' as const, num: {
-      orderType: 'linear' as const,
-      bitNum: 6,
-      startNum: 1
-    }}
-  ]
-
-  return (
-    <FormSerialNumber
-      input={{
-        value: serialNumber,
-        onChange: setSerialNumber
-      }}
-      field={{
-        schema: {
-          serialRules
-        }
-      }}
-    />
-  )
-}
-```
-
-### 5. 在表单中使用
+### 4. 在表单中使用
 
 配合表单使用，自动生成序列号。
 
@@ -182,10 +102,8 @@ function Example() {
   return (
     <form>
       <FormSerialNumber
-        input={{
-          value: formData.serialNumber,
-          onChange: (value) => setFormData({ ...formData, serialNumber: value })
-        }}
+        value={formData.serialNumber}
+        onChange={(value) => setFormData(prev => ({ ...prev, serialNumber: value }))}
       />
       {/* 其他表单字段 */}
     </form>
@@ -193,7 +111,7 @@ function Example() {
 }
 ```
 
-### 6. 只读查看模式
+### 5. 只读查看模式
 
 在查看页面中显示序列号。
 
@@ -204,19 +122,13 @@ function Example() {
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium">序列号</label>
-      <FormSerialNumber
-        input={{
-          value: serialNumber,
-          onChange: () => {}
-        }}
-        disabled={true}
-      />
+      <FormSerialNumber value={serialNumber} />
     </div>
   )
 }
 ```
 
-### 7. 批量生成序列号
+### 6. 批量生成序列号
 
 为多个项目生成序列号。
 
@@ -243,12 +155,7 @@ function Example() {
       {items.map(item => (
         <div key={item.id}>
           <label>项目 {item.id}</label>
-          <FormSerialNumber
-            input={{
-              value: item.serialNumber,
-              onChange: () => {}
-            }}
-          />
+          <FormSerialNumber value={item.serialNumber} />
         </div>
       ))}
     </div>
@@ -315,10 +222,8 @@ function OrderForm() {
         <div className="col-span-2 space-y-2">
           <label className="text-sm font-medium">订单序列号</label>
           <FormSerialNumber
-            input={{
-              value: order.serialNumber,
-              onChange: (value) => setOrder({ ...order, serialNumber: value })
-            }}
+            value={order.serialNumber}
+            onChange={(value) => setOrder(prev => ({ ...prev, serialNumber: value }))}
           />
         </div>
 
@@ -466,10 +371,7 @@ function BatchProductionManager() {
         <div className="col-span-2 space-y-2">
           <label className="text-sm font-medium">批次序列号</label>
           <FormSerialNumber
-            input={{
-              value: currentBatch.serialNumber || '',
-              onChange: () => {}
-            }}
+            value={currentBatch.serialNumber || ''}
           />
         </div>
 
@@ -563,12 +465,8 @@ function BatchProductionManager() {
 
 5. **只读显示**：在大多数情况下，序列号应该保持只读状态，仅用于显示和标识。
 
-6. **规则配置**：`field.schema.serialRules` 用于定义序列号生成规则，但实际生成逻辑需要在业务层实现。
+6. **性能考虑**：批量生成序列号时注意性能，避免在循环中执行高开销操作。
 
-7. **onChange 回调**：即使序列号是只读的，仍需提供 `onChange` 回调以保持接口一致性。
+7. **并发安全**：在高并发场景下，序列号生成需要考虑线程安全和去重问题。
 
-8. **性能考虑**：批量生成序列号时注意性能，避免在循环中执行高开销操作。
-
-9. **并发安全**：在高并发场景下，序列号生成需要考虑线程安全和去重问题。
-
-10. **存储格式**：序列号作为字符串存储，确保数据库字段类型匹配。
+8. **存储格式**：序列号作为字符串存储，确保数据库字段类型匹配。

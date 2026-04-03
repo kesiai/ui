@@ -16,22 +16,22 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 否 | - | 表单输入对象 |
-| `input.value` | `string` | 否 | - | 当前富文本内容（HTML 格式） |
-| `input.onChange` | `(value: string) => void` | 否 | - | 内容变化回调 |
-| `field` | `object` | 否 | - | 字段配置对象 |
-| `field.schema` | `object` | 否 | - | 字段 schema 配置 |
-| `field.schema.placeholder` | `string` | 否 | `'编辑富文本'` | 占位提示文本 |
-| `field.schema.disabled` | `boolean` | 否 | `false` | 是否禁用（只读模式） |
-| `field.schema.defaultVal` | `string` | 否 | - | 默认值 |
-| `field.schema.defaultValType` | `'fixed' \| 'logic'` | 否 | `'fixed'` | 默认值类型 |
-| `field.schema.inList` | `boolean` | 否 | `false` | 是否在列表中显示 |
-| `field.schema.key` | `string` | 否 | - | 字段唯一标识 |
-| `field.schema.title` | `string` | 否 | - | 字段标题 |
-| `field.schema.ediforms` | `boolean` | 否 | `true` | 是否可编辑字段 |
-| `field.schema.toolbar` | `object` | 否 | - | 自定义工具栏配置 |
-| `meta` | `any` | 否 | - | 元数据 |
-| `record` | `any` | 否 | - | 记录数据 |
+| `value` | `string` | 否 | - | 当前富文本内容（HTML 格式） |
+| `onChange` | `(value: string) => void` | 否 | - | 内容变化回调 |
+| `placeholder` | `string` | 否 | `'编辑富文本'` | 占位提示文本 |
+| `disabled` | `boolean` | 否 | `false` | 是否禁用（只读模式） |
+| `defaultVal` | `string` | 否 | - | 默认值 |
+| `defaultValType` | `'fixed' \| 'logic'` | 否 | `'fixed'` | 默认值类型 |
+| `inList` | `boolean` | 否 | `false` | 是否在列表中显示 |
+| `key` | `string` | 否 | - | 字段唯一标识 |
+| `title` | `string` | 否 | - | 字段标题 |
+| `ediforms` | `boolean` | 否 | - | 是否可编辑字段 |
+| `toolbar` | `object` | 否 | - | 自定义工具栏配置 |
+| `record` | `any` | 否 | - | 表单记录数据 |
+| `onBlur` | `() => void` | 否 | - | 失焦回调（继承自 BaseFormFieldProps） |
+| `name` | `string` | 否 | - | 字段名（继承自 BaseFormFieldProps） |
+| `id` | `string` | 否 | - | 字段 ID（继承自 BaseFormFieldProps） |
+| `schema` | `Record<string, any>` | 否 | - | 表单 schema（继承自 BaseFormFieldProps） |
 
 ### 默认工具栏
 
@@ -70,15 +70,9 @@ function Example() {
 
   return (
     <FormRichText
-      input={{
-        value: content,
-        onChange: setContent
-      }}
-      field={{
-        schema: {
-          placeholder: '编辑富文本'
-        }
-      }}
+      value={content}
+      onChange={setContent}
+      placeholder="编辑富文本"
     />
   )
 }
@@ -94,15 +88,9 @@ function Example() {
 
   return (
     <FormRichText
-      input={{
-        value: content,
-        onChange: () => {}
-      }}
-      field={{
-        schema: {
-          disabled: true
-        }
-      }}
+      value={content}
+      onChange={() => {}}
+      disabled
     />
   )
 }
@@ -118,17 +106,11 @@ function Example() {
 
   return (
     <FormRichText
-      input={{
-        value: content,
-        onChange: () => {}
-      }}
-      field={{
-        schema: {
-          disabled: true,
-          inList: true,
-          title: '文章内容'
-        }
-      }}
+      value={content}
+      onChange={() => {}}
+      disabled
+      inList
+      title="文章内容"
     />
   )
 }
@@ -144,16 +126,10 @@ function Example() {
 
   return (
     <FormRichText
-      input={{
-        value: content,
-        onChange: setContent
-      }}
-      field={{
-        schema: {
-          defaultVal: '<h1>标题</h1><p>默认内容</p>',
-          defaultValType: 'fixed'
-        }
-      }}
+      value={content}
+      onChange={setContent}
+      defaultVal="<h1>标题</h1><p>默认内容</p>"
+      defaultValType="fixed"
     />
   )
 }
@@ -194,17 +170,11 @@ function ArticleEditor() {
       <div className="space-y-2">
         <Label>文章内容</Label>
         <FormRichText
-          input={{
-            value: content,
-            onChange: setContent
-          }}
-          field={{
-            schema: {
-              placeholder: '开始编写您的文章...',
-              key: 'article-content',
-              ediforms: true
-            }
-          }}
+          value={content}
+          onChange={setContent}
+          placeholder="开始编写您的文章..."
+          key="article-content"
+          ediforms
         />
       </div>
 
@@ -225,17 +195,11 @@ function ProductDescriptionForm() {
   return (
     <div className="space-y-4">
       <FormRichText
-        input={{
-          value: description,
-          onChange: setDescription
-        }}
-        field={{
-          schema: {
-            placeholder: '请输入产品详细描述',
-            defaultVal: '<h2>产品特点</h2><ul><li>特点1</li><li>特点2</li></ul>',
-            key: 'product-description'
-          }
-        }}
+        value={description}
+        onChange={setDescription}
+        placeholder="请输入产品详细描述"
+        defaultVal="<h2>产品特点</h2><ul><li>特点1</li><li>特点2</li></ul>"
+        key="product-description"
       />
 
       <div className="text-sm text-gray-500">
@@ -273,17 +237,11 @@ function AnnouncementEditor() {
       </div>
 
       <FormRichText
-        input={{
-          value: announcement,
-          onChange: setAnnouncement
-        }}
-        field={{
-          schema: {
-            disabled: isPreview,
-            placeholder: '请输入公告内容',
-            key: 'announcement-content'
-          }
-        }}
+        value={announcement}
+        onChange={setAnnouncement}
+        disabled={isPreview}
+        placeholder="请输入公告内容"
+        key="announcement-content"
       />
     </div>
   )
@@ -308,6 +266,6 @@ function AnnouncementEditor() {
 
 8. **链接处理**：在预览模式下，组件会自动为所有链接添加 `target="_Blank"` 属性，确保链接在新标签页中打开。
 
-9. **自定义工具栏**：可以通过 `field.schema.toolbar` 自定义工具栏配置，完全控制显示的编辑功能。传空对象 `{}` 使用默认工具栏，传自定义配置覆盖默认配置。
+9. **自定义工具栏**：可以通过 `toolbar` 属性自定义工具栏配置，完全控制显示的编辑功能。传空对象 `{}` 使用默认工具栏，传自定义配置覆盖默认配置。
 
 10. **样式隔离**：编辑器内容使用 `.ck-content` 类名进行样式隔离，确保编辑器内的样式不影响页面其他部分。

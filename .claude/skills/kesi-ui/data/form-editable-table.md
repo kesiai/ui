@@ -18,36 +18,32 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 否 | - | 输入对象，包含 value 和 onChange |
-| `input.value` | `any[]` | 否 | `[]` | 表格数据数组 |
-| `input.onChange` | `(value: any[] \| null) => void` | 否 | - | 值变化回调函数 |
-| `input.name` | `string` | 否 | - | 字段名称 |
+| `value` | `any[]` | 否 | `[]` | 表格数据数组 |
+| `onChange` | `(value: any[] \| null) => void` | 否 | - | 值变化回调函数 |
 | `schema` | `object` | 否 | - | 表格配置对象 |
 | `schema.key` | `string` | 否 | - | 表格的唯一标识 |
 | `schema.disabled` | `boolean` | 否 | `false` | 是否禁用整个表格 |
 | `schema.minCount` | `number` | 否 | `0` | 最小行数限制 |
 | `schema.maxCount` | `number` | 否 | `100` | 最大行数限制 |
-| `schema.forms` | `object` | 否 | - | 表单字段配置 |
-| `schema.forms.form` | `string[]` | 否 | - | 字段key数组 |
-| `schema.forms.properties` | `object` | 否 | - | 字段配置对象 |
+| `schema.items` | `object` | 否 | - | 表单字段配置 |
+| `schema.items.formSchema` | `Array<{ key: string }>` | 否 | - | 字段 key 数组 |
+| `schema.items.properties` | `Record<string, any>` | 否 | - | 字段配置对象 |
 | `schema.defaultVal` | `any[]` | 否 | - | 默认值数组 |
 | `schema.displayForm` | `'grid' \| 'card'` | 否 | `'grid'` | 显示方式 |
 | `schema.uniqueFields` | `string[]` | 否 | - | 唯一字段数组 |
 | `schema.uniqueRow` | `boolean` | 否 | `false` | 行是否唯一 |
+| `schema.fieldRules` | `object` | 否 | - | 字段验证规则 |
+| `schema.fieldRules.errorNotice` | `any[]` | 否 | - | 错误提示信息 |
 | `schema.showPagination` | `boolean` | 否 | - | 是否显示分页 |
-| `schema.btnText` | `object` | 否 | - | 按钮文本配置 |
+| `schema.btnText` | `Record<string, string>` | 否 | - | 按钮文本配置 |
 | `schema.createAddBtn` | `object` | 否 | - | 新增模式添加按钮权限 |
 | `schema.editAddBtn` | `object` | 否 | - | 编辑模式添加按钮权限 |
 | `schema.createDelBtn` | `object` | 否 | - | 新增模式删除按钮权限 |
 | `schema.editDelBtn` | `object` | 否 | - | 编辑模式删除按钮权限 |
 | `schema.cardLayout` | `'1' \| '2' \| '3'` | 否 | `'3'` | 卡片布局列数 |
-| `batchOption` | `boolean` | 否 | `false` | 是否启用批量操作 |
-| `inline` | `boolean` | 否 | `false` | 是否内联显示 |
-| `meta` | `object` | 否 | - | 元数据对象 |
 | `record` | `any` | 否 | - | 记录数据对象 |
-| `antdForm` | `any` | 否 | - | Ant Design 表单实例 |
 
-### schema.forms.properties 结构
+### schema.items.properties 结构
 
 每个字段的配置对象：
 
@@ -66,10 +62,10 @@
 
 ```tsx
 {
-  show: boolean,            // 是否显示
-  userRange: string,        // 用户范围
-  users: any[],            // 用户列表
-  roles: any[]             // 角色列表
+  show?: boolean,           // 是否显示
+  userRange?: string,       // 用户范围
+  users?: any[],            // 用户列表
+  roles?: any[]             // 角色列表
 }
 ```
 
@@ -90,13 +86,11 @@ function Example() {
 
   return (
     <FormEditableTable
-      input={{
-        value: data,
-        onChange: setData
-      }}
+      value={data}
+      onChange={setData}
       schema={{
-        forms: {
-          form: ['field1', 'field2'],
+        items: {
+          formSchema: [{ key: 'field1' }, { key: 'field2' }],
           properties: {
             field1: {
               key: 'field1',
@@ -130,15 +124,13 @@ function Example() {
 
   return (
     <FormEditableTable
-      input={{
-        value: data,
-        onChange: setData
-      }}
+      value={data}
+      onChange={setData}
       schema={{
         minCount: 1,      // 至少保留1行
         maxCount: 5,      // 最多5行
-        forms: {
-          form: ['field1'],
+        items: {
+          formSchema: [{ key: 'field1' }],
           properties: {
             field1: {
               key: 'field1',
@@ -166,15 +158,13 @@ function Example() {
 
   return (
     <FormEditableTable
-      input={{
-        value: data,
-        onChange: setData
-      }}
+      value={data}
+      onChange={setData}
       schema={{
         displayForm: 'card',    // 使用卡片模式
         cardLayout: '2',         // 2列布局
-        forms: {
-          form: ['field1', 'field2'],
+        items: {
+          formSchema: [{ key: 'field1' }, { key: 'field2' }],
           properties: {
             field1: {
               key: 'field1',
@@ -208,14 +198,12 @@ function Example() {
 
   return (
     <FormEditableTable
-      input={{
-        value: data,
-        onChange: () => {}
-      }}
+      value={data}
+      onChange={() => {}}
       schema={{
         disabled: true,  // 禁用表格
-        forms: {
-          form: ['field1'],
+        items: {
+          formSchema: [{ key: 'field1' }],
           properties: {
             field1: {
               key: 'field1',
@@ -241,17 +229,15 @@ function Example() {
 
   return (
     <FormEditableTable
-      input={{
-        value: data,
-        onChange: setData
-      }}
+      value={data}
+      onChange={setData}
       schema={{
         btnText: {
           add: '新增数据行',
           delete: '删除选中'
         },
-        forms: {
-          form: ['field1'],
+        items: {
+          formSchema: [{ key: 'field1' }],
           properties: {
             field1: {
               key: 'field1',
@@ -280,13 +266,11 @@ function Example() {
 
   return (
     <FormEditableTable
-      input={{
-        value: data,
-        onChange: setData
-      }}
+      value={data}
+      onChange={setData}
       schema={{
-        forms: {
-          form: ['field1'],
+        items: {
+          formSchema: [{ key: 'field1' }],
           properties: {
             field1: {
               key: 'field1',
@@ -297,7 +281,6 @@ function Example() {
           }
         }
       }}
-      batchOption  // 启用批量操作
     />
   )
 }
@@ -315,13 +298,11 @@ function Example() {
 
   return (
     <FormEditableTable
-      input={{
-        value: data,
-        onChange: setData
-      }}
+      value={data}
+      onChange={setData}
       schema={{
-        forms: {
-          form: ['name', 'age'],
+        items: {
+          formSchema: [{ key: 'name' }, { key: 'age' }],
           properties: {
             name: {
               key: 'name',
@@ -404,10 +385,8 @@ function EmployeeManager() {
         </div>
 
         <FormEditableTable
-          input={{
-            value: employees,
-            onChange: setEmployees
-          }}
+          value={employees}
+          onChange={setEmployees}
           schema={{
             key: 'employee-table',
             minCount: 0,
@@ -418,8 +397,8 @@ function EmployeeManager() {
               add: '添加员工',
               delete: '删除选中'
             },
-            forms: {
-              form: ['name', 'department', 'position', 'salary', 'email'],
+            items: {
+              formSchema: [{ key: 'name' }, { key: 'department' }, { key: 'position' }, { key: 'salary' }, { key: 'email' }],
               properties: {
                 name: {
                   key: 'name',
@@ -456,7 +435,6 @@ function EmployeeManager() {
               }
             }
           }}
-          batchOption
         />
 
         <div className="mt-4 text-sm text-muted-foreground">
@@ -513,10 +491,8 @@ function InventoryManager() {
         </div>
 
         <FormEditableTable
-          input={{
-            value: products,
-            onChange: setProducts
-          }}
+          value={products}
+          onChange={setProducts}
           schema={{
             key: 'inventory-table',
             minCount: 1,
@@ -527,8 +503,8 @@ function InventoryManager() {
               add: '添加产品',
               delete: '删除选中'
             },
-            forms: {
-              form: ['productName', 'category', 'price', 'stock', 'sku'],
+            items: {
+              formSchema: [{ key: 'productName' }, { key: 'category' }, { key: 'price' }, { key: 'stock' }, { key: 'sku' }],
               properties: {
                 productName: {
                   key: 'productName',
@@ -647,10 +623,8 @@ function PurchaseOrderForm() {
           <h2 className="text-2xl font-bold mb-6">采购订单明细</h2>
 
           <FormEditableTable
-            input={{
-              value: orderItems,
-              onChange: setOrderItems
-            }}
+            value={orderItems}
+            onChange={setOrderItems}
             schema={{
               key: 'order-items-table',
               minCount: 1,      // 至少1行
@@ -660,8 +634,8 @@ function PurchaseOrderForm() {
                 add: '添加订单项',
                 delete: '删除选中'
               },
-              forms: {
-                form: ['productCode', 'productName', 'quantity', 'unitPrice', 'totalAmount'],
+              items: {
+                formSchema: [{ key: 'productCode' }, { key: 'productName' }, { key: 'quantity' }, { key: 'unitPrice' }, { key: 'totalAmount' }],
                 properties: {
                   productCode: {
                     key: 'productCode',
@@ -700,7 +674,6 @@ function PurchaseOrderForm() {
                 }
               }
             }}
-            batchOption
           />
 
           <div className="mt-6 space-y-4">
@@ -739,7 +712,7 @@ function PurchaseOrderForm() {
 
 3. **空值处理**：当 `onChange` 传入空数组或 `null` 时，表格会显示为空。
 
-4. **字段配置**：`forms.form` 和 `forms.properties` 必须对应，确保所有字段都在 properties 中定义。
+4. **字段配置**：`items.formSchema` 和 `items.properties` 必须对应，确保所有字段都在 properties 中定义。
 
 5. **必填验证**：`need: true` 标记必填字段，会在标题旁显示红色星号。
 

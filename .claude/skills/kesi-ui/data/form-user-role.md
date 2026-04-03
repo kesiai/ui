@@ -16,23 +16,20 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `input` | `object` | 否 | - | 表单输入对象 |
-| `input.value` | `any` | 否 | - | 当前选中的用户对象 |
-| `input.onChange` | `(value: any) => void` | 否 | - | 值变化回调 |
-| `field` | `object` | 否 | - | 字段配置对象 |
-| `field.schema` | `object` | 否 | - | 字段 schema 配置 |
-| `field.schema.name` | `string` | 否 | `'core/user'` | 用户表资源名称 |
-| `field.displayField` | `string` | 否 | `'name'` | 显示字段名 |
-| `field.showField` | `string` | 否 | - | 额外显示的字段名 |
-| `field.relateSchema` | `object` | 否 | - | 关联 schema 配置 |
-| `field.relateSchema.ignoreAdmin` | `boolean` | 否 | `false` | 是否忽略管理员账号 |
-| `field.relateSchema.size` | `string` | 否 | - | 尺寸配置 |
-| `field.fieldSchema` | `object` | 否 | - | 字段 schema |
+| `value` | `any` | 否 | - | 当前选中的用户对象 |
+| `onChange` | `(value: any) => void` | 否 | - | 值变化回调 |
+| `name` | `string` | 否 | `'user'` | 字段名，用于指定资源名称 |
+| `displayField` | `string` | 否 | `'name'` | 显示字段名 |
+| `showField` | `string` | 否 | - | 额外获取并展示的字段名 |
+| `ignoreAdmin` | `boolean` | 否 | `false` | 是否忽略管理员账号 |
+| `fieldSchema` | `object` | 否 | - | 字段 schema 配置 |
+| `fieldSchema.enum` | `string[]` | 否 | - | 枚举值列表 |
+| `fieldSchema.enum_title` | `string[]` | 否 | - | 枚举显示名列表 |
+| `fieldSchema.enum1` | `string[]` | 否 | - | 二级枚举值列表 |
+| `fieldSchema.enum_title1` | `string[]` | 否 | - | 二级枚举显示名列表 |
 | `label` | `string` | 否 | `'用户'` | 标签文本 |
 | `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 | `mode` | `'single' \| 'multiple'` | 否 | `'single'` | 选择模式 |
-| `meta` | `any` | 否 | - | 元数据 |
-| `record` | `any` | 否 | - | 记录数据 |
 
 ### FormUserRoleOption
 
@@ -62,16 +59,10 @@ function Example() {
 
   return (
     <FormUserRole
-      input={{
-        value: user,
-        onChange: setUser
-      }}
-      field={{
-        schema: {
-          name: 'core/user'
-        },
-        displayField: 'name'
-      }}
+      value={user}
+      onChange={setUser}
+      name="user"
+      displayField="name"
       label="用户"
     />
   )
@@ -88,19 +79,11 @@ function Example() {
 
   return (
     <FormUserRole
-      input={{
-        value: user,
-        onChange: setUser
-      }}
-      field={{
-        schema: {
-          name: 'core/user'
-        },
-        displayField: 'name',
-        relateSchema: {
-          ignoreAdmin: true
-        }
-      }}
+      value={user}
+      onChange={setUser}
+      name="user"
+      displayField="name"
+      ignoreAdmin
       label="选择用户"
     />
   )
@@ -117,16 +100,10 @@ function Example() {
 
   return (
     <FormUserRole
-      input={{
-        value: user,
-        onChange: setUser
-      }}
-      field={{
-        schema: {
-          name: 'core/user'
-        },
-        displayField: 'username'  // 使用 username 字段显示
-      }}
+      value={user}
+      onChange={setUser}
+      name="user"
+      displayField="username"
       label="用户名"
     />
   )
@@ -143,17 +120,11 @@ function Example() {
 
   return (
     <FormUserRole
-      input={{
-        value: user,
-        onChange: () => {}
-      }}
-      field={{
-        schema: {
-          name: 'core/user'
-        },
-        displayField: 'name'
-      }}
-      disabled={true}
+      value={user}
+      onChange={() => {}}
+      name="user"
+      displayField="name"
+      disabled
     />
   )
 }
@@ -169,17 +140,11 @@ function Example() {
 
   return (
     <FormUserRole
-      input={{
-        value: user,
-        onChange: setUser
-      }}
-      field={{
-        schema: {
-          name: 'core/user'
-        },
-        displayField: 'name',
-        showField: 'department'  // 额外获取部门字段
-      }}
+      value={user}
+      onChange={setUser}
+      name="user"
+      displayField="name"
+      showField="department"
       label="用户"
     />
   )
@@ -229,20 +194,12 @@ function TaskAssignmentForm() {
       <div className="space-y-2">
         <Label>分配给</Label>
         <FormUserRole
-          input={{
-            value: task.assignee,
-            onChange: (assignee) => setTask({ ...task, assignee })
-          }}
-          field={{
-            schema: {
-              name: 'core/user'
-            },
-            displayField: 'name',
-            showField: 'department',
-            relateSchema: {
-              ignoreAdmin: true
-            }
-          }}
+          value={task.assignee}
+          onChange={(assignee) => setTask({ ...task, assignee })}
+          name="user"
+          displayField="name"
+          showField="department"
+          ignoreAdmin
           label="用户"
         />
       </div>
@@ -275,19 +232,10 @@ function ApprovalWorkflowForm() {
       <div className="space-y-2">
         <Label>一级审批人</Label>
         <FormUserRole
-          input={{
-            value: approvers.firstLevel,
-            onChange: (user) => setApprovers({ ...approvers, firstLevel: user })
-          }}
-          field={{
-            schema: {
-              name: 'core/user'
-            },
-            displayField: 'name',
-            relateSchema: {
-              ignoreAdmin: false
-            }
-          }}
+          value={approvers.firstLevel}
+          onChange={(user) => setApprovers({ ...approvers, firstLevel: user })}
+          name="user"
+          displayField="name"
           label="一级审批人"
         />
       </div>
@@ -295,16 +243,10 @@ function ApprovalWorkflowForm() {
       <div className="space-y-2">
         <Label>二级审批人</Label>
         <FormUserRole
-          input={{
-            value: approvers.secondLevel,
-            onChange: (user) => setApprovers({ ...approvers, secondLevel: user })
-          }}
-          field={{
-            schema: {
-              name: 'core/user'
-            },
-            displayField: 'name'
-          }}
+          value={approvers.secondLevel}
+          onChange={(user) => setApprovers({ ...approvers, secondLevel: user })}
+          name="user"
+          displayField="name"
           label="二级审批人"
         />
       </div>
@@ -312,19 +254,11 @@ function ApprovalWorkflowForm() {
       <div className="space-y-2">
         <Label>最终审批人</Label>
         <FormUserRole
-          input={{
-            value: approvers.finalLevel,
-            onChange: (user) => setApprovers({ ...approvers, finalLevel: user })
-          }}
-          field={{
-            schema: {
-              name: 'core/user'
-            },
-            displayField: 'name',
-            relateSchema: {
-              ignoreAdmin: true
-            }
-          }}
+          value={approvers.finalLevel}
+          onChange={(user) => setApprovers({ ...approvers, finalLevel: user })}
+          name="user"
+          displayField="name"
+          ignoreAdmin
           label="最终审批人"
         />
       </div>
@@ -347,17 +281,11 @@ function TeamMemberForm() {
   return (
     <div className="space-y-4">
       <FormUserRole
-        input={{
-          value: member.userId,
-          onChange: (user) => setMember({ ...member, userId: user })
-        }}
-        field={{
-          schema: {
-            name: 'core/user'
-          },
-          displayField: 'name',
-          showField: 'email'
-        }}
+        value={member.userId}
+        onChange={(user) => setMember({ ...member, userId: user })}
+        name="user"
+        displayField="name"
+        showField="email"
         label="选择成员"
       />
 
@@ -379,13 +307,13 @@ function TeamMemberForm() {
 
 2. **API 依赖**：组件依赖 `@airiot/client` 的 `createAPI` 方法，确保已正确配置和初始化。
 
-3. **资源名称**：`field.schema.name` 默认为 `'core/user'`，如果使用其他用户表，需要修改此配置。
+3. **资源名称**：`name` 默认为 `'user'`，组件会拼接为 `'core/' + name` 作为资源路径，如果使用其他用户表，需要修改此配置。
 
 4. **字段映射**：`displayField` 指定在下拉列表中显示的字段，默认为 `'name'`。可以根据实际需求修改为其他字段，如 `'username'`、`'nickname'` 等。
 
 5. **加载时机**：用户列表在首次打开下拉菜单时加载，之后会缓存结果，避免重复请求。
 
-6. **值格式**：`input.onChange` 返回的是完整的用户对象，而不是用户 ID，这使得后续处理更方便。
+6. **值格式**：`onChange` 返回的是完整的用户对象，而不是用户 ID，这使得后续处理更方便。
 
 7. **管理员过滤**：当 `ignoreAdmin` 为 `true` 时，会过滤掉 `id` 为 `'admin'` 的用户，确保只显示普通用户。
 

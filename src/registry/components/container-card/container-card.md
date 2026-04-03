@@ -173,7 +173,7 @@ function DashboardCard() {
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-lg flex items-center justify-center h-[200px]">
+        <div className="bg-gray-50 rounded-lg flex items-center justify-center h-50">
           <p className="text-gray-400">图表区域</p>
         </div>
       </div>

@@ -269,7 +269,7 @@ function ProductCarousel() {
         {products.map((product) => (
           <div
             key={product.id}
-            className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-8"
+            className="h-full flex items-center justify-center bg-linear-to-br from-blue-50 to-purple-50 rounded-lg p-8"
           >
             <div className="text-center">
               <h3 className="text-3xl font-bold text-gray-800 mb-4">

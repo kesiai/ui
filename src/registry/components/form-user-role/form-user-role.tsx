@@ -217,7 +217,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
       <PopoverTrigger asChild>
         <div
           className={cn(
-            'flex items-center justify-between w-full min-h-[40px] px-3 py-2 text-sm bg-background border border-input rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground',
+            'flex items-center justify-between w-full min-h-10 px-3 py-2 text-sm bg-background border border-input rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground',
             disabled && 'cursor-not-allowed opacity-50'
           )}
           onClick={() => !disabled && setOpen(!open)}
@@ -244,7 +244,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
               formatDisplayValue(value) || `选择${label || '用户'}...`
             )}
           </span>
-          <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+          <div className="flex items-center gap-1 shrink-0 ml-2">
             {hasValue && !disabled && (
               <X
                 className="h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer"
@@ -256,7 +256,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
         </div>
       </PopoverTrigger>
       <PopoverContent
-        className="p-0 w-full min-w-[200px]"
+        className="p-0 w-full min-w-50"
         align="start"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >

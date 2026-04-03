@@ -152,7 +152,7 @@ function useViewData(config: ViewDataConfig) {
   }, [])
 
   // submit 变化时手动触发
-  const prevSubmitRef = useRef<string>()
+  const prevSubmitRef = useRef<string>(null)
 
   useEffect(() => {
     if (submit && submit !== prevSubmitRef.current) {

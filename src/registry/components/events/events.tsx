@@ -145,7 +145,7 @@ export function SchemaFormDialog({
             schema={schema}
             formSchema={formSchema}
             formId="schema-form-dialog"
-            initialValues={initialValues}
+            defaultValues={initialValues}
             onSubmit={handleSubmit}
             classNames={classNames}
           >

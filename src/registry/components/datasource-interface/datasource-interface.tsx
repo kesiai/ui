@@ -54,8 +54,8 @@ const filterResult = (json: any): { dimensions: string[]; source: any[][] } => {
 
   // 提取所有维度
   _json.forEach((item: any) => {
-    const keys = keys(item)
-    dimensions = union(dimensions, keys)
+    const ks = keys(item)
+    dimensions = union(dimensions, ks)
   })
 
   // 构建数据源

@@ -80,7 +80,7 @@ interface DefaultPanelProps {
 
 export const DefaultPanel: React.FC<DefaultPanelProps> = ({ data, onClose, hidenCloseBtn = false }) => {
     return (
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-[300px] max-w-[400px] max-h-[400px] overflow-hidden">
+        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-75 max-w-100 max-h-100 overflow-hidden">
             <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-gray-900">
                     {data?.name || data?.title || '详情'}
@@ -96,7 +96,7 @@ export const DefaultPanel: React.FC<DefaultPanelProps> = ({ data, onClose, hiden
                     </Button>
                 )}
             </div>
-            <div className="p-4 overflow-y-auto max-h-[340px]">
+            <div className="p-4 overflow-y-auto max-h-85">
                 <div className="space-y-2">
                     {data?.id && (
                         <div className="text-xs text-gray-500 mb-2 truncate" title={data.id}>
@@ -105,7 +105,7 @@ export const DefaultPanel: React.FC<DefaultPanelProps> = ({ data, onClose, hiden
                     )}
                     {typeof data?.online !== 'undefined' && (
                         <div className="mb-2">
-                            <Badge variant={data.online ? 'default' : 'destructive'}>
+                            <Badge variant={data.online ? 'primary' : 'destructive'}>
                                 {data.online ? '在线' : '离线'}
                             </Badge>
                         </div>
@@ -167,7 +167,7 @@ export const CustomPanel: React.FC<CustomPanelProps> = ({ data, onClose, hidenCl
     }, [customCode, data])
 
     return (
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-[300px] max-w-[600px] max-h-[500px] overflow-hidden">
+        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-75 max-w-150 max-h-125 overflow-hidden">
             <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-gray-900">
                     {data?.name || data?.title || '自定义内容'}
@@ -183,7 +183,7 @@ export const CustomPanel: React.FC<CustomPanelProps> = ({ data, onClose, hidenCl
                     </Button>
                 )}
             </div>
-            <div className="p-4 overflow-y-auto max-h-[440px]">
+            <div className="p-4 overflow-y-auto max-h-110">
                 {error ? (
                     <div className="text-red-500 text-sm p-4 bg-red-50 rounded">
                         <p className="font-semibold mb-2">代码执行错误:</p>
@@ -335,7 +335,7 @@ export const ViewPanel: React.FC<ViewPanelProps> = ({
                     // 循环直到没有占位符为止
                     const placeholderRegex = /%%JSX_PLACEHOLDER_(\d+)%%/;
                     while (placeholderRegex.test(processed)) {
-                        processed = processed.replace(placeholderRegex, (match, indexStr) => {
+                        processed = processed.replace(placeholderRegex, (_match, indexStr) => {
                             const index = parseInt(indexStr);
                             return placeholders[index];
                         });
@@ -418,7 +418,7 @@ export const ViewPanel: React.FC<ViewPanelProps> = ({
     }, [viewCode, viewId, data, viewConfig])
 
     return (
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-[400px] max-w-[800px] max-h-[600px] overflow-hidden">
+        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-100 max-w-200 max-h-150 overflow-hidden">
             <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-gray-900">
                     {data?.name || data?.title || '画面视图'}

@@ -529,27 +529,6 @@ const MobileDatePicker = React.forwardRef<HTMLDivElement, MobileDatePickerProps>
       }
     }, [visible, value, defaultValue, precision])
 
-    // 计算最小最大限制
-    const min = React.useMemo(() => {
-      if (precision === 'day' || precision === 'week-day') {
-        return minDate ? new Date(minDate) : undefined
-      }
-      if (precision === 'hour' || precision === 'minute' || precision === 'second') {
-        return minDateTime ? new Date(minDateTime) : undefined
-      }
-      return undefined
-    }, [minDate, minDateTime, precision])
-
-    const max = React.useMemo(() => {
-      if (precision === 'day' || precision === 'week-day') {
-        return maxDate ? new Date(maxDate) : undefined
-      }
-      if (precision === 'hour' || precision === 'minute' || 'second') {
-        return maxDateTime ? new Date(maxDateTime) : undefined
-      }
-      return undefined
-    }, [maxDate, maxDateTime, precision])
-
     // 当前暂存值的各部分
     const currentYear = pendingDate.getFullYear()
     const currentMonth = pendingDate.getMonth()

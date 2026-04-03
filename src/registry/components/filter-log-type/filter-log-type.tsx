@@ -173,7 +173,7 @@ const FilterLogType = ({ value, onChange, multiple = true }: FilterLogTypeProps)
           role="combobox"
           aria-expanded={open}
           className={cn(
-            'w-full justify-between min-w-[175px]',
+            'w-full justify-between min-w-43.75',
             selectedValues.length === 0 && 'text-muted-foreground'
           )}
         >

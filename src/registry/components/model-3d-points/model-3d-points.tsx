@@ -29,7 +29,6 @@ const Model3dPoints: React.FC<Model3dPointsProps> = ({
   meshConfig = {},
   materialsConfig = {},
   editMode = false,
-  name = "",
   onClick,
   count = 1000,
 }) => {
@@ -79,7 +78,7 @@ const Model3dPoints: React.FC<Model3dPointsProps> = ({
 
   // 生成随机点
   const pointsList = React.useMemo(() => {
-    return Array.from({ length: count }, (_, i) => [
+    return Array.from({ length: count }, () => [
       Math.random() * 100 - 50,
       Math.random() * 100 - 50,
       Math.random() * 100 - 50,

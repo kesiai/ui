@@ -5,7 +5,6 @@ import {
   DrawerContent,
   DrawerPortal,
 } from "@/components/ui/drawer"
-import { Button } from "@/registry/components/button/button"
 import { ChevronsUpDown, Loader2, ArrowLeft, Check } from "lucide-react"
 
 // ====================== 类型定义 ======================
@@ -83,7 +82,6 @@ const PickerList: React.FC<PickerListProps> = ({
   onConfirm,
   onClose,
   disabled = false,
-  placeholder = "请选择",
   multiple = false
 }) => {
   const [selectedValue, setSelectedValue] = React.useState<any>(() => {
@@ -191,7 +189,6 @@ const CascadePickerList: React.FC<CascadePickerListProps> = ({
   onSelect,
   disabled = false,
   level,
-  currentPath,
   onBack,
   loading = false,
   multiple = false

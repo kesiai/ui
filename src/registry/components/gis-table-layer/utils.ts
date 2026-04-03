@@ -18,7 +18,7 @@ export const getMarkerId = (record: any) => {
 }
 
 // 简单的坐标转换，默认 EPSG:4326 -> EPSG:3857
-export const getTransformTo3857 = (coordinateType?: string) => {
+export const getTransformTo3857 = (_coordinateType?: string) => {
     // 暂时忽略 coordinateType 的复杂判断，假设输入是 WGS84，输出 3857
     // 如果需要支持其他坐标系，这里需要 proj4
     return (coordinate: number[]) => fromLonLat(coordinate)
@@ -326,7 +326,7 @@ export const createStyleClass = ({
             stroke: new style.Stroke({
                 color: finalStrokeColor,
                 width: finalStrokeWidth,
-                lineDash: (finalStrokeLineDash == "dashed" || finalStrokeLineDash == 'dash') ? [10, 10] : null
+                lineDash: (finalStrokeLineDash == "dashed" || finalStrokeLineDash == 'dash') ? [10, 10] : undefined
             }),
         })
     }

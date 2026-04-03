@@ -34,9 +34,10 @@ import {
 } from 'lucide-react'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
-import { FormSchemaItem, SchemaForm } from '@/registry/components/schema-form/schema-form'
+import { SchemaForm } from '@/registry/components/schema-form/schema-form'
 import { ViewDetail } from '@/registry/components/view-detail/view-detail'
 import { HasPermission } from '@/registry/components/view-permission/view-permission'
+import type { FormSchemaItem } from '@/registry/lib/model-types'
 interface EditActionContentProps {
   itemId: string
   onClose?: () => void
@@ -44,7 +45,7 @@ interface EditActionContentProps {
 }
 
 const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, formSchema }) => {
-  const { title, data, loading, model } = useModelGet({ id: itemId })
+  const { data, loading, model } = useModelGet({ id: itemId })
   const { getItems } = useModelGetItems()
   const { saveItem } = useModelSave()
   const [saving, setSaving] = useState(false)

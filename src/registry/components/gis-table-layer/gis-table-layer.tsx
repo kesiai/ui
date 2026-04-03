@@ -373,7 +373,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             const onFeatureChange = (evt: any) => {
                 const geometry = evt.target.getGeometry()
                 const coordinate = getGeometryCenter(geometry)
-                popup.setPosition(coordinate)
+                popup?.setPosition(coordinate)
             }
 
             feature.on('change', onFeatureChange)
@@ -391,7 +391,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
                 if (feature) {
                     const fCellKey = feature.get('cellKey')
-                    
+
                     // Check if it's a cluster feature
                     const clusteredFeatures = feature.get('features')
 
@@ -402,7 +402,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                             if (map.getView()) {
                                 const extent = createEmpty()
                                 clusteredFeatures.forEach((f: any) => extend(extent, f.getGeometry().getExtent()))
-                                
+
                                 // Check if all points are at the same location
                                 const firstCoords = clusteredFeatures[0].getGeometry().getCoordinates()
                                 const isSameLocation = clusteredFeatures.every((f: any) => {
@@ -411,11 +411,11 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                                 })
 
                                 if (isSameLocation) {
-                                     map.getView().animate({
+                                    map.getView().animate({
                                         center: firstCoords,
                                         zoom: map.getView().getZoom() + 1,
                                         duration: 500
-                                     })
+                                    })
                                 } else {
                                     map.getView().fit(extent, {
                                         duration: 500,
@@ -429,7 +429,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                             const originalFeature = clusteredFeatures[0]
                             const record = originalFeature.get('markerRecord')
                             const fCellKey = originalFeature.get('cellKey')
-                            
+
                             if (fCellKey !== cellKey) return
                             if (!record) return
 
@@ -1247,33 +1247,33 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     })
                     const clusterLayer = new VectorLayer({
                         source: clusterSource,
-                        id: 'cluster_' + cellKey,
                         style: styleClusterFn,
                         properties: { layerType: 'cluster' },
                         ...layerconfig
                     })
+                    clusterLayer.set('id', 'cluster_' + cellKey)
                     layerlist.push(clusterLayer)
                 }
                 if (heatmap?.show) {
                     const heatmapLayer = new Heatmap({
                         source: pointSource,
-                        id: 'heatmap_' + cellKey,
                         blur: heatmap?.blur || 15,
                         radius: heatmap?.radius || 8,
                         gradient: createHeatmapGradient(heatmap?.gradient || []),
                         properties: { layerType: 'heatmap' },
                         zIndex: 888
                     })
+                    heatmapLayer.set('id', 'heatmap_' + cellKey)
                     layerlist.push(heatmapLayer)
                 }
                 if (!cluster?.show && !heatmap?.show) {
                     const layer = new VectorLayer({
                         source: pointSource,
-                        id: cellKey,
                         style: styleFn,
                         properties: { layerType: 'default', cellKey },
                         ...layerconfig
                     })
+                    layer.set('id', cellKey)
                     layerlist.push(layer)
                 }
                 return layerlist.filter(Boolean)
@@ -1284,7 +1284,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
             const nonPointLayer = new VectorLayer({
                 source: nonPointSource,
-                id: cellKey,
                 style: styleFn,
                 properties: { layerType: 'base' },
                 opacity,
@@ -1294,6 +1293,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 maxZoom,
                 minZoom,
             })
+            nonPointLayer.set('id', cellKey)
             map.addLayer(nonPointLayer)
             layerRef.current = [nonPointLayer, ...pointsLayerList]
 
@@ -1429,33 +1429,33 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     })
                     const clusterLayer = new VectorLayer({
                         source: clusterSource,
-                        id: 'cluster_' + cellKey,
                         style: styleClusterFn,
                         properties: { layerType: 'cluster' },
                         ...layerconfig
                     })
+                    clusterLayer.set('id', 'cluster_' + cellKey)
                     layerlist.push(clusterLayer)
                 }
                 if (heatmap?.show) {
                     const heatmapLayer = new Heatmap({
                         source: pointSourceRef.current,
-                        id: 'heatmap_' + cellKey,
                         blur: heatmap?.blur || 15,
                         radius: heatmap?.radius || 8,
                         gradient: createHeatmapGradient(heatmap?.gradient || []),
                         properties: { layerType: 'heatmap' },
                         zIndex: 888
                     })
+                    heatmapLayer.set('id', 'heatmap_' + cellKey)
                     layerlist.push(heatmapLayer)
                 }
                 if (!cluster?.show && !heatmap?.show) {
                     const layer = new VectorLayer({
                         source: pointSourceRef.current,
-                        id: cellKey,
                         style: styleFn,
                         properties: { layerType: 'default', cellKey },
                         ...layerconfig
                     })
+                    layer.set('id', cellKey)
                     layerlist.push(layer)
                 }
                 return layerlist.filter(Boolean)
@@ -1463,7 +1463,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
             const pointsLayerList = createPointsLayer()
             pointsLayerList.forEach((l: any) => map.addLayer(l))
-            
+
             // Rebuild layerRef carefully
             const newLayers = pointsLayerList
             if (nonPointLayer) {

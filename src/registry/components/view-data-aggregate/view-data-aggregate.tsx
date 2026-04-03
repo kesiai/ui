@@ -59,15 +59,12 @@ const ViewDataTableAggregate: React.FC<ViewDataAggregateProps> = ({
   fields = [],
   aggregateTypes = ['count', 'sum', 'avg'],
   groupBy,
-  showChange = true,
-  showChart = false,
   layout = 'grid',
   refreshInterval = 0,
   className = '',
-  onRefresh,
   onFieldClick,
 }) => {
-  const { items } = useModelList()
+
   const { getItems } = useModelGetItems()
 
   const [results, setResults] = useState<AggregateResult[]>([])
@@ -89,14 +86,15 @@ const ViewDataTableAggregate: React.FC<ViewDataAggregateProps> = ({
   const loadAggregates = async () => {
     setLoading(true)
     try {
-      const data = await getItems(modelId, {
+      const data = await getItems({
+        modelId,
         limit: 1000
       })
 
       if (groupBy) {
-        calculateGroupAggregates(data || [])
+        calculateGroupAggregates(data?.items || [])
       } else {
-        calculateAggregates(data || [])
+        calculateAggregates(data?.items || [])
       }
     } catch (error) {
       console.error('Failed to load aggregates:', error)
@@ -174,15 +172,6 @@ const ViewDataTableAggregate: React.FC<ViewDataAggregateProps> = ({
         return null
     }
 
-    const typeLabelMap: Record<AggregateType, string> = {
-      count: '计数',
-      sum: '总和',
-      avg: '平均',
-      min: '最小',
-      max: '最大',
-      group: '分组'
-    }
-
     return {
       field: field.name,
       label: field.label,
@@ -196,7 +185,7 @@ const ViewDataTableAggregate: React.FC<ViewDataAggregateProps> = ({
     const groups = new Map<string, any[]>()
 
     data.forEach((item) => {
-      const groupValue = item[groupBy] || '未分组'
+      const groupValue = groupBy ? item[groupBy] : '未分组'
       if (!groups.has(groupValue)) {
         groups.set(groupValue, [])
       }

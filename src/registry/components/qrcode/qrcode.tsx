@@ -32,8 +32,18 @@ const QRCodeComp: React.FC<QRCodeCompProps> = ({
       },
     };
 
-    QRCode.toCanvas(canvasRef.current, content, qrCodeOptions)
-      .catch((error) => {
+    interface QrCodeError {
+      message: string;
+      name: string;
+      stack?: string;
+    }
+
+    QRCode.toCanvas(
+      canvasRef.current as HTMLCanvasElement,
+      content,
+      qrCodeOptions
+    )
+      .catch((error: QrCodeError) => {
         console.error("生成二维码失败：", error);
       });
   }, [content, width, margin, darkColor, lightColor]);

@@ -27,15 +27,6 @@ const CardComponent = ({
     return <span className="text-muted-foreground">暂无数据</span>
   }
 
-  // 根据 cardLayout 确定列宽：1=全宽，2=半宽，3=三分之一
-  const getColSpan = () => {
-    if (cardLayout === '1') return 'w-full'
-    if (cardLayout === '2') return 'w-1/2'
-    return 'w-1/3'
-  }
-
-  const colSpanClass = getColSpan()
-
   const FieldComponent = tableConverter(schema, tableSchema)
 
   return (
@@ -82,7 +73,7 @@ const TableComponent = ({
   schema: any
   tableSchema: any
 }) => {
-  const { tableFields, showPagination } = schema || {}
+  const { tableFields } = schema || {}
 
   if (!isArray(value) || value.length === 0) {
     return <span className="text-muted-foreground">暂无数据</span>
@@ -107,7 +98,7 @@ const TableComponent = ({
       <table className="w-full border-collapse border border-slate-200 dark:border-slate-700">
         <thead>
           <tr className="bg-slate-100 dark:bg-slate-800">
-            {columns.map((col) => (
+            {columns.map((col: { key: React.Key | null | undefined; width: any; title: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined }) => (
               <th
                 key={col.key}
                 className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-left text-sm font-medium"
@@ -121,17 +112,24 @@ const TableComponent = ({
         <tbody>
           {value.map((row: any, rowIndex: number) => (
             <tr key={rowIndex} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-              {columns.map((col) => (
-                <td
-                  key={col.key}
-                  className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm"
-                >
-                  <FieldComponent
-                    value={row?.[col.dataIndex]}
-                    schema={col.fieldSchema}
-                    inList={true}
-                  />
-                </td>
+              {columns.map((col: {
+              key: React.Key | null | undefined;
+              dataIndex: string;
+              title: string;
+              width: number;
+              fieldType?: string;
+              fieldSchema?: any;
+              }) => (
+              <td
+                key={col.key}
+                className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm"
+              >
+                <FieldComponent
+                value={row?.[col.dataIndex]}
+                schema={col.fieldSchema}
+                inList={true}
+                />
+              </td>
               ))}
             </tr>
           ))}
@@ -198,9 +196,9 @@ const EditableTable = ({ value, schema, inList = true }: { value: any; schema?: 
 
   // 直接展示
   return displayForm === 'card' ? (
-    <CardComponent value={displayValue} schema={schema} />
+    <CardComponent value={displayValue} schema={schema} tableSchema={undefined} />
   ) : (
-    <TableComponent value={displayValue} schema={schema} />
+    <TableComponent value={displayValue} schema={schema} tableSchema={undefined} />
   )
 }
 

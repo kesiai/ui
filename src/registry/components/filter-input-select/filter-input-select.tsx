@@ -18,7 +18,7 @@ interface FilterInputSelectProps {
   onChange?: (value: any) => void
 }
 
-const FilterInputSelect: React.FC<FilterInputSelectProps> = ({ name, schema, value, onChange }) => {
+const FilterInputSelect: React.FC<FilterInputSelectProps> = ({ name, value, onChange }) => {
   const { model } = useModel()
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([])
   const [loading, setLoading] = useState(false)

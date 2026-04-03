@@ -221,22 +221,22 @@ const VideoPeriodsWidget = React.forwardRef<HTMLDivElement, VideoPeriodsWidgetPr
 
 
     // 添加时间段
-    const addTimeSegment = (dayOfWeek: string) => {
-      if (readonly) return
+    // const addTimeSegment = (dayOfWeek: string) => {
+    //   if (readonly) return
 
-      const newSegment: TimeSegment = {
-        id: `${Date.now()}_${Math.random()}`,
-        name: effectivePeriod === "week" ? `${dayOfWeek}${getDayIndex(dayOfWeek)}录制${value.filter(item => item.day_of_week === dayOfWeek).length}` : `录制${value.length}`,
-        day_of_week: dayOfWeek,
-        start_time: "09:00",
-        end_time: "10:00",
-        length: 60,
-        recording_mode: effectiveRecordingMode,
-        segmentTime: { count: 10, unit: "m" }
-      }
+    //   const newSegment: TimeSegment = {
+    //     id: `${Date.now()}_${Math.random()}`,
+    //     name: effectivePeriod === "week" ? `${dayOfWeek}${getDayIndex(dayOfWeek)}录制${value.filter(item => item.day_of_week === dayOfWeek).length}` : `录制${value.length}`,
+    //     day_of_week: dayOfWeek,
+    //     start_time: "09:00",
+    //     end_time: "10:00",
+    //     length: 60,
+    //     recording_mode: effectiveRecordingMode,
+    //     segmentTime: { count: 10, unit: "m" }
+    //   }
 
-      onChange?.([...value, newSegment])
-    }
+    //   onChange?.([...value, newSegment])
+    // }
 
     // 删除时间段
     const removeTimeSegment = (segmentId: string) => {
@@ -791,7 +791,7 @@ const VideoPeriodsWidget = React.forwardRef<HTMLDivElement, VideoPeriodsWidgetPr
             >
               <div className="flex">
                 {/* 左侧星期标签 - 与时间轴条居中对齐 */}
-                <div className="w-10 text-sm text-gray-600 flex-shrink-0 flex items-center justify-center h-6">
+                <div className="w-10 text-sm text-gray-600 shrink-0 flex items-center justify-center h-6">
                   {dayData.title}
                 </div>
                 
@@ -807,7 +807,7 @@ const VideoPeriodsWidget = React.forwardRef<HTMLDivElement, VideoPeriodsWidgetPr
                 </div>
                 
                 {/* 右侧复制按钮占位 - 保持布局一致 */}
-                <div className="w-8 flex-shrink-0"></div>
+                <div className="w-8 shrink-0"></div>
               </div>
               
               {/* 右侧复制按钮 - 绝对定位不影响布局 */}

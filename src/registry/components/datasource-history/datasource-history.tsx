@@ -639,10 +639,7 @@ function useHistoryData(config: HistoryDataConfig) {
       setRequestId(`${Date.now()}-${Math.random().toString(36).substring(2, 9)}`)
     } catch (err) {
       console.error('查询失败:', err)
-      toast({
-        variant: 'destructive',
-        title: '数据查询出现错误，请检查数据'
-      })
+      toast.error('数据查询出现错误，请检查数据')
     } finally {
       setLoading(false)
     }

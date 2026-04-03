@@ -93,9 +93,9 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
               height: '100%',
               objectFit: 'contain',
               backgroundColor: backgroundColor || undefined,
-              userSelect: 'none',
-              draggable: false
+              userSelect: 'none'
             }}
+            draggable={false}
             {...props}
           />
         ) : (

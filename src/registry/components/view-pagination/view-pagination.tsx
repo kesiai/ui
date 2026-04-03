@@ -131,8 +131,7 @@ const ViewPagination: React.FC<ViewPaginationProps> = ({
                   <PaginationLink
                     isActive={page === activePage}
                     onClick={() => handlePageChange(page as number)}
-                    className="cursor-pointer"
-                  >
+                    className="cursor-pointer" size={undefined}                  >
                     {page}
                   </PaginationLink>
                 </PaginationItem>
@@ -163,7 +162,7 @@ const ViewPagination: React.FC<ViewPaginationProps> = ({
             onValueChange={(value) => handlePageSizeChange(Number(value))}
             disabled={disabled}
           >
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className="w-25">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

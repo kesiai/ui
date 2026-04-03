@@ -120,7 +120,7 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
           <TabsContent
             key={tabValue}
             value={tabValue}
-            forceMount={tab.forceRender}
+            forceMount={tab.forceRender ? true : undefined}
             className={cn(
               "mt-0 flex-1",
               orientation === "left" || orientation === "right" ? "ml-0" : ""

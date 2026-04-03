@@ -69,18 +69,18 @@ const Model3dLayout3d: React.FC<Model3dLayout3dProps> = ({
     }
   }, [JSON.stringify(meshConfig), isSprite, isFixd])
 
-  const handleDoubleClick = (e: React.MouseEvent) => {
+  const handleDoubleClick = () => {
     if (!editMode) {
       return
     }
     setVisible(true)
   }
 
-  const handleMouseEnter = (e: React.MouseEvent) => {
+  const handleMouseEnter = () => {
     setMask(true)
   }
 
-  const handleMouseLeave = (e: React.MouseEvent) => {
+  const handleMouseLeave = () => {
     setMask(false)
   }
 

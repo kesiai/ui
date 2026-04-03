@@ -55,7 +55,6 @@ const FilterUserRole: React.FC<FilterUserRoleProps> = (props) => {
   const searchRef = useRef<string>('')
   const itemsRef = useRef<UserOption[]>([])
 
-  const multi = true
   const ignoreAdmin = relateSchema?.ignoreAdmin
 
   // 初始化选中的值
@@ -215,7 +214,7 @@ const FilterUserRole: React.FC<FilterUserRoleProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-w-[150px]',
+            'flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-w-37.5',
             selectedValues.length > 0 && 'h-auto min-h-10 py-1'
           )}
         >
@@ -270,7 +269,7 @@ const FilterUserRole: React.FC<FilterUserRoleProps> = (props) => {
 
           {/* 选项列表 */}
           <div
-            className="max-h-[300px] overflow-y-auto"
+            className="max-h-75 overflow-y-auto"
             onScroll={handleScroll}
           >
             {options.length === 0 && !loading ? (

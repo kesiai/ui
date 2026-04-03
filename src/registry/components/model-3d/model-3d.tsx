@@ -190,7 +190,7 @@ const useBackground = (background: any, backgroundImage: any, environmentConfig:
 }
 
 const Ground = ({ ground }: any) => {
-  const { materialType = 'MeshBasicMaterial', width = 100, height = 100, color = '#AAAAAA' } = ground || {}
+  const { width = 100, height = 100, color = '#AAAAAA' } = ground || {}
 
   return (
     <>
@@ -222,7 +222,7 @@ const Scene = (props: any) => {
 
 // 相机组件
 const Camera = ({ cameraConfig, aspect }: any) => {
-  const { fov = 45, near = 1, far = 10000, position: cameraPositon = { x: 0, y: 200, z: 500 }, lookAt: cameraLookAt = { x: 0, y: 0, z: 0 } } = cameraConfig || {}
+  const { fov = 45, near = 1, far = 10000, position: cameraPositon = { x: 0, y: 200, z: 500 }, } = cameraConfig || {}
 
   // 简化：移除 store hooks 和 spring 动画，直接使用位置
   const position: [number, number, number] = [cameraPositon.x, cameraPositon.y, cameraPositon.z]
@@ -292,7 +292,7 @@ const DirectionalLightComp = (props: any) => {
 
 // 灯光组件
 const Lights = ({ lightConfig }: any) => {
-  const { ambientLight, directionalLight, hemisphereLight, pointLight, rectAreaLight, spotLight } = lightConfig || {}
+  const { ambientLight, directionalLight, hemisphereLight, pointLight, spotLight } = lightConfig || {}
   return (
     <>
       {ambientLight && ambientLight.length && (
@@ -400,9 +400,8 @@ const Controls = (props: any) => {
   const { controlType, orbitConfig, pointerLockConfig, flyConfig } = controlConfig || {}
 
   const orbitRef = React.useRef<any>(null)
-  const transRef = React.useRef<any>(null)
 
-  const { scene, camera } = useThree((state) => state)
+  const { camera } = useThree((state) => state)
 
   // 简化：移除 store hooks 和 transform 逻辑
 
@@ -437,7 +436,7 @@ const Controls = (props: any) => {
 
 // 加载组件
 const Loading = (props: any) => {
-  const { loadingConfig, script } = props
+  const { loadingConfig } = props
   const { img, width, height, backgroundColor } = loadingConfig || {}
 
   const { progress } = useProgress()

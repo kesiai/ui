@@ -93,7 +93,7 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
 
   const [options, setOptions] = React.useState<Array<{ label: string; value: string; table?: TableInfo }>>([])
   const [loading, setLoading] = React.useState(false)
-  const [tables, setTables] = React.useState<TableInfo[]>([])
+  const [_tables, setTables] = React.useState<TableInfo[]>([])
 
   // 获取表列表
   const fetchTables = React.useCallback(async () => {
@@ -162,21 +162,6 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
       name: selectedValue
     }
     onChange(table)
-  }
-
-  // 处理多选值变化
-  const handleMultipleChange = (selectedValues: string[]) => {
-    if (!onChange) return
-
-    const selectedTables = selectedValues.map(val => {
-      const option = options.find(opt => opt.value === val)
-      return option?.table || {
-        id: val,
-        title: val,
-        name: val
-      }
-    })
-    onChange(selectedTables)
   }
 
   // 获取当前显示值

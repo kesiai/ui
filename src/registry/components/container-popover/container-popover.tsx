@@ -165,7 +165,7 @@ const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
               placement === 'right' ? 'right' : undefined
             }
             style={contentStyle}
-            onOpenAutoFocus={(e: React.SyntheticEvent) => {
+            onOpenAutoFocus={(e: Event) => {
               // hover 模式下不自动聚焦
               if (trigger === 'hover') {
                 e.preventDefault()

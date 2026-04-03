@@ -10,7 +10,6 @@ import {
 
 // 翻译函数占位符
 const _r = (str: string) => str
-const _t1 = (str: string) => str
 
 export interface TableSelectProps {
   /**

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
-import { SchemaForm, type ModelSchema, type FormSchemaItem } from "@/registry/components/schema-form/schema-form"
+import { SchemaForm } from "@/registry/components/schema-form/schema-form"
 import { filterConverter } from '@/registry/lib/view-filter-converter'
-
+import type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
 type SchemaFormProps = {
   schema: ModelSchema
   filterSchema: FormSchemaItem[]

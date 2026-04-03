@@ -52,6 +52,14 @@ const ViewAdvancedFilter: React.FC<ViewAdvancedFilterProps> = ({
   const viewSchema = model
   if (!viewSchema || !viewSchema.properties) return <span style={{ fontSize: 12 }}>无可配置项</span>
 
+  const querySchema = React.useMemo(() => {
+    const cloned = cloneDeep(viewSchema)
+    if (!cloned.properties) {
+      cloned.properties = {}
+    }
+    return cloned
+  }, [viewSchema])
+
   const onSearch = () => {
     const filter = getQueryFilter(editValue, viewSchema)
     setWheres((w: object) => ({ ...w, filter }));
@@ -68,7 +76,7 @@ const ViewAdvancedFilter: React.FC<ViewAdvancedFilterProps> = ({
           <DialogTitle>高级筛选</DialogTitle>
         </DialogHeader>
         <QueryEditor
-          schema={cloneDeep(viewSchema)}
+          schema={querySchema as any}
           value={editValue}
           onChange={(v: any) => setEditValue(v)}
           timeRangeQuery={true}

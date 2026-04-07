@@ -209,6 +209,7 @@ export function ViewDataTable({
   tableLayout = {},
   tableOptions = {},
   gridOptions = {},
+  showCheckbox = true,
   children
 }: {
   className?: string,
@@ -216,16 +217,17 @@ export function ViewDataTable({
   tableOptions?: Omit<TableOptions<IData>, 'data' | 'columns' | 'getCoreRowModel'>,
   columns?: ColumnDef<IData>[]
   gridOptions?: Omit<React.ComponentProps<typeof DataGrid>, 'table' | 'recordCount' | 'tableLayout'>
+  showCheckbox?: boolean
   children?: React.ReactElement[] | React.ReactElement | undefined
 }) {
   const { items, loading, fields } = useModelList()
   const { model, atoms } = useModel()
 
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [selected, setSelected] = useModelState<{ id: string }[]>(atoms.selected)
-
   const [order, setOrder] = useModelState(atoms.order)
   const [sorting, setSorting] = useState<SortingState>([])
+
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [selected, setSelected] = useModelState<{ id: string }[]>(atoms.selected)
 
   const columnHelper = createColumnHelper<IData>()
   const columns: ColumnDef<IData>[] = []
@@ -285,18 +287,20 @@ export function ViewDataTable({
     }, {}));
   }, [selected]);
 
-  columns.unshift({
-    accessorKey: 'id',
-    header: () => <DataGridTableRowSelectAll />,
-    cell: ({ row }) => <DataGridTableRowSelect row={row} />,
-    enableSorting: false,
-    enableResizing: false,
-    size: 35,
-    meta: {
-      headerClassName: '',
-      cellClassName: '',
-    },
-  })
+  if (showCheckbox) {
+    columns.unshift({
+      accessorKey: 'id',
+      header: () => <DataGridTableRowSelectAll />,
+      cell: ({ row }) => <DataGridTableRowSelect row={row} />,
+      enableSorting: false,
+      enableResizing: false,
+      size: 35,
+      meta: {
+        headerClassName: '',
+        cellClassName: '',
+      },
+    })
+  }
 
   // 配置排序
   const onSortingChange = (handler: (state: SortingState) => SortingState) => {
@@ -344,14 +348,13 @@ export function ViewDataTable({
           right: ['__actions__'],
         },
       },
-      // 添加行选择配置
-      ...({ onRowSelectionChange, enableRowSelection: true, }),
       // 添加排序配置
       state: {
         ...(tableOptions.state || {}),
         sorting,
-        rowSelection
+        ...(showCheckbox ? { rowSelection } : {}),
       },
+      ...(showCheckbox ? { onRowSelectionChange, enableRowSelection: true } : {}),
       onSortingChange
     }}
   >{children}</DataTable>;

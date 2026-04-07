@@ -21,6 +21,7 @@ import isNil from 'lodash/isNil'
 import omit from 'lodash/omit'
 import get from 'lodash/get'
 import find from 'lodash/find'
+import isArray from 'lodash/isArray'
 import { FilterDatetime } from '@/registry/components/filter-datetime/filter-datetime'
 import { FilterDate } from '@/registry/components/filter-date/filter-date'
 import { convertProps } from '@/registry/lib/query-editor-util'
@@ -32,6 +33,7 @@ interface FilterFieldSchema {
   enum1?: string[]
   enum_title?: string[]
   enum_title1?: string[]
+  enumNames?: string[]
   format?: string
   formatType?: string
   timeFormat?: string
@@ -58,7 +60,7 @@ interface MethodItem {
 }
 
 interface EnumInputProps {
-  value?: string | { $in?: string[]; in?: string[] }
+  value?: string | { $in?: string[]; in?: string[] } | string[]
   onChange?: (value: string | string[]) => void
   schema?: FilterFieldSchema
   mode?: string
@@ -226,16 +228,79 @@ const BooleanInput = ({ value, onChange }: { value?: boolean; onChange?: (value:
 
 // 枚举输入组件
 const EnumInput = ({ value, onChange, schema, mode }: EnumInputProps) => {
-  const currentValue = typeof value === 'object' && value !== null
-    ? (value.$in || value.in)
-    : value
+  const [open, setOpen] = useState(false)
+  const currentValue = isArray(value) ? value : (typeof value === 'object' && value !== null ? (value.$in || value.in) : value)
 
-  const enum_title = schema?.enum_title || schema?.enum_title1 || []
+  const enum_title = schema?.enum_title || schema?.enum_title1 || schema?.enumNames || []
   const enums = schema?.enum || schema?.enum1 || []
+
+  // 多选模式
+  if (mode == 'multiple') {
+    const selectedValues = (currentValue as string[]) || []
+
+    // 处理选项选择
+    const handleSelectOption = (item: string) => {
+      const isSelected = selectedValues.includes(item)
+      const newValues = isSelected
+        ? selectedValues.filter((v) => v !== item)
+        : [...selectedValues, item]
+      onChange?.(newValues)
+    }
+
+    // 清除所有选择
+    const handleClear = (e: React.MouseEvent) => {
+      e.stopPropagation()
+      onChange?.([])
+    }
+
+    // 格式化显示值
+    const formatDisplayValue = () => {
+      if (selectedValues.length === 0) return '请选择'
+      return selectedValues
+        .map((v) => enum_title[enums.indexOf(v)] || v)
+        .join(', ')
+    }
+
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <div
+            className="flex items-center justify-between w-full h-10 px-3 py-2 text-sm bg-background border border-input rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground"
+          >
+            <span className="flex-1 truncate">{formatDisplayValue()}</span>
+            <div className="flex items-center gap-1">
+              {selectedValues.length > 0 && (
+                <X className="h-4 w-4 text-muted-foreground hover:text-foreground" onClick={handleClear} />
+              )}
+            </div>
+          </div>
+        </PopoverTrigger>
+        <PopoverContent className="p-0 w-full min-w-[200px]" align="start">
+          <div className="p-2 max-h-60 overflow-y-auto">
+            {enums?.map((item, index) => {
+              const isSelected = selectedValues.includes(item)
+              return (
+                <div
+                  key={item}
+                  className="flex items-center px-3 py-2 text-sm cursor-pointer rounded-md hover:bg-accent hover:text-accent-foreground"
+                  onClick={() => handleSelectOption(item)}
+                >
+                  <Checkbox checked={isSelected} className="mr-2" />
+                  <span>{enum_title[index] || item}</span>
+                </div>
+              )
+            })}
+          </div>
+        </PopoverContent>
+      </Popover>
+    )
+  }
+
+  // 单选模式
   return (
     <Select
-      value={mode == 'multiple' ? (currentValue?.[0] || '') : ((currentValue as string) || '')}
-      onValueChange={(v) => onChange?.(mode == 'multiple' ? [v] : v)}
+      value={(currentValue as string) || ''}
+      onValueChange={(v) => onChange?.(v)}
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="请选择" />

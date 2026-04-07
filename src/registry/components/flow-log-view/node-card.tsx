@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Handle } from 'react-flow-renderer'
+import { Handle, Position } from 'react-flow-renderer'
 import { Card } from '@/components/ui/card'
 import flowNodes from '@/registry/lib/flow-nodes'
 
@@ -115,12 +115,12 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
 
   useEffect(() => {
     const cardContainer = document.querySelector(`.card-content-${id}`)
-    const handleMouseWheel = (e: WheelEvent) => {
+    const handleMouseWheel = (e: Event) => {
       e.stopPropagation()
     }
-    cardContainer?.addEventListener('mousewheel', handleMouseWheel)
+    cardContainer?.addEventListener('wheel', handleMouseWheel)
     return () => {
-      cardContainer?.removeEventListener('mousewheel', handleMouseWheel)
+      cardContainer?.removeEventListener('wheel', handleMouseWheel)
     }
   }, [id])
 
@@ -156,11 +156,11 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
       {/* Handles */}
       <div className="flow-gateway-rhombus">
         {nodeType == 'default' || nodeType == 'output' ? (
-          <Handle type="target" position="top" className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
+          <Handle type="target" position={Position.Top} className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
         ) : null}
 
         {nodeType == 'default' || nodeType == 'input' ? (
-          <Handle type="source" position="bottom" className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-2" />
+          <Handle type="source" position={Position.Bottom} className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-2" />
         ) : null}
       </div>
     </Card>
@@ -170,7 +170,7 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
 const EndNode: React.FC<NodeTemplateComponentProps> = (props) => {
   return (
     <div className="flow-gateway-rhombus w-50 h-20 bg-[rgb(170_170_170)] rounded text-3 text-white flex justify-center items-center relative">
-      <Handle type="target" position="top" className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
+      <Handle type="target" position={Position.Top} className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
       结束
     </div>
   )
@@ -179,9 +179,9 @@ const EndNode: React.FC<NodeTemplateComponentProps> = (props) => {
 const FlowIteratorEndNode: React.FC<NodeTemplateComponentProps> = (props) => {
   return (
     <div className="w-[100px] h-[46px] border border-[rgb(170_170_170)] rounded-[5px] text-[18px] text-[rgb(170_170_170)] flex justify-center items-center relative flow-gateway-rhombus">
-      <Handle type="target" position="top" className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
+      <Handle type="target" position={Position.Top} className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
       迭代结束
-      <Handle type="source" position="bottom" className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-2" />
+      <Handle type="source" position={Position.Bottom} className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-2" />
     </div>
   )
 }
@@ -189,9 +189,9 @@ const FlowIteratorEndNode: React.FC<NodeTemplateComponentProps> = (props) => {
 const GatewayEndNode: React.FC<NodeTemplateComponentProps> = (props) => {
   return (
     <div className="w-[100px] h-[46px] border border-[rgb(170_170_170)] rounded-[5px] text-[18px] text-[rgb(170_170_170)] flex justify-center items-center relative flow-gateway-rhombus">
-      <Handle type="target" position="top" className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
+      <Handle type="target" position={Position.Top} className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
       分支结束
-      <Handle type="source" position="bottom" className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-2" />
+      <Handle type="source" position={Position.Bottom} className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-2" />
     </div>
   )
 }
@@ -202,9 +202,9 @@ const GatewayNode = ({ id }: { id: string }) => {
   return (
     <div className="w-13 h-13 rotate-45 bg-lightslategrey flex items-center justify-center text-[#faebd7] bg-[#789]">
       <div className="w-full h-full rotate-315 flex items-center justify-center !text-[38px]">
-        <Handle type="target" position="top" className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-4 z-5" />
+        <Handle type="target" position={Position.Top} className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-4 z-5" />
         +
-        <Handle type="source" position="bottom" className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-3" />
+        <Handle type="source" position={Position.Bottom} className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-3" />
       </div>
     </div>
   )

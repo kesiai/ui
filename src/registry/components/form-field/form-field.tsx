@@ -9,6 +9,7 @@ import { Controller, useFieldUIStateValue, useFormContext } from '@airiot/client
 import type { ReactNode } from 'react'
 import { Input } from "@/components/ui/input"
 import React, { cloneElement } from 'react'
+import { formFieldConverter } from "@/registry/lib/form-field-converter"
 
 import { cn } from '@/lib/utils'
 
@@ -42,15 +43,7 @@ const FormField =
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
     const fieldProps = React.useMemo(() => {
-      const converted: Record<string, any> = { schema }
-      // enum → options 转换（仅当 schema 没有 options 时）
-      if (schema?.enum && !schema?.options) {
-        converted.options = schema.enum.map((val: any, index: number) => ({
-          value: val,
-          label: schema.enumNames?.[index] ?? schema.enum_title?.[index] ?? val,
-        }))
-      }
-      return { ...converted, ...schema }
+      return formFieldConverter(schema)
     }, [schema])
     const controllerRules = { required, ...rules, validate }
 

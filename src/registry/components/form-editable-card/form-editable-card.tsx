@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Trash2 } from 'lucide-react'
 import { formConverter } from '@/registry/lib/view-form-converter'
 import { FormProvider, useForm } from '@airiot/client'
+import { formFieldConverter } from '@/registry/lib/form-field-converter'
 
 export interface FormEditableCardProps {
   /** 当前值 */
@@ -110,13 +111,15 @@ const FieldCell: React.FC<{
   // 使用 form-widget 的字段选择器来渲染不同的字段类型
   const actualSchema = disabled ? { ...schema, disabled: true } : schema
 
+  const field = formFieldConverter(actualSchema)
+
   const FieldController = formConverter(schema, {})
 
   const methods = useForm()
 
   return (
     <FormProvider {...methods} >
-      <FieldController value={value} record={record} schema={actualSchema} onChange={onChange} />
+      <FieldController {...field} value={value} record={record} onChange={onChange} />
     </FormProvider>
   )
 

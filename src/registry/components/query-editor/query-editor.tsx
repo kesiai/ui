@@ -5,9 +5,9 @@ import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
 import { NullInput, TextInput, VariateRangeTimeInput, getMethods, type MethodItem } from '@/registry/components/query-editor-methods/query-editor-methods'
 import { convertProps } from '@/registry/lib/query-editor-util'
-import { FormField } from '@/registry/components/form-field/form-field'
 import { formConverter } from '@/registry/lib/view-form-converter'
 import { filterConverter } from '@/registry/lib/view-filter-converter'
+import { formFieldConverter } from '@/registry/lib/form-field-converter'
 import { FormProvider, useForm, } from '@airiot/client'
 import isNil from 'lodash/isNil'
 import omit from 'lodash/omit'
@@ -26,6 +26,10 @@ interface QueryCondition {
   value?: unknown
   timeRange?: {
     rangeType?: string
+    type?: string
+    count?: number | null
+    unit?: string
+    fromNow?: boolean
     [key: string]: unknown
   }
   valid?: boolean
@@ -131,19 +135,25 @@ const getFieldCom = (fSchema: FieldSchema, method: MethodItem | undefined) => {
     } else {
       const schema = { type: 'object', properties: { [fSchema.key]: { ...fSchema, name: fSchema.key } } }
       const multipleSchema = { items: schema, ...fSchema, selectType: 'multiple', type: 'array' }
+      if (fSchema.enum) {
+        fSchema.controlType = fSchema.type == 'number' ? 'select-array-number' : 'select-array-string'
+      } else if (fSchema.controlType == 'relate') {
+        fSchema.controlType = 'relate-multiple'
+      }
       FieldController = formConverter(multipleSchema, fieldSchame)
     }
-    FieldController = fSchema?.type == 'array' ? filterConverter(fSchema, fieldSchame) : formConverter(fSchema, fieldSchame)
   } else if (fSchema.type == 'object' && ['eq', 'ne'].indexOf(method?.key || '') > -1 && (fSchema.relateTo || fSchema.relate)) {
     FieldController = formConverter(fSchema, fieldSchame)
   } else {
     FieldController = fSchema?.type == 'array' ? filterConverter(fSchema, fieldSchame) : formConverter(fSchema, fieldSchame)
-  }
+  }  
   return ({ value, onChange }: { value?: any, onChange?: (v: any) => void }) => {
     const methods = useForm()
+    const field = formFieldConverter(fSchema)
+    
     return (
       <FormProvider {...methods}>
-         <FieldController schema={fSchema} value={value} onChange={onChange} />
+        <FieldController {...field} value={value} onChange={onChange} />
       </FormProvider>
     )
   }
@@ -168,7 +178,6 @@ const getConvertCom = (fieldSchema: FieldSchema, method: MethodItem | undefined)
     return FieldTypeCom || method.component
   }
   if (method?.type == 'multipleSelect' && ['in', 'nin'].indexOf(method?.key) > -1) {
-    if (fieldSchema.enum) return method.component
     return FieldTypeCom || fieldSchema.component || method?.component || TextInput
   }
   if (fieldSchema.controlType && (fieldSchema.enum || fieldSchema.enum1) || fieldSchema.relateTo || fieldSchema.controlType === 'area') {
@@ -191,13 +200,13 @@ const ValueComponent = ({ method, fieldSchema, fieldKey, ...restProps }: {
 }) => {
 
   const Com = () => getConvertCom(fieldSchema, method) || TextInput
-  const [FieldComponent, setFieldComponent] = useState<React.ComponentType>(Com)
+  const [FieldComponent, setFieldComponent] = useState<React.ComponentType<Record<string, any>>>(Com)
   React.useEffect(() => {
     setFieldComponent(Com)
   }, [fieldKey, method])
 
   const Comp = FieldComponent || NullInput
-  return <Comp fieldKey={fieldKey} schema={fieldSchema} {...restProps} />
+  return <Comp schema={fieldSchema} {...restProps} />
 }
 
 const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, showValidBtn }: QueryItemFromProps) => {
@@ -465,7 +474,7 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
 
         {
           ['range', 'notRange', 'gt', 'lt'].indexOf(selectMethod as string) > -1 && timeRangeQuery && isTime &&
-          (rangeType == 'dynamic' ? <VariateRangeTimeInput {...fieldSchema} value={value?.timeRange} onChange={onTimeRangeChange} label={fieldSchema.title}></VariateRangeTimeInput> :
+          (rangeType == 'dynamic' ? <VariateRangeTimeInput {...fieldSchema} value={value?.timeRange} onChange={onTimeRangeChange}></VariateRangeTimeInput> :
             rangeType == 'fixed' || defaultType == 'fixed' ?
               <div className="mb-2">
                 <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} />
@@ -696,7 +705,7 @@ interface QueryEditorProps {
   DataWrap?: React.ComponentType
   btnName?: string
   onlyOneType?: boolean
-  schema?: SchemaDef
+  schema: SchemaDef
   selectHide?: boolean
   fieldPlaceholder?: string
   timeRangeQuery?: boolean

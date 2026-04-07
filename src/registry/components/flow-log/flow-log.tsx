@@ -27,8 +27,9 @@ interface TaskProps {
 
 interface FlowRecord {
   id: string
+  type: string
   flowId?: string
-  elementId?: string
+  elementId: string
   status?: string
   variables?: any
   startTimestamp?: number
@@ -68,9 +69,9 @@ const fetchJobLogs = async ({ jobKey, bpmnProcessId, variables }: TaskProps) => 
 
 const FlowLog: React.FC<FlowLogProps> = ({ task, taskId, jobs, logNodeRenderMap }) => {
 
-  const [taskData, setTaskData] = React.useState({})
+  const [taskData, setTaskData] = React.useState<Record<string, any>>({})
   const [loading, setLoading] = React.useState(false)
-  const [elements, setElements] = React.useState(jobs ||[])
+  const [elements, setElements] = React.useState<FlowRecord[]>(jobs || [])
 
   React.useEffect(() => {
     (async () => {
@@ -113,7 +114,7 @@ const FlowLog: React.FC<FlowLogProps> = ({ task, taskId, jobs, logNodeRenderMap 
             const nodeInfo = getNodeData({ ...el, setting }, taskData, logNodeRenderMap?.[el.type]) || {}
             const content = ['flowUserFillin', 'flowUserApprove', 'flowUserCC'].includes(el.type)
               ? nodeInfo.content
-              : getFlowData({ ...el, variables: { ...el.variables, __mock__: false }, setting }, null, logNodeRenderMap?.[el.type])
+              : getFlowData({ ...el, variables: { ...el.variables, __mock__: false }, setting }, undefined, logNodeRenderMap?.[el.type])
 
             const isCurrent = el?.job == taskData?.elementJob
             const currentIndex = elements.findIndex((item: any) => item?.job == taskData?.elementJob)

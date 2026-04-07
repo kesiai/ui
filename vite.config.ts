@@ -21,6 +21,14 @@ export default defineConfig({
         target: 'https://demo.airiot.link',
         changeOrigin: true
       },
+      '/rest/flow/': {
+        target: 'https://demo.airiot.link',
+        changeOrigin: true
+      },
+      '/rest/engine/': {
+        target: 'https://demo.airiot.link',
+        changeOrigin: true
+      },
       // 匹配 /rest/core/fileServer 开头的请求
       '/rest/core/fileServer': {
         target: 'https://demo.airiot.link',

@@ -3,6 +3,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { TC2Provider } from '@/registry/lib/table-context'
 import { formConverter } from '@/registry/lib/view-form-converter'
 import { FormProvider, useForm } from '@airiot/client'
+import { formFieldConverter } from '@/registry/lib/form-field-converter'
+
 export interface FormTableViewColumn {
   key: string
   dataIndex: string
@@ -138,6 +140,8 @@ const EditCell: React.FC<{
     onSave(updatedRecord)
   }
 
+  const field = formFieldConverter({ ...schema, disabled })
+
   const FieldController = formConverter(schema, {})
 
   const methods = useForm()
@@ -145,7 +149,7 @@ const EditCell: React.FC<{
   return (
     <FormProvider {...methods} >
       <TC2Provider editingSchema={record}>
-        <FieldController value={value} record={record} schema={{ ...schema, disabled }} onChange={handleChange} />
+        <FieldController {...field} value={value} record={record} onChange={handleChange} />
       </TC2Provider>
     </FormProvider>
   )

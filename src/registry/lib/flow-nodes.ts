@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react'
 import {
   LogIn,
   Table,
@@ -53,7 +54,7 @@ import {
 } from 'lucide-react'
 
 // 图标映射
-const iconMap: Record<string, React.ElementType> = {
+const iconMap: Record<string, LucideIcon> = {
   "用户登录": LogIn,
   "表事件": Table,
   "报警事件": AlertTriangle,

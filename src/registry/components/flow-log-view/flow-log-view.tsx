@@ -37,6 +37,7 @@ interface FlowElement {
   position?: { x: number; y: number }
   data?: FlowElementData
   elementId?: string
+  elementData?: any
   source?: string
   target?: string
   style?: FlowElementStyle
@@ -125,8 +126,9 @@ interface FlowVariables {
 
 interface FlowRecord {
   id: string
+  type: string
   flowId?: string
-  elementId?: string
+  elementId: string
   status?: string
   variables?: FlowVariables
   startTimestamp?: number
@@ -214,7 +216,7 @@ const onVersion = (oldElements?: FlowElement[]): FlowElement[] => {
   })
 
   if (!hasEnd) {
-    newElements.push({ id: uuid(8, 16), ...initEnd } as FlowElement)
+    newElements.push({ ...initEnd, id: uuid(8, 16) } as FlowElement)
   }
 
   return newElements
@@ -222,7 +224,7 @@ const onVersion = (oldElements?: FlowElement[]): FlowElement[] => {
 
 const formatEls = (els?: FlowElement[]): FlowElement[] => {
   const convertInitEls = onVersion(els)
-  const initValue = convertInitEls && convertInitEls.length > 0 ? convertInitEls : [{ id: uuid(8, 16), ...initEnd }] as FlowElement[]
+  const initValue = convertInitEls && convertInitEls.length > 0 ? convertInitEls : [{ ...initEnd, id: uuid(8, 16) }] as FlowElement[]
   let newEls: FlowElement[] = []
 
   initValue?.map((el) => {
@@ -302,14 +304,14 @@ interface FlowDataProps {
   logRender?: string | React.ReactNode
 }
 
-const FlowData: React.FC<FlowDataProps> = ({ record = {}, items = [], logRender }) => {
-  const item = items?.[0] || {}
-  const configs = (item.config && JSON.parse(item.config)) || []
-  const config = configs?.find((v: { id?: string }) => v.id == record.elementId) || {}
-  const setting = { ...(record.setting || {}), taskFormSchema: config['taskFormSchema'] }
+const FlowData: React.FC<FlowDataProps> = ({ record, items = [], logRender }) => {
+  const item = items?.[0]
+  const configs = (item?.config && JSON.parse(item.config)) || []
+  const config = configs?.find((v: { id?: string }) => v.id == record?.elementId) || {}
+  const setting = { ...(record?.setting || {}), taskFormSchema: config['taskFormSchema'] }
   return (
     <div className="break-words">
-      {getFlowData({ ...record, setting }, items, logRender)}
+      {record && getFlowData({ ...record, setting }, items, logRender)}
     </div>
   )
 }
@@ -373,9 +375,9 @@ interface LogCardProps {
     return (
       <NodeTemplate
         {...props}
+        id={props.record.id}
         nodeType={isStart ? 'input' : 'default'}
         title={props.data?.name || node?.title}
-        titleIcon={node?.titleIcon}
         cardProps={cardProps}
         icon={<Icon className='w-5 h-5' />}
       >
@@ -416,7 +418,7 @@ interface LogCardProps {
     const config = statusConfig[status] || statusConfig.default
 
     return (
-      <Badge variant={config.variant as 'default' | 'success' | 'destructive' | 'secondary'} size="sm" className="gap-1">
+      <Badge variant={config.variant as 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'outline' | 'destructive'} size="sm" className="gap-1">
         {config.icon}
         {config.label}
       </Badge>
@@ -428,7 +430,7 @@ interface LogCardProps {
 
     Object.keys(flowNodes).forEach((node) => {
       const nodeConfig = flowNodes[node]
-      const paramSchema = nodeConfig?.paramSchema
+      const paramSchema = {}
       const _node = flowNodes[node]
       const isStart = getIsStartNode(_node)
       const RenderEndNode = node == 'flowEnd' ? EndNode : node == 'flowIteratorEnd' ? FlowIteratorEndNode : node == 'gatewayEnd' ? GatewayEndNode : null
@@ -462,7 +464,7 @@ interface LogCardProps {
 
         if (useLogCard) {
           return React.createElement(
-            RenderNode || LogCard,
+            (RenderNode || LogCard) as React.ComponentType<any>,
             { ...props, node, editable: false, paramSchema, layout: 'horizontal', record, extraChildren }
           )
         }
@@ -498,12 +500,12 @@ interface LogCardProps {
           animated={true}
           pathType='smoothStep'
           isLoop={isLoop}
-          gatewayPanelRender={(p: GatewayPanelProps) => <GatewayPanelRender {...p} branch={branch} />}
+          gatewayPanelRender={(p: GatewayPanelProps) => <GatewayPanelRender {...p} branch={branch as any} />}
         />
       )
     },
     iteratorEdgeLoop: (props: React.ComponentProps<typeof IteratorEdgeLoop>) => {
-      return <IteratorEdgeLoop {...props} isLoop={true} pathType='smoothStep' />
+      return <IteratorEdgeLoop {...props} pathType='smoothStep' />
     },
     gatewayDefaultEdge: (props: React.ComponentProps<typeof GatewayDefaultEdge>) => {
       const logic = !jobs?.find((el) => el.elementId == props.source)?.setting?.branch?.some((b) => b.logic)
@@ -512,8 +514,8 @@ interface LogCardProps {
   }
 
   // 将 elements 分离为 nodes 和 edges
-  const nodes = elements.filter((el) => !el.source && !el.target)
-  const edges = elements.filter((el) => el.source && el.target).map(el => el.type == 'iteratorEdgeLoop' ? { ...el, markerEnd: { type: 'arrowclosed' } } : { ...el, animated: true })
+  const nodes = elements.filter((el) => !el.source && !el.target) as any
+  const edges = elements.filter((el) => el.source && el.target).map(el => el.type == 'iteratorEdgeLoop' ? { ...el, markerEnd: { type: 'arrowclosed' } } : { ...el, animated: true }) as any
 
   return (
     <ReactFlowProvider>

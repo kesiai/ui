@@ -1,0 +1,17 @@
+{
+  "name": "view-permission",
+  "type": "registry:component",
+  "title": "View Permission",
+  "description": "View Permission - 组件",
+  "dependencies": [
+    "@airiot/client"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/components/kesi/view-permission/view-permission.tsx",
+      "type": "registry:component",
+      "content": "import React from \"react\"\nimport { useUser, type UserInfo } from \"@airiot/client\"\n\ntype Permission = string | string[] | ((user: UserInfo) => boolean)\n\ntype FailureComponent =\n  | React.ReactNode\n  | React.ComponentType\n  | string\n\ninterface HasPermissionProps {\n  permission?: Permission\n  failureComponent?: FailureComponent\n  children: React.ReactElement\n}\n\nfunction checkPermission(user: UserInfo | undefined, permission: Permission): boolean {\n  if (!user) return false\n  if (user.isSuper) return true\n  if (!user.permissions) return false\n\n  if (Array.isArray(permission)) {\n    return permission.every((p) => user.permissions!.includes(p))\n  }\n  if (typeof permission === \"function\") {\n    return permission(user)\n  }\n  return user.permissions.includes(permission)\n}\n\nfunction renderFailure(FailureComponent: FailureComponent): React.ReactNode {\n  if (React.isValidElement(FailureComponent)) {\n    return FailureComponent\n  }\n  if (typeof FailureComponent === \"function\") {\n    return <FailureComponent />\n  }\n  return FailureComponent\n}\n\nexport function HasPermission({\n  permission,\n  failureComponent = \"NoPermission\",\n  children,\n  ...props\n}: HasPermissionProps & Record<string, unknown>): React.ReactElement {\n  const { user } = useUser()\n  // console.log(\"User permissions:\", user)\n  if (!permission || checkPermission(user, permission)) {\n    return Object.keys(props).length > 0\n      ? React.cloneElement(children, props)\n      : children\n  }\n\n  return renderFailure(failureComponent) as React.ReactElement\n}\n"
+    }
+  ]
+}

@@ -11,7 +11,12 @@
     {
       "path": "registry/components/kesi/form-serial-number/form-serial-number.tsx",
       "type": "registry:component",
-      "content": "import * as React from 'react'\nimport { Input } from '@/components/ui/input'\n\nexport interface FormSerialNumberProps {\n  value?: string\n  onChange?: (value: string) => void\n  serialRules?: Array<{\n    type: 'text' | 'time' | 'num'\n    text?: string\n    time?: string\n    num?: {\n      orderType?: 'random' | 'linear'\n      bitNum?: number\n      startNum?: number\n    }\n  }>\n  disabled?: boolean\n  meta?: any\n  record?: any\n}\n\nconst FormSerialNumber: React.FC<FormSerialNumberProps> = (props) => {\n  const { value, disabled = true } = props\n\n  return (\n    <Input\n      value={value || ''}\n      disabled={disabled}\n      placeholder=\"自动生成\"\n      className=\"bg-muted\"\n    />\n  )\n}\n\nexport { FormSerialNumber }\n"
+      "content": "import * as React from 'react'\nimport { Input } from '@/components/ui/input'\nimport type { BaseFormFieldProps } from '@/registry/lib/base-form-props'\n\nexport interface FormSerialNumberProps extends Omit<BaseFormFieldProps, 'value'> {\n  /** 当前值 */\n  value?: string\n  /** 是否禁用 */\n  disabled?: boolean\n}\n\nconst FormSerialNumber: React.FC<FormSerialNumberProps> = (props) => {\n  const { value, disabled = true } = props\n\n  return (\n    <Input\n      value={value || ''}\n      disabled={disabled}\n      placeholder=\"自动生成\"\n      className=\"bg-muted\"\n    />\n  )\n}\n\nexport { FormSerialNumber }\n"
+    },
+    {
+      "path": "registry/lib/base-form-props.ts",
+      "type": "registry:lib",
+      "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
     }
   ]
 }

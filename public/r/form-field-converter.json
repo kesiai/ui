@@ -1,0 +1,15 @@
+{
+  "name": "form-field-converter",
+  "type": "registry:lib",
+  "title": "Form Field Converter",
+  "description": "Form Field Converter - 工具库",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/form-field-converter.ts",
+      "type": "registry:lib",
+      "content": "\nexport const formFieldConverter = (schema: Record<string, any>) => {\n  const converted: Record<string, any> = { schema }\n  // enum → options 转换（仅当 schema 没有 options 时）  \n  if (schema?.enum && !schema?.options) {\n    converted.options = schema.enum.map((val: any, index: number) => ({\n      value: val,\n      label: schema.enumNames?.[index] ?? schema.enum_title?.[index] ?? val,\n    }))\n  }\n  return { ...converted, ...schema }\n}"
+    }
+  ]
+}

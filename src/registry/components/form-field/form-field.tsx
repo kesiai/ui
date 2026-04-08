@@ -27,7 +27,7 @@ type FormFieldProps = {
 }
 
 type FormContextReturnType = ReturnType<typeof useFormContext> & {
-  classNames?: Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error', string>
+  classNames?: Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error' | 'orientation', string>
 }
 
 const FormField =
@@ -54,7 +54,7 @@ const FormField =
         control={methods?.control}
         rules={controllerRules}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
+          <Field orientation={(formClassNames?.orientation as 'vertical' | 'horizontal' | 'responsive') || 'vertical'} data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
             {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
               {label} : {required && <span className="text-red-500">*</span>}
             </FieldLabel>}

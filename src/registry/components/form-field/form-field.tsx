@@ -42,6 +42,7 @@ const FormField =
     const ui = useFieldUIStateValue(name)
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
+    const fieldDescription = description || schema.description
     const fieldProps = React.useMemo(() => {
       return formFieldConverter(schema)
     }, [schema])
@@ -73,9 +74,9 @@ const FormField =
                 'aria-invalid': fieldState.invalid
               })) : <Input className={cn(formClassNames?.input, classNames?.input, schema?.classNames?.input)} />
             }
-            {description && (
+            {fieldDescription && (
               <FieldDescription className={cn(formClassNames?.description, classNames?.description, schema?.classNames?.description)}>
-                {description}
+                {fieldDescription}
               </FieldDescription>
             )}
             {fieldState.invalid && (

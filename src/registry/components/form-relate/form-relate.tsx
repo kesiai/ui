@@ -54,17 +54,6 @@ const FormRelate: React.FC<FormRelateProps> = (props) => {
     return String(val)
   }
 
-  // 处理值变化
-  const handleChange = (val: any) => {
-    if (!val || isEmpty(val)) {
-      onChange?.(null)
-    } else if (internalTable) {
-      onChange?.(val)
-    } else {
-      onChange?.({ in: val })
-    }
-  }
-
   // 格式化当前值
   const currentValue = React.useMemo(() => {
     if (!value) return undefined
@@ -99,13 +88,7 @@ const FormRelate: React.FC<FormRelateProps> = (props) => {
           : null
       }
       onChange={(option) => {
-        if (!option || (isArray(option) && option.length === 0)) {
-          onChange?.(null)
-        } else if (isArray(option)) {
-          handleChange(option.map((o: any) => o.value || o.key))
-        } else {
-          handleChange((option as any).value || (option as any).key)
-        }
+        isArray(option) ? onChange(option.map(item => item.item)) : onChange(option.item)
       }}
       field={field}
       schema={schema}

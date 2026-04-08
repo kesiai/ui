@@ -49,29 +49,6 @@ export interface FormRelateTestProps {
 }
 
 const FormRelateTest: React.FC<FormRelateTestProps> = (props) => {
-  const input = props.input || { value: props.value, onChange: props.onChange }
-  // 只传递需要的属性给子组件
-  const dataSelectProps: any = {
-    schema: props.schema,
-    tableID: props.tableID || props.schema?.relate?.id,
-    input,
-    field: props.field,
-    meta: props.meta,
-  }
-
-  const addRecordBtnProps = {
-    relateSchema: props.schema,
-    tableID: props.tableID || props.schema?.relate?.id,
-    input: props,
-    meta: props.meta,
-  }
-
-  const dataShowProps = {
-    relateSchema: props.schema,
-    input: props,
-    field: props.field,
-    schema: props.schema,
-  }
 
   if (!props.schema) {
     return <div className="text-sm text-red-500">关联字段配置错误：缺少 schema</div>
@@ -79,10 +56,10 @@ const FormRelateTest: React.FC<FormRelateTestProps> = (props) => {
   return (
     <div className="flex flex-col items-stretch w-full gap-2">
       <div className="flex flex-row gap-2">
-        <FormRelate {...dataSelectProps} />
-        <FormRelatePlusAddRecordBtn {...addRecordBtnProps} />
+        <FormRelate {...props} />
+        <FormRelatePlusAddRecordBtn {...props} />
       </div>
-      <FormRelatePlusDataShow {...dataShowProps} />
+      <FormRelatePlusDataShow {...props} />
     </div>
   )
 }

@@ -8,7 +8,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import { fieldRender } from '@/registry/lib/form-relate-utils'
 
 export interface FormRelatePlusDataShowProps {
-  relateSchema: {
+  schema: {
     showType?: 'select' | 'card' | 'table'
     relateShowFields?: Array<{
       key: string
@@ -21,9 +21,7 @@ export interface FormRelatePlusDataShowProps {
     }
     relateTo?: string
   } & Record<string, any>
-  input?: {
-    value?: any
-  }
+  value?: any
   field?: {
     displayField?: string
     relateShowFields?: Array<{
@@ -74,14 +72,14 @@ function parseJsonStrings(data: any): any {
 
 // Single item display in card format
 const ItemShow: React.FC<{
-  relateSchema: FormRelatePlusDataShowProps['relateSchema']
+  schema: FormRelatePlusDataShowProps['schema']
   val: object
   field?: FormRelatePlusDataShowProps['field']
   detailPage?: boolean
   relateTableData?: Array<Object>
-}> = ({ relateSchema, val, field, detailPage, relateTableData }) => {
-  const displayField = field?.displayField || relateSchema.showField || 'name'
-  const showFields = relateSchema.relateShowFields || []
+}> = ({ schema, val, field, detailPage, relateTableData }) => {
+  const displayField = field?.displayField || schema.showField || 'name'
+  const showFields = schema.relateShowFields || []
 
   const value = { ...val || {}, ...(relateTableData?.find(item => item.id === val.id) || {}) }
 
@@ -133,8 +131,8 @@ const ItemShow: React.FC<{
 
 // Table display format
 const TableShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
-  const { relateSchema, field, val } = props
-  const tableID = relateSchema?.relate?.id
+  const { schema, field, val } = props
+  const tableID = schema?.relate?.id
 
   const [loading, setLoading] = React.useState(true)
   const [tableSchema, setTableSchema] = React.useState<any>(null)
@@ -175,9 +173,9 @@ const TableShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
     return <div className="text-sm text-muted-foreground py-2">请从右侧属性配置中选择显示字段</div>
   }
 
-  const displayField = field?.displayField || relateSchema.showField || 'name'
-  const showFields = field?.relateShowFields || relateSchema.relateShowFields || []
-  const columns = [displayField, relateSchema.showField, ...showFields.map((f: any) => f.key)]
+  const displayField = field?.displayField || schema.showField || 'name'
+  const showFields = field?.relateShowFields || schema.relateShowFields || []
+  const columns = [displayField, schema.showField, ...showFields.map((f: any) => f.key)]
     .filter(Boolean)
 
   return (
@@ -212,16 +210,16 @@ const TableShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
 
 // Main DataShow component
 const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
-  const { relateSchema, input } = props
+  const { schema, value, showType = 'card' } = props
 
   const [relateTableData, setRelateTableData] = React.useState<Array<Object>>(null)
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => { // 关联关联字段时后端只有ID，前端需要请求一次数据才能展示
-    const rsf = relateSchema?.relateShowFields || []
+    const rsf = schema?.relateShowFields || []
     const relateFields = rsf.filter((f: any) => f.fieldSchema?.config === '关联字段')
     if (relateFields.length > 0) {
-      const api = createAPI({ resource: relateSchema.name })
+      const api = createAPI({ resource: schema.name })
 
       // 使用 api.query 查询数据
       const relateFieldKeys = relateFields?.map((f: { key: string }) => f.key) || []
@@ -250,8 +248,7 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
     )
   }
 
-  if (relateSchema.showType === 'card') {
-    const value = input?.value
+  if (showType === 'card') {
     const parsedValue = parseJsonStrings(value)
 
     if (isArray(parsedValue)) {
@@ -299,13 +296,11 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
     }
 
     return null
+  } else if (showType === 'table') {
+    return <TableShow {...props} val={parseJsonStrings(value)} />
+  } else {
+    return null
   }
-
-  if (relateSchema.showType === 'table') {
-    return <TableShow {...props} val={parseJsonStrings(input?.value)} />
-  }
-
-  return null
 }
 
 export { FormRelatePlusDataShow }

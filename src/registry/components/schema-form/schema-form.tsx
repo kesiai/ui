@@ -19,7 +19,7 @@ type SchemaFormProps = UseFormPropsExtended & {
   onSubmit?: (data: any) => void
   isValid?: boolean
   children?: ReactNode | ((props: any) => ReactNode)
-  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
+  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string> & { groupStyle?: React.CSSProperties }
 }
 
 const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = true, classNames, schameConvert, ...props }: SchemaFormProps) => {
@@ -80,7 +80,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
   const resolver = React.useMemo<Resolver<any, any>>(() => {
     return zodResolver(zodSchema as any)
   }, [zodSchema])
-  
+
   const methods = useForm({
     resolver: isValid ? resolver : null,
     ...props
@@ -157,7 +157,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
   return (
     <FormProvider {...methods} classNames={classNames}>
       <form id={formId} onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
-        <FieldGroup className={classNames?.group}>
+        <FieldGroup className={classNames?.group} style={classNames?.groupStyle}>
           {processedFormSchema.map(field => {
             const fieldKey = typeof field === 'string' ? field : field.key
             const fieldSchame = typeof field === 'string' ? { key: field } : field

@@ -164,7 +164,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
             const baseSchema = schema?.properties?.[fieldKey as string]
             const type = field?.controlType || baseSchema?.controlType
             // 将表格内部字段的 need 属性转换为外层的验证规则
-            const editableTableValidate = React.useMemo(() => {
+            const editableTableValidate = (() => {
               const forms = baseSchema?.items
               const hasEditableTableForms = forms?.form && forms?.properties
 
@@ -219,7 +219,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
               }
 
               return validateFn
-            }, [type, baseSchema?.items])
+            })()
             const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
             const megerSchema = { ...baseSchema, ...fieldSchame }
             return (

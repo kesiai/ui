@@ -32,6 +32,9 @@ const formConverter = (schema: any, formSchema: any) => {
 
   if (!controlType) {
     const type = schema.type
+    if (schema.enum) {
+      return FormSelect
+    }
     switch (type) {
       case 'string':
         return FormInput

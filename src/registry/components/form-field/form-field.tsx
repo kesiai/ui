@@ -54,27 +54,25 @@ const FormField =
         control={methods?.control}
         rules={controllerRules}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <div className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
-              {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
-                {label} : {required && <span className="text-red-500">*</span>}
-              </FieldLabel>}
-              {
-                children ? (typeof children === 'function' ? children({
-                  id: fieldId,
-                  ...field,
-                  ...fieldProps,
-                  className: cn(formClassNames?.input, classNames?.input, schema.classNames?.input),
-                  'aria-invalid': fieldState.invalid
-                }) : cloneElement(children as React.ReactElement<any>, {
-                  id: fieldId,
-                  ...field,
-                  ...fieldProps,
-                  className: cn(formClassNames?.input, classNames?.input, schema.classNames?.input),
-                  'aria-invalid': fieldState.invalid
-                })) : <Input className={cn(formClassNames?.input, classNames?.input, schema?.classNames?.input)} />
-              }
-            </div>
+          <Field data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
+            {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
+              {label} : {required && <span className="text-red-500">*</span>}
+            </FieldLabel>}
+            {
+              children ? (typeof children === 'function' ? children({
+                id: fieldId,
+                ...field,
+                ...fieldProps,
+                className: cn(formClassNames?.input, classNames?.input, schema.classNames?.input),
+                'aria-invalid': fieldState.invalid
+              }) : cloneElement(children as React.ReactElement<any>, {
+                id: fieldId,
+                ...field,
+                ...fieldProps,
+                className: cn(formClassNames?.input, classNames?.input, schema.classNames?.input),
+                'aria-invalid': fieldState.invalid
+              })) : <Input className={cn(formClassNames?.input, classNames?.input, schema?.classNames?.input)} />
+            }
             {fieldDescription && (
               <FieldDescription className={cn(formClassNames?.description, classNames?.description, schema?.classNames?.description)}>
                 {fieldDescription}

@@ -1,151 +1,120 @@
 import * as React from 'react'
-import { FormRelate as FormRelateComponent } from '@/registry/components/form-relate-component/form-relate-component'
-import { RelateSelect } from '@/registry/components/form-relate-select/form-relate-select'
-import { RelateMultiSelect } from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
-import { RelateModelSelect } from '@/registry/components/form-relate-model-select/form-relate-model-select'
-import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
-import { useFormContext } from '@airiot/client'
-import { Table2Context } from '@/registry/lib/table-context'
-import { dealFilter } from '@/registry/lib/form-relate-utils'
+import isEmpty from 'lodash/isEmpty'
+import isArray from 'lodash/isArray'
+import isObject from 'lodash/isObject'
+import { AsyncSelect } from '@/registry/components/form-relate-async-select/form-relate-async-select'
+
+export interface FormRelateProps {
+  input?: {
+    value?: any
+    onChange?: (value: any) => void
+  }
+  field?: {
+    schema?: Record<string, any> | undefined
+    filter?: any
+    meta?: any
+    key?: string | undefined
+    displayField?: string | undefined
+    tableID?: string | undefined
+    relateShowFields?: any
+    option?: any
+    internalTable?: boolean
+  }
+  meta?: any
+  record?: any
+  disabled?: boolean
+  /**
+   * 外部传入的过滤器对象
+   * 组件变为纯组件后，由父组件负责构建 filterObj
+   */
+  filterObj?: Record<string, any>
+}
 
 /**
- * FormRelate - 关联字段容器组件
- * 根据 field.schema 配置自动分发到对应的子组件：
- * - FormRelateComponent: 内部表关联 (internalTable=true)
- * - RelateSelect: 外部工作表单选 (默认单选)
- * - RelateMultiSelect: 外部工作表多选 (selectType='multiple')
- * - RelateModelSelect: 弹窗表格选择 (有 relateShowFields)
+ * FormRelate - 简单关联字段组件（纯组件版本）
+ * 用于内部表关联（同一个表内的字段关联）
  *
- * 对于内部表关联，此组件负责构建 filterObj 并传递给纯组件 FormRelateComponent
+ * 这是一个纯组件，不依赖 useFormContext 或 Table2Context
+ * filterObj 由父组件传入
  */
-const FormRelate: React.FC<RelateFieldProps> = (props) => {
-  const { field = {}, relateSchema: schema = {}, value, onChange, meta, record, disabled, label } = props
+const FormRelate: React.FC<FormRelateProps> = (props) => {
+  const { onChange, value, field = {}, meta, record, disabled: propsDisabled, filterObj, displayField = 'name', schema, internalTable = true } = props
 
-  // 判断是否为内部表关联
-  const isInternalTable = schema.internalTable !== false
+  const disabled = propsDisabled || meta?.data?.disabled || false
 
-  // 获取选择类型
-  const selectType = schema.selectType || 'single'
+  // 格式化显示值
+  const formatDisplayValue = (val: any): string => {
+    if (!val) return ''
+    if (isObject(val) && !isArray(val)) {
+      return (val as any)[displayField] || (val as any).name || ''
+    }
+    if (isArray(val)) {
+      return val.map((v) => (isObject(v) ? (v as any)[displayField] || (v as any).name : v)).join(', ')
+    }
+    return String(val)
+  }
 
-  // 判断是否有多个展示字段（使用弹窗表格选择器）
-  const hasMultiFields = schema.relateShowFields && schema.relateShowFields.length > 0
-
-  // 判断是否为详情展示模式
-  const isDetailShow = schema.recordSelectType === 'show'
-
-  // 获取表单和表格上下文（用于构建 filterObj）
-  const form = useFormContext()
-  const outTable = React.useContext(Table2Context)
-
-  const getFormState = () => {
-    if (form) {
-      return form.getValues()
+  // 处理值变化
+  const handleChange = (val: any) => {
+    if (!val || isEmpty(val)) {
+      onChange?.(null)
+    } else if (internalTable) {
+      onChange?.(val)
+    } else {
+      onChange?.({ in: val })
     }
   }
 
-  // 构建过滤器对象
-  const filterObj = React.useMemo(() => {
-    const result: Record<string, any> = {}
-    dealFilter(result, field, getFormState, outTable)
-    return result
-  }, [field, form, outTable])
-
-  // ==================== 分发逻辑 ====================
-
-  // 1. 详情展示模式
-  if (isDetailShow) {
-    // TODO: 如果需要支持 DetailShow，可以在这里处理
-    // 目前返回 null，由调用方处理
-    return null
-  }
-
-  // 2. 内部表关联 - 使用 FormRelateComponent
-  if (isInternalTable) {
-    return (
-      <FormRelateComponent
-        value={value}
-        onChange={onChange}
-        field={field}
-        schema={schema}
-        meta={meta}
-        record={record}
-        disabled={disabled}
-        filterObj={filterObj}
-      />
-    )
-  }
-
-  // 3. 外部表关联 - 根据是否有多字段和选择类型分发
-
-  // 3.1 有多个展示字段 - 使用弹窗表格选择器
-  if (hasMultiFields) {
-    // 构建完整的 field 对象传给 RelateModelSelect
-    const modelSelectField = {
-      ...field,
-      schema: {
-        ...schema,
-        name: schema.relate?.id ? `core/t/${schema.relate.id}/d` : undefined,
-      },
-      displayField: schema.relate?.fields?.[0]?.key || 'name',
+  // 格式化当前值
+  const currentValue = React.useMemo(() => {
+    if (!value) return undefined
+    if ((value as any).ne) return undefined
+    if (disabled) {
+      if (isArray(value)) {
+        return value.map((v: any) => (v as any)[displayField])
+      }
+      return (value as any)[displayField]
     }
-
-    return (
-      <RelateModelSelect
-        input={input}
-        field={modelSelectField}
-        meta={meta}
-        record={record}
-        disabled={disabled}
-        label={label || schema.title}
-        selectType={selectType}
-        inputType={schema.inputType || 'select'}
-        allFieldReturn={schema.allFieldReturn || false}
-        insideFilter={schema.insideFilter}
-      />
-    )
-  }
-
-  // 3.2 多选模式 - 使用 RelateMultiSelect
-  if (selectType === 'multiple') {
-    const multiSelectField = {
-      ...field,
-      displayField: schema.relate?.fields?.[0]?.key || 'name',
-      schema: {
-        ...schema,
-        name: schema.relate?.id ? `core/t/${schema.relate.id}/d` : undefined,
-      },
+    if ((value as any).in || (value as any).nin) {
+      return (value as any).in || (value as any).nin
     }
-
-    return (
-      <RelateMultiSelect
-        input={input}
-        field={multiSelectField}
-        meta={meta}
-        record={record}
-        disabled={disabled}
-        label={label || schema.title}
-      />
-    )
-  }
-
-  // 3.3 默认单选模式 - 使用 RelateSelect
-  const selectField = {
-    ...field,
-    displayField: schema.relate?.fields?.[0]?.key || 'name',
-    schema: {
-      ...schema,
-      name: schema.relate?.id ? `core/t/${schema.relate.id}/d` : undefined,
-    },
-  }
+    return value
+  }, [value, disabled, displayField])
 
   return (
-    <RelateSelect
-      input={input}
-      field={selectField}
+    <AsyncSelect
+      value={
+        currentValue
+          ? isArray(currentValue)
+            ? currentValue.map((v: any) => ({
+                key: isObject(v) ? (v as any).id || (v as any).value : v,
+                label: isObject(v) ? (v as any).label || (v as any).name : v,
+                item: v,
+              }))
+            : {
+                key: isObject(currentValue) ? (currentValue as any).id || (currentValue as any).value : currentValue,
+                label: formatDisplayValue(currentValue),
+                item: currentValue,
+              }
+          : null
+      }
+      onChange={(option) => {
+        if (!option || (isArray(option) && option.length === 0)) {
+          onChange?.(null)
+        } else if (isArray(option)) {
+          handleChange(option.map((o: any) => o.value || o.key))
+        } else {
+          handleChange((option as any).value || (option as any).key)
+        }
+      }}
+      field={field}
+      schema={schema}
+      label={`请选择${(schema as any)?.title || '关联字段'}`}
+      disabled={disabled}
+      mode={internalTable ? undefined : 'multiple'}
       meta={meta}
       record={record}
-      disabled={disabled}
-      label={label || schema.title}
+      filterObj={filterObj}
     />
   )
 }

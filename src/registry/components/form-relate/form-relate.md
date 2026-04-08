@@ -1,4 +1,4 @@
-> **安装命令**: `npx shadcn@latest add @kesi/form-relate-component`
+> **安装命令**: `npx shadcn@latest add @kesi/form-relate`
 
 # FormRelate 关联字段（纯组件版本）
 
@@ -44,7 +44,7 @@
 最简单的用法，在表单外独立使用。
 
 ```tsx
-import { FormRelate } from '@/registry/components/form-relate-component/form-relate-component'
+import { FormRelate } from '@/registry/components/form-relate/form-relate'
 import { useState } from 'react'
 
 function Example() {
@@ -70,7 +70,7 @@ function Example() {
 父组件构建 `filterObj` 并传入。
 
 ```tsx
-import { FormRelate } from '@/registry/components/form-relate-component/form-relate-component'
+import { FormRelate } from '@/registry/components/form-relate/form-relate'
 import { useState, useMemo } from 'react'
 
 function Example() {
@@ -178,7 +178,7 @@ const filterObj = {
 ### 产品选择器（带动态过滤）
 
 ```tsx
-import { FormRelate } from '@/registry/components/form-relate-component/form-relate-component'
+import { FormRelate } from '@/registry/components/form-relate/form-relate'
 import { useState, useMemo } from 'react'
 
 function ProductSelector() {

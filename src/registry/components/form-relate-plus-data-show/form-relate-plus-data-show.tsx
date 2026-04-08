@@ -242,10 +242,6 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
 
   const [expand, setExpand] = React.useState(false)
 
-  if (relateSchema.showType === 'select') {
-    return null
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-4">

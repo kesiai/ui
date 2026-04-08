@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { FormRelate } from '@/registry/components/form-relate-component/form-relate-component'
+import { FormRelateTest } from '@/registry/components/form-relate-test/form-relate-test'
 import { ComponentConfig } from '@/app/config/types'
-import documentationMd from './form-relate-component.md?raw'
+import documentationMd from './form-relate-test.md?raw'
 
 export const formRelateComponentPropsConfig = [
   {
@@ -98,12 +98,12 @@ const renderFormRelateComponentPreview = (props: Record<string, any>) => {
       <div className="w-full max-w-2xl bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded">
           <p className="text-sm text-green-700">
-            <strong>纯组件版本：</strong>这是一个纯组件，filterObj 需要从外部传入。
+            <strong>测试版本：</strong>这是一个测试组件。
             <br />
             <span className="text-xs">关联表ID: {schema.relate?.id} | 显示字段key: {props.displayField}</span>
           </p>
         </div>
-        <FormRelate
+        <FormRelateTest
           value={value}
           onChange={setValue}
           schema={schema}
@@ -117,7 +117,7 @@ const renderFormRelateComponentPreview = (props: Record<string, any>) => {
 }
 
 const renderFormRelateComponentCodePreview = (props: Record<string, any>) => {
-  return `<FormRelate
+  return `<FormRelateTest
   value={value}
   onChange={(value) => setValue(value)}
   schema={schema}
@@ -128,8 +128,8 @@ const renderFormRelateComponentCodePreview = (props: Record<string, any>) => {
 }
 
 export const formRelateComponentConfig: ComponentConfig = {
-  id: 'form-relate-component',
-  name: '关联字段（纯组件）',
+  id: 'form-relate-test',
+  name: '关联字段（测试）',
   propsConfig: formRelateComponentPropsConfig,
   defaultProps: formRelateComponentDefaultProps,
   renderPreview: renderFormRelateComponentPreview,

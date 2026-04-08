@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FormRelate, FormRelateProps } from '@/registry/components/form-relate-component/form-relate-component'
+import { FormRelate, FormRelateProps } from '@/registry/components/form-relate/form-relate'
 import { useFormContext } from '@airiot/client'
 import { Table2Context } from '@/registry/lib/table-context'
 import { dealFilter } from '@/registry/lib/form-relate-utils'

@@ -58,8 +58,6 @@ const FormRelatePlusAddRecordBtn: React.FC<FormRelatePlusAddRecordBtnProps> = (p
     }
   }, [open, tableID, tableSchema])
 
-  if (!relateSchema.allowAdd) return null
-
   // TODO: 实现表单提交处理
   // const handleSubmit = async (formData: Record<string, any>) => {
   //   if (!tableID) return
@@ -77,6 +75,7 @@ const FormRelatePlusAddRecordBtn: React.FC<FormRelatePlusAddRecordBtnProps> = (p
   //   setOpen(false)
   // }
 
+  console.log(12345, tableSchema)
   return (
     <>
       <Button

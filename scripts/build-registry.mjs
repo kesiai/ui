@@ -258,6 +258,32 @@ function generateComponentTitle(name) {
     .join(' ');
 }
 
+// 查找组件的主文件
+function findMainFile(folder, files, componentName) {
+  if (folder === 'components') {
+    // 对于 components/xxx/，主文件应该是 components/xxx/xxx.tsx 或 components/xxx/index.tsx
+    const possibleMainFiles = files.filter(file => {
+      const parts = file.split(path.sep);
+      // 必须在组件目录下（第一级目录）
+      if (parts[0] !== componentName) return false;
+      // 主文件名应该是组件名或 index
+      const fileName = parts[parts.length - 1].replace(/\.(ts|tsx)$/, '');
+      return fileName === componentName || fileName === 'index';
+    });
+
+    // 优先选择与组件同名的文件
+    const sameNameFile = possibleMainFiles.find(f => {
+      const fileName = path.basename(f).replace(/\.(ts|tsx)$/, '');
+      return fileName === componentName;
+    });
+
+    return sameNameFile || possibleMainFiles[0] || files.find(f => f.split(path.sep)[0] === componentName);
+  } else {
+    // 对于 ui、lib、blocks，主文件是当前处理的文件
+    return null;
+  }
+}
+
 // 构建主函数
 async function buildRegistry() {
   console.log('🚀 开始构建 registry...\n');
@@ -280,159 +306,331 @@ async function buildRegistry() {
     try {
       const files = await getFilesRecursive(absFolder);
 
-      for (const file of files) {
-        // 生成组件名称
-        const name = generateComponentName(folder, file);
+      if (folder === 'components') {
+        // 对于 components，按组件名分组，每个组件创建一个 item
+        const componentGroups = new Map();
 
-        // 读取文件内容
-        const absFilePath = path.join(absFolder, file);
-        let fileContent = '';
-        try {
-          fileContent = await fs.readFile(absFilePath, 'utf-8');
-        } catch (err) {
-          console.error(`  ❌ 读取文件失败: ${absFilePath}`, err.message);
-          continue;
+        for (const file of files) {
+          const componentName = generateComponentName(folder, file);
+          if (!componentGroups.has(componentName)) {
+            componentGroups.set(componentName, []);
+          }
+          componentGroups.get(componentName).push(file);
         }
 
-        // 提取依赖
-        const allDeps = extractThirdPartyDepsFromContent(fileContent, thirdPartyDeps);
-        const filteredDeps = allDeps.filter(dep => !SKIP_DEPENDENCIES.includes(dep));
+        // 为每个组件创建一个 registry item
+        for (const [componentName, componentFiles] of componentGroups) {
+          // 找到主文件
+          const mainFile = findMainFile(folder, componentFiles, componentName);
 
-        // 提取注册表依赖（分离 registry 依赖、标准依赖和 lib 依赖）
-        const { registryDeps, standardDeps, libDeps } = extractRegistryDepsFromContent(fileContent);
-
-        // 构建文件列表
-        const fileList = [
-          {
-            path: folder === 'components'
-              ? `registry/components/kesi/${file.replace(/\\/g, '/')}`
-              : `registry/${folder}/${file.replace(/\\/g, '/')}`,
-            type: type,
-            content: fileContent,
-          },
-        ];
-
-        // 添加 lib 依赖文件
-        for (const libDep of libDeps) {
-          // 尝试 .ts 和 .tsx 扩展名
-          const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libDep + '.ts');
-          const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libDep + '.tsx');
-          const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
-
-          if (!libAbsPath) {
-            console.warn(`  ⚠️  无法找到 lib 文件: ${libDep}`);
+          if (!mainFile) {
+            console.warn(`  ⚠️  跳过组件 ${componentName}: 未找到主文件`);
             continue;
           }
 
-          // 确定输出路径和类型
-          const ext = path.extname(libAbsPath);
-          const libPath = `registry/lib/${libDep}${ext}`;
-
+          // 读取主文件内容
+          const absFilePath = path.join(absFolder, mainFile);
+          let mainFileContent = '';
           try {
-            const libContent = await fs.readFile(libAbsPath, 'utf-8');
-            fileList.push({
-              path: libPath,
-              type: 'registry:lib',
-              content: libContent,
-            });
-            console.log(`    📄 添加 lib 文件: ${libPath}`);
+            mainFileContent = await fs.readFile(absFilePath, 'utf-8');
           } catch (err) {
-            console.warn(`  ⚠️  无法读取 lib 文件: ${libAbsPath}`);
+            console.error(`  ❌ 读取文件失败: ${absFilePath}`, err.message);
+            continue;
           }
-        }
 
-        // 新增：添加相对导入的 CSS 文件
-        const currentFileDir = path.dirname(absFilePath);
-        const cssAbsPaths = extractRelativeCssImports(fileContent, currentFileDir);
+          // 提取依赖
+          const allDeps = extractThirdPartyDepsFromContent(mainFileContent, thirdPartyDeps);
+          const filteredDeps = allDeps.filter(dep => !SKIP_DEPENDENCIES.includes(dep));
 
-        for (const absCssPath of cssAbsPaths) {
-          try {
-            const cssContent = await fs.readFile(absCssPath, 'utf-8');
+          // 提取注册表依赖（分离 registry 依赖、标准依赖和 lib 依赖）
+          const { registryDeps, standardDeps, libDeps } = extractRegistryDepsFromContent(mainFileContent);
 
-            // 计算在 registry 中的路径
-            const relCssFromFolder = path.relative(absFolder, absCssPath);
-            const registryCssPath = folder === 'components'
-              ? `registry/components/kesi/${relCssFromFolder.replace(/\\/g, '/')}`
-              : `registry/${folder}/${relCssFromFolder.replace(/\\/g, '/')}`;
+          // 构建文件列表（先添加主文件）
+          const fileList = [
+            {
+              path: `registry/components/kesi/${mainFile.replace(/\\/g, '/')}`,
+              type: type,
+              content: mainFileContent,
+            },
+          ];
 
-            fileList.push({
-              path: registryCssPath,
-              type: 'registry:style',
-              content: cssContent.trim(),
-            });
+          // 添加该组件的其他文件
+          for (const file of componentFiles) {
+            if (file === mainFile) continue; // 跳过主文件
 
-            console.log(`    📄 添加样式文件: ${registryCssPath}`);
-          } catch (err) {
-            console.warn(`  ⚠️  无法读取 CSS 文件: ${absCssPath} (被 ${file} 导入)`);
-          }
-        }
-
-        // 添加相对导入的 TS/TSX 文件
-        const tsAbsPaths = extractRelativeTsImports(fileContent, currentFileDir);
-
-        // 用于收集所有相对导入文件中的第三方依赖
-        const relativeFileDeps = new Set();
-
-        for (const absTsPath of tsAbsPaths) {
-          const existingPath = await findExistingFile(absTsPath);
-          if (!existingPath) continue;
-
-          try {
-            const tsContent = await fs.readFile(existingPath, 'utf-8');
-
-            // 计算在 registry 中的路径
-            const relTsFromFolder = path.relative(absFolder, existingPath);
-            const registryTsPath = folder === 'components'
-              ? `registry/components/kesi/${relTsFromFolder.replace(/\\/g, '/')}`
-              : `registry/${folder}/${relTsFromFolder.replace(/\\/g, '/')}`;
-
-            // 避免重复添加（已经在 fileList 中的文件不再添加）
-            if (!fileList.some(f => f.path === registryTsPath)) {
+            const absFilePath = path.join(absFolder, file);
+            try {
+              const fileContent = await fs.readFile(absFilePath, 'utf-8');
               fileList.push({
-                path: registryTsPath,
-                type: existingPath.endsWith('.css') ? 'registry:style' : type,
-                content: tsContent,
+                path: `registry/components/kesi/${file.replace(/\\/g, '/')}`,
+                type: type,
+                content: fileContent,
               });
-              console.log(`    📄 添加依赖文件: ${registryTsPath}`);
+            } catch (err) {
+              console.warn(`  ⚠️  无法读取文件: ${absFilePath}`);
+            }
+          }
+
+          // 添加 lib 依赖文件
+          for (const libDep of libDeps) {
+            // 尝试 .ts 和 .tsx 扩展名
+            const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libDep + '.ts');
+            const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libDep + '.tsx');
+            const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
+
+            if (!libAbsPath) {
+              console.warn(`  ⚠️  无法找到 lib 文件: ${libDep}`);
+              continue;
             }
 
-            // 提取相对导入文件中的第三方依赖
-            const relativeFileDepsArray = extractThirdPartyDepsFromContent(tsContent, thirdPartyDeps);
-            relativeFileDepsArray.forEach(dep => relativeFileDeps.add(dep));
-          } catch (err) {
-            console.warn(`  ⚠️  无法读取 TS/TSX 文件: ${existingPath} (被 ${file} 导入)`);
+            // 确定输出路径和类型
+            const ext = path.extname(libAbsPath);
+            const libPath = `registry/lib/${libDep}${ext}`;
+
+            try {
+              const libContent = await fs.readFile(libAbsPath, 'utf-8');
+              fileList.push({
+                path: libPath,
+                type: 'registry:lib',
+                content: libContent,
+              });
+            } catch (err) {
+              console.warn(`  ⚠️  无法读取 lib 文件: ${libAbsPath}`);
+            }
           }
+
+          // 新增：添加相对导入的 CSS 文件
+          const currentFileDir = path.dirname(absFilePath);
+          const cssAbsPaths = extractRelativeCssImports(mainFileContent, currentFileDir);
+
+          for (const absCssPath of cssAbsPaths) {
+            try {
+              const cssContent = await fs.readFile(absCssPath, 'utf-8');
+
+              // 计算在 registry 中的路径
+              const relCssFromFolder = path.relative(absFolder, absCssPath);
+              const registryCssPath = `registry/components/kesi/${relCssFromFolder.replace(/\\/g, '/')}`;
+
+              fileList.push({
+                path: registryCssPath,
+                type: 'registry:style',
+                content: cssContent.trim(),
+              });
+            } catch (err) {
+              console.warn(`  ⚠️  无法读取 CSS 文件: ${absCssPath} (被 ${mainFile} 导入)`);
+            }
+          }
+
+          // 添加相对导入的 TS/TSX 文件
+          const tsAbsPaths = extractRelativeTsImports(mainFileContent, currentFileDir);
+
+          // 用于收集所有相对导入文件中的第三方依赖
+          const relativeFileDeps = new Set();
+
+          for (const absTsPath of tsAbsPaths) {
+            const existingPath = await findExistingFile(absTsPath);
+            if (!existingPath) continue;
+
+            try {
+              const tsContent = await fs.readFile(existingPath, 'utf-8');
+
+              // 计算在 registry 中的路径
+              const relTsFromFolder = path.relative(absFolder, existingPath);
+              const registryTsPath = `registry/components/kesi/${relTsFromFolder.replace(/\\/g, '/')}`;
+
+              // 避免重复添加（已经在 fileList 中的文件不再添加）
+              if (!fileList.some(f => f.path === registryTsPath)) {
+                fileList.push({
+                  path: registryTsPath,
+                  type: existingPath.endsWith('.css') ? 'registry:style' : type,
+                  content: tsContent,
+                });
+              }
+
+              // 提取相对导入文件中的第三方依赖
+              const relativeFileDepsArray = extractThirdPartyDepsFromContent(tsContent, thirdPartyDeps);
+              relativeFileDepsArray.forEach(dep => relativeFileDeps.add(dep));
+            } catch (err) {
+              console.warn(`  ⚠️  无法读取 TS/TSX 文件: ${existingPath} (被 ${mainFile} 导入)`);
+            }
+          }
+
+          // 合并主文件和相对导入文件的第三方依赖
+          const allRelativeFileDeps = Array.from(relativeFileDeps);
+          const mergedDeps = [...new Set([...filteredDeps, ...allRelativeFileDeps])];
+
+          // 构建注册表项
+          // registryDeps: 来自 @/registry/ 的依赖，添加 URL 前缀
+          // standardDeps: 来自 @/components/ 的依赖（包括 ui、reui、xxxui 等），不添加 URL 前缀
+          const processedRegistryDeps = [
+            ...registryDeps.map(dep => dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`),
+            ...standardDeps,
+          ];
+
+          const item = {
+            name: componentName,
+            type,
+            title: generateComponentTitle(componentName),
+            description: `${generateComponentTitle(componentName)} - 组件`,
+            dependencies: mergedDeps,
+            registryDependencies: processedRegistryDeps,
+            files: fileList,
+          };
+
+          items.push(item);
+
+          // 写入单个组件的 JSON 文件
+          const componentJsonPath = path.join(OUTPUT_DIR, `${componentName}.json`);
+          await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
+
+          console.log(`  ✓ ${componentName} (${mergedDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} component deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files, ${componentFiles.length} total files)`);
         }
+      } else {
+        // 对于 ui、lib、blocks，保持原有逻辑
+        for (const file of files) {
+          // 生成组件名称
+          const name = generateComponentName(folder, file);
 
-        // 合并主文件和相对导入文件的第三方依赖
-        const allRelativeFileDeps = Array.from(relativeFileDeps);
-        const mergedDeps = [...new Set([...filteredDeps, ...allRelativeFileDeps])];
+          // 读取文件内容
+          const absFilePath = path.join(absFolder, file);
+          let fileContent = '';
+          try {
+            fileContent = await fs.readFile(absFilePath, 'utf-8');
+          } catch (err) {
+            console.error(`  ❌ 读取文件失败: ${absFilePath}`, err.message);
+            continue;
+          }
 
-        // 构建注册表项
-        // registryDeps: 来自 @/registry/ 的依赖，添加 URL 前缀
-        // standardDeps: 来自 @/components/ 的依赖（包括 ui、reui、xxxui 等），不添加 URL 前缀
-        const processedRegistryDeps = [
-          ...registryDeps.map(dep => dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`),
-          ...standardDeps,
-        ];
+          // 提取依赖
+          const allDeps = extractThirdPartyDepsFromContent(fileContent, thirdPartyDeps);
+          const filteredDeps = allDeps.filter(dep => !SKIP_DEPENDENCIES.includes(dep));
 
-        const item = {
-          name,
-          type,
-          title: generateComponentTitle(name),
-          description: `${generateComponentTitle(name)} - ${type === 'registry:component' ? '组件' : type === 'registry:lib' ? '工具库' : '区块'}`,
-          dependencies: mergedDeps,
-          registryDependencies: processedRegistryDeps,
-          files: fileList,
-        };
+          // 提取注册表依赖（分离 registry 依赖、标准依赖和 lib 依赖）
+          const { registryDeps, standardDeps, libDeps } = extractRegistryDepsFromContent(fileContent);
 
-        items.push(item);
+          // 构建文件列表
+          const fileList = [
+            {
+              path: `registry/${folder}/${file.replace(/\\/g, '/')}`,
+              type: type,
+              content: fileContent,
+            },
+          ];
 
-        // 写入单个组件的 JSON 文件
-        const componentJsonPath = path.join(OUTPUT_DIR, `${name}.json`);
-        await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
+          // 添加 lib 依赖文件
+          for (const libDep of libDeps) {
+            // 尝试 .ts 和 .tsx 扩展名
+            const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libDep + '.ts');
+            const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libDep + '.tsx');
+            const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
 
-        console.log(`  ✓ ${name} (${mergedDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} component deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
+            if (!libAbsPath) {
+              console.warn(`  ⚠️  无法找到 lib 文件: ${libDep}`);
+              continue;
+            }
+
+            // 确定输出路径和类型
+            const ext = path.extname(libAbsPath);
+            const libPath = `registry/lib/${libDep}${ext}`;
+
+            try {
+              const libContent = await fs.readFile(libAbsPath, 'utf-8');
+              fileList.push({
+                path: libPath,
+                type: 'registry:lib',
+                content: libContent,
+              });
+            } catch (err) {
+              console.warn(`  ⚠️  无法读取 lib 文件: ${libAbsPath}`);
+            }
+          }
+
+          // 新增：添加相对导入的 CSS 文件
+          const currentFileDir = path.dirname(absFilePath);
+          const cssAbsPaths = extractRelativeCssImports(fileContent, currentFileDir);
+
+          for (const absCssPath of cssAbsPaths) {
+            try {
+              const cssContent = await fs.readFile(absCssPath, 'utf-8');
+
+              // 计算在 registry 中的路径
+              const relCssFromFolder = path.relative(absFolder, absCssPath);
+              const registryCssPath = `registry/${folder}/${relCssFromFolder.replace(/\\/g, '/')}`;
+
+              fileList.push({
+                path: registryCssPath,
+                type: 'registry:style',
+                content: cssContent.trim(),
+              });
+            } catch (err) {
+              console.warn(`  ⚠️  无法读取 CSS 文件: ${absCssPath} (被 ${file} 导入)`);
+            }
+          }
+
+          // 添加相对导入的 TS/TSX 文件
+          const tsAbsPaths = extractRelativeTsImports(fileContent, currentFileDir);
+
+          // 用于收集所有相对导入文件中的第三方依赖
+          const relativeFileDeps = new Set();
+
+          for (const absTsPath of tsAbsPaths) {
+            const existingPath = await findExistingFile(absTsPath);
+            if (!existingPath) continue;
+
+            try {
+              const tsContent = await fs.readFile(existingPath, 'utf-8');
+
+              // 计算在 registry 中的路径
+              const relTsFromFolder = path.relative(absFolder, existingPath);
+              const registryTsPath = `registry/${folder}/${relTsFromFolder.replace(/\\/g, '/')}`;
+
+              // 避免重复添加（已经在 fileList 中的文件不再添加）
+              if (!fileList.some(f => f.path === registryTsPath)) {
+                fileList.push({
+                  path: registryTsPath,
+                  type: existingPath.endsWith('.css') ? 'registry:style' : type,
+                  content: tsContent,
+                });
+              }
+
+              // 提取相对导入文件中的第三方依赖
+              const relativeFileDepsArray = extractThirdPartyDepsFromContent(tsContent, thirdPartyDeps);
+              relativeFileDepsArray.forEach(dep => relativeFileDeps.add(dep));
+            } catch (err) {
+              console.warn(`  ⚠️  无法读取 TS/TSX 文件: ${existingPath} (被 ${file} 导入)`);
+            }
+          }
+
+          // 合并主文件和相对导入文件的第三方依赖
+          const allRelativeFileDeps = Array.from(relativeFileDeps);
+          const mergedDeps = [...new Set([...filteredDeps, ...allRelativeFileDeps])];
+
+          // 构建注册表项
+          // registryDeps: 来自 @/registry/ 的依赖，添加 URL 前缀
+          // standardDeps: 来自 @/components/ 的依赖（包括 ui、reui、xxxui 等），不添加 URL 前缀
+          const processedRegistryDeps = [
+            ...registryDeps.map(dep => dep.startsWith('http') ? dep : `${REGISTRY_URL}/${dep}.json`),
+            ...standardDeps,
+          ];
+
+          const item = {
+            name,
+            type,
+            title: generateComponentTitle(name),
+            description: `${generateComponentTitle(name)} - ${type === 'registry:lib' ? '工具库' : '区块'}`,
+            dependencies: mergedDeps,
+            registryDependencies: processedRegistryDeps,
+            files: fileList,
+          };
+
+          items.push(item);
+
+          // 写入单个组件的 JSON 文件
+          const componentJsonPath = path.join(OUTPUT_DIR, `${name}.json`);
+          await fs.writeFile(componentJsonPath, JSON.stringify(item, null, 2));
+
+          console.log(`  ✓ ${name} (${mergedDeps.length} deps, ${registryDeps.length} registry deps, ${standardDeps.length} component deps, ${libDeps.length} lib files, ${cssAbsPaths.length} css files, ${tsAbsPaths.length} ts files)`);
+        }
       }
     } catch (e) {
       console.error(`  ⚠️  跳过文件夹 ${folder}:`, e.message);

@@ -10,10 +10,15 @@ import {
   DialogClose
 } from '@/components/ui/dialog'
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -425,38 +430,33 @@ export const DeleteAction: React.FC<DeleteActionProps> = ({
 
   return (
     <HasPermission permission={permission}>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogTrigger asChild>
           {trigger}
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-4" side='top' align="end">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-destructive" />
-              <p className="text-sm">{confirmMessage}</p>
-            </div>
-            <div className="flex gap-2 justify-end">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setOpen(false)}
-                disabled={deleting}
-              >
-                取消
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleDelete}
-                disabled={deleting}
-              >
-                {deleting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                确认删除
-              </Button>
-            </div>
-          </div>
-        </PopoverContent>
-      </Popover>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              确认删除
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {confirmMessage}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>取消</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              {deleting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              确认删除
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </HasPermission>
   )
 }

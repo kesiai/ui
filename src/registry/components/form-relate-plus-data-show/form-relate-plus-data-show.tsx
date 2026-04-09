@@ -254,7 +254,9 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
     )
   }
 
-  if (showType === 'card') {
+  if (showType === 'table') {
+    return <TableShow {...props} val={parseJsonStrings(value)} />
+  } else {
     const parsedValue = parseJsonStrings(value)
 
     if (isArray(parsedValue)) {
@@ -301,10 +303,6 @@ const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) =>
       )
     }
 
-    return null
-  } else if (showType === 'table') {
-    return <TableShow {...props} val={parseJsonStrings(value)} />
-  } else {
     return null
   }
 }

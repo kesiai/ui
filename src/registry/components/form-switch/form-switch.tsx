@@ -67,6 +67,7 @@ const FormSwitch = React.forwardRef<HTMLButtonElement, FormSwitchProps>(
           onCheckedChange={handleChange}
           disabled={disabled}
           autoFocus={autoFocus}
+          type="button"
           {...props}
         />
       </div>

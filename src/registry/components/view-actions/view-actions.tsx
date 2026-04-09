@@ -43,13 +43,16 @@ import { SchemaForm } from '@/registry/components/schema-form/schema-form'
 import { ViewDetail } from '@/registry/components/view-detail/view-detail'
 import { HasPermission } from '@/registry/components/view-permission/view-permission'
 import type { FormSchemaItem } from '@/registry/lib/model-types'
+import { formLayoutToClassNames } from '@/registry/lib/form-layout'
+
 interface EditActionContentProps {
   itemId: string
   onClose?: () => void
   formSchema?: FormSchemaItem[]
+  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, formSchema }) => {
+const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, formSchema, classNames }) => {
   const { data, loading, model } = useModelGet({ id: itemId })
   const { getItems } = useModelGetItems()
   const { saveItem } = useModelSave()
@@ -79,7 +82,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
         </div>
       ) : (
         <ScrollArea className="max-h-[70vh] pr-3">
-          <SchemaForm formId={formId} defaultValues={data} schema={model} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
+          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}
@@ -192,9 +195,10 @@ const ExportActionContent: React.FC<ExportActionContentProps> = ({ itemId, forma
 interface CreateActionContentProps {
   onClose?: () => void
   formSchema?: FormSchemaItem[]
+  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
-const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, formSchema }) => {
+const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, classNames, formSchema }) => {
   const { getItems, model } = useModelGetItems()
   const { saveItem } = useModelSave()
   const [saving, setSaving] = useState(false)
@@ -218,7 +222,7 @@ const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, form
         <DialogTitle>新建 {model.title}</DialogTitle>
       </DialogHeader>
       <ScrollArea className="max-h-[70vh] pr-3">
-        <SchemaForm formId={formId} schema={model} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
+        <SchemaForm formId={formId} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
@@ -316,6 +320,8 @@ interface ViewActionProps extends BaseActionProps {
 }
 
 export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children, formSchema, permission }) => {
+  const { model } = useModelGetItems()
+  const layout = formLayoutToClassNames(model?.formLayout)
   const trigger = children || (
     <Button variant="ghost" size="sm">
       <Eye className="h-4 w-4" />
@@ -329,8 +335,8 @@ export const ViewAction: React.FC<ViewActionProps> = ({ itemId, children, formSc
         <DialogTrigger asChild>
           {trigger}
         </DialogTrigger>
-        <DialogContent className="max-w-4xl">
-          <ViewDetail itemId={itemId} formSchema={formSchema} />
+        <DialogContent className={layout?.dialog ? layout.dialog : "max-w-4xl"}>
+          <ViewDetail itemId={itemId} classNames={layout?.classNames} formSchema={formSchema} />
         </DialogContent>
       </Dialog>
     </HasPermission>
@@ -343,6 +349,8 @@ interface EditActionProps extends BaseActionProps {
 }
 
 export const EditAction: React.FC<EditActionProps> = ({ itemId, children, formSchema, permission }) => {
+  const { model } = useModelGetItems()
+  const layout = formLayoutToClassNames(model?.formLayout)
   const [open, setOpen] = useState(false)
 
   const trigger = children || (
@@ -358,8 +366,8 @@ export const EditAction: React.FC<EditActionProps> = ({ itemId, children, formSc
         <DialogTrigger asChild>
           {trigger}
         </DialogTrigger>
-        <DialogContent className="max-w-4xl">
-          <EditActionContent itemId={itemId} onClose={() => setOpen(false)} formSchema={formSchema} />
+        <DialogContent className={layout?.dialog ? layout.dialog : "max-w-4xl"}>
+          <EditActionContent itemId={itemId} onClose={() => setOpen(false)} classNames={layout?.classNames} formSchema={formSchema} />
         </DialogContent>
       </Dialog>
     </HasPermission>
@@ -373,6 +381,8 @@ interface CreateActionProps {
 }
 
 export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema, permission }) => {
+  const { model } = useModelGetItems()
+  const layout = formLayoutToClassNames(model?.formLayout)
   const [open, setOpen] = useState(false)
 
   const trigger = children || (
@@ -388,8 +398,8 @@ export const CreateAction: React.FC<CreateActionProps> = ({ children, formSchema
         <DialogTrigger asChild>
           {trigger}
         </DialogTrigger>
-        <DialogContent className="max-w-4xl">
-          <CreateActionContent onClose={() => setOpen(false)} formSchema={formSchema} />
+        <DialogContent className={layout?.dialog ? layout.dialog : "max-w-4xl"}>
+          <CreateActionContent onClose={() => setOpen(false)} classNames={layout?.classNames} formSchema={formSchema} />
         </DialogContent>
       </Dialog>
     </HasPermission>
@@ -562,6 +572,7 @@ const Actions: React.FC<ActionsProps> = ({
     copy: `ext_${modelKey}.view`
   }
   const finalPermission = permission || defaultPermissions
+
   // Render as button group
   if (variant === 'buttons') {
     return (

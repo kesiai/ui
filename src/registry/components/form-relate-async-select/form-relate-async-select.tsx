@@ -35,6 +35,7 @@ interface AsyncSelectProps {
   }
   schema?: Record<string, any> | {
     relateSchema: Record<string, any>
+    relateTo?: string
     relate?: {
       id?: string
       fields?: Array<{
@@ -78,7 +79,8 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
     filterObj = {},
   } = props
 
-  const relateSchema = schema?.relate ? schema : schema?.relateSchema
+  const relateSchema = (schema?.relate || schema?.relateTo) ? schema : schema?.relateSchema
+  console.log(12345, schema, relateSchema)
   const { relateShowFields } = relateSchema
   const displayField = relateSchema?.relate?.fields?.[0]?.key || 'name'
 
@@ -114,7 +116,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
       setLoading(true)
       try {
         const s = relateSchema
-        const resource = s?.name ? s?.name : `core/t/${s?.relate?.id}/d`
+        const resource = s?.relateTo ? `core/${s.relateTo.toLowerCase()}` : s?.name ? s?.name : `core/t/${s?.relate?.id}/d`
 
         // 创建 API 实例
         const api = createAPI({ resource })

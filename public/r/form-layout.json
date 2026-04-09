@@ -1,0 +1,17 @@
+{
+  "name": "form-layout",
+  "type": "registry:lib",
+  "title": "Form Layout",
+  "description": "Form Layout - 工具库",
+  "dependencies": [],
+  "registryDependencies": [
+    "lib-form-layout"
+  ],
+  "files": [
+    {
+      "path": "registry/lib/form-layout.ts",
+      "type": "registry:lib",
+      "content": "export { formLayoutToClassNames } from '@/lib/form-layout'\nexport type { FormLayout, FormLayoutResult } from '@/lib/form-layout'\n"
+    }
+  ]
+}

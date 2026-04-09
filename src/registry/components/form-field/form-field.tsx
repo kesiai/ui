@@ -54,7 +54,7 @@ const FormField =
         control={methods?.control}
         rules={controllerRules}
         render={({ field, fieldState }) => (
-          <Field orientation={(formClassNames?.orientation as 'vertical' | 'horizontal' | 'responsive') || 'vertical'} data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
+          <Field orientation={(formClassNames?.orientation as 'vertical' | 'horizontal' | 'responsive') || 'vertical'} data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)} style={schema?.colSpan ? { gridColumn: `span ${schema.colSpan}` } : undefined}>
             {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
               {label} : {required && <span className="text-red-500">*</span>}
             </FieldLabel>}

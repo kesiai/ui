@@ -85,11 +85,9 @@ export const dealFilter = (
   getFormState?: () => any,
   outTable?: { editingSchema?: Record<string, any> }
 ) => {
-  // 在过滤器中，如果没有设置 field.filter，则使用内置查询
-  const ifFilter = field.filter
 
   // 设置了内置查询
-  if (field.insideFilter && !ifFilter) {
+  if (field.insideFilter) {
     const inFilter = getQueryFilter(field.insideFilter, field.schema)
     const allValues = {
       ...(outTable?.editingSchema || {}),

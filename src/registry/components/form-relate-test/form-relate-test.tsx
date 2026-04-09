@@ -43,9 +43,6 @@ export interface FormRelateTestProps {
       disabled?: boolean
     }
   }
-  schema?: {
-    name?: string
-  }
 }
 
 const FormRelateTest: React.FC<FormRelateTestProps> = (props) => {

@@ -31,7 +31,7 @@ const FormRelateOld: React.FC<FormRelateProps> = (props) => {
     return result
   }, [field, form, outTable])
 
-  return <FormRelate value={value} onChange={onChange} field={field} schema={schema} meta={meta} record={record} disabled={disabled} filterObj={filterObj} />
+  return <FormRelate value={value} onChange={onChange} schema={schema} meta={meta} record={record} disabled={disabled} filterObj={filterObj} />
 }
 
 export { FormRelateOld }

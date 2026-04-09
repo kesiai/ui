@@ -19,6 +19,9 @@ import { getFormValues, dealFilter } from '@/registry/lib/form-relate-utils'
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 interface RelateModelSelectProps extends RelateFieldProps {
+  value?: any
+  onChange?: (value: any) => void
+  field: Record<string, any>
   label?: string
   schema?: any
   inputType?: 'select' | 'button'
@@ -33,7 +36,8 @@ interface RelateModelSelectProps extends RelateFieldProps {
  */
 const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
   const {
-    input,
+    value,
+    onChange,
     field = {},
     label,
     disabled: propsDisabled,
@@ -42,15 +46,13 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
     allFieldReturn = false,
   } = props
 
-  const { onChange, value } = input || {}
-  const { displayField = 'name', relateShowFields, fieldSchema, schema } = field
-
-  const { user } = useUser()
+  const { relateShowFields, schema } = field
+  const displayField = schema?.relate?.fields?.[0]?.key || 'name'
 
   // 获取表单状态
   const [formState] = React.useState<Record<string, any>>({})
 
-  const disabled = propsDisabled || (field.schema as any)?.disabled || false
+  const disabled = propsDisabled || (schema as any)?.disabled || false
 
   // 弹窗状态
   const [visible, setVisible] = React.useState(false)
@@ -60,7 +62,7 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
 
   // 默认值生效
   React.useEffect(() => {
-    const defaultVal = (field.schema as any)?.defaultVal
+    const defaultVal = (schema as any)?.defaultVal
     setTimeout(() => {
       if (!value && defaultVal && onChange) {
         onChange(defaultVal)
@@ -70,10 +72,10 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
 
   // 字段脚本部分
   React.useEffect(() => {
-    const values = getFormValues(field.schema, { values: formState })
+    const values = getFormValues(schema, { values: formState })
     if (values && !isEmpty(values)) {
       // TODO: 实现字段脚本逻辑
-      // useScriptVal({ schema: field.schema, value, values, record, onChange })
+      // useScriptVal({ schema: schema, value, values, record, onChange })
     }
   }, [JSON.stringify(formState)])
 
@@ -166,14 +168,6 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
         }
       : null
 
-    if (v && fieldSchema && (fieldSchema as any).enum) {
-      const enumList = (fieldSchema as any).enum
-      const enumTitle = (fieldSchema as any).enum_title || []
-      const i = enumList.indexOf(v)
-      const title = enumTitle[i]
-      if (title) (r as any).name = title
-    }
-
     if (field.displayField && item[field.displayField]) {
       (r as any)[field.displayField] = item[field.displayField]
     }
@@ -209,14 +203,6 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
             ...pick(item, relateShowFields?.map((s: any) => s.key) || []),
           }
         : null
-
-      if (v && fieldSchema && (fieldSchema as any).enum) {
-        const enumList = (fieldSchema as any).enum
-        const enumTitle = (fieldSchema as any).enum_title || []
-        const i = enumList.indexOf(v)
-        const title = enumTitle[i]
-        if (title) (r as any).name = title
-      }
 
       if (field.displayField && item[field.displayField]) {
         (r as any)[field.displayField] = item[field.displayField]

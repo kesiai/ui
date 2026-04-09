@@ -13,10 +13,6 @@ import type { RelateFieldOption } from '@/registry/lib/form-relate-types'
 import { cn } from '@/lib/utils'
 
 interface AsyncSelectProps {
-  input?: {
-    value?: any
-    onChange?: (value: any) => void
-  }
   field?: {
     schema?: Record<string, any>
     filter?: any
@@ -54,17 +50,7 @@ interface AsyncSelectProps {
   antdForm?: any
   label?: string
   disabled?: boolean
-  value?: {
-    key: string
-    label: string
-    value: string
-    item?: any
-  } | null | {
-    key: string
-    label: string
-    value: string
-    item?: any
-  }[]
+  value?: RelateFieldOption | null | RelateFieldOption[]
   mode?: 'multiple' | 'tags'
   isOptionSelected?: (option: RelateFieldOption) => boolean
   style?: React.CSSProperties
@@ -157,9 +143,9 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
           // 使用 Map 去重（按 value/id 去重）
           const optionMap = new Map<string, RelateFieldOption>()
           // 先添加已有的选项
-          prev.forEach((opt: RelateFieldOption) => optionMap.set(opt.value, opt))
+          prev.forEach((opt: RelateFieldOption) => optionMap.set(opt.key, opt))
           // 再添加新选项（会覆盖重复的）
-          newOptions.forEach((opt: RelateFieldOption) => optionMap.set(opt.value, opt))
+          newOptions.forEach((opt: RelateFieldOption) => optionMap.set(opt.key, opt))
           return Array.from(optionMap.values())
         })
         setHasMore(items.length === 100)
@@ -257,7 +243,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
 
   // 格式化显示值
   const formatDisplayValue = (val: any): string => {
-    if (isObject(val)) {
+    if (isObject(val) && 'key' in val) {
       return allOptions.find((opt) => opt.value === val.key)?.item?.[displayField] || val.key
     } else {
       return '空'

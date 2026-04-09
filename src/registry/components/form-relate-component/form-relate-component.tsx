@@ -63,8 +63,9 @@ const FormRelate: React.FC<RelateFieldProps> = (props) => {
   if (isInternalTable) {
     return (
       <FormRelatePure
-        input={{ value, onChange }}
-        field={{ ...field, schema }}
+        value={value}
+        onChange={onChange}
+        schema={schema}
         meta={meta}
         record={record}
         disabled={disabled}

@@ -132,7 +132,7 @@ const FormRelatePlusAddRecordBtn: React.FC<FormRelatePlusAddRecordBtnProps> = (p
                 onSubmit={handleSubmit}
                 isValid={false}
               >
-                {(methods) => (
+                {() => (
                   <div className="mt-6 pt-4 border-t flex justify-end gap-2">
                     <Button
                       type="button"

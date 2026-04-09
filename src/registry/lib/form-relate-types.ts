@@ -3,9 +3,9 @@
  */
 
 export interface RelateFieldOption {
-  value: string
+  value?: string
   label: string
-  key?: string
+  key: string
   item?: any
 }
 

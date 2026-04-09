@@ -5,7 +5,7 @@ import { RelateModelSelect } from '@/registry/components/form-relate-model-selec
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 export interface FormRelatePlusDataSelectProps extends RelateFieldProps {
-  relateSchema: {
+  schema: {
     relateTo?: string
     recordSelectType?: 'select' | 'modal'
     selectType?: 'single' | 'multiple'
@@ -19,7 +19,7 @@ export interface FormRelatePlusDataSelectProps extends RelateFieldProps {
 }
 
 const FormRelatePlusDataSelect: React.FC<FormRelatePlusDataSelectProps> = (props) => {
-  const { relateSchema, tableID, meta, field, input } = props
+  const { schema, tableID, meta, field, value, onChange } = props
 
   // Determine which select component to use
   let SelectComponent: any = RelateModelSelect
@@ -28,28 +28,28 @@ const FormRelatePlusDataSelect: React.FC<FormRelatePlusDataSelectProps> = (props
   // User/Role special handling would go here if needed
   // For now, we use RelateSelect/RelateMultiSelect/RelateModelSelect based on recordSelectType
 
-  if (!relateSchema.recordSelectType || relateSchema.recordSelectType === 'select') {
-    if (relateSchema.selectType === 'multiple') {
+  if (!schema.recordSelectType || schema.recordSelectType === 'select') {
+    if (schema.selectType === 'multiple') {
       SelectComponent = RelateMultiSelect
     } else {
       SelectComponent = RelateSelect
     }
-  } else if (relateSchema.recordSelectType === 'modal') {
+  } else if (schema.recordSelectType === 'modal') {
     SelectComponent = RelateModelSelect
     // Set input type to button for card/table show types
-    if (['card', 'table'].includes(relateSchema.showType || '')) {
+    if (['card', 'table'].includes(schema.showType || '')) {
       extraProps.inputType = 'button'
     }
-    extraProps.selectType = relateSchema.selectType
+    extraProps.selectType = schema.selectType
   }
 
   // Handle disabled state
-  const isDisabled = meta?.data?.disabled ?? relateSchema.editDisabled ?? false
+  const isDisabled = meta?.data?.disabled ?? schema.editDisabled ?? false
 
   if (isDisabled) {
     extraProps.disabled = true
-    extraProps.relateSchema = {
-      ...relateSchema,
+    extraProps.schema = {
+      ...schema,
       editDisabled: true,
       createDisabled: true,
     }
@@ -57,15 +57,16 @@ const FormRelatePlusDataSelect: React.FC<FormRelatePlusDataSelectProps> = (props
 
   // 构建 field props，确保包含必要的 schema 信息
   const selectProps: any = {
-    input,
+    value,
+    onChange,
     meta,
     field: {
       ...field,
       // 为 AsyncSelect 提供带 name 的 schema（与 schemaConverter 的格式一致）
-      schema: tableID ? { name: `core/t/${tableID}/d` } : relateSchema,
-      displayField: relateSchema.relate?.fields?.[0]?.key || relateSchema.showField || 'name',
+      schema: tableID ? { name: `core/t/${tableID}/d` } : schema,
+      displayField: schema.relate?.fields?.[0]?.key || schema.showField || 'name',
       tableID,
-      relateShowFields: relateSchema.relateShowFields,
+      relateShowFields: schema.relateShowFields,
     },
     ...extraProps,
   }

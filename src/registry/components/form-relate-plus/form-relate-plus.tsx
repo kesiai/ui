@@ -4,7 +4,7 @@ import { FormRelatePlusAddRecordBtn } from '@/registry/components/form-relate-pl
 import { FormRelatePlusDataShow } from '@/registry/components/form-relate-plus-data-show/form-relate-plus-data-show'
 
 export interface FormRelatePlusProps {
-  relateSchema: {
+  schema: {
     relateTo?: string
     relate?: {
       id?: string
@@ -43,46 +43,20 @@ export interface FormRelatePlusProps {
       disabled?: boolean
     }
   }
-  schema?: {
-    name?: string
-  }
 }
 
 const FormRelatePlus: React.FC<FormRelatePlusProps> = (props) => {
-  const input = props.input || { value: props.value, onChange: props.onChange }
-  // 只传递需要的属性给子组件
-  const dataSelectProps: any = {
-    relateSchema: props.relateSchema,
-    tableID: props.tableID || props.relateSchema?.relate?.id,
-    input,
-    field: props.field,
-    meta: props.meta,
-  }
 
-  const addRecordBtnProps = {
-    relateSchema: props.relateSchema,
-    tableID: props.tableID || props.relateSchema?.relate?.id,
-    input: props,
-    meta: props.meta,
-  }
-
-  const dataShowProps = {
-    relateSchema: props.relateSchema,
-    input: props,
-    field: props.field,
-    schema: props.schema,
-  }
-
-  if (!props.relateSchema) {
-    return <div className="text-sm text-red-500">关联字段配置错误：缺少 relateSchema</div>
+  if (!props.schema) {
+    return <div className="text-sm text-red-500">关联字段配置错误：缺少 schema</div>
   }
   return (
     <div className="flex flex-col items-stretch w-full gap-2">
       <div className="flex flex-row gap-2">
-        <FormRelatePlusDataSelect {...dataSelectProps} />
-        <FormRelatePlusAddRecordBtn {...addRecordBtnProps} />
+        <FormRelatePlusDataSelect {...props} />
+        <FormRelatePlusAddRecordBtn {...props} />
       </div>
-      <FormRelatePlusDataShow {...dataShowProps} />
+      <FormRelatePlusDataShow {...props} />
     </div>
   )
 }

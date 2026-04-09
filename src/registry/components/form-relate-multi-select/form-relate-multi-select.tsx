@@ -10,8 +10,7 @@ import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
  * 外部工作表关联，多选模式
  */
 const RelateMultiSelect: React.FC<RelateFieldProps> = (props) => {
-  const { input, field = {}, label, meta, record, disabled: propsDisabled } = props
-  const { onChange, value: items } = input || {}
+  const { onChange, value: items, field = {}, label, meta, record, disabled: propsDisabled } = props
   const { displayField = 'name', schema: relateSchema = {} } = field
 
   // 获取表单状态用于字段脚本

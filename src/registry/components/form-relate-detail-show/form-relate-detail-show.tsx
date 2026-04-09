@@ -38,8 +38,6 @@ const DetailShow: React.FC<DetailShowProps> = ({
   const [detailData, setDetailData] = React.useState<Array<{ title: string; value: any }>>([])
   const [loading, setLoading] = React.useState(false)
 
-  const { user } = useUser()
-
   // 获取详情数据
   const getDetailData = async () => {
     if (!value?.id || !schema?.relate?.id) {

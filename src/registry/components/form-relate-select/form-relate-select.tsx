@@ -9,8 +9,7 @@ import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
  * 外部工作表关联，单选模式
  */
 const RelateSelect: React.FC<RelateFieldProps> = (props) => {
-  const { input, field = {}, label, meta, record, disabled: propsDisabled } = props
-  const { onChange, value: item } = input || {}
+  const { onChange, value: item, field = {}, label, meta, record, disabled: propsDisabled } = props
   const { displayField = 'name', schema: relateSchema = {} } = field
 
   // 获取表单状态用于字段脚本

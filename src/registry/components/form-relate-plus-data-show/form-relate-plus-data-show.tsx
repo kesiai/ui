@@ -30,9 +30,6 @@ export interface FormRelatePlusDataShowProps {
       fieldSchema?: any
     }>
   }
-  schema?: {
-    name?: string
-  }
   val?: any
 }
 
@@ -70,18 +67,26 @@ function parseJsonStrings(data: any): any {
   return processValue(JSON.parse(JSON.stringify(data)))
 }
 
+type DataItem = {
+  id?: string | number;
+  [key: string]: any; // 允许任意字符串 key
+};
+
 // Single item display in card format
 const ItemShow: React.FC<{
   schema: FormRelatePlusDataShowProps['schema']
-  val: object
+  val: DataItem
   field?: FormRelatePlusDataShowProps['field']
   detailPage?: boolean
-  relateTableData?: Array<Object>
+  relateTableData?: DataItem[]
 }> = ({ schema, val, field, detailPage, relateTableData }) => {
   const displayField = field?.displayField || schema.showField || 'name'
   const showFields = schema.relateShowFields || []
 
-  const value = { ...val || {}, ...(relateTableData?.find(item => item.id === val.id) || {}) }
+  const value: DataItem = {
+    ...(val || {}),
+    ...(relateTableData?.find(item => item.id === val?.id) || {})
+  };
 
   if (detailPage) {
     return (
@@ -210,9 +215,10 @@ const TableShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
 
 // Main DataShow component
 const FormRelatePlusDataShow: React.FC<FormRelatePlusDataShowProps> = (props) => {
-  const { schema, value, showType = 'card' } = props
+  const { schema, value } = props
+  const { showType = 'card' } = schema
 
-  const [relateTableData, setRelateTableData] = React.useState<Array<Object>>(null)
+  const [relateTableData, setRelateTableData] = React.useState<Array<Object>>([])
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => { // 关联关联字段时后端只有ID，前端需要请求一次数据才能展示

@@ -19,7 +19,7 @@ type SchemaFormProps = UseFormPropsExtended & {
   onSubmit?: (data: any) => void
   isValid?: boolean
   children?: ReactNode | ((props: any) => ReactNode)
-  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
+  classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string> & { groupStyle?: React.CSSProperties }
 }
 
 const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = true, classNames, schameConvert, ...props }: SchemaFormProps) => {
@@ -80,7 +80,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
   const resolver = React.useMemo<Resolver<any, any>>(() => {
     return zodResolver(zodSchema as any)
   }, [zodSchema])
-  
+
   const methods = useForm({
     resolver: isValid ? resolver : null,
     ...props
@@ -157,14 +157,14 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
   return (
     <FormProvider {...methods} classNames={classNames}>
       <form id={formId} onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
-        <FieldGroup className={classNames?.group}>
+        <FieldGroup className={classNames?.group} style={classNames?.groupStyle}>
           {processedFormSchema.map(field => {
             const fieldKey = typeof field === 'string' ? field : field.key
             const fieldSchame = typeof field === 'string' ? { key: field } : field
             const baseSchema = schema?.properties?.[fieldKey as string]
             const type = field?.controlType || baseSchema?.controlType
             // 将表格内部字段的 need 属性转换为外层的验证规则
-            const editableTableValidate = React.useMemo(() => {
+            const editableTableValidate = (() => {
               const forms = baseSchema?.items
               const hasEditableTableForms = forms?.form && forms?.properties
 
@@ -219,7 +219,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
               }
 
               return validateFn
-            }, [type, baseSchema?.items])
+            })()
             const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
             const megerSchema = { ...baseSchema, ...fieldSchame }
             return (

@@ -1,0 +1,19 @@
+{
+  "name": "form-relate-test",
+  "type": "registry:component",
+  "title": "Form Relate Test",
+  "description": "Form Relate Test - 组件",
+  "dependencies": [],
+  "registryDependencies": [
+    "http://localhost:3000/r/form-relate.json",
+    "http://localhost:3000/r/form-relate-plus-add-record-btn.json",
+    "http://localhost:3000/r/form-relate-plus-data-show.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/kesi/form-relate-test/form-relate-test.tsx",
+      "type": "registry:component",
+      "content": "import * as React from 'react'\nimport { FormRelate } from '@/registry/components/form-relate/form-relate'\nimport { FormRelatePlusAddRecordBtn } from '@/registry/components/form-relate-plus-add-record-btn/form-relate-plus-add-record-btn'\nimport { FormRelatePlusDataShow } from '@/registry/components/form-relate-plus-data-show/form-relate-plus-data-show'\n\nexport interface FormRelateTestProps {\n  schema: {\n    relateTo?: string\n    relate?: {\n      id?: string\n    }\n    recordSelectType?: 'select' | 'modal'\n    selectType?: 'single' | 'multiple'\n    showType?: 'select' | 'card' | 'table'\n    showField?: string\n    allowAdd?: boolean\n    editDisabled?: boolean\n    createDisabled?: boolean\n    relateShowFields?: Array<{\n      key: string\n      title: string\n      fieldSchema?: any\n    }>\n  } & Record<string, any>\n  tableID?: string\n  input?: {\n    value?: any\n    onChange?: (value: any) => void\n  }\n  value?: any\n  onChange?: (value: any) => void\n  field?: {\n    schema?: Record<string, any>\n    displayField?: string\n    relateShowFields?: Array<{\n      key: string\n      title: string\n      fieldSchema?: any\n    }>\n  }\n  meta?: {\n    data?: {\n      disabled?: boolean\n    }\n  }\n  schema?: {\n    name?: string\n  }\n}\n\nconst FormRelateTest: React.FC<FormRelateTestProps> = (props) => {\n\n  if (!props.schema) {\n    return <div className=\"text-sm text-red-500\">关联字段配置错误：缺少 schema</div>\n  }\n  return (\n    <div className=\"flex flex-col items-stretch w-full gap-2\">\n      <div className=\"flex flex-row gap-2\">\n        <FormRelate {...props} />\n        <FormRelatePlusAddRecordBtn {...props} />\n      </div>\n      <FormRelatePlusDataShow {...props} />\n    </div>\n  )\n}\n\nexport { FormRelateTest }\n"
+    }
+  ]
+}

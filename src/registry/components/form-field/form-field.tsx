@@ -27,7 +27,7 @@ type FormFieldProps = {
 }
 
 type FormContextReturnType = ReturnType<typeof useFormContext> & {
-  classNames?: Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error', string>
+  classNames?: Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error' | 'orientation', string>
 }
 
 const FormField =
@@ -42,6 +42,7 @@ const FormField =
     const ui = useFieldUIStateValue(name)
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
+    const fieldDescription = description || schema.description
     const fieldProps = React.useMemo(() => {
       return formFieldConverter(schema)
     }, [schema])
@@ -53,8 +54,7 @@ const FormField =
         control={methods?.control}
         rules={controllerRules}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}
-            className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
+          <Field orientation={(formClassNames?.orientation as 'vertical' | 'horizontal' | 'responsive') || 'vertical'} data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)}>
             {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
               {label} : {required && <span className="text-red-500">*</span>}
             </FieldLabel>}
@@ -73,9 +73,9 @@ const FormField =
                 'aria-invalid': fieldState.invalid
               })) : <Input className={cn(formClassNames?.input, classNames?.input, schema?.classNames?.input)} />
             }
-            {description && (
+            {fieldDescription && (
               <FieldDescription className={cn(formClassNames?.description, classNames?.description, schema?.classNames?.description)}>
-                {description}
+                {fieldDescription}
               </FieldDescription>
             )}
             {fieldState.invalid && (

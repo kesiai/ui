@@ -7,7 +7,7 @@ import { FormLink } from '@/registry/components/form-link/form-link'
 import { FormMap } from '@/registry/components/form-map/form-map'
 import { FormInputNumber } from '@/registry/components/form-input-number/form-input-number'
 import { Rate } from '@/registry/components/form-rate/form-rate'
-import { FormRelate } from '@/registry/components/form-relate/form-relate'
+import { FormRelateOld } from '@/registry/components/form-relate-old-component/form-relate-old-component'
 import { FormSelect } from '@/registry/components/form-select/form-select'
 import { FormSerialNumber } from '@/registry/components/form-serial-number/form-serial-number'
 import { FormEditableTable } from '@/registry/components/form-editable-table/form-editable-table'
@@ -72,7 +72,7 @@ const formConverter = (schema: any, formSchema: any) => {
         return Rate
       case 'relate':
       case 'relate-multiple':
-        return FormRelate
+        return FormRelateOld
       case 'select-string':
       case 'select-number':
       case 'select-array-string':

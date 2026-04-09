@@ -1,25 +1,15 @@
 import * as React from 'react'
-import isEmpty from 'lodash/isEmpty'
 import isArray from 'lodash/isArray'
 import isObject from 'lodash/isObject'
 import { AsyncSelect } from '@/registry/components/form-relate-async-select/form-relate-async-select'
+import isFunction from 'lodash/isFunction'
 
 export interface FormRelateProps {
-  input?: {
-    value?: any
-    onChange?: (value: any) => void
-  }
-  field?: {
-    schema?: Record<string, any> | undefined
-    filter?: any
-    meta?: any
-    key?: string | undefined
-    displayField?: string | undefined
-    tableID?: string | undefined
-    relateShowFields?: any
-    option?: any
-    internalTable?: boolean
-  }
+  value?: any
+  onChange?: (value: any) => void
+  displayField?: string | undefined
+  schema?: Record<string, any> | undefined
+  internalTable?: boolean
   meta?: any
   record?: any
   disabled?: boolean
@@ -38,7 +28,7 @@ export interface FormRelateProps {
  * filterObj 由父组件传入
  */
 const FormRelate: React.FC<FormRelateProps> = (props) => {
-  const { onChange, value, field = {}, meta, record, disabled: propsDisabled, filterObj, displayField = 'name', schema, internalTable = true } = props
+  const { onChange, value, meta, record, disabled: propsDisabled, filterObj, displayField = 'name', schema, internalTable = true } = props
 
   const disabled = propsDisabled || meta?.data?.disabled || false
 
@@ -88,9 +78,10 @@ const FormRelate: React.FC<FormRelateProps> = (props) => {
           : null
       }
       onChange={(option) => {
-        isArray(option) ? onChange(option.map(item => item.item)) : onChange(option.item)
+        if (isFunction(onChange)) {
+          isArray(option) ? onChange(option.map(item => item.item)) : onChange(option.item)
+        }
       }}
-      field={field}
       schema={schema}
       label={`请选择${(schema as any)?.title || '关联字段'}`}
       disabled={disabled}

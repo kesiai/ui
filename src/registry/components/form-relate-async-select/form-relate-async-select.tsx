@@ -17,6 +17,38 @@ interface AsyncSelectProps {
     value?: any
     onChange?: (value: any) => void
   }
+  field?: {
+    schema?: Record<string, any>
+    filter?: any
+    meta?: any
+    key?: string
+    displayField?: string
+    tableID?: string
+    relateShowFields?: Array<{
+      key: string
+      title: string
+      mapToCurrent?: boolean
+      mapField?: string
+      fieldSchema?: any
+    }>
+    option?: {
+      form?: {
+        change: (field: string, value: any) => void
+      }
+    }
+  }
+  schema?: Record<string, any> | {
+    relateSchema: Record<string, any>
+    relate?: {
+      id?: string
+      fields?: Array<{
+        key: string
+        title: string
+        fieldSchema?: any
+      }>
+    }
+    relateShowFields?: any
+  }
   meta?: any
   record?: any
   antdForm?: any
@@ -25,10 +57,12 @@ interface AsyncSelectProps {
   value?: {
     key: string
     label: string
+    value: string
     item?: any
   } | null | {
     key: string
     label: string
+    value: string
     item?: any
   }[]
   mode?: 'multiple' | 'tags'
@@ -58,8 +92,9 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
     filterObj = {},
   } = props
 
-  const { relateShowFields } = schema
-  const displayField = schema?.relate?.fields?.[0]?.key || 'name'
+  const relateSchema = schema?.relate ? schema : schema?.relateSchema
+  const { relateShowFields } = relateSchema
+  const displayField = relateSchema?.relate?.fields?.[0]?.key || 'name'
 
   // 状态管理
   const [loading, setLoading] = React.useState(false)
@@ -92,7 +127,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
 
       setLoading(true)
       try {
-        const s = schema
+        const s = relateSchema
         const resource = s?.name ? s?.name : `core/t/${s?.relate?.id}/d`
 
         // 创建 API 实例

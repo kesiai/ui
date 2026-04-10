@@ -41,6 +41,7 @@ export interface FormUserRoleProps extends Omit<BaseFormFieldProps, 'value' | 'o
   label?: string
   /** 是否禁用 */
   disabled?: boolean
+  relateTo?: string
   /** 模式 */
   mode?: 'single' | 'multiple'
 }
@@ -49,7 +50,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
   const {
     value,
     onChange,
-    name,
+    relateTo,
     displayField = 'name',
     showField,
     ignoreAdmin = false,
@@ -79,8 +80,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
       setLoading(true)
       try {
         const api = createAPI({
-          resource: 'core/' + (name || 'user'),
-          name: name || 'user'
+          resource: 'core/' + (relateTo == 'Role' ? 'role' : 'user'),
         })
 
         const fields = showField ? ['id', displayField, showField] : ['id', displayField]
@@ -107,7 +107,7 @@ const FormUserRoleSelect: React.FC<FormUserRoleProps> = (props) => {
         setLoading(false)
       }
     },
-    [name, displayField, showField, ignoreAdmin]
+    [relateTo, displayField, showField, ignoreAdmin]
   )
 
   // 打开下拉时加载选项

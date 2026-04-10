@@ -80,8 +80,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   } = props
 
   const relateSchema = (schema?.relate || schema?.relateTo) ? schema : schema?.relateSchema
-  console.log(12345, schema, relateSchema)
-  const { relateShowFields } = relateSchema
+  const { relateShowFields } = relateSchema || {}
   const displayField = relateSchema?.relate?.fields?.[0]?.key || 'name'
 
   // 状态管理

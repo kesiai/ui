@@ -176,12 +176,10 @@ const renderWarnViewsPreview = (props: Record<string, any>) => {
                         position: { center: [116.391, 39.9042] },
                         zoom: 10
                     }}
-                    cellKey="preview-map"
                 >
                     <TableViews
                         table={table}
                         tableData={tableData}
-                        cellKey="preview-table"
                     />
                     <WarnViews
                         table={table}
@@ -195,7 +193,6 @@ const renderWarnViewsPreview = (props: Record<string, any>) => {
                         background={props.background || warnViewsDefaultProps.background}
                         overrunHide={overrunHide}
                         display={props.display ?? warnViewsDefaultProps.display}
-                        cellKey="preview-warn"
                     />
                 </MapContainer>
             </div>
@@ -226,7 +223,6 @@ const renderWarnViewsCodePreview = (props: Record<string, any>) => {
     return `<TableViews
   table={${tableProp}}
   tableData={${tableDataProp}}
-  cellKey="table-layer"
   map={mapInstance}
 />
 <WarnViews
@@ -240,7 +236,6 @@ const renderWarnViewsCodePreview = (props: Record<string, any>) => {
   radius={${props.radius ?? 20}}
   background="${props.background || 'rgba(255, 0, 0, 0.5)'}"${overrunHideCode}
   display={${props.display ?? true}}
-  cellKey="warn-layer"
   map={mapInstance}
 />`
 }

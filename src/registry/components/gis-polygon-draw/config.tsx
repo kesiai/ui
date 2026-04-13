@@ -126,7 +126,6 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
                         position: { center: [116.391, 39.9042] },
                         zoom: 10
                     }}
-                    cellKey="preview-map"
                 >
                     <PolygonViews
                         data={polygonData}
@@ -144,7 +143,6 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
                             }
                         }}
                         display={props.display as boolean}
-                        cellKey="preview"
                     />
                 </MapContainer>
             </div>
@@ -169,7 +167,6 @@ const renderPolygonViewsCodePreview = (props: Record<string, unknown>) => {
     }
   }}
   display={${props.display}}
-  cellKey="your-cell-key"
   map={mapInstance}
 />`
 }

@@ -130,10 +130,6 @@ export interface TableViewsProps {
      */
     className?: string
     /**
-     * 单元格唯一标识
-     */
-    cellKey?: string
-    /**
      * 表数据点 (额外订阅的字段)
      */
     tableTags?: any
@@ -216,7 +212,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             heatmap,
             cluster,
             display = true,
-            cellKey,
             map: mapProp,
             marker: markerProp,
             highlightMarker: highlightMarkerProp,
@@ -360,8 +355,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     onClose: () => {
                         feature.un('change', onFeatureChange)
                     },
-                    className: `${cellKey}-overlay`,
-                    id: `overlay-${cellKey}-${record.table || record._table}-${record.id}`,
+                    className: 'overlay',
+                    id: `overlay-${record.table || record._table}-${record.id}`,
                     overlayConfig: {
                         positioning: positioning || 'top-center',
                         offset: [offsetX || 0, offsetY || 0]
@@ -377,7 +372,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             }
 
             feature.on('change', onFeatureChange)
-        }, [map, cellKey])
+        }, [map])
 
         // Click Handler - 使用 OpenLayers Overlay
         React.useEffect(() => {
@@ -390,8 +385,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 })
 
                 if (feature) {
-                    const fCellKey = feature.get('cellKey')
-
                     // Check if it's a cluster feature
                     const clusteredFeatures = feature.get('features')
 
@@ -428,9 +421,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                             // Single feature in cluster
                             const originalFeature = clusteredFeatures[0]
                             const record = originalFeature.get('markerRecord')
-                            const fCellKey = originalFeature.get('cellKey')
 
-                            if (fCellKey !== cellKey) return
                             if (!record) return
 
                             // Determine modal config
@@ -445,9 +436,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                     }
 
                     // Regular feature (not clustered or different layer type)
-                    // Ensure the feature belongs to this layer instance
-                    if (fCellKey !== cellKey) return
-
                     const record = feature.get('markerRecord')
                     if (!record) return
 
@@ -466,7 +454,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
             return () => {
                 map.un('singleclick', handleClick)
             }
-        }, [map, cellKey, createRecordOverlay])
+        }, [map, createRecordOverlay])
 
         // 更新缓存标记配置
         React.useEffect(() => { markerScaleRef.current = markerScale }, [markerScale])
@@ -1055,7 +1043,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                                 style: tableGisConfig.Point,
                                 coordinateType,
                                 markerTags: dataMap[r.id],
-                                cellKey,
                                 tableGisConfig
                             })
                             allFeatures.push(f)
@@ -1074,7 +1061,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                             coordinate: [loc.lng, loc.lat],
                             style: tableGisConfig.Point,
                             coordinateType,
-                            cellKey,
                             tableGisConfig
                         })
                         allFeatures.push(f)
@@ -1100,7 +1086,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                                 coordinate: d.coordinates,
                                 style: mergedStyle,
                                 coordinateType,
-                                cellKey,
                                 tableGisConfig
                             })
 
@@ -1133,7 +1118,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
                 if (requestTracker.current === currentRequest) {
                     if (result?.features && result.features.length > 0) {
-                        result.features.forEach((f: any) => f.set('cellKey', cellKey))
                         source.addFeatures(result.features)
                     }
 
@@ -1179,15 +1163,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
 
             sourceRef.current = baseSource
             pointSourceRef.current = pointSource
-
-            // 注册 pointSource 到 map
-            if (cellKey) {
-                try {
-                    map.set(`gisv2.record.pointSource:${cellKey}`, pointSource)
-                } catch (e) {
-                    console.error(e)
-                }
-            }
 
             // baseSource添加feature时，自动分发到点/非点source
             baseSource.on('addfeature', (e: any) => {
@@ -1251,7 +1226,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         properties: { layerType: 'cluster' },
                         ...layerconfig
                     })
-                    clusterLayer.set('id', 'cluster_' + cellKey)
+                    clusterLayer.set('id', 'cluster_default')
                     layerlist.push(clusterLayer)
                 }
                 if (heatmap?.show) {
@@ -1263,17 +1238,17 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         properties: { layerType: 'heatmap' },
                         zIndex: 888
                     })
-                    heatmapLayer.set('id', 'heatmap_' + cellKey)
+                    heatmapLayer.set('id', 'heatmap_default')
                     layerlist.push(heatmapLayer)
                 }
                 if (!cluster?.show && !heatmap?.show) {
                     const layer = new VectorLayer({
                         source: pointSource,
                         style: styleFn,
-                        properties: { layerType: 'default', cellKey },
+                        properties: { layerType: 'default' },
                         ...layerconfig
                     })
-                    layer.set('id', cellKey)
+                    layer.set('id', 'default')
                     layerlist.push(layer)
                 }
                 return layerlist.filter(Boolean)
@@ -1293,7 +1268,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 maxZoom,
                 minZoom,
             })
-            nonPointLayer.set('id', cellKey)
+            nonPointLayer.set('id', 'default')
             map.addLayer(nonPointLayer)
             layerRef.current = [nonPointLayer, ...pointsLayerList]
 
@@ -1302,20 +1277,14 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 if (map) {
                     const overlays = map.getOverlays().getArray().slice()
                     overlays.forEach((overlay: any) => {
-                        const overlayId = overlay.getId()
-                        if (overlayId && overlayId.includes(cellKey)) {
-                            map.removeOverlay(overlay)
-                            const element = overlay.getElement()
-                            if (element && element.parentNode) {
-                                element.parentNode.removeChild(element)
-                            }
+                        map.removeOverlay(overlay)
+                        const element = overlay.getElement()
+                        if (element && element.parentNode) {
+                            element.parentNode.removeChild(element)
                         }
                     })
                 }
 
-                if (cellKey && map.unset) {
-                    try { map.unset(`gisv2.record.pointSource:${cellKey}`) } catch (e) { }
-                }
                 if (map && layerRef.current) {
                     layerRef.current.forEach((l: any) => {
                         try {
@@ -1329,7 +1298,8 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 if (map) {
                     const layersToRemove: any[] = []
                     map.getLayers().forEach((l: any) => {
-                        if (l.get('id') === cellKey || l.get('id') === 'cluster_' + cellKey || l.get('id') === 'heatmap_' + cellKey) {
+                        const layerId = l.get('id')
+                        if (layerId === 'default' || layerId === 'cluster_default' || layerId === 'heatmap_default') {
                             layersToRemove.push(l)
                         }
                     })
@@ -1433,7 +1403,7 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         properties: { layerType: 'cluster' },
                         ...layerconfig
                     })
-                    clusterLayer.set('id', 'cluster_' + cellKey)
+                    clusterLayer.set('id', 'cluster_default')
                     layerlist.push(clusterLayer)
                 }
                 if (heatmap?.show) {
@@ -1445,17 +1415,17 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                         properties: { layerType: 'heatmap' },
                         zIndex: 888
                     })
-                    heatmapLayer.set('id', 'heatmap_' + cellKey)
+                    heatmapLayer.set('id', 'heatmap_default')
                     layerlist.push(heatmapLayer)
                 }
                 if (!cluster?.show && !heatmap?.show) {
                     const layer = new VectorLayer({
                         source: pointSourceRef.current,
                         style: styleFn,
-                        properties: { layerType: 'default', cellKey },
+                        properties: { layerType: 'default' },
                         ...layerconfig
                     })
-                    layer.set('id', cellKey)
+                    layer.set('id', 'default')
                     layerlist.push(layer)
                 }
                 return layerlist.filter(Boolean)
@@ -1479,7 +1449,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
                 ref={ref}
                 className={cn("table-views", className)}
                 style={{ display: 'none' }}
-                data-cell-key={cellKey}
                 {...restProps}
             />
         )

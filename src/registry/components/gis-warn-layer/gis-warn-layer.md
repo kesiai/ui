@@ -29,7 +29,6 @@
 | `overrunHide` | `object` | 否 | - | 层级隐藏配置 `{overmax, overmin}` |
 | `display` | `boolean` | 否 | `true` | 是否显示报警层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | `'warn-layer'` | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### overrunHide
@@ -60,13 +59,11 @@ function BasicWarnLayer() {
       {/* 必须先添加数据表层 */}
       <TableViews
         table={[{ id: 'table1', title: '设备表' }]}
-        cellKey="table-layer"
       />
 
       {/* 报警层 */}
       <WarnViews
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -83,13 +80,11 @@ function FilteredByTableWarn() {
     <MapContainer>
       <TableViews
         table={[{ id: 'sensor-table', title: '传感器表' }]}
-        cellKey="table-layer"
       />
 
       <WarnViews
         table={[{ id: 'sensor-table', title: '传感器表' }]}
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -109,7 +104,6 @@ function FilteredByRecordWarn() {
           { id: 'record1', _table: 'table1' },
           { id: 'record2', _table: 'table1' }
         ]}
-        cellKey="table-layer"
       />
 
       <WarnViews
@@ -118,7 +112,6 @@ function FilteredByRecordWarn() {
           { id: 'record2', _table: 'table1' }
         ]}
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -135,14 +128,12 @@ function FilteredByLevelWarn() {
     <MapContainer>
       <TableViews
         table={[{ id: 'device-table', title: '设备表' }]}
-        cellKey="table-layer"
       />
 
       <WarnViews
         table={[{ id: 'device-table', title: '设备表' }]}
         level="高"
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -159,14 +150,12 @@ function FilteredByTypeWarn() {
     <MapContainer>
       <TableViews
         table={[{ id: 'device-table', title: '设备表' }]}
-        cellKey="table-layer"
       />
 
       <WarnViews
         table={[{ id: 'device-table', title: '设备表' }]}
         type="温度报警"
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -183,7 +172,6 @@ function CustomAnimationWarn() {
     <MapContainer>
       <TableViews
         table={[{ id: 'sensor-table', title: '传感器表' }]}
-        cellKey="table-layer"
       />
 
       <WarnViews
@@ -192,7 +180,6 @@ function CustomAnimationWarn() {
         duration={0.6}                         // 较慢的动画
         radius={30}                            // 更大的半径
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -209,7 +196,6 @@ function ZoomControlledWarn() {
     <MapContainer>
       <TableViews
         table={[{ id: 'device-table', title: '设备表' }]}
-        cellKey="table-layer"
       />
 
       <WarnViews
@@ -218,7 +204,6 @@ function ZoomControlledWarn() {
           overmax: 15  // 缩放级别 >= 15 时隐藏
         }}
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -242,14 +227,12 @@ function DynamicDisplayWarn() {
       <MapContainer>
         <TableViews
           table={[{ id: 'device-table', title: '设备表' }]}
-          cellKey="table-layer"
         />
 
         <WarnViews
           table={[{ id: 'device-table', title: '设备表' }]}
           display={visible}
           dataType={true}
-          cellKey="warn-layer"
         />
       </MapContainer>
     </div>
@@ -284,7 +267,6 @@ function MultiFilterWarn() {
           { id: 'sensor-table', title: '传感器表' },
           { id: 'device-table', title: '设备表' }
         ]}
-        cellKey="table-layer"
       />
 
       {/* 报警层：多条件过滤 */}
@@ -300,7 +282,6 @@ function MultiFilterWarn() {
           overmax: 16
         }}
         display={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -325,7 +306,6 @@ function MultiLevelWarnStyles() {
       {/* 数据表层 */}
       <TableViews
         table={[{ id: 'device-table', title: '设备表' }]}
-        cellKey="table-layer"
       />
 
       {/* 高级报警：红色，快速闪烁 */}
@@ -336,7 +316,6 @@ function MultiLevelWarnStyles() {
         duration={0.6}
         radius={30}
         dataType={true}
-        cellKey="high-warn-layer"
       />
 
       {/* 中级报警：橙色，中速闪烁 */}
@@ -347,7 +326,6 @@ function MultiLevelWarnStyles() {
         duration={0.4}
         radius={25}
         dataType={true}
-        cellKey="medium-warn-layer"
       />
 
       {/* 低级报警：黄色，慢速闪烁 */}
@@ -358,7 +336,6 @@ function MultiLevelWarnStyles() {
         duration={0.3}
         radius={20}
         dataType={true}
-        cellKey="low-warn-layer"
       />
     </MapContainer>
   )
@@ -376,7 +353,6 @@ function DepartmentFilteredWarn() {
       {/* 数据表层：包含部门信息 */}
       <TableViews
         table={[{ id: 'production-table', title: '生产设备表' }]}
-        cellKey="table-layer"
       />
 
       {/* 报警层：只显示生产部门的报警 */}
@@ -387,7 +363,6 @@ function DepartmentFilteredWarn() {
           { id: 'dept-002', title: '制造部' }
         ]}
         dataType={true}
-        cellKey="warn-layer"
       />
     </MapContainer>
   )
@@ -433,7 +408,6 @@ function DynamicFilterWarn() {
       <MapContainer>
         <TableViews
           table={[{ id: 'device-table', title: '设备表' }]}
-          cellKey="table-layer"
         />
 
         <WarnViews
@@ -442,7 +416,6 @@ function DynamicFilterWarn() {
           type={selectedType}
           dataType={true}
           key={`${selectedLevel}-${selectedType}`} // key 变化时重新创建
-          cellKey="warn-layer"
         />
       </MapContainer>
     </div>
@@ -475,13 +448,11 @@ function WarnStatisticsPanel() {
       <MapContainer>
         <TableViews
           table={[{ id: 'sensor-table', title: '传感器表' }]}
-          cellKey="table-layer"
         />
 
         <WarnViews
           table={[{ id: 'sensor-table', title: '传感器表' }]}
           dataType={true}
-          cellKey="warn-layer"
         />
       </MapContainer>
     </div>
@@ -506,7 +477,6 @@ function ResponsiveZoomWarn() {
       >
         <TableViews
           table={[{ id: 'device-table', title: '设备表' }]}
-          cellKey="table-layer"
         />
 
         <WarnViews
@@ -515,7 +485,6 @@ function ResponsiveZoomWarn() {
             overmax: currentZoom > 12 ? 15 : 18  // 动态调整隐藏层级
           }}
           dataType={true}
-          cellKey="warn-layer"
         />
       </MapContainer>
     </div>
@@ -579,16 +548,14 @@ interface WarningData {
 
 9. **动画性能**：闪烁动画通过 `postrender` 事件实现，每帧都会重绘，注意性能影响
 
-10. **cellKey 唯一性**：确保 `cellKey` 在同一地图中唯一
+10. **参数 JSON 格式**：`table`、`tableData`、`department` 参数支持 JSON 字符串格式
 
-11. **参数 JSON 格式**：`table`、`tableData`、`department` 参数支持 JSON 字符串格式
+11. **点位 source 注册**：数据表层会将 `pointSource` 注册到 map 上
 
-12. **点位 source 注册**：数据表层会将 `pointSource` 注册到 map 上，key 格式为 `gisv2.record.pointSource:${cellKey}`
+12. **坐标系一致性**：确保报警层与数据表层使用相同的坐标系
 
-13. **坐标系一致性**：确保报警层与数据表层使用相同的坐标系
+13. **多报警层叠加**：可以添加多个报警层（不同级别、不同样式），通过 `zIndex` 控制叠加顺序
 
-14. **多报警层叠加**：可以添加多个报警层（不同级别、不同样式），通过 `zIndex` 控制叠加顺序
+14. **取消监听**：组件卸载时会自动取消所有事件监听和 WebSocket 订阅
 
-15. **取消监听**：组件卸载时会自动取消所有事件监听和 WebSocket 订阅
-
-16. **错误处理**：查询历史报警失败会在控制台输出错误，不会中断应用运行
+15. **错误处理**：查询历史报警失败会在控制台输出错误，不会中断应用运行

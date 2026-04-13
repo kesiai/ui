@@ -53,8 +53,6 @@ export interface VideoPlaybackWidgetProps extends React.HTMLAttributes<HTMLDivEl
   timelineBackground?: string
   // 时间轴刻度颜色
   timelineScaleColor?: string
-  // 唯一标识
-  cellKey?: string
 }
 
 // 时间选择器组件
@@ -285,7 +283,6 @@ const VideoPlaybackWidget = React.forwardRef<HTMLDivElement, VideoPlaybackWidget
       backgroundColor = "rgba(13, 14, 27, 0.7)",
       timelineBackground = "#374151",
       timelineScaleColor = "#ffffff",
-      cellKey = "playback",
       ...props
     },
     ref

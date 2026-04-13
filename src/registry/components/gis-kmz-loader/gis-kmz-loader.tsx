@@ -49,7 +49,6 @@ export interface KmzProps {
     layerBase?: LayerBase
     display?: boolean
     className?: string
-    cellKey?: string
     map?: Map | null
 }
 
@@ -57,7 +56,6 @@ const Kmz = React.forwardRef<HTMLDivElement, KmzProps>(
     (
         {
             className,
-            cellKey,
             source: sourceUrl,
             kmzFile,
             coordinateType,
@@ -114,7 +112,6 @@ const Kmz = React.forwardRef<HTMLDivElement, KmzProps>(
                     })
 
                     const layer = new VectorLayer({
-                        id: cellKey,
                         title,
                         source: source,
                         opacity: opacity || 1,
@@ -125,7 +122,6 @@ const Kmz = React.forwardRef<HTMLDivElement, KmzProps>(
                         minZoom,
                         properties: {
                             layerType: 'kmz',
-                            cellKey,
                             title
                         }
                     } as any)
@@ -152,7 +148,7 @@ const Kmz = React.forwardRef<HTMLDivElement, KmzProps>(
                     map.removeLayer(layerRef.current)
                 }
             }
-        }, [map, sourceUrl, kmzFile, coordinateType, cellKey, title]) // Re-load if source changes
+        }, [map, sourceUrl, kmzFile, coordinateType, title]) // Re-load if source changes
 
         // Update Visibility and Properties (Dynamic updates)
         React.useEffect(() => {
@@ -174,7 +170,6 @@ const Kmz = React.forwardRef<HTMLDivElement, KmzProps>(
                 ref={ref}
                 className={cn("kmz-layer", className)}
                 style={{ display: 'none' }}
-                data-cell-key={cellKey}
                 {...props}
             />
         )

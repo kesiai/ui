@@ -16,7 +16,6 @@ const defaultModel3dLayout3dProps = {
   isFixd: false,
   layoutWidth: 400,
   layoutHeight: 250,
-  cellKey: '',
   editMode: false,
   className: ''
 }
@@ -55,13 +54,6 @@ export const model3dLayout3dPropsConfig = [
     placeholder: '请输入布局高度'
   },
   {
-    name: 'cellKey',
-    label: '单元格键',
-    type: 'text' as const,
-    default: defaultModel3dLayout3dProps.cellKey,
-    placeholder: '请输入单元格键'
-  },
-  {
     name: 'editMode',
     label: '编辑模式',
     type: 'boolean' as const,
@@ -82,7 +74,6 @@ export const model3dLayout3dDefaultProps = {
   isFixd: defaultModel3dLayout3dProps.isFixd,
   layoutWidth: defaultModel3dLayout3dProps.layoutWidth.toString(),
   layoutHeight: defaultModel3dLayout3dProps.layoutHeight.toString(),
-  cellKey: defaultModel3dLayout3dProps.cellKey,
   editMode: defaultModel3dLayout3dProps.editMode,
   className: defaultModel3dLayout3dProps.className
 }
@@ -140,7 +131,6 @@ const renderModel3dLayout3dPreview = (props: Record<string, any>) => {
               isFixd={props.isFixd}
               layoutWidth={layoutWidth}
               layoutHeight={layoutHeight}
-              cellKey={props.cellKey}
               editMode={props.editMode}
               className={props.className}
               setMeshs={() => {}} // 提供空函数，避免组件显示"请放入三维空间中使用"
@@ -211,7 +201,6 @@ const renderModel3dLayout3dCodePreview = (props: Record<string, any>) => {
   if (props.isFixd) innerCode += `\n    isFixd`
   if (props.layoutWidth) innerCode += `\n    layoutWidth={${layoutWidth}}`
   if (props.layoutHeight) innerCode += `\n    layoutHeight={${layoutHeight}}`
-  if (props.cellKey) innerCode += `\n    cellKey="${props.cellKey}"`
   if (props.editMode) innerCode += `\n    editMode`
   if (props.className) innerCode += `\n    className="${props.className}"`
   innerCode += `\n    setMeshs={() => {}}`

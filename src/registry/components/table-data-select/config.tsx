@@ -42,7 +42,6 @@ const renderTableSelectPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
         <TableSelect
-          cellKey="preview"
           input={{ value: undefined, onChange: () => {} }}
           {...props}
         />

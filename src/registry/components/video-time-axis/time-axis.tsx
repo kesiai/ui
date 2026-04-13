@@ -37,8 +37,6 @@ export interface TimeAxisWidgetProps extends React.HTMLAttributes<HTMLDivElement
   onTimeChange?: (time: number, direction?: "left" | "right") => void
   // 是否只读
   readonly?: boolean
-  // 唯一标识
-  cellKey?: string
 }
 
 const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
@@ -53,7 +51,6 @@ const TimeAxisWidget = React.forwardRef<HTMLDivElement, TimeAxisWidgetProps>(
       axisConfiguration = {},
       onTimeChange,
       readonly = false,
-      cellKey = "default",
       ...props
     },
     ref

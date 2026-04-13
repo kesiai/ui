@@ -21,8 +21,6 @@ export interface Model3dLayout3dProps {
   layoutWidth?: number
   /** 布局高度 */
   layoutHeight?: number
-  /** 单元格键 */
-  cellKey?: string
   /** 编辑模式 */
   editMode?: boolean
   /** 子组件 */
@@ -39,7 +37,6 @@ const Model3dLayout3d: React.FC<Model3dLayout3dProps> = ({
   isFixd = false,
   layoutWidth = 400,
   layoutHeight = 250,
-  cellKey = "",
   editMode = false,
   children,
   setMeshs,
@@ -59,7 +56,7 @@ const Model3dLayout3d: React.FC<Model3dLayout3dProps> = ({
     if (setMeshs) {
       setMeshs((state: any) => ({
         ...state,
-        [cellKey]: JSON.stringify({
+        layout3dConfig: JSON.stringify({
           meshConfig,
           isSprite,
           isFixd,

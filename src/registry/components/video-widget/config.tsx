@@ -287,7 +287,6 @@ const renderVideoControlPreview = (props: Record<string, any>) => {
           jessConfigute={jessConfigute}
           webrtcConfig={webrtcConfig}
           errorReload={props.errorReload}
-          cellKey="preview"
         />
       </div>
     </div>
@@ -333,7 +332,6 @@ const renderVideoControlCodePreview = (props: Record<string, any>) => {
   jessConfigute={${JSON.stringify(jessConfigute)}}
   webrtcConfig={${JSON.stringify(webrtcConfig)}}
   errorReload={${props.errorReload}}
-  cellKey="your-cell-key"
 />`
 }
 

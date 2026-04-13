@@ -5,7 +5,6 @@ import { createAPI } from '@airiot/client'
 interface EzuikitVideoProps {
   tableData?: any
   videoAction?: string
-  cellKey?: string
   videoData?: any
   url?: string
   accessToken?: string
@@ -13,7 +12,7 @@ interface EzuikitVideoProps {
 }
 
 const EzuikitVideo: React.FC<EzuikitVideoProps> = (props) => {
-  const { tableData, videoAction="preview", cellKey, videoData } = props
+  const { tableData, videoAction="preview", videoData } = props
   const ezuikitContainer = useRef<HTMLDivElement>(null)
   const ezuikitVideoContainer = useRef<HTMLDivElement>(null)
   const [ ezopen, setEzopen ] = useState<{url?: string, accessToken?: string}>({ url: props?.url, accessToken: props?.accessToken })
@@ -39,20 +38,20 @@ const EzuikitVideo: React.FC<EzuikitVideoProps> = (props) => {
 
   useEffect(()=>{
     if(ezopen?.url && ezopen?.accessToken && tableDataId) {
-      let containerElement = document.getElementById(`video-ezuikit-${cellKey}`)
+      let containerElement = document.getElementById('video-ezuikit')
       let clientHeight = containerElement?.clientHeight || 400
       let clientWidth = containerElement?.clientWidth || '100%'
 
-      let videoContainer = document.getElementById(`video-container-${tableDataId}-${cellKey}-${randows || 0}`)
+      let videoContainer = document.getElementById(`video-container-${tableDataId}-${randows || 0}`)
       if (videoContainer) videoContainer.innerHTML = ''
 
       const isMobile = check()
-      
+
       // if(player.current) { player.current.stop(); player.current = null }
-      
+
       try {
           player.current = new EZUIKit.EZUIKitPlayer({
-            id: `video-container-${tableDataId}-${cellKey}-${randows || 0}`, // 视频容器ID
+            id: `video-container-${tableDataId}-${randows || 0}`, // 视频容器ID
             accessToken: ezopen.accessToken,
             url: ezopen.url,
             width: clientWidth,
@@ -64,7 +63,7 @@ const EzuikitVideo: React.FC<EzuikitVideoProps> = (props) => {
           console.error("EZUIKit init failed", e)
       }
     }
-  }, [ ezopen?.url, ezopen?.accessToken, tableDataId, cellKey ])
+  }, [ ezopen?.url, ezopen?.accessToken, tableDataId ])
 
   const getTableSchema = async (tableId: string) => {
     const api = createAPI({ resource: 'core/t/schema' })
@@ -108,8 +107,8 @@ const EzuikitVideo: React.FC<EzuikitVideoProps> = (props) => {
 
   return (
     <>
-      <div className='video-ezuikit' id={`video-ezuikit-${cellKey}`} ref={ezuikitVideoContainer} style={{ width: '100%', height: '100%' }}>
-        <div id={`video-container-${tableDataId}-${cellKey}-${randows || 0}`} ref={ezuikitContainer}></div>
+      <div className='video-ezuikit' id="video-ezuikit" ref={ezuikitVideoContainer} style={{ width: '100%', height: '100%' }}>
+        <div id={`video-container-${tableDataId}-${randows || 0}`} ref={ezuikitContainer}></div>
       </div>
     </>
   )

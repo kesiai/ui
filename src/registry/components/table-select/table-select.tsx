@@ -14,10 +14,6 @@ const _t1 = (str: string) => str
 
 export interface TableSelectProps {
   /**
-   * 单元格键值
-   */
-  cellKey?: string
-  /**
    * 字段配置
    */
   field?: any
@@ -75,7 +71,6 @@ export interface TableInfo {
  */
 export const TableSelect: React.FC<TableSelectProps> = (props) => {
   const {
-    cellKey,
     field,
     placeholder = _r('请选择表'),
     input = { value: undefined, onChange: undefined },

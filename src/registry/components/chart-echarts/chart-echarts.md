@@ -21,7 +21,6 @@
 | `chartCode` | `string` | 否 | `""` | 自定义图表代码，用于动态生成图表配置 |
 | `chartData` | `object` | 否 | `undefined` | 数据源对象，支持 dimensions 格式 |
 | `seriesOption` | `object` | 否 | `undefined` | 系列配置，与 chartData 配合使用 |
-| `cellKey` | `string` | 是 | - | 图表实例的唯一标识 |
 | `size` | `{width?, height?}` | 否 | `width: '100%', height: '100%'` | 图表尺寸 |
 | `theme` | `string` | 否 | `undefined` | 主题配置 |
 | `className` | `string` | 否 | `undefined` | CSS 类名 |
@@ -100,7 +99,6 @@ function BasicLineChart() {
   return (
     <ChartEcharts
       title="一周销量趋势"
-      cellKey="basic-chart"
       option={{
         title: {
           text: '一周销量趋势'
@@ -137,7 +135,6 @@ function BarChartExample() {
   return (
     <ChartEcharts
       title="产品销量对比"
-      cellKey="bar-chart"
       option={{
         title: {
           text: '产品销量对比'
@@ -213,7 +210,6 @@ function DynamicChart() {
   return (
     <ChartEcharts
       title="动态计算图表"
-      cellKey="dynamic-chart"
       option={{
         xAxis: {
           type: 'category',
@@ -258,7 +254,6 @@ function DatasetChart() {
   return (
     <ChartEcharts
       title="时间序列数据"
-      cellKey="dataset-chart"
       option={{
         title: {
           text: '时间序列数据'
@@ -308,7 +303,6 @@ function DashboardOverview() {
       {/* 销售趋势图 */}
       <ChartEcharts
         title="月度销售趋势"
-        cellKey="sales-trend"
         option={{
           title: {
             text: '月度销售趋势',
@@ -346,7 +340,6 @@ function DashboardOverview() {
       {/* 产品分类饼图 */}
       <ChartEcharts
         title="产品分类占比"
-        cellKey="category-pie"
         option={{
           title: {
             text: '产品分类占比',
@@ -428,7 +421,6 @@ function RealTimeMonitor() {
   return (
     <ChartEcharts
       title="实时数据监控"
-      cellKey="realtime-monitor"
       option={{
         title: {
           text: '实时数据监控',
@@ -469,9 +461,7 @@ function RealTimeMonitor() {
 
 ## 注意事项
 
-1. **cellKey 唯一性**：每个图表实例必须有唯一的 cellKey，避免图表实例冲突
-
-2. **性能优化**：大数据集时建议使用 dataZoom 组件和渐进式渲染
+1. **性能优化**：大数据集时建议使用 dataZoom 组件和渐进式渲染
 
 3. **内存管理**：组件卸载时会自动销毁图表实例，避免内存泄漏
 

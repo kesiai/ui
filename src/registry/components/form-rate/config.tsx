@@ -102,7 +102,6 @@ const renderRateCodePreview = (props: Record<string, any>) => {
   allowClear={${props.allowClear}}
   showScore={${props.showScore}}
   size="${props.size}"
-  cellKey="your-cell-key"
 />`
 }
 

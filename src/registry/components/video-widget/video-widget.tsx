@@ -162,7 +162,6 @@ export interface VideoWidgetProps extends React.HTMLAttributes<HTMLDivElement> {
   jessConfigute?: Record<string, any>
   webrtcConfig?: Record<string, any>
   errorReload?: number
-  cellKey?: string
   // Legacy props compatibility
   autoplay?: boolean
   loop?: boolean

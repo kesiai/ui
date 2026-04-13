@@ -57,10 +57,6 @@ export interface VideoPeriodsWidgetProps {
    * CSS 类名
    */
   className?: string
-  /**
-   * 单元格唯一标识
-   */
-  cellKey?: string
 }
 
 const VideoPeriodsWidget = React.forwardRef<HTMLDivElement, VideoPeriodsWidgetProps>(

@@ -68,7 +68,6 @@ const renderKmzPreview = (props: Record<string, any>) => {
                         opacity: props.opacity,
                         zIndex: props.zIndex,
                     }}
-                    cellKey="preview"
                 />
             </MapContainer>
         </div>
@@ -84,7 +83,6 @@ const renderKmzCodePreview = (props: Record<string, any>) => {
     opacity: ${props.opacity},
     zIndex: ${props.zIndex}
   }}
-  cellKey="your-cell-key"
 />`
 }
 

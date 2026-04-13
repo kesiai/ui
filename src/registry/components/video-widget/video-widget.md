@@ -35,7 +35,6 @@
 | `jessConfigute` | `object` | 否 | 见下方 | Jessibuca 播放器配置 |
 | `webrtcConfig` | `object` | 否 | 见下方 | WebRTC 播放配置 |
 | `errorReload` | `number` | 否 | `5` | 错误重连时间（秒） |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 
 ### configure（高级配置）
 
@@ -141,7 +140,6 @@ function Example() {
       streamType="main"
       type="hls"
       videoAction="preview"
-      cellKey="live-preview"
     />
   )
 }
@@ -159,7 +157,6 @@ function Example() {
       type="hls"
       url="https://example.com/live/stream.m3u8"
       videoAction="preview"
-      cellKey="custom-url"
     />
   )
 }
@@ -193,7 +190,6 @@ function Example() {
           record: false
         }
       }}
-      cellKey="rtsp-stream"
     />
   )
 }
@@ -217,7 +213,6 @@ function Example() {
       videoAction="record"
       recordStartTime="2024-01-01T00:00:00Z"
       recordEndTime="2024-01-01T23:59:59Z"
-      cellKey="playback"
     />
   )
 }
@@ -235,7 +230,6 @@ function Example() {
       type="flv"
       url="ws://example.com/live/stream.flv"
       videoAction="preview"
-      cellKey="flv-live"
     />
   )
 }
@@ -257,7 +251,6 @@ function Example() {
         showLatency: true,
         reconnectAttempts: 5
       }}
-      cellKey="webrtc-stream"
     />
   )
 }
@@ -281,7 +274,6 @@ function Example() {
       type="ezopen"
       accessToken="your-access-token"
       videoAction="preview"
-      cellKey="ezviz-stream"
     />
   )
 }
@@ -325,7 +317,6 @@ function MonitoringCenter() {
               resolution: '1920x1080',
               frameRate: 25
             }}
-            cellKey={`monitor-${camera.id}`}
           />
         </div>
       ))}
@@ -370,7 +361,6 @@ function AlarmLinkageVideo() {
           streamType="main"
           videoAction="preview"
           errorReload={3}
-          cellKey="alarm-linkage"
         />
       )}
     </div>
@@ -425,7 +415,6 @@ function VideoPlayback() {
           videoAction="record"
           recordStartTime={startTime}
           recordEndTime={endTime}
-          cellKey="playback-query"
         />
       </div>
     </div>
@@ -463,7 +452,6 @@ function AdaptiveVideoPlayer() {
             type={device.protocol}
             streamType="main"
             videoAction="preview"
-            cellKey={`adaptive-${device.id}`}
           />
         </div>
       ))}

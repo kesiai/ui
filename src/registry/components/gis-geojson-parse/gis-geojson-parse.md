@@ -24,7 +24,6 @@
 | `layerBase` | `LayerBase` | 否 | - | 图层基础配置（透明度、层级等） |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### LineStyle
@@ -86,7 +85,6 @@ function RemoteGeoJsonLayer() {
       <GeoJson
         source="https://example.com/data/geojson.json"
         coordinateType="EPSG:4326"
-        cellKey="remote-geojson"
       />
     </MapContainer>
   )
@@ -104,7 +102,6 @@ function LocalGeoJsonLayer() {
       <GeoJson
         geoJsonFile="/data/areas.geojson"
         coordinateType="EPSG:4326"
-        cellKey="local-geojson"
       />
     </MapContainer>
   )
@@ -127,7 +124,6 @@ function StyledGeoJsonLayer() {
           width: 3,
           background: 'rgba(255, 255, 255, 0.2)'
         }}
-        cellKey="styled-geojson"
       />
     </MapContainer>
   )
@@ -154,7 +150,6 @@ function TransparentGeoJsonLayer() {
           opacity: 0.6,
           zIndex: 10
         }}
-        cellKey="transparent-geojson"
       />
     </MapContainer>
   )
@@ -177,7 +172,6 @@ function GCJ02GeoJsonLayer() {
           width: 2,
           background: 'rgba(0, 255, 0, 0.1)'
         }}
-        cellKey="gcj02-geojson"
       />
     </MapContainer>
   )
@@ -204,7 +198,6 @@ function LimitedZoomGeoJsonLayer() {
           maxZoom: 15,
           zIndex: 5
         }}
-        cellKey="limited-geojson"
       />
     </MapContainer>
   )
@@ -230,7 +223,6 @@ function DynamicGeoJsonLayer() {
           source="/data/polygons.geojson"
           coordinateType="EPSG:4326"
           display={visible}
-          cellKey="dynamic-geojson"
         />
       </MapContainer>
     </div>
@@ -275,7 +267,6 @@ function MultiGeoJsonMap() {
           maxZoom: 10
         }}
         display={true}
-        cellKey="province-layer"
       />
 
       {/* 市界图层 */}
@@ -295,7 +286,6 @@ function MultiGeoJsonMap() {
           maxZoom: 18
         }}
         display={true}
-        cellKey="city-layer"
       />
 
       {/* 区域填充图层 */}
@@ -313,7 +303,6 @@ function MultiGeoJsonMap() {
           zIndex: 0
         }}
         display={true}
-        cellKey="area-layer"
       />
     </MapContainer>
   )
@@ -372,7 +361,6 @@ function FeaturePropertyStyles() {
           width: 1,
           background: 'rgba(128, 128, 128, 0.1)'
         }}
-        cellKey="feature-styles"
       />
     </MapContainer>
   )
@@ -398,7 +386,6 @@ function LabeledGeoJsonLayer() {
             font: '14px Calibri,sans-serif'
           }
         }}
-        cellKey="labeled-geojson"
       />
     </MapContainer>
   )
@@ -436,7 +423,6 @@ function DynamicGeoJsonSource() {
             width: 2
           }}
           key={dataSource} // key 变化时重新创建组件
-          cellKey="dynamic-source"
         />
       </MapContainer>
     </div>
@@ -490,7 +476,6 @@ function ResponsiveStyleGeoJson() {
           maxZoom: 18,
           zIndex: 10
         }}
-        cellKey="responsive-geojson"
       />
     </MapContainer>
   )
@@ -518,7 +503,7 @@ function ResponsiveStyleGeoJson() {
 
 8. **图层更新**：样式变化时会更新图层样式而不重新创建，但数据源变化会重新创建图层
 
-9. **cellKey 唯一性**：确保 `cellKey` 在同一地图中唯一，否则可能导致图层冲突
+9. **图层层级**：使用 `zIndex` 控制多个图层的叠加顺序
 
 10. **跨域问题**：远程 GeoJSON 文件必须支持 CORS 或配置为同源，否则无法加载
 

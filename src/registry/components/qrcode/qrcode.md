@@ -21,7 +21,6 @@
 | `margin` | `number` | 否 | `1` | 二维码边距（格子数） |
 | `darkColor` | `string` | 否 | `'#000000'` | 前景色（二维码颜色） |
 | `lightColor` | `string` | 否 | `'#ffffff'` | 背景色 |
-| `cellKey` | `string` | 是 | - | 唯一标识符，用于生成 canvas ID |
 
 ## 基本用法
 
@@ -36,7 +35,6 @@ function Example() {
   return (
     <QRCodeComp
       content="https://example.com"
-      cellKey="url-qr"
     />
   )
 }
@@ -51,7 +49,6 @@ function Example() {
   return (
     <QRCodeComp
       content="Hello, World!"
-      cellKey="text-qr"
     />
   )
 }
@@ -68,7 +65,6 @@ function Example() {
       content="https://example.com"
       width={300}
       margin={2}
-      cellKey="custom-qr"
     />
   )
 }
@@ -85,7 +81,6 @@ function Example() {
       content="https://example.com"
       darkColor="#3b82f6"
       lightColor="#f0f9ff"
-      cellKey="colored-qr"
     />
   )
 }
@@ -113,7 +108,6 @@ function Example() {
       {text && (
         <QRCodeComp
           content={text}
-          cellKey="dynamic-qr"
         />
       )}
     </div>
@@ -146,7 +140,6 @@ function Example() {
     <div>
       <QRCodeComp
         content="https://example.com"
-        cellKey="download-qr"
       />
       <button onClick={handleDownload}>下载二维码</button>
     </div>
@@ -167,7 +160,6 @@ function Example() {
         <QRCodeComp
           content="https://example.com"
           width={250}
-          cellKey="card-qr"
         />
       </div>
       <p className="text-sm text-gray-600">使用手机扫描二维码</p>
@@ -205,7 +197,6 @@ END:VCARD
           width={200}
           darkColor="#1f2937"
           lightColor="#f9fafb"
-          cellKey="contact-qr"
         />
       </div>
     </div>
@@ -235,7 +226,6 @@ function WiFiQRCode() {
           width={250}
           darkColor="#3b82f6"
           lightColor="#eff6ff"
-          cellKey="wifi-qr"
         />
       </div>
     </div>
@@ -248,6 +238,5 @@ function WiFiQRCode() {
 1. **内容长度**：内容越长，二维码越复杂，建议控制在合理范围内。
 2. **尺寸选择**：宽度建议至少 200px，确保扫描设备能够识别。
 3. **颜色对比**：确保前景色和背景色有足够对比度，否则可能影响扫描。
-4. **cellKey 唯一性**：同一页面多个二维码时，确保 cellKey 唯一。
-5. **容错率**：组件使用默认容错率，适合大多数场景。
-6. **浏览器兼容**：依赖 canvas，确保目标浏览器支持。
+4. **容错率**：组件使用默认容错率，适合大多数场景。
+5. **浏览器兼容**：依赖 canvas，确保目标浏览器支持。

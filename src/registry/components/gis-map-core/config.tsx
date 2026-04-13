@@ -127,7 +127,6 @@ const renderMapContainerPreview = (props: Record<string, any>) => {
                 zoomOption={zoomOption}
                 scaleLine={scaleLine}
                 extentOption={extentOption}
-                cellKey="preview"
             />
         </div>
     )
@@ -163,7 +162,6 @@ const renderMapContainerCodePreview = (props: Record<string, any>) => {
   zoomOption={${JSON.stringify(zoomOption)}}
   scaleLine={${JSON.stringify(scaleLine)}}
   extentOption={${JSON.stringify(extentOption)}}
-  cellKey="your-cell-key"
 />`
 }
 

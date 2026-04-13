@@ -60,7 +60,6 @@ const renderQRCodePreview = (props: Record<string, any>) => {
           margin={props.margin}
           darkColor={props.darkColor}
           lightColor={props.lightColor}
-          cellKey="preview"
         />
       </div>
     </div>
@@ -74,7 +73,6 @@ const renderQRCodeCodePreview = (props: Record<string, any>) => {
   margin={${props.margin}}
   darkColor="${props.darkColor}"
   lightColor="${props.lightColor}"
-  cellKey="your-cell-key"
 />`
 }
 

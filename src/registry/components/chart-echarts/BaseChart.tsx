@@ -34,7 +34,7 @@ export interface BaseChartProps {
   theme?: any
   option?: any
   chartCode?: string
-  cellKey: string
+  cellKey?: string
   style?: React.CSSProperties
   className?: string
   onEvents?: Record<string, Function>
@@ -49,7 +49,7 @@ declare global {
 }
 
 export const BaseChart: React.FC<BaseChartProps> = (props) => {
-  const { size, theme, option, chartCode, cellKey, style, className, onEvents, onChartReady } = props
+  const { size, theme, option, chartCode, cellKey = 'default-chart', style, className, onEvents, onChartReady } = props
 
   const echartDom = useRef<HTMLDivElement>(null)
   const resizeDOM = useRef<HTMLDivElement>(null)

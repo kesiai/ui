@@ -49,7 +49,6 @@ export interface XYZProps {
   layerBase?: LayerBase
   display?: boolean
   className?: string
-  cellKey?: string
   map?: Map | null
 }
 
@@ -57,7 +56,6 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
   (props, ref) => {
     const {
       className,
-      cellKey,
       source: sourceUrl,
       coordinateType,
       coorDefs,
@@ -180,7 +178,7 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
         // rotation: 76,
         changeSelect: true,
         style: (_feature: any, _type: any) => new style.Style({ image: new style.Icon({ src: '' }) }),
-        properties: { layerType: 'xyz', cellKey } // Preserve custom props
+        properties: { layerType: 'xyz' } // Preserve custom props
       } as any)
 
       layerRef.current = layer
@@ -234,7 +232,6 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
         ref={ref}
         className={cn("xyz-layer", className)}
         style={{ display: 'none' }}
-        data-cell-key={cellKey}
         {...otherProps}
       />
     )

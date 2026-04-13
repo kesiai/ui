@@ -20,7 +20,6 @@
 | `featureStyle` | `FeatureStyle` | 否 | `{}` | 图层默认样式配置，包含点和线的样式 |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### DrawLineItem
@@ -107,7 +106,6 @@ function PointLayer() {
     <MapContainer>
       <CustomViews
         drawLine={data}
-        cellKey="point-layer"
       />
     </MapContainer>
   )
@@ -134,7 +132,6 @@ function LineLayer() {
     <MapContainer>
       <CustomViews
         drawLine={data}
-        cellKey="line-layer"
       />
     </MapContainer>
   )
@@ -165,7 +162,6 @@ function PolygonLayer() {
     <MapContainer>
       <CustomViews
         drawLine={data}
-        cellKey="polygon-layer"
       />
     </MapContainer>
   )
@@ -192,7 +188,6 @@ function CircleLayer() {
     <MapContainer>
       <CustomViews
         drawLine={data}
-        cellKey="circle-layer"
       />
     </MapContainer>
   )
@@ -230,7 +225,6 @@ function CustomStyleLayer() {
             fillColor: 'rgba(0, 255, 0, 0.3)'
           }
         }}
-        cellKey="custom-style-layer"
       />
     </MapContainer>
   )
@@ -260,7 +254,6 @@ function CustomIconLayer() {
             scale: 1.5
           }
         }}
-        cellKey="custom-icon-layer"
       />
     </MapContainer>
   )
@@ -308,7 +301,6 @@ function MultiGeometryLayer() {
     <MapContainer>
       <CustomViews
         drawLine={data}
-        cellKey="multi-geometry-layer"
       />
     </MapContainer>
   )
@@ -382,7 +374,6 @@ function StyleOverrideExample() {
             fillColor: 'rgba(0, 255, 0, 0.2)'
           }
         }}
-        cellKey="style-override-layer"
       />
     </MapContainer>
   )
@@ -438,7 +429,6 @@ function MultipleGeometriesExample() {
     >
       <CustomViews
         drawLine={data}
-        cellKey="multiple-geometries-layer"
       />
     </MapContainer>
   )
@@ -488,7 +478,6 @@ function DynamicUpdateExample() {
       <CustomViews
         drawLine={data}
         display={true}
-        cellKey="dynamic-update-layer"
       />
     </MapContainer>
   )
@@ -515,4 +504,4 @@ function DynamicUpdateExample() {
 
 9. **display 属性**：设置 `display={false}` 可以隐藏图层而不销毁，适合需要频繁切换显示的场景
 
-10. **cellKey 唯一性**：同一地图上的多个图层应使用不同的 cellKey，以避免冲突
+10. **图层层级**：使用 `zIndex` 控制多图层叠加顺序

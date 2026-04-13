@@ -100,7 +100,6 @@ const VideoPlaybackPreview = ({ props }: { props: Record<string, any> }) => {
         currentTime={currentTime}
         onTimeChange={setCurrentTime}
         videoRecords={sampleVideoRecords}
-        cellKey="preview"
       />
     </div>
   )

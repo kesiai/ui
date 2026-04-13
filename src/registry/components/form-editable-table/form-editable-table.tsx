@@ -164,7 +164,7 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
           className="mb-2 ml-2"
         >
           <Trash2 className="h-4 w-4 mr-1" />
-          删除
+          {schema?.btnText?.delete || '删除'}
         </Button>
       )}
 

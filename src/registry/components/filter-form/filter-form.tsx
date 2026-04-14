@@ -18,6 +18,7 @@ const FilterForm = ({ schema, filterSchema, formId, onSubmit, ...props }: Schema
       schema={schema}
       onSubmit={onSubmit}
       isValid={false}
+      showDescribe={false}
       formSchema={filterSchema}
       schameConvert={filterConverter}
       {...props}

@@ -24,8 +24,7 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
 
   const filterSchema = filters && filters.length > 0 ? filters : model.filterSchema
 
-  const onSubmit = (value: any) => {
-    console.log(value)
+  const onSubmit = (value: any) => {    
     setWheres((w: any) => {
       return { ...w, filter: { ...w.filter, ...value } }
     });

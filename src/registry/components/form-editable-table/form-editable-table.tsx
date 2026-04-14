@@ -101,7 +101,17 @@ const FormEditableTable: React.FC<FormEditableTableProps> = (props) => {
         ),
         schema: item,
         editable: true,
-        width: item.fieldType === 'attachments' ? 270 : 200,
+        width: (() => {
+          if (item.width) return item.width
+          switch (item.fieldType) {
+            case 'attachments': return 280
+            case 'select': return 160
+            case 'inputNumber': return 140
+            case 'datePicker': return 180
+            case 'input': return 160
+            default: return 180  // relate / user / 其他
+          }
+        })(),
       }
     })
   }, [schema?.items])

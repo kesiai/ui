@@ -123,7 +123,7 @@ const DataCell = ({ children, schema, tableSchema, ...restProps }:
       schema: { ...baseSchema, ...(tableSchema || {}) },
       tableSchema,
     }
-
+    
     const FieldComponent = tableConverter(baseSchema, tableSchema)
 
     return (
@@ -243,7 +243,7 @@ export function ViewDataTable({
       field,
       size: field.width || undefined,
       fixed: field.tableFixed,
-      enableSorting: field.canOrder,
+      enableSorting: Boolean(field.canOrder),
       header: ({ column }) => {
         return <DataGridColumnHeader title={field.title || fieldName} column={column} />
       },

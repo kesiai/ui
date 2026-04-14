@@ -51,7 +51,6 @@ const renderChartEchartsPreview = (props: Record<string, any>) => {
           <ChartEcharts
             option={props.option}
             chartCode={props.chartCode}
-            cellKey="preview"
             size={{
               width: `${props.width || 100}%`,
               height: `${props.height || 100}%`
@@ -67,7 +66,6 @@ const renderChartEchartsCodePreview = (props: Record<string, any>) => {
   return `<ChartEcharts
   title="${props.title}"
   option={${JSON.stringify(props.option, null, 2)}}
-  cellKey="your-cell-key"
 />`
 }
 

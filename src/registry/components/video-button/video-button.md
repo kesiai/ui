@@ -28,7 +28,6 @@
 | `onActionClick` | `(action: PtzAction) => void` | 否 | - | 点击动作回调 |
 | `onActionStart` | `(action: PtzAction) => void` | 否 | - | 动作开始回调 |
 | `onActionEnd` | `(action: PtzAction) => void` | 否 | - | 动作结束回调 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 
 ### PtzAction（云台动作）
 
@@ -67,7 +66,6 @@ function Example() {
     <ButtonWidget
       tableData={tableData}
       buttonType="hk"
-      cellKey="ptz-control"
     />
   )
 }
@@ -85,7 +83,6 @@ function Example() {
       size={280}
       bg="rgb(15, 23, 42)"
       btnColor="rgb(148, 163, 184)"
-      cellKey="custom-style"
     />
   )
 }
@@ -102,7 +99,6 @@ function Example() {
       tableData={tableData}
       controlMode="click"
       buttonType="hk"
-      cellKey="click-mode"
     />
   )
 }
@@ -119,7 +115,6 @@ function Example() {
       tableData={tableData}
       buttonType="ez"
       controlMode="click"
-      cellKey="ezviz-ptz"
     />
   )
 }
@@ -145,7 +140,6 @@ function Example() {
       <ButtonWidget
         tableData={tableData}
         size={size}
-        cellKey="responsive-size"
       />
     </div>
   )
@@ -177,7 +171,6 @@ function Example() {
         controlMode="hold"
         onActionStart={handleActionStart}
         onActionEnd={handleActionEnd}
-        cellKey="event-listener"
       />
     </div>
   )
@@ -206,7 +199,6 @@ function Example() {
       <ButtonWidget
         tableData={tableData}
         disable={!hasPermission}
-        cellKey="conditional-disable"
       />
     </div>
   )
@@ -252,7 +244,6 @@ function MonitoringConsole() {
               tableData={selectedCamera}
               type="hls"
               videoAction="preview"
-              cellKey="console-video"
             />
           ) : (
             <div className="flex items-center justify-center h-full text-gray-400">
@@ -303,7 +294,6 @@ function MonitoringConsole() {
               controlMode="hold"
               onActionStart={handleActionStart}
               onActionEnd={handleActionEnd}
-              cellKey="console-ptz"
             />
           ) : (
             <div className="text-gray-400">请先选择摄像头</div>
@@ -342,7 +332,6 @@ function PresetControl() {
           tableData={tableData}
           buttonType="hk"
           size={200}
-          cellKey="preset-ptz"
         />
       </div>
 
@@ -410,7 +399,6 @@ function CruiseControl() {
         <ButtonWidget
           tableData={tableData}
           buttonType="hk"
-          cellKey="cruise-ptz"
         />
 
         <div className="flex-1">
@@ -527,7 +515,6 @@ function MultiPtzControl() {
               size={200}
               buttonType="hk"
               onActionStart={handleActionStart}
-              cellKey="multi-ptz"
             />
           ) : (
             <div className="text-gray-400">请选择要控制的设备</div>
@@ -571,7 +558,6 @@ function CustomActionMapping() {
         buttonType="hk"
         controlMode="click"
         onActionClick={handleActionClick}
-        cellKey="custom-action"
       />
     </div>
   )

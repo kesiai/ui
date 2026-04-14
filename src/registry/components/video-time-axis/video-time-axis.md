@@ -25,7 +25,6 @@
 | `axisConfiguration` | `AxisConfiguration` | 否 | 见下方 | 时间轴配置对象 |
 | `onTimeChange` | `(time: number, direction?: 'left' \| 'right') => void` | 否 | - | 时间改变回调函数 |
 | `readonly` | `boolean` | 否 | `false` | 是否启用只读模式 |
-| `cellKey` | `string` | 否 | `'default'` | 单元格唯一标识 |
 
 ### AxisConfiguration（时间轴配置）
 
@@ -168,7 +167,6 @@ function Example() {
       onTimeChange={(time) => {
         console.log('查询时间:', new Date(time * 1000))
       }}
-      cellKey="auto-records"
     />
   )
 }
@@ -281,7 +279,6 @@ function VideoQuerySystem() {
               videoAction="record"
               recordStartTime={new Date(selectedTime * 1000).toISOString()}
               recordEndTime={new Date((selectedTime + 3600) * 1000).toISOString()}
-              cellKey="query-system"
             />
           ) : (
             <div className="flex items-center justify-center h-full text-gray-400">
@@ -309,7 +306,6 @@ function VideoQuerySystem() {
             textSize: 12
           }}
           onTimeChange={handleTimeChange}
-          cellKey="query-timeline"
         />
       </div>
     </div>
@@ -364,7 +360,6 @@ function MultiDeviceTimeline() {
                 textSize: 11
               }}
               onTimeChange={handleTimeChange}
-              cellKey={`timeline-${device.id}`}
             />
           </div>
         ))}
@@ -418,7 +413,6 @@ function AnnotatedTimeline() {
         height={60}
         currentTime={currentTime}
         onTimeChange={setCurrentTime}
-        cellKey="annotated-timeline"
       />
 
       {/* 标注列表 */}
@@ -487,7 +481,6 @@ function ZoomableTimeline() {
         height={settings.height}
         currentTime={currentTime}
         onTimeChange={setCurrentTime}
-        cellKey={`zoomable-${zoom}`}
       />
     </div>
   )

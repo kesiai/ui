@@ -36,7 +36,7 @@ const renderDataViewChartPreview = (props: Record<string, any>) => {
           view={props.view || dataViewChartDefaultProps.view}
           echartOption={props.echartOption || dataViewChartDefaultProps.echartOption}
           chartCode={props.chartCode}
-          cellKey="preview"
+          cellKey="data-view-chart"
         />
       </div>
     </div>

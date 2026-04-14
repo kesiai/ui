@@ -65,10 +65,6 @@ export interface CustomViewsProps {
    */
   className?: string
   /**
-   * 单元格唯一标识
-   */
-  cellKey?: string
-  /**
    * 地图实例（由父组件传入）
    */
   map?: Map | null
@@ -84,7 +80,6 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
       drawLine = "",
       featureStyle = {},
       display = true,
-      cellKey,
       map: mapProp,
       ...props
     },
@@ -150,7 +145,6 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
           geometry: featureGeom,
           customIndex: index,
           customData: item,
-          cellKey,
         })
         return f
       }
@@ -176,7 +170,7 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
       const source = new VectorSource({ features })
       const layer = new VectorLayer({
         source,
-        properties: { layerType: 'custom', cellKey },
+        properties: { layerType: 'custom' },
         zIndex: 100,
       })
 
@@ -238,7 +232,7 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
           layerRef.current = null
         }
       }
-    }, [map, JSON.stringify(drawLine), JSON.stringify(featureStyle), cellKey, transformTo3857])
+    }, [map, JSON.stringify(drawLine), JSON.stringify(featureStyle), transformTo3857])
 
     // display 变化时，仅更新图层可见性
     React.useEffect(() => {
@@ -251,7 +245,6 @@ const CustomViews = React.forwardRef<HTMLDivElement, CustomViewsProps>(
         ref={ref}
         className={cn("custom-views", className)}
         style={{ display: 'none' }}
-        data-cell-key={cellKey}
         {...props}
       />
     )

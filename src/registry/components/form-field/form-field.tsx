@@ -17,6 +17,7 @@ type FormFieldProps = {
   name: string
   label?: ReactNode
   description?: ReactNode
+  showDescribe?: boolean
   children?: ReactNode | ((props: any) => ReactNode)
   required?: boolean
   rules?: any
@@ -31,7 +32,7 @@ type FormContextReturnType = ReturnType<typeof useFormContext> & {
 }
 
 const FormField =
-  ({ name, label, description, children, required, rules, validate, className, classNames, schema }: FormFieldProps) => {
+  ({ name, label, description, children, required, rules, validate, showDescribe, className, classNames, schema }: FormFieldProps) => {
     let methods = null
     try {
       methods = useFormContext() as FormContextReturnType
@@ -73,7 +74,7 @@ const FormField =
                 'aria-invalid': fieldState.invalid
               })) : <Input className={cn(formClassNames?.input, classNames?.input, schema?.classNames?.input)} />
             }
-            {fieldDescription && (
+            {showDescribe && fieldDescription && (
               <FieldDescription className={cn(formClassNames?.description, classNames?.description, schema?.classNames?.description)}>
                 {fieldDescription}
               </FieldDescription>

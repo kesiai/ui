@@ -86,10 +86,6 @@ export interface PolygonViewsProps {
    */
   className?: string
   /**
-   * 单元格唯一标识
-   */
-  cellKey?: string
-  /**
    * 地图实例（由父组件传入）
    */
   map?: Map | null
@@ -110,7 +106,6 @@ const PolygonViews = React.forwardRef<HTMLDivElement, PolygonViewsProps>(
       showToolbar = false,
       readonly = false,
       display = true,
-      cellKey,
       map: mapProp,
       ...props
     },
@@ -222,7 +217,6 @@ const PolygonViews = React.forwardRef<HTMLDivElement, PolygonViewsProps>(
           polygonId: item.id,
           polygonType: item.type,
           polygonStyle: item.style,
-          cellKey,
         })
         features.push(f)
       })
@@ -232,7 +226,7 @@ const PolygonViews = React.forwardRef<HTMLDivElement, PolygonViewsProps>(
       const source = new VectorSource({ features })
       const layer = new VectorLayer({
         source,
-        properties: { layerType: 'polygon', cellKey },
+        properties: { layerType: 'polygon' },
         zIndex: 50,
       })
 
@@ -299,7 +293,7 @@ const PolygonViews = React.forwardRef<HTMLDivElement, PolygonViewsProps>(
           layerRef.current = null
         }
       }
-    }, [map, JSON.stringify(data), JSON.stringify(defaultStyle), cellKey, transformTo3857, createNumberLabelStyles])
+    }, [map, JSON.stringify(data), JSON.stringify(defaultStyle), transformTo3857, createNumberLabelStyles])
 
     // display 变化时，仅更新图层可见性
     React.useEffect(() => {
@@ -343,7 +337,6 @@ const PolygonViews = React.forwardRef<HTMLDivElement, PolygonViewsProps>(
       <div
         ref={ref}
         className={cn("polygon-views relative", className)}
-        data-cell-key={cellKey}
         {...props}
       >
         {renderToolbar()}

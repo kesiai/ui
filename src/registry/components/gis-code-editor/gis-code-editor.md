@@ -20,7 +20,6 @@
 | `params` | `CodeParam[]` | 否 | `[]` | 传递给代码函数的参数列表 |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### CodeParam
@@ -56,7 +55,6 @@ function OSMLayer() {
     <MapContainer>
       <CodeEditorViews
         codeScript={script}
-        cellKey="osm-layer"
       />
     </MapContainer>
   )
@@ -82,7 +80,6 @@ function AmapLayer() {
     <MapContainer>
       <CodeEditorViews
         codeScript={script}
-        cellKey="amap-layer"
       />
     </MapContainer>
   )
@@ -126,7 +123,6 @@ function ParametrizedLayer() {
       <CodeEditorViews
         codeScript={script}
         params={params}
-        cellKey="param-layer"
       />
     </MapContainer>
   )
@@ -158,7 +154,6 @@ function DynamicLayer() {
         <CodeEditorViews
           codeScript={script}
           display={visible}
-          cellKey="dynamic-layer"
         />
       </MapContainer>
     </div>
@@ -193,7 +188,6 @@ function TransparentLayer() {
       <CodeEditorViews
         codeScript={script}
         params={params}
-        cellKey="transparent-layer"
       />
     </MapContainer>
   )
@@ -242,14 +236,12 @@ function MultiCodeLayerMap() {
       <CodeEditorViews
         codeScript={osmScript}
         display={true}
-        cellKey="osm-base-layer"
       />
 
       {/* 顶层：半透明高德图层 */}
       <CodeEditorViews
         codeScript={amapScript}
         display={true}
-        cellKey="amap-overlay-layer"
       />
     </MapContainer>
   )
@@ -296,7 +288,6 @@ function DynamicCodeEditor() {
         <CodeEditorViews
           codeScript={script}
           display={isValid}
-          cellKey="editor-layer"
         />
       </MapContainer>
     </div>
@@ -346,7 +337,6 @@ function ConditionalParamsLayer() {
         <CodeEditorViews
           codeScript={script}
           params={params}
-          cellKey="conditional-layer"
         />
       </MapContainer>
     </div>
@@ -391,4 +381,3 @@ function ConditionalParamsLayer() {
 
 9. **性能考虑**：频繁变化 `codeScript` 或 `params` 会导致图层重复创建，影响性能
 
-10. **cellKey 唯一性**：确保 `cellKey` 在同一地图中唯一，否则可能导致图层冲突

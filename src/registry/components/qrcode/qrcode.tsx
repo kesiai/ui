@@ -7,7 +7,6 @@ interface QRCodeCompProps {
   margin?: number;
   darkColor?: string;
   lightColor?: string;
-  cellKey: string;
 }
 
 const QRCodeComp: React.FC<QRCodeCompProps> = ({
@@ -16,7 +15,6 @@ const QRCodeComp: React.FC<QRCodeCompProps> = ({
   margin = 1,
   darkColor = "#000000",
   lightColor = "#ffffff",
-  cellKey,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -48,7 +46,7 @@ const QRCodeComp: React.FC<QRCodeCompProps> = ({
       });
   }, [content, width, margin, darkColor, lightColor]);
 
-  return <canvas ref={canvasRef} id={`${cellKey}-QRCode`} />;
+  return <canvas ref={canvasRef} id="QRCode" />;
 };
 
 export { QRCodeComp };

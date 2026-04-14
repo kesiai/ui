@@ -23,7 +23,6 @@
 | `layerBase` | `LayerBase` | 否 | - | 图层基础配置（透明度、层级等） |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### LayerBase
@@ -57,7 +56,6 @@ function RemoteKmzLayer() {
       <Kmz
         source="https://example.com/data/areas.kmz"
         coordinateType="EPSG:4326"
-        cellKey="remote-kmz"
       />
     </MapContainer>
   )
@@ -75,7 +73,6 @@ function LocalKmzLayer() {
       <Kmz
         kmzFile="/data/regions.kmz"
         coordinateType="EPSG:4326"
-        cellKey="local-kmz"
       />
     </MapContainer>
   )
@@ -97,7 +94,6 @@ function TransparentKmzLayer() {
           opacity: 0.7,
           zIndex: 10
         }}
-        cellKey="transparent-kmz"
       />
     </MapContainer>
   )
@@ -118,7 +114,6 @@ function GCJ02KmzLayer() {
         layerBase={{
           zIndex: 5
         }}
-        cellKey="gcj02-kmz"
       />
     </MapContainer>
   )
@@ -141,7 +136,6 @@ function LimitedZoomKmzLayer() {
           maxZoom: 15,
           zIndex: 5
         }}
-        cellKey="limited-kmz"
       />
     </MapContainer>
   )
@@ -167,7 +161,6 @@ function DynamicKmzLayer() {
           source="/data/areas.kmz"
           coordinateType="EPSG:4326"
           display={visible}
-          cellKey="dynamic-kmz"
         />
       </MapContainer>
     </div>
@@ -218,7 +211,6 @@ function DynamicPropsKmzLayer() {
             opacity,
             zIndex
           }}
-          cellKey="dynamic-props-kmz"
         />
       </MapContainer>
     </div>
@@ -258,7 +250,6 @@ function MultiKmzMap() {
           maxZoom: 10
         }}
         display={true}
-        cellKey="province-kmz-layer"
       />
 
       {/* 市界图层 */}
@@ -273,7 +264,6 @@ function MultiKmzMap() {
           maxZoom: 18
         }}
         display={true}
-        cellKey="city-kmz-layer"
       />
 
       {/* 区域标注图层 */}
@@ -287,7 +277,6 @@ function MultiKmzMap() {
           minZoom: 12
         }}
         display={true}
-        cellKey="labels-kmz-layer"
       />
     </MapContainer>
   )
@@ -324,7 +313,6 @@ function DynamicKmzSource() {
             zIndex: 10
           }}
           key={dataSource} // key 变化时重新创建组件
-          cellKey="dynamic-source-kmz"
         />
       </MapContainer>
     </div>
@@ -367,7 +355,6 @@ function KmzLayerWithLoading() {
           layerBase={{
             zIndex: 5
           }}
-          cellKey="loading-kmz"
         />
       </MapContainer>
     </div>
@@ -400,7 +387,6 @@ function MultiLevelKmzMap() {
           zIndex: 1
         }}
         display={true}
-        cellKey="provinces-kmz"
       />
 
       {/* 中缩放级别：显示市界 */}
@@ -413,7 +399,6 @@ function MultiLevelKmzMap() {
           zIndex: 2
         }}
         display={true}
-        cellKey="cities-kmz"
       />
 
       {/* 高缩放级别：显示区县界 */}
@@ -426,7 +411,6 @@ function MultiLevelKmzMap() {
           zIndex: 3
         }}
         display={true}
-        cellKey="districts-kmz"
       />
     </MapContainer>
   )
@@ -473,7 +457,6 @@ function ResponsiveKmzLayer() {
           maxZoom: 18
         }}
         display={true}
-        cellKey="responsive-kmz"
       />
     </MapContainer>
   )
@@ -525,14 +508,12 @@ example.kmz
    - `layerBase` 属性变化会动态更新图层
    - `display` 变化只更新可见性
 
-10. **cellKey 唯一性**：确保 `cellKey` 在同一地图中唯一，否则可能导致图层冲突
+10. **跨域问题**：远程 KMZ 文件必须支持 CORS 或配置为同源，否则无法加载
 
-11. **跨域问题**：远程 KMZ 文件必须支持 CORS 或配置为同源，否则无法加载
+11. **资源清理**：组件卸载时会自动清理图层资源，防止内存泄漏
 
-12. **资源清理**：组件卸载时会自动清理图层资源，防止内存泄漏
+12. **坐标转换**：组件会自动将数据坐标转换为地图坐标系，无需手动转换
 
-13. **坐标转换**：组件会自动将数据坐标转换为地图坐标系，无需手动转换
+13. **取消机制**：组件内部实现了取消机制，防止快速切换数据源时出现竞态条件
 
-14. **取消机制**：组件内部实现了取消机制，防止快速切换数据源时出现竞态条件
-
-15. **JSZip 依赖**：组件依赖 `jszip` 库来解压 KMZ 文件，确保项目已安装该依赖
+14. **JSZip 依赖**：组件依赖 `jszip` 库来解压 KMZ 文件，确保项目已安装该依赖

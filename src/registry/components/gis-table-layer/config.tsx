@@ -296,7 +296,6 @@ const renderTableViewsPreview = (props: Record<string, any>) => {
                     layerBase={layerBase}
                     heatmap={heatmap}
                     cluster={cluster}
-                    cellKey="preview"
                 />
             </MapContainer>
         </div>
@@ -336,7 +335,6 @@ const renderTableViewsCodePreview = (props: Record<string, any>) => {
   layerBase={${JSON.stringify(layerBase)}}
   heatmap={${JSON.stringify(heatmap)}}
   cluster={${JSON.stringify(cluster)}}
-  cellKey="your-cell-key"
 />`
 }
 

@@ -54,7 +54,6 @@ const renderAreaCodePreview = (props: Record<string, any>) => {
   config={{
     areaType: "${props.areaType}"
   }}
-  cellKey="your-cell-key"
 />`
 }
 

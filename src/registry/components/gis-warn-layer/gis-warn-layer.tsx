@@ -21,7 +21,7 @@ import { createAPI, useWS } from '@airiot/client'
 
 /**
  * 获取地图上所有数据表层的 pointSource
- * 数据表层会将 pointSource 注册到 map 上，key 格式为 gisv2.record.pointSource:${cellKey}
+ * 数据表层会将 pointSource 注册到 map 上，key 格式为 gisv2.record.pointSource:...
  */
 const getAllPointSources = (map: any) => {
     if (!map) return []
@@ -130,10 +130,6 @@ export interface WarnViewsProps {
      */
     className?: string
     /**
-     * 单元格唯一标识
-     */
-    cellKey?: string
-    /**
      * 地图实例（由父组件传入）
      */
     map?: any
@@ -154,7 +150,6 @@ const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
             background = 'rgba(255, 0, 0, 0.5)',
             overrunHide,
             display = true,
-            cellKey = 'warn-layer',
             map: mapProp,
             ...props
         },
@@ -368,7 +363,7 @@ const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
             const warnSource = new VectorSource({ wrapX: false })
             const warnLayer = new VectorLayer({
                 source: warnSource,
-                id: `${cellKey}_warning_layer`,
+                id: 'warning_layer',
                 zIndex: 888,
                 style: () =>
                     new style.Style({
@@ -405,7 +400,7 @@ const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
                 }
                 warningMapRef.current.clear()
             }
-        }, [map, cellKey, createFlashAnimation, updateLayerVisibility])
+        }, [map, createFlashAnimation, updateLayerVisibility])
 
         // 更新动画监听器（当动画参数变化时）
         useEffect(() => {
@@ -606,7 +601,6 @@ const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
                 ref={ref}
                 className={cn('warn-views-layer', className)}
                 style={{ display: 'none' }}
-                data-cell-key={cellKey}
                 {...props}
             />
         )

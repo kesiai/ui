@@ -33,7 +33,6 @@ const renderCodeEditorViewsPreview = (props: Record<string, any>) => {
                     <CodeEditorViews
                         codeScript={props.codeScript}
                         display={props.display}
-                        cellKey="preview"
                     />
                 </MapContainer>
             </div>
@@ -45,7 +44,6 @@ const renderCodeEditorViewsCodePreview = (props: Record<string, any>) => {
     return `<CodeEditorViews
   codeScript={\`${props.codeScript}\`}
   display={${props.display}}
-  cellKey="your-cell-key"
 />`
 }
 

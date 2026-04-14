@@ -18,11 +18,12 @@ type SchemaFormProps = UseFormPropsExtended & {
   schameConvert?: (schema: any, field: object) => void,
   onSubmit?: (data: any) => void
   isValid?: boolean
+  showDescribe?: boolean
   children?: ReactNode | ((props: any) => ReactNode)
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string> & { groupStyle?: React.CSSProperties }
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = true, classNames, schameConvert, ...props }: SchemaFormProps) => {
+const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, ...props }: SchemaFormProps) => {
 
   // 处理 formSchema，展开 '*' 通配符
   const processedFormSchema = React.useMemo(() => {
@@ -223,7 +224,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, isValid = 
             const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
             const megerSchema = { ...baseSchema, ...fieldSchame }
             return (
-              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} validate={editableTableValidate}>
+              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} showDescribe={showDescribe} validate={editableTableValidate}>
                 <FieldController />
               </FormField>
             )

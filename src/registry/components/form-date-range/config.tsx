@@ -100,7 +100,6 @@ const renderDateRangeCodePreview = (props: Record<string, any>) => {
   format="${props.format}"
   disabled={${props.disabled}}
   placeholder="${props.placeholder}"
-  cellKey="your-cell-key"
 />`
 }
 

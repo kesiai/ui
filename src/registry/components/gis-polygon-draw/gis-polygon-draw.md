@@ -25,7 +25,6 @@
 | `readonly` | `boolean` | 否 | `false` | 是否只读模式 |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### PolygonData
@@ -109,7 +108,6 @@ function LineStringExample() {
     <MapContainer>
       <PolygonViews
         data={data}
-        cellKey="linestring-layer"
       />
     </MapContainer>
   )
@@ -139,7 +137,6 @@ function PolygonExample() {
     <MapContainer>
       <PolygonViews
         data={data}
-        cellKey="polygon-layer"
       />
     </MapContainer>
   )
@@ -165,7 +162,6 @@ function CircleExample() {
     <MapContainer>
       <PolygonViews
         data={data}
-        cellKey="circle-layer"
       />
     </MapContainer>
   )
@@ -202,7 +198,6 @@ function CustomStyleExample() {
             fillColor: 'rgba(0, 255, 0, 0.3)'
           }
         }}
-        cellKey="custom-style-layer"
       />
     </MapContainer>
   )
@@ -240,7 +235,6 @@ function NumberLabelExample() {
             snumber: true  // 启用序号标签
           }
         }}
-        cellKey="number-label-layer"
       />
     </MapContainer>
   )
@@ -288,7 +282,6 @@ function MultipleRegionsExample() {
     <MapContainer>
       <PolygonViews
         data={data}
-        cellKey="multiple-regions-layer"
       />
     </MapContainer>
   )
@@ -312,7 +305,6 @@ function WithToolbarExample() {
         onDrawTypeChange={setDrawType}
         onDataChange={setData}
         showToolbar={true}
-        cellKey="toolbar-layer"
       />
     </MapContainer>
   )
@@ -478,7 +470,6 @@ function RegionManagementApp() {
           <PolygonViews
             data={regions}
             defaultStyle={style}
-            cellKey="app-layer"
           />
         </MapContainer>
       </div>
@@ -581,7 +572,6 @@ function DynamicRegionUpdate() {
             }
           }}
           display={!loading}
-          cellKey="dynamic-update-layer"
         />
       </MapContainer>
     </div>
@@ -624,7 +614,6 @@ function ReadonlyComparison() {
           <PolygonViews
             data={data}
             readonly={true}
-            cellKey="readonly-layer"
           />
         </MapContainer>
       </div>
@@ -643,7 +632,6 @@ function ReadonlyComparison() {
           <PolygonViews
             data={data}
             showToolbar={true}
-            cellKey="interactive-layer"
           />
         </MapContainer>
       </div>

@@ -31,8 +31,6 @@ export interface Model3dCardProps {
       value: any
     }>
   }
-  /** 单元格键 */
-  cellKey?: string
   /** 编辑模式 */
   editMode?: boolean
   /** 点击回调 */
@@ -47,7 +45,6 @@ const Model3dCard: React.FC<Model3dCardProps> = ({
   isFixd = false,
   cardConfig = {},
   dataConfig = {},
-  cellKey = "",
   editMode = false,
   onClick,
   className,
@@ -116,7 +113,6 @@ const Model3dCard: React.FC<Model3dCardProps> = ({
     onClick?.()
     if (editMode) {
       // 编辑模式下的逻辑
-      console.log("Card clicked in edit mode", cellKey)
     }
   }
 

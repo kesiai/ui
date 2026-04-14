@@ -98,7 +98,6 @@ const renderGeoJsonPreview = (props: Record<string, any>) => {
                         opacity: props.opacity,
                         zIndex: props.zIndex,
                     }}
-                    cellKey="preview"
                 />
             </MapContainer>
         </div>
@@ -119,7 +118,6 @@ const renderGeoJsonCodePreview = (props: Record<string, any>) => {
     opacity: ${props.opacity},
     zIndex: ${props.zIndex}
   }}
-  cellKey="your-cell-key"
 />`
 }
 

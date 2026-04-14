@@ -26,7 +26,6 @@ export interface GeoserverWmsProps {
   layerBase?: LayerBase
   display?: boolean
   className?: string
-  cellKey?: string
   map?: Map | null
 }
 
@@ -34,7 +33,6 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
   (
     {
       className,
-      cellKey,
       VERSION,
       layers,
       source: sourceUrl,
@@ -83,7 +81,6 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
       const wmsSource = new ImageWMS(wmsConfig)
 
       const layer = new ImageLayer({
-        id: cellKey,
         title,
         type: 'geoserver-wms', // Matches source logic of passing custom props in options
         opacity: opacity || 1,
@@ -94,11 +91,9 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
         minZoom,
         source: wmsSource,
         properties: { // Also keep in properties for safety
-          id: cellKey,
           title,
           layerType: 'geoserver-wms',
           type: 'geoserver-wms',
-          cellKey
         }
       } as any)
 
@@ -112,7 +107,7 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
           layerRef.current = null
         }
       }
-    }, [map, sourceUrl, coordinateType, layers, VERSION, title, cellKey])
+    }, [map, sourceUrl, coordinateType, layers, VERSION, title])
 
     // 刷新图层
     React.useEffect(() => {
@@ -157,7 +152,6 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
         ref={ref}
         className={cn("geoserver-wms-layer", className)}
         style={{ display: 'none' }}
-        data-cell-key={cellKey}
         {...props}
       />
     )

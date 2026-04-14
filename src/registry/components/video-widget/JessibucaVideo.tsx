@@ -41,7 +41,6 @@ interface JessibucaVideoProps {
   callback?: any
   playback?: any
   driverInstanceId?: string
-  cellKey?: string
   streamType?: string
 }
 
@@ -110,7 +109,7 @@ const JessibucaVideo: React.FC<JessibucaVideoProps> = (props) => {
   }
 
   const deleteElement = (jessibuca: any) => {
-    if (!isEmpty(jessConfigute?.showPerformance) && container.current && jessibuca && props?.cellKey) {
+    if (!isEmpty(jessConfigute?.showPerformance) && container.current && jessibuca) {
         // Implementation for showing performance stats overlaid on video
         // Simplified for this port
     }
@@ -522,7 +521,7 @@ const JessibucaVideo: React.FC<JessibucaVideoProps> = (props) => {
     <div className="container-shell" style={{ width: '100%', height: '100%' }}>
       <div className='jessibuc-container'
         style={{ background: 'rgba(13, 14, 27, 0.7)', width: style?.width || '100%', height: style?.height || '100%' }}
-        ref={container} id={`container-${props.cellKey || 'video'}`}></div>
+        ref={container} id="container-video"></div>
     </div>
   )
 }

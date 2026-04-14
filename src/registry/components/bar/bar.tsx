@@ -54,10 +54,6 @@ export interface BarProps
    * 起始位置
    */
   position?: "start" | "end"
-  /**
-   * 单元格键值
-   */
-  cellKey?: string
 }
 
 const Bar = React.forwardRef<HTMLDivElement, BarProps>(
@@ -72,7 +68,6 @@ const Bar = React.forwardRef<HTMLDivElement, BarProps>(
       direction = "horizontal",
       position = "start",
       variant,
-      cellKey,
       ...props
     },
     ref

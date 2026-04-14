@@ -92,7 +92,6 @@ const VideoPeriodsPreview = ({ props }: { props: Record<string, any> }) => {
           showActions={props.showActions}
           readonly={props.readonly}
           tableData={props.tableData}
-          cellKey="preview"
           value={segments}
           onChange={(newSegments) => setSegments(newSegments)}
         />
@@ -112,7 +111,6 @@ const renderVideoPeriodsCodePreview = (props: Record<string, any>) => {
   showActions={${props.showActions}}
   readonly={${props.readonly}}
   tableData={tableData}
-  cellKey="your-cell-key"
   value={timeSegments}
   onChange={handleTimeSegmentsChange}
 />`

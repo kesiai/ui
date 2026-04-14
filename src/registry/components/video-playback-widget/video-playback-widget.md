@@ -31,7 +31,6 @@
 | `backgroundColor` | `string` | 否 | `'rgba(13, 14, 27, 0.7)'` | 视频区背景颜色 |
 | `timelineBackground` | `string` | 否 | `'rgb(55, 65, 81)'` | 时间轴背景颜色 |
 | `timelineScaleColor` | `string` | 否 | `'rgb(255, 255, 255)'` | 时间轴刻度颜色 |
-| `cellKey` | `string` | 否 | `'playback'` | 单元格唯一标识 |
 
 ### VideoRecord（录像记录）
 
@@ -224,7 +223,6 @@ function Example() {
             }}
             videoHeight={300}
             timelineHeight={40}
-            cellKey={`playback-${device.id}`}
           />
         </div>
       ))}
@@ -322,7 +320,6 @@ function MonitoringPlaybackSystem() {
             backgroundColor="rgb(0, 0, 0)"
             timelineBackground="rgb(30, 41, 59)"
             timelineScaleColor="rgb(255, 255, 255)"
-            cellKey="monitoring-playback"
           />
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">
@@ -415,7 +412,6 @@ function EventPlayback() {
             onDateChange={setDate}
             currentTime={currentTime}
             onTimeChange={setCurrentTime}
-            cellKey={`event-playback-${selectedEvent.id}`}
           />
         )}
       </div>

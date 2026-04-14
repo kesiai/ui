@@ -26,7 +26,6 @@ const defaultModel3dCardProps = {
       { label: '标签2', value: '值2' }
     ]
   },
-  cellKey: '',
   editMode: false,
   className: ''
 }
@@ -63,13 +62,6 @@ export const model3dCardPropsConfig = [
     default: JSON.stringify(defaultModel3dCardProps.dataConfig)
   },
   {
-    name: 'cellKey',
-    label: '单元格键',
-    type: 'text' as const,
-    default: defaultModel3dCardProps.cellKey,
-    placeholder: '请输入单元格键'
-  },
-  {
     name: 'editMode',
     label: '编辑模式',
     type: 'boolean' as const,
@@ -90,7 +82,6 @@ export const model3dCardDefaultProps = {
   isFixd: defaultModel3dCardProps.isFixd,
   cardConfig: JSON.stringify(defaultModel3dCardProps.cardConfig),
   dataConfig: JSON.stringify(defaultModel3dCardProps.dataConfig),
-  cellKey: defaultModel3dCardProps.cellKey,
   editMode: defaultModel3dCardProps.editMode,
   className: defaultModel3dCardProps.className
 }
@@ -148,7 +139,6 @@ const renderModel3dCardPreview = (props: Record<string, any>) => {
               isFixd={props.isFixd}
               cardConfig={cardConfig}
               dataConfig={dataConfig}
-              cellKey={props.cellKey}
               editMode={props.editMode}
               className={props.className}
             />
@@ -206,7 +196,6 @@ const renderModel3dCardCodePreview = (props: Record<string, any>) => {
   if (props.isFixd) innerCode += `\n    isFixd`
   if (props.cardConfig && cardConfig !== undefined) innerCode += `\n    cardConfig={${JSON.stringify(cardConfig)}}`
   if (props.dataConfig && dataConfig !== undefined) innerCode += `\n    dataConfig={${JSON.stringify(dataConfig)}}`
-  if (props.cellKey) innerCode += `\n    cellKey="${props.cellKey}"`
   if (props.editMode) innerCode += `\n    editMode`
   if (props.className) innerCode += `\n    className="${props.className}"`
   innerCode += `\n  />`

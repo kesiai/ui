@@ -90,7 +90,6 @@ const renderbuttonControlPreview = (props: Record<string, any>) => {
           tableData={props.tableData}
           table={props.table}
           buttonType={props.buttonType}
-          cellKey="preview"
         />
       </div>
     </div>
@@ -107,7 +106,6 @@ const renderbuttonControlCodePreview = (props: Record<string, any>) => {
   tableData={tableData}
   table={table}
   buttonType="${props.buttonType}"
-  cellKey="your-cell-key"
 />`
 }
 

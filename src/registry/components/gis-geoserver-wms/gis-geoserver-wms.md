@@ -24,7 +24,6 @@
 | `layerBase` | `LayerBase` | 否 | - | 图层基础配置（透明度、层级等） |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### LayerBase
@@ -60,7 +59,6 @@ function BasicWMSLayer() {
         layers="workspace:layer_name"
         VERSION="1.1.0"
         coordinateType="EPSG:4326"
-        cellKey="wms-layer"
       />
     </MapContainer>
   )
@@ -80,7 +78,6 @@ function CustomProjectionWMS() {
         layers="workspace:layer_name"
         VERSION="1.1.0"
         coordinateType="EPSG:3857"
-        cellKey="wms-3857-layer"
       />
     </MapContainer>
   )
@@ -104,7 +101,6 @@ function TransparentWMS() {
           opacity: 0.7,
           zIndex: 1
         }}
-        cellKey="transparent-wms-layer"
       />
     </MapContainer>
   )
@@ -128,7 +124,6 @@ function LimitedZoomWMS() {
           minZoom: 8,
           maxZoom: 15
         }}
-        cellKey="limited-zoom-wms-layer"
       />
     </MapContainer>
   )
@@ -148,7 +143,6 @@ function WMS130Version() {
         layers="workspace:layer_name"
         VERSION="1.3.0"
         coordinateType="EPSG:4326"
-        cellKey="wms130-layer"
       />
     </MapContainer>
   )
@@ -180,7 +174,6 @@ function MultiWMSLayers() {
           opacity: 1,
           zIndex: 0
         }}
-        cellKey="base-wms-layer"
       />
 
       {/* 顶层：叠加图层 */}
@@ -193,7 +186,6 @@ function MultiWMSLayers() {
           opacity: 0.8,
           zIndex: 1
         }}
-        cellKey="overlay-wms-layer"
       />
     </MapContainer>
   )
@@ -219,7 +211,6 @@ function DynamicWMSLayer() {
           layers={`workspace:${layerName}`}
           VERSION="1.1.0"
           coordinateType="EPSG:4326"
-          cellKey="dynamic-wms-layer"
         />
       </MapContainer>
     </div>
@@ -317,7 +308,6 @@ function WMSApplication() {
               zIndex: 1
             }}
             display={display}
-            cellKey="app-wms-layer"
           />
         </MapContainer>
       </div>
@@ -352,7 +342,6 @@ function WMSVersionComparison() {
           zIndex: 0
         }}
         title="WMS 1.1.0"
-        cellKey="wms110-layer"
       />
 
       {/* WMS 1.3.0 */}
@@ -366,7 +355,6 @@ function WMSVersionComparison() {
           zIndex: 1
         }}
         title="WMS 1.3.0"
-        cellKey="wms130-layer"
       />
     </MapContainer>
   )
@@ -418,7 +406,6 @@ function DynamicWMSParams() {
           layerBase={{
             opacity: wmsParams.opacity
           }}
-          cellKey="dynamic-params-wms-layer"
         />
       </MapContainer>
     </div>

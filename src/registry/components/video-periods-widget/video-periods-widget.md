@@ -24,7 +24,6 @@
 | `onChange` | `(value: TimeSegment[]) => void` | 否 | - | 值变化回调函数 |
 | `showActions` | `boolean` | 否 | `true` | 是否显示操作按钮 |
 | `readonly` | `boolean` | 否 | `false` | 是否只读模式 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 
 ### TimeSegment（时间段）
 
@@ -332,7 +331,6 @@ function DeviceRecordingConfig() {
             onChange={setSegments}
             tableData={device}
             showActions={true}
-            cellKey="device-config"
           />
         </div>
       )}
@@ -438,7 +436,6 @@ function RecordingPlanTemplates() {
         value={segments}
         onChange={setSegments}
         showActions={true}
-        cellKey="template-plan"
       />
     </div>
   )
@@ -474,7 +471,6 @@ function PlanComparison() {
                 console.log('更新', device.id, newSegments)
               }}
               showActions={true}
-              cellKey={`compare-${device.id}`}
             />
           </div>
         ))}
@@ -557,7 +553,6 @@ function BatchConfiguration() {
           value={masterPlan}
           onChange={setMasterPlan}
           showActions={true}
-          cellKey="batch-plan"
         />
       </div>
 
@@ -654,7 +649,6 @@ function PlanImportExport() {
         value={segments}
         onChange={setSegments}
         showActions={true}
-        cellKey="import-export-plan"
       />
     </div>
   )

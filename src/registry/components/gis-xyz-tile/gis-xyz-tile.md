@@ -24,7 +24,6 @@
 | `layerBase` | `LayerBase` | 否 | - | 图层基础配置（透明度、层级等） |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### CoorDefs
@@ -87,7 +86,6 @@ function AmapLayer() {
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         coordinateType="EPSG:3857"
-        cellKey="amap-layer"
       />
     </MapContainer>
   )
@@ -109,7 +107,6 @@ function TiandituLayer() {
           opacity: 1,
           zIndex: 0
         }}
-        cellKey="tianditu-layer"
       />
     </MapContainer>
   )
@@ -132,7 +129,6 @@ function GrayscaleMap() {
           invert: 0,
           sepia: 0
         }}
-        cellKey="grayscale-layer"
       />
     </MapContainer>
   )
@@ -159,7 +155,6 @@ function InvertedMap() {
           brightness: 80,
           contrast: 90
         }}
-        cellKey="inverted-layer"
       />
     </MapContainer>
   )
@@ -180,7 +175,6 @@ function TransparentMap() {
           opacity: 0.6,
           zIndex: 0
         }}
-        cellKey="transparent-layer"
       />
     </MapContainer>
   )
@@ -201,7 +195,6 @@ function LimitedZoomMap() {
           minZoom: 5,
           maxZoom: 15
         }}
-        cellKey="limited-zoom-layer"
       />
     </MapContainer>
   )
@@ -219,7 +212,6 @@ function GCJ02Map() {
       <XYZ
         source="https://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         coordinateType="GCJ02"
-        cellKey="gcj02-layer"
       />
     </MapContainer>
   )
@@ -256,7 +248,6 @@ function MultiLayerMap() {
           minZoom: 0,
           maxZoom: 18
         }}
-        cellKey="base-layer"
       />
 
       {/* 顶层：灰度滤镜图层 */}
@@ -272,7 +263,6 @@ function MultiLayerMap() {
           zIndex: 1
         }}
         display={true}
-        cellKey="overlay-layer"
       />
     </MapContainer>
   )
@@ -311,7 +301,6 @@ function CustomFilterMap() {
           zIndex: 0
         }}
         display={true}
-        cellKey="custom-filter-layer"
       />
     </MapContainer>
   )
@@ -345,7 +334,6 @@ function DynamicMap() {
           source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
           display={!useSatellite}
           layerBase={{ zIndex: 0 }}
-          cellKey="vector-layer"
         />
 
         {/* 卫星地图 */}
@@ -353,7 +341,6 @@ function DynamicMap() {
           source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=6&x={x}&y={y}&z={z}"
           display={useSatellite}
           layerBase={{ zIndex: 0 }}
-          cellKey="satellite-layer"
         />
       </MapContainer>
     </div>

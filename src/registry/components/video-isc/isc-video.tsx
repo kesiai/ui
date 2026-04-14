@@ -43,8 +43,6 @@ export interface PlayBackConfig {
 export interface IscVideoProps {
   /** 编辑模式 */
   editMode?: boolean
-  /** 单元格键 */
-  cellKey?: string
   /** 节点列表 */
   nodes?: Node[]
   /** 初始化配置 */
@@ -273,7 +271,6 @@ const play = async ({
 // 主组件
 const IscVideo: React.FC<IscVideoProps> = ({
   editMode = false,
-  cellKey,
   nodes = [],
   initConfig,
   playConfig,
@@ -283,14 +280,6 @@ const IscVideo: React.FC<IscVideoProps> = ({
   const [instanceId] = React.useState(() => Math.random().toString(36).substr(2, 9))
   const [init, setInit] = React.useState(false)
   const [activeWin, setActiveWin] = React.useState(1)
-
-  // 注册播放函数（原逻辑使用 xadmin cell.functions.set，这里简化）
-  React.useEffect(() => {
-    if (cellKey) {
-      // 可以在此处将播放函数暴露给父组件，但暂时留空
-      console.log("注册播放函数到 cellKey:", cellKey)
-    }
-  }, [cellKey, activeWin, playConfig?.streamMode])
 
   // 启动/停止插件
   React.useEffect(() => {

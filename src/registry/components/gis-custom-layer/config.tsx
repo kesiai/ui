@@ -135,7 +135,6 @@ const renderCustomViewsPreview = (props: Record<string, unknown>) => {
                         position: { center: [116.391, 39.9042] },
                         zoom: 10
                     }}
-                    cellKey="preview-map"
                 >
                     <CustomViews
                         drawLine={customData}
@@ -151,7 +150,6 @@ const renderCustomViewsPreview = (props: Record<string, unknown>) => {
                             }
                         }}
                         display={props.display as boolean}
-                        cellKey="preview"
                     />
                 </MapContainer>
             </div>
@@ -174,7 +172,6 @@ const renderCustomViewsCodePreview = (props: Record<string, unknown>) => {
     }
   }}
   display={${props.display}}
-  cellKey="your-cell-key"
   map={mapInstance}
 />`
 }

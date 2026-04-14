@@ -121,7 +121,6 @@ const TimeAxisPreview = ({ props }: { props: Record<string, any> }) => {
         videoRecords={sampleVideoRecords}
         tableData={props.tableData}
         onTimeChange={handleTimeChange}
-        cellKey="preview"
       />
     </div>
   )

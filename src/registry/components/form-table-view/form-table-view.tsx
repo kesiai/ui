@@ -66,12 +66,12 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
   }
 
   return (
-    <div className="border rounded-md overflow-hidden">
-      <table className="w-full border-collapse">
+    <div className="border rounded-md overflow-x-auto">
+      <table className="border-collapse" style={{ minWidth: 'max-content', width: '100%' }}>
         <thead className="bg-muted/50">
           <tr>
             {/* 总是显示复选框列 */}
-            <th className="w-12.5 px-4 py-2 text-left border-b">
+            <th className="px-4 py-2 text-left border-b" style={{ width: 50, minWidth: 50 }}>
               <Checkbox
                 checked={isAllSelected}
                 onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
@@ -79,7 +79,8 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
               />
             </th>
             {columns.map((col) => (
-              <th key={col.key} className="px-4 py-2 text-left border-b" style={{ width: col.width }}>
+              <th key={col.key} className="px-4 py-2 text-left border-b whitespace-nowrap"
+                style={{ width: col.width, minWidth: col.width }}>
                 {col.title}
               </th>
             ))}
@@ -96,7 +97,7 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
             value?.map((record: any, rowIndex: number) => (
               <tr key={record?.key || rowIndex} className="border-b hover:bg-muted/30">
                 {/* 总是显示复选框 */}
-                <td className="px-4 py-2">
+                <td className="px-4 py-2" style={{ width: 50, minWidth: 50 }}>
                   <Checkbox
                     checked={(selectedRows || []).some((r: any) => r?.key === record?.key)}
                     onCheckedChange={(checked) => handleSelectRow(record, checked as boolean)}
@@ -104,7 +105,8 @@ const FormTableView: React.FC<FormTableViewProps> = (props) => {
                   />
                 </td>
                 {columns.map((col) => (
-                  <td key={col.key} className="px-4 py-2">
+                  <td key={col.key} className="px-4 py-2"
+                    style={{ width: col.width, minWidth: col.width }}>
                     {col.editable ? (
                       <EditCell
                         schema={col.schema}

@@ -37,7 +37,7 @@ export const generateHalfCircle = (center: number[], radius: number, startAngle:
     return points
 }
 
-export const createFeature = ({ type, record, style: styleConfig, coordinate, coordinateType, markerTags, cellKey, tableGisConfig }: any) => {
+export const createFeature = ({ type, record, style: styleConfig, coordinate, coordinateType, markerTags, tableGisConfig }: any) => {
     const transform = getTransformTo3857(coordinateType)
     let feature = new Feature({})
 
@@ -81,7 +81,6 @@ export const createFeature = ({ type, record, style: styleConfig, coordinate, co
         markerInitStyle: styleConfig,
         markerTags: markerTags,
         markerLabel: record._label,
-        cellKey,
         tableGisConfig
     }, true)
     return feature

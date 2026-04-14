@@ -23,7 +23,6 @@
 | `scaleLine` | `ScaleLineOption` | 否 | `{show: true, bar: false, text: false}` | 比例尺配置 |
 | `extentOption` | `ExtentOption` | 否 | `{}` | 拖拽边界范围配置，限制地图可视范围 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识，用于调试和追踪 |
 | `children` | `ReactNode` | 否 | - | 子组件，通常为图层组件 |
 
 ### ViewOptions
@@ -275,7 +274,6 @@ function MapWithLayers() {
     >
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
-        cellKey="base-layer"
       />
     </MapContainer>
   )

@@ -93,10 +93,6 @@ export interface MapContainerProps {
    */
   className?: string
   /**
-   * 单元格唯一标识
-   */
-  cellKey?: string
-  /**
    * 子元素
    */
   children?: React.ReactNode
@@ -147,7 +143,6 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
       extentOption,
       width = '100%',
       height = '100%',
-      cellKey,
       children,
       ...props
     },
@@ -342,7 +337,6 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
           width: typeof width === 'number' ? `${width}px` : width,
           height: typeof height === 'number' ? `${height}px` : height
         }}
-        data-cell-key={cellKey}
         {...props}
       >
         {/* OpenLayers 地图容器 */}

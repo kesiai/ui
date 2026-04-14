@@ -35,7 +35,6 @@ export interface GeoJsonProps {
     layerBase?: LayerBase
     display?: boolean
     className?: string
-    cellKey?: string
     map?: Map | null
 }
 
@@ -43,7 +42,6 @@ const GeoJson = React.forwardRef<HTMLDivElement, GeoJsonProps>(
     (
         {
             className,
-            cellKey,
             source: sourceUrl, // source usually means remote URL
             geoJsonFile, // alternative file path
             coordinateType,
@@ -122,7 +120,6 @@ const GeoJson = React.forwardRef<HTMLDivElement, GeoJsonProps>(
             }
 
             const layer = new VectorLayer({
-                id: cellKey,
                 title,
                 opacity: opacity || 1,
                 zIndex,
@@ -133,10 +130,8 @@ const GeoJson = React.forwardRef<HTMLDivElement, GeoJsonProps>(
                 source: geoSource,
                 style: styleFunction,
                 properties: { // Preserve custom properties
-                    id: cellKey,
                     title,
                     layerType: 'geojson',
-                    cellKey
                 }
             } as any)
 
@@ -149,7 +144,7 @@ const GeoJson = React.forwardRef<HTMLDivElement, GeoJsonProps>(
                     map.removeLayer(layerRef.current)
                 }
             }
-        }, [map, sourceUrl, geoJsonFile, coordinateType, opacity, zIndex, maxResolution, minResolution, maxZoom, minZoom, cellKey, title]) // Re-create if essential props change
+        }, [map, sourceUrl, geoJsonFile, coordinateType, opacity, zIndex, maxResolution, minResolution, maxZoom, minZoom, title]) // Re-create if essential props change
 
         // Update Style independently to avoid reloading layer
         React.useEffect(() => {
@@ -168,7 +163,6 @@ const GeoJson = React.forwardRef<HTMLDivElement, GeoJsonProps>(
                 ref={ref}
                 className={cn("geojson-layer", className)}
                 style={{ display: 'none' }}
-                data-cell-key={cellKey}
                 {...props}
             />
         )

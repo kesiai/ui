@@ -29,10 +29,6 @@ export interface CodeEditorViewsProps {
    */
   className?: string
   /**
-   * 单元格唯一标识
-   */
-  cellKey?: string
-  /**
    * 地图实例（由父组件传入）
    */
   map?: Map | null
@@ -56,7 +52,6 @@ const CodeEditorViews = React.forwardRef<HTMLDivElement, CodeEditorViewsProps>(
       codeScript,
       params = [],
       display = true,
-      cellKey,
       map: mapProp,
       ...props
     },
@@ -121,7 +116,6 @@ const CodeEditorViews = React.forwardRef<HTMLDivElement, CodeEditorViewsProps>(
         ref={ref}
         className={cn("code-editor-views", className)}
         style={{ display: 'none' }}
-        data-cell-key={cellKey}
         {...props}
       />
     )

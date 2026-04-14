@@ -173,7 +173,6 @@ const renderXYZPreview = (props: Record<string, any>) => {
                         minZoom: props.minZoom,
                         maxZoom: props.maxZoom
                     }}
-                    cellKey="preview"
                 />
             </MapContainer>
         </div>
@@ -209,7 +208,6 @@ const renderXYZCodePreview = (props: Record<string, any>) => {
     minZoom: ${props.minZoom},
     maxZoom: ${props.maxZoom}
   }}
-  cellKey="your-cell-key"
 />`
 }
 

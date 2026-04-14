@@ -34,7 +34,6 @@
 | `getQueryFilter` | `function` | 否 | - | 自定义查询过滤器函数 |
 | `display` | `boolean` | 否 | `true` | 是否显示图层 |
 | `className` | `string` | 否 | - | 自定义 CSS 类名 |
-| `cellKey` | `string` | 否 | - | 单元格唯一标识 |
 | `map` | `Map` | 否 | - | 地图实例（通常从 Context 获取） |
 
 ### LayerBase
@@ -98,7 +97,6 @@ function TableByID() {
       <TableViews
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
-        cellKey="table-layer"
       />
     </MapContainer>
   )
@@ -133,7 +131,6 @@ function DirectTableData() {
       <TableViews
         tableData={tableData}
         coordinateType="EPSG:4326"
-        cellKey="direct-data-layer"
       />
     </MapContainer>
   )
@@ -169,7 +166,6 @@ function CustomMarkerStyle() {
             snumber: true
           }
         }}
-        cellKey="custom-marker-layer"
       />
     </MapContainer>
   )
@@ -193,7 +189,6 @@ function HeatmapExample() {
           blur: 20,
           gradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00']
         }}
-        cellKey="heatmap-layer"
       />
     </MapContainer>
   )
@@ -220,7 +215,6 @@ function ClusterExample() {
           color: '#ffffff',
           background: 'rgba(0,0,0,0.7)'
         }}
-        cellKey="cluster-layer"
       />
     </MapContainer>
   )
@@ -248,7 +242,6 @@ function ModalExample() {
             content: 'default'
           }
         ]}
-        cellKey="modal-layer"
       />
     </MapContainer>
   )
@@ -274,7 +267,6 @@ function FilterExample() {
           status: 'active',
           type: 'sensor'
         }}
-        cellKey="filter-layer"
       />
     </MapContainer>
   )
@@ -297,7 +289,6 @@ function MarkerScaleExample() {
           { from: 6, to: 10, scale: 0.8 },
           { from: 11, to: 18, scale: 1.0 }
         ]}
-        cellKey="scale-layer"
       />
     </MapContainer>
   )
@@ -438,7 +429,6 @@ function DeviceMonitoringApp() {
               minZoom: 0,
               maxZoom: 18
             }}
-            cellKey="device-monitoring-layer"
           />
         </MapContainer>
       </div>
@@ -515,7 +505,6 @@ function VehicleTrackingApp() {
             minZoom: 5,
             maxZoom: 18
           }}
-          cellKey="vehicle-tracking-layer"
         />
       </MapContainer>
     </div>
@@ -553,7 +542,6 @@ function MultiLayerComparison() {
           zIndex: 10
         }}
         modalConfig={[{ showType: 'click', content: 'default' }]}
-        cellKey="device-a-layer"
       />
 
       {/* 图层 2: 设备 B */}
@@ -571,7 +559,6 @@ function MultiLayerComparison() {
           zIndex: 11
         }}
         modalConfig={[{ showType: 'click', content: 'default' }]}
-        cellKey="device-b-layer"
       />
 
       {/* 图层 3: 热力图 */}
@@ -587,7 +574,6 @@ function MultiLayerComparison() {
           opacity: 0.6,
           zIndex: 5
         }}
-        cellKey="heatmap-overlay-layer"
       />
     </MapContainer>
   )

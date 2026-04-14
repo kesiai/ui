@@ -1,17 +1,19 @@
 import React from 'react';
 import { useModel, useSetModelState, useModelGetItems } from '@airiot/client';
 import { FilterForm } from '@/registry/components/filter-form/filter-form';
-
+import type { ModelSchema } from '@/registry/lib/model-types';
 interface ViewFilterProps {
   filters?: Array<{
     name: string
   }>
+  schema?: ModelSchema
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
 
 const ViewFilter: React.FC<ViewFilterProps> = ({
   filters = [],
+  schema,
   classNames
 }) => {
   const { model } = useModel()
@@ -41,7 +43,7 @@ const ViewFilter: React.FC<ViewFilterProps> = ({
   return (
     <FilterForm
       formId={model?.key + 'view-filter'}
-      schema={model}
+      schema={schema ? schema : model}
       filterSchema={filterSchema}
       classNames={classNames ? classNames : {
         form: '',

@@ -126,7 +126,7 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
 
   return (
     <Card
-      className={`react-flow-card react-flow-card-${getClassName(category)} hover:shadow-md rounded max-w-[300px] rounded-t-lg`}
+      className={`react-flow-card react-flow-card-${getClassName(category)} hover:shadow-md rounded max-w-78 py-0 gap-0 rounded-t-lg`}
       style={{
         ...(cardProps?.style || {}),
         ...(selected ? { boxShadow: `0 0 3px 3px ${headStyle?.background || '#4971E0'}` } : {}),
@@ -142,7 +142,7 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
 
       {/* Card Body */}
       <div
-        className={`react-flow-card-content card-content-${id} max-w-[300px] min-w-[200px] min-h-[60px] max-h-[112px] overflow-auto p-3`}
+        className={`react-flow-card-content card-content-${id} max-w-78 min-w-50 min-h-12 max-h-30 overflow-auto p-3`}
       >
         {extraChildren ? (
           <>
@@ -156,11 +156,11 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
       {/* Handles */}
       <div className="flow-gateway-rhombus">
         {nodeType == 'default' || nodeType == 'output' ? (
-          <Handle type="target" position={Position.Top} className="!w-4 !h-4 rounded-[25px] !bg-[rgb(31_203_46)] !-top-2" />
+          <Handle type="target" position={Position.Top} className="!w-4 !h-4 rounded-6 !bg-[rgb(31_203_46)] !-top-2" />
         ) : null}
 
         {nodeType == 'default' || nodeType == 'input' ? (
-          <Handle type="source" position={Position.Bottom} className="!w-4 !h-4 rounded-[25px] !bg-[#6991FF] !-bottom-2" />
+          <Handle type="source" position={Position.Bottom} className="!w-4 !h-4 rounded-6 !bg-[#6991FF] !-bottom-2" />
         ) : null}
       </div>
     </Card>

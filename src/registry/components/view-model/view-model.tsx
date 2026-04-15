@@ -24,7 +24,7 @@ type ViewModelProps = {
   queryFields?: string[]
   projectAll?: boolean
   limit?: number
-  tableFilters?: TableFilter[]
+  tableFilters?: TableFilter
   fieldOrder?: Record<string, 'asc' | 'desc'>[]
   interval?: number
 }
@@ -50,7 +50,7 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
     if (limit) {
       values['limit'] = limit
     }
-    if (tableFilters && tableFilters.length > 0) {
+    if (tableFilters) {
       values['wheres'] = { tableFilters }
     }
     if (fieldOrder && fieldOrder.length > 0) {

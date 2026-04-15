@@ -153,10 +153,18 @@ interface TaskProps {
   variables: TaskVariables
 }
 
+interface JobData {
+  flowJob: string
+  flow?: { id: string; name?: string }
+  flowId?: string
+  variables: TaskVariables
+}
+
 interface RecordViewProps {
   taskId?: string
   task?: TaskProps
-  jobs?: FlowRecord[]
+  job?: JobData
+  logs?: FlowRecord[]
   logNodeRenderMap?: LogNodeRenderMap
 }
 
@@ -228,6 +236,7 @@ const formatEls = (els?: FlowElement[]): FlowElement[] => {
   let newEls: FlowElement[] = []
 
   initValue?.map((el) => {
+    el.style = {}
     if (el.type == 'defaultEdge') {
       newEls = newEls.concat({ ...el, style: { strokeWidth: 3 }, type: 'smoothstep', animated: true })
     } else if (el.type == 'flowIteratorEnd') {
@@ -280,12 +289,12 @@ const GatewayPanelRender: React.FC<GatewayPanelProps> = ({ selected, data, branc
   )
 }
 
-const fetchJobLogs = async ({ jobKey, bpmnProcessId, variables }: TaskProps) => {
+const fetchJobLogs = async ({ flowJob, flowId, flow, variables }: JobData) => {
   try {
     const startTimestamp = variables['#startTimestamp']
     const filter = {
-      flowJob: jobKey,
-      flowid: bpmnProcessId.id,
+      flowJob,
+      flowid: flow?.id || flowId,
       timestamp: {
         '$gte': startTimestamp ? dayjs(startTimestamp).format('YYYY-MM-DD HH:mm:ss') : null
       }
@@ -316,10 +325,10 @@ const FlowData: React.FC<FlowDataProps> = ({ record, items = [], logRender }) =>
   )
 }
 
-const RecordView: React.FC<RecordViewProps> = ({ taskId, task, jobs, logNodeRenderMap }) => {
+const RecordView: React.FC<RecordViewProps> = ({ taskId, task, job, logs, logNodeRenderMap }) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const [elements, setElements] = useState<FlowElement[]>([])
-  const [jobData, setJobData] = useState<FlowRecord[]>([])
+  const [logData, setLogData] = useState<FlowRecord[]>([])
   const [loading, setLoading] = useState(false)
 
   const defaultZoom = 1
@@ -327,26 +336,27 @@ const RecordView: React.FC<RecordViewProps> = ({ taskId, task, jobs, logNodeRend
   React.useEffect(() => {
     (async () => {
       setLoading(true)
-      let _jobs
-      if (jobs?.length) {
-        _jobs = jobs
+      let _logs
+      if (logs?.length) {
+        _logs = logs
       } else {
         const flowTaskApi = createAPI({ name: 'flow/flowTask' })
-        const _task = !isEmpty(task) ? task : await flowTaskApi.get(taskId)
-        _jobs = await fetchJobLogs(_task)
+        const _task = !isEmpty(task) ? task : taskId ? await flowTaskApi.get(taskId) : null
+        const _job = !isEmpty(job) ? job : _task ? { flowJob: _task.jobKey, flow: { id: _task.bpmnProcessId?.id }, variables: _task.variables } : null
+        _logs = _job ? await fetchJobLogs(_job) : []
       }
-      setJobData(_jobs)
-      const jobEls = JSON.parse(_jobs?.[0]?.config || '[]') as FlowElement[]
-      if (_jobs?.[0]?.variables?.__mock__ && jobEls?.some((j) => j.elementData)) {
+      setLogData(_logs)
+      const jobEls = JSON.parse(_logs?.[0]?.config || '[]') as FlowElement[]
+      if (_logs?.[0]?.variables?.__mock__ && jobEls?.some((j) => j.elementData)) {
         const initEls = jobEls?.map((el) => ({ ...omit(el, 'elementData'), ...el.elementData }))
         setElements(formatEls(initEls))
         setLoading(false)
-      } else if (_jobs?.[0]?.flowId) {
+      } else if (_logs?.[0]?.flowId) {
         const flowDraftApi = createAPI({ name: 'flow/flowDraft' })
         flowDraftApi
           .query(
-            { order: { createTime: 'DESC' }, limit: 1, filter: { flow: _jobs[0].flowId, createTime: { lte: _jobs[0].startTimestamp } } },
-            {}
+            { order: { createTime: 'DESC' }, limit: 1, fields: ['flowDraft'] },
+            { where: { flow: _logs[0].flowId, createTime: { lte: _logs[0].startTimestamp } } }
           )
           .then(({ items }: { items?: Array<{ flowDraft?: { elements?: FlowElement[] } }> }) => {
             const initEls = items?.[0]?.flowDraft?.elements?.filter((el: FlowElement) => jobEls?.find((f) => f.id == el.id))
@@ -356,7 +366,7 @@ const RecordView: React.FC<RecordViewProps> = ({ taskId, task, jobs, logNodeRend
           .catch(() => setLoading(false))
       }
     })()
-  }, [JSON.stringify({ task, jobs }), taskId])
+  }, [JSON.stringify({ task, logs }), taskId])
 
 interface LogCardProps {
   node: string
@@ -369,7 +379,7 @@ interface LogCardProps {
     const node = flowNodes[props.node]
     const isStart = getIsStartNode(node)
     const cardProps = { headStyle: { ...(node?.style || {}), color: '#FFF' } }
-    const index = jobs?.findIndex((r) => r.id == props.record.id) || 0
+    const index = logs?.findIndex((r) => r.id == props.record.id) || 0
     const Icon = iconMap[props.node] || Table
 
     return (
@@ -381,7 +391,7 @@ interface LogCardProps {
         cardProps={cardProps}
         icon={<Icon className='w-5 h-5' />}
       >
-        <FlowData record={props.record} items={jobs?.slice(0, index)} logRender={logNodeRenderMap?.[props.node]} />
+        <FlowData record={props.record} items={logs?.slice(0, index)} logRender={logNodeRenderMap?.[props.node]} />
       </NodeTemplate>
     )
   }
@@ -437,7 +447,7 @@ interface LogCardProps {
       const RenderNode = node == 'gateway' ? GatewayNode : RenderEndNode
 
       types[node] = (props: any) => {
-        const record = jobData?.find((r) => r.elementId == props.id)
+        const record = logData?.find((r) => r.elementId == props.id)
 
         const useLogCard =
           record &&
@@ -488,12 +498,12 @@ interface LogCardProps {
     })
 
     return types
-  }, [jobData])
+  }, [logData])
 
   const edgeTypes = {
     gatewayEdge: (props: React.ComponentProps<typeof GatewayEdge>) => {
       const isLoop = elements.find((el) => el.id == props.id)?.isLoop
-      const branch = jobData?.find((el) => el.elementId == props.source)?.setting?.branch?.find((b) => b.elementId == props.target)
+      const branch = logData?.find((el) => el.elementId == props.source)?.setting?.branch?.find((b) => b.elementId == props.target)
       return (
         <GatewayEdge
           {...props}
@@ -508,7 +518,7 @@ interface LogCardProps {
       return <IteratorEdgeLoop {...props} pathType='smoothStep' />
     },
     gatewayDefaultEdge: (props: React.ComponentProps<typeof GatewayDefaultEdge>) => {
-      const logic = !jobs?.find((el) => el.elementId == props.source)?.setting?.branch?.some((b) => b.logic)
+      const logic = !logs?.find((el) => el.elementId == props.source)?.setting?.branch?.some((b) => b.logic)
       return <GatewayDefaultEdge {...props} logic={logic} pathType='smoothStep' />
     },
   }

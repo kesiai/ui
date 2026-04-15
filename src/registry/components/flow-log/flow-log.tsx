@@ -20,6 +20,7 @@ interface TaskVariables {
 }
 
 interface TaskProps {
+  id: string
   jobKey: string
   bpmnProcessId: BpmnProcessId
   variables: TaskVariables
@@ -78,7 +79,7 @@ const FlowLog: React.FC<FlowLogProps> = ({ task, taskId, jobs, logNodeRenderMap 
       if (!isEmpty(task)) {
         setTaskData(task)
         setLoading(true)
-        const els = await fetchJobLogs(task)
+        const els = jobs?.length ? jobs : await fetchJobLogs(task)
         setElements(els)
         setLoading(false)
       } else if (taskId) {
@@ -86,12 +87,12 @@ const FlowLog: React.FC<FlowLogProps> = ({ task, taskId, jobs, logNodeRenderMap 
         const flowTaskApi = createAPI({ name: 'flow/flowTask' })
         const task = await flowTaskApi.get(taskId)
         setTaskData(task)
-        const els = await fetchJobLogs(task)
+        const els = jobs?.length ? jobs : await fetchJobLogs(task)
         setElements(els)
         setLoading(false)
       }
     })()
-  }, [task?.bpmnProcessId?.id, taskId])
+  }, [task?.id, taskId])
 
   const isValEmpty = (value: any) => value === null || value === undefined || Object.keys(value).length === 0
 
@@ -135,10 +136,10 @@ const FlowLog: React.FC<FlowLogProps> = ({ task, taskId, jobs, logNodeRenderMap 
                   {/* Status icon */}
                   <div className="flex-shrink-0">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isCurrent
-                        ? 'bg-primary text-primary-foreground'
-                        : i < currentIndex
-                          ? 'bg-success text-success-foreground'
-                          : 'bg-muted text-muted-foreground'
+                      ? 'bg-primary text-primary-foreground'
+                      : i < currentIndex
+                        ? 'bg-success text-success-foreground'
+                        : 'bg-muted text-muted-foreground'
                       }`}>
                       {i < currentIndex ? '✓' : i + 1}
                     </div>

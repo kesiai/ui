@@ -137,7 +137,7 @@ const getNodeData = (el: FlowElement, task: FlowTask, logRender?: Element | Reac
     return { title, user, operation, content: logRender }
   }
   if (el.type == 'worksheetRecord') {
-    user = startVar.flowTriggerUser?.name || startVar.flowTriggerUser || (startVar.extFlowType == '表记录增加' ? startVar.creatorName || '' : startVar.modifyUser?.name) || ''
+    user = startVar.flowTriggerUser?.name || startVar.flowTriggerUserMap?.['#$user']?.name || (startVar.extFlowType == '表记录增加' ? startVar.creatorName || '' : startVar.modifyUser?.name) || ''
     content = startVar.extFlowType || ''
   } else if (el.type == 'worksheet') {
     const tableName = startVar['#$table']?.title || ''

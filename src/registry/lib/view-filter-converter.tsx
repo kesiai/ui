@@ -17,7 +17,9 @@ import { FilterRelateSelect } from '@/registry/components/filter-relate-select/f
 const filterConverter = (schema: any, filterSchema: any) => {
   const controlType = filterSchema?.controlType || schema?.controlType
   if (!controlType) {
-    const type = schema.type
+    // schema 可能为 undefined（filters 里的 name 在 model.properties 中不存在），
+    // 此时回退为文本筛选，避免读 .type 崩溃
+    const type = schema?.type
     switch (type) {
       case 'string':
         return FilterText

@@ -345,6 +345,7 @@ export function ViewDataTable({
       initialState: {
         ...tableOptions.initialState,
         columnPinning: {
+          left: showCheckbox ? ['id'] : [],
           right: ['__actions__'],
         },
       },

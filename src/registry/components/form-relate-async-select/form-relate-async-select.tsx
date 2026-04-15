@@ -52,7 +52,7 @@ interface AsyncSelectProps {
   label?: string
   disabled?: boolean
   value?: RelateFieldOption | null | RelateFieldOption[]
-  mode?: 'multiple' | 'tags'
+  mode?: 'multiple' | 'single'
   isOptionSelected?: (option: RelateFieldOption) => boolean
   style?: React.CSSProperties
   onChange?: (value: any) => void
@@ -80,6 +80,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   } = props
 
   const relateSchema = (schema?.relate || schema?.relateTo) ? schema : schema?.relateSchema
+
   const { relateShowFields } = relateSchema || {}
   const displayField = relateSchema?.relate?.fields?.[0]?.key || 'name'
 
@@ -182,14 +183,20 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   }, [loadOptions])
 
   // 处理选项选择
-  const handleSelectOption = (option: RelateFieldOption) => {
-    if (mode === 'multiple' && isArray(propValue)) {
-      const isSelected = propValue.some((v: any) => v?.key === option.value)
+  const handleSelectOption = (option: RelateFieldOption, e?: React.MouseEvent) => {
+    // 阻止事件冒泡，防止点击选项时Popover关闭
+    e?.stopPropagation()
+
+    if (mode === 'multiple') {
+      // 如果propValue不是数组，初始化为空数组
+      const currentSelected = isArray(propValue) ? propValue : []
+
+      const isSelected = currentSelected.some((v: any) => v?.key === option.value || v?.value === option.value)
       let newSelected: RelateFieldOption[]
       if (isSelected) {
-        newSelected = propValue.filter((v: any) => v?.key !== option.value)
+        newSelected = currentSelected.filter((v: any) => v?.key !== option.value && v?.value !== option.value)
       } else {
-        newSelected = [...propValue, option]
+        newSelected = [...currentSelected, option]
       }
       onChange?.(newSelected)
     } else {
@@ -202,7 +209,11 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
   // 处理清除
   const handleClear = (e: React.MouseEvent<SVGSVGElement>) => {
     e.stopPropagation()
-    onChange?.(mode === 'multiple' ? [] : {})
+    if (mode === 'multiple') {
+      onChange?.([])
+    } else {
+      onChange?.({})
+    }
     setInputSearchValue('')
   }
 
@@ -277,7 +288,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
             <span className={cn('flex-1 truncate', !propValue && 'text-muted-foreground')}>
               {mode === 'multiple' && isArray(propValue) && propValue.length > 0
                 ? propValue.map((v) => formatDisplayValue(v)).join(', ')
-                : formatDisplayValue(propValue)}
+                : mode === 'multiple' ? '' : formatDisplayValue(propValue)}
             </span>
             <div className="flex items-center gap-1">
               {(mode === 'multiple' && isArray(propValue) && propValue.length > 0) && !disabled && (
@@ -330,7 +341,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
                 <>
                   {filteredOptions.map((option: RelateFieldOption, index: number) => {
                     const isSelected = mode === 'multiple'
-                      ? isArray(propValue) && propValue.some((v: any) => v?.key === option.value)
+                      ? isArray(propValue) && propValue.some((v: any) => v?.key === option.value || v?.value === option.value)
                       : (propValue as any)?.key === option.value
                     return (
                       <div
@@ -341,7 +352,7 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
                           highlightedIndex === index && 'bg-accent',
                           isSelected && 'bg-accent text-accent-foreground'
                         )}
-                        onClick={() => handleSelectOption(option)}
+                        onClick={(e) => handleSelectOption(option, e)}
                         onMouseEnter={() => setHighlightedIndex(index)}
                       >
                         {mode === 'multiple' && (

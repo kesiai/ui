@@ -29,7 +29,7 @@ const useTextFilter = (props: any) => {
   }
 
   const onValueChange = (value: any) => {
-    if (like) {
+    if (like && value) {
       props.onChange({ like: value })
     } else {
       props.onChange(value)

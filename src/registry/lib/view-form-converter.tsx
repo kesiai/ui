@@ -26,6 +26,9 @@ import { TableSelect as TableDataSelect } from '@/registry/components/table-data
 import { FormArray } from '@/registry/components/form-array/form-array'
 import { FormObject } from '@/registry/components/form-object/form-object'
 import { FormReference } from '@/registry/components/form-reference/form-reference'
+import { FormMultiSelect } from '@/registry/components/form-multi-select/form-multi-select'
+import { FormNumberSelect } from '@/registry/components/form-number-select/form-number-select'
+import { FormNumberMultiSelect } from '@/registry/components/form-number-multi-select/form-number-multi-select'
 
 const formConverter = (schema: any, formSchema: any) => {
   const controlType = formSchema?.controlType || schema?.controlType
@@ -74,10 +77,13 @@ const formConverter = (schema: any, formSchema: any) => {
       case 'relate-multiple':
         return FormRelateOld
       case 'select-string':
-      case 'select-number':
-      case 'select-array-string':
-      case 'select-array-number':
         return FormSelect
+      case 'select-number':
+        return FormNumberSelect
+      case 'select-array-string':
+        return FormMultiSelect
+      case 'select-array-number':
+        return FormNumberMultiSelect
       case 'serial-number':
         return FormSerialNumber
       case 'editable-table':

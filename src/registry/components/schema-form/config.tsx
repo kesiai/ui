@@ -194,10 +194,13 @@ export const schemaFormDefaultProps = {
         title: '国家'
       },
       country2: {
-        type: 'string',
-        enum: ['china', 'usa', 'japan'],
-        enumNames: ['中国', '美国', '日本'],
-        title: '国家2'
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        enum: ['option1', 'option2', 'option3'],
+        enumNames: ['选项一', '选项二', '选项三'],
+        title: '多国家选'
       },
       birthDate: {
         type: 'string',
@@ -347,7 +350,7 @@ export const schemaFormDefaultProps = {
     { key: "sliderF", name: "sliderF", controlType: 'slider' },
     { key: "bio", name: "bio", controlType: 'textarea' },
     { key: "country", name: "country", controlType: 'select-string' },
-    { key: 'country2' },
+    { key: 'country2', controlType: 'select-array-string' },
     { key: "birthDate", name: "birthDate", controlType: 'date' },
     { key: "dateRange", name: "dateRange", controlType: 'date-range' },
     { key: "meetingTime", name: "meetingTime", controlType: 'time' },

@@ -5,18 +5,22 @@ import { cn } from '@/lib/utils'
 const Select = ({ value, schema }: { value: any; schema?: any }) => {
   if (isNil(value)) return <span className="text-muted-foreground">空</span>
 
+  const enumList = schema?.enum
+  const enumNamesList = schema?.enumNames
+
   const getDisplayText = (val: any) => {
-    if (schema?.enum1 && schema?.enum_title1) {
-      const index = schema.enum1.indexOf(val)
-      return index >= 0 ? schema.enum_title1[index] : val
+    if (enumList && enumNamesList) {
+      const index = enumList.indexOf(val)
+      return index >= 0 ? enumNamesList[index] : val
     }
     return val
   }
 
   const getColor = (val: any) => {
-    if (schema?.enum_color1 && schema?.enum1) {
-      const index = schema.enum1.indexOf(val)
-      return index >= 0 ? schema.enum_color1[index] : undefined
+    const colorList = schema?.enumColor
+    if (colorList && enumList) {
+      const index = enumList.indexOf(val)
+      return index >= 0 ? colorList[index] : undefined
     }
     return undefined
   }

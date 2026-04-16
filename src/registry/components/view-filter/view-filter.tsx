@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Search, RotateCcw } from 'lucide-react';
 interface ViewFilterProps {
   filters?: Array<{
-    name: string
+    key: string
   }>
   schema?: ModelSchema
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>

@@ -15,7 +15,7 @@ import {
 import { Plus, Repeat2 } from 'lucide-react'
 import { useUser } from '@airiot/client'
 import { createAPI } from '@airiot/client'
-import { getFormValues, dealFilter } from '@/registry/lib/form-relate-utils'
+import { getFormValues, dealFilter, fieldRender } from '@/registry/lib/form-relate-utils'
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
 
 interface RelateModelSelectProps extends RelateFieldProps {
@@ -328,7 +328,7 @@ const RelateModelSelect: React.FC<RelateModelSelectProps> = (props) => {
                         <td className="p-2">{item[displayField]}</td>
                         {relateShowFields?.map((f: any) => (
                           <td key={f.key} className="p-2">
-                            {item[f.key]}
+                            {fieldRender(item[f.key], f.fieldSchema)}
                           </td>
                         ))}
                         {selectType === 'single' && (

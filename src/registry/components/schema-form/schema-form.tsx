@@ -10,6 +10,7 @@ import { FormField } from "@/registry/components/form-field/form-field"
 import { formConverter } from '@/registry/lib/view-form-converter'
 
 import type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
+import { fa } from "zod/v4/locales"
 
 type SchemaFormProps = UseFormPropsExtended & {
   formId: string
@@ -224,7 +225,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
             const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
             const megerSchema = { ...baseSchema, ...fieldSchame }
             return (
-              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} required={megerSchema?.need} showDescribe={showDescribe} validate={editableTableValidate}>
+              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} required={isValid ? megerSchema?.need : false} showDescribe={showDescribe} validate={editableTableValidate}>
                 <FieldController />
               </FormField>
             )

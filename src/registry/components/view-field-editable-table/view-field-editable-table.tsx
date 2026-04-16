@@ -10,101 +10,79 @@ import {
 } from '@/components/ui/dialog'
 import { tableConverter } from '@/registry/lib/view-table-converter'
 
-// 卡片展示组件
-const CardComponent = ({
-  value,
-  schema,
-  tableSchema,
-}: {
-  value: any[]
-  schema: any
-  tableSchema: any
-}) => {
-  const { tableFields, cardLayout, defaultVal } = schema || {}
-  const cardValue = value || defaultVal || []
-
-  if (!isArray(cardValue) || cardValue.length === 0) {
-    return <span className="text-muted-foreground">暂无数据</span>
+/** 从 schema 中提取字段列表（兼容新旧格式） */
+const getFields = (schema: any) => {
+  const items = schema?.items
+  // 新格式：items.formSchema + items.properties
+  if (items?.formSchema && items?.properties) {
+    return items.formSchema
+      .map((s: any) => {
+        const field = items.properties[s.key]
+        return field ? { ...field, key: field.key || s.key } : null
+      })
+      .filter(Boolean)
   }
+  // 旧格式：schema.tableFields?.form + schema.tableFields?.properties
+  if (schema?.tableFields) {
+    const { form, properties } = schema.tableFields
+    return (form || [])
+      .map((key: string) => {
+        const field = properties?.[key]
+        return field ? { ...field, key: field.key || key } : null
+      })
+      .filter(Boolean)
+  }
+  return []
+}
 
-  const FieldComponent = tableConverter(schema, tableSchema)
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {cardValue.map((item: any, index: number) => (
-        <div
-          key={index}
-          className={cardLayout === '1' ? 'col-span-full' : cardLayout === '2' ? 'col-span-1' : 'col-span-1'}
-        >
-          <div className="border rounded-lg p-4 bg-card hover:shadow-md transition-shadow">
-            {tableFields?.form?.map((key: string) => {
-              const fieldSchema = tableFields.properties?.[key]
-              if (!fieldSchema) return null
-
-              return (
-                <div key={key} className="mb-2 last:mb-0">
-                  <label className="text-sm font-medium text-muted-foreground">
-                    {fieldSchema.title || key}
-                  </label>
-                  <div className="mt-1">
-                    <FieldComponent
-                      value={item?.[key]}
-                      schema={fieldSchema}
-                      inList={true}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      ))}
-    </div>
-  )
+/** 根据 controlType 获取列宽 */
+const getColumnWidth = (controlType?: string) => {
+  switch (controlType) {
+    case 'upload-group':
+      return 270
+    case 'upload':
+    case 'date-range':
+    case 'map':
+    case 'rich-text':
+      return 220
+    case 'boolean':
+    case 'rate':
+      return 80
+    default:
+      return 150
+  }
 }
 
 // 表格展示组件
 const TableComponent = ({
   value,
   schema,
-  tableSchema,
 }: {
   value: any[]
   schema: any
-  tableSchema: any
 }) => {
-  const { tableFields } = schema || {}
-
   if (!isArray(value) || value.length === 0) {
     return <span className="text-muted-foreground">暂无数据</span>
   }
-  const FieldComponent = tableConverter(schema, tableSchema)
 
-  // 构建列配置
-  const columns = tableFields?.form?.map((key: string) => {
-    const fieldSchema = tableFields.properties?.[key]
-    return {
-      key: fieldSchema?.key || key,
-      dataIndex: fieldSchema?.key || key,
-      title: fieldSchema?.title || key,
-      width: fieldSchema?.fieldType === 'attachments' ? 270 : 150,
-      fieldType: fieldSchema?.fieldType,
-      fieldSchema,
-    }
-  }) || []
+  const fields = getFields(schema)
+
+  if (fields.length === 0) {
+    return <span className="text-muted-foreground">未配置字段</span>
+  }
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse border border-slate-200 dark:border-slate-700">
         <thead>
           <tr className="bg-slate-100 dark:bg-slate-800">
-            {columns.map((col: { key: React.Key | null | undefined; width: any; title: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined }) => (
+            {fields.map((field: any) => (
               <th
-                key={col.key}
+                key={field.key}
                 className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-left text-sm font-medium"
-                style={{ width: col.width }}
+                style={{ width: getColumnWidth(field.controlType) }}
               >
-                {col.title}
+                {field.title || field.key}
               </th>
             ))}
           </tr>
@@ -112,25 +90,21 @@ const TableComponent = ({
         <tbody>
           {value.map((row: any, rowIndex: number) => (
             <tr key={rowIndex} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-              {columns.map((col: {
-              key: React.Key | null | undefined;
-              dataIndex: string;
-              title: string;
-              width: number;
-              fieldType?: string;
-              fieldSchema?: any;
-              }) => (
-              <td
-                key={col.key}
-                className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm"
-              >
-                <FieldComponent
-                value={row?.[col.dataIndex]}
-                schema={col.fieldSchema}
-                inList={true}
-                />
-              </td>
-              ))}
+              {fields.map((field: any) => {
+                const FieldComponent = tableConverter(field, {})
+                return (
+                  <td
+                    key={field.key}
+                    className="border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm"
+                  >
+                    <FieldComponent
+                      value={row?.[field.key]}
+                      schema={field}
+                      inList={true}
+                    />
+                  </td>
+                )
+              })}
             </tr>
           ))}
         </tbody>
@@ -161,10 +135,7 @@ const EditableTable = ({ value, schema, inList = true }: { value: any; schema?: 
     return <span className="text-muted-foreground">空</span>
   }
 
-  const displayForm = schema?.displayForm || 'grid'
   const title = schema?.title || '表格内容'
-
-  const tableSchema = {}
 
   // 列表中的展示（点击打开弹窗）
   if (inList) {
@@ -183,11 +154,7 @@ const EditableTable = ({ value, schema, inList = true }: { value: any; schema?: 
             <DialogHeader>
               <DialogTitle>{title}</DialogTitle>
             </DialogHeader>
-            {displayForm === 'card' ? (
-              <CardComponent value={displayValue} schema={schema} tableSchema={tableSchema} />
-            ) : (
-              <TableComponent value={displayValue} schema={schema} tableSchema={tableSchema} />
-            )}
+            <TableComponent value={displayValue} schema={schema} />
           </DialogContent>
         </Dialog>
       </>
@@ -195,11 +162,7 @@ const EditableTable = ({ value, schema, inList = true }: { value: any; schema?: 
   }
 
   // 直接展示
-  return displayForm === 'card' ? (
-    <CardComponent value={displayValue} schema={schema} tableSchema={undefined} />
-  ) : (
-    <TableComponent value={displayValue} schema={schema} tableSchema={undefined} />
-  )
+  return <TableComponent value={displayValue} schema={schema} />
 }
 
 export { EditableTable }

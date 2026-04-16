@@ -1,0 +1,22 @@
+{
+  "name": "form-number-multi-select",
+  "type": "registry:component",
+  "title": "Form Number Multi Select",
+  "description": "Form Number Multi Select - 组件",
+  "dependencies": [],
+  "registryDependencies": [
+    "http://localhost:3000/r/form-multi-select.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/kesi/form-number-multi-select/form-number-multi-select.tsx",
+      "type": "registry:component",
+      "content": "import * as React from \"react\"\nimport type { FormOption } from \"@/registry/lib/base-form-props\"\nimport { FormMultiSelect, type FormMultiSelectProps } from \"@/registry/components/form-multi-select/form-multi-select\"\n\nexport interface FormNumberMultiSelectProps extends Omit<FormMultiSelectProps, \"value\" | \"defaultValue\" | \"onChange\"> {\n  /** 当前值（数字数组） */\n  value?: number[]\n  /** 默认值（数字数组） */\n  defaultValue?: number[]\n  /** 值改变时的回调 */\n  onChange?: (value: number[]) => void\n}\n\nconst FormNumberMultiSelect = React.forwardRef<HTMLDivElement, FormNumberMultiSelectProps>(\n  ({ value, defaultValue, onChange, ...props }, ref) => {\n    return (\n      <FormMultiSelect\n        ref={ref}\n        value={value}\n        defaultValue={defaultValue}\n        onChange={onChange}\n        {...props}\n      />\n    )\n  },\n)\n\nFormNumberMultiSelect.displayName = \"FormNumberMultiSelect\"\n\nexport { FormNumberMultiSelect }\n"
+    },
+    {
+      "path": "registry/lib/base-form-props.ts",
+      "type": "registry:lib",
+      "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
+    }
+  ]
+}

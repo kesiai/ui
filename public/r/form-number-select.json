@@ -1,0 +1,22 @@
+{
+  "name": "form-number-select",
+  "type": "registry:component",
+  "title": "Form Number Select",
+  "description": "Form Number Select - 组件",
+  "dependencies": [],
+  "registryDependencies": [
+    "http://localhost:3000/r/form-select.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/kesi/form-number-select/form-number-select.tsx",
+      "type": "registry:component",
+      "content": "import * as React from \"react\"\nimport type { FormOption } from \"@/registry/lib/base-form-props\"\nimport { FormSelect, type FormSelectProps } from \"@/registry/components/form-select/form-select\"\n\nexport interface FormNumberSelectProps extends Omit<FormSelectProps, \"value\" | \"defaultValue\" | \"onChange\"> {\n  /** 当前值（数字） */\n  value?: number\n  /** 默认值（数字） */\n  defaultValue?: number\n  /** 值改变时的回调 */\n  onChange?: (value: number) => void\n}\n\nconst FormNumberSelect = React.forwardRef<HTMLDivElement, FormNumberSelectProps>(\n  ({ value, defaultValue, onChange, ...props }, ref) => {\n    return (\n      <FormSelect\n        ref={ref}\n        value={value !== undefined ? String(value) : undefined}\n        defaultValue={defaultValue !== undefined ? String(defaultValue) : undefined}\n        onChange={(v) => {\n          if (v === \"\") {\n            onChange?.(undefined as unknown as number)\n          } else {\n            onChange?.(Number(v))\n          }\n        }}\n        {...props}\n      />\n    )\n  },\n)\n\nFormNumberSelect.displayName = \"FormNumberSelect\"\n\nexport { FormNumberSelect }\n"
+    },
+    {
+      "path": "registry/lib/base-form-props.ts",
+      "type": "registry:lib",
+      "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
+    }
+  ]
+}

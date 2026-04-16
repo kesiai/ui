@@ -20,7 +20,7 @@ import {
 
 export interface FormMultiSelectProps
   extends Omit<BaseFormFieldProps, "value" | "onChange">,
-  Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus"> {
+  Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur" | "onFocus" | "defaultValue"> {
   /** 当前值 */
   value?: (string | number)[]
   /** 默认值 */
@@ -77,13 +77,13 @@ const FormMultiSelect = React.forwardRef<HTMLDivElement, FormMultiSelectProps>(
     const rawValue = value !== undefined ? value : internalValue
     const currentValue: (string | number)[] = Array.isArray(rawValue) ? rawValue : rawValue != null ? [rawValue] : []
 
-    const handleSelect = (selectedValue: string) => {
+    const handleSelect = (selectedValue: string | number) => {
       if (readOnly) return
-      const isSelected = currentValue.includes(selectedValue)
+      const isSelected = currentValue.some((v) => String(v) === String(selectedValue))
       let newValue: (string | number)[]
 
       if (isSelected) {
-        newValue = currentValue.filter((v) => String(v) !== selectedValue)
+        newValue = currentValue.filter((v) => String(v) !== String(selectedValue))
       } else {
         if (maxCount !== undefined && currentValue.length >= maxCount) return
         newValue = [...currentValue, selectedValue]
@@ -189,7 +189,7 @@ const FormMultiSelect = React.forwardRef<HTMLDivElement, FormMultiSelectProps>(
                       key={String(option.value)}
                       value={String(option.value)}
                       disabled={option.disabled}
-                      onSelect={() => handleSelect(String(option.value))}
+                      onSelect={() => handleSelect(option.value)}
                     >
                       <Check
                         className={cn(

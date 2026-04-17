@@ -6,6 +6,7 @@ import React, { type ReactNode } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Resolver } from 'react-hook-form'
 import { z } from 'zod'
+import get from 'lodash/get'
 
 // 全局设置 Zod 中文错误提示
 z.config({
@@ -33,9 +34,9 @@ z.config({
 
 import { FormField } from "@/registry/components/form-field/form-field"
 import { formConverter } from '@/registry/lib/view-form-converter'
+import { getControlValidate } from '@/registry/lib/form-field-validate'
 
 import type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
-import get from 'lodash/get'
 
 type SchemaFormProps = UseFormPropsExtended & {
   formId: string
@@ -49,8 +50,7 @@ type SchemaFormProps = UseFormPropsExtended & {
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string> & { groupStyle?: React.CSSProperties }
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, ...props }: SchemaFormProps) => {
-
+const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, ...props }: SchemaFormProps) => {
   // 处理 formSchema，展开 '*' 通配符
   const processedFormSchema = React.useMemo(() => {
     const allPropertyKeys = Object.keys(schema?.properties || {})
@@ -74,9 +74,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
     return result
   }, [schema, formSchema])
 
-  const fields = processedFormSchema
-
-  // 预处理 schema：need/required 转标准约束，enum 移入 items
+  // 预处理 schema：当 type=array 且顶层有 enum 时，将 enum 移入 items
   const preprocessSchema = React.useCallback((schema: any): any => {
     if (!schema?.properties) return schema
     const processed = { ...schema, properties: { ...schema.properties } }
@@ -119,9 +117,32 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
     }
   }, [schema, preprocessSchema])
 
+  const getMergedSchema = (schema: any, field: string | Record<string, any>) => {
+    const fieldKey = typeof field === 'string' ? field : field.key
+    const fieldSchema = typeof field === 'string' ? { key: field } : field
+    const _fieldKey = fieldKey.includes('.') ? fieldKey.replace('.', '.properties.') : fieldKey
+    const baseSchema = get(schema, `properties.${_fieldKey}`)
+    return { fieldKey, mergedSchema: { ...baseSchema, ...fieldSchema } }
+  }
+
   const resolver = React.useMemo<Resolver<any, any>>(() => {
-    return zodResolver(zodSchema as any)
-  }, [zodSchema])
+    const zodResolverFn = zodResolver(zodSchema as any)
+    return async (values, context, options) => {
+      const zodResult = await zodResolverFn(values, context, options)
+      // 始终跑 controlType 校验，合并错误
+      for (const field of processedFormSchema) {
+          const { fieldKey, mergedSchema } = getMergedSchema(schema, field)
+          const controlValidate = getControlValidate(mergedSchema)
+          if (controlValidate) {
+            const error = await controlValidate(values[fieldKey])
+            if (error) {
+              ;(zodResult.errors as Record<string, unknown>)[fieldKey] = { type: 'validate', message: error }
+            }
+          }
+        }
+      return zodResult
+    }
+  }, [zodSchema, processedFormSchema, schema])
 
   // 从 schema 中提取默认值，与 props.defaultValues 合并（props 优先）
   const schemaDefaults = React.useMemo(() => {
@@ -137,75 +158,24 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
 
   const methods = useForm({
     resolver: isValid ? resolver : null,
+    onEffect,
     defaultValues: isValid ? { ...schemaDefaults, ...props.defaultValues } : {},
     ...props
   } as any)
 
-  // 手动验证 editable-table 类型的字段
-  const validateEditableTableFields = (data: any): string | true => {
-    for (const field of fields) {
-      if (field.type === 'editable-table' && field.items) {
-        const fieldName = field.name || field.key
-        const value = data?.[fieldName]
+  // 在表单挂载后手动调用一次 onEffect，用于初始化字段可见性等
+  const hasCalledInitOnEffect = React.useRef(false)
 
-        const forms = field.items
-        const properties = forms.properties || {}
-        const formKeys = forms.formSchema || []
-
-        // 找出所有必填字段 (need: true)
-        const requiredFields: Array<{ key: string; title: string }> = []
-        formKeys.forEach((key: string) => {
-          const fieldSchema = properties[key]
-          if (fieldSchema?.need === true) {
-            requiredFields.push({
-              key: fieldSchema.key || key,
-              title: fieldSchema.title || key
-            })
-          }
-        })
-
-        // 空数组验证
-        if (!Array.isArray(value) || value.length === 0) {
-          const error = `请至少添加一条数据`
-          methods.setError(fieldName, { type: 'manual', message: error })
-          return error
-        }
-
-        // 检查每一行的必填字段
-        for (let i = 0; i < value.length; i++) {
-          const row = value[i]
-          for (const reqField of requiredFields) {
-            const fieldValue = row?.[reqField.key]
-            if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
-              const error = `第 ${i + 1} 行的「${reqField.title}」不能为空`
-              methods.setError(fieldName, { type: 'manual', message: error })
-              return error
-            }
-          }
-        }
-
-        // 清除该字段的错误（如果验证通过）
-        methods.clearErrors(fieldName)
-      }
+  React.useEffect(() => {
+    if (onEffect && schema && !hasCalledInitOnEffect.current) {
+      // 获取当前表单的默认值
+      const defaultValues = methods.getValues()
+      onEffect(defaultValues, methods)
+      hasCalledInitOnEffect.current = true
     }
+  }, [schema])
 
-    return true
-  }
-
-  // 手动处理提交，确保所有字段（包括editable-table）都被验证
   const handleFormSubmit = async (data: any) => {
-    // 首先运行 resolver 验证
-    const resolverValid = await methods.trigger()
-    if (!resolverValid) {
-      return
-    }
-
-    // 然后手动验证 editable-table 字段
-    const editableTableValid = validateEditableTableFields(data)
-    if (editableTableValid !== true) {
-      return
-    }
-
     onSubmit?.(data)
   }
 
@@ -214,72 +184,16 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
       <form id={formId} noValidate onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
         <FieldGroup className={classNames?.group} style={classNames?.groupStyle}>
           {processedFormSchema.map(field => {
-            const fieldKey = typeof field === 'string' ? field : field.key
-            const fieldSchame = typeof field === 'string' ? { key: field } : field
-            const _fieldKey = fieldKey.includes('.') ? fieldKey.replace('.', '.properties.') : fieldKey
-            const baseSchema = get(schema, `properties.${_fieldKey}`)
-            const type = field?.controlType || baseSchema?.controlType
-            // 将表格内部字段的 need 属性转换为外层的验证规则
-            const editableTableValidate = (() => {
-              const forms = baseSchema?.items
-              const hasEditableTableForms = forms?.form && forms?.properties
-
-              // 检查是否为 editable-table 类型（通过 type 或 forms 属性判断）
-              const isEditableTable = type === 'editable-table' || hasEditableTableForms
-
-              if (!isEditableTable) {
-                return undefined
-              }
-
-              if (!hasEditableTableForms) {
-                return undefined
-              }
-
-              // 找出所有必填字段 (need: true)
-              const requiredFields: Array<{ key: string; title: string }> = []
-              forms.form.forEach((key: string) => {
-                const fieldSchema = forms.properties[key]
-                if (fieldSchema?.need === true) {
-                  requiredFields.push({
-                    key: fieldSchema.key || key,
-                    title: fieldSchema.title || key
-                  })
-                }
-              })
-
-              // 如果没有必填字段，不需要特殊验证
-              if (requiredFields.length === 0) {
-                return undefined
-              }
-
-              // 返回验证函数
-              const validateFn = (value: any) => {
-                // 空数组验证
-                if (!Array.isArray(value) || value.length === 0) {
-                  return `请至少添加一条数据`
-                }
-
-                // 检查每一行的必填字段
-                for (let i = 0; i < value.length; i++) {
-                  const row = value[i]
-                  for (const field of requiredFields) {
-                    const fieldValue = row?.[field.key]
-                    // 检查值是否为空 (null, undefined, 或空字符串)
-                    if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
-                      return `第 ${i + 1} 行的「${field.title}」不能为空`
-                    }
-                  }
-                }
-
-                return undefined // 验证通过
-              }
-
-              return validateFn
-            })()
-            const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
-            const megerSchema = { ...baseSchema, ...fieldSchame }
+            const { fieldKey, mergedSchema } = getMergedSchema(schema, field)
+            const FieldController = (
+              typeof field !== 'string' && field.component
+                ? field.component
+                : schameConvert
+                  ? schameConvert(mergedSchema, field)
+                  : formConverter(mergedSchema, field)
+            ) as React.ComponentType
             return (
-              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} required={isValid ? megerSchema?.need : false} showDescribe={showDescribe} validate={megerSchema.validate || editableTableValidate}>
+              <FormField name={fieldKey} label={mergedSchema?.title} schema={mergedSchema} required={isValid ? mergedSchema?.need : false} showDescribe={showDescribe}>
                 <FieldController />
               </FormField>
             )

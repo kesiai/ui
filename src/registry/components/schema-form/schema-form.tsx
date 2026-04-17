@@ -6,11 +6,35 @@ import React, { type ReactNode } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Resolver } from 'react-hook-form'
 import { z } from 'zod'
+
+// 全局设置 Zod 中文错误提示
+z.config({
+  localeError: (issue) => {
+    switch (issue.code) {
+      case 'too_small':
+        if (issue.origin === 'string') return '不能为空'
+        if (issue.origin === 'array') return '请至少添加一条数据'
+        return '值太小'
+      case 'too_big':
+        if (issue.origin === 'string') return '内容过长'
+        if (issue.origin === 'array') return '超出最大数量'
+        return '值太大'
+      case 'invalid_type':
+        if (issue.expected === 'string') return '请填写此项'
+        if (issue.expected === 'number') return '请填写数字'
+        return '请填写此项'
+      case 'invalid_value':
+        return '请选择有效的选项'
+      default:
+        return '请检查填写内容'
+    }
+  }
+})
+
 import { FormField } from "@/registry/components/form-field/form-field"
 import { formConverter } from '@/registry/lib/view-form-converter'
 
 import type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
-import { fa } from "zod/v4/locales"
 import get from 'lodash/get'
 
 type SchemaFormProps = UseFormPropsExtended & {
@@ -52,21 +76,36 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
 
   const fields = processedFormSchema
 
-  // 预处理 schema：当 type=array 且顶层有 enum 时，将 enum 移入 items
+  // 预处理 schema：need/required 转标准约束，enum 移入 items
   const preprocessSchema = React.useCallback((schema: any): any => {
     if (!schema?.properties) return schema
     const processed = { ...schema, properties: { ...schema.properties } }
+    const requiredKeys: string[] = []
     for (const [key, prop] of Object.entries(processed.properties) as [string, any][]) {
-      if (prop?.type === 'array' && prop?.enum && prop?.items) {
-        const { enum: _, ...rest } = prop
+      // need/required → JSON Schema 标准约束
+      if (prop?.need || prop?.required) {
+        requiredKeys.push(key)
+        if (prop?.type === 'string' && prop?.minLength === undefined) {
+          processed.properties[key] = { ...prop, minLength: 1 }
+        }
+        if (prop?.type === 'array' && prop?.minItems === undefined) {
+          processed.properties[key] = { ...processed.properties[key], minItems: 1 }
+        }
+      }
+      // enum 从数组顶层移入 items
+      if (prop?.type === 'array' && prop?.enum) {
+        const { enum: _, ...rest } = processed.properties[key]
         processed.properties[key] = {
           ...rest,
           items: {
-            ...prop.items,
+            ...(prop.items || {}),
             enum: prop.enum,
           },
         }
       }
+    }
+    if (requiredKeys.length > 0) {
+      processed.required = [...(processed.required || []), ...requiredKeys]
     }
     return processed
   }, [])
@@ -84,8 +123,21 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
     return zodResolver(zodSchema as any)
   }, [zodSchema])
 
+  // 从 schema 中提取默认值，与 props.defaultValues 合并（props 优先）
+  const schemaDefaults = React.useMemo(() => {
+    if (!schema?.properties) return {}
+    const defaults: Record<string, unknown> = {}
+    for (const [key, prop] of Object.entries(schema.properties) as [string, Record<string, unknown>][]) {
+      if (prop?.defaultVal !== undefined) {
+        defaults[key] = prop.defaultVal
+      }
+    }
+    return defaults
+  }, [schema])
+
   const methods = useForm({
     resolver: isValid ? resolver : null,
+    defaultValues: isValid ? { ...schemaDefaults, ...props.defaultValues } : {},
     ...props
   } as any)
 
@@ -159,7 +211,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
 
   return (
     <FormProvider {...methods} classNames={classNames}>
-      <form id={formId} onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
+      <form id={formId} noValidate onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
         <FieldGroup className={classNames?.group} style={classNames?.groupStyle}>
           {processedFormSchema.map(field => {
             const fieldKey = typeof field === 'string' ? field : field.key
@@ -227,7 +279,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
             const FieldController = (schameConvert ? schameConvert(baseSchema, field) : formConverter(baseSchema, field)) as React.ComponentType
             const megerSchema = { ...baseSchema, ...fieldSchame }
             return (
-              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} required={isValid ? megerSchema?.need : false} showDescribe={showDescribe} validate={editableTableValidate}>
+              <FormField name={fieldKey} label={baseSchema?.title} schema={megerSchema} required={isValid ? megerSchema?.need : false} showDescribe={showDescribe} validate={megerSchema.validate || editableTableValidate}>
                 <FieldController />
               </FormField>
             )

@@ -11,6 +11,7 @@ import { formConverter } from '@/registry/lib/view-form-converter'
 
 import type { ModelSchema, FormSchemaItem } from '@/registry/lib/model-types'
 import { fa } from "zod/v4/locales"
+import get from 'lodash/get'
 
 type SchemaFormProps = UseFormPropsExtended & {
   formId: string
@@ -163,7 +164,8 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
           {processedFormSchema.map(field => {
             const fieldKey = typeof field === 'string' ? field : field.key
             const fieldSchame = typeof field === 'string' ? { key: field } : field
-            const baseSchema = schema?.properties?.[fieldKey as string]
+            const _fieldKey = fieldKey.includes('.') ? fieldKey.replace('.', '.properties.') : fieldKey
+            const baseSchema = get(schema, `properties.${_fieldKey}`)
             const type = field?.controlType || baseSchema?.controlType
             // 将表格内部字段的 need 属性转换为外层的验证规则
             const editableTableValidate = (() => {

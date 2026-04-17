@@ -5,7 +5,7 @@ import { FilterDate } from '@/registry/components/filter-date/filter-date'
 import { FilterBool } from '@/registry/components/filter-bool/filter-bool'
 import { FilterEnum } from '@/registry/components/filter-enum/filter-enum'
 import { FilterRelateSelect } from '@/registry/components/filter-relate-select/filter-relate-select'
-// import { FilterDatetime } from '@/registry/components/filter-datetime/filter-datetime'
+import { FilterDatetime } from '@/registry/components/filter-datetime/filter-datetime'
 // import { FilterInputSelect } from '@/registry/components/filter-input-select/filter-input-select'
 // import { FilterRelateUnique } from '@/registry/components/filter-relate-unique/filter-relate-unique'
 // import { FilterUserRole } from '@/registry/components/filter-user-role/filter-user-role'
@@ -17,9 +17,14 @@ import { FilterRelateSelect } from '@/registry/components/filter-relate-select/f
 const filterConverter = (schema: any, filterSchema: any) => {
   const controlType = filterSchema?.controlType || schema?.controlType
   if (!controlType) {
-    // schema 可能为 undefined（filters 里的 name 在 model.properties 中不存在），
-    // 此时回退为文本筛选，避免读 .type 崩溃
     const type = schema?.type
+    const format = filterSchema?.format || schema?.format
+    const isEnum = filterSchema?.enum || schema?.enum
+    if (isEnum) {
+      return FilterEnum
+    } else if (['date', 'date-time', 'datetime'].includes(format)) {
+      return format == 'date' ? FilterDate : FilterDatetime
+    }
     switch (type) {
       case 'string':
         return FilterText

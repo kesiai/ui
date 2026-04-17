@@ -11,6 +11,12 @@ interface OldSchemaField {
   [key: string]: any;
 }
 
+interface FilterItem {
+  key: string;
+  boolLabel?: [string, string];
+  [key: string]: any;
+}
+
 interface OldSchema {
   type: string;
   name?: string;
@@ -20,6 +26,7 @@ interface OldSchema {
   required?: string[];
   form?: string[];
   listFields?: string[];
+  filters?: Record<string, (string | FilterItem)[]>;
 }
 
 interface NewSchemaField {
@@ -110,6 +117,7 @@ const formSchemaProps = new Set<string>([
 const filterSchemaProps = new Set<string>([
   'filterFields',
   'filterFormat',
+  'format'
 ]);
 
 /**
@@ -262,6 +270,47 @@ function transformSchema(oldSchema: OldSchema): NewSchema {
   result.formSchema.sort((a, b) => formOrder.indexOf(a.fieldKey) - formOrder.indexOf(b.fieldKey));
   result.tableSchema.sort((a, b) => listFieldsOrder.indexOf(a.fieldKey) - listFieldsOrder.indexOf(b.fieldKey));
 
+  // 处理 filters 字段
+  if (oldSchema?.filters) {
+    Object.entries(oldSchema.filters).forEach(([filterGroup, filterItems]) => {
+      filterItems.forEach((item) => {
+        let filterItemKey: string;
+
+        if (typeof item === 'string') {
+          // 简单字符串格式
+          filterItemKey = item;
+        } else {
+          // 对象格式，如 { key: "disable", boolLabel: ["禁用", "启用"] }
+          filterItemKey = item.key;
+        }
+
+        // 从 properties 中查找对应字段的 filterSchemaProps 属性
+        const property = oldSchema.properties?.[filterItemKey];
+        const filterItem: SchemaItem = { key: filterItemKey };
+
+        // 如果是对象格式，先复制对象中的额外属性（如 boolLabel）
+        if (typeof item !== 'string') {
+          Object.entries(item).forEach(([k, v]) => {
+            if (k !== 'key') {
+              filterItem[k] = v;
+            }
+          });
+        }
+
+        // 从 properties 中复制 filterSchemaProps 中定义的属性
+        if (property) {
+          filterSchemaProps.forEach((prop) => {
+            if (property[prop] !== undefined && property[prop] !== null) {
+              filterItem[prop] = property[prop];
+            }
+          });
+        }
+
+        result.filterSchema.push(filterItem);
+      });
+    });
+  }  
+  
   return result;
 }
 

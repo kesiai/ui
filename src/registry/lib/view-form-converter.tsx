@@ -35,8 +35,25 @@ const formConverter = (schema: any, formSchema: any) => {
 
   if (!controlType) {
     const type = schema.type
-    if (schema.enum) {
-      return FormSelect
+    const format = formSchema.format || schema.format
+    const isEnum = formSchema.enum || schema.enum
+    if (isEnum) {
+      switch (type) {
+        case 'string':
+          return FormSelect
+        case 'number':
+          return FormNumberSelect
+        case 'array':
+          if (schema.items?.type === 'string') {
+            return FormMultiSelect
+          } else if (schema.items?.type === 'number') {
+            return FormNumberMultiSelect
+          }
+      }
+    } else if (['date', 'date-time', 'datetime'].includes(format)) {
+      return FormDate
+    } else if (format === 'time') {
+      return FormTime
     }
     switch (type) {
       case 'string':

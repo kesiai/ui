@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 const FilterEnum = (props: any) => {
   const { value, onChange, schema } = props
   const placeholder = schema && schema.placeholder
-  const titleMap = schema && schema.enum ? schema.enum.map((k: string) => ({ value: k, name: schema.enumNames[k] || k })) : []
+  const titleMap = schema && schema.enum ? schema.enum.map((k: string, index: number) => ({ value: k, name: schema.enumNames[index] || k })) : []
   const [open, setOpen] = useState(false)
 
   // 初始化选中的值

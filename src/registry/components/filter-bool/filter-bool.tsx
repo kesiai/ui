@@ -4,7 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 const FilterBool = (props: any) => {
-  const { value, onChange, field } = props
+  const { value, onChange, boolLabel } = props
   const disabled = (value === null || value === undefined || value === '')
 
   return (
@@ -36,7 +36,7 @@ const FilterBool = (props: any) => {
         onCheckedChange={onChange}
       />
       <span className="text-sm text-muted-foreground">
-        {value ? (field?.boolLabel?.[0] || '真') : (field?.boolLabel?.[1] || '假')}
+        {value ? (boolLabel?.[0] || '真') : (boolLabel?.[1] || '假')}
       </span>
     </div>
   )

@@ -255,7 +255,9 @@ const AsyncSelect: React.FC<AsyncSelectProps> = (props) => {
 
   // 格式化显示值
   const formatDisplayValue = (val: any): string => {
-    if (isObject(val) && 'key' in val) {
+    if (isObject(val) && 'label' in val && typeof val.label === 'string') {
+      return val.label
+    } else if (isObject(val) && 'key' in val) {
       return allOptions.find((opt) => opt.value === val.key)?.item?.[displayField] || val.key
     } else {
       return '空'

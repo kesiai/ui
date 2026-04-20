@@ -105,6 +105,31 @@ interface PropItem {
   [key: string]: unknown
 }
 
+// --- BindDataWrap Component ---
+
+const BindDataWrap = ({
+  children,
+  DataWrap,
+  selectMethod,
+  ...restProps
+}: {
+  children: React.ReactNode
+  DataWrap?: React.ComponentType<any>
+  selectMethod?: string
+  [key: string]: unknown
+}) => {
+  if (['isNull', 'notNull'].indexOf(selectMethod || '') > -1) {
+    // 为空，不为空，不渲染 DataWrap
+    return null
+  }
+
+  return DataWrap ? (
+    <DataWrap {...restProps}>{children}</DataWrap>
+  ) : (
+    children
+  )
+}
+
 // --- Interfaces ---
 
 interface QueryItemFromProps {
@@ -112,7 +137,6 @@ interface QueryItemFromProps {
   schema: SchemaDef
   fieldKey: string
   onChange: (value: QueryCondition) => void
-  unbind?: boolean
   timeRangeQuery?: boolean
   DataWrap?: React.ComponentType
   showValidBtn?: boolean
@@ -209,7 +233,7 @@ const ValueComponent = ({ method, fieldSchema, fieldKey, ...restProps }: {
   return <Comp schema={fieldSchema} {...restProps} />
 }
 
-const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, showValidBtn }: QueryItemFromProps) => {
+const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, DataWrap, showValidBtn }: QueryItemFromProps) => {
   const [methods, setMethods] = useState<MethodItem[]>()
   const [isTime, setIsTime] = useState<boolean>()
   const [containerWidth, setContainerWidth] = useState(0)
@@ -403,18 +427,22 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
                           {ops.map(op => <SelectItem key={op.value} value={op.value}>{op.label}</SelectItem>)}
                         </SelectContent>
                       </Select> :
-                      <div className="w-full">
-                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} label={fieldSchema.title} />
-                      </div>
+                      <BindDataWrap input={{ value: value?.value, onChange: onValueChange }} field={megerSchema} DataWrap={DataWrap} selectMethod={selectMethod}>
+                        <div className="w-full">
+                          <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} label={fieldSchema.title} />
+                        </div>
+                      </BindDataWrap>
                   }
                 </div>
 
                 {showValidBtn ?
                   <div className="mb-2">
-                    <Switch
-                      checked={isNil(value?.valid) || value?.valid}
-                      onCheckedChange={onValidChange}
-                    />
+                    <BindDataWrap input={{ value: value?.valid, onChange: onValidChange }} field={{ title: '生效', type: 'boolean' }} DataWrap={DataWrap} selectMethod={selectMethod}>
+                      <Switch
+                        checked={isNil(value?.valid) || value?.valid}
+                        onCheckedChange={onValidChange}
+                      />
+                    </BindDataWrap>
                   </div>
                   : null}
               </>
@@ -455,15 +483,19 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
                             {ops.map(op => <SelectItem key={op.value} value={op.value}>{op.label}</SelectItem>)}
                           </SelectContent>
                         </Select> :
-                        <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} />
+                        <BindDataWrap input={{ value: value?.value, onChange: onValueChange }} field={megerSchema} DataWrap={DataWrap} selectMethod={selectMethod}>
+                          <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} />
+                        </BindDataWrap>
                     }
                   </div>
                   {showValidBtn ?
                     <div className="shrink-0 min-w-15">
-                      <Switch
-                        checked={isNil(value?.valid) || value?.valid}
-                        onCheckedChange={onValidChange}
-                      />
+                      <BindDataWrap input={{ value: value?.valid, onChange: onValidChange }} field={{ title: '生效', type: 'boolean' }} DataWrap={DataWrap} selectMethod={selectMethod}>
+                        <Switch
+                          checked={isNil(value?.valid) || value?.valid}
+                          onCheckedChange={onValidChange}
+                        />
+                      </BindDataWrap>
                     </div>
                     : null}
                 </div>
@@ -477,7 +509,9 @@ const QueryItemFrom = ({ value, schema, fieldKey, onChange, timeRangeQuery, show
           (rangeType == 'dynamic' ? <VariateRangeTimeInput {...fieldSchema} value={value?.timeRange} onChange={onTimeRangeChange}></VariateRangeTimeInput> :
             rangeType == 'fixed' || defaultType == 'fixed' ?
               <div className="mb-2">
-                <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} />
+                <BindDataWrap input={{ value: value?.value, onChange: onValueChange }} field={megerSchema} DataWrap={DataWrap} selectMethod={selectMethod}>
+                  <ValueComponent method={method} fieldKey={fieldKey} value={value?.value} onChange={onValueChange} fieldSchema={megerSchema} />
+                </BindDataWrap>
               </div> : null)
         }
       </div>
@@ -582,7 +616,6 @@ interface QueryItemProps {
   onDelete: () => void
   selectHide?: boolean
   fieldPlaceholder?: string
-  unbind?: boolean
   timeRangeQuery?: boolean
   DataWrap?: React.ComponentType
   showValidBtn?: boolean
@@ -628,7 +661,6 @@ interface QueryFormProps {
   allowAndOp?: boolean
   selectHide?: boolean
   fieldPlaceholder?: string
-  unbind?: boolean
   timeRangeQuery?: boolean
   DataWrap?: React.ComponentType
   showValidBtn?: boolean
@@ -700,7 +732,6 @@ interface QueryEditorProps {
   value?: QueryCondition[][]
   onChange?: (value: QueryCondition[][]) => void
   relation?: string
-  unbind?: boolean
   style?: React.CSSProperties
   DataWrap?: React.ComponentType
   btnName?: string

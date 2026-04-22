@@ -7,6 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Resolver } from 'react-hook-form'
 import { z } from 'zod'
 import get from 'lodash/get'
+import {
+  convertToSchemaFormRules,
+  evaluateValidations,
+  evaluateConditions,
+} from '@/registry/lib/field-rules-hooks'
+import type { FieldRules } from '@/registry/lib/field-rules-hooks'
 
 // 全局设置 Zod 中文错误提示
 z.config({
@@ -48,9 +54,44 @@ type SchemaFormProps = UseFormPropsExtended & {
   showDescribe?: boolean
   children?: ReactNode | ((props: any) => ReactNode)
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string> & { groupStyle?: React.CSSProperties }
+  fieldRules?: FieldRules
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, ...props }: SchemaFormProps) => {
+const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, fieldRules, ...props }: SchemaFormProps) => {
+  // 字段规则转换
+  const schemaFieldRules = React.useMemo(() =>
+    fieldRules ? convertToSchemaFormRules(fieldRules) : undefined,
+    [fieldRules]
+  )
+
+  // 跟踪动态必填字段（由规则引擎设置）
+  const dynamicRequiredRef = React.useRef<Set<string>>(new Set())
+  const rulesPrevValuesRef = React.useRef<Record<string, any>>({})
+
+  // 包装 onEffect：在调用原始 onEffect 前更新动态必填
+  const wrappedOnEffect = React.useCallback((values: any, methods: any) => {
+    if (schemaFieldRules?.rules?.length) {
+      dynamicRequiredRef.current.clear()
+      const changedFields = new Set(
+        Object.keys(values).filter(k => values[k] !== rulesPrevValuesRef.current[k])
+      )
+      for (const rule of schemaFieldRules.rules) {
+        if (rule.disabled) continue
+        const triggerFields = new Set(rule.when.flat().map(c => c.field))
+        if (triggerFields.size > 0 && ![...triggerFields].some(f => changedFields.has(f))) continue
+        const matched = evaluateConditions(rule.when, values, rulesPrevValuesRef.current)
+        const effects = matched ? rule.then : rule.else
+        effects?.forEach((effect: any) => {
+          if (effect.type === 'require' && effect.field) {
+            const targets = Array.isArray(effect.field) ? effect.field : [effect.field]
+            targets.forEach((f: string) => dynamicRequiredRef.current.add(f))
+          }
+        })
+      }
+      rulesPrevValuesRef.current = { ...values }
+    }
+    onEffect?.(values, methods)
+  }, [onEffect, schemaFieldRules])
   // 处理 formSchema，展开 '*' 通配符
   const processedFormSchema = React.useMemo(() => {
     const allPropertyKeys = Object.keys(schema?.properties || {})
@@ -140,9 +181,22 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
             }
           }
         }
+      // 动态必填（由字段规则 setRequire 设置）
+      for (const field of dynamicRequiredRef.current) {
+        if (values[field] == null || values[field] === '') {
+          ;(zodResult.errors as Record<string, unknown>)[field] = { type: 'required', message: '此字段为必填项' }
+        }
+      }
+      // 字段规则校验（正则 pattern）
+      if (schemaFieldRules?.validations?.length) {
+        const valErrors = evaluateValidations(schemaFieldRules.validations, values)
+        for (const [field, error] of Object.entries(valErrors)) {
+          ;(zodResult.errors as Record<string, unknown>)[field] = error
+        }
+      }
       return zodResult
     }
-  }, [zodSchema, processedFormSchema, schema])
+  }, [zodSchema, processedFormSchema, schema, schemaFieldRules])
 
   // 从 schema 中提取默认值，与 props.defaultValues 合并（props 优先）
   const schemaDefaults = React.useMemo(() => {
@@ -158,7 +212,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
 
   const methods = useForm({
     resolver: isValid ? resolver : null,
-    onEffect,
+    onEffect: wrappedOnEffect,
     defaultValues: isValid ? { ...schemaDefaults, ...props.defaultValues } : {},
     ...props
   } as any)

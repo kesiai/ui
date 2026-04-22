@@ -12,6 +12,7 @@ export interface UseFormReturnExtended {
   setError(name: string, error: { type: string; message: string }): void
   clearErrors(name?: string): void
   setFieldUIState?: (name: string, state: Record<string, any>) => void
+  formState?: { errors?: Record<string, { type: string; message: string } | undefined> }
 }
 
 // ============================================================================
@@ -46,7 +47,7 @@ export interface SchemaFormCondition {
 
 /** 效果项 */
 export interface SchemaFormEffect {
-  type: 'show' | 'hide' | 'require' | 'setValue' | 'message' | 'disable' | 'enable'
+  type: 'show' | 'hide' | 'require' | 'optional' | 'setValue' | 'message' | 'disable' | 'enable'
   field: string | string[]
   value?: any
 }
@@ -166,6 +167,9 @@ function applyEffect(
     case 'require':
       targets.forEach(f => setUI?.(f, { required: true }))
       break
+    case 'optional':
+      targets.forEach(f => setUI?.(f, { required: false }))
+      break
     case 'disable':
       targets.forEach(f => setUI?.(f, { disabled: true }))
       break
@@ -187,7 +191,9 @@ function applyEffect(
       break
     case 'message':
       if (effect.value) {
-        console.warn('[FieldRules message]', effect.value)
+        if (targets.length > 0) {
+          targets.forEach(f => methods.setError(f, { type: 'message', message: String(effect.value) }))
+        }
       }
       break
   }

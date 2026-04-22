@@ -12,6 +12,7 @@ import {
   type UseFormReturnExtended,
   applyRules,
   evaluateValidations,
+  evaluateConditions,
 } from './field-rules-engine'
 
 // ============================================================================
@@ -26,7 +27,7 @@ export interface ConditionItem {
 }
 
 /** 编辑器交互动作类型 */
-export type MutualActionType = 'show' | 'hide' | 'setRequire' | 'canEdit' | 'setDisabled' | 'setValue' | 'message'
+export type MutualActionType = 'show' | 'hide' | 'setRequire' | 'setOptional' | 'canEdit' | 'setDisabled' | 'setValue' | 'message'
 
 /** 编辑器交互动作 */
 export interface MutualAction {
@@ -67,6 +68,7 @@ const ACTION_TYPE_MAP: Record<string, SchemaFormRule['then'][number]['type']> = 
   show: 'show',
   hide: 'hide',
   setRequire: 'require',
+  setOptional: 'optional',
   setValue: 'setValue',
   message: 'message',
   canEdit: 'enable',
@@ -125,6 +127,21 @@ export function useFieldRulesEffect(fieldRules: SchemaFormFieldRules | undefined
       applyingRef.current = true
       try {
         if (fieldRules.rules?.length) {
+          const changedFields = new Set(
+            Object.keys(values).filter(k => values[k] !== prevValuesRef.current[k])
+          )
+          for (const rule of fieldRules.rules) {
+            if (rule.disabled) continue
+            const triggerFields = new Set(rule.when.flat().map(c => c.field))
+            if (triggerFields.size > 0 && ![...triggerFields].some(f => changedFields.has(f))) continue
+            const matched = evaluateConditions(rule.when, values as Record<string, any>, prevValuesRef.current)
+            const effects = matched ? rule.then : rule.else
+            effects?.forEach(effect => {
+              if (effect.type === 'message' && effect.value && !effect.field) {
+                console.warn('[FieldRules message]', effect.value)
+              }
+            })
+          }
           applyRules(fieldRules.rules, values as Record<string, any>, prevValuesRef.current, methods, schema)
         }
         if (fieldRules.validations?.length) {
@@ -134,7 +151,10 @@ export function useFieldRulesEffect(fieldRules: SchemaFormFieldRules | undefined
           }
           for (const v of fieldRules.validations) {
             if (v.field && !errors[v.field]) {
-              methods.clearErrors(v.field)
+              const currentError = (methods.formState as any)?.errors?.[v.field]
+              if (currentError?.type === 'validate') {
+                methods.clearErrors(v.field)
+              }
             }
           }
         }

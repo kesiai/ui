@@ -47,9 +47,10 @@ const FormField =
     const fieldProps = React.useMemo(() => {
       return formFieldConverter(schema)
     }, [schema])
-    const controllerRules = { required, ...rules, validate }
+    const isRequired = required || ui.required
+    const controllerRules = { required: isRequired, ...rules, validate }
 
-    return ui.visible ? (
+    return ui.visible !== false ? (
       <Controller
         name={name}
         control={methods?.control}
@@ -57,7 +58,7 @@ const FormField =
         render={({ field, fieldState }) => (
           <Field orientation={(formClassNames?.orientation as 'vertical' | 'horizontal' | 'responsive') || 'vertical'} data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)} style={schema?.colSpan ? { gridColumn: `span ${schema.colSpan}` } : undefined}>
             {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
-              {label} : {required && <span className="text-red-500">*</span>}
+              {label} : {isRequired && <span className="text-red-500">*</span>}
             </FieldLabel>}
             {
               children ? (typeof children === 'function' ? children({

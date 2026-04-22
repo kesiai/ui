@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useModelGet, useModelSave, useModelDelete, useModelGetItems, useModel } from '@airiot/client'
 import {
   Dialog,
@@ -44,6 +44,7 @@ import { ViewDetail } from '@/registry/components/view-detail/view-detail'
 import { HasPermission } from '@/registry/components/view-permission/view-permission'
 import type { FormSchemaItem } from '@/registry/lib/model-types'
 import { formLayoutToClassNames } from '@/registry/lib/form-layout'
+import { useFieldRulesEffect, convertToSchemaFormRules, type FieldRules } from '@/registry/lib/field-rules-hooks'
 
 interface EditActionContentProps {
   itemId: string
@@ -59,6 +60,8 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
   const [saving, setSaving] = useState(false)
 
   const formId = `edit-form-${itemId}`
+  const fieldRules = useMemo(() => convertToSchemaFormRules((model as any)?.fieldRules as FieldRules), [model])
+  const onEffect = useFieldRulesEffect(fieldRules, model as any)
 
   const handleSave = async (values: any) => {
     setSaving(true)
@@ -82,7 +85,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
         </div>
       ) : (
         <ScrollArea className="max-h-[70vh] pr-3">
-          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
+          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} onEffect={onEffect} />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}
@@ -204,6 +207,8 @@ const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, clas
   const [saving, setSaving] = useState(false)
 
   const formId = `create-form-${model.key}`
+  const fieldRules = useMemo(() => convertToSchemaFormRules((model as any)?.fieldRules as FieldRules), [model])
+  const onEffect = useFieldRulesEffect(fieldRules, model as any)
 
   const handleSave = async (values: any) => {
     setSaving(true)
@@ -222,7 +227,7 @@ const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, clas
         <DialogTitle>新建 {model.title}</DialogTitle>
       </DialogHeader>
       <ScrollArea className="max-h-[70vh] pr-3">
-        <SchemaForm formId={formId} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} />
+        <SchemaForm formId={formId} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} onEffect={onEffect} />
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 

@@ -161,6 +161,7 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
   ) => {
     const [internalValue, setInternalValue] = React.useState(defaultValue?.toString() || "")
     const [displayValue, setDisplayValue] = React.useState("")
+    const [isFocused, setIsFocused] = React.useState(false)
     const inputRef = React.useRef<HTMLInputElement>(null)
 
     const isControlled = controlledValue !== undefined
@@ -178,10 +179,12 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
       return val.toString()
     }, [actualPrecision])
 
-    // 更新显示值
-    React.useEffect(() => {
-      setDisplayValue(formatValue(numericValue))
-    }, [numericValue, formatValue])
+    // 更新显示值：非聚焦时跟随受控值，聚焦时保持用户输入
+    React.useLayoutEffect(() => {
+      if (!isFocused) {
+        setDisplayValue(formatValue(numericValue))
+      }
+    }, [numericValue, formatValue, isFocused])
 
     // 验证和限制数值
     const validateAndClampValue = React.useCallback((val: number): number => {
@@ -235,6 +238,7 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
     // 处理失焦时的最小/最大/精度处理并格式化显示
     const handleBlur = React.useCallback(
       (e: React.FocusEvent<HTMLInputElement>) => {
+        setIsFocused(false)
         const val = displayValue?.trim()
 
         if (val === "") {
@@ -273,6 +277,15 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
       }
     }, [autoFocus])
 
+    // 聚焦时标记状态，让 displayValue 跟随用户输入
+    const handleFocus = React.useCallback(
+      (e: React.FocusEvent<HTMLInputElement>) => {
+        setIsFocused(true)
+        onFocus?.(e)
+      },
+      [onFocus]
+    )
+
     const inputElement = (
       <InputGroupInput
         ref={inputRef}
@@ -280,7 +293,7 @@ const FormInputNumber = React.forwardRef<HTMLDivElement, InputNumberProps>(
         value={displayValue}
         onChange={handleInputChange}
         onBlur={handleBlur}
-        onFocus={onFocus}
+        onFocus={handleFocus}
         placeholder={placeholder}
         disabled={disabled}
         readOnly={readOnly}

@@ -94,7 +94,7 @@ const MapPickerLayer: React.FC<MapPickerLayerProps> = ({ coordinates, onMapClick
 
   return (
     <div ref={markerRef} className="pointer-events-none">
-      <MapPin className="h-8 w-8 text-red-500 drop-shadow-md" />
+      <MapPin className="h-8 w-8 drop-shadow-md" style={{ color: '#2bb634' }} />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { MapContainer, ViewOptions, ZoomOption, ScaleLineOption, ExtentOption } from '@/registry/components/gis-map-core/gis-map-core'
+import { GisMapCore, ViewOptions, ZoomOption, ScaleLineOption, ExtentOption } from '@/registry/components/gis-map-core/gis-map-core'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
 import documentationMd from './gis-map-core.md?raw'
 
@@ -94,7 +94,7 @@ export const mapContainerDefaultProps = {
     extentOption: defaultExtentOption
 }
 
-const renderMapContainerPreview = (props: Record<string, any>) => {
+const renderGisMapCorePreview = (props: Record<string, any>) => {
     const width = props.width ?? mapContainerDefaultProps.width
     const height = props.height ?? mapContainerDefaultProps.height
     // 解析 JSON 字符串或直接使用对象
@@ -120,7 +120,7 @@ const renderMapContainerPreview = (props: Record<string, any>) => {
 
     return (
         <div className="w-full flex items-center justify-center p-4">
-            <MapContainer
+            <GisMapCore
                 width={width}
                 height={height}
                 viewOptions={viewOptions}
@@ -132,7 +132,7 @@ const renderMapContainerPreview = (props: Record<string, any>) => {
     )
 }
 
-const renderMapContainerCodePreview = (props: Record<string, any>) => {
+const renderGisMapCoreCodePreview = (props: Record<string, any>) => {
     const width = props.width ?? mapContainerDefaultProps.width
     const height = props.height ?? mapContainerDefaultProps.height
     const parseJson = <T,>(value: any, fallback: T): T => {
@@ -155,7 +155,7 @@ const renderMapContainerCodePreview = (props: Record<string, any>) => {
             ? parseJson<ExtentOption>(props.extentOption, mapContainerDefaultProps.extentOption)
             : mapContainerDefaultProps.extentOption
 
-    return `<MapContainer
+    return `<GisMapCore
   width="${width}"
   height="${height}"
   viewOptions={${JSON.stringify(viewOptions)}}
@@ -170,7 +170,7 @@ export const mapContainerConfig: ComponentConfig = {
     name: '2D地图',
     propsConfig: mapContainerPropsConfig,
     defaultProps: mapContainerDefaultProps,
-    renderPreview: renderMapContainerPreview,
-    renderCodePreview: renderMapContainerCodePreview,
+    renderPreview: renderGisMapCorePreview,
+    renderCodePreview: renderGisMapCoreCodePreview,
     documentation: documentationMd
 }

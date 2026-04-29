@@ -4,7 +4,7 @@
 
 ## 简介
 
-`GeoJson` 是一个 GeoJSON 数据加载和渲染组件，用于在地图上显示 GeoJSON 格式的矢量数据。
+`GisGeoJsonParse` 是一个 GeoJSON 数据加载和渲染组件，用于在地图上显示 GeoJSON 格式的矢量数据。
 
 - **多数据源支持**：支持远程 URL 和本地文件路径两种数据源
 - **多坐标系转换**：支持 EPSG:4326、EPSG:3857、GCJ02、BD09 等坐标系
@@ -77,18 +77,18 @@ GeoJSON Feature 的属性会影响样式，支持的属性包括：
 从远程 URL 加载 GeoJSON 数据。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { GeoJson } from '@/components/kesi/gis-geojson-parse'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisGeoJsonParse } from '@/components/kesi/gis-geojson-parse'
 
-function RemoteGeoJsonLayer() {
+function RemoteGisGeoJsonParseLayer() {
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         source="https://example.com/data/geojson.json"
         coordinateType="EPSG:4326"
         cellKey="remote-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -98,15 +98,15 @@ function RemoteGeoJsonLayer() {
 从项目本地路径加载 GeoJSON 文件。
 
 ```tsx
-function LocalGeoJsonLayer() {
+function LocalGisGeoJsonParseLayer() {
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         geoJsonFile="/data/areas.geojson"
         coordinateType="EPSG:4326"
         cellKey="local-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -116,10 +116,10 @@ function LocalGeoJsonLayer() {
 配置线条的颜色、宽度和填充颜色。
 
 ```tsx
-function StyledGeoJsonLayer() {
+function StyledGisGeoJsonParseLayer() {
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         source="/data/boundaries.geojson"
         coordinateType="EPSG:4326"
         lineStyle={{
@@ -129,7 +129,7 @@ function StyledGeoJsonLayer() {
         }}
         cellKey="styled-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -139,10 +139,10 @@ function StyledGeoJsonLayer() {
 通过 layerBase 配置图层透明度。
 
 ```tsx
-function TransparentGeoJsonLayer() {
+function TransparentGisGeoJsonParseLayer() {
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         source="/data/regions.geojson"
         coordinateType="EPSG:4326"
         lineStyle={{
@@ -156,7 +156,7 @@ function TransparentGeoJsonLayer() {
         }}
         cellKey="transparent-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -166,10 +166,10 @@ function TransparentGeoJsonLayer() {
 使用不同的坐标系加载数据。
 
 ```tsx
-function GCJ02GeoJsonLayer() {
+function GCJ02GisGeoJsonParseLayer() {
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         source="/data/china-areas.geojson"
         coordinateType="GCJ02"
         lineStyle={{
@@ -179,7 +179,7 @@ function GCJ02GeoJsonLayer() {
         }}
         cellKey="gcj02-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -189,10 +189,10 @@ function GCJ02GeoJsonLayer() {
 设置图层的最小和最大缩放级别。
 
 ```tsx
-function LimitedZoomGeoJsonLayer() {
+function LimitedZoomGisGeoJsonParseLayer() {
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         source="/data/cities.geojson"
         coordinateType="EPSG:4326"
         lineStyle={{
@@ -206,7 +206,7 @@ function LimitedZoomGeoJsonLayer() {
         }}
         cellKey="limited-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -216,7 +216,7 @@ function LimitedZoomGeoJsonLayer() {
 通过 display 属性控制图层的显示和隐藏。
 
 ```tsx
-function DynamicGeoJsonLayer() {
+function DynamicGisGeoJsonParseLayer() {
   const [visible, setVisible] = React.useState(true)
 
   return (
@@ -225,14 +225,14 @@ function DynamicGeoJsonLayer() {
         {visible ? '隐藏' : '显示'}图层
       </button>
 
-      <MapContainer>
-        <GeoJson
+      <GisMapCore>
+        <GisGeoJsonParse
           source="/data/polygons.geojson"
           coordinateType="EPSG:4326"
           display={visible}
           cellKey="dynamic-geojson"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -245,12 +245,12 @@ function DynamicGeoJsonLayer() {
 叠加多个 GeoJSON 图层，展示不同类型的地理数据。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { GeoJson } from '@/components/kesi/gis-geojson-parse'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisGeoJsonParse } from '@/components/kesi/gis-geojson-parse'
 
-function MultiGeoJsonMap() {
+function MultiGisGeoJsonParseMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -259,7 +259,7 @@ function MultiGeoJsonMap() {
       }}
     >
       {/* 省界图层 */}
-      <GeoJson
+      <GisGeoJsonParse
         source="/data/provinces.geojson"
         coordinateType="EPSG:4326"
         title="省界"
@@ -279,7 +279,7 @@ function MultiGeoJsonMap() {
       />
 
       {/* 市界图层 */}
-      <GeoJson
+      <GisGeoJsonParse
         source="/data/cities.geojson"
         coordinateType="EPSG:4326"
         title="市界"
@@ -299,7 +299,7 @@ function MultiGeoJsonMap() {
       />
 
       {/* 区域填充图层 */}
-      <GeoJson
+      <GisGeoJsonParse
         source="/data/areas.geojson"
         coordinateType="EPSG:4326"
         title="区域"
@@ -315,7 +315,7 @@ function MultiGeoJsonMap() {
         display={true}
         cellKey="area-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -362,8 +362,8 @@ function FeaturePropertyStyles() {
   }
 
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         source="/data/styled-features.geojson"
         coordinateType="EPSG:4326"
         lineStyle={{
@@ -374,7 +374,7 @@ function FeaturePropertyStyles() {
         }}
         cellKey="feature-styles"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -384,10 +384,10 @@ function FeaturePropertyStyles() {
 在地图上显示 Feature 的名称标签。
 
 ```tsx
-function LabeledGeoJsonLayer() {
+function LabeledGisGeoJsonParseLayer() {
   return (
-    <MapContainer>
-      <GeoJson
+    <GisMapCore>
+      <GisGeoJsonParse
         source="/data/labeled-areas.geojson"
         coordinateType="EPSG:4326"
         lineStyle={{
@@ -400,7 +400,7 @@ function LabeledGeoJsonLayer() {
         }}
         cellKey="labeled-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -410,7 +410,7 @@ function LabeledGeoJsonLayer() {
 根据用户选择动态加载不同的 GeoJSON 数据。
 
 ```tsx
-function DynamicGeoJsonSource() {
+function DynamicGisGeoJsonParseSource() {
   const [dataSource, setDataSource] = React.useState('provinces')
 
   const dataSources = {
@@ -427,8 +427,8 @@ function DynamicGeoJsonSource() {
         <option value="districts">区县界</option>
       </select>
 
-      <MapContainer>
-        <GeoJson
+      <GisMapCore>
+        <GisGeoJsonParse
           source={dataSources[dataSource]}
           coordinateType="EPSG:4326"
           lineStyle={{
@@ -438,7 +438,7 @@ function DynamicGeoJsonSource() {
           key={dataSource} // key 变化时重新创建组件
           cellKey="dynamic-source"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -449,7 +449,7 @@ function DynamicGeoJsonSource() {
 根据地图缩放级别动态调整样式。
 
 ```tsx
-function ResponsiveStyleGeoJson() {
+function ResponsiveStyleGisGeoJsonParse() {
   const [zoom, setZoom] = React.useState(10)
 
   const lineStyle = React.useMemo(() => {
@@ -478,10 +478,10 @@ function ResponsiveStyleGeoJson() {
   }, [zoom])
 
   return (
-    <MapContainer
+    <GisMapCore
       onZoomChange={(newZoom) => setZoom(newZoom)}
     >
-      <GeoJson
+      <GisGeoJsonParse
         source="/data/multi-level.geojson"
         coordinateType="EPSG:4326"
         lineStyle={lineStyle}
@@ -492,7 +492,7 @@ function ResponsiveStyleGeoJson() {
         }}
         cellKey="responsive-geojson"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```

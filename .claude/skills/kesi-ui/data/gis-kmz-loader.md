@@ -4,7 +4,7 @@
 
 ## 简介
 
-`Kmz` 是一个 KMZ 压缩文件加载和渲染组件，用于在地图上显示 KMZ 格式的地理数据。
+`GisKmzLoader` 是一个 KMZ 压缩文件加载和渲染组件，用于在地图上显示 KMZ 格式的地理数据。
 
 - **KMZ 文件支持**：自动解压 KMZ 文件并提取其中的 KML 内容
 - **多坐标系转换**：支持 EPSG:4326、EPSG:3857、GCJ02、BD09 等坐标系
@@ -48,18 +48,18 @@ interface LayerBase {
 从远程 URL 加载 KMZ 文件。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { Kmz } from '@/components/kesi/gis-kmz-loader'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisKmzLoader } from '@/components/kesi/gis-kmz-loader'
 
-function RemoteKmzLayer() {
+function RemoteGisKmzLoaderLayer() {
   return (
-    <MapContainer>
-      <Kmz
+    <GisMapCore>
+      <GisKmzLoader
         source="https://example.com/data/areas.kmz"
         coordinateType="EPSG:4326"
         cellKey="remote-kmz"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -69,15 +69,15 @@ function RemoteKmzLayer() {
 从项目本地路径加载 KMZ 文件。
 
 ```tsx
-function LocalKmzLayer() {
+function LocalGisKmzLoaderLayer() {
   return (
-    <MapContainer>
-      <Kmz
+    <GisMapCore>
+      <GisKmzLoader
         kmzFile="/data/regions.kmz"
         coordinateType="EPSG:4326"
         cellKey="local-kmz"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -87,10 +87,10 @@ function LocalKmzLayer() {
 通过 layerBase 配置图层透明度。
 
 ```tsx
-function TransparentKmzLayer() {
+function TransparentGisKmzLoaderLayer() {
   return (
-    <MapContainer>
-      <Kmz
+    <GisMapCore>
+      <GisKmzLoader
         kmzFile="/data/polygons.kmz"
         coordinateType="EPSG:4326"
         layerBase={{
@@ -99,7 +99,7 @@ function TransparentKmzLayer() {
         }}
         cellKey="transparent-kmz"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -109,10 +109,10 @@ function TransparentKmzLayer() {
 使用不同的坐标系加载数据。
 
 ```tsx
-function GCJ02KmzLayer() {
+function GCJ02GisKmzLoaderLayer() {
   return (
-    <MapContainer>
-      <Kmz
+    <GisMapCore>
+      <GisKmzLoader
         kmzFile="/data/china-areas.kmz"
         coordinateType="GCJ02"
         layerBase={{
@@ -120,7 +120,7 @@ function GCJ02KmzLayer() {
         }}
         cellKey="gcj02-kmz"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -130,10 +130,10 @@ function GCJ02KmzLayer() {
 设置图层的最小和最大缩放级别。
 
 ```tsx
-function LimitedZoomKmzLayer() {
+function LimitedZoomGisKmzLoaderLayer() {
   return (
-    <MapContainer>
-      <Kmz
+    <GisMapCore>
+      <GisKmzLoader
         source="/data/cities.kmz"
         coordinateType="EPSG:4326"
         layerBase={{
@@ -143,7 +143,7 @@ function LimitedZoomKmzLayer() {
         }}
         cellKey="limited-kmz"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -153,7 +153,7 @@ function LimitedZoomKmzLayer() {
 通过 display 属性控制图层的显示和隐藏。
 
 ```tsx
-function DynamicKmzLayer() {
+function DynamicGisKmzLoaderLayer() {
   const [visible, setVisible] = React.useState(true)
 
   return (
@@ -162,14 +162,14 @@ function DynamicKmzLayer() {
         {visible ? '隐藏' : '显示'}图层
       </button>
 
-      <MapContainer>
-        <Kmz
+      <GisMapCore>
+        <GisKmzLoader
           source="/data/areas.kmz"
           coordinateType="EPSG:4326"
           display={visible}
           cellKey="dynamic-kmz"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -180,7 +180,7 @@ function DynamicKmzLayer() {
 动态更新图层的透明度、层级等属性。
 
 ```tsx
-function DynamicPropsKmzLayer() {
+function DynamicPropsGisKmzLoaderLayer() {
   const [opacity, setOpacity] = React.useState(1)
   const [zIndex, setZIndex] = React.useState(5)
 
@@ -210,8 +210,8 @@ function DynamicPropsKmzLayer() {
         />
       </label>
 
-      <MapContainer>
-        <Kmz
+      <GisMapCore>
+        <GisKmzLoader
           source="/data/regions.kmz"
           coordinateType="EPSG:4326"
           layerBase={{
@@ -220,7 +220,7 @@ function DynamicPropsKmzLayer() {
           }}
           cellKey="dynamic-props-kmz"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -233,12 +233,12 @@ function DynamicPropsKmzLayer() {
 叠加多个 KMZ 图层，展示不同类型的地理数据。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { Kmz } from '@/components/kesi/gis-kmz-loader'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisKmzLoader } from '@/components/kesi/gis-kmz-loader'
 
-function MultiKmzMap() {
+function MultiGisKmzLoaderMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -247,7 +247,7 @@ function MultiKmzMap() {
       }}
     >
       {/* 省界图层 */}
-      <Kmz
+      <GisKmzLoader
         source="/data/provinces.kmz"
         coordinateType="EPSG:4326"
         title="省界"
@@ -262,7 +262,7 @@ function MultiKmzMap() {
       />
 
       {/* 市界图层 */}
-      <Kmz
+      <GisKmzLoader
         source="/data/cities.kmz"
         coordinateType="EPSG:4326"
         title="市界"
@@ -277,7 +277,7 @@ function MultiKmzMap() {
       />
 
       {/* 区域标注图层 */}
-      <Kmz
+      <GisKmzLoader
         source="/data/labels.kmz"
         coordinateType="EPSG:4326"
         title="标注"
@@ -289,7 +289,7 @@ function MultiKmzMap() {
         display={true}
         cellKey="labels-kmz-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -299,7 +299,7 @@ function MultiKmzMap() {
 根据用户选择动态加载不同的 KMZ 文件。
 
 ```tsx
-function DynamicKmzSource() {
+function DynamicGisKmzLoaderSource() {
   const [dataSource, setDataSource] = React.useState('provinces')
 
   const dataSources = {
@@ -316,8 +316,8 @@ function DynamicKmzSource() {
         <option value="districts">区县界</option>
       </select>
 
-      <MapContainer>
-        <Kmz
+      <GisMapCore>
+        <GisKmzLoader
           source={dataSources[dataSource]}
           coordinateType="EPSG:4326"
           layerBase={{
@@ -326,7 +326,7 @@ function DynamicKmzSource() {
           key={dataSource} // key 变化时重新创建组件
           cellKey="dynamic-source-kmz"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -337,7 +337,7 @@ function DynamicKmzSource() {
 显示加载状态，提升用户体验。
 
 ```tsx
-function KmzLayerWithLoading() {
+function GisKmzLoaderLayerWithLoading() {
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
 
@@ -360,8 +360,8 @@ function KmzLayerWithLoading() {
       {loading && <p>正在加载 KMZ 文件...</p>}
       {error && <p style={{ color: 'red' }}>加载失败：{error}</p>}
 
-      <MapContainer>
-        <Kmz
+      <GisMapCore>
+        <GisKmzLoader
           source="/data/large-file.kmz"
           coordinateType="EPSG:4326"
           layerBase={{
@@ -369,7 +369,7 @@ function KmzLayerWithLoading() {
           }}
           cellKey="loading-kmz"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -380,9 +380,9 @@ function KmzLayerWithLoading() {
 根据地图缩放级别显示不同详细程度的 KMZ 数据。
 
 ```tsx
-function MultiLevelKmzMap() {
+function MultiLevelGisKmzLoaderMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -391,7 +391,7 @@ function MultiLevelKmzMap() {
       }}
     >
       {/* 低缩放级别：显示省界 */}
-      <Kmz
+      <GisKmzLoader
         source="/data/provinces.kmz"
         coordinateType="EPSG:4326"
         layerBase={{
@@ -404,7 +404,7 @@ function MultiLevelKmzMap() {
       />
 
       {/* 中缩放级别：显示市界 */}
-      <Kmz
+      <GisKmzLoader
         source="/data/cities.kmz"
         coordinateType="EPSG:4326"
         layerBase={{
@@ -417,7 +417,7 @@ function MultiLevelKmzMap() {
       />
 
       {/* 高缩放级别：显示区县界 */}
-      <Kmz
+      <GisKmzLoader
         source="/data/districts.kmz"
         coordinateType="EPSG:4326"
         layerBase={{
@@ -428,7 +428,7 @@ function MultiLevelKmzMap() {
         display={true}
         cellKey="districts-kmz"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -438,7 +438,7 @@ function MultiLevelKmzMap() {
 根据地图状态动态调整图层属性。
 
 ```tsx
-function ResponsiveKmzLayer() {
+function ResponsiveGisKmzLoaderLayer() {
   const map = useMap()
   const [zoom, setZoom] = React.useState(10)
 
@@ -462,8 +462,8 @@ function ResponsiveKmzLayer() {
   const zIndex = zoom < 8 ? 1 : zoom < 12 ? 2 : 3
 
   return (
-    <MapContainer>
-      <Kmz
+    <GisMapCore>
+      <GisKmzLoader
         source="/data/adaptive.kmz"
         coordinateType="EPSG:4326"
         layerBase={{
@@ -475,7 +475,7 @@ function ResponsiveKmzLayer() {
         display={true}
         cellKey="responsive-kmz"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```

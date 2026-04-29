@@ -41,7 +41,7 @@ export interface LayerBase {
     minZoom?: number
 }
 
-export interface KmzProps {
+export interface GisKmzLoaderProps {
     source?: string
     coordinateType?: string
     kmzFile?: string
@@ -52,7 +52,7 @@ export interface KmzProps {
     map?: Map | null
 }
 
-const Kmz = React.forwardRef<HTMLDivElement, KmzProps>(
+const GisKmzLoader = React.forwardRef<HTMLDivElement, GisKmzLoaderProps>(
     (
         {
             className,
@@ -176,6 +176,6 @@ const Kmz = React.forwardRef<HTMLDivElement, KmzProps>(
     }
 )
 
-Kmz.displayName = "Kmz"
+GisKmzLoader.displayName = "GisKmzLoader"
 
-export { Kmz }
+export { GisKmzLoader }

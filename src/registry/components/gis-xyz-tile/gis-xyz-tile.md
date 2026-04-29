@@ -77,17 +77,17 @@ interface LayerBase {
 加载高德地图瓦片作为底图。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
 import { XYZ } from '@/components/kesi/gis-xyz-tile'
 
 function AmapLayer() {
   return (
-    <MapContainer>
+    <GisMapCore>
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         coordinateType="EPSG:3857"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -99,7 +99,7 @@ function AmapLayer() {
 ```tsx
 function TiandituLayer() {
   return (
-    <MapContainer>
+    <GisMapCore>
       <XYZ
         source="https://t{0-7}.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}"
         coordinateType="EPSG:3857"
@@ -108,7 +108,7 @@ function TiandituLayer() {
           zIndex: 0
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -120,7 +120,7 @@ function TiandituLayer() {
 ```tsx
 function GrayscaleMap() {
   return (
-    <MapContainer>
+    <GisMapCore>
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         canvasFilter={true}
@@ -130,7 +130,7 @@ function GrayscaleMap() {
           sepia: 0
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -142,7 +142,7 @@ function GrayscaleMap() {
 ```tsx
 function InvertedMap() {
   return (
-    <MapContainer>
+    <GisMapCore>
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         canvasFilter={true}
@@ -156,7 +156,7 @@ function InvertedMap() {
           contrast: 90
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -168,7 +168,7 @@ function InvertedMap() {
 ```tsx
 function TransparentMap() {
   return (
-    <MapContainer>
+    <GisMapCore>
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         layerBase={{
@@ -176,7 +176,7 @@ function TransparentMap() {
           zIndex: 0
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -188,7 +188,7 @@ function TransparentMap() {
 ```tsx
 function LimitedZoomMap() {
   return (
-    <MapContainer>
+    <GisMapCore>
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         layerBase={{
@@ -196,7 +196,7 @@ function LimitedZoomMap() {
           maxZoom: 15
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -208,12 +208,12 @@ function LimitedZoomMap() {
 ```tsx
 function GCJ02Map() {
   return (
-    <MapContainer>
+    <GisMapCore>
       <XYZ
         source="https://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
         coordinateType="GCJ02"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -225,12 +225,12 @@ function GCJ02Map() {
 叠加多个 XYZ 瓦片图层，实现丰富的地图效果。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
 import { XYZ } from '@/components/kesi/gis-xyz-tile'
 
 function MultiLayerMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -264,7 +264,7 @@ function MultiLayerMap() {
         }}
         display={true}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -276,7 +276,7 @@ function MultiLayerMap() {
 ```tsx
 function CustomFilterMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="500px"
       viewOptions={{
@@ -302,7 +302,7 @@ function CustomFilterMap() {
         }}
         display={true}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -321,7 +321,7 @@ function DynamicMap() {
         切换到{useSatellite ? '矢量' : '卫星'}地图
       </button>
 
-      <MapContainer
+      <GisMapCore
         width="100%"
         height="500px"
         viewOptions={{
@@ -342,7 +342,7 @@ function DynamicMap() {
           display={useSatellite}
           layerBase={{ zIndex: 0 }}
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }

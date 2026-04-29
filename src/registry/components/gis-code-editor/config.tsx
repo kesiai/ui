@@ -1,6 +1,6 @@
 
-import { CodeEditorViews } from '@/registry/components/gis-code-editor/gis-code-editor'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisCodeEditor } from '@/registry/components/gis-code-editor/gis-code-editor'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-code-editor.md?raw'
 
@@ -25,23 +25,23 @@ export const codeEditorViewsDefaultProps = {
     display: true
 }
 
-const renderCodeEditorViewsPreview = (props: Record<string, any>) => {
+const renderGisCodeEditorPreview = (props: Record<string, any>) => {
     return (
         <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative flex flex-col">
             <div className="flex-1 relative">
-                <MapContainer>
-                    <CodeEditorViews
+                <GisMapCore>
+                    <GisCodeEditor
                         codeScript={props.codeScript}
                         display={props.display}
                     />
-                </MapContainer>
+                </GisMapCore>
             </div>
         </div>
     )
 }
 
-const renderCodeEditorViewsCodePreview = (props: Record<string, any>) => {
-    return `<CodeEditorViews
+const renderGisCodeEditorCodePreview = (props: Record<string, any>) => {
+    return `<GisCodeEditor
   codeScript={\`${props.codeScript}\`}
   display={${props.display}}
 />`
@@ -52,7 +52,7 @@ export const codeEditorViewsConfig: ComponentConfig = {
     name: '代码图层',
     propsConfig: codeEditorViewsPropsConfig,
     defaultProps: codeEditorViewsDefaultProps,
-    renderPreview: renderCodeEditorViewsPreview,
-    renderCodePreview: renderCodeEditorViewsCodePreview,
+    renderPreview: renderGisCodeEditorPreview,
+    renderCodePreview: renderGisCodeEditorCodePreview,
     documentation: documentationMd
 }

@@ -4,7 +4,7 @@
 
 ## 简介
 
-`GeoserverWms` 是一个 GeoServer WMS 服务图层组件，用于加载和显示 GeoServer 发布的 WMS 地图服务。
+`GisGeoserverWms` 是一个 GeoServer WMS 服务图层组件，用于加载和显示 GeoServer 发布的 WMS 地图服务。
 
 - **标准 WMS 支持**：完整支持 WMS 1.1.0、1.1.1、1.3.0 等多个版本
 - **灵活投影配置**：支持 EPSG:4326、EPSG:3857 等多种投影类型
@@ -49,20 +49,20 @@ interface LayerBase {
 加载 GeoServer 发布的 WMS 图层。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { GeoserverWms } from '@/components/kesi/gis-geoserver-wms'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisGeoserverWms } from '@/components/kesi/gis-geoserver-wms'
 
 function BasicWMSLayer() {
   return (
-    <MapContainer>
-      <GeoserverWms
+    <GisMapCore>
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:layer_name"
         VERSION="1.1.0"
         coordinateType="EPSG:4326"
         cellKey="wms-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -74,15 +74,15 @@ function BasicWMSLayer() {
 ```tsx
 function CustomProjectionWMS() {
   return (
-    <MapContainer>
-      <GeoserverWms
+    <GisMapCore>
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:layer_name"
         VERSION="1.1.0"
         coordinateType="EPSG:3857"
         cellKey="wms-3857-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -94,8 +94,8 @@ function CustomProjectionWMS() {
 ```tsx
 function TransparentWMS() {
   return (
-    <MapContainer>
-      <GeoserverWms
+    <GisMapCore>
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:layer_name"
         VERSION="1.1.0"
@@ -106,7 +106,7 @@ function TransparentWMS() {
         }}
         cellKey="transparent-wms-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -118,8 +118,8 @@ function TransparentWMS() {
 ```tsx
 function LimitedZoomWMS() {
   return (
-    <MapContainer>
-      <GeoserverWms
+    <GisMapCore>
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:layer_name"
         VERSION="1.1.0"
@@ -130,7 +130,7 @@ function LimitedZoomWMS() {
         }}
         cellKey="limited-zoom-wms-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -142,15 +142,15 @@ function LimitedZoomWMS() {
 ```tsx
 function WMS130Version() {
   return (
-    <MapContainer>
-      <GeoserverWms
+    <GisMapCore>
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:layer_name"
         VERSION="1.3.0"
         coordinateType="EPSG:4326"
         cellKey="wms130-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -162,7 +162,7 @@ function WMS130Version() {
 ```tsx
 function MultiWMSLayers() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -171,7 +171,7 @@ function MultiWMSLayers() {
       }}
     >
       {/* 底层：基础图层 */}
-      <GeoserverWms
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:base_layer"
         VERSION="1.1.0"
@@ -184,7 +184,7 @@ function MultiWMSLayers() {
       />
 
       {/* 顶层：叠加图层 */}
-      <GeoserverWms
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:overlay_layer"
         VERSION="1.1.0"
@@ -195,7 +195,7 @@ function MultiWMSLayers() {
         }}
         cellKey="overlay-wms-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -213,15 +213,15 @@ function DynamicWMSLayer() {
       <button onClick={() => setLayerName('layer_a')}>图层 A</button>
       <button onClick={() => setLayerName('layer_b')}>图层 B</button>
 
-      <MapContainer>
-        <GeoserverWms
+      <GisMapCore>
+        <GisGeoserverWms
           source="http://localhost:8080/geoserver/wms"
           layers={`workspace:${layerName}`}
           VERSION="1.1.0"
           coordinateType="EPSG:4326"
           cellKey="dynamic-wms-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -234,8 +234,8 @@ function DynamicWMSLayer() {
 创建一个完整的 WMS 图层应用，包含透明度控制和图层切换。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { GeoserverWms } from '@/components/kesi/gis-geoserver-wms'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisGeoserverWms } from '@/components/kesi/gis-geoserver-wms'
 
 function WMSApplication() {
   const [opacity, setOpacity] = React.useState(1)
@@ -299,7 +299,7 @@ function WMSApplication() {
 
       {/* 地图 */}
       <div className="flex-1">
-        <MapContainer
+        <GisMapCore
           width="100%"
           height="100%"
           viewOptions={{
@@ -307,7 +307,7 @@ function WMSApplication() {
             zoom: 12
           }}
         >
-          <GeoserverWms
+          <GisGeoserverWms
             source="http://localhost:8080/geoserver/wms"
             layers={`workspace:${currentLayer}`}
             VERSION="1.1.0"
@@ -319,7 +319,7 @@ function WMSApplication() {
             display={display}
             cellKey="app-wms-layer"
           />
-        </MapContainer>
+        </GisMapCore>
       </div>
     </div>
   )
@@ -333,7 +333,7 @@ function WMSApplication() {
 ```tsx
 function WMSVersionComparison() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -342,7 +342,7 @@ function WMSVersionComparison() {
       }}
     >
       {/* WMS 1.1.0 */}
-      <GeoserverWms
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:layer_name"
         VERSION="1.1.0"
@@ -356,7 +356,7 @@ function WMSVersionComparison() {
       />
 
       {/* WMS 1.3.0 */}
-      <GeoserverWms
+      <GisGeoserverWms
         source="http://localhost:8080/geoserver/wms"
         layers="workspace:layer_name"
         VERSION="1.3.0"
@@ -368,7 +368,7 @@ function WMSVersionComparison() {
         title="WMS 1.3.0"
         cellKey="wms130-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -402,7 +402,7 @@ function DynamicWMSParams() {
         <button onClick={() => updateVersion('1.3.0')}>1.3.0</button>
       </div>
 
-      <MapContainer
+      <GisMapCore
         width="100%"
         height="500px"
         viewOptions={{
@@ -410,7 +410,7 @@ function DynamicWMSParams() {
           zoom: 10
         }}
       >
-        <GeoserverWms
+        <GisGeoserverWms
           source="http://localhost:8080/geoserver/wms"
           layers={wmsParams.layers}
           VERSION={wmsParams.version}
@@ -420,7 +420,7 @@ function DynamicWMSParams() {
           }}
           cellKey="dynamic-params-wms-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }

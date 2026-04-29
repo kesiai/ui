@@ -1,5 +1,5 @@
-import { PolygonViews, PolygonData } from '@/registry/components/gis-polygon-draw/gis-polygon-draw'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisPolygonDraw, PolygonData } from '@/registry/components/gis-polygon-draw/gis-polygon-draw'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-polygon-draw.md?raw'
 
@@ -103,7 +103,7 @@ export const polygonViewsDefaultProps = {
     display: true
 }
 
-const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
+const renderGisPolygonDrawPreview = (props: Record<string, unknown>) => {
     let polygonData: PolygonData[] = defaultPolygonData
 
     if (typeof props.data === 'string') {
@@ -119,7 +119,7 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
         <div className="flex flex-col">
             {/* 地图容器 */}
             <div className="rounded-lg overflow-hidden border border-slate-200">
-                <MapContainer
+                <GisMapCore
                     width="100%"
                     height={400}
                     viewOptions={{
@@ -127,7 +127,7 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
                         zoom: 10
                     }}
                 >
-                    <PolygonViews
+                    <GisPolygonDraw
                         data={polygonData}
                         defaultStyle={{
                             line: {
@@ -144,14 +144,14 @@ const renderPolygonViewsPreview = (props: Record<string, unknown>) => {
                         }}
                         display={props.display as boolean}
                     />
-                </MapContainer>
+                </GisMapCore>
             </div>
         </div>
     )
 }
 
-const renderPolygonViewsCodePreview = (props: Record<string, unknown>) => {
-    return `<PolygonViews
+const renderGisPolygonDrawCodePreview = (props: Record<string, unknown>) => {
+    return `<GisPolygonDraw
   data={polygonData}
   defaultStyle={{
     line: {
@@ -176,7 +176,7 @@ export const polygonViewsConfig: ComponentConfig = {
     name: '区域层', // Updated name to match reference if needed, but keeping registry ID consistent
     propsConfig: polygonViewsPropsConfig,
     defaultProps: polygonViewsDefaultProps,
-    renderPreview: renderPolygonViewsPreview,
-    renderCodePreview: renderPolygonViewsCodePreview,
+    renderPreview: renderGisPolygonDrawPreview,
+    renderCodePreview: renderGisPolygonDrawCodePreview,
     documentation: documentationMd
 }

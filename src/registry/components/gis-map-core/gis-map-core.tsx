@@ -63,7 +63,7 @@ export interface ExtentOption {
   northLat?: number
 }
 
-export interface MapContainerProps {
+export interface GisMapCoreProps {
   /**
    * 视图配置
    */
@@ -111,7 +111,7 @@ const createTileLayer = () => {
   })
 }
 
-const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
+const GisMapCore = React.forwardRef<HTMLDivElement, GisMapCoreProps>(
   (
     {
       className,
@@ -361,6 +361,6 @@ const MapContainer = React.forwardRef<HTMLDivElement, MapContainerProps>(
   }
 )
 
-MapContainer.displayName = "MapContainer"
+GisMapCore.displayName = "GisMapCore"
 
-export { MapContainer }
+export { GisMapCore }

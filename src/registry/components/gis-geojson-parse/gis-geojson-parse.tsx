@@ -26,7 +26,7 @@ export interface LayerBase {
     minZoom?: number
 }
 
-export interface GeoJsonProps {
+export interface GisGeoJsonParseProps {
     source?: string
     coordinateType?: string
     geoJsonFile?: string
@@ -38,7 +38,7 @@ export interface GeoJsonProps {
     map?: Map | null
 }
 
-const GeoJson = React.forwardRef<HTMLDivElement, GeoJsonProps>(
+const GisGeoJsonParse = React.forwardRef<HTMLDivElement, GisGeoJsonParseProps>(
     (
         {
             className,
@@ -169,6 +169,6 @@ const GeoJson = React.forwardRef<HTMLDivElement, GeoJsonProps>(
     }
 )
 
-GeoJson.displayName = "GeoJson"
+GisGeoJsonParse.displayName = "GisGeoJsonParse"
 
-export { GeoJson }
+export { GisGeoJsonParse }

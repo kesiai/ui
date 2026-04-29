@@ -11,7 +11,7 @@ export interface CodeParam {
   value: string | number | boolean | Record<string, unknown>
 }
 
-export interface CodeEditorViewsProps {
+export interface GisCodeEditorProps {
   /**
    * 代码脚本
    */
@@ -45,7 +45,7 @@ const olModules = {
   },
 }
 
-const CodeEditorViews = React.forwardRef<HTMLDivElement, CodeEditorViewsProps>(
+const GisCodeEditor = React.forwardRef<HTMLDivElement, GisCodeEditorProps>(
   (
     {
       className,
@@ -90,7 +90,7 @@ const CodeEditorViews = React.forwardRef<HTMLDivElement, CodeEditorViewsProps>(
           }
         }
       } catch (error) {
-        console.error('CodeEditorViews script error:', error)
+        console.error('GisCodeEditor script error:', error)
       }
 
       return () => {
@@ -122,6 +122,6 @@ const CodeEditorViews = React.forwardRef<HTMLDivElement, CodeEditorViewsProps>(
   }
 )
 
-CodeEditorViews.displayName = "CodeEditorViews"
+GisCodeEditor.displayName = "GisCodeEditor"
 
-export { CodeEditorViews }
+export { GisCodeEditor }

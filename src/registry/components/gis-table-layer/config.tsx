@@ -1,5 +1,5 @@
-import { TableViews } from '@/registry/components/gis-table-layer/gis-table-layer'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisTableLayer } from '@/registry/components/gis-table-layer/gis-table-layer'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig, PropConfig } from '@/app/config/types'
 import { defaultDrawStyleProps } from '../gis-custom-layer/config'
 import documentationMd from './gis-table-layer.md?raw'
@@ -250,7 +250,7 @@ export const tableViewsDefaultProps = {
     cluster: defaultCluster
 }
 
-const renderTableViewsPreview = (props: Record<string, any>) => {
+const renderGisTableLayerPreview = (props: Record<string, any>) => {
     // 解析 JSON 属性，提供默认空值防止解析失败
     const parseJson = (val: any, defaultVal: any) => {
         if (typeof val === 'string') {
@@ -279,8 +279,8 @@ const renderTableViewsPreview = (props: Record<string, any>) => {
 
     return (
         <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
-            <MapContainer>
-                <TableViews
+            <GisMapCore>
+                <GisTableLayer
                     table={table}
                     tableData={tableData}
                     coordinateType={props.coordinateType}
@@ -297,12 +297,12 @@ const renderTableViewsPreview = (props: Record<string, any>) => {
                     heatmap={heatmap}
                     cluster={cluster}
                 />
-            </MapContainer>
+            </GisMapCore>
         </div>
     )
 }
 
-const renderTableViewsCodePreview = (props: Record<string, any>) => {
+const renderGisTableLayerCodePreview = (props: Record<string, any>) => {
     const parseJson = (val: any, defaultVal: any) => {
         if (typeof val === 'string') {
             try {
@@ -320,7 +320,7 @@ const renderTableViewsCodePreview = (props: Record<string, any>) => {
     const markerScale = parseJson(props.markerScale, defaultMarkerScale)
     const tableTags = parseJson(props.tableTags, [])
 
-    return `<TableViews
+    return `<GisTableLayer
   table={${props.table}}
   coordinateType="${props.coordinateType}"
   marker={${props.marker}}
@@ -343,7 +343,7 @@ export const tableViewsConfig: ComponentConfig = {
     name: '数据表层',
     propsConfig: tableViewsPropsConfig,
     defaultProps: tableViewsDefaultProps,
-    renderPreview: renderTableViewsPreview,
-    renderCodePreview: renderTableViewsCodePreview,
+    renderPreview: renderGisTableLayerPreview,
+    renderCodePreview: renderGisTableLayerCodePreview,
     documentation: documentationMd
 }

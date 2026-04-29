@@ -4,7 +4,7 @@
 
 ## 简介
 
-`CustomViews` 是一个自定义矢量图层组件，用于在地图上绘制点、线、面、圆等几何图形。
+`GisCustomLayer` 是一个自定义矢量图层组件，用于在地图上绘制点、线、面、圆等几何图形。
 
 - **多种几何类型**：支持 Point（点）、LineString（线）、Polygon（多边形）、Circle（圆）等多种几何类型
 - **灵活样式配置**：支持自定义点图标、线颜色、填充色等样式，数据和图层样式可灵活合并
@@ -92,8 +92,8 @@ interface LineStyle {
 在地图上绘制单个点标记。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { CustomViews } from '@/components/kesi/gis-custom-layer'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisCustomLayer } from '@/components/kesi/gis-custom-layer'
 
 function PointLayer() {
   const data = [{
@@ -104,12 +104,12 @@ function PointLayer() {
   }]
 
   return (
-    <MapContainer>
-      <CustomViews
+    <GisMapCore>
+      <GisCustomLayer
         drawLine={data}
         cellKey="point-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -131,12 +131,12 @@ function LineLayer() {
   }]
 
   return (
-    <MapContainer>
-      <CustomViews
+    <GisMapCore>
+      <GisCustomLayer
         drawLine={data}
         cellKey="line-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -162,12 +162,12 @@ function PolygonLayer() {
   }]
 
   return (
-    <MapContainer>
-      <CustomViews
+    <GisMapCore>
+      <GisCustomLayer
         drawLine={data}
         cellKey="polygon-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -189,12 +189,12 @@ function CircleLayer() {
   }]
 
   return (
-    <MapContainer>
-      <CustomViews
+    <GisMapCore>
+      <GisCustomLayer
         drawLine={data}
         cellKey="circle-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -220,8 +220,8 @@ function CustomStyleLayer() {
   }]
 
   return (
-    <MapContainer>
-      <CustomViews
+    <GisMapCore>
+      <GisCustomLayer
         drawLine={data}
         featureStyle={{
           line: {
@@ -232,7 +232,7 @@ function CustomStyleLayer() {
         }}
         cellKey="custom-style-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -251,8 +251,8 @@ function CustomIconLayer() {
   }]
 
   return (
-    <MapContainer>
-      <CustomViews
+    <GisMapCore>
+      <GisCustomLayer
         drawLine={data}
         featureStyle={{
           point: {
@@ -262,7 +262,7 @@ function CustomIconLayer() {
         }}
         cellKey="custom-icon-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -305,12 +305,12 @@ function MultiGeometryLayer() {
   ]
 
   return (
-    <MapContainer>
-      <CustomViews
+    <GisMapCore>
+      <GisCustomLayer
         drawLine={data}
         cellKey="multi-geometry-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -322,8 +322,8 @@ function MultiGeometryLayer() {
 演示数据级样式如何覆盖图层默认样式。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { CustomViews } from '@/components/kesi/gis-custom-layer'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisCustomLayer } from '@/components/kesi/gis-custom-layer'
 
 function StyleOverrideExample() {
   const data = [
@@ -365,7 +365,7 @@ function StyleOverrideExample() {
   ]
 
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -373,7 +373,7 @@ function StyleOverrideExample() {
         zoom: 9
       }}
     >
-      <CustomViews
+      <GisCustomLayer
         drawLine={data}
         featureStyle={{
           line: {
@@ -384,7 +384,7 @@ function StyleOverrideExample() {
         }}
         cellKey="style-override-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -428,7 +428,7 @@ function MultipleGeometriesExample() {
   }]
 
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="500px"
       viewOptions={{
@@ -436,11 +436,11 @@ function MultipleGeometriesExample() {
         zoom: 9
       }}
     >
-      <CustomViews
+      <GisCustomLayer
         drawLine={data}
         cellKey="multiple-geometries-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -477,7 +477,7 @@ function DynamicUpdateExample() {
   }, [])
 
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="500px"
       viewOptions={{
@@ -485,12 +485,12 @@ function DynamicUpdateExample() {
         zoom: 9
       }}
     >
-      <CustomViews
+      <GisCustomLayer
         drawLine={data}
         display={true}
         cellKey="dynamic-update-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```

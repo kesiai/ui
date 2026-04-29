@@ -50,7 +50,7 @@ import * as olStyle from 'ol/style'
 // 默认标记图标（绿色图钉）- 没有配置图标时使用
 const DEFAULT_MARKER_ICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDI0IDM2Ij48cGF0aCBmaWxsPSIjNENBRjUwIiBkPSJNMTIgMEMxOC42MjcgMCAyNC41MzczIDI0IDEyIDI0UzAgMjAuMjc0IDAgMTJDMCA1LjM3MyA1LjM3MyAwIDEyIDB6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNyIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg=='
 
-export interface TableViewsProps {
+export interface GisTableLayerProps {
     /**
      * 表ID（单个表对象，如 {id: '表ID', title: '表名'}，或JSON字符串）
      */
@@ -197,7 +197,7 @@ const getPointMarkerSubProps = (record: any, tableGisConfig: any, tableTags?: an
     return [...baseTags, ...optionalTags, ...(tableSelectTags || [])]
 }
 
-const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
+const GisTableLayer = React.forwardRef<HTMLDivElement, GisTableLayerProps>(
     (
         {
             className,
@@ -1455,6 +1455,6 @@ const TableViews = React.forwardRef<HTMLDivElement, TableViewsProps>(
     }
 )
 
-TableViews.displayName = "TableViews"
+GisTableLayer.displayName = "GisTableLayer"
 
-export { TableViews }
+export { GisTableLayer }

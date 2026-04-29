@@ -4,7 +4,7 @@
 
 ## 简介
 
-`MapContainer` 是一个基于 OpenLayers 的二维地图容器组件，用于构建 GIS 地图应用。
+`GisMapCore` 是一个基于 OpenLayers 的二维地图容器组件，用于构建 GIS 地图应用。
 
 - **OpenLayers 集成**：基于成熟的 OpenLayers 地图库，提供稳定可靠的地图渲染能力
 - **灵活视图控制**：支持中心位置、缩放级别、旋转角度等多种视图参数配置
@@ -93,11 +93,11 @@ interface ExtentOption {
 创建一个基本的地图容器，使用默认配置。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
 
 function BasicMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="400px"
     />
@@ -112,7 +112,7 @@ function BasicMap() {
 ```tsx
 function CustomViewMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="400px"
       viewOptions={{
@@ -136,7 +136,7 @@ function CustomViewMap() {
 ```tsx
 function BoundedMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="400px"
       extentOption={{
@@ -157,7 +157,7 @@ function BoundedMap() {
 ```tsx
 function CustomControlsMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="400px"
       zoomOption={{
@@ -183,7 +183,7 @@ function CustomControlsMap() {
 ```tsx
 function CleanMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="400px"
       zoomOption={{ show: false }}
@@ -200,7 +200,7 @@ function CleanMap() {
 ```tsx
 function ResponsiveMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="100vh"
     />
@@ -215,11 +215,11 @@ function ResponsiveMap() {
 创建一个以北京市为中心的地图应用，配置合理的缩放范围和控件。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
 
 function BeijingMap() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -259,12 +259,12 @@ function BeijingMap() {
 在地图容器中添加子图层组件。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
 import { XYZ } from '@/components/kesi/gis-xyz-tile'
 
 function MapWithLayers() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="500px"
       viewOptions={{
@@ -275,7 +275,7 @@ function MapWithLayers() {
       <XYZ
         source="http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```

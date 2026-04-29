@@ -1,5 +1,5 @@
-import { GeoserverWms } from '@/registry/components/gis-geoserver-wms/gis-geoserver-wms'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisGeoserverWms } from '@/registry/components/gis-geoserver-wms/gis-geoserver-wms'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-geoserver-wms.md?raw'
 
@@ -95,11 +95,11 @@ export const geoserverWmsDefaultProps = {
     maxZoom: 18
 }
 
-const renderGeoserverWmsPreview = (props: Record<string, any>) => {
+const renderGisGeoserverWmsPreview = (props: Record<string, any>) => {
     return (
         <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
-            <MapContainer>
-                <GeoserverWms
+            <GisMapCore>
+                <GisGeoserverWms
                     source={props.source}
                     layers={props.layers}
                     VERSION={props.VERSION}
@@ -112,13 +112,13 @@ const renderGeoserverWmsPreview = (props: Record<string, any>) => {
                         maxZoom: props.maxZoom
                     }}
                 />
-            </MapContainer>
+            </GisMapCore>
         </div>
     )
 }
 
-const renderGeoserverWmsCodePreview = (props: Record<string, any>) => {
-    return `<GeoserverWms
+const renderGisGeoserverWmsCodePreview = (props: Record<string, any>) => {
+    return `<GisGeoserverWms
   source="${props.source}"
   layers="${props.layers}"
   VERSION="${props.VERSION}"
@@ -138,7 +138,7 @@ export const geoserverWmsConfig: ComponentConfig = {
     name: 'WMS层',
     propsConfig: geoserverWmsPropsConfig,
     defaultProps: geoserverWmsDefaultProps,
-    renderPreview: renderGeoserverWmsPreview,
-    renderCodePreview: renderGeoserverWmsCodePreview,
+    renderPreview: renderGisGeoserverWmsPreview,
+    renderCodePreview: renderGisGeoserverWmsCodePreview,
     documentation: documentationMd
 }

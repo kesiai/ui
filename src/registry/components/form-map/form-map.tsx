@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/tooltip'
 import { MapPin, Edit, Search } from 'lucide-react'
 import isEmpty from 'lodash/isEmpty'
-import { MapContainer, useMap } from '@/registry/components/gis-map-core/gis-map-core'
+import { GisMapCore, useMap } from '@/registry/components/gis-map-core/gis-map-core'
 import Overlay from 'ol/Overlay'
 import { fromLonLat, toLonLat } from 'ol/proj'
 
@@ -415,7 +415,7 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
 
     // 地图 JSX
     const mapElement = (
-      <MapContainer
+      <GisMapCore
         width="100%"
         height={showType === 'map' ? 400 : 500}
         viewOptions={{
@@ -434,7 +434,7 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
           onMapClick={handleMapClick}
           disabled={disabled}
         />
-      </MapContainer>
+      </GisMapCore>
     )
 
     if (showType === 'map') {

@@ -1,6 +1,6 @@
 
-import { GeoJson } from '@/registry/components/gis-geojson-parse/gis-geojson-parse'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisGeoJsonParse } from '@/registry/components/gis-geojson-parse/gis-geojson-parse'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-geojson-parse.md?raw'
 
@@ -81,11 +81,11 @@ export const geoJsonDefaultProps = {
     zIndex: 0
 }
 
-const renderGeoJsonPreview = (props: Record<string, any>) => {
+const renderGisGeoJsonParsePreview = (props: Record<string, any>) => {
     return (
         <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
-            <MapContainer>
-                <GeoJson
+            <GisMapCore>
+                <GisGeoJsonParse
                     source={props.source}
                     coordinateType={props.coordinateType}
                     lineStyle={{
@@ -99,13 +99,13 @@ const renderGeoJsonPreview = (props: Record<string, any>) => {
                         zIndex: props.zIndex,
                     }}
                 />
-            </MapContainer>
+            </GisMapCore>
         </div>
     )
 }
 
-const renderGeoJsonCodePreview = (props: Record<string, any>) => {
-    return `<GeoJson
+const renderGisGeoJsonParseCodePreview = (props: Record<string, any>) => {
+    return `<GisGeoJsonParse
   source="${props.source}"
   coordinateType="${props.coordinateType}"
   lineStyle={{
@@ -126,7 +126,7 @@ export const geoJsonConfig: ComponentConfig = {
     name: 'GeoJSON层',
     propsConfig: geoJsonPropsConfig,
     defaultProps: geoJsonDefaultProps,
-    renderPreview: renderGeoJsonPreview,
-    renderCodePreview: renderGeoJsonCodePreview,
+    renderPreview: renderGisGeoJsonParsePreview,
+    renderCodePreview: renderGisGeoJsonParseCodePreview,
     documentation: documentationMd
 }

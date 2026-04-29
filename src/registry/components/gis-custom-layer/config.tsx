@@ -1,5 +1,5 @@
-import { CustomViews, DrawLineItem } from '@/registry/components/gis-custom-layer/gis-custom-layer'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisCustomLayer, DrawLineItem } from '@/registry/components/gis-custom-layer/gis-custom-layer'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-custom-layer.md?raw'
 
@@ -111,7 +111,7 @@ export const customViewsDefaultProps = {
     display: true
 }
 
-const renderCustomViewsPreview = (props: Record<string, unknown>) => {
+const renderGisCustomLayerPreview = (props: Record<string, unknown>) => {
     let customData: DrawLineItem[] = defaultDrawStyleProps.drawLine as DrawLineItem[]
 
     // 如果 drawLine 是字符串，尝试解析
@@ -128,7 +128,7 @@ const renderCustomViewsPreview = (props: Record<string, unknown>) => {
         <div className="flex flex-col">
             {/* 地图容器 */}
             <div className="rounded-lg overflow-hidden border border-slate-200">
-                <MapContainer
+                <GisMapCore
                     width="100%"
                     height={400}
                     viewOptions={{
@@ -136,7 +136,7 @@ const renderCustomViewsPreview = (props: Record<string, unknown>) => {
                         zoom: 10
                     }}
                 >
-                    <CustomViews
+                    <GisCustomLayer
                         drawLine={customData}
                         featureStyle={{
                             point: {
@@ -151,14 +151,14 @@ const renderCustomViewsPreview = (props: Record<string, unknown>) => {
                         }}
                         display={props.display as boolean}
                     />
-                </MapContainer>
+                </GisMapCore>
             </div>
         </div>
     )
 }
 
-const renderCustomViewsCodePreview = (props: Record<string, unknown>) => {
-    return `<CustomViews
+const renderGisCustomLayerCodePreview = (props: Record<string, unknown>) => {
+    return `<GisCustomLayer
   drawLine={bindData}
   featureStyle={{
     point: {
@@ -181,8 +181,8 @@ export const customViewsConfig: ComponentConfig = {
     name: '自定义层',
     propsConfig: customViewsPropsConfig,
     defaultProps: customViewsDefaultProps,
-    renderPreview: renderCustomViewsPreview,
-    renderCodePreview: renderCustomViewsCodePreview,
+    renderPreview: renderGisCustomLayerPreview,
+    renderCodePreview: renderGisCustomLayerCodePreview,
     documentation: documentationMd
 }
 

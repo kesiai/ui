@@ -4,7 +4,7 @@
 
 ## 简介
 
-`PolygonViews` 是一个区域绘制图层组件，用于在地图上绘制和管理点、线、面、圆等区域几何图形。
+`GisPolygonDraw` 是一个区域绘制图层组件，用于在地图上绘制和管理点、线、面、圆等区域几何图形。
 
 - **多种几何类型**：支持 Point、LineString、Polygon、Circle、Semicircle 等多种区域类型
 - **灵活样式配置**：支持为不同几何类型配置独立的颜色、宽度、填充等样式
@@ -92,8 +92,8 @@ interface PolygonStyle {
 在地图上绘制一条线段。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { PolygonViews } from '@/components/kesi/gis-polygon-draw'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisPolygonDraw } from '@/components/kesi/gis-polygon-draw'
 
 function LineStringExample() {
   const data = [{
@@ -106,12 +106,12 @@ function LineStringExample() {
   }]
 
   return (
-    <MapContainer>
-      <PolygonViews
+    <GisMapCore>
+      <GisPolygonDraw
         data={data}
         cellKey="linestring-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -136,12 +136,12 @@ function PolygonExample() {
   }]
 
   return (
-    <MapContainer>
-      <PolygonViews
+    <GisMapCore>
+      <GisPolygonDraw
         data={data}
         cellKey="polygon-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -162,12 +162,12 @@ function CircleExample() {
   }]
 
   return (
-    <MapContainer>
-      <PolygonViews
+    <GisMapCore>
+      <GisPolygonDraw
         data={data}
         cellKey="circle-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -192,8 +192,8 @@ function CustomStyleExample() {
   }]
 
   return (
-    <MapContainer>
-      <PolygonViews
+    <GisMapCore>
+      <GisPolygonDraw
         data={data}
         defaultStyle={{
           polygon: {
@@ -204,7 +204,7 @@ function CustomStyleExample() {
         }}
         cellKey="custom-style-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -229,8 +229,8 @@ function NumberLabelExample() {
   }]
 
   return (
-    <MapContainer>
-      <PolygonViews
+    <GisMapCore>
+      <GisPolygonDraw
         data={data}
         defaultStyle={{
           polygon: {
@@ -242,7 +242,7 @@ function NumberLabelExample() {
         }}
         cellKey="number-label-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -285,12 +285,12 @@ function MultipleRegionsExample() {
   ]
 
   return (
-    <MapContainer>
-      <PolygonViews
+    <GisMapCore>
+      <GisPolygonDraw
         data={data}
         cellKey="multiple-regions-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -305,8 +305,8 @@ function WithToolbarExample() {
   const [data, setData] = React.useState([])
 
   return (
-    <MapContainer>
-      <PolygonViews
+    <GisMapCore>
+      <GisPolygonDraw
         data={data}
         drawType={drawType}
         onDrawTypeChange={setDrawType}
@@ -314,7 +314,7 @@ function WithToolbarExample() {
         showToolbar={true}
         cellKey="toolbar-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -326,8 +326,8 @@ function WithToolbarExample() {
 创建一个完整的区域管理应用，支持区域显示、样式配置和切换。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { PolygonViews } from '@/components/kesi/gis-polygon-draw'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisPolygonDraw } from '@/components/kesi/gis-polygon-draw'
 
 function RegionManagementApp() {
   const [regions, setRegions] = React.useState([
@@ -467,7 +467,7 @@ function RegionManagementApp() {
 
       {/* 地图 */}
       <div className="flex-1">
-        <MapContainer
+        <GisMapCore
           width="100%"
           height="100%"
           viewOptions={{
@@ -475,12 +475,12 @@ function RegionManagementApp() {
             zoom: 9
           }}
         >
-          <PolygonViews
+          <GisPolygonDraw
             data={regions}
             defaultStyle={style}
             cellKey="app-layer"
           />
-        </MapContainer>
+        </GisMapCore>
       </div>
     </div>
   )
@@ -557,7 +557,7 @@ function DynamicRegionUpdate() {
         </span>
       </div>
 
-      <MapContainer
+      <GisMapCore
         width="100%"
         height="500px"
         viewOptions={{
@@ -565,7 +565,7 @@ function DynamicRegionUpdate() {
           zoom: 9
         }}
       >
-        <PolygonViews
+        <GisPolygonDraw
           data={data}
           defaultStyle={{
             line: {
@@ -583,7 +583,7 @@ function DynamicRegionUpdate() {
           display={!loading}
           cellKey="dynamic-update-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -613,7 +613,7 @@ function ReadonlyComparison() {
       {/* 只读模式 */}
       <div>
         <h3 className="text-lg font-semibold mb-2">只读模式</h3>
-        <MapContainer
+        <GisMapCore
           width="100%"
           height="400px"
           viewOptions={{
@@ -621,18 +621,18 @@ function ReadonlyComparison() {
             zoom: 9
           }}
         >
-          <PolygonViews
+          <GisPolygonDraw
             data={data}
             readonly={true}
             cellKey="readonly-layer"
           />
-        </MapContainer>
+        </GisMapCore>
       </div>
 
       {/* 交互模式 */}
       <div>
         <h3 className="text-lg font-semibold mb-2">交互模式</h3>
-        <MapContainer
+        <GisMapCore
           width="100%"
           height="400px"
           viewOptions={{
@@ -640,12 +640,12 @@ function ReadonlyComparison() {
             zoom: 9
           }}
         >
-          <PolygonViews
+          <GisPolygonDraw
             data={data}
             showToolbar={true}
             cellKey="interactive-layer"
           />
-        </MapContainer>
+        </GisMapCore>
       </div>
     </div>
   )

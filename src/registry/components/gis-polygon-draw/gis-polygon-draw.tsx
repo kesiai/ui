@@ -48,7 +48,7 @@ export interface PolygonData {
   style?: PolygonStyle
 }
 
-export interface PolygonViewsProps {
+export interface GisPolygonDrawProps {
   /**
    * 区域数据列表
    */
@@ -94,7 +94,7 @@ export interface PolygonViewsProps {
 // 默认点图标
 const DEFAULT_POINT_ICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNlNzRjM2MiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjEgMTBjMCA3LTkgMTMtOSAxM3MtOS02LTktMTNhOSA5IDAgMCAxIDE4IDB6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMCIgcj0iMyIvPjwvc3ZnPg=='
 
-const PolygonViews = React.forwardRef<HTMLDivElement, PolygonViewsProps>(
+const GisPolygonDraw = React.forwardRef<HTMLDivElement, GisPolygonDrawProps>(
   (
     {
       className,
@@ -345,6 +345,6 @@ const PolygonViews = React.forwardRef<HTMLDivElement, PolygonViewsProps>(
   }
 )
 
-PolygonViews.displayName = "PolygonViews"
+GisPolygonDraw.displayName = "GisPolygonDraw"
 
-export { PolygonViews }
+export { GisPolygonDraw }

@@ -4,7 +4,7 @@
 
 ## 简介
 
-`WarnViews` 是一个实时报警可视化组件，用于在地图上显示闪烁动画标记的报警位置。
+`GisWarnLayer` 是一个实时报警可视化组件，用于在地图上显示闪烁动画标记的报警位置。
 
 - **实时报警推送**：通过 WebSocket 订阅报警推送，实时更新报警状态
 - **历史报警查询**：支持查询未确认的历史报警数据
@@ -50,25 +50,25 @@ interface OverrunHide {
 显示所有实时报警。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { WarnViews } from '@/components/kesi/gis-warn-layer'
-import { TableViews } from '@/components/kesi/gis-table-layer'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisWarnLayer } from '@/components/kesi/gis-warn-layer'
+import { GisTableLayer } from '@/components/kesi/gis-table-layer'
 
 function BasicWarnLayer() {
   return (
-    <MapContainer>
+    <GisMapCore>
       {/* 必须先添加数据表层 */}
-      <TableViews
+      <GisTableLayer
         table={[{ id: 'table1', title: '设备表' }]}
         cellKey="table-layer"
       />
 
       {/* 报警层 */}
-      <WarnViews
+      <GisWarnLayer
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -80,18 +80,18 @@ function BasicWarnLayer() {
 ```tsx
 function FilteredByTableWarn() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={[{ id: 'sensor-table', title: '传感器表' }]}
         cellKey="table-layer"
       />
 
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'sensor-table', title: '传感器表' }]}
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -103,8 +103,8 @@ function FilteredByTableWarn() {
 ```tsx
 function FilteredByRecordWarn() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         tableData={[
           { id: 'record1', _table: 'table1' },
           { id: 'record2', _table: 'table1' }
@@ -112,7 +112,7 @@ function FilteredByRecordWarn() {
         cellKey="table-layer"
       />
 
-      <WarnViews
+      <GisWarnLayer
         tableData={[
           { id: 'record1', _table: 'table1' },
           { id: 'record2', _table: 'table1' }
@@ -120,7 +120,7 @@ function FilteredByRecordWarn() {
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -132,19 +132,19 @@ function FilteredByRecordWarn() {
 ```tsx
 function FilteredByLevelWarn() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         cellKey="table-layer"
       />
 
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         level="高"
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -156,19 +156,19 @@ function FilteredByLevelWarn() {
 ```tsx
 function FilteredByTypeWarn() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         cellKey="table-layer"
       />
 
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         type="温度报警"
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -180,13 +180,13 @@ function FilteredByTypeWarn() {
 ```tsx
 function CustomAnimationWarn() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={[{ id: 'sensor-table', title: '传感器表' }]}
         cellKey="table-layer"
       />
 
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'sensor-table', title: '传感器表' }]}
         background="rgba(255, 165, 0, 0.6)"  // 橙色
         duration={0.6}                         // 较慢的动画
@@ -194,7 +194,7 @@ function CustomAnimationWarn() {
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -206,13 +206,13 @@ function CustomAnimationWarn() {
 ```tsx
 function ZoomControlledWarn() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         cellKey="table-layer"
       />
 
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         overrunHide={{
           overmax: 15  // 缩放级别 >= 15 时隐藏
@@ -220,7 +220,7 @@ function ZoomControlledWarn() {
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -239,19 +239,19 @@ function DynamicDisplayWarn() {
         {visible ? '隐藏' : '显示'}报警
       </button>
 
-      <MapContainer>
-        <TableViews
+      <GisMapCore>
+        <GisTableLayer
           table={[{ id: 'device-table', title: '设备表' }]}
           cellKey="table-layer"
         />
 
-        <WarnViews
+        <GisWarnLayer
           table={[{ id: 'device-table', title: '设备表' }]}
           display={visible}
           dataType={true}
           cellKey="warn-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -264,13 +264,13 @@ function DynamicDisplayWarn() {
 组合多个过滤条件，精确控制显示的报警。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { WarnViews } from '@/components/kesi/gis-warn-layer'
-import { TableViews } from '@/components/kesi/gis-table-layer'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisWarnLayer } from '@/components/kesi/gis-warn-layer'
+import { GisTableLayer } from '@/components/kesi/gis-table-layer'
 
 function MultiFilterWarn() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -279,7 +279,7 @@ function MultiFilterWarn() {
       }}
     >
       {/* 数据表层 */}
-      <TableViews
+      <GisTableLayer
         table={[
           { id: 'sensor-table', title: '传感器表' },
           { id: 'device-table', title: '设备表' }
@@ -288,7 +288,7 @@ function MultiFilterWarn() {
       />
 
       {/* 报警层：多条件过滤 */}
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'sensor-table', title: '传感器表' }]}
         level="高"
         type="温度报警"
@@ -302,7 +302,7 @@ function MultiFilterWarn() {
         display={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -314,7 +314,7 @@ function MultiFilterWarn() {
 ```tsx
 function MultiLevelWarnStyles() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -323,13 +323,13 @@ function MultiLevelWarnStyles() {
       }}
     >
       {/* 数据表层 */}
-      <TableViews
+      <GisTableLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         cellKey="table-layer"
       />
 
       {/* 高级报警：红色，快速闪烁 */}
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         level="高"
         background="rgba(255, 0, 0, 0.7)"
@@ -340,7 +340,7 @@ function MultiLevelWarnStyles() {
       />
 
       {/* 中级报警：橙色，中速闪烁 */}
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         level="中"
         background="rgba(255, 165, 0, 0.6)"
@@ -351,7 +351,7 @@ function MultiLevelWarnStyles() {
       />
 
       {/* 低级报警：黄色，慢速闪烁 */}
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'device-table', title: '设备表' }]}
         level="低"
         background="rgba(255, 255, 0, 0.5)"
@@ -360,7 +360,7 @@ function MultiLevelWarnStyles() {
         dataType={true}
         cellKey="low-warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -372,15 +372,15 @@ function MultiLevelWarnStyles() {
 ```tsx
 function DepartmentFilteredWarn() {
   return (
-    <MapContainer>
+    <GisMapCore>
       {/* 数据表层：包含部门信息 */}
-      <TableViews
+      <GisTableLayer
         table={[{ id: 'production-table', title: '生产设备表' }]}
         cellKey="table-layer"
       />
 
       {/* 报警层：只显示生产部门的报警 */}
-      <WarnViews
+      <GisWarnLayer
         table={[{ id: 'production-table', title: '生产设备表' }]}
         department={[
           { id: 'dept-001', title: '生产部' },
@@ -389,7 +389,7 @@ function DepartmentFilteredWarn() {
         dataType={true}
         cellKey="warn-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -430,13 +430,13 @@ function DynamicFilterWarn() {
         </label>
       </div>
 
-      <MapContainer>
-        <TableViews
+      <GisMapCore>
+        <GisTableLayer
           table={[{ id: 'device-table', title: '设备表' }]}
           cellKey="table-layer"
         />
 
-        <WarnViews
+        <GisWarnLayer
           table={[{ id: 'device-table', title: '设备表' }]}
           level={selectedLevel}
           type={selectedType}
@@ -444,7 +444,7 @@ function DynamicFilterWarn() {
           key={`${selectedLevel}-${selectedType}`} // key 变化时重新创建
           cellKey="warn-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -472,18 +472,18 @@ function WarnStatisticsPanel() {
         <p>高级报警：<strong style={{ color: 'red' }}>{highWarnCount}</strong></p>
       </div>
 
-      <MapContainer>
-        <TableViews
+      <GisMapCore>
+        <GisTableLayer
           table={[{ id: 'sensor-table', title: '传感器表' }]}
           cellKey="table-layer"
         />
 
-        <WarnViews
+        <GisWarnLayer
           table={[{ id: 'sensor-table', title: '传感器表' }]}
           dataType={true}
           cellKey="warn-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -501,15 +501,15 @@ function ResponsiveZoomWarn() {
     <div>
       <p>当前缩放级别：{currentZoom}</p>
 
-      <MapContainer
+      <GisMapCore
         onZoomChange={(zoom) => setCurrentZoom(Math.round(zoom))}
       >
-        <TableViews
+        <GisTableLayer
           table={[{ id: 'device-table', title: '设备表' }]}
           cellKey="table-layer"
         />
 
-        <WarnViews
+        <GisWarnLayer
           table={[{ id: 'device-table', title: '设备表' }]}
           overrunHide={{
             overmax: currentZoom > 12 ? 15 : 18  // 动态调整隐藏层级
@@ -517,7 +517,7 @@ function ResponsiveZoomWarn() {
           dataType={true}
           cellKey="warn-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -555,7 +555,7 @@ interface WarningData {
 
 ## 注意事项
 
-1. **必须配合数据表层使用**：报警层需要与 `TableViews` 组件配合使用，数据表层会将 `pointSource` 注册到地图上
+1. **必须配合数据表层使用**：报警层需要与 `GisTableLayer` 组件配合使用，数据表层会将 `pointSource` 注册到地图上
 
 2. **点位同步机制**：报警层会实时从数据表层的 `pointSource` 中获取 feature 坐标，确保报警动画与 marker 位置同步
 

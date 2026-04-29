@@ -77,7 +77,7 @@ const parseJsonProp = (val: any, defaultVal: any = null) => {
     return val
 }
 
-export interface WarnViewsProps {
+export interface GisWarnLayerProps {
     /**
      * 数据表过滤
      */
@@ -135,7 +135,7 @@ export interface WarnViewsProps {
     map?: any
 }
 
-const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
+const GisWarnLayer = React.forwardRef<HTMLDivElement, GisWarnLayerProps>(
     (
         {
             className,
@@ -607,6 +607,6 @@ const WarnViews = React.forwardRef<HTMLDivElement, WarnViewsProps>(
     }
 )
 
-WarnViews.displayName = 'WarnViews'
+GisWarnLayer.displayName = 'GisWarnLayer'
 
-export { WarnViews }
+export { GisWarnLayer }

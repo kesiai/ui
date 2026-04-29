@@ -1,5 +1,5 @@
-import { XYZ } from '@/registry/components/gis-xyz-tile/gis-xyz-tile'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisXyzTile } from '@/registry/components/gis-xyz-tile/gis-xyz-tile'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-xyz-tile.md?raw'
 
@@ -9,7 +9,7 @@ export const xyzPropsConfig = [
         label: '瓦片源地址',
         type: 'text' as const,
         default: 'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}',
-        placeholder: '请输入 XYZ 瓦片服务地址'
+        placeholder: '请输入 GisXyzTile 瓦片服务地址'
     },
     {
         name: 'coordinateType',
@@ -141,7 +141,7 @@ export const xyzDefaultProps = {
     maxZoom: 18
 }
 
-const renderXYZPreview = (props: Record<string, any>) => {
+const renderGisXyzTilePreview = (props: Record<string, any>) => {
     let coorDefs = {}
     try {
         coorDefs = typeof props.coorDefs === 'string' ? JSON.parse(props.coorDefs) : props.coorDefs
@@ -151,8 +151,8 @@ const renderXYZPreview = (props: Record<string, any>) => {
 
     return (
         <div className="w-full h-75 border border-gray-200 rounded overflow-hidden relative">
-            <MapContainer>
-                <XYZ
+            <GisMapCore>
+                <GisXyzTile
                     source={props.source}
                     coordinateType={props.coordinateType}
                     coorDefs={coorDefs}
@@ -174,12 +174,12 @@ const renderXYZPreview = (props: Record<string, any>) => {
                         maxZoom: props.maxZoom
                     }}
                 />
-            </MapContainer>
+            </GisMapCore>
         </div>
     )
 }
 
-const renderXYZCodePreview = (props: Record<string, any>) => {
+const renderGisXyzTileCodePreview = (props: Record<string, any>) => {
     let coorDefsString = "{}"
     try {
         coorDefsString = typeof props.coorDefs === 'string' ? props.coorDefs : JSON.stringify(props.coorDefs, null, 2)
@@ -187,7 +187,7 @@ const renderXYZCodePreview = (props: Record<string, any>) => {
         // ignore
     }
 
-    return `<XYZ
+    return `<GisXyzTile
   source="${props.source}"
   coordinateType="${props.coordinateType}"
   coorDefs={${coorDefsString}}
@@ -213,10 +213,10 @@ const renderXYZCodePreview = (props: Record<string, any>) => {
 
 export const xyzConfig: ComponentConfig = {
     id: 'gis-xyz-tile',
-    name: 'XYZ层',
+    name: 'GisXyzTile层',
     propsConfig: xyzPropsConfig,
     defaultProps: xyzDefaultProps,
-    renderPreview: renderXYZPreview,
-    renderCodePreview: renderXYZCodePreview,
+    renderPreview: renderGisXyzTilePreview,
+    renderCodePreview: renderGisXyzTileCodePreview,
     documentation: documentationMd
 }

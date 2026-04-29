@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "warn-views",
   "type": "registry:component",
-  "title": "WarnViews",
+  "title": "GisWarnLayer",
   "description": "报警层 - GIS报警层",
   "registryDependencies": [],
   "dependencies": [],

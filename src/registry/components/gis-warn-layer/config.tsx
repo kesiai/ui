@@ -1,12 +1,12 @@
 
-import { WarnViews } from '@/registry/components/gis-warn-layer/gis-warn-layer'
-import { TableViews } from '../gis-table-layer/gis-table-layer'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisWarnLayer } from '@/registry/components/gis-warn-layer/gis-warn-layer'
+import { GisTableLayer } from '../gis-table-layer/gis-table-layer'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-warn-layer.md?raw'
 
 // 默认配置
-const defaultWarnViewsProps = {
+const defaultGisWarnLayerProps = {
     table: [],
     tableData: [],
     department: [],
@@ -125,21 +125,21 @@ export const warnViewsPropsConfig = [
 ]
 
 export const warnViewsDefaultProps = {
-    table: JSON.stringify(defaultWarnViewsProps.table),
-    tableData: JSON.stringify(defaultWarnViewsProps.tableData),
-    department: JSON.stringify(defaultWarnViewsProps.department),
-    dataType: defaultWarnViewsProps.dataType,
-    type: defaultWarnViewsProps.type,
-    level: defaultWarnViewsProps.level,
-    duration: defaultWarnViewsProps.duration,
-    radius: defaultWarnViewsProps.radius,
-    background: defaultWarnViewsProps.background,
+    table: JSON.stringify(defaultGisWarnLayerProps.table),
+    tableData: JSON.stringify(defaultGisWarnLayerProps.tableData),
+    department: JSON.stringify(defaultGisWarnLayerProps.department),
+    dataType: defaultGisWarnLayerProps.dataType,
+    type: defaultGisWarnLayerProps.type,
+    level: defaultGisWarnLayerProps.level,
+    duration: defaultGisWarnLayerProps.duration,
+    radius: defaultGisWarnLayerProps.radius,
+    background: defaultGisWarnLayerProps.background,
     overrunHideOvermax: undefined,
     overrunHideOvermin: undefined,
-    display: defaultWarnViewsProps.display
+    display: defaultGisWarnLayerProps.display
 }
 
-const renderWarnViewsPreview = (props: Record<string, any>) => {
+const renderGisWarnLayerPreview = (props: Record<string, any>) => {
     // 解析 JSON 属性，提供默认空值防止解析失败
     const parseJson = (val: any, defaultVal: any) => {
         if (typeof val === 'string') {
@@ -169,7 +169,7 @@ const renderWarnViewsPreview = (props: Record<string, any>) => {
         <div className="flex flex-col">
             {/* 地图容器 */}
             <div className="rounded-lg overflow-hidden border border-slate-200">
-                <MapContainer
+                <GisMapCore
                     width="100%"
                     height={400}
                     viewOptions={{
@@ -177,11 +177,11 @@ const renderWarnViewsPreview = (props: Record<string, any>) => {
                         zoom: 10
                     }}
                 >
-                    <TableViews
+                    <GisTableLayer
                         table={table}
                         tableData={tableData}
                     />
-                    <WarnViews
+                    <GisWarnLayer
                         table={table}
                         tableData={tableData}
                         department={department}
@@ -194,7 +194,7 @@ const renderWarnViewsPreview = (props: Record<string, any>) => {
                         overrunHide={overrunHide}
                         display={props.display ?? warnViewsDefaultProps.display}
                     />
-                </MapContainer>
+                </GisMapCore>
             </div>
 
             {/* 说明文本 */}
@@ -207,7 +207,7 @@ const renderWarnViewsPreview = (props: Record<string, any>) => {
     )
 }
 
-const renderWarnViewsCodePreview = (props: Record<string, any>) => {
+const renderGisWarnLayerCodePreview = (props: Record<string, any>) => {
     const overrunHideCode =
         props.overrunHideOvermax !== undefined || props.overrunHideOvermin !== undefined
             ? `
@@ -220,12 +220,12 @@ const renderWarnViewsCodePreview = (props: Record<string, any>) => {
     const tableProp = props.table || '[]'
     const tableDataProp = props.tableData || '[]'
 
-    return `<TableViews
+    return `<GisTableLayer
   table={${tableProp}}
   tableData={${tableDataProp}}
   map={mapInstance}
 />
-<WarnViews
+<GisWarnLayer
   table={${tableProp}}
   tableData={${tableDataProp}}
   department={${props.department || '[]'}}
@@ -245,7 +245,7 @@ export const warnViewsConfig: ComponentConfig = {
     name: '报警层',
     propsConfig: warnViewsPropsConfig,
     defaultProps: warnViewsDefaultProps,
-    renderPreview: renderWarnViewsPreview,
-    renderCodePreview: renderWarnViewsCodePreview,
+    renderPreview: renderGisWarnLayerPreview,
+    renderCodePreview: renderGisWarnLayerCodePreview,
     documentation: documentationMd
 }

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 // @ts-ignore
 import { Tile as TileLayer } from 'ol/layer'
 // @ts-ignore
-import { XYZ as XYZSource } from 'ol/source'
+import { GisXyzTile as GisXyzTileSource } from 'ol/source'
 // @ts-ignore
 import * as style from 'ol/style'
 import type Map from 'ol/Map'
@@ -40,7 +40,7 @@ export interface LayerBase {
   minZoom?: number
 }
 
-export interface XYZProps {
+export interface GisXyzTileProps {
   source?: string
   coordinateType?: string
   coorDefs?: CoorDefs
@@ -52,7 +52,7 @@ export interface XYZProps {
   map?: Map | null
 }
 
-const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
+const GisXyzTile = React.forwardRef<HTMLDivElement, GisXyzTileProps>(
   (props, ref) => {
     const {
       className,
@@ -159,7 +159,7 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
       // Projection Logic
       const projection = getProjection(coorDefs, coordinateType, mapCoordinateType)
 
-      const geoSource = new XYZSource({
+      const geoSource = new GisXyzTileSource({
         cacheSize: 0,
         url: initUrl,
         crossOrigin: 'anonymous',
@@ -238,6 +238,6 @@ const XYZ = React.forwardRef<HTMLDivElement, XYZProps>(
   }
 )
 
-XYZ.displayName = "XYZ"
+GisXyzTile.displayName = "GisXyzTile"
 
-export { XYZ }
+export { GisXyzTile }

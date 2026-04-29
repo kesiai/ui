@@ -17,7 +17,7 @@ export interface LayerBase {
   minZoom?: number
 }
 
-export interface GeoserverWmsProps {
+export interface GisGeoserverWmsProps {
   source?: string
   coordinateType?: string
   VERSION?: string
@@ -29,7 +29,7 @@ export interface GeoserverWmsProps {
   map?: Map | null
 }
 
-const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
+const GisGeoserverWms = React.forwardRef<HTMLDivElement, GisGeoserverWmsProps>(
   (
     {
       className,
@@ -158,6 +158,6 @@ const GeoserverWms = React.forwardRef<HTMLDivElement, GeoserverWmsProps>(
   }
 )
 
-GeoserverWms.displayName = "GeoserverWms"
+GisGeoserverWms.displayName = "GisGeoserverWms"
 
-export { GeoserverWms }
+export { GisGeoserverWms }

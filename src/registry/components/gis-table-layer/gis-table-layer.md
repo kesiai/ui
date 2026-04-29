@@ -4,7 +4,7 @@
 
 ## 简介
 
-`TableViews` 是一个强大的数据表图层组件，用于将数据库表中的地理信息数据可视化到地图上。
+`GisTableLayer` 是一个强大的数据表图层组件，用于将数据库表中的地理信息数据可视化到地图上。
 
 - **多数据源支持**：支持通过表 ID 或直接传入表数据两种方式加载数据
 - **实时数据更新**：通过 WebSocket 实现实时数据推送和更新
@@ -88,17 +88,17 @@ interface Cluster {
 通过表 ID 从服务器加载地理信息数据。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { TableViews } from '@/components/kesi/gis-table-layer'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisTableLayer } from '@/components/kesi/gis-table-layer'
 
 function TableByID() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -127,12 +127,12 @@ function DirectTableData() {
   ]
 
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         tableData={tableData}
         coordinateType="EPSG:4326"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -144,8 +144,8 @@ function DirectTableData() {
 ```tsx
 function CustomMarkerStyle() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
         marker={{
@@ -167,7 +167,7 @@ function CustomMarkerStyle() {
           }
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -179,8 +179,8 @@ function CustomMarkerStyle() {
 ```tsx
 function HeatmapExample() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
         heatmap={{
@@ -190,7 +190,7 @@ function HeatmapExample() {
           gradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00']
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -202,8 +202,8 @@ function HeatmapExample() {
 ```tsx
 function ClusterExample() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
         cluster={{
@@ -216,7 +216,7 @@ function ClusterExample() {
           background: 'rgba(0,0,0,0.7)'
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -228,8 +228,8 @@ function ClusterExample() {
 ```tsx
 function ModalExample() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
         modalConfig={[
@@ -243,7 +243,7 @@ function ModalExample() {
           }
         ]}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -255,8 +255,8 @@ function ModalExample() {
 ```tsx
 function FilterExample() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
         department={[
@@ -268,7 +268,7 @@ function FilterExample() {
           type: 'sensor'
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -280,8 +280,8 @@ function FilterExample() {
 ```tsx
 function MarkerScaleExample() {
   return (
-    <MapContainer>
-      <TableViews
+    <GisMapCore>
+      <GisTableLayer
         table={{ id: '地理信息', title: '地理信息' }}
         coordinateType="EPSG:4326"
         markerScale={[
@@ -290,7 +290,7 @@ function MarkerScaleExample() {
           { from: 11, to: 18, scale: 1.0 }
         ]}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -302,8 +302,8 @@ function MarkerScaleExample() {
 创建一个完整的设备监控应用，展示设备位置、状态和实时数据。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { TableViews } from '@/components/kesi/gis-table-layer'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisTableLayer } from '@/components/kesi/gis-table-layer'
 
 function DeviceMonitoringApp() {
   const [selectedStatus, setSelectedStatus] = React.useState('all')
@@ -385,7 +385,7 @@ function DeviceMonitoringApp() {
 
       {/* 地图 */}
       <div className="flex-1">
-        <MapContainer
+        <GisMapCore
           width="100%"
           height="100%"
           viewOptions={{
@@ -393,7 +393,7 @@ function DeviceMonitoringApp() {
             zoom: 12
           }}
         >
-          <TableViews
+          <GisTableLayer
             table={{ id: '设备信息', title: '设备信息' }}
             coordinateType="EPSG:4326"
             tableFilters={selectedStatus !== 'all' ? { status: selectedStatus } : {}}
@@ -430,7 +430,7 @@ function DeviceMonitoringApp() {
               maxZoom: 18
             }}
           />
-        </MapContainer>
+        </GisMapCore>
       </div>
     </div>
   )
@@ -447,7 +447,7 @@ function VehicleTrackingApp() {
 
   return (
     <div className="h-screen">
-      <MapContainer
+      <GisMapCore
         width="100%"
         height="100%"
         viewOptions={{
@@ -455,7 +455,7 @@ function VehicleTrackingApp() {
           zoom: 13
         }}
       >
-        <TableViews
+        <GisTableLayer
           table={{ id: '车辆位置', title: '车辆位置' }}
           coordinateType="EPSG:4326"
           marker={{
@@ -506,7 +506,7 @@ function VehicleTrackingApp() {
             maxZoom: 18
           }}
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -519,7 +519,7 @@ function VehicleTrackingApp() {
 ```tsx
 function MultiLayerComparison() {
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -528,7 +528,7 @@ function MultiLayerComparison() {
       }}
     >
       {/* 图层 1: 设备 A */}
-      <TableViews
+      <GisTableLayer
         table={{ id: '设备A', title: '设备A' }}
         coordinateType="EPSG:4326"
         marker={{
@@ -545,7 +545,7 @@ function MultiLayerComparison() {
       />
 
       {/* 图层 2: 设备 B */}
-      <TableViews
+      <GisTableLayer
         table={{ id: '设备B', title: '设备B' }}
         coordinateType="EPSG:4326"
         marker={{
@@ -562,7 +562,7 @@ function MultiLayerComparison() {
       />
 
       {/* 图层 3: 热力图 */}
-      <TableViews
+      <GisTableLayer
         table={{ id: '所有设备', title: '所有设备' }}
         coordinateType="EPSG:4326"
         heatmap={{
@@ -575,7 +575,7 @@ function MultiLayerComparison() {
           zIndex: 5
         }}
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```

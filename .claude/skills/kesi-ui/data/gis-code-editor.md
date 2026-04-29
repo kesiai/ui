@@ -4,7 +4,7 @@
 
 ## 简介
 
-`CodeEditorViews` 是一个动态代码图层组件，允许通过编写 JavaScript 代码函数来创建和自定义 OpenLayers 图层。
+`GisCodeEditor` 是一个动态代码图层组件，允许通过编写 JavaScript 代码函数来创建和自定义 OpenLayers 图层。
 
 - **动态代码执行**：支持执行 JavaScript 函数创建图层
 - **OpenLayers 模块注入**：内置 OpenLayers 常用模块（layer、source）
@@ -41,8 +41,8 @@ interface CodeParam {
 使用默认脚本创建 OpenStreetMap 图层。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { CodeEditorViews } from '@/components/kesi/gis-code-editor'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisCodeEditor } from '@/components/kesi/gis-code-editor'
 
 function OSMLayer() {
   const script = `(context, params) => {
@@ -53,12 +53,12 @@ function OSMLayer() {
 }`
 
   return (
-    <MapContainer>
-      <CodeEditorViews
+    <GisMapCore>
+      <GisCodeEditor
         codeScript={script}
         cellKey="osm-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -79,12 +79,12 @@ function AmapLayer() {
 }`
 
   return (
-    <MapContainer>
-      <CodeEditorViews
+    <GisMapCore>
+      <GisCodeEditor
         codeScript={script}
         cellKey="amap-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -122,13 +122,13 @@ function ParametrizedLayer() {
   ]
 
   return (
-    <MapContainer>
-      <CodeEditorViews
+    <GisMapCore>
+      <GisCodeEditor
         codeScript={script}
         params={params}
         cellKey="param-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -154,13 +154,13 @@ function DynamicLayer() {
         {visible ? '隐藏' : '显示'}图层
       </button>
 
-      <MapContainer>
-        <CodeEditorViews
+      <GisMapCore>
+        <GisCodeEditor
           codeScript={script}
           display={visible}
           cellKey="dynamic-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -189,13 +189,13 @@ function TransparentLayer() {
   ]
 
   return (
-    <MapContainer>
-      <CodeEditorViews
+    <GisMapCore>
+      <GisCodeEditor
         codeScript={script}
         params={params}
         cellKey="transparent-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -207,8 +207,8 @@ function TransparentLayer() {
 叠加多个代码图层，实现复杂的地图效果。
 
 ```tsx
-import { MapContainer } from '@/components/kesi/gis-map-core'
-import { CodeEditorViews } from '@/components/kesi/gis-code-editor'
+import { GisMapCore } from '@/components/kesi/gis-map-core'
+import { GisCodeEditor } from '@/components/kesi/gis-code-editor'
 
 function MultiCodeLayerMap() {
   const osmScript = `(context, params) => {
@@ -230,7 +230,7 @@ function MultiCodeLayerMap() {
 }`
 
   return (
-    <MapContainer
+    <GisMapCore
       width="100%"
       height="600px"
       viewOptions={{
@@ -239,19 +239,19 @@ function MultiCodeLayerMap() {
       }}
     >
       {/* 底层：OSM 图层 */}
-      <CodeEditorViews
+      <GisCodeEditor
         codeScript={osmScript}
         display={true}
         cellKey="osm-base-layer"
       />
 
       {/* 顶层：半透明高德图层 */}
-      <CodeEditorViews
+      <GisCodeEditor
         codeScript={amapScript}
         display={true}
         cellKey="amap-overlay-layer"
       />
-    </MapContainer>
+    </GisMapCore>
   )
 }
 ```
@@ -292,13 +292,13 @@ function DynamicCodeEditor() {
       />
       {!isValid && <p style={{ color: 'red' }}>脚本语法错误</p>}
 
-      <MapContainer>
-        <CodeEditorViews
+      <GisMapCore>
+        <GisCodeEditor
           codeScript={script}
           display={isValid}
           cellKey="editor-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }
@@ -342,13 +342,13 @@ function ConditionalParamsLayer() {
         <option value="amap">高德地图</option>
       </select>
 
-      <MapContainer>
-        <CodeEditorViews
+      <GisMapCore>
+        <GisCodeEditor
           codeScript={script}
           params={params}
           cellKey="conditional-layer"
         />
-      </MapContainer>
+      </GisMapCore>
     </div>
   )
 }

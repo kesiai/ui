@@ -1,6 +1,6 @@
 
-import { Kmz } from '@/registry/components/gis-kmz-loader/gis-kmz-loader'
-import { MapContainer } from '../gis-map-core/gis-map-core'
+import { GisKmzLoader } from '@/registry/components/gis-kmz-loader/gis-kmz-loader'
+import { GisMapCore } from '../gis-map-core/gis-map-core'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './gis-kmz-loader.md?raw'
 
@@ -56,11 +56,11 @@ export const kmzDefaultProps = {
     zIndex: 0
 }
 
-const renderKmzPreview = (props: Record<string, any>) => {
+const renderGisKmzLoaderPreview = (props: Record<string, any>) => {
     return (
         <div className="w-full h-100 border border-gray-200 rounded overflow-hidden relative">
-            <MapContainer>
-                <Kmz
+            <GisMapCore>
+                <GisKmzLoader
                     source={props.source}
                     coordinateType={props.coordinateType}
                     display={props.display}
@@ -69,13 +69,13 @@ const renderKmzPreview = (props: Record<string, any>) => {
                         zIndex: props.zIndex,
                     }}
                 />
-            </MapContainer>
+            </GisMapCore>
         </div>
     )
 }
 
-const renderKmzCodePreview = (props: Record<string, any>) => {
-    return `<Kmz
+const renderGisKmzLoaderCodePreview = (props: Record<string, any>) => {
+    return `<GisKmzLoader
   source="${props.source}"
   coordinateType="${props.coordinateType}"
   display={${props.display}}
@@ -91,7 +91,7 @@ export const kmzConfig: ComponentConfig = {
     name: 'KMZ层',
     propsConfig: kmzPropsConfig,
     defaultProps: kmzDefaultProps,
-    renderPreview: renderKmzPreview,
-    renderCodePreview: renderKmzCodePreview,
+    renderPreview: renderGisKmzLoaderPreview,
+    renderCodePreview: renderGisKmzLoaderCodePreview,
     documentation: documentationMd
 }

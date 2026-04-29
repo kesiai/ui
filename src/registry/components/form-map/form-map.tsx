@@ -488,7 +488,7 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
         </div>
 
         <Dialog open={visible} onOpenChange={setVisible}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>地图选点</DialogTitle>
             </DialogHeader>

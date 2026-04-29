@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 // @ts-ignore
 import { Tile as TileLayer } from 'ol/layer'
 // @ts-ignore
-import { GisXyzTile as GisXyzTileSource } from 'ol/source'
+import { XYZ as XYZSource } from 'ol/source'
 // @ts-ignore
 import * as style from 'ol/style'
 import type Map from 'ol/Map'
@@ -159,7 +159,7 @@ const GisXyzTile = React.forwardRef<HTMLDivElement, GisXyzTileProps>(
       // Projection Logic
       const projection = getProjection(coorDefs, coordinateType, mapCoordinateType)
 
-      const geoSource = new GisXyzTileSource({
+      const geoSource = new XYZSource({
         cacheSize: 0,
         url: initUrl,
         crossOrigin: 'anonymous',

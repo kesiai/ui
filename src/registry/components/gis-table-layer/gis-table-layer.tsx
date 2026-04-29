@@ -9,7 +9,7 @@ import { Vector as VectorLayer, Heatmap } from 'ol/layer'
 import Cluster from 'ol/source/Cluster'
 import { createEmpty, extend } from 'ol/extent'
 // @ts-ignore
-import { useMap } from '../gis-map-core/gis-map-core'
+import { useMap } from '@/registry/components/gis-map-core/gis-map-core'
 import {
     getGISTable,
     getTableRecord,

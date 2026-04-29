@@ -9,10 +9,9 @@ import { z } from 'zod'
 import get from 'lodash/get'
 import {
   convertToSchemaFormRules,
-  evaluateValidations,
-  evaluateConditions,
 } from '@/registry/lib/field-rules-hooks'
 import type { FieldRules } from '@/registry/lib/field-rules-hooks'
+import { evaluateValidations, evaluateConditions } from '@/registry/lib/field-rules-engine'
 
 // 全局设置 Zod 中文错误提示
 z.config({
@@ -163,7 +162,14 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
     const fieldSchema = typeof field === 'string' ? { key: field } : field
     const _fieldKey = fieldKey.includes('.') ? fieldKey.replace('.', '.properties.') : fieldKey
     const baseSchema = get(schema, `properties.${_fieldKey}`)
-    return { fieldKey, mergedSchema: { ...baseSchema, ...fieldSchema } }
+
+    // 如果 FormSchemaItem 中有 required 属性，将其转换为 need
+    let merged = { ...baseSchema, ...fieldSchema }
+    if (typeof field === 'object' && field.required) {
+      merged = { ...merged, need: true }
+    }
+
+    return { fieldKey, mergedSchema: merged }
   }
 
   const resolver = React.useMemo<Resolver<any, any>>(() => {

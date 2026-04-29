@@ -41,8 +41,8 @@ export const getTableRecord = (table: any, filter: any = {}) => {
         filter
     }
 
-    if (table?.schema?.listFields?.length) {
-        table.schema.listFields.forEach((val: string) => {
+    if (table?.schema?.properties) {
+        Object.keys(table.schema.properties).forEach((val: string) => {
             query.project = { ...query.project, [val]: 1 }
         })
     }

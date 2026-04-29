@@ -754,7 +754,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
               )}
 
               {/* 媒体库上传 - TODO */}
-              {!props.disabled && (
+              {/* {!props.disabled && (
                 <div className="text-sm text-slate-400 flex items-center justify-center border-2 border-dashed rounded"
                   style={{ width: defaultWidth, height: defaultHeight }}>
                   <div className="text-center p-2">
@@ -762,7 +762,7 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
                     <div className="text-xs">等待 MediaModal 迁移</div>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         ) : (
@@ -808,11 +808,11 @@ const FormUpload = React.forwardRef<HTMLDivElement, FormUploadProps>(
             )}
 
             {/* 媒体库上传 - TODO */}
-            {!props.disabled && (
+            {/* {!props.disabled && (
               <div className="text-sm text-slate-400">
                 等待 MediaModal 迁移
               </div>
-            )}
+            )} */}
           </div>
         )}
 

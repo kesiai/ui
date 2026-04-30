@@ -209,7 +209,9 @@ export const createNumberLabelStyles = ({ geometry, baseStyle, textStyle = {} }:
 // 默认标记图标（绿色图钉）- 与主文件保持一致
 const defaultIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDI0IDM2Ij48cGF0aCBmaWxsPSIjNENBRjUwIiBkPSJNMTIgMEMxOC42MjcgMCAyNC41MzczIDI0IDEyIDI0UzAgMjAuMjc0IDAgMTJDMCA1LjM3MyA1LjM3MyAwIDEyIDB6Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNyIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg=='
 
-export const createIconClass = ({ iconSrc, color, offsetX, offsetY, scale, rotation, displacementX, displacementY, rotateWithView, anchor }: any, zoomScale: any) => {
+export const DEFAULT_MARKER_COLOR = '#2bb634'
+
+export const createIconClass = ({ iconSrc, color, offsetX, offsetY, scale, rotation, displacementX, displacementY, rotateWithView, anchor, anchorXUnits, anchorYUnits, opacity }: any, zoomScale: any) => {
 
     const baseScale = scale ? scale : 1
     let normalizedSrc = iconSrc
@@ -226,15 +228,18 @@ export const createIconClass = ({ iconSrc, color, offsetX, offsetY, scale, rotat
         offset: [offsetX || 0, offsetY || 0],
         scale: zoomScale ? zoomScale * baseScale : baseScale,
         anchor: anchor || [0.5, 0.5],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'fraction',
-        rotation: rotation || 0,
+        anchorXUnits: anchorXUnits || 'fraction',
+        anchorYUnits: anchorYUnits || 'fraction',
+        rotation: rotation ? rotation * (Math.PI / 180) : 0,
         rotateWithView: rotateWithView !== undefined ? rotateWithView : true,
         displacement: [displacementX || 0, displacementY || 0]
     }
 
     if (color) {
         iconOptions.color = color
+    }
+    if (opacity !== undefined && opacity !== null) {
+        iconOptions.opacity = opacity
     }
 
     return new style.Icon(iconOptions)

@@ -19,7 +19,12 @@ import {
 import { MapPin, Edit, Search } from 'lucide-react'
 import isEmpty from 'lodash/isEmpty'
 import { GisMapCore, useMap } from '@/registry/components/gis-map-core/gis-map-core'
-import Overlay from 'ol/Overlay'
+import { createIconClass, DEFAULT_MARKER_COLOR } from '@/registry/components/gis-table-layer/utils'
+import Feature from 'ol/Feature'
+import Point from 'ol/geom/Point'
+import VectorLayer from 'ol/layer/Vector'
+import VectorSource from 'ol/source/Vector'
+import { Style, Circle as CircleStyle, Fill, Stroke } from 'ol/style'
 import { fromLonLat, toLonLat } from 'ol/proj'
 
 const AMAP_KEY = 'f1430b13cf18a4cf75ca41a7bb742874'
@@ -39,32 +44,39 @@ export interface FormMapProps extends Omit<BaseFormFieldProps, 'value' | 'onChan
   defaultVal?: { name?: string; lng: number; lat: number }
   showType?: 'map' | 'modal'
   disabled?: boolean
+  markerIconUrl?: string
+  markerIconSetting?: {
+    color?: string
+    scale?: number
+    rotation?: number
+    opacity?: number
+    anchor?: [number, number]
+    anchorXUnits?: string
+    anchorYUnits?: string
+    displacement?: [number, number]
+  }
 }
 
 interface MapPickerLayerProps {
   coordinates: [number, number] | null
   onMapClick: (lng: number, lat: number) => void
   disabled?: boolean
+  iconUrl?: string
+  iconSetting?: FormMapProps['markerIconSetting']
 }
 
-const MapPickerLayer: React.FC<MapPickerLayerProps> = ({ coordinates, onMapClick, disabled = false }) => {
+const MapPickerLayer: React.FC<MapPickerLayerProps> = ({ coordinates, onMapClick, disabled = false, iconUrl, iconSetting }) => {
   const map = useMap()
-  const markerRef = React.useRef<HTMLDivElement>(null)
-  const overlayRef = React.useRef<Overlay | null>(null)
+  const layerRef = React.useRef<VectorLayer<VectorSource> | null>(null)
   const disabledRef = React.useRef(disabled)
   disabledRef.current = disabled
 
   React.useEffect(() => {
-    if (!map || !markerRef.current) return
-
-    const overlay = new Overlay({
-      element: markerRef.current,
-      positioning: 'bottom-center',
-      offset: [0, -4],
-      stopEvent: false,
-    })
-    map.addOverlay(overlay)
-    overlayRef.current = overlay
+    if (!map) return
+    const source = new VectorSource()
+    const layer = new VectorLayer({ source })
+    map.addLayer(layer)
+    layerRef.current = layer
 
     const handleMapClick = (evt: any) => {
       if (disabledRef.current) return
@@ -76,27 +88,56 @@ const MapPickerLayer: React.FC<MapPickerLayerProps> = ({ coordinates, onMapClick
 
     return () => {
       map.un('singleclick', handleMapClick)
-      if (overlayRef.current) {
-        map.removeOverlay(overlayRef.current)
-        overlayRef.current = null
+      if (layerRef.current) {
+        map.removeLayer(layerRef.current)
+        layerRef.current = null
       }
     }
   }, [map])
 
   React.useEffect(() => {
-    if (!overlayRef.current) return
-    if (coordinates && coordinates[0] != null && coordinates[1] != null) {
-      overlayRef.current.setPosition(fromLonLat(coordinates))
-    } else {
-      overlayRef.current.setPosition(undefined)
-    }
-  }, [coordinates])
+    const layer = layerRef.current
+    if (!layer) return
+    const source = layer.getSource()
+    source.clear()
 
-  return (
-    <div ref={markerRef} className="pointer-events-none">
-      <MapPin className="h-8 w-8 drop-shadow-md" style={{ color: '#2bb634' }} />
-    </div>
-  )
+    if (coordinates && coordinates[0] != null && coordinates[1] != null) {
+      const feature = new Feature({
+        geometry: new Point(fromLonLat(coordinates)),
+      })
+
+      let featureStyle
+      if (iconUrl) {
+        featureStyle = new Style({
+          image: createIconClass({
+            iconSrc: iconUrl,
+            color: iconSetting?.color || DEFAULT_MARKER_COLOR,
+            scale: iconSetting?.scale,
+            anchor: iconSetting?.anchor,
+            anchorXUnits: iconSetting?.anchorXUnits,
+            anchorYUnits: iconSetting?.anchorYUnits,
+            rotation: iconSetting?.rotation,
+            opacity: iconSetting?.opacity,
+            displacementX: iconSetting?.displacement?.[0],
+            displacementY: iconSetting?.displacement?.[1],
+          })
+        })
+      } else {
+        featureStyle = new Style({
+          image: new CircleStyle({
+            radius: 7,
+            fill: new Fill({ color: DEFAULT_MARKER_COLOR }),
+            stroke: new Stroke({ color: '#fff', width: 2 }),
+          })
+        })
+      }
+
+      feature.setStyle(featureStyle)
+      source.addFeature(feature)
+    }
+  }, [coordinates, iconUrl, iconSetting])
+
+  return null
 }
 
 // 自定义搜索下拉组件
@@ -189,7 +230,9 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
       canHand = true,
       defaultVal,
       showType = 'modal',
-      disabled = false
+      disabled = false,
+      markerIconUrl,
+      markerIconSetting,
     } = props
 
     const getInit = (v: any) => {
@@ -433,6 +476,8 @@ const FormMap = React.forwardRef<HTMLInputElement, FormMapProps>(
           coordinates={markerCoordinates}
           onMapClick={handleMapClick}
           disabled={disabled}
+          iconUrl={markerIconUrl}
+          iconSetting={markerIconSetting}
         />
       </GisMapCore>
     )

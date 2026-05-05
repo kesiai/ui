@@ -1,0 +1,394 @@
+import React from 'react'
+import { AIModal } from '@/registry/components/ai-modal/ai-modal'
+import { ComponentConfig } from '@/app/config/types'
+import documentationMd from './ai-modal.md?raw'
+import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
+
+// Runtime 预设类型定义
+export type RuntimePreset = 'opencode' | 'openai' | 'vercel' | 'custom'
+
+// Runtime 预设代码模板
+export const runtimePresetCodes: Record<RuntimePreset, string> = {
+  opencode: `import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
+
+const runtime = useOpenCodeRuntime({
+  baseUrl: "http://localhost:4096",
+})`,
+  openai: `import { useChatModelRuntime } from "@assistant-ui/react"
+
+const runtime = useChatModelRuntime({
+  initialMessages: [
+    {
+      role: "system",
+      content: "You are a helpful AI assistant."
+    }
+  ],
+  streamOptions: {
+    api: "/api/chat/openai"
+  }
+})`,
+  vercel: `import { useChatRuntime } from "@assistant-ui/react"
+import { createOpenAI } from "@ai-sdk/openai"
+import { streamText } from "ai"
+
+const runtime = useChatRuntime({
+  streamOptions: async (messages) => {
+    const result = await streamText({
+      model: createOpenAI({
+        apiKey: process.env.OPENAI_API_KEY
+      })("gpt-4-turbo"),
+      messages
+    })
+    return result.toDataStream()
+  }
+})`,
+  custom: `import { createCustomRuntime } from "@assistant-ui/react"
+
+const runtime = createCustomRuntime({
+  initialState: {
+    messages: [
+      {
+        role: "system",
+        content: "You are a helpful AI assistant."
+      }
+    ]
+  },
+  onSendMessage: async (messages) => {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages })
+    })
+    return response.body
+  }
+})`
+}
+
+export const aiModalPropsConfig = [
+  {
+    name: 'runtimePreset',
+    label: 'Runtime 类型',
+    type: 'select' as const,
+    default: 'opencode' as RuntimePreset,
+    required: true,
+    description: '选择 AI 助手运行时类型',
+    options: [
+      { value: 'opencode', label: 'OpenCode Runtime' },
+      { value: 'openai', label: 'OpenAI Runtime' },
+      { value: 'vercel', label: 'Vercel AI SDK' },
+      { value: 'custom', label: '自定义 Runtime' }
+    ]
+  },
+  {
+    name: 'baseUrl',
+    label: 'Base URL',
+    type: 'text' as const,
+    default: 'http://localhost:4096',
+    placeholder: 'http://localhost:4096',
+    description: 'OpenCode Runtime 的服务地址'
+  },
+  {
+    name: 'modalTitle',
+    label: '弹窗标题',
+    type: 'text' as const,
+    default: 'AI Assistant',
+    placeholder: 'AI Assistant',
+    description: 'AI 助手弹窗的标题'
+  },
+  {
+    name: 'triggerPosition',
+    label: '触发按钮位置',
+    type: 'select' as const,
+    default: 'bottom-right' as const,
+    description: '浮动触发按钮的位置',
+    options: [
+      { value: 'bottom-right', label: '右下角' },
+      { value: 'bottom-left', label: '左下角' },
+      { value: 'top-right', label: '右上角' },
+      { value: 'top-left', label: '左上角' }
+    ]
+  },
+  {
+    name: 'modalWidth',
+    label: '弹窗宽度',
+    type: 'text' as const,
+    default: '400px',
+    placeholder: '400px',
+    description: '小弹窗的宽度'
+  },
+  {
+    name: 'modalHeight',
+    label: '弹窗高度',
+    type: 'text' as const,
+    default: '500px',
+    placeholder: '500px',
+    description: '小弹窗的高度'
+  },
+  {
+    name: 'showExpandButton',
+    label: '显示放大按钮',
+    type: 'boolean' as const,
+    default: true,
+    description: '是否在弹窗标题栏显示放大按钮'
+  },
+  {
+    name: 'expandPosition',
+    label: '放大模式',
+    type: 'select' as const,
+    default: 'fullscreen' as const,
+    description: '点击放大按钮后的显示模式',
+    options: [
+      { value: 'fullscreen', label: '全屏' },
+      { value: 'large', label: '大窗口 (90vw x 90vh)' }
+    ]
+  },
+  {
+    name: 'theme',
+    label: '主题',
+    type: 'select' as const,
+    default: 'system' as const,
+    description: '组件主题',
+    options: [
+      { value: 'system', label: '跟随系统' },
+      { value: 'light', label: '浅色' },
+      { value: 'dark', label: '深色' }
+    ]
+  }
+]
+
+export const aiModalDefaultProps = {
+  runtimePreset: 'opencode' as RuntimePreset,
+  baseUrl: 'http://localhost:4096',
+  modalTitle: 'AI Assistant',
+  triggerPosition: 'bottom-right' as const,
+  modalWidth: '400px',
+  modalHeight: '500px',
+  showExpandButton: true,
+  expandPosition: 'fullscreen' as const,
+  theme: 'system' as const
+}
+
+const renderAIModalPreview = (props: Record<string, any>) => {
+  const runtimePreset = props.runtimePreset || 'opencode'
+
+  // 为不同 preset 创建对应的 runtime
+  const getRuntime = () => {
+    switch (runtimePreset) {
+      case 'opencode':
+        return useOpenCodeRuntime({
+          baseUrl: props.baseUrl || 'http://localhost:4096',
+        })
+      default:
+        return null
+    }
+  }
+
+  const runtime = getRuntime()
+
+  return (
+    <div className=" bg-gradient-to-br from-slate-50 to-slate-100">
+      {runtime ? (
+        <AIModal
+          runtime={runtime}
+          modalTitle={props.modalTitle || 'AI Assistant'}
+          triggerPosition={props.triggerPosition || 'bottom-right'}
+          modalSize={{ width: props.modalWidth || '400px', height: props.modalHeight || '500px' }}
+          showExpandButton={props.showExpandButton !== false}
+          expandPosition={props.expandPosition || 'fullscreen'}
+          theme={props.theme || 'system'}
+        />
+      ) : (
+        <div className="h-full flex items-center justify-center p-8">
+          <div className="max-w-md bg-white rounded-lg shadow-lg p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-amber-100 flex items-center justify-center">
+              <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-slate-800 mb-2">需要配置 Runtime</h3>
+            <p className="text-sm text-slate-600 mb-4">
+              当前选择的 Runtime 类型需要手动配置，请选择 OpenCode Runtime 以查看预览。
+            </p>
+            <div className="bg-slate-50 rounded-lg p-4 text-left">
+              <p className="text-xs font-medium text-slate-700 mb-1">当前选择：</p>
+              <p className="text-sm text-slate-800">{runtimePreset}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const renderAIModalCodePreview = (props: Record<string, any>) => {
+  const runtimePreset = props.runtimePreset || 'opencode'
+  const baseUrl = props.baseUrl || 'http://localhost:4096'
+
+  let runtimeCode = ''
+
+  switch (runtimePreset) {
+    case 'opencode':
+      runtimeCode = `import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
+
+const runtime = useOpenCodeRuntime({
+  baseUrl: "${baseUrl}",
+})`
+      break
+    case 'openai':
+      runtimeCode = `import { useChatModelRuntime } from "@assistant-ui/react"
+
+const runtime = useChatModelRuntime({
+  initialMessages: [
+    {
+      role: "system",
+      content: "You are a helpful AI assistant."
+    }
+  ],
+  streamOptions: {
+    api: "/api/chat/openai"
+  }
+})`
+      break
+    case 'vercel':
+      runtimeCode = `import { useChatRuntime } from "@assistant-ui/react"
+import { createOpenAI } from "@ai-sdk/openai"
+import { streamText } from "ai"
+
+const runtime = useChatRuntime({
+  streamOptions: async (messages) => {
+    const result = await streamText({
+      model: createOpenAI({
+        apiKey: process.env.OPENAI_API_KEY
+      })("gpt-4-turbo"),
+      messages
+    })
+    return result.toDataStream()
+  }
+})`
+      break
+    case 'custom':
+      runtimeCode = `import { createCustomRuntime } from "@assistant-ui/react"
+
+const runtime = createCustomRuntime({
+  initialState: {
+    messages: [
+      {
+        role: "system",
+        content: "You are a helpful AI assistant."
+      }
+    ]
+  },
+  onSendMessage: async (messages) => {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages })
+    })
+    return response.body
+  }
+})`
+      break
+  }
+
+  const additionalProps = []
+  if (props.modalTitle !== 'AI Assistant') {
+    additionalProps.push(`modalTitle="${props.modalTitle}"`)
+  }
+  if (props.triggerPosition !== 'bottom-right') {
+    additionalProps.push(`triggerPosition="${props.triggerPosition}"`)
+  }
+  if (props.modalWidth !== '400px' || props.modalHeight !== '500px') {
+    additionalProps.push(`modalSize={{ width: "${props.modalWidth}", height: "${props.modalHeight}" }}`)
+  }
+  if (!props.showExpandButton) {
+    additionalProps.push(`showExpandButton={false}`)
+  }
+  if (props.expandPosition !== 'fullscreen') {
+    additionalProps.push(`expandPosition="${props.expandPosition}"`)
+  }
+  if (props.theme !== 'system') {
+    additionalProps.push(`theme="${props.theme}"`)
+  }
+
+  const propsStr = additionalProps.length > 0
+    ? '\n  ' + additionalProps.join('\n  ')
+    : ''
+
+  return `import { AIModal } from '@/registry/components/ai-modal/ai-modal'
+
+${runtimeCode}
+
+const MyAIModal = () => {
+  return (
+    <AIModal runtime={runtime}${propsStr} />
+  )
+}`
+}
+
+const renderAIModalCustomForm = (props: Record<string, any>, _onChange: (name: string, value: any) => void) => {
+  const runtimePreset = props.runtimePreset || 'opencode'
+
+  return (
+    <div className="space-y-4">
+      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <p className="text-sm font-medium text-slate-700 mb-2">
+          💡 Runtime 类型说明
+        </p>
+        <div className="text-sm text-slate-600 space-y-2">
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="bg-white p-2 rounded">
+              <p className="font-medium">OpenCode Runtime</p>
+              <p className="text-slate-500">使用 OpenCode 服务，适合代码生成场景</p>
+            </div>
+            <div className="bg-white p-2 rounded">
+              <p className="font-medium">OpenAI Runtime</p>
+              <p className="text-slate-500">直接调用 OpenAI API</p>
+            </div>
+            <div className="bg-white p-2 rounded">
+              <p className="font-medium">Vercel AI SDK</p>
+              <p className="text-slate-500">使用 Vercel AI SDK 集成</p>
+            </div>
+            <div className="bg-white p-2 rounded">
+              <p className="font-medium">自定义 Runtime</p>
+              <p className="text-slate-500">完全自定义的 runtime 实现</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+        <p className="text-sm font-medium text-green-800 mb-2">
+          🎯 状态继承说明
+        </p>
+        <p className="text-xs text-green-700">
+          点击放大按钮打开全屏 Dialog 时，会完全继承小弹窗的对话状态和交互信息。
+          这是通过共享同一个 <code className="px-1 bg-white rounded">AssistantRuntime</code> 实例实现的。
+        </p>
+      </div>
+
+      {runtimePreset === 'opencode' && (
+        <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+          <p className="text-sm font-medium text-amber-800 mb-2">
+            ⚠️ OpenCode Runtime 注意事项
+          </p>
+          <ul className="text-xs text-amber-700 space-y-1">
+            <li>• 确保 OpenCode 服务正在运行</li>
+            <li>• 默认端口为 4096</li>
+            <li>• baseUrl 应指向 OpenCode 服务的地址</li>
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export const aiModalConfig: ComponentConfig = {
+  id: 'ai-modal',
+  name: 'AI 弹窗助手',
+  propsConfig: aiModalPropsConfig,
+  defaultProps: aiModalDefaultProps,
+  renderPreview: renderAIModalPreview,
+  renderCodePreview: renderAIModalCodePreview,
+  renderCustomForm: renderAIModalCustomForm,
+  documentation: documentationMd
+}

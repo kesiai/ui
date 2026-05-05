@@ -8,6 +8,7 @@ import type { ComponentConfig } from './config/types'
 import { setConfig, useUser, useLogout } from '@airiot/client'
 import { Routes, Route, Link, useParams, Outlet } from 'react-router-dom'
 import { GlobalDialogs } from '@/registry/components/events/events'
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { toast } from 'sonner'
 // 配置 @airiot/client
 const apiHost = 'http://localhost:3000' //'https://demo.airiot.link'
@@ -266,7 +267,7 @@ function HomePage() {
 // 主 App 组件
 function App() {
   return (
-    <>
+    <TooltipProvider>
       <GlobalDialogs />
       <Routes>
         <Route path="/" element={<HomePage />}>
@@ -300,7 +301,7 @@ function App() {
           </div>
         } />
       </Routes>
-    </>
+    </TooltipProvider>
   )
 }
 

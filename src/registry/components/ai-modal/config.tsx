@@ -80,20 +80,19 @@ export const aiModalPropsConfig = [
     ]
   },
   {
-    name: 'baseUrl',
-    label: 'Base URL',
-    type: 'text' as const,
-    default: 'http://localhost:4096',
-    placeholder: 'http://localhost:4096',
-    description: 'OpenCode Runtime 的服务地址'
-  },
-  {
-    name: 'modalTitle',
-    label: '弹窗标题',
+    name: 'title',
+    label: '标题',
     type: 'text' as const,
     default: 'AI Assistant',
     placeholder: 'AI Assistant',
-    description: 'AI 助手弹窗的标题'
+    description: 'AI 助手的标题（显示在弹窗头部和侧边栏）'
+  },
+  {
+    name: 'modalSize',
+    label: '弹窗尺寸',
+    type: 'json' as const,
+    default: '{"width": "400px", "height": "500px"}',
+    description: '小弹窗的宽度和高度（JSON 格式：{"width": "400px", "height": "500px"}）'
   },
   {
     name: 'triggerPosition',
@@ -107,22 +106,6 @@ export const aiModalPropsConfig = [
       { value: 'top-right', label: '右上角' },
       { value: 'top-left', label: '左上角' }
     ]
-  },
-  {
-    name: 'modalWidth',
-    label: '弹窗宽度',
-    type: 'text' as const,
-    default: '400px',
-    placeholder: '400px',
-    description: '小弹窗的宽度'
-  },
-  {
-    name: 'modalHeight',
-    label: '弹窗高度',
-    type: 'text' as const,
-    default: '500px',
-    placeholder: '500px',
-    description: '小弹窗的高度'
   },
   {
     name: 'showExpandButton',
@@ -141,31 +124,16 @@ export const aiModalPropsConfig = [
       { value: 'fullscreen', label: '全屏' },
       { value: 'large', label: '大窗口 (90vw x 90vh)' }
     ]
-  },
-  {
-    name: 'theme',
-    label: '主题',
-    type: 'select' as const,
-    default: 'system' as const,
-    description: '组件主题',
-    options: [
-      { value: 'system', label: '跟随系统' },
-      { value: 'light', label: '浅色' },
-      { value: 'dark', label: '深色' }
-    ]
   }
 ]
 
 export const aiModalDefaultProps = {
   runtimePreset: 'opencode' as RuntimePreset,
-  baseUrl: 'http://localhost:4096',
-  modalTitle: 'AI Assistant',
+  title: 'AI Assistant',
+  modalSize: { width: '400px', height: '500px' },
   triggerPosition: 'bottom-right' as const,
-  modalWidth: '400px',
-  modalHeight: '500px',
   showExpandButton: true,
-  expandPosition: 'fullscreen' as const,
-  theme: 'system' as const
+  expandPosition: 'fullscreen' as const
 }
 
 const renderAIModalPreview = (props: Record<string, any>) => {
@@ -176,7 +144,7 @@ const renderAIModalPreview = (props: Record<string, any>) => {
     switch (runtimePreset) {
       case 'opencode':
         return useOpenCodeRuntime({
-          baseUrl: props.baseUrl || 'http://localhost:4096',
+          baseUrl: 'http://localhost:4096',
         })
       default:
         return null
@@ -185,17 +153,28 @@ const renderAIModalPreview = (props: Record<string, any>) => {
 
   const runtime = getRuntime()
 
+  // 解析 modalSize JSON
+  let modalSize = { width: '400px', height: '500px' }
+  if (props.modalSize) {
+    try {
+      modalSize = typeof props.modalSize === 'string'
+        ? JSON.parse(props.modalSize)
+        : props.modalSize
+    } catch (e) {
+      modalSize = { width: '400px', height: '500px' }
+    }
+  }
+
   return (
-    <div className=" bg-gradient-to-br from-slate-50 to-slate-100">
+    <div>
       {runtime ? (
         <AIModal
           runtime={runtime}
-          modalTitle={props.modalTitle || 'AI Assistant'}
+          title={props.title || 'AI Assistant'}
+          modalSize={modalSize}
           triggerPosition={props.triggerPosition || 'bottom-right'}
-          modalSize={{ width: props.modalWidth || '400px', height: props.modalHeight || '500px' }}
           showExpandButton={props.showExpandButton !== false}
           expandPosition={props.expandPosition || 'fullscreen'}
-          theme={props.theme || 'system'}
         />
       ) : (
         <div className="h-full flex items-center justify-center p-8">
@@ -222,7 +201,6 @@ const renderAIModalPreview = (props: Record<string, any>) => {
 
 const renderAIModalCodePreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'opencode'
-  const baseUrl = props.baseUrl || 'http://localhost:4096'
 
   let runtimeCode = ''
 
@@ -231,7 +209,7 @@ const renderAIModalCodePreview = (props: Record<string, any>) => {
       runtimeCode = `import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
 
 const runtime = useOpenCodeRuntime({
-  baseUrl: "${baseUrl}",
+  baseUrl: "http://localhost:4096",
 })`
       break
     case 'openai':
@@ -290,24 +268,27 @@ const runtime = createCustomRuntime({
       break
   }
 
+  // 解析 modalSize
+  let modalSizeCode = ''
+  if (props.modalSize && props.modalSize !== '{"width": "400px", "height": "500px"}') {
+    try {
+      const size = typeof props.modalSize === 'string' ? JSON.parse(props.modalSize) : props.modalSize
+      modalSizeCode = `\n  modalSize={{ width: "${size.width}", height: "${size.height}" }}`
+    } catch (e) {}
+  }
+
   const additionalProps = []
-  if (props.modalTitle !== 'AI Assistant') {
-    additionalProps.push(`modalTitle="${props.modalTitle}"`)
+  if (props.title && props.title !== 'AI Assistant') {
+    additionalProps.push(`title="${props.title}"`)
   }
   if (props.triggerPosition !== 'bottom-right') {
     additionalProps.push(`triggerPosition="${props.triggerPosition}"`)
-  }
-  if (props.modalWidth !== '400px' || props.modalHeight !== '500px') {
-    additionalProps.push(`modalSize={{ width: "${props.modalWidth}", height: "${props.modalHeight}" }}`)
   }
   if (!props.showExpandButton) {
     additionalProps.push(`showExpandButton={false}`)
   }
   if (props.expandPosition !== 'fullscreen') {
     additionalProps.push(`expandPosition="${props.expandPosition}"`)
-  }
-  if (props.theme !== 'system') {
-    additionalProps.push(`theme="${props.theme}"`)
   }
 
   const propsStr = additionalProps.length > 0
@@ -320,7 +301,7 @@ ${runtimeCode}
 
 const MyAIModal = () => {
   return (
-    <AIModal runtime={runtime}${propsStr} />
+    <AIModal runtime={runtime}${propsStr}${modalSizeCode} />
   )
 }`
 }

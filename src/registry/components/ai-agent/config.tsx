@@ -95,6 +95,14 @@ export const aiAgentPropsConfig = [
     description: 'AI 助手的系统提示词，用于定义助手的行为和角色'
   },
   {
+    name: 'title',
+    label: '侧边栏标题',
+    type: 'text' as const,
+    default: '',
+    placeholder: 'Chat History',
+    description: '侧边栏顶部的标题（留空则不显示）'
+  },
+  {
     name: 'showCodePreview',
     label: '显示代码预览',
     type: 'boolean' as const,
@@ -107,6 +115,7 @@ export const aiAgentDefaultProps = {
   runtimePreset: 'opencode' as RuntimePreset,
   baseUrl: 'http://127.0.0.1:4096',
   systemPrompt: 'You are a helpful AI assistant.',
+  title: '',
   showCodePreview: true
 }
 
@@ -131,7 +140,7 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-4 bg-slate-50">
       <div className="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
         {runtime ? (
-          <Assistant runtime={runtime} />
+          <Assistant runtime={runtime} title={props.title || ''} />
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center overflow-auto">
             <div className="w-16 h-16 mb-4 rounded-full bg-blue-100 flex items-center justify-center">
@@ -231,7 +240,7 @@ const runtime = createCustomRuntime({
 ${runtimeCode}
 
 const MyAIAssistant = () => {
-  return <Assistant runtime={runtime} />
+  return <Assistant runtime={runtime} ${props.title ? `title="${props.title}"` : ''} />
 }`
 }
 

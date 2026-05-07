@@ -8,21 +8,20 @@
 - **可展开设计**：支持从小弹窗展开为全屏 Dialog
 - **状态继承**：大小窗口间完全共享对话状态
 - **位置灵活**：支持四种触发按钮位置
-- **主题支持**：浅色/深色/跟随系统三种主题
+- **自定义样式**：支持自定义弹窗样式和触发按钮样式
 
 ## Props 参数说明
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
 | `runtime` | `AssistantRuntime` | 是 | - | AI 助手运行时实例，来自 @assistant-ui/react |
-| `triggerPosition` | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | 否 | `'bottom-right'` | 浮动触发按钮的位置 |
+| `title` | `string` | 否 | `'AI Assistant'` | AI 助手的标题（显示在弹窗头部和侧边栏） |
 | `modalSize` | `{ width: string; height: string }` | 否 | `{ width: '400px', height: '500px' }` | 小弹窗的尺寸 |
-| `modalTitle` | `string` | 否 | `'AI Assistant'` | 弹窗标题 |
+| `modalClassName` | `string` | 否 | - | 小弹窗的自定义类名 |
+| `triggerPosition` | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | 否 | `'bottom-right'` | 浮动触发按钮的位置 |
+| `triggerClassName` | `string` | 否 | - | 触发按钮的自定义类名 |
 | `showExpandButton` | `boolean` | 否 | `true` | 是否显示放大按钮 |
 | `expandPosition` | `'fullscreen' \| 'large'` | 否 | `'fullscreen'` | 展开模式：全屏或大窗口 |
-| `expandedSize` | `{ width: string; height: string }` | 否 | `{ width: '100vw', height: '100vh' }` | 展开后的尺寸（非全屏模式） |
-| `theme` | `'light' \| 'dark' \| 'system'` | 否 | `'system'` | 组件主题 |
-| `triggerClassName` | `string` | 否 | - | 触发按钮的自定义类名 |
 
 ### triggerPosition
 
@@ -63,9 +62,7 @@ function MyAIModal() {
 }
 ```
 
-### 2. 自定义触发位置
-
-将触发按钮放在左下角。
+### 2. 自定义标题
 
 ```tsx
 function MyAIModal() {
@@ -76,15 +73,13 @@ function MyAIModal() {
   return (
     <AIModal
       runtime={runtime}
-      triggerPosition="bottom-left"
+      title="智能客服"
     />
   )
 }
 ```
 
 ### 3. 自定义弹窗尺寸
-
-调整小弹窗的大小。
 
 ```tsx
 function MyAIModal() {
@@ -101,7 +96,7 @@ function MyAIModal() {
 }
 ```
 
-### 4. 自定义标题和主题
+### 4. 自定义触发位置
 
 ```tsx
 function MyAIModal() {
@@ -112,16 +107,13 @@ function MyAIModal() {
   return (
     <AIModal
       runtime={runtime}
-      modalTitle="智能客服"
-      theme="dark"
+      triggerPosition="bottom-left"
     />
   )
 }
 ```
 
 ### 5. 大窗口展开模式
-
-使用大窗口模式而非全屏。
 
 ```tsx
 function MyAIModal() {
@@ -133,15 +125,30 @@ function MyAIModal() {
     <AIModal
       runtime={runtime}
       expandPosition="large"
-      expandedSize={{ width: '90vw', height: '90vh' }}
     />
   )
 }
 ```
 
-### 6. 隐藏放大按钮
+### 6. 自定义样式
 
-如果不需要展开功能，可以隐藏放大按钮。
+```tsx
+function MyAIModal() {
+  const runtime = useOpenCodeRuntime({
+    baseUrl: "http://localhost:4096",
+  })
+
+  return (
+    <AIModal
+      runtime={runtime}
+      modalClassName="bg-blue-50 border-blue-200"
+      triggerClassName="bg-gradient-to-r from-blue-500 to-purple-500"
+    />
+  )
+}
+```
+
+### 7. 隐藏放大按钮
 
 ```tsx
 function MyAIModal() {
@@ -184,12 +191,13 @@ AIModal
 │   │   ├── AssistantModalPrimitive.Anchor (浮动按钮定位)
 │   │   │   └── Trigger (浮动触发按钮)
 │   │   └── AssistantModalPrimitive.Content (小弹窗内容)
-│   │       ├── Header (标题栏 + 放大按钮)
+│   │       ├── Header (标题栏 + 放大/关闭按钮)
 │   │       └── Thread (对话内容)
 │   └── Dialog (全屏展开)
 │       └── DialogContent
-│           ├── Header (标题栏 + 最小化按钮)
-│           └── Thread (对话内容，与小弹窗共享状态)
+│           └── Assistant (完整 AI 助手界面)
+│               ├── Sidebar (对话历史)
+│               └── Thread (对话内容，与小弹窗共享状态)
 ```
 
 ## 样式定制
@@ -201,24 +209,19 @@ AIModal
 ```tsx
 <AIModal
   runtime={runtime}
-  triggerClassName="bg-gradient-to-r from-blue-500 to-purple-500"
+  triggerClassName="bg-gradient-to-r from-blue-500 to-purple-500 shadow-xl"
 />
 ```
 
 ### 弹窗样式
 
-可以通过覆盖 CSS 变量来自定义弹窗样式：
+通过 `modalClassName` 自定义弹窗样式。
 
-```css
-/* 自定义弹窗阴影 */
-[data-state="open"] {
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-}
-
-/* 自定义标题栏 */
-.aui-modal-header {
-  background: linear-gradient(to right, #f8fafc, #f1f5f9);
-}
+```tsx
+<AIModal
+  runtime={runtime}
+  modalClassName="bg-blue-50 border-blue-200 rounded-2xl"
+/>
 ```
 
 ## 依赖项
@@ -242,13 +245,13 @@ AIModal
 
 2. **状态管理**：所有对话状态由 runtime 管理，大小窗口会自动同步
 
-3. **性能考虑**：弹窗内容使用了虚拟滚动，支持大量消息
+3. **性能考虑**：Thread 组件使用了虚拟滚动，支持大量消息
 
-4. **主题切换**：主题变化会实时应用到小弹窗和全屏 Dialog
+4. **响应式设计**：组件已内置响应式支持，在移动设备上也能正常使用
 
-5. **移动端适配**：在移动设备上，建议使用全屏模式以获得更好的体验
+5. **Z-Index 管理**：浮动按钮的 z-index 为 50，弹窗内容为 60
 
-6. **Z-Index 管理**：浮动按钮的 z-index 为 50，弹窗内容的 z-index 相同，通过 Portal 渲染避免层级问题
+6. **全屏模式**：全屏 Dialog 使用 `h-screen` 确保占满整个视口高度
 
 ## 完整示例
 
@@ -266,12 +269,12 @@ function CustomAIModal() {
   return (
     <AIModal
       runtime={runtime}
-      modalTitle="编程助手"
-      triggerPosition="bottom-right"
+      title="编程助手"
       modalSize={{ width: '450px', height: '550px' }}
+      modalClassName="bg-gradient-to-br from-slate-50 to-blue-50"
+      triggerPosition="bottom-right"
       showExpandButton={true}
       expandPosition="fullscreen"
-      theme="system"
       triggerClassName="bg-blue-600 hover:bg-blue-700"
     />
   )
@@ -296,12 +299,12 @@ function MultiAIModal() {
     <>
       <AIModal
         runtime={assistantRuntime}
-        modalTitle="助手"
+        title="助手"
         triggerPosition="bottom-left"
       />
       <AIModal
         runtime={coderRuntime}
-        modalTitle="编程助手"
+        title="编程助手"
         triggerPosition="bottom-right"
       />
     </>

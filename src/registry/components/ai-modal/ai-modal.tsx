@@ -21,27 +21,15 @@ import {
   AssistantModalPrimitive,
 } from "@assistant-ui/react";
 
-// ThreadTitle 组件
-const ThreadTitle = () => {
-  const title = useAuiState((s) => s.thread.suggestions?.[0]?.prompt);
-
-  return (
-    <span className="text-sm">
-      {title || "New Chat"}
-    </span>
-  );
-};
-
 interface AIModalProps {
   runtime: AssistantRuntime;
   triggerClassName?: string;
   triggerPosition?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  title?: string;
   modalSize?: { width: string; height: string };
-  modalTitle?: string;
+  modalClassName?: string;
   showExpandButton?: boolean;
   expandPosition?: "fullscreen" | "large";
-  expandedSize?: { width: string; height: string };
-  theme?: "light" | "dark" | "system";
 }
 
 const positionClasses = {
@@ -55,12 +43,11 @@ export const AIModal = ({
   runtime,
   triggerClassName,
   triggerPosition = "bottom-right",
+  title = "",
   modalSize = { width: "400px", height: "500px" },
-  modalTitle = "AI Assistant",
+  modalClassName = "",
   showExpandButton = true,
-  expandPosition = "fullscreen",
-  expandedSize = { width: "100vw", height: "100vh" },
-  theme = "system",
+  expandPosition = "fullscreen"
 }: AIModalProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,18 +57,12 @@ export const AIModal = ({
     setIsFullscreen(true);
   }, []);
 
-  const handleMinimize = useCallback(() => {
-    setIsFullscreen(false);
-  }, []);
-
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setIsFullscreen(false);
   }, []);
 
   const triggerPositionClass = positionClasses[triggerPosition];
-  const tooltipSide = triggerPosition.includes("top") ? "bottom" : "top";
-  const originSide = triggerPosition.includes("left") ? "left" : "right";
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
@@ -107,14 +88,18 @@ export const AIModal = ({
 
           <AssistantModalPrimitive.Content
             sideOffset={16}
-            className="h-[500px] w-[400px] rounded-xl border bg-popover shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out"
+            className={cn(
+              "rounded-xl border bg-popover shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out",
+              modalClassName
+            )}
+            style={{ width: modalSize.width, height: modalSize.height }}
           >
             {/* Modal 头部 */}
             <div className="flex items-center justify-between border-b px-4 py-3">
               <div className="flex items-center gap-2">
                 <BotIcon className="size-4 text-primary" />
                 <h3 className="font-semibold text-sm">
-                  <ThreadTitle />
+                  {title || 'AI Assistant'}
                 </h3>
               </div>
               <div className="flex items-center gap-1">
@@ -156,46 +141,14 @@ export const AIModal = ({
         <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
           <DialogContent
             className={cn(
-              "fixed z-[60] p-0 overflow-hidden",
+              "fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-[60] p-0 overflow-hidden gap-0",
               expandPosition === "fullscreen"
-                ? "h-screen w-screen max-w-screen rounded-none border-0"
-                : "h-[90vh] w-[90vw] max-w-[90vw]"
+                ? "!h-screen !w-screen !max-w-screen rounded-none border-0"
+                : "!h-[90vh] !w-[90vw] !max-w-[90vw]"
             )}
             onInteractOutside={(e) => e.preventDefault()}
           >
-            <div className="flex flex-col h-full">
-              <DialogHeader className="flex flex-row items-center justify-between border-b px-6 py-4 space-y-0">
-                <div className="flex items-center gap-2">
-                  <BotIcon className="size-5 text-primary" />
-                  <DialogTitle>
-                    <ThreadTitle />
-                  </DialogTitle>
-                </div>
-                <div className="flex items-center gap-2">
-                  {expandPosition === "fullscreen" && (
-                    <button
-                      onClick={handleMinimize}
-                      className="size-8 rounded hover:bg-accent flex items-center justify-center transition-colors"
-                      title="Minimize"
-                    >
-                      <Minimize2Icon className="size-4" />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => setIsFullscreen(false)}
-                    className="size-8 rounded hover:bg-accent flex items-center justify-center transition-colors"
-                    title="Close"
-                  >
-                    <XIcon className="size-4" />
-                  </button>
-                </div>
-              </DialogHeader>
-
-              {/* Assistant 组件 */}
-              <div className="flex-1 overflow-hidden">
-                <Assistant runtime={runtime} />
-              </div>
-            </div>
+            <Assistant runtime={runtime} title={title} className={cn(expandPosition === "fullscreen" ? "h-screen!" : "h-[90vh]!")} />
           </DialogContent>
         </Dialog>
     </AssistantRuntimeProvider>

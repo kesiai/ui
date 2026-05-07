@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Check, Copy } from 'lucide-react'
 
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ text, dark }: { text: string; dark?: boolean }) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = useCallback(() => {
@@ -17,12 +17,21 @@ function CopyButton({ text }: { text: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className="inline-flex items-center justify-center w-5 h-5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
+      className={`inline-flex items-center justify-center w-5 h-5 rounded transition-colors ${dark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-700' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-200'}`}
       title="复制"
     >
       {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
     </button>
   )
+}
+
+function extractText(children: React.ReactNode): string {
+  if (typeof children === 'string') return children
+  if (Array.isArray(children)) return children.map(extractText).join('')
+  if (children && typeof children === 'object' && 'props' in children) {
+    return extractText((children as React.ReactElement).props.children)
+  }
+  return ''
 }
 
 interface DocumentationViewerProps {
@@ -59,7 +68,7 @@ export function DocumentationViewer({ content }: DocumentationViewerProps) {
             const match = /language-(\w+)/.exec(className || '')
             if (match) {
               return (
-                <code className="block bg-slate-100 rounded-lg p-3 my-2 text-sm overflow-x-auto" {...props}>
+                <code className="block bg-slate-800 text-slate-100 rounded-lg p-3 my-2 text-sm overflow-x-auto whitespace-pre-wrap break-all" {...props}>
                   {children}
                 </code>
               )
@@ -67,16 +76,24 @@ export function DocumentationViewer({ content }: DocumentationViewerProps) {
             const codeText = String(children).replace(/\n$/, '')
             return (
               <span className="inline-flex items-center gap-1">
-                <code className="bg-slate-100 px-1.5 py-0.5 rounded text-sm text-red-600" {...props}>
+                <code className="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-sm" {...props}>
                   {children}
                 </code>
                 {codeText?.indexOf('npx shadcn@latest add') >= 0 && <CopyButton text={codeText} />}
               </span>
             )
           },
-          pre: ({ children }) => (
-            <pre className="bg-slate-100 rounded-lg p-4 my-4 overflow-x-auto">{children}</pre>
-          ),
+          pre: ({ children }) => {
+            const codeText = extractText(children)
+            return (
+              <div className="relative group">
+                <pre className="bg-slate-800 text-slate-100 rounded-lg p-4 my-4 pr-10 overflow-x-auto">{children}</pre>
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <CopyButton text={codeText} dark />
+                </div>
+              </div>
+            )
+          },
           ul: ({ children }) => (
             <ul className="list-disc list-inside mb-4 space-y-2 text-slate-700">{children}</ul>
           ),

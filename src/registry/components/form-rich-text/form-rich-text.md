@@ -4,13 +4,28 @@
 
 ## 简介
 
-`FormRichText` 是一个基于 CKEditor 5 的富文本编辑器组件，提供强大的文本编辑和格式化功能。
+`FormRichText` 是一个基于 TipTap 的轻量级富文本编辑器组件，提供丰富的文本编辑和格式化功能。
 
-- **丰富编辑功能**：支持标题、粗体、斜体、下划线、链接、列表、表格等多种格式
-- **自定义工具栏**：支持自定义工具栏配置，按需显示编辑功能
-- **图片上传**：集成图片上传适配器，支持插入和管理图片
+- **轻量模块化**：基于 TipTap 按需加载扩展，体积远小于 CKEditor
+- **丰富编辑功能**：支持标题、粗体、斜体、下划线、链接、列表、表格、图片等多种格式
+- **颜色与字体**：支持字体颜色、背景颜色（快捷色板 + 自定义取色器）、中文字体切换
+- **图片上传**：内置图片上传功能，上传至 `/core/media/img` 接口
 - **只读预览**：支持禁用模式下的富文本内容预览
 - **列表优化**：在列表中显示时，提供弹窗查看功能
+
+## 依赖
+
+组件依赖以下 TipTap 扩展包：
+
+```bash
+npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-underline @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight @tiptap/extension-font-family @tiptap/extension-table @tiptap/extension-table-row @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-image
+```
+
+同时需要安装 `@tailwindcss/typography` 以支持 `prose` 排版样式，并在全局 CSS 中注册：
+
+```css
+@plugin "@tailwindcss/typography";
+```
 
 ## Props 参数说明
 
@@ -23,43 +38,35 @@
 | `defaultVal` | `string` | 否 | - | 默认值 |
 | `defaultValType` | `'fixed' \| 'logic'` | 否 | `'fixed'` | 默认值类型 |
 | `inList` | `boolean` | 否 | `false` | 是否在列表中显示 |
-| `key` | `string` | 否 | - | 字段唯一标识 |
-| `title` | `string` | 否 | - | 字段标题 |
+| `title` | `string` | 否 | - | 字段标题（列表弹窗预览时显示） |
 | `ediforms` | `boolean` | 否 | - | 是否可编辑字段 |
-| `toolbar` | `object` | 否 | - | 自定义工具栏配置 |
+| `toolbar` | `object` | 否 | - | 保留字段，当前版本暂不支持自定义工具栏 |
 | `record` | `any` | 否 | - | 表单记录数据 |
-| `onBlur` | `() => void` | 否 | - | 失焦回调（继承自 BaseFormFieldProps） |
-| `name` | `string` | 否 | - | 字段名（继承自 BaseFormFieldProps） |
-| `id` | `string` | 否 | - | 字段 ID（继承自 BaseFormFieldProps） |
-| `schema` | `Record<string, any>` | 否 | - | 表单 schema（继承自 BaseFormFieldProps） |
 
-### 默认工具栏
+### 工具栏功能
 
-组件默认包含以下工具栏项目：
+组件内置工具栏包含以下功能：
 
-- `heading`：标题
-- `bold`：粗体
-- `italic`：斜体
-- `underline`：下划线
-- `link`：链接
-- `bulletedList`：无序列表
-- `numberedList`：有序列表
-- `outdent`：减少缩进
-- `indent`：增加缩进
-- `blockQuote`：引用
-- `insertTable`：插入表格
-- `fontFamily`：字体
-- `fontSize`：字号
-- `fontColor`：字体颜色
-- `fontBackgroundColor`：背景颜色
-- `undo`：撤销
-- `redo`：重做
+| 功能 | 说明 |
+|------|------|
+| 撤销 / 重做 | 支持操作历史回退 |
+| 标题1 / 标题2 / 标题3 | 切换段落标题级别 |
+| 加粗 / 斜体 / 下划线 | 基础文字格式 |
+| 字体颜色 / 背景颜色 | 快捷色板 + 自定义取色器 + 重置 |
+| 插入链接 | 弹窗输入链接地址 |
+| 插入图片 | 选择本地图片上传 |
+| 无序列表 / 有序列表 | 列表排版 |
+| 引用 | 块引用 |
+| 插入表格 | 插入 3x3 表格（含表头） |
+| 字体选择 | 宋体、黑体、微软雅黑等中文字体 |
+
+### 支持的字体
+
+默认、宋体、新宋体、仿宋、楷体、黑体、微软雅黑、隶书、幼圆
 
 ## 基本用法
 
 ### 1. 基础富文本编辑
-
-最简单的富文本编辑器，使用默认工具栏。
 
 ```tsx
 import { FormRichText } from '@/components/kesi/form-rich-text'
@@ -79,8 +86,6 @@ function Example() {
 ```
 
 ### 2. 只读预览模式
-
-禁用编辑功能，只显示富文本内容。
 
 ```tsx
 function Example() {
@@ -118,8 +123,6 @@ function Example() {
 
 ### 4. 带默认值
 
-设置初始的富文本内容。
-
 ```tsx
 function Example() {
   const [content, setContent] = useState('')
@@ -138,8 +141,6 @@ function Example() {
 ## 完整示例
 
 ### 文章发布编辑器
-
-用于创建和编辑文章内容的富文本编辑器。
 
 ```tsx
 import { FormRichText } from '@/components/kesi/form-rich-text'
@@ -173,7 +174,6 @@ function ArticleEditor() {
           value={content}
           onChange={setContent}
           placeholder="开始编写您的文章..."
-          key="article-content"
           ediforms
         />
       </div>
@@ -184,35 +184,7 @@ function ArticleEditor() {
 }
 ```
 
-### 产品描述编辑
-
-编辑产品详细描述，支持图片和表格。
-
-```tsx
-function ProductDescriptionForm() {
-  const [description, setDescription] = useState('')
-
-  return (
-    <div className="space-y-4">
-      <FormRichText
-        value={description}
-        onChange={setDescription}
-        placeholder="请输入产品详细描述"
-        defaultVal="<h2>产品特点</h2><ul><li>特点1</li><li>特点2</li></ul>"
-        key="product-description"
-      />
-
-      <div className="text-sm text-gray-500">
-        支持：标题、列表、表格、图片、链接等格式
-      </div>
-    </div>
-  )
-}
-```
-
-### 公告内容编辑
-
-编辑系统公告，支持预览和编辑切换。
+### 公告内容编辑（编辑/预览切换）
 
 ```tsx
 function AnnouncementEditor() {
@@ -241,7 +213,6 @@ function AnnouncementEditor() {
         onChange={setAnnouncement}
         disabled={isPreview}
         placeholder="请输入公告内容"
-        key="announcement-content"
       />
     </div>
   )
@@ -250,22 +221,18 @@ function AnnouncementEditor() {
 
 ## 注意事项
 
-1. **CKEditor 依赖**：组件依赖 `@ckeditor/ckeditor5-react` 和 `@ckeditor/ckeditor5-build-decoupled-document`，需要确保这些包已正确安装。
+1. **内容格式**：组件使用 HTML 格式存储和传输富文本内容，`value` 和 `onChange` 处理的都是 HTML 字符串。
 
-2. **内容格式**：组件使用 HTML 格式存储和传输富文本内容，`value` 和 `onChange` 处理的都是 HTML 字符串。
+2. **排版样式**：编辑器内容使用 Tailwind CSS `prose` 类进行排版，需要安装 `@tailwindcss/typography` 插件并在全局 CSS 中通过 `@plugin "@tailwindcss/typography"` 注册。
 
-3. **图片上传**：组件集成了自定义的上传适配器 `RichTextUploadAdapter`，需要配置图片上传的 API 接口才能正常使用图片插入功能。
+3. **图片上传**：组件内置图片上传功能，上传接口为 `/core/media/img`，使用 `localStorage` 中的 `token` 进行鉴权。如需修改上传接口，请编辑组件中的 `uploadImage` 函数。
 
-4. **工具栏分离**：使用 Decoupled Editor 模式，工具栏和编辑区域是分离的，工具栏会自动插入到编辑区域上方。
+4. **默认值生效时机**：默认值会在组件初始化时自动设置，但如果 `defaultValType` 为 `'logic'`，则不会自动设置默认值，等待逻辑计算后手动设置。
 
-5. **中文语言包**：组件默认加载中文语言包（`zh-cn`），并扩展了一些自定义翻译，提升中文用户体验。
+5. **列表模式优化**：当 `inList` 为 `true` 且组件处于禁用状态时，富文本内容会显示为"查看内容"链接，点击后在弹窗中查看完整内容。
 
-6. **默认值生效时机**：默认值会在组件初始化时自动设置，但如果 `defaultValType` 为 `'logic'`，则不会自动设置默认值，等待逻辑计算后手动设置。
+6. **链接处理**：在预览模式下，组件会自动为所有链接添加 `target="_Blank"` 属性，确保链接在新标签页中打开。
 
-7. **列表模式优化**：当 `inList` 为 `true` 且组件处于禁用状态时，富文本内容会显示为"查看内容"链接，点击后在弹窗中查看完整内容，避免在列表中占用过多空间。
+7. **键盘快捷键**：支持 `Ctrl+Z` 撤销、`Ctrl+Shift+Z` / `Ctrl+Y` 重做、`Ctrl+B` 加粗、`Ctrl+I` 斜体、`Ctrl+U` 下划线等常用快捷键。
 
-8. **链接处理**：在预览模式下，组件会自动为所有链接添加 `target="_Blank"` 属性，确保链接在新标签页中打开。
-
-9. **自定义工具栏**：可以通过 `toolbar` 属性自定义工具栏配置，完全控制显示的编辑功能。传空对象 `{}` 使用默认工具栏，传自定义配置覆盖默认配置。
-
-10. **样式隔离**：编辑器内容使用 `.ck-content` 类名进行样式隔离，确保编辑器内的样式不影响页面其他部分。
+8. **样式隔离**：编辑器内容样式通过 `.custom-text-editor .tiptap` 选择器隔离，不会影响页面其他部分。

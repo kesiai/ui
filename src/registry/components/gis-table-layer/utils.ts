@@ -74,13 +74,14 @@ export const createFeature = ({ type, record, style: styleConfig, coordinate, co
         feature = new Feature({ geometry });
     }
 
+    const label = tableGisConfig?.labelField ? record?.[tableGisConfig.labelField] : record._label
     feature.setId(getMarkerId(record))
     feature.setProperties({
         markerRecord: record,
         markerType: type,
         markerInitStyle: styleConfig,
         markerTags: markerTags,
-        markerLabel: record._label,
+        markerLabel: label,
         tableGisConfig
     }, true)
     return feature
@@ -304,7 +305,7 @@ export const createStyleClass = ({
 
         // typeStyle 是特定类型的样式（如 line: { color: 'blue', width: 8 }）
         
-        const { fill, fillColor: typeFill, color, width, lineDash } = typeStyle || {}
+        const { fill, fillColor: typeFill, color, width, lineDash, lineDashStyle } = typeStyle || {}
 
         // 优先级：
         // 1. typeStyle 中的属性 (line.color, line.width 等)
@@ -316,12 +317,13 @@ export const createStyleClass = ({
 
         let finalStrokeColor = color
         if (!finalStrokeColor) finalStrokeColor = markerStyle?.color
-        
+
         let finalStrokeWidth = width
         if (finalStrokeWidth === undefined) finalStrokeWidth = markerStyle?.width
         if (finalStrokeWidth === undefined) finalStrokeWidth = 2
 
-        let finalStrokeLineDash = lineDash
+        const dashStyle = lineDashStyle || lineDash || markerStyle?.lineDashStyle
+        let finalStrokeLineDash = (dashStyle === 'dashed' || dashStyle === 'dash') ? [10, 10] : undefined
 
         return new style.Style({
             text: createTextClass(textStyle || {}),
@@ -330,7 +332,7 @@ export const createStyleClass = ({
             stroke: new style.Stroke({
                 color: finalStrokeColor,
                 width: finalStrokeWidth,
-                lineDash: (finalStrokeLineDash == "dashed" || finalStrokeLineDash == 'dash') ? [10, 10] : undefined
+                lineDash: finalStrokeLineDash,
             }),
         })
     }

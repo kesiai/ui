@@ -1,8 +1,3 @@
-/**
- * 将旧版本的 schema 格式转换为新的分离格式
- */
-
-// 类型定义
 interface OldSchemaField {
   type: string;
   key: string;
@@ -205,7 +200,10 @@ function transformSchema(oldSchema: OldSchema): NewSchema {
       // 分配到对应的 schema
       if (baseSchemaProps.has(renamedKey)) {
         if (renamedKey == 'items') {
-          const { schema, formSchema } = transformSchema(propValue)
+          const { schema, formSchema } = transformSchema({
+            ...propValue,
+            form: propValue?.form || Object.keys(propValue?.properties || {}),
+          })
           baseField[renamedKey] = { ...schema, formSchema }
         } else {
           baseField[renamedKey] = propValue;
@@ -309,8 +307,7 @@ function transformSchema(oldSchema: OldSchema): NewSchema {
         result.filterSchema.push(filterItem);
       });
     });
-  }  
-  
+  }    
   return result;
 }
 

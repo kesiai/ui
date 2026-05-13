@@ -67,11 +67,13 @@ const FormArray: React.FC<FormArrayProps> = (props) => {
   const properties = items?.properties || {}
   // 判断 items 是否为基础类型（非对象类型）
   const isPrimitiveItem = items?.type && items.type !== 'object'
-  // 如果没有 formSchema，从 properties 的 keys 中自动生成
-  const formSchema = items?.formSchema || Object.keys(properties).map(key => ({
-    key,
-    title: properties[key]?.title
-  }))
+  // 如果没有 formSchema 或 formSchema 为空，从 properties 的 keys 中自动生成
+  const formSchema = items?.formSchema?.length
+    ? items.formSchema
+    : Object.keys(properties).map(key => ({
+        key,
+        title: properties[key]?.title
+      }))
 
   // 从 FormProvider 获取 control
   const { control } = useFormContext()

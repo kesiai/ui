@@ -4,11 +4,10 @@ import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
 import isString from 'lodash/isString'
 import isNull from 'lodash/isNull'
-import { useAtomValue } from 'jotai'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { convertValue, type DataPointConfig } from "@/registry/lib/data-point-utils"
-import { useUser, useTag, queryLastData, serverTimeState } from "@airiot/client"
+import { useUser, useTag, queryLastData, useServerTime } from "@airiot/client"
 
 // ─── 类型 ───
 
@@ -112,7 +111,7 @@ const PopoverDetail: React.FC<{
   format?: (value: any) => any
   onClose: () => void
 }> = ({ tableId, tableDataId, tagId, value, time, warningState, config, format, onClose }) => {
-  const serverTime = useAtomValue(serverTimeState)
+  const serverTime = useServerTime()
 
   const gap = time ? serverTime.unix() - dayjs(time).unix() : 0
   const timeValid = time ? dayjs(time).isValid() : false

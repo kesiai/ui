@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Badge } from "@/components/ui/badge"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { convertValue, type DataPointConfig } from "@/registry/lib/data-point-utils"
-import { useUser, useTag, queryLastData, useServerTime } from "@airiot/client"
+import { useUser, useTag, queryLastData, useServerTime, getSettings } from "@airiot/client"
 
 // ─── 类型 ───
 
@@ -99,9 +99,27 @@ function formatFieldValue(val: any): string {
 
 // ─── WarningSection ───
 
+function useWarningKinds() {
+  const [kinds, setKinds] = React.useState<Array<{ id: string; name: string }>>([])
+  React.useEffect(() => {
+    getSettings().then(settings => {
+      setKinds(settings?.warning?.warningkind || [])
+    })
+  }, [])
+  return kinds
+}
+
 const WarningSection: React.FC<{ warningState: WarningState }> = ({ warningState }) => {
   const { level, recoveryTime, info } = warningState
   const isRecovered = !!recoveryTime
+  const warningKinds = useWarningKinds()
+
+  const typeNames = React.useMemo(() => {
+    if (!info?.type || !warningKinds.length) return null
+    const ids = Array.isArray(info.type) ? info.type : [info.type]
+    const names = ids.map((id: string) => warningKinds.find(k => k.id === id)?.name || id)
+    return names.join('、')
+  }, [info?.type, warningKinds])
 
   return (
     <div className="space-y-1.5">
@@ -135,8 +153,14 @@ const WarningSection: React.FC<{ warningState: WarningState }> = ({ warningState
               {info.desc && (
                 <p><span className="text-muted-foreground">报警描述:</span> {info.desc}</p>
               )}
+              {typeNames && (
+                <p><span className="text-muted-foreground">报警类型:</span> {typeNames}</p>
+              )}
               {info.status && (
-                <p><span className="text-muted-foreground">报警状态:</span> {info.status}</p>
+                <p><span className="text-muted-foreground">确认状态:</span> {info.status}</p>
+              )}
+              {info.processed && (
+                <p><span className="text-muted-foreground">处理状态:</span> {info.processed}</p>
               )}
               {info.fields && info.fields.length > 0 && (
                 <p>

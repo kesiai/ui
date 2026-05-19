@@ -8,8 +8,7 @@ import { useAtomValue } from 'jotai'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { convertValue, type DataPointConfig } from "@/registry/lib/data-point-utils"
-import { useUser, useTag, queryLastData } from "@airiot/client"
-import { serverTimeAtom } from "@/registry/components/server-time/server-time"
+import { useUser, useTag, queryLastData, serverTimeState } from "@airiot/client"
 
 // ─── 类型 ───
 
@@ -113,7 +112,7 @@ const PopoverDetail: React.FC<{
   format?: (value: any) => any
   onClose: () => void
 }> = ({ tableId, tableDataId, tagId, value, time, warningState, config, format, onClose }) => {
-  const serverTime = useAtomValue(serverTimeAtom)
+  const serverTime = useAtomValue(serverTimeState)
 
   const gap = time ? serverTime.unix() - dayjs(time).unix() : 0
   const timeValid = time ? dayjs(time).isValid() : false
@@ -237,5 +236,5 @@ const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(
 
 DataPoint.displayName = "DataPoint"
 
-export { DataPoint, convertValue, serverTimeAtom }
+export { DataPoint, convertValue }
 export type { DataPointConfig } from "../../lib/data-point-utils"

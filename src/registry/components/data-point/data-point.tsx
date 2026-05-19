@@ -6,15 +6,32 @@ import isString from 'lodash/isString'
 import isNull from 'lodash/isNull'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Badge } from "@/components/ui/badge"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { convertValue, type DataPointConfig } from "@/registry/lib/data-point-utils"
 import { useUser, useTag, queryLastData, useServerTime } from "@airiot/client"
 
 // ─── 类型 ───
 
+export interface WarningInfo {
+  desc?: string
+  level?: string
+  status?: string
+  processed?: string
+  time?: string
+  table?: { id: string; title?: string }
+  tableData?: { id: string; name?: string; title?: string }
+  fields?: Array<{ id: string; name: string; value?: any }>
+  confirmUser?: { name: string }
+  confirmTime?: string
+  [key: string]: any
+}
+
 export interface WarningState {
   className?: string
   level?: '低' | '中' | '高'
   recoveryTime?: string
+  info?: WarningInfo
 }
 
 export interface TimeoutState {
@@ -47,6 +64,16 @@ export interface DataPointProps {
   style?: DataPointStyle
 }
 
+// ─── 常量 ───
+
+const levelColors: Record<string, string> = {
+  '低': 'bg-blue-100 text-blue-700 border-blue-200',
+  '中': 'bg-orange-100 text-orange-700 border-orange-200',
+  '高': 'bg-red-100 text-red-700 border-red-200',
+}
+
+const recoveredColor = 'bg-green-100 text-green-700 border-green-200'
+
 // ─── 工具 ───
 
 function formatGap(seconds: number): string {
@@ -62,6 +89,77 @@ function formatGap(seconds: number): string {
 
 function isEmptyValue(val: any): boolean {
   return val === undefined || val === '' || isNull(val)
+}
+
+function formatFieldValue(val: any): string {
+  if (typeof val === 'boolean') return val ? '1' : '0'
+  if (typeof val === 'number') return Number.isInteger(val) ? String(val) : val.toFixed(3)
+  return String(val ?? '-')
+}
+
+// ─── WarningSection ───
+
+const WarningSection: React.FC<{ warningState: WarningState }> = ({ warningState }) => {
+  const { level, recoveryTime, info } = warningState
+  const isRecovered = !!recoveryTime
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center gap-1.5">
+        <span className="text-muted-foreground">报警:</span>
+        {level && (
+          <Badge variant="outline" className={cn('text-xs px-1.5 py-0', levelColors[level])}>
+            {level}
+          </Badge>
+        )}
+        {isRecovered && (
+          <Badge variant="outline" className={cn('text-xs px-1.5 py-0', recoveredColor)}>
+            已恢复
+          </Badge>
+        )}
+      </div>
+
+      {info && (
+        <Collapsible>
+          <CollapsibleTrigger className="text-xs text-blue-600 hover:text-blue-800 underline cursor-pointer">
+            报警详情
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="mt-1.5 pl-2 border-l-2 border-muted text-xs space-y-1">
+              {info.time && (
+                <p><span className="text-muted-foreground">报警时间:</span> {dayjs(info.time).format('YYYY-MM-DD HH:mm:ss')}</p>
+              )}
+              {(info.tableData?.name || info.tableData?.title || info.tableData?.id) && (
+                <p><span className="text-muted-foreground">报警设备:</span> {info.tableData.name || info.tableData.title || info.tableData.id}</p>
+              )}
+              {info.desc && (
+                <p><span className="text-muted-foreground">报警描述:</span> {info.desc}</p>
+              )}
+              {info.status && (
+                <p><span className="text-muted-foreground">报警状态:</span> {info.status}</p>
+              )}
+              {info.fields && info.fields.length > 0 && (
+                <p>
+                  <span className="text-muted-foreground">报警数据:</span>{' '}
+                  {info.fields.map((f, i) => (
+                    <React.Fragment key={f.id || i}>
+                      {i > 0 && ', '}{f.name}: {formatFieldValue(f.value)}
+                    </React.Fragment>
+                  ))}
+                </p>
+              )}
+              {info.confirmUser?.name && (
+                <p><span className="text-muted-foreground">处理人:</span> {info.confirmUser.name}</p>
+              )}
+              {info.confirmTime && (
+                <p><span className="text-muted-foreground">处理时间:</span> {dayjs(info.confirmTime).format('YYYY-MM-DD HH:mm:ss')}</p>
+              )}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
+    </div>
+  )
 }
 
 // ─── LatestValue ───
@@ -113,7 +211,7 @@ const PopoverDetail: React.FC<{
 }> = ({ tableId, tableDataId, tagId, value, time, warningState, config, format, onClose }) => {
   const serverTime = useServerTime()
 
-  const gap = time ? serverTime.unix() - dayjs(time).unix() : 0
+  const gap = time ? serverTime?.unix() - dayjs(time).unix() : 0
   const timeValid = time ? dayjs(time).isValid() : false
 
   return (
@@ -137,10 +235,7 @@ const PopoverDetail: React.FC<{
         </p>
       ) : null}
       {warningState && !isEmpty(warningState) ? (
-        <p className="text-muted-foreground">
-          报警: {warningState.level ? `${warningState.level}级` : ''}
-          {warningState.recoveryTime ? ' (已恢复)' : ''}
-        </p>
+        <WarningSection warningState={warningState} />
       ) : null}
       {!isString(value) && (
         <p className="text-center pt-1">

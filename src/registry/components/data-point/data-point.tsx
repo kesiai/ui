@@ -4,11 +4,14 @@ import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
 import isString from 'lodash/isString'
 import isNull from 'lodash/isNull'
-import isNumber from 'lodash/isNumber'
+import { useAtomValue } from 'jotai'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { convertValue, valueFormat, type DataPointConfig } from "@/registry/lib/data-point-utils"
-import { useUser, useTag } from "@airiot/client"
+import { convertValue, type DataPointConfig } from "@/registry/lib/data-point-utils"
+import { useUser, useTag, queryLastData } from "@airiot/client"
+import { serverTimeAtom } from "@/registry/components/server-time/server-time"
+
+// ─── 类型 ───
 
 export interface WarningState {
   className?: string
@@ -28,6 +31,13 @@ export interface DataPointTag {
   timeoutState?: TimeoutState
 }
 
+export interface DataPointStyle {
+  timeout?: string
+  offline?: string
+  warning?: { '低'?: string; '中'?: string; '高'?: string; '恢复'?: string }
+  tagClassName?: string
+}
+
 export interface DataPointProps {
   tableId: string
   tableDataId: string
@@ -35,196 +45,108 @@ export interface DataPointProps {
   tagId: string
   initVisible?: boolean
   format?: (value: any) => any
-  colors?: {
-    timeout?: string
-    offline?: string
-    warning?: string
-    warning1?: string
-    warning2?: string
-    warning3?: string
-    warning4?: string
-  }
-  animated?: boolean
-  timeoutColor?: string
-  offlineColor?: string
-  warningColor?: string
-  warningLevelColor?: {
-    '低'?: string
-    '中'?: string
-    '高'?: string
-  }
-  tagClassName?: string
   config?: DataPointConfig
+  style?: DataPointStyle
 }
 
-export interface DataPointValueProps {
+// ─── 工具 ───
+
+function formatGap(seconds: number): string {
+  let s = seconds < 0 && seconds > -5 ? 0 : seconds
+  let text = ''
+
+  if (s >= 86400) { text += `${Math.floor(s / 86400)}天`; s %= 86400 }
+  if (text || s >= 3600) { text += ` ${Math.floor(s / 3600)}小时`; s %= 3600 }
+  if (text || s >= 60) { text += ` ${Math.floor(s / 60)}分`; s %= 60 }
+  text += ` ${s}秒`
+  return text
+}
+
+function isEmptyValue(val: any): boolean {
+  return val === undefined || val === '' || isNull(val)
+}
+
+// ─── LatestValue ───
+
+const LatestValue: React.FC<{
+  tableId: string
+  tableDataId: string
+  tagId: string
   value: any
   format?: (value: any) => any
   config: DataPointConfig
+}> = ({ tableId, tableDataId, tagId, value, format, config }) => {
+  const [queried, setQueried] = React.useState<any>(null)
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    queryLastData([{ tableId, dataId: tableDataId, tagId }], (res: any) => {
+      const path = `${tableId}|${tableDataId}|${tagId}.value`
+      const v = res?.[path]
+      if (v !== undefined) setQueried(v)
+      setLoading(false)
+    })
+  }, [tableId, tableDataId, tagId])
+
+  const val = convertValue(!isNil(value) ? value : queried, format, config)
+
+  return (
+    <p>
+      <span className="text-muted-foreground">最新有效值: </span>
+      <span className="font-medium">
+        {loading ? '加载中...' : !isNil(val) ? String(val) : '-'}
+      </span>
+    </p>
+  )
 }
 
-export interface PopoverContentProps {
-  setVisible: (visible: boolean) => void
+// ─── PopoverDetail ───
+
+const PopoverDetail: React.FC<{
+  tableId: string
+  tableDataId: string
+  tagId: string
   value: any
   time?: string | Date
   warningState?: WarningState
   config: DataPointConfig
   format?: (value: any) => any
-  colors?: {
-    timeout?: string
-    offline?: string
-    warning?: string
-    warning1?: string
-    warning2?: string
-    warning3?: string
-    warning4?: string
-  }
-  animated?: boolean
-  timeoutColor?: string
-  offlineColor?: string
-  warningColor?: string
-  warningLevelColor?: {
-    '低'?: string
-    '中'?: string
-    '高'?: string
-  }
-  tagClassName?: string
-  tagName?: string
-  tableId: string
-  tableDataId: string
-  tableDataName?: string
-  tagId: string
-  initVisible?: boolean
-}
+  onClose: () => void
+}> = ({ tableId, tableDataId, tagId, value, time, warningState, config, format, onClose }) => {
+  const serverTime = useAtomValue(serverTimeAtom)
 
-// Animated Number Component
-const AnimatedNumber: React.FC<{
-  value: number
-  className?: string
-}> = ({ value, className }) => {
-  const [displayValue, setDisplayValue] = React.useState(0)
-
-  React.useEffect(() => {
-    const duration = 300
-    const steps = 30
-    const increment = (value - displayValue) / steps
-    let currentStep = 0
-
-    const timer = setInterval(() => {
-      currentStep++
-      if (currentStep >= steps) {
-        setDisplayValue(value)
-        clearInterval(timer)
-      } else {
-        setDisplayValue(prev => prev + increment)
-      }
-    }, duration / steps)
-
-    return () => clearInterval(timer)
-  }, [value])
-
-  return <span className={className}>{displayValue}</span>
-}
-
-// Gap Time Component
-const GapTime: React.FC<{ seconds: number }> = ({ seconds }) => {
-  let text = ''
-  let ss = seconds < 0 && seconds > -5 ? 0 : seconds
-  let rt = ss
-
-  if (rt > 24 * 3600) {
-    text += `${Math.floor(rt / (24 * 3600))}天`
-    rt = rt % (24 * 3600)
-  }
-  if (text != '' || rt > 3600) {
-    text += ` ${Math.floor(rt / 3600)}小时`
-    rt = rt % 3600
-  }
-  if (text != '' || rt > 60) {
-    text += ` ${Math.floor(rt / 60)}分`
-    rt = rt % 60
-  }
-  text += ` ${rt}秒`
-
-  return (
-    <span title={`${ss}秒`}>
-      {text}
-    </span>
-  )
-}
-
-// Latest Value Component
-const LatestValue: React.FC<{
-  value: any
-  format?: (value: any) => any
-  config: DataPointConfig
-}> = ({ value, format, config }) => {
-  const [state, setState] = React.useState<any>(null)
-
-  React.useEffect(() => {
-    if (!isNil(value)) {
-      setState(value)
-    }
-  }, [value])
-
-  const val = convertValue(state, format, config)
-
-  return (
-    <p>
-      <strong>最新有效值: </strong>
-      {!isNil(val) ? val : null}
-    </p>
-  )
-}
-
-// Popover Content Component
-const PopoverContentComponent: React.FC<PopoverContentProps> = ({
-  setVisible,
-  value,
-  time,
-  warningState,
-  config,
-  format,
-}) => {
-  const { interval } = config
-  // Mock server time - in real implementation this would come from a context or prop
-  const serverTime = dayjs()
   const gap = time ? serverTime.unix() - dayjs(time).unix() : 0
-
-  const valid = time ? !dayjs(time).isValid() : true
+  const timeValid = time ? dayjs(time).isValid() : false
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5 text-sm">
       <LatestValue
-        value={value}
-        format={format}
-        config={config}
+        tableId={tableId} tableDataId={tableDataId} tagId={tagId}
+        value={value} format={format} config={config}
       />
       <p>
-        <strong>最新时间: </strong>
-        {!valid && time ? dayjs(time).format('YYYY-MM-DD HH:mm:ss') : null}
+        <span className="text-muted-foreground">最新时间: </span>
+        {timeValid ? dayjs(time).format('YYYY-MM-DD HH:mm:ss') : '-'}
       </p>
       <p>
-        <strong>距现时间: </strong>
-        {!valid && time ? <GapTime seconds={gap} /> : null}
+        <span className="text-muted-foreground">距现时间: </span>
+        <span title={`${gap}秒`}>{timeValid ? formatGap(gap) : '-'}</span>
       </p>
-      {interval ? (
+      {config.interval ? (
         <p>
-          <strong>采集周期: </strong>
-          {interval}秒
+          <span className="text-muted-foreground">采集周期: </span>
+          {config.interval}秒
         </p>
       ) : null}
       {warningState && !isEmpty(warningState) ? (
-        <div className="text-sm">
-          Warning State: {JSON.stringify(warningState)}
-        </div>
+        <p className="text-muted-foreground">
+          报警: {warningState.level ? `${warningState.level}级` : ''}
+          {warningState.recoveryTime ? ' (已恢复)' : ''}
+        </p>
       ) : null}
       {!isString(value) && (
-        <p className="text-center">
-          <button
-            onClick={() => setVisible(false)}
-            className="text-blue-600 hover:text-blue-800 underline"
-          >
+        <p className="text-center pt-1">
+          <button onClick={onClose} className="text-blue-600 hover:text-blue-800 underline">
             查看历史数据
           </button>
         </p>
@@ -233,187 +155,80 @@ const PopoverContentComponent: React.FC<PopoverContentProps> = ({
   )
 }
 
-// Default Render Component
-const DefaultRender: React.FC<{
+// ─── TagRender ───
+
+const TagRender: React.FC<{
   tag: DataPointTag
   config: DataPointConfig
   format?: (value: any) => any
-  animated?: boolean
-  timeoutColor?: string
-  offlineColor?: string
-  warningColor?: string
-  warningLevelColor?: { '低'?: string; '中'?: string; '高'?: string }
-  tagClassName?: string
-  colors?: {
-    timeout?: string
-    offline?: string
-    warning1?: string
-    warning2?: string
-    warning3?: string
-    warning4?: string
-    [key: string]: string | undefined
-  }
-}> = ({
-  tag,
-  config,
-  format,
-  animated,
-  timeoutColor,
-  offlineColor,
-  warningColor,
-  warningLevelColor,
-  tagClassName = '',
-  colors
-}) => {
-    const { errview } = config || {}
-    const { value, warningState = {}, timeoutState = {} } = tag || {}
+  style?: DataPointStyle
+}> = ({ tag, config, format, style }) => {
+  const { errview } = config || {}
+  const { value, warningState = {}, timeoutState = {} } = tag || {}
+  const val = convertValue(value, format, config)
 
-    const val = convertValue(value, format, config)
+  const { className: warningClassName, level, recoveryTime } = warningState
+  const { isTimeout, isOffline } = timeoutState
 
-    const { className: warningClassName, level, recoveryTime } = warningState
-    const { isTimeout, isOffline } = timeoutState
+  const bg = isOffline ? style?.offline : isTimeout ? style?.timeout : undefined
+  const color = level
+    ? style?.warning?.[level]
+    : recoveryTime ? style?.warning?.['恢复'] : undefined
 
-    const _timeoutColor = isTimeout ? timeoutColor || colors?.timeout : undefined
-    const backgroundColor = isOffline
-      ? offlineColor || colors?.offline
-      : _timeoutColor
+  const showDash = (isTimeout && (errview === '不显示当前值' || !errview)) || isEmptyValue(val)
 
-    const tagStyle: React.CSSProperties = {
-      cursor: 'pointer',
-      ...(backgroundColor && { backgroundColor }),
-      userSelect: 'none',
-    }
+  return (
+    <span
+      className={cn(warningClassName || 'normal', style?.tagClassName, 'inline-flex items-center')}
+      style={{ cursor: 'pointer', ...(bg && { backgroundColor: bg }), ...(color && { color }), userSelect: 'none' }}
+    >
+      {showDash ? (
+        <span className="text-muted-foreground">-</span>
+      ) : val === 0 ? (
+        <>{val}</>
+      ) : (
+        <>{val}</>
+      )}
+    </span>
+  )
+}
 
-    if (level) {
-      const k: Record<string, string> = { '低': 'warning1', '中': 'warning2', '高': 'warning3' }
-      tagStyle.color = warningLevelColor?.[level] || warningColor || colors?.[k[level] as keyof typeof colors]
-    }
+// ─── DataPoint ───
 
-    if (recoveryTime) {
-      tagStyle.color = colors?.['warning4']
-    }
-
-    return (
-      <span
-        className={cn(
-          warningClassName || 'normal',
-          tagClassName,
-          'inline-flex items-center'
-        )}
-        style={tagStyle}
-      >
-        {(isTimeout && (errview == '不显示当前值' || !errview)) ? (
-          <span className="text-muted-foreground">-</span>
-        ) : val == 0 ? (
-          val
-        ) : val === undefined || value === '' || isNull(val) ? (
-          <span className="text-muted-foreground">-</span>
-        ) : (
-          <>{animated && isNumber(val) ? <AnimatedNumber value={val} /> : val}</>
-        )}
-      </span>
-    )
-  }
-
-// Main DataPoint Component
 const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(
-  (
-    {
-      tableId,
-      tableDataId,
-      tableDataName,
-      tagId,
-      initVisible,
-      format,
-      colors,
-      animated,
-      timeoutColor,
-      offlineColor,
-      warningColor,
-      warningLevelColor,
-      tagClassName = '',
-      config = {} as DataPointConfig,
-    },
-    _ref
-  ) => {
+  ({ tableId, tableDataId, tableDataName, tagId, initVisible, format, config = {} as DataPointConfig, style }, ref) => {
     const [visible, setVisible] = React.useState(initVisible || false)
     const { user } = useUser()
 
-    // 检查用户是否登录
-    const isLoggedIn = user && (user.token || user.username || user.id)
+    const tagValue = useTag({ tableId, dataId: tableDataId, tagId })
 
-    // Use useDataTag to get real-time data point data and configuration
-    // 只有在登录时才使用 useDataTag
-    const tagValue = useTag({
-      tableId,
-      dataId: tableDataId,
-      tagId,
-    })
-
-    // Extract tag data from useDataTag response
-    const tag: DataPointTag = React.useMemo(() => ({
+    const tag = React.useMemo<DataPointTag>(() => ({
       value: tagValue?.value,
       time: tagValue?.time,
       warningState: tagValue?.warningState || {},
       timeoutState: tagValue?.timeoutState || {},
     }), [tagValue])
 
-    const renderProps = {
-      tag,
-      config,
-      format,
-      animated,
-      timeoutColor,
-      offlineColor,
-      warningColor,
-      warningLevelColor,
-      tagClassName,
-      colors,
-    }
-
-    const contentProps: PopoverContentProps = {
-      setVisible,
-      format,
-      value: tag.value,
-      time: tag.time,
-      warningState: tag.warningState,
-      config,
-      tableId,
-      tableDataId,
-      tableDataName,
-      tagId,
-      tagName: config?.tagValue?.enum?.[0]?.label || tagId,
-      animated,
-      timeoutColor,
-      offlineColor,
-      warningColor,
-      warningLevelColor,
-      tagClassName,
-      colors,
-      initVisible,
-    }
-
-    const number = <DefaultRender {...renderProps} />
-
-    // 如果未登录，显示提示
-    if (!isLoggedIn) {
-      return (
-        <div>
-          <span className="text-slate-400">请先登录以查看数据点</span>
-        </div>
-      )
+    if (!(user?.token || user?.username || user?.id)) {
+      return <span className="text-slate-400">请先登录以查看数据点</span>
     }
 
     return (
       <Popover open={visible} onOpenChange={setVisible}>
         <PopoverTrigger asChild>
-          <span ref={_ref} className="inline-block cursor-pointer">
-            {number}
+          <span ref={ref} className="inline-block cursor-pointer">
+            <TagRender tag={tag} config={config} format={format} style={style} />
           </span>
         </PopoverTrigger>
-        <PopoverContent className="z-999" side="bottom" align="start">
-          <div className="font-medium mb-2">{tableDataName}</div>
-          <PopoverContentComponent {...contentProps} />
+        <PopoverContent className="z-999 w-60 p-3" side="bottom" align="start">
+          {tableDataName && (
+            <div className="text-sm font-medium mb-2 pb-2 border-b">{tableDataName}</div>
+          )}
+          <PopoverDetail
+            tableId={tableId} tableDataId={tableDataId} tagId={tagId}
+            value={tag.value} time={tag.time} warningState={tag.warningState}
+            config={config} format={format} onClose={() => setVisible(false)}
+          />
         </PopoverContent>
       </Popover>
     )
@@ -422,5 +237,5 @@ const DataPoint = React.forwardRef<HTMLSpanElement, DataPointProps>(
 
 DataPoint.displayName = "DataPoint"
 
-export { DataPoint, convertValue, valueFormat, AnimatedNumber }
+export { DataPoint, convertValue, serverTimeAtom }
 export type { DataPointConfig } from "../../lib/data-point-utils"

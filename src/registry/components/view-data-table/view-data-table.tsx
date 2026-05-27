@@ -1,5 +1,5 @@
 import React, { cloneElement, useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelState } from '@airiot/client'
+import { useModelList, useModel, useModelState, useSubscribeContext, useTableDataValue } from '@airiot/client'
 import type { FieldProperty, ModelSchema } from '@/registry/lib/model-types'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
@@ -18,6 +18,7 @@ import {
 } from '@tanstack/react-table';
 import { cn } from '@/lib/utils';
 import { tableConverter } from '@/registry/lib/view-table-converter'
+import { DataPoint } from '@/registry/components/data-point/data-point'
 
 declare module '@tanstack/react-table' {
   interface ColumnDefBase<TData, TValue> {
@@ -108,22 +109,24 @@ const getFieldProp = (model: ModelSchema | null | undefined, field: string): Fie
   }, model)
 }
 
-const DataCell = ({ children, schema, tableSchema, ...restProps }:
+const DataCell = ({ children, schema, tableSchema, tableId, ...restProps }:
   {
-    children?: React.ReactNode | ((props: any) => React.ReactNode), [key: string]: any
+    children?: React.ReactNode | ((props: any) => React.ReactNode), tableId?: string, [key: string]: any
   }) =>
   ({ getValue, row, column }: CellContext<IData, any>) => {
 
+    const fieldName = column.columnDef?.id || (column as any).id
+    const liveValue = useTableDataValue({ dataId: row.original.id, field: fieldName })
     const baseSchema = schema || column.columnDef?.field
 
     const childrenProps = {
       ...restProps,
-      value: getValue(),
+      value: liveValue ?? getValue(),
       item: row.original,
       schema: { ...baseSchema, ...(tableSchema || {}) },
       tableSchema,
     }
-    
+
     const FieldComponent = tableConverter(baseSchema, tableSchema)
 
     return (
@@ -222,6 +225,16 @@ export function ViewDataTable({
 }) {
   const { items, loading, fields } = useModelList()
   const { model, atoms } = useModel()
+  const { subscribeData } = useSubscribeContext()
+
+  const tableId = model?.key || model?.name
+
+  // 订阅所有可见记录的实时数据更新
+  useEffect(() => {
+    if (!tableId || items.length === 0) return
+    const subDataIds = items.map(item => ({ tableId, dataId: item.id, fields: [] }))
+    subscribeData(subDataIds, true)
+  }, [tableId, items, subscribeData])
 
   const [order, setOrder] = useModelState(atoms.order)
   const [sorting, setSorting] = useState<SortingState>([])
@@ -235,6 +248,31 @@ export function ViewDataTable({
   fields.forEach((tableSchema: string | TableFieldSchema) => {
     if (typeof tableSchema === 'string') tableSchema = { key: tableSchema }
     const fieldName = tableSchema.key
+
+    // 点位列：使用 DataPoint 组件渲染
+    if (fieldName.startsWith('__tag_')) {
+      const tagConfig = tableSchema as any
+      const column: ColumnDef<IData> = columnHelper.accessor(fieldName, {
+        id: fieldName,
+        size: tagConfig.width || undefined,
+        enableSorting: false,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={tagConfig.title || tagConfig.tagId} column={column} />
+        ),
+        cell: ({ row }) => (
+          <DataPoint
+            tableId={tableId}
+            tableDataId={row.original.id}
+            tableDataName={row.original._label || row.original.name}
+            tagId={tagConfig.tagId}
+          />
+        ),
+      })
+      columns.push(column)
+      return
+    }
+
+    // 普通字段列
     const baseSchema = getFieldProp(model, fieldName)
     const field = { ...baseSchema, ...(typeof tableSchema === 'object' ? tableSchema : { key: tableSchema }) }
     if (!field) return
@@ -251,6 +289,7 @@ export function ViewDataTable({
         name: fieldName,
         schema: baseSchema,
         tableSchema,
+        tableId,
         inList: true,
         type: field.type as string,
         ...field.column

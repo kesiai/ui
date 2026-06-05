@@ -56,6 +56,26 @@ Bash: npx shadcn@latest info --json → aliases
 
 > `form.md` 是表单根组件（无前缀）。
 
+### 页面级组件选型决策表
+
+> 从 kesi-client 的规划报告获得页面列表后，根据下表为每个页面选择组件方案。
+
+| 页面需求 | 组件方案 | 说明 |
+|----------|---------|------|
+| 数据的增删改查（CRUD） | **ViewModel 视图系统** | ViewModel + ViewDataTable + ViewFilter + ViewPagination + ViewActions，自动处理数据加载、过滤、分页、表单弹窗、权限 |
+| 仅列表展示，不需要新增/编辑/删除 | **基础 Table + createAPI** | shadcn/ui Table + @airiot/client createAPI 手动查询，更轻量 |
+| 设备表管理（需要在线状态+实时数据） | **ViewModel 视图系统** | ViewModel 自动支持设备表在线状态显示和实时数据订阅 |
+| 仪表盘/数据概览 | **基础组件 + 图表** | shadcn/ui Card + chart-echarts + createAPI 手动构建 |
+| 可视化系统（大量图表，少量或无 CRUD） | **chart-echarts + 基础组件** | 以图表为主，用 createAPI 获取数据，不使用 ViewModel |
+| 地图展示 | **GIS 组件系统** | GisMapCore + 图层组件 |
+
+**决策原则：**
+- ✅ **需要增删改查 → ViewModel 视图系统**（完整的 CRUD 封装）
+- ✅ **设备表管理 → ViewModel 视图系统**（内置实时数据支持）
+- ❌ **仅展示不编辑 → 基础 Table + createAPI**（更轻量，无需 ViewModel 的 CRUD 开销）
+- ❌ **仪表盘/概览 → 基础组件 + 图表**（非表格场景）
+- ❌ **纯可视化系统 → chart-echarts 为主**（大量图表场景）
+
 ### 快速决策树
 
 ```

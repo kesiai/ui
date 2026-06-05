@@ -6,7 +6,8 @@
   "dependencies": [
     "lodash",
     "@airiot/client",
-    "sonner"
+    "sonner",
+    "dayjs"
   ],
   "registryDependencies": [
     "http://localhost:3000/r/container-context-provider.json"

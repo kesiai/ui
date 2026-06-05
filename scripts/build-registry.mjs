@@ -284,6 +284,89 @@ function findMainFile(folder, files, componentName) {
   }
 }
 
+// 处理 lib 文件：重写 import 路径、提取依赖、递归处理嵌套 lib 依赖
+// 返回 { files: [{path, type, content}], registryDeps: Set, standardDeps: Set, thirdPartyDeps: Set }
+async function processLibFile(libDep, thirdPartyDeps, processedLibs = new Set()) {
+  const result = {
+    files: [],
+    registryDeps: new Set(),
+    standardDeps: new Set(),
+    thirdPartyDeps: new Set(),
+  };
+
+  // 防止重复处理同一个 lib 文件
+  if (processedLibs.has(libDep)) return result;
+  processedLibs.add(libDep);
+
+  const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libDep + '.ts');
+  const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libDep + '.tsx');
+  const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
+
+  if (!libAbsPath) {
+    console.warn(`  ⚠️  无法找到 lib 文件: ${libDep}`);
+    return result;
+  }
+
+  let libContent;
+  try {
+    libContent = await fs.readFile(libAbsPath, 'utf-8');
+  } catch (err) {
+    console.warn(`  ⚠️  无法读取 lib 文件: ${libAbsPath}`);
+    return result;
+  }
+
+  // 提取 lib 文件中的依赖
+  const { registryDeps: libRegistryDeps, standardDeps: libStandardDeps, libDeps: nestedLibDeps } = extractRegistryDepsFromContent(libContent);
+  const libThirdPartyDeps = extractThirdPartyDepsFromContent(libContent, thirdPartyDeps)
+    .filter(dep => !SKIP_DEPENDENCIES.includes(dep));
+
+  libRegistryDeps.forEach(d => result.registryDeps.add(d));
+  libStandardDeps.forEach(d => result.standardDeps.add(d));
+  libThirdPartyDeps.forEach(d => result.thirdPartyDeps.add(d));
+
+  // 重写 lib 文件中的 import 路径
+  // @/registry/components/xxx -> @/components/kesi/xxx (匹配目标项目的安装路径)
+  let rewrittenContent = libContent.replace(
+    /(['"])@\/registry\/components\/([\w-\/]+)\1/g,
+    (match, quote, compPath) => `${quote}@/components/kesi/${compPath}${quote}`
+  );
+  // @/registry/ui/xxx -> @/components/ui/xxx
+  rewrittenContent = rewrittenContent.replace(
+    /(['"])@\/registry\/ui\/([\w-]+)\1/g,
+    (match, quote, uiPath) => `${quote}@/components/ui/${uiPath}${quote}`
+  );
+  // @/registry/lib/xxx -> @/lib/xxx (lib 文件安装在 lib/ 目录下)
+  rewrittenContent = rewrittenContent.replace(
+    /(['"])@\/registry\/lib\/([\w-\/]+)\1/g,
+    (match, quote, libPath) => `${quote}@/lib/${libPath}${quote}`
+  );
+
+  // 确定输出路径和类型
+  const ext = path.extname(libAbsPath);
+  const libPath = `registry/lib/${libDep}${ext}`;
+
+  result.files.push({
+    path: libPath,
+    type: 'registry:lib',
+    content: rewrittenContent,
+  });
+
+  // 递归处理嵌套的 lib 依赖
+  for (const nestedLibDep of nestedLibDeps) {
+    const nestedResult = await processLibFile(nestedLibDep, thirdPartyDeps, processedLibs);
+    nestedResult.files.forEach(f => {
+      if (!result.files.some(existing => existing.path === f.path)) {
+        result.files.push(f);
+      }
+    });
+    nestedResult.registryDeps.forEach(d => result.registryDeps.add(d));
+    nestedResult.standardDeps.forEach(d => result.standardDeps.add(d));
+    nestedResult.thirdPartyDeps.forEach(d => result.thirdPartyDeps.add(d));
+  }
+
+  return result;
+}
+
 // 构建主函数
 async function buildRegistry() {
   console.log('🚀 开始构建 registry...\n');
@@ -371,32 +454,23 @@ async function buildRegistry() {
             }
           }
 
-          // 添加 lib 依赖文件
+          // 添加 lib 依赖文件（使用 processLibFile 重写路径并提取嵌套依赖）
+          const allLibResults = [];
           for (const libDep of libDeps) {
-            // 尝试 .ts 和 .tsx 扩展名
-            const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libDep + '.ts');
-            const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libDep + '.tsx');
-            const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
+            const libResult = await processLibFile(libDep, thirdPartyDeps);
+            libResult.files.forEach(f => {
+              if (!fileList.some(existing => existing.path === f.path)) {
+                fileList.push(f);
+              }
+            });
+            allLibResults.push(libResult);
+          }
 
-            if (!libAbsPath) {
-              console.warn(`  ⚠️  无法找到 lib 文件: ${libDep}`);
-              continue;
-            }
-
-            // 确定输出路径和类型
-            const ext = path.extname(libAbsPath);
-            const libPath = `registry/lib/${libDep}${ext}`;
-
-            try {
-              const libContent = await fs.readFile(libAbsPath, 'utf-8');
-              fileList.push({
-                path: libPath,
-                type: 'registry:lib',
-                content: libContent,
-              });
-            } catch (err) {
-              console.warn(`  ⚠️  无法读取 lib 文件: ${libAbsPath}`);
-            }
+          // 将 lib 文件中提取的 registry/standard 依赖合并到组件的依赖列表
+          for (const libResult of allLibResults) {
+            libResult.registryDeps.forEach(d => registryDeps.push(d));
+            libResult.standardDeps.forEach(d => standardDeps.push(d));
+            libResult.thirdPartyDeps.forEach(d => filteredDeps.push(d));
           }
 
           // 新增：添加相对导入的 CSS 文件
@@ -517,32 +591,23 @@ async function buildRegistry() {
             },
           ];
 
-          // 添加 lib 依赖文件
+          // 添加 lib 依赖文件（使用 processLibFile 重写路径并提取嵌套依赖）
+          const allLibResults = [];
           for (const libDep of libDeps) {
-            // 尝试 .ts 和 .tsx 扩展名
-            const libAbsPathTs = path.join(REGISTRY_ROOT, 'lib', libDep + '.ts');
-            const libAbsPathTsx = path.join(REGISTRY_ROOT, 'lib', libDep + '.tsx');
-            const libAbsPath = await findExistingFile(libAbsPathTs) || await findExistingFile(libAbsPathTsx);
+            const libResult = await processLibFile(libDep, thirdPartyDeps);
+            libResult.files.forEach(f => {
+              if (!fileList.some(existing => existing.path === f.path)) {
+                fileList.push(f);
+              }
+            });
+            allLibResults.push(libResult);
+          }
 
-            if (!libAbsPath) {
-              console.warn(`  ⚠️  无法找到 lib 文件: ${libDep}`);
-              continue;
-            }
-
-            // 确定输出路径和类型
-            const ext = path.extname(libAbsPath);
-            const libPath = `registry/lib/${libDep}${ext}`;
-
-            try {
-              const libContent = await fs.readFile(libAbsPath, 'utf-8');
-              fileList.push({
-                path: libPath,
-                type: 'registry:lib',
-                content: libContent,
-              });
-            } catch (err) {
-              console.warn(`  ⚠️  无法读取 lib 文件: ${libAbsPath}`);
-            }
+          // 将 lib 文件中提取的 registry/standard 依赖合并
+          for (const libResult of allLibResults) {
+            libResult.registryDeps.forEach(d => registryDeps.push(d));
+            libResult.standardDeps.forEach(d => standardDeps.push(d));
+            libResult.thirdPartyDeps.forEach(d => filteredDeps.push(d));
           }
 
           // 新增：添加相对导入的 CSS 文件

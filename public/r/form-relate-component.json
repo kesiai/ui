@@ -4,7 +4,8 @@
   "title": "Form Relate Component",
   "description": "Form Relate Component - 组件",
   "dependencies": [
-    "@airiot/client"
+    "@airiot/client",
+    "lodash"
   ],
   "registryDependencies": [
     "http://localhost:3000/r/form-relate.json",

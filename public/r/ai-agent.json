@@ -1,0 +1,22 @@
+{
+  "name": "ai-agent",
+  "type": "registry:component",
+  "title": "Ai Agent",
+  "description": "Ai Agent - 组件",
+  "dependencies": [
+    "@assistant-ui/react"
+  ],
+  "registryDependencies": [
+    "@assistant-ui/thread",
+    "@assistant-ui/thread-list",
+    "button",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "registry/components/kesi/ai-agent/ai-agent.tsx",
+      "type": "registry:component",
+      "content": "\"use client\";\n\nimport { useState } from \"react\";\nimport { MenuIcon, PanelLeftIcon } from \"lucide-react\";\nimport { AssistantRuntimeProvider, type AssistantRuntime, useAuiState } from \"@assistant-ui/react\";\nimport { Thread } from \"@/components/assistant-ui/thread\";\nimport { ThreadList } from \"@/components/assistant-ui/thread-list\";\nimport { Button } from \"@/components/ui/button\";\nimport { Separator } from \"@/components/ui/separator\";\nimport { cn } from \"@/lib/utils\";\n\n// ThreadTitle 组件\nconst ThreadTitle = () => {\n  const messages = useAuiState((s) => s.thread.messages) as any[];\n\n  // 从第一条用户消息获取标题\n  const getThreadTitle = () => {\n    if (!messages || messages.length === 0) {\n      return \"New Chat\";\n    }\n\n    const firstUserMessage = messages.find((m) => m?.role === \"user\");\n    if (firstUserMessage?.content) {\n      const content = firstUserMessage.content;\n      if (typeof content === \"string\") {\n        return content.slice(0, 30) + (content.length > 30 ? \"...\" : \"\");\n      }\n    }\n    return \"New Chat\";\n  };\n\n  return (\n    <span className=\"text-sm font-medium truncate\">\n      {getThreadTitle()}\n    </span>\n  );\n};\n\nexport const Assistant = ({ runtime, className, title }: { runtime: AssistantRuntime; className?: string; title?: string }) => {\n  const [isSidebarOpen, setIsSidebarOpen] = useState(true);\n\n  return (\n    <AssistantRuntimeProvider runtime={runtime}>\n      <div className={cn(\"flex max-h-dvh h-full w-full\", className)}>\n        {/* Sidebar */}\n        <aside\n          className={`\n            border-r bg-muted/30 p-2 gap-2 flex flex-col transition-all duration-300 ease-in-out\n            ${isSidebarOpen ? \"w-64 opacity-100\" : \"w-0 opacity-0 overflow-hidden\"}\n          `}\n        >\n          {title && (\n            <div className=\"p-2 font-semibold\">\n              {title}\n            </div>\n          )}\n          <ThreadList />\n        </aside>\n\n        {/* Main content */}\n        <main className=\"flex-1 overflow-hidden flex flex-col min-w-0\">\n          {/* Header with SidebarTrigger */}\n          <header className=\"h-14 shrink-0 flex items-center gap-2 border-b px-4\">\n            <Button\n              variant=\"ghost\"\n              size=\"icon\"\n              onClick={() => setIsSidebarOpen(!isSidebarOpen)}\n              className=\"size-8\"\n            >\n              {isSidebarOpen ? (\n                <PanelLeftIcon className=\"size-4\" />\n              ) : (\n                <MenuIcon className=\"size-4\" />\n              )}\n            </Button>\n            <Separator orientation=\"vertical\" className=\"h-4\" />\n            <ThreadTitle />\n          </header>\n\n          {/* Thread */}\n          <div className=\"flex-1 overflow-hidden\">\n            <Thread />\n          </div>\n        </main>\n      </div>\n    </AssistantRuntimeProvider>\n  );\n};\n"
+    }
+  ]
+}

@@ -11,7 +11,8 @@
   "registryDependencies": [
     "card",
     "badge",
-    "spinner"
+    "spinner",
+    "badge"
   ],
   "files": [
     {

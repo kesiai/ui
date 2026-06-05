@@ -5,7 +5,8 @@
   "description": "Datasource Message - 组件",
   "dependencies": [
     "lodash",
-    "@airiot/client"
+    "@airiot/client",
+    "dayjs"
   ],
   "registryDependencies": [
     "http://localhost:3000/r/container-context-provider.json"

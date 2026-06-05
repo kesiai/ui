@@ -60,10 +60,80 @@ Bash: npx shadcn@latest info --json → aliases
 
 ```
 用户需求
-  ├─ 数据表格/列表/CRUD → view-*（视图组件系统，需配套）
+  ├─ 中台表的 CRUD 管理页 → ViewModel 视图系统（需配套，见下方决策规则）
   ├─ 表单输入/选择/上传 → form-*
   ├─ 图表可视化 → chart-*
   └─ 地图/图层/绘制 → gis-*（GIS 组件系统，需配套）
+```
+
+### ViewModel 使用决策规则
+
+**ViewModel 是 KESI 中台表 CRUD 的完整封装，自动处理数据加载、分页、过滤、排序、增删改查、权限控制。但不是所有列表页都需要 ViewModel。**
+
+#### 何时使用 ViewModel
+
+| 使用场景 | 说明 |
+|----------|------|
+| ✅ 需要增删改查的数据管理页 | ViewModel 提供 ViewActions 自动处理新增、编辑、删除、查看 |
+| ✅ device 表的管理页 | ViewModel 内置设备表在线状态和实时数据点显示支持 |
+| ✅ 需要过滤+分页+排序+CRUD 的完整列表页 | ViewModel 自动处理所有这些功能 |
+
+#### 何时不使用 ViewModel
+
+| 不使用场景 | 替代方案 |
+|-----------|---------|
+| ❌ 仅列表展示，不需要新增/编辑/删除 | shadcn/ui Table + createAPI（更轻量） |
+| ❌ 仪表盘/首页概览 | shadcn/ui Card + chart-echarts + createAPI |
+| ❌ 纯图表/可视化展示页 | chart-echarts + createAPI |
+| ❌ 自定义布局/完全控制数据流的页面 | shadcn/ui 基础组件 + @airiot/client hooks |
+
+#### 核心判断标准
+
+```
+页面需要增删改查？
+  ├─ 是 → 使用 ViewModel 视图系统
+  └─ 否
+      ├─ 页面是数据表格/列表？
+      │   ├─ 是 → 使用基础 Table + createAPI（轻量展示）
+      │   └─ 否
+      │       ├─ 页面以图表为主？→ chart-echarts + createAPI
+      │       └─ 页面以地图为主？→ GIS 组件系统
+```
+
+#### ViewModel 完整组件配套
+
+**必须使用 ViewModel 作为根容器，内部按需组合子组件：**
+
+```
+ViewModel (tableId="表ID")
+  ├─ ViewFilter          → 搜索过滤栏
+  ├─ ViewDataTable       → 数据表格（支持实时数据订阅）
+  │   └─ TableColumn     → 自定义列（可选，不写则自动根据表 schema 生成）
+  ├─ ViewPagination      → 分页器
+  └─ ViewActions         → CRUD 操作按钮（新增/查看/编辑/删除/导出/复制）
+```
+
+**典型用法（common 表 CRUD）：**
+
+```tsx
+<ViewModel tableId="building_info">
+  <ViewFilter />
+  <ViewDataTable />
+  <ViewPagination />
+</ViewModel>
+```
+
+**典型用法（device 表，带操作按钮）：**
+
+```tsx
+<ViewModel tableId="hvac_system">
+  <ViewFilter />
+  <ViewDataTable showCheckbox>
+    <TableColumn name="online" title="在线状态" />
+    <TableColumn name="warnFlag" title="报警" />
+  </ViewDataTable>
+  <ViewPagination />
+</ViewModel>
 ```
 
 ---

@@ -14,7 +14,8 @@
   "registryDependencies": [
     "badge",
     "spinner",
-    "tooltip"
+    "tooltip",
+    "badge"
   ],
   "files": [
     {

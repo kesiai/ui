@@ -1,11 +1,11 @@
 ---
 name: kesi-ui
-description: "Kesi UI 组件库智能助手 - 基于文档驱动的组件推荐系统。涵盖表单/视图/图表/GIS组件。核心特性：先读文档再推荐，确保代码100%准确可用。"
+description: "KESI UI 实现 — 接收 kesi-frontend 的页面设计报告，负责具体的 UI 组件选型和代码实现。根据设计报告中每个页面的数据展示方式、交互模式，选择合适的组件（表格/图表/表单/视图/GIS），安装组件，编写页面代码。"
 ---
 
-# Kesi UI 组件库智能助手
+# KESI UI 实现
 
-> 文档驱动推荐 - 所有代码基于实际文档生成，确保 100% 准确可用。
+接收页面设计报告，用组件实现具体页面。
 
 ---
 
@@ -58,101 +58,53 @@ Bash: npx shadcn@latest info --json → aliases
 
 ### 页面级组件选型决策表
 
-> 从 kesi-client 的规划报告获得页面列表后，根据下表为每个页面选择组件方案。
+> 从 kesi-frontend 的规划报告获得页面列表后，根据下表为每个页面选择组件方案。
 
-| 页面需求 | 组件方案 | 说明 |
-|----------|---------|------|
-| 数据的增删改查（CRUD） | **ViewModel 视图系统** | ViewModel + ViewDataTable + ViewFilter + ViewPagination + ViewActions，自动处理数据加载、过滤、分页、表单弹窗、权限 |
-| 仅列表展示，不需要新增/编辑/删除 | **基础 Table + createAPI** | shadcn/ui Table + @airiot/client createAPI 手动查询，更轻量 |
-| 设备表管理（需要在线状态+实时数据） | **ViewModel 视图系统** | ViewModel 自动支持设备表在线状态显示和实时数据订阅 |
-| 仪表盘/数据概览 | **基础组件 + 图表** | shadcn/ui Card + chart-echarts + createAPI 手动构建 |
-| 可视化系统（大量图表，少量或无 CRUD） | **chart-echarts + 基础组件** | 以图表为主，用 createAPI 获取数据，不使用 ViewModel |
-| 地图展示 | **GIS 组件系统** | GisMapCore + 图层组件 |
-
-**决策原则：**
-- ✅ **需要增删改查 → ViewModel 视图系统**（完整的 CRUD 封装）
-- ✅ **设备表管理 → ViewModel 视图系统**（内置实时数据支持）
-- ❌ **仅展示不编辑 → 基础 Table + createAPI**（更轻量，无需 ViewModel 的 CRUD 开销）
-- ❌ **仪表盘/概览 → 基础组件 + 图表**（非表格场景）
-- ❌ **纯可视化系统 → chart-echarts 为主**（大量图表场景）
-
-### 快速决策树
+**默认策略：纯展示或带过滤的展示。CRUD 需用户显式指定。**
 
 ```
-用户需求
-  ├─ 中台表的 CRUD 管理页 → ViewModel 视图系统（需配套，见下方决策规则）
-  ├─ 表单输入/选择/上传 → form-*
-  ├─ 图表可视化 → chart-*
-  └─ 地图/图层/绘制 → gis-*（GIS 组件系统，需配套）
+页面交互模式（由 kesi-frontend 规划报告标注）
+  ├─ 纯展示 → shadcn/ui Card + chart-echarts + createAPI
+  ├─ 带过滤的展示（默认）→ shadcn/ui Table + createAPI + 自定义 Filter
+  ├─ CRUD 管理（用户指定）→ ViewModel 视图系统
+  └─ 地图展示 → GIS 组件系统
 ```
 
-### ViewModel 使用决策规则
+| 页面交互模式 | 组件方案 | 数据源 |
+|-------------|---------|--------|
+| **纯展示**（仪表盘、概览） | shadcn/ui Card + chart-echarts + createAPI | `createAPI` |
+| **带过滤的展示**（默认） | shadcn/ui Table + 自定义 Filter + createAPI | `createAPI` |
+| **CRUD 管理**（用户显式指定） | ViewModel 视图系统 | `ViewModel`（内部 Model） |
+| **地图展示** | GisMapCore + 图层组件 | `createAPI` |
 
-**ViewModel 是 KESI 中台表 CRUD 的完整封装，自动处理数据加载、分页、过滤、排序、增删改查、权限控制。但不是所有列表页都需要 ViewModel。**
-
-#### 何时使用 ViewModel
+#### 何时使用 ViewModel（仅限用户明确要求 CRUD 时）
 
 | 使用场景 | 说明 |
 |----------|------|
 | ✅ 需要增删改查的数据管理页 | ViewModel 提供 ViewActions 自动处理新增、编辑、删除、查看 |
-| ✅ device 表的管理页 | ViewModel 内置设备表在线状态和实时数据点显示支持 |
 | ✅ 需要过滤+分页+排序+CRUD 的完整列表页 | ViewModel 自动处理所有这些功能 |
 
-#### 何时不使用 ViewModel
-
-| 不使用场景 | 替代方案 |
-|-----------|---------|
-| ❌ 仅列表展示，不需要新增/编辑/删除 | shadcn/ui Table + createAPI（更轻量） |
-| ❌ 仪表盘/首页概览 | shadcn/ui Card + chart-echarts + createAPI |
-| ❌ 纯图表/可视化展示页 | chart-echarts + createAPI |
-| ❌ 自定义布局/完全控制数据流的页面 | shadcn/ui 基础组件 + @airiot/client hooks |
-
-#### 核心判断标准
-
-```
-页面需要增删改查？
-  ├─ 是 → 使用 ViewModel 视图系统
-  └─ 否
-      ├─ 页面是数据表格/列表？
-      │   ├─ 是 → 使用基础 Table + createAPI（轻量展示）
-      │   └─ 否
-      │       ├─ 页面以图表为主？→ chart-echarts + createAPI
-      │       └─ 页面以地图为主？→ GIS 组件系统
-```
-
-#### ViewModel 完整组件配套
-
-**必须使用 ViewModel 作为根容器，内部按需组合子组件：**
+#### ViewModel 完整组件配套（CRUD 页面使用）
 
 ```
 ViewModel (tableId="表ID")
   ├─ ViewFilter          → 搜索过滤栏
-  ├─ ViewDataTable       → 数据表格（支持实时数据订阅）
+  ├─ ViewDataTable       → 数据表格
   │   └─ TableColumn     → 自定义列（可选，不写则自动根据表 schema 生成）
   ├─ ViewPagination      → 分页器
   └─ ViewActions         → CRUD 操作按钮（新增/查看/编辑/删除/导出/复制）
 ```
 
-**典型用法（common 表 CRUD）：**
+**CRUD 页面示例：**
 
 ```tsx
-<ViewModel tableId="building_info">
-  <ViewFilter />
-  <ViewDataTable />
-  <ViewPagination />
-</ViewModel>
-```
-
-**典型用法（device 表，带操作按钮）：**
-
-```tsx
-<ViewModel tableId="hvac_system">
-  <ViewFilter />
-  <ViewDataTable showCheckbox>
-    <TableColumn name="online" title="在线状态" />
-    <TableColumn name="warnFlag" title="报警" />
+<ViewModel tableId="building_info" initQuery>
+  <ViewFilter filters={[{ key: 'building' }]} />
+  <ViewDataTable>
+    <TableColumn name="id" title="编号" width={120} fixed="left" />
+    <TableColumn name="name" title="名称" width={160} />
   </ViewDataTable>
-  <ViewPagination />
+  <ViewPagination showTotal showSizeChanger />
 </ViewModel>
 ```
 

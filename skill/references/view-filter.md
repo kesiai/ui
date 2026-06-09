@@ -16,21 +16,22 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `filters` | `Array<{key: string, name: string}>` | 否 | `[]` | 筛选字段配置 |
+| `filters` | `Array<{key: string}>` | 否 | `[]` | 筛选字段配置 |
 | `classNames` | `FormClassNames` | 否 | - | 自定义样式类名 |
 
 ### filters 配置
 
 筛选字段数组，每个元素包含：
 
-- `key`：字段在 Model 中的字段名
-- `name`：字段显示的标签名
+- `key`：字段在 Model 中的字段名（必填，对应 schema 中的字段 key）
+
+标签名自动从 schema 的 `title` 获取，无需手动指定。
 
 ```typescript
 const filters = [
-  { key: 'username', name: '用户名' },
-  { key: 'email', name: '邮箱' },
-  { key: 'status', name: '状态' }
+  { key: 'username' },
+  { key: 'email' },
+  { key: 'status' }
 ]
 ```
 

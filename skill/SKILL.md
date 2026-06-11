@@ -51,8 +51,9 @@ Bash: npx shadcn@latest info --json → aliases
 |------|------|--------|---------|
 | `form-*` | 表单 | 30 | 输入、选择、日期、上传、富文本、滑块 |
 | `view-*` | 视图 | 11 | 数据表格、分页、过滤、批量操作、详情 |
-| `chart-*` | 图表 | 1 | ECharts 图表 |
 | `gis-*` | GIS | 10 | 地图、图层、绘制、瓦片、GeoJSON |
+
+> **图表不提供内置组件。** 需要图表时直接使用 `echarts`（`import * as echarts from 'echarts'`），自行封装 React 组件或使用 `useRef` + `useEffect` 初始化。参考 ECharts 官方文档：https://echarts.apache.org/zh/option.html
 
 > `form.md` 是表单根组件（无前缀）。
 
@@ -64,7 +65,7 @@ Bash: npx shadcn@latest info --json → aliases
 
 ```
 页面交互模式（由 kesi-frontend 规划报告标注）
-  ├─ 纯展示 → shadcn/ui Card + chart-echarts + createAPI
+  ├─ 纯展示 → shadcn/ui Card + echarts（直接使用） + createAPI
   ├─ 带过滤的展示（默认）→ shadcn/ui Table + createAPI + 自定义 Filter
   ├─ CRUD 管理（用户指定）→ ViewModel 视图系统
   └─ 地图展示 → GIS 组件系统

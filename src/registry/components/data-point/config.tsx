@@ -1,5 +1,5 @@
 import { DataPoint } from '@/registry/components/data-point/data-point'
-import { Subscribe } from '@airiot/client'
+import { Subscribe } from '@kesi/client'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './data-point.md?raw'
 

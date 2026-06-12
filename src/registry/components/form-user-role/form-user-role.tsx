@@ -1,6 +1,6 @@
 import * as React from 'react'
 import isArray from 'lodash/isArray'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import type { BaseFormFieldProps } from '@/registry/lib/base-form-props'
 import {
   Popover,

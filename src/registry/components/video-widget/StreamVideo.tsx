@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import { JessibucaVideo } from './JessibucaVideo'
 
 // Mocking translations

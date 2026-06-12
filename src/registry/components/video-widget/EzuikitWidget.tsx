@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import EZUIKit from 'ezuikit-js'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 
 interface EzuikitVideoProps {
   tableData?: any

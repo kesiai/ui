@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/collapsible'
 import { FormField } from '@/registry/components/form-field/form-field'
 import { formConverter } from '@/registry/lib/view-form-converter'
-import { useFormContext } from '@airiot/client'
+import { useFormContext } from '@kesi/client'
 
 export interface FormObjectProps {
   /** 字段名 */

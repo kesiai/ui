@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { api } from '@airiot/client'
+import { api } from '@kesi/client'
 import {
   Select,
   SelectContent,

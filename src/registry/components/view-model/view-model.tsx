@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableModel, Model } from '@airiot/client'
+import { TableModel, Model } from '@kesi/client'
 import trans from '@/registry/lib/schema-trans'
 import type { ModelSchema } from '@/registry/lib/model-types'
 

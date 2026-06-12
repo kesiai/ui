@@ -272,7 +272,7 @@ import { ViewDataTable, TableColumn } from '@/components/kesi/view-data-table/vi
 import { ViewModel } from '@/components/kesi/view-model/view-model'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { useModelState } from '@airiot/client'
+import { useModelState } from '@kesi/client'
 
 function TaskManagementTable() {
   const [selected] = useModelState('selected')

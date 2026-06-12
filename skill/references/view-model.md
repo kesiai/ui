@@ -4,7 +4,7 @@
 
 ## 简介
 
-`ViewModel` 是基于 `@airiot/client` 的 `TableModel` + UI 层字段组件封装的容器组件。内部通过 `TableModel` 加载表 Schema 并管理数据状态，UI 层注册了各种 `controlType` 的渲染组件（表单/过滤器/列表），实现 Schema 驱动的自动渲染。
+`ViewModel` 是基于 `@kesi/client` 的 `TableModel` + UI 层字段组件封装的容器组件。内部通过 `TableModel` 加载表 Schema 并管理数据状态，UI 层注册了各种 `controlType` 的渲染组件（表单/过滤器/列表），实现 Schema 驱动的自动渲染。
 
 - **上下文提供**：为子组件提供数据模型、状态管理和操作方法的共享上下文
 - **灵活配置**：支持查询字段、筛选条件、排序规则等多种数据获取配置

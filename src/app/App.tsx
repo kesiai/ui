@@ -5,17 +5,17 @@ import { DocumentationViewer } from './components/DocumentationViewer'
 import { LoginDialog } from './components/LoginDialog'
 import { EventsTestPage } from './components/EventsTestPage'
 import type { ComponentConfig } from './config/types'
-import { setConfig, useUser, useLogout } from '@airiot/client'
+import { setConfig, useUser, useLogout } from '@kesi/client'
 import { Routes, Route, Link, useParams, Outlet } from 'react-router-dom'
 import { GlobalDialogs } from '@/registry/components/events/events'
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { toast } from 'sonner'
-// 配置 @airiot/client
+// 配置 @kesi/client
 const apiHost = 'http://localhost:3000' //'https://demo.airiot.link'
 const projectId = '695dbf22d8887e7ae129c4e9'
 
-// console.log('🔧 配置 @airiot/client:', { apiHost, projectId })
-// console.log('🔧 配置 @airiot/client:', { componentCategories })
+// console.log('🔧 配置 @kesi/client:', { apiHost, projectId })
+// console.log('🔧 配置 @kesi/client:', { componentCategories })
 try {
   const { loadUser } = useUser()
   setConfig({
@@ -30,7 +30,7 @@ try {
   })
   loadUser()
 } catch (error) {
-  console.warn('Failed to set @airiot/client config:', error)
+  console.warn('Failed to set @kesi/client config:', error)
 }
 
 // 组件配置映射

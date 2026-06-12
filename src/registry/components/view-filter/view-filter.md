@@ -290,7 +290,7 @@ import { ViewFilter } from '@/components/kesi/view-filter/view-filter'
 import { ViewDataTable, TableColumn } from '@/components/kesi/view-data-table/view-data-table'
 import { ViewModel } from '@/components/kesi/view-model/view-model'
 import { Badge } from '@/components/ui/badge'
-import { useModelList } from '@airiot/client'
+import { useModelList } from '@kesi/client'
 
 function TaskFilterWithStats() {
   const filters = [

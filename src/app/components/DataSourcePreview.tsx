@@ -1,7 +1,7 @@
 'use client'
 
 import { useContextProvider } from '@/registry/components/container-context-provider/context-provider'
-import { useDatasourceValue } from '@airiot/client'
+import { useDatasourceValue } from '@kesi/client'
 
 /**
  * 数据源预览组件 - 展示数据获取方式

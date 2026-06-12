@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import { Loader2 } from 'lucide-react'
 import { fieldRender } from '@/registry/lib/form-relate-utils'
 import debounce from 'lodash/debounce'

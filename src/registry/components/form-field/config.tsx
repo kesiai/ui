@@ -230,7 +230,7 @@ const renderFormFieldCodePreview = (props: Record<string, any>) => {
     ? `\n  options={${JSON.stringify(typeof props.options === 'string' ? JSON.parse(props.options) : props.options)}}`
     : ''
 
-  return `import { Form } from '@airiot/client'
+  return `import { Form } from '@kesi/client'
 import { FormField } from '@/registry/components/form-field/form-field'
 
 const MyForm = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { pick, omit, find, isNil, isEmpty } from 'lodash'
-import { useModelDelete, useModelSave, useModelGetItems, useModel, useModelSelect, useModelCallback } from '@airiot/client'
+import { useModelDelete, useModelSave, useModelGetItems, useModel, useModelSelect, useModelCallback } from '@kesi/client'
 import {
   Dialog,
   DialogContent,

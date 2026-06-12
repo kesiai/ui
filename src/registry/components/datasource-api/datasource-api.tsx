@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useMemo, useState, useRef, useCallback } from 'react'
-import { useDatasetSet } from '@airiot/client'
+import { useDatasetSet } from '@kesi/client'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 
 // ==================== Types ====================
@@ -211,8 +211,8 @@ function useApiData(config: ApiDataConfig) {
         const response = await fetch(requestUrl, requestOptions)
         responseData = await response.json()
       } else {
-        // 内部 API 调用 (使用 @airiot/client)
-        const { api } = await import('@airiot/client')
+        // 内部 API 调用 (使用 @kesi/client)
+        const { api } = await import('@kesi/client')
 
         let path = url
 
@@ -246,7 +246,7 @@ function useApiData(config: ApiDataConfig) {
           path = objToUrlParams(arrayToKv(body), path)
         }
 
-        // 使用 @airiot/client 的 API
+        // 使用 @kesi/client 的 API
         const bodyStr = method !== 'GET' && body.length > 0 ? JSON.stringify(arrayToKv(body)) : undefined
 
         const apiRet = api({

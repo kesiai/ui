@@ -10,8 +10,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Loader2 } from 'lucide-react'
-import { useUser } from '@airiot/client'
-import { createAPI } from '@airiot/client'
+import { useUser } from '@kesi/client'
+import { createAPI } from '@kesi/client'
 import { fieldRender } from '@/registry/lib/form-relate-utils'
 
 interface DetailShowProps {

@@ -305,7 +305,7 @@ function TeamMemberForm() {
 
 1. **多选模式待实现**：当前版本中，`mode` 设置为 `'multiple'` 时会显示"用户多选（待实现）"占位文本，多选功能尚未实现。
 
-2. **API 依赖**：组件依赖 `@airiot/client` 的 `createAPI` 方法，确保已正确配置和初始化。
+2. **API 依赖**：组件依赖 `@kesi/client` 的 `createAPI` 方法，确保已正确配置和初始化。
 
 3. **资源名称**：`name` 默认为 `'user'`，组件会拼接为 `'core/' + name` 作为资源路径，如果使用其他用户表，需要修改此配置。
 

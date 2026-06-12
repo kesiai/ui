@@ -5,7 +5,7 @@
  * 供 SchemaForm 消费，通过 onEffect 和 resolver 集成
  */
 
-/** 扩展的表单方法（由 @airiot/client 的 useForm 提供） */
+/** 扩展的表单方法（由 @kesi/client 的 useForm 提供） */
 export interface UseFormReturnExtended {
   getValues(): Record<string, any>
   setValue(name: string, value: any): void

@@ -12,7 +12,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChevronDown, ChevronUp, Table as TableIcon, ExternalLink } from 'lucide-react'
 import { tableConverter } from '@/registry/lib/view-table-converter'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 
 // ============================================
 // 工具函数

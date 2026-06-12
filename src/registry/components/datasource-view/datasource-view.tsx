@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useEffect, useState, useRef, useCallback, type ReactNode } from 'react'
-import { useDatasetSet } from '@airiot/client'
+import { useDatasetSet } from '@kesi/client'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 
 interface ViewDataConfig {
@@ -76,8 +76,8 @@ function useViewData(config: ViewDataConfig) {
     setLoading(true)
 
     try {
-      // 使用 @airiot/client 的 API
-      const { api } = await import('@airiot/client')
+      // 使用 @kesi/client 的 API
+      const { api } = await import('@kesi/client')
 
       // 构建查询路径
       const path = `ds/view/preview`

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useModelGet } from '@airiot/client'
+import { useModelGet } from '@kesi/client'
 import {
   DialogHeader,
   DialogTitle,

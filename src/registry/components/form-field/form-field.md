@@ -83,7 +83,7 @@ classNames: {
 
 ```tsx
 import { FormField } from '@/components/kesi/form-field/form-field'
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 
 function Example() {
   return (
@@ -235,7 +235,7 @@ function Example() {
 
 ```tsx
 import { FormField } from '@/components/kesi/form-field/form-field'
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 
@@ -339,7 +339,7 @@ function RegistrationForm() {
 
 ```tsx
 import { FormField } from '@/components/kesi/form-field/form-field'
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 
 function ProductForm() {
   const handleSubmit = (data: any) => {

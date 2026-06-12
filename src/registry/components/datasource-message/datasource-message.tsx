@@ -2,8 +2,8 @@
 
 import { ReactNode, useEffect, useMemo, useState, useRef, useCallback } from 'react'
 import isObject from 'lodash/isObject'
-import { api } from '@airiot/client'
-import { useDatasetSet } from '@airiot/client'
+import { api } from '@kesi/client'
+import { useDatasetSet } from '@kesi/client'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 import { numberFormat, dateFormat } from '@/registry/lib/datasource-utils'
 

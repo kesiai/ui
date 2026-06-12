@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/collapsible'
 import { FormField } from '@/registry/components/form-field/form-field'
 import { formConverter } from '@/registry/lib/view-form-converter'
-import { useForm, FormProvider, useFieldArray, useFormContext } from '@airiot/client'
+import { useForm, FormProvider, useFieldArray, useFormContext } from '@kesi/client'
 
 // 用于生成唯一的空值占位符
 const EMPTY_PLACEHOLDER = Symbol('empty')

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import isFunction from 'lodash/isFunction'
 import isBoolean from 'lodash/isBoolean'
-import { getConfig, createAPI } from '@airiot/client'
+import { getConfig, createAPI } from '@kesi/client'
 const config = getConfig()
 
 declare global {

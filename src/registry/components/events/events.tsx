@@ -27,7 +27,7 @@ import {
   useEvent,
   useEventsWithSpread,
   useGlobalDialogs
-} from '@airiot/client'
+} from '@kesi/client'
 
 export {
   useEvents,
@@ -66,7 +66,7 @@ export interface SchemaFormDialogProps {
 }
 
 /**
- * 基于 @airiot/client SchemaForm 的表单对话框组件
+ * 基于 @kesi/client SchemaForm 的表单对话框组件
  *
  * @example
  * ```tsx

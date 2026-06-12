@@ -71,7 +71,7 @@ interface FormSchemaConfig {
 使用 JSON Schema 自动生成简单表单。
 
 ```tsx
-import { SchemaForm } from '@airiot/client'
+import { SchemaForm } from '@kesi/client'
 
 function Example() {
   const handleSubmit = (data: any) => {

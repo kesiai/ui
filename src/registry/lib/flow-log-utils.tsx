@@ -1,5 +1,5 @@
 import React from 'react'
-import { getConfig } from '@airiot/client'
+import { getConfig } from '@kesi/client'
 import isPlainObject from 'lodash/isPlainObject'
 import last from 'lodash/last'
 import omit from 'lodash/omit'

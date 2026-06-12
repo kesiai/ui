@@ -270,7 +270,7 @@ function DataDisplay() {
 通过组件 ID 从 Jotai atom 获取数据：
 
 ```tsx
-import { useDataset } from '@airiot/client'
+import { useDataset } from '@kesi/client'
 
 function AnotherComponent() {
   const { data, loading } = useDataset('user-data')

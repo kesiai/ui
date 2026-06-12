@@ -230,7 +230,7 @@ function InteractiveStats() {
 ```tsx
 import { ViewDataAggregate, AggregateField } from '@/components/kesi/view-data-aggregate/view-data-aggregate'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useModelList } from '@airiot/client'
+import { useModelList } from '@kesi/client'
 
 function DeviceMonitorDashboard() {
   const { items } = useModelList()

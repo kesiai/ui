@@ -319,7 +319,7 @@ function StatisticsTable() {
 
 ## 注意事项
 
-1. **API 依赖**：组件依赖 `@airiot/client` 的 `createAPI` 方法创建 API 实例，确保已正确配置和初始化。
+1. **API 依赖**：组件依赖 `@kesi/client` 的 `createAPI` 方法创建 API 实例，确保已正确配置和初始化。
 
 2. **表名格式**：`option.schema.name` 必须遵循特定格式 `core/t/{tableId}/d`，组件会从这个格式中提取 tableId。
 

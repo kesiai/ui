@@ -1,5 +1,5 @@
 import React, { cloneElement, useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelState, useSubscribeContext, useTableDataValue } from '@airiot/client'
+import { useModelList, useModel, useModelState, useSubscribeContext, useTableDataValue } from '@kesi/client'
 import type { FieldProperty, ModelSchema } from '@/registry/lib/model-types'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';

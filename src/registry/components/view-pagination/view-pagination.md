@@ -355,7 +355,7 @@ function MobilePagination() {
 import { ViewPagination } from '@/components/kesi/view-pagination/view-pagination'
 import { ViewDataTable } from '@/components/kesi/view-data-table/view-data-table'
 import { ViewModel } from '@/components/kesi/view-model/view-model'
-import { useModelPagination, useModelPageSize, useModelCount } from '@airiot/client'
+import { useModelPagination, useModelPageSize, useModelCount } from '@kesi/client'
 
 function PaginationWithStats() {
   return (

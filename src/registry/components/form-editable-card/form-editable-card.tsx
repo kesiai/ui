@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Trash2 } from 'lucide-react'
 import { formConverter } from '@/registry/lib/view-form-converter'
-import { FormProvider, useForm } from '@airiot/client'
+import { FormProvider, useForm } from '@kesi/client'
 import { formFieldConverter } from '@/registry/lib/form-field-converter'
 
 export interface FormEditableCardProps {

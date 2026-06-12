@@ -600,7 +600,7 @@ function MultiLayerComparison() {
 
 2. **坐标系匹配**：`coordinateType` 必须与数据实际的坐标系一致，否则会出现位置偏移
 
-3. **WebSocket 集成**：组件使用 WebSocket 实现实时数据更新，确保项目已正确配置 `@airiot/client`
+3. **WebSocket 集成**：组件使用 WebSocket 实现实时数据更新，确保项目已正确配置 `@kesi/client`
 
 4. **热力图与聚合互斥**：热力图和聚合功能不应同时启用，两者会产生冲突
 

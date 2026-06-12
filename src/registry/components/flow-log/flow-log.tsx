@@ -1,7 +1,7 @@
 import React from 'react'
 import dayjs from 'dayjs'
 import isEmpty from 'lodash/isEmpty'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ChevronDown, MinusCircle, PlusCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 
 export type PtzAction =
   | "up"

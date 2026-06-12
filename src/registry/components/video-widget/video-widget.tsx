@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import { JessibucaVideo } from './JessibucaVideo'
 import { StreamVideo } from './StreamVideo'
 import Ckplayer from './Ckplayer'

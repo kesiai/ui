@@ -256,7 +256,7 @@ const renderFormCodePreview = (props: Record<string, any>) => {
 
   const classNamesStr = JSON.stringify(classNames, null, 2)
 
-  return `import { Form } from '@airiot/client'
+  return `import { Form } from '@kesi/client'
 import { FormField } from '@/registry/components/form-field/form-field'
 import { layoutPresets } from '@/registry/components/form/config'
 

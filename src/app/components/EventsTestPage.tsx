@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useEvents } from '@/registry/components/events/events'
-import { usePageVarValue, Page } from '@airiot/client'
+import { usePageVarValue, Page } from '@kesi/client'
 import { Button } from '@/components/ui/button'
 
 // Card 组件的临时实现（如果 @/components/ui/card 不存在）

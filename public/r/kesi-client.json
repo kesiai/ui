@@ -1,15 +1,15 @@
 {
-  "name": "airiot-client",
+  "name": "kesi-client",
   "type": "registry:lib",
-  "title": "Airiot Client",
-  "description": "Airiot Client - 工具库",
+  "title": "KESI Client",
+  "description": "KESI Client - 工具库",
   "dependencies": [],
   "registryDependencies": [],
   "files": [
     {
       "path": "registry/lib/airiot/client.ts",
       "type": "registry:lib",
-      "content": "export * from '@airiot/client'"
+      "content": "export * from '@kesi/client'"
     }
   ]
 }

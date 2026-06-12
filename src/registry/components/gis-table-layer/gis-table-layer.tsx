@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { useWS } from '@airiot/client'
+import { useWS } from '@kesi/client'
 import { cn } from '@/lib/utils'
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';

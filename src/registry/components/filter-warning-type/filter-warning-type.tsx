@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getSettings } from '@airiot/client'
+import { getSettings } from '@kesi/client'
 import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Check, ChevronDown, X } from 'lucide-react'

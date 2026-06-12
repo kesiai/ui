@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import isString from 'lodash/isString'
 import isEmpty from 'lodash/isEmpty'
-import { createAPI, useModel } from '@airiot/client'
+import { createAPI, useModel } from '@kesi/client'
 import {
   Select,
   SelectContent,

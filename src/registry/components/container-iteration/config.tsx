@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { Iteration } from '@/registry/components/container-iteration/container-iteration'
-import { IterationContext } from '@airiot/client'
+import { IterationContext } from '@kesi/client'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './container-iteration.md?raw'
 

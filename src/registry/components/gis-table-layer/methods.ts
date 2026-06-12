@@ -1,5 +1,5 @@
 
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import isEmpty from 'lodash/isEmpty'
 import set from 'lodash/set'
 

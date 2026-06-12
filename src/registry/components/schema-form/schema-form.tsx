@@ -1,7 +1,7 @@
 import {
   FieldGroup
 } from "@/components/ui/field"
-import { FormProvider, useForm, type UseFormPropsExtended, } from '@airiot/client'
+import { FormProvider, useForm, type UseFormPropsExtended, } from '@kesi/client'
 import React, { type ReactNode } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Resolver } from 'react-hook-form'

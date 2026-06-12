@@ -4,7 +4,7 @@ import { RelateSelect } from '@/registry/components/form-relate-select/form-rela
 import { RelateMultiSelect } from '@/registry/components/form-relate-multi-select/form-relate-multi-select'
 import { RelateModelSelect } from '@/registry/components/form-relate-model-select/form-relate-model-select'
 import type { RelateFieldProps } from '@/registry/lib/form-relate-types'
-import { useFormContext } from '@airiot/client'
+import { useFormContext } from '@kesi/client'
 import { Table2Context } from '@/registry/lib/table-context'
 import { dealFilter } from '@/registry/lib/form-relate-utils'
 

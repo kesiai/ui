@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { QueryEditor } from '@/registry/components/query-editor/query-editor'
-import { useModel, useModelGetItems, useSetModelState } from '@airiot/client'
+import { useModel, useModelGetItems, useSetModelState } from '@kesi/client'
 import cloneDeep from 'lodash/cloneDeep'
 import {
   Dialog,

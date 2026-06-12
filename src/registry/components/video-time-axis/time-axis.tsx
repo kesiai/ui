@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 
 // 视频记录类型
 export interface VideoRecord {

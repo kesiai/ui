@@ -178,7 +178,7 @@ function LockedTable({ isLocked }: { isLocked: boolean }) {
 
 ```tsx
 import { BatchActions } from '@/components/kesi/view-batch/view-batch'
-import { useModelSelect } from '@airiot/client'
+import { useModelSelect } from '@kesi/client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -259,7 +259,7 @@ function UserTable() {
 import { BatchActions, BatchChangeAction } from '@/components/kesi/view-batch/view-batch'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { useModelSelect } from '@airiot/client'
+import { useModelSelect } from '@kesi/client'
 
 interface Order {
   id: string

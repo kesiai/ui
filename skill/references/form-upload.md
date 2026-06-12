@@ -460,4 +460,4 @@ function IdCardUpload() {
 
 9. **文件命名**：`autoName` 启用后会使用随机字符串重命名文件，保留原始扩展名
 
-10. **认证依赖**：组件依赖 `@airiot/client` 的 `useUser` hook 获取用户信息用于水印等功能
+10. **认证依赖**：组件依赖 `@kesi/client` 的 `useUser` hook 获取用户信息用于水印等功能

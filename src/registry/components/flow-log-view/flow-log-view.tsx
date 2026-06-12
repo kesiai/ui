@@ -5,7 +5,7 @@ import ReactFlow, {
   Background,
   Controls,
 } from 'react-flow-renderer'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'

@@ -39,7 +39,7 @@ interface IterationContextValue {
 ```tsx
 import { Iteration } from '@/components/kesi/container-iteration/iteration'
 import { useContext } from 'react'
-import { IterationContext } from '@airiot/client'
+import { IterationContext } from '@kesi/client'
 
 // 迭代项组件
 function Item() {
@@ -124,7 +124,7 @@ function UserList() {
 ```tsx
 import { Iteration } from '@/components/kesi/container-iteration/iteration'
 import { useContext } from 'react'
-import { IterationContext } from '@airiot/client'
+import { IterationContext } from '@kesi/client'
 
 // 用户卡片组件
 function UserCard() {
@@ -181,7 +181,7 @@ function UserList() {
 ```tsx
 import { Iteration } from '@/components/kesi/container-iteration/iteration'
 import { useContext } from 'react'
-import { IterationContext } from '@airiot/client'
+import { IterationContext } from '@kesi/client'
 
 // 任务项组件
 function TaskItem() {
@@ -262,7 +262,7 @@ function TaskList() {
 ```tsx
 import { Iteration } from '@/components/kesi/container-iteration/iteration'
 import { useContext } from 'react'
-import { IterationContext } from '@airiot/client'
+import { IterationContext } from '@kesi/client'
 
 // 产品卡片组件
 function ProductCard() {
@@ -318,7 +318,7 @@ function ProductGrid() {
 ```tsx
 import { Iteration } from '@/components/kesi/container-iteration/iteration'
 import { useContext } from 'react'
-import { IterationContext } from '@airiot/client'
+import { IterationContext } from '@kesi/client'
 
 // 表格行组件
 function TableRow() {
@@ -395,7 +395,7 @@ function EmployeeTable() {
 ```tsx
 import { Iteration } from '@/components/kesi/container-iteration/iteration'
 import { useContext } from 'react'
-import { IterationContext } from '@airiot/client'
+import { IterationContext } from '@kesi/client'
 
 // 统计卡片组件
 function StatCard() {

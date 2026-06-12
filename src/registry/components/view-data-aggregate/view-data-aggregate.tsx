@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useModelList, useModelGetItems } from '@airiot/client'
+import { useModelList, useModelGetItems } from '@kesi/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

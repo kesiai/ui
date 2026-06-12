@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useModelPagination, useModelPageSize, useModelCount } from '@airiot/client'
+import { useModelPagination, useModelPageSize, useModelCount } from '@kesi/client'
 
 interface ViewPaginationProps {
   showSizeChanger?: boolean

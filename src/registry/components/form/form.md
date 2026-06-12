@@ -64,7 +64,7 @@ interface ClassNamesConfig {
 创建一个最简单的表单。
 
 ```tsx
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 import FormField from '@/components/kesi/form-field/form-field'
 
 function Example() {
@@ -90,7 +90,7 @@ function Example() {
 使用组件提供的预设布局样式。
 
 ```tsx
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 import FormField from '@/components/kesi/form-field/form-field'
 import { layoutPresets } from '@/components/kesi/form/config'
 
@@ -280,7 +280,7 @@ function Example() {
 创建一个完整的用户注册表单，包含多种字段类型和验证规则。
 
 ```tsx
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 import FormField from '@/components/kesi/form-field/form-field'
 import { layoutPresets } from '@/components/kesi/form/config'
 
@@ -380,7 +380,7 @@ function RegistrationForm() {
 创建一个设置表单，使用水平布局。
 
 ```tsx
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 import FormField from '@/components/kesi/form-field/form-field'
 import { layoutPresets } from '@/components/kesi/form/config'
 
@@ -465,7 +465,7 @@ function SettingsForm() {
 创建一个包含动态字段的表单。
 
 ```tsx
-import { Form } from '@airiot/client'
+import { Form } from '@kesi/client'
 import FormField from '@/components/kesi/form-field/form-field'
 import { useState } from 'react'
 

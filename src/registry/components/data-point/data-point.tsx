@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Badge } from "@/components/ui/badge"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { convertValue, type DataPointConfig } from "@/registry/lib/data-point-utils"
-import { useUser, useTag, queryLastData, useServerTime, getSettings } from "@airiot/client"
+import { useUser, useTag, queryLastData, useServerTime, getSettings } from "@kesi/client"
 
 // ─── 类型 ───
 

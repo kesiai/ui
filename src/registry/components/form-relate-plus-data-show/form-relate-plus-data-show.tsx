@@ -1,7 +1,7 @@
 import * as React from 'react'
 import isObject from 'lodash/isObject'
 import isArray from 'lodash/isArray'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronUp } from 'lucide-react'

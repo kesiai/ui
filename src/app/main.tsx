@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { Page } from '@airiot/client'
+import { Page } from '@kesi/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from "@/components/ui/sonner"
 import './globals.css'

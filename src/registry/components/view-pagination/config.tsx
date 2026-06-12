@@ -2,7 +2,7 @@ import { ViewModel } from '../view-model/view-model'
 import React from 'react'
 import { ViewPagination } from './view-pagination'
 import { ComponentConfig } from '@/app/config/types'
-import { useModelGetItems } from '@airiot/client'
+import { useModelGetItems } from '@kesi/client'
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import documentationMd from './view-pagination.md?raw'

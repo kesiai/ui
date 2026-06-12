@@ -1,5 +1,5 @@
 import React from 'react';
-import { useModel, useSetModelState, useModelGetItems } from '@airiot/client';
+import { useModel, useSetModelState, useModelGetItems } from '@kesi/client';
 import { FilterForm } from '@/registry/components/filter-form/filter-form';
 import type { ModelSchema } from '@/registry/lib/model-types';
 import { Button } from '@/components/ui/button';

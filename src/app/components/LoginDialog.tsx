@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLogin } from '@airiot/client'
+import { useLogin } from '@kesi/client'
 
 interface LoginDialogProps {
   open: boolean
@@ -27,7 +27,7 @@ export function LoginDialog({ open, onOpenChange, onLoginSuccess }: LoginDialogP
       })
 
       if (result) {
-        // @airiot/client 的 onLogin 会自动处理用户存储和状态管理
+        // @kesi/client 的 onLogin 会自动处理用户存储和状态管理
         // 调用成功回调
         onLoginSuccess?.()
 

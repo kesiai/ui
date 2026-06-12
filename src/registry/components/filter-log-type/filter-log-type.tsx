@@ -16,7 +16,7 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
-import { createAPI, getConfig } from '@airiot/client'
+import { createAPI, getConfig } from '@kesi/client'
 
 interface LogTypeItem {
   title: string

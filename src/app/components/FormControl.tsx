@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { PropConfig } from '../config/types'
 import { CodeEditorModal } from './CodeEditorModal'
-import { modelRegistry, api } from '@airiot/client'
+import { modelRegistry, api } from '@kesi/client'
 interface FormControlProps {
   config: PropConfig
   value: any

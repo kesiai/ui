@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

@@ -1,1 +1,1 @@
-export * from '@airiot/client'
+export * from '@kesi/client'

@@ -483,7 +483,7 @@ const renderSchemaFormCodePreview = (props: Record<string, any>) => {
     ? JSON.stringify(props.formSchema, null, 2)
     : props.formSchema
 
-  return `import { SchemaForm } from '@airiot/client'
+  return `import { SchemaForm } from '@kesi/client'
 
 const MySchemaForm = () => {
   const handleSubmit = (data: any) => {

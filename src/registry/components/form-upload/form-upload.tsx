@@ -15,7 +15,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Upload, Eye, Trash2, Paperclip, Image as ImageIcon } from 'lucide-react'
-import { createAPI, useUser } from '@airiot/client'
+import { createAPI, useUser } from '@kesi/client'
 import isNumber from 'lodash/isNumber'
 import isArray from 'lodash/isArray'
 import { cn } from '@/lib/utils'

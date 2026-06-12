@@ -1,5 +1,5 @@
 import React from "react"
-import { useUser, type UserInfo } from "@airiot/client"
+import { useUser, type UserInfo } from "@kesi/client"
 
 type Permission = string | string[] | ((user: UserInfo) => boolean)
 

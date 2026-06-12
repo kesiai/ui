@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import unionWith from 'lodash/unionWith'
 import isEqual from 'lodash/isEqual'
-import { createAPI, useModel } from '@airiot/client'
+import { createAPI, useModel } from '@kesi/client'
 import { ChevronDown, Check, X, Loader2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'

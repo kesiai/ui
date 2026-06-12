@@ -17,7 +17,7 @@ import * as style from 'ol/style'
 // @ts-ignore
 import * as geom from 'ol/geom'
 import { useMap } from '../gis-map-core/gis-map-core'
-import { createAPI, useWS } from '@airiot/client'
+import { createAPI, useWS } from '@kesi/client'
 
 /**
  * 获取地图上所有数据表层的 pointSource

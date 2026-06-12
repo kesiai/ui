@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useModelGet, useModelSave, useModelDelete, useModelGetItems, useModel } from '@airiot/client'
+import { useModelGet, useModelSave, useModelDelete, useModelGetItems, useModel } from '@kesi/client'
 import {
   Dialog,
   DialogContent,

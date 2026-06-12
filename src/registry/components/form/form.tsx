@@ -1,4 +1,4 @@
-import { FormProvider, useForm, type UseFormPropsExtended } from '@airiot/client'
+import { FormProvider, useForm, type UseFormPropsExtended } from '@kesi/client'
 import { type ReactNode } from 'react'
 
 type FormProps = UseFormPropsExtended & {

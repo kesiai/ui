@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { useUser } from "@airiot/client"
+import { useUser } from "@kesi/client"
 
 export interface IframeProps extends React.IframeHTMLAttributes<HTMLIFrameElement> {
   /**

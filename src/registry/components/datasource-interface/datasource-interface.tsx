@@ -5,8 +5,8 @@ import isPlainObject from 'lodash/isPlainObject'
 import isArray from 'lodash/isArray'
 import keys from 'lodash/keys'
 import union from 'lodash/union'
-import { api } from '@airiot/client'
-import { useDatasetSet } from '@airiot/client'
+import { api } from '@kesi/client'
+import { useDatasetSet } from '@kesi/client'
 import { ContextProvider } from '@/registry/components/container-context-provider/context-provider'
 
 /**

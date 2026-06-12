@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Loader2, X, ChevronDown } from 'lucide-react'
-import { createAPI } from '@airiot/client'
+import { createAPI } from '@kesi/client'
 import type { RelateFieldOption } from '@/registry/lib/form-relate-types'
 import { cn } from '@/lib/utils'
 

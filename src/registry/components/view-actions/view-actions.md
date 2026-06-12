@@ -209,7 +209,7 @@ function DataTable({ itemId }) {
 
 ```tsx
 import { Actions, CreateAction } from '@/components/kesi/view-actions/view-actions'
-import { useModelGetItems } from '@airiot/client'
+import { useModelGetItems } from '@kesi/client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 interface User {

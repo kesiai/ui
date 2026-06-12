@@ -8,7 +8,7 @@ import merge from 'lodash/merge'
 import React from 'react'
 import dayjs from 'dayjs'
 import { BaseChart, BaseChartProps } from '@/registry/components/chart-echarts/BaseChart'
-import { createAPI, getSettings } from '@airiot/client'
+import { createAPI, getSettings } from '@kesi/client'
 
 // ECharts 图表类型定义
 interface EChartSchema {

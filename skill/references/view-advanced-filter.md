@@ -110,7 +110,7 @@ function ProductFilter() {
 
 ```tsx
 import { ViewAdvancedFilter, FilterRule, LogicOperator } from '@/components/kesi/view-advanced-filter/view-advanced-filter'
-import { useSetModelState, useModelGetItems } from '@airiot/client'
+import { useSetModelState, useModelGetItems } from '@kesi/client'
 
 function OrderFilter() {
   const setWheres = useSetModelState('wheres')
@@ -230,7 +230,7 @@ function DateRangeFilter() {
 
 ```tsx
 import { ViewAdvancedFilter, FilterField } from '@/components/kesi/view-advanced-filter/view-advanced-filter'
-import { useSetModelState, useModelGetItems } from '@airiot/client'
+import { useSetModelState, useModelGetItems } from '@kesi/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -345,7 +345,7 @@ function UserAdvancedFilter() {
 
 ```tsx
 import { ViewAdvancedFilter } from '@/components/kesi/view-advanced-filter/view-advanced-filter'
-import { useSetModelState, useModelGetItems } from '@airiot/client'
+import { useSetModelState, useModelGetItems } from '@kesi/client'
 import { Badge } from '@/components/ui/badge'
 
 function OrderQuerySystem() {

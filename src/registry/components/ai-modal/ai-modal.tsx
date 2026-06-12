@@ -22,7 +22,7 @@ import {
 } from "@assistant-ui/react";
 
 interface AIModalProps {
-  runtime: AssistantRuntime;
+  runtime?: AssistantRuntime;
   triggerClassName?: string;
   triggerPosition?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   title?: string;
@@ -64,8 +64,8 @@ export const AIModal = ({
 
   const triggerPositionClass = positionClasses[triggerPosition];
 
-  return (
-    <AssistantRuntimeProvider runtime={runtime}>
+  const modalContent = (
+    <>
         {/* 浮动按钮和 Modal */}
         <AssistantModalPrimitive.Root
           open={isModalOpen && !isFullscreen}
@@ -148,9 +148,17 @@ export const AIModal = ({
             )}
             onInteractOutside={(e) => e.preventDefault()}
           >
-            <Assistant runtime={runtime} title={title} className={cn(expandPosition === "fullscreen" ? "h-screen!" : "h-[90vh]!")} />
+            <Assistant title={title} className={cn(expandPosition === "fullscreen" ? "h-screen!" : "h-[90vh]!")} />
           </DialogContent>
         </Dialog>
+    </>
+  );
+
+  return runtime ? (
+    <AssistantRuntimeProvider runtime={runtime}>
+      {modalContent}
     </AssistantRuntimeProvider>
+  ) : (
+    modalContent
   );
 };

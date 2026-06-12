@@ -36,53 +36,57 @@ const ThreadTitle = () => {
   );
 };
 
-export const Assistant = ({ runtime, className, title }: { runtime: AssistantRuntime; className?: string; title?: string }) => {
+export const Assistant = ({ runtime, className, title }: { runtime?: AssistantRuntime; className?: string; title?: string }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  return (
-    <AssistantRuntimeProvider runtime={runtime}>
-      <div className={cn("flex max-h-dvh h-full w-full", className)}>
-        {/* Sidebar */}
-        <aside
-          className={`
-            border-r bg-muted/30 p-2 gap-2 flex flex-col transition-all duration-300 ease-in-out
-            ${isSidebarOpen ? "w-64 opacity-100" : "w-0 opacity-0 overflow-hidden"}
-          `}
-        >
-          {title && (
-            <div className="p-2 font-semibold">
-              {title}
-            </div>
-          )}
-          <ThreadList />
-        </aside>
-
-        {/* Main content */}
-        <main className="flex-1 overflow-hidden flex flex-col min-w-0">
-          {/* Header with SidebarTrigger */}
-          <header className="h-14 shrink-0 flex items-center gap-2 border-b px-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="size-8"
-            >
-              {isSidebarOpen ? (
-                <PanelLeftIcon className="size-4" />
-              ) : (
-                <MenuIcon className="size-4" />
-              )}
-            </Button>
-            <Separator orientation="vertical" className="h-4" />
-            <ThreadTitle />
-          </header>
-
-          {/* Thread */}
-          <div className="flex-1 overflow-hidden">
-            <Thread />
+  const assistantContent = (
+    <div className={cn("flex max-h-dvh h-full w-full", className)}>
+      {/* Sidebar */}
+      <aside
+        className={`
+          border-r bg-muted/30 p-2 gap-2 flex flex-col transition-all duration-300 ease-in-out
+          ${isSidebarOpen ? "w-64 opacity-100" : "w-0 opacity-0 overflow-hidden"}
+        `}
+      >
+        {title && (
+          <div className="p-2 font-semibold">
+            {title}
           </div>
-        </main>
-      </div>
-    </AssistantRuntimeProvider>
+        )}
+        <ThreadList />
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 overflow-hidden flex flex-col min-w-0">
+        {/* Header with SidebarTrigger */}
+        <header className="h-14 shrink-0 flex items-center gap-2 border-b px-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="size-8"
+          >
+            {isSidebarOpen ? (
+              <PanelLeftIcon className="size-4" />
+            ) : (
+              <MenuIcon className="size-4" />
+            )}
+          </Button>
+          <Separator orientation="vertical" className="h-4" />
+          <ThreadTitle />
+        </header>
+
+        {/* Thread */}
+        <div className="flex-1 overflow-hidden">
+          <Thread />
+        </div>
+      </main>
+    </div>
   );
+
+  return runtime ? (
+    <AssistantRuntimeProvider runtime={runtime}>
+      {assistantContent}
+    </AssistantRuntimeProvider>
+  ) : assistantContent;
 };

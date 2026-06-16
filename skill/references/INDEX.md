@@ -124,6 +124,8 @@
 | **CRUD 管理**（用户指定） | ViewModel + ViewFilter + ViewDataTable + ViewPagination + ViewActions | `ViewModel` |
 | **地图展示** | GisMapCore + GisXyzTile + GisCustomLayer | `createAPI` |
 
+> ⚠️ **前置**：本索引仅当 `design-report.json` 的 `uiRouting.route ∈ {kesi-ui, kesi-ui+design-skill}` 时使用。`self-loop` / `design-skill` 路由下 kesi-ui 不执行（已在输入验证短路退出）。组合模式（`kesi-ui+design-skill`）下，本索引仅用于 CRUD/GIS 页面选型，展示型页面视觉交给设计 skill。
+
 ## 组合系统规则
 
 | 系统 | 核心容器 | 必须配套 | 文档 |

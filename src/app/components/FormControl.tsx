@@ -17,6 +17,8 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
   const [loadingTableData, setLoadingTableData] = useState(false)
   const [tableTagsOptions, setTableTagsOptions] = useState<Array<{ value: string; label: string }>>([])
   const [loadingTableTags, setLoadingTableTags] = useState(false)
+  const [agentOptions, setAgentOptions] = useState<Array<{ value: string; label: string }>>([])
+  const [loadingAgents, setLoadingAgents] = useState(false)
 
   // 获取设备表列表
   useEffect(() => {
@@ -137,6 +139,39 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
       fetchTableTags()
     }
   }, [config.type, config.dependsOn, config.tableId, allValues])
+
+  // 获取 Agent 列表（用于 agent-id 类型）
+  useEffect(() => {
+    if (config.type === 'agent-id') {
+      const fetchAgents = async () => {
+        try {
+          setLoadingAgents(true)
+          const response = await api({ name: 'eap/agents' }).fetch('')
+
+          const items = response?.json || response || []
+          if (!Array.isArray(items)) {
+            console.error('Agent 数据格式错误:', response)
+            setAgentOptions([])
+            return
+          }
+
+          const options = items.map((item: any) => ({
+            value: item.id,
+            label: item.title || item.name || item.id
+          }))
+
+          setAgentOptions(options)
+        } catch (error) {
+          console.error('获取 Agent 列表失败:', error)
+          setAgentOptions([])
+        } finally {
+          setLoadingAgents(false)
+        }
+      }
+
+      fetchAgents()
+    }
+  }, [config.type])
 
   const handleChange = (newValue: any) => {
     onChange(config.name, newValue)
@@ -545,6 +580,31 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
           ))}
         </select>
       )
+    case 'agent-id':
+      if (loadingAgents) {
+        return (
+          <div className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-500 text-sm">
+            加载 Agent...
+          </div>
+        )
+      }
+      return (
+        <select
+          value={value as string || ''}
+          onChange={(e) => handleChange(e.target.value)}
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
+        >
+          <option value="">
+            请选择 Agent
+          </option>
+          {agentOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      )
+
     default:
       return null
   }

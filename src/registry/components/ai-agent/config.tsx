@@ -1,8 +1,10 @@
 import React from 'react'
-import { Assistant } from '@/registry/components/ai-agent/ai-agent'
+import { Assistant } from '@/registry/components/ai-agent/base'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-agent.md?raw'
+import { type AssistantRuntime } from "@assistant-ui/react";
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
+import { useAgentRuntime } from "./runtime";
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'openai' | 'vercel' | 'custom'
@@ -74,6 +76,7 @@ export const aiAgentPropsConfig = [
     description: '选择 AI 助手运行时类型',
     options: [
       { value: 'opencode', label: 'OpenCode Runtime' },
+      { value: 'agent', label: 'Agent Runtime' },
       { value: 'openai', label: 'OpenAI Runtime' },
       { value: 'vercel', label: 'Vercel AI SDK' },
       { value: 'custom', label: '自定义 Runtime' }
@@ -86,6 +89,14 @@ export const aiAgentPropsConfig = [
     default: 'http://localhost:4096',
     placeholder: 'http://localhost:4096',
     description: 'OpenCode Runtime 的服务地址'
+  },
+  {
+    name: 'agentId',
+    label: 'Agent',
+    type: 'agent-id' as const,
+    default: '6a3a22aeecf2e81476c84246',
+    placeholder: 'your-agent-id',
+    description: 'Agent Runtime 的 agent ID'
   },
   {
     name: 'systemPrompt',
@@ -112,33 +123,37 @@ export const aiAgentPropsConfig = [
 ]
 
 export const aiAgentDefaultProps = {
-  runtimePreset: 'opencode' as RuntimePreset,
+  runtimePreset: 'agent' as RuntimePreset,
   baseUrl: 'http://127.0.0.1:4096',
+  agentId: '6a3a22aeecf2e81476c84246',
   systemPrompt: 'You are a helpful AI assistant.',
   title: '',
   showCodePreview: true
 }
 
 const renderAiAgentPreview = (props: Record<string, any>) => {
-  const runtimePreset = props.runtimePreset || 'opencode'
+  const runtimePreset = props.runtimePreset || 'agent'
 
-  // 为不同 preset 创建对应的 runtime
-  const getRuntime = () => {
-    switch (runtimePreset) {
-      case 'opencode':
-        return useOpenCodeRuntime({
-          baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
-        })
-      default:
-        return null
-    }
+  // 始终无条件调用所有 hooks 以遵守 Rules of Hooks，
+  // 然后根据 runtimePreset 选择使用哪个 runtime
+  const opencodeRuntime = useOpenCodeRuntime({
+    baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
+  })
+  const agentRuntime = useAgentRuntime(props.agentId || 'your-agent-id')
+
+  let runtime: AssistantRuntime | null = null
+  switch (runtimePreset) {
+    case 'opencode':
+      runtime = opencodeRuntime
+      break
+    case 'agent':
+      runtime = agentRuntime
+      break
   }
 
-  const runtime = getRuntime()
-
   return (
-    <div className="h-full flex items-center justify-center p-4 bg-slate-50">
-      <div className="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
+    <div className="flex h-150 items-center justify-center p-4 bg-slate-50">
+      <div className="w-full h-150 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
         {runtime ? (
           <Assistant runtime={runtime} title={props.title || ''} />
         ) : (

@@ -1,14 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { BotIcon, Maximize2Icon, Minimize2Icon, XIcon } from "lucide-react";
-import { Thread } from "@/components/assistant-ui/thread";
-import { Assistant } from "@/registry/components/ai-agent/ai-agent";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+  DialogContent
 } from "@/components/ui/dialog";
 import {
   Tooltip,
@@ -16,11 +11,26 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { AssistantRuntimeProvider, type AssistantRuntime, useAuiState } from "@assistant-ui/react";
+import { Assistant, Thread } from "@/registry/components/ai-agent/ai-agent";
+import { AssistantModalPrimitive, AssistantRuntimeProvider, useAuiState, useAui, type AssistantRuntime } from "@assistant-ui/react";
+import { BotIcon, Maximize2Icon, XIcon, TrashIcon, MoreHorizontalIcon, ArchiveIcon, PlusIcon } from "lucide-react";
+import { useCallback, useState } from "react";
 import {
-  AssistantModalPrimitive,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
+  ThreadListItemMorePrimitive,
+  ThreadListItemPrimitive,
+  ThreadListPrimitive,
 } from "@assistant-ui/react";
 
+
+import type { FC } from "react";
 interface AIModalProps {
   runtime?: AssistantRuntime;
   triggerClassName?: string;
@@ -39,12 +49,102 @@ const positionClasses = {
   "top-left": "left-4 top-4",
 };
 
+/** 下拉列表形式的 Thread 选择器 */
+const ThreadListSelect: React.FC = () => {
+  const { threadItems, mainThreadId, isLoading } = useAuiState((s) => s.threads);
+  const threadsApi = useAui().threads();
+
+  const handleValueChange = (value: string) => {
+    if (value === '__new__') {
+      threadsApi.switchToNewThread();
+    } else {
+      threadsApi.switchToThread(value);
+    }
+  };
+
+  return (
+    <Select value={mainThreadId || ''} onValueChange={handleValueChange}>
+      <SelectTrigger className="max-w-50 h-7 border-0 bg-transparent px-1 shadow-none text-sm font-semibold focus:ring-2 focus:ring-blue-500">
+        <SelectValue placeholder="选择对话" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="__new__" className="text-blue-600">
+          <PlusIcon className="size-3.5" />
+          新对话
+        </SelectItem>
+        {isLoading && (
+          <SelectItem value="__loading__" disabled>
+            加载中...
+          </SelectItem>
+        )}
+        {!isLoading && threadItems.length === 0 && (
+          <SelectItem value="__empty__" disabled>
+            无对话
+          </SelectItem>
+        )}
+        <ThreadListPrimitive.Items>
+          {() => <ThreadListItem />}
+        </ThreadListPrimitive.Items>
+      </SelectContent>
+    </Select>
+  );
+};
+
+const ThreadListItem: FC = () => {
+  const item = useAuiState((s) => s.threadListItem)
+  return (
+    <div className="aui-thread-list-item group flex h-9 items-center gap-2 rounded-lg transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none data-active:bg-muted">
+      <SelectItem key={item.id} value={item.id} className="aui-thread-list-item-trigger flex h-full min-w-0 flex-1 items-center px-3 text-start text-sm">
+        <span className="aui-thread-list-item-title min-w-0 flex-1 truncate">
+          <ThreadListItemPrimitive.Title fallback="新对话" />
+        </span>
+      </SelectItem>
+      <ThreadListItemMore />
+    </div>
+  );
+};
+
+const ThreadListItemMore: FC = () => {
+  return (
+    <ThreadListItemMorePrimitive.Root>
+      <ThreadListItemMorePrimitive.Trigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="aui-thread-list-item-more me-2 size-7 p-0 opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:bg-accent data-[state=open]:opacity-100 group-data-active:opacity-100"
+        >
+          <MoreHorizontalIcon className="size-4" />
+          <span className="sr-only">More options</span>
+        </Button>
+      </ThreadListItemMorePrimitive.Trigger>
+      <ThreadListItemMorePrimitive.Content
+        side="bottom"
+        align="start"
+        className="aui-thread-list-item-more-content z-50 min-w-32 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
+      >
+        <ThreadListItemPrimitive.Archive asChild>
+          <ThreadListItemMorePrimitive.Item className="aui-thread-list-item-more-item flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+            <ArchiveIcon className="size-4" />
+            归档
+          </ThreadListItemMorePrimitive.Item>
+        </ThreadListItemPrimitive.Archive>
+        <ThreadListItemPrimitive.Delete asChild>
+          <ThreadListItemMorePrimitive.Item className="aui-thread-list-item-more-item flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-destructive text-sm outline-none hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive">
+            <TrashIcon className="size-4" />
+            删除
+          </ThreadListItemMorePrimitive.Item>
+        </ThreadListItemPrimitive.Delete>
+      </ThreadListItemMorePrimitive.Content>
+    </ThreadListItemMorePrimitive.Root>
+  );
+};
+
 export const AIModal = ({
   runtime,
   triggerClassName,
   triggerPosition = "bottom-right",
   title = "",
-  modalSize = { width: "400px", height: "500px" },
+  modalSize = { width: "500px", height: "600px" },
   modalClassName = "",
   showExpandButton = true,
   expandPosition = "fullscreen"
@@ -97,10 +197,8 @@ export const AIModal = ({
             {/* Modal 头部 */}
             <div className="flex items-center justify-between border-b px-4 py-3">
               <div className="flex items-center gap-2">
-                <BotIcon className="size-4 text-primary" />
-                <h3 className="font-semibold text-sm">
-                  {title || 'AI Assistant'}
-                </h3>
+                <BotIcon className="size-4 text-primary shrink-0" />
+                <ThreadListSelect />
               </div>
               <div className="flex items-center gap-1">
                 {showExpandButton && (
@@ -113,7 +211,7 @@ export const AIModal = ({
                         <Maximize2Icon className="size-4" />
                       </button>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">Expand</TooltipContent>
+                    <TooltipContent side="bottom">展开</TooltipContent>
                   </Tooltip>
                 )}
                 <Tooltip>
@@ -125,7 +223,7 @@ export const AIModal = ({
                       <XIcon className="size-4" />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom">Close</TooltipContent>
+                  <TooltipContent side="bottom">关闭</TooltipContent>
                 </Tooltip>
               </div>
             </div>

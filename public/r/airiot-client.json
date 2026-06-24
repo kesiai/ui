@@ -1,8 +1,8 @@
 {
-  "name": "kesi-client",
+  "name": "airiot-client",
   "type": "registry:lib",
-  "title": "KESI Client",
-  "description": "KESI Client - 工具库",
+  "title": "Airiot Client",
+  "description": "Airiot Client - 工具库",
   "dependencies": [],
   "registryDependencies": [],
   "files": [

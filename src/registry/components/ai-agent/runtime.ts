@@ -13,23 +13,37 @@ import {
 } from "@assistant-ui/react";
 import { createAPI, getConfig } from '@kesi/client'
 
-type AgentSessionMessage = {
+/** 消息块（对应后端 entity.AgentMessagePart） */
+type AgentMessagePart = {
   id?: string;
+  messageId?: string;
   sessionId?: string;
-  agentId?: string;
-  role: string;                         // "user" | "assistant" | "tool"
+  role?: string;
   type: string;                         // "text" | "thinking" | "tool_use" | "tool_result" | "error"
-  content?: string;                     // 文本内容（替代原来的 message）
+  content?: string;                     // 文本内容
   tool?: string;                        // 工具名称
   input?: any;                          // 工具输入
   output?: string;                      // 工具输出
   payload?: Record<string, any>;        // 扩展负载
   metadata?: Record<string, any>;
-  seq?: number;                         // 同一 run 下的过程序号
-  runId?: string;
-  sourceMessageId?: string;             // 触发该过程消息的用户消息 ID
+  seq?: number;                         // 同一 message 下的过程序号
+  sourcePartId?: string;                // 触发该过程 part 的用户 part ID
   createdBy?: string;
   createdAt?: string;
+  agentId?: string;
+};
+
+/** 后端消息（对应后端 entity.AgentMessage），包含 parts 数组 */
+type AgentSessionMessage = {
+  id: string;
+  agentId?: string;
+  role: string;                         // "user" | "assistant"
+  status?: string;
+  source?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  metadata?: Record<string, any>;
+  parts?: AgentMessagePart[];
 };
 
 const agentApi = createAPI({ name: 'eap/agents' });
@@ -94,83 +108,90 @@ function genId() {
   return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
-/** 后端 AgentSessionMessage → ThreadMessage */
+/** 后端 AgentSessionMessage（含 parts 数组）→ ThreadMessage */
 function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
   const id = m.id ?? genId();
   const now = new Date(m.createdAt ?? Date.now());
   const metadata = { custom: {} as Record<string, unknown> };
   const base = { id, createdAt: now, metadata };
 
-  // ─── tool_use → ToolCallMessagePart ──────────────────────────
-  if (m.type === 'tool_use') {
+  const parts = m.parts ?? [];
+  if (parts.length === 0) return null;
+
+  const content: ThreadAssistantMessagePart[] = [];
+  // 记录 tool_use part.id → content 索引，用于 tool_result 匹配
+  const toolUseById = new Map<string, number>();
+
+  for (const part of parts) {
+    switch (part.type) {
+      case 'text':
+        content.push({ type: 'text', text: part.content ?? '' });
+        break;
+
+      case 'thinking':
+        content.push({ type: 'reasoning', text: part.content ?? '' });
+        break;
+
+      case 'tool_use': {
+        const callId = part.id ?? genId();
+        toolUseById.set(callId, content.length);
+        content.push({
+          type: 'tool-call',
+          toolCallId: callId,
+          toolName: part.tool ?? '',
+          args: (part.input ?? {}) as any,
+          argsText: typeof part.input === 'string' ? part.input : JSON.stringify(part.input ?? {}),
+        });
+        break;
+      }
+
+      case 'tool_result': {
+        // 优先通过 sourcePartId 匹配对应的 tool-call
+        const matchKey = part.sourcePartId;
+        const targetIdx = matchKey ? toolUseById.get(matchKey) : undefined;
+
+        if (targetIdx !== undefined) {
+          // 合并 result 到已有的 tool-call part
+          const existing = content[targetIdx] as any;
+          content[targetIdx] = { ...existing, result: part.output ?? part.content ?? '' } as ThreadAssistantMessagePart;
+        } else {
+          // 没有匹配的 tool-call，兜底为 data part
+          content.push({
+            type: 'data',
+            name: `tool_result:${part.tool ?? ''}`,
+            data: {
+              toolCallId: part.sourcePartId ?? genId(),
+              toolName: part.tool ?? '',
+              output: part.output ?? part.content ?? '',
+            },
+          });
+        }
+        break;
+      }
+
+      case 'error':
+        content.push({ type: 'text', text: `[Error] ${part.content ?? ''}` });
+        break;
+    }
+  }
+
+  if (content.length === 0) return null;
+
+  if (m.role === 'user') {
     return {
       ...base,
-      role: 'assistant' as const,
-      content: [{
-        type: 'tool-call' as const,
-        toolCallId: m.runId ?? id,
-        toolName: m.tool ?? '',
-        args: (m.input ?? {}) as any,
-        argsText: typeof m.input === 'string' ? m.input : JSON.stringify(m.input ?? {}),
-      }],
-      status: { type: 'complete' as const, reason: 'stop' as const },
+      role: 'user',
+      content,
+      attachments: [],
     } as unknown as ThreadMessage;
   }
 
-  // ─── tool_result → 嵌入到对应 tool-call 的 result 字段 ──────
-  //  ToolCallMessagePart.result 本身可携带结果；这里用 DataMessagePart
-  //  占位，runtime 加载历史时会以 tool-call + result 形式展示。
-  if (m.type === 'tool_result') {
-    return {
-      ...base,
-      role: 'assistant' as const,
-      content: [{
-        type: 'data' as const,
-        name: `tool_result:${m.tool ?? ''}`,
-        data: {
-          toolCallId: m.runId ?? id,
-          toolName: m.tool ?? '',
-          output: m.output ?? m.content ?? '',
-        },
-      }],
-      status: { type: 'complete' as const, reason: 'stop' as const },
-    } as unknown as ThreadMessage;
-  }
-
-  // ─── thinking → ReasoningMessagePart ──────────────────────────
-  if (m.type === 'thinking') {
-    return {
-      ...base,
-      role: 'assistant' as const,
-      content: [{ type: 'reasoning' as const, text: m.content ?? '' }],
-      status: { type: 'complete' as const, reason: 'stop' as const },
-    } as unknown as ThreadMessage;
-  }
-
-  // ─── text / error → TextMessagePart ───────────────────────────
-  const text = m.type === 'error' ? `[Error] ${m.content ?? ''}` : (m.content ?? '');
-
-  if (m.role === 'assistant') {
-    return {
-      ...base,
-      role: 'assistant' as const,
-      content: [{ type: 'text' as const, text }],
-      status: { type: 'complete' as const, reason: 'stop' as const },
-    } as unknown as ThreadMessage;
-  }
-
-  // user（含 system 等兜底）
   return {
     ...base,
-    role: 'user' as const,
-    content: [{ type: 'text' as const, text }],
-    attachments: [] as readonly any[],
+    role: 'assistant',
+    content,
+    status: { type: 'complete' as const, reason: 'stop' as const },
   } as unknown as ThreadMessage;
-}
-
-function getLastAssistantText(sessionMessages: AgentSessionMessage[]) {
-  const lastAssistant = [...sessionMessages].reverse().find((m) => m.role === "assistant");
-  return lastAssistant?.message ?? "";
 }
 
 /**
@@ -192,8 +213,9 @@ async function streamRunInSession(params: {
   const host = (sessionApi as any).host ?? getConfig().rest ?? '/rest/';
   const url = `${host}eap/agent-sessions/${sessionId}/messages?stream=true`;
   const headers: Record<string, string> = sessionApi.headers;
+  headers['Accept'] = 'text/event-stream';
 
-  console.log('[streamRunInSession] start fetching SSE stream...', { url, sessionId, userText });
+  console.log('[StreamRunInSession] start fetching SSE stream...', { url, sessionId, userText });
 
   const response = await fetch(url, {
     method: 'POST',
@@ -213,8 +235,6 @@ async function streamRunInSession(params: {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
-  let textContent = '';
-  let finalText = '';
 
   // 按 callId 索引 tool-call part 在 content 数组中的位置
   const toolIdxMap = new Map<string, number>();
@@ -222,20 +242,6 @@ async function streamRunInSession(params: {
 
   function emit() {
     onMessageChange([...parts]);
-  }
-
-  function upsertTextPart(text: string) {
-    textContent = text;
-    const i = parts.findIndex(p => p.type === 'text');
-    const textPart: ThreadAssistantMessagePart = { type: 'text', text };
-    if (i >= 0) {
-      parts[i] = textPart;
-    } else {
-      // 文本放在工具调用之前
-      parts.unshift(textPart);
-      // 修正后面 tool-call 的索引
-      toolIdxMap.forEach((idx, callId) => toolIdxMap.set(callId, idx + 1));
-    }
   }
 
   try {
@@ -258,26 +264,28 @@ async function streamRunInSession(params: {
           else if (line.startsWith('data: ')) dataStr = line.slice(6).trim();
         }
 
-        if (!dataStr || dataStr === '[DONE]') continue;
+        if (!dataStr || dataStr === '[DONE]') {
+          if (eventType === 'done') break;
+          continue;
+        }
 
         try {
           const parsed = JSON.parse(dataStr);
+          const payload = parsed.data?.payload ?? {};
 
-          if (eventType === 'run:output') {
-            const text = parsed.data?.payload?.text;
-            if (text && text !== textContent) {
-              upsertTextPart(text);
+          if (eventType === 'message:thinking') {
+            const chunk = payload.text;
+            if (chunk) {
+              const lastPart = parts[parts.length - 1];
+              if (lastPart?.type === 'reasoning') {
+                (lastPart as { type: 'reasoning'; text: string }).text += chunk;
+              } else {
+                parts.push({ type: 'reasoning', text: chunk });
+              }
               emit();
             }
-          } else if (eventType === 'run:completed') {
-            const final = parsed.data?.payload?.assistantMessage;
-            if (final) {
-              finalText = final;
-              if (final !== textContent) upsertTextPart(final);
-              emit();
-            }
-          } else if (eventType === 'run:tool_use') {
-            const { tool, callId, input } = parsed.data?.payload ?? {};
+          } else if (eventType === 'message:tool_use') {
+            const { tool, callId, input } = payload;
             console.log('[streamRunInSession] tool use', { tool, callId, input });
             if (!callId) continue;
             const toolPart: ThreadAssistantMessagePart = {
@@ -290,8 +298,8 @@ async function streamRunInSession(params: {
             toolIdxMap.set(callId, parts.length);
             parts.push(toolPart);
             emit();
-          } else if (eventType === 'run:tool_result') {
-            const { tool, callId, output } = parsed.data?.payload ?? {};
+          } else if (eventType === 'message:tool_result') {
+            const { tool, callId, output } = payload;
             console.log('[streamRunInSession] tool result', { tool, callId, output });
             if (!callId) continue;
             const i = toolIdxMap.get(callId);
@@ -300,6 +308,20 @@ async function streamRunInSession(params: {
               parts[i] = { ...p, result: output } as ThreadAssistantMessagePart;
               emit();
             }
+          } else if (eventType === 'message:partial') {
+            const { deltaType, text } = payload;
+            if (deltaType === 'text_delta' && text) {
+              const lastPart = parts[parts.length - 1];
+              if (lastPart?.type === 'text') {
+                (lastPart as { type: 'text'; text: string }).text += text;
+              } else {
+                parts.push({ type: 'text', text });
+              }
+              emit();
+            }
+          } else if (eventType === 'message:completed') {
+            // 流结束，final 状态已通过增量更新发出
+            break;
           }
         } catch {
           // 非 JSON data 行，跳过
@@ -565,7 +587,7 @@ export const useAgentRuntime = (agentId: string) => {
       await streamRunInSession({
         sessionId: currentThreadId,
         signal: ac.signal,
-        userText,
+        userText: newText,
         requestedBy,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Assistant } from '@/registry/components/ai-agent/base'
+import { Assistant } from '@/registry/components/ai-agent/ai-agent'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-agent.md?raw'
 import { type AssistantRuntime } from "@assistant-ui/react";
@@ -152,10 +152,10 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
   }
 
   return (
-    <div className="flex h-150 items-center justify-center p-4 bg-slate-50">
-      <div className="w-full h-150 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
+    <div className="flex h-250 items-center justify-center p-4 bg-slate-50">
+      <div className="w-full h-250 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
         {runtime ? (
-          <Assistant runtime={runtime} title={props.title || ''} />
+          <Assistant runtime={runtime} title={props.title} />
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center overflow-auto">
             <div className="w-16 h-16 mb-4 rounded-full bg-blue-100 flex items-center justify-center">

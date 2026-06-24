@@ -130,7 +130,7 @@ export const aiModalPropsConfig = [
 export const aiModalDefaultProps = {
   runtimePreset: 'opencode' as RuntimePreset,
   title: 'AI Assistant',
-  modalSize: { width: '400px', height: '500px' },
+  modalSize: { width: '500px', height: '600px' },
   triggerPosition: 'bottom-right' as const,
   showExpandButton: true,
   expandPosition: 'fullscreen' as const

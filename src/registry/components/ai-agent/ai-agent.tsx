@@ -103,21 +103,23 @@ export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed
         collapsed ? "w-12" : "w-65",
       )}
     >
-      <div
-        className={cn(
-          "mt-2 flex h-12 shrink-0 items-center transition-[padding] duration-200",
-          collapsed ? "px-3.5" : "px-6",
-        )}
-      >
-        <span
+      { title && (
+        <div
           className={cn(
-            "text-foreground/90 ml-2 text-sm font-medium whitespace-nowrap transition-opacity duration-200",
-            collapsed && "opacity-0",
+            "mt-2 flex h-12 shrink-0 items-center transition-[padding] duration-200",
+            collapsed ? "px-3.5" : "px-6",
           )}
         >
-          {title || "kesi-ui"}
-        </span>
-      </div>
+          <span
+            className={cn(
+              "text-foreground/90 ml-2 text-sm font-medium whitespace-nowrap transition-opacity duration-200",
+              collapsed && "opacity-0",
+            )}
+          >
+            {title}
+          </span>
+        </div>
+      )}
       {collapsed ? (
         <ThreadListPrimitive.New asChild>
           <TooltipIconButton

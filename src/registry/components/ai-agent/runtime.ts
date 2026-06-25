@@ -11,7 +11,76 @@ import {
   type AppendMessage,
   type ThreadAssistantMessagePart,
 } from "@assistant-ui/react";
-import { createAPI, getConfig } from '@kesi/client'
+import { createAPI, getConfig } from '@/registry/lib/airiot/client'
+
+/** Token 用量 */
+type AgentTokens = {
+  cacheRead?: number;
+  cacheWrite?: number;
+  input: number;
+  output: number;
+  total: number;
+};
+
+/** 模型用量明细（按模型 ID 索引） */
+type AgentModelUsage = {
+  inputTokens?: number;
+  outputTokens?: number;
+  cacheReadTokens?: number;
+  cacheWriteTokens?: number;
+};
+
+/** 后端响应元数据（user 消息 metadata.backendResponse） */
+type BackendResponseMetadata = {
+  adapterType?: string;
+  agentName?: string;
+  command?: string;
+  content?: string;
+  cwd?: string;
+  elapsedMs?: number;
+  finishReason?: string;
+  mode?: string;
+  modelId?: string;
+  providerId?: string;
+  rootPath?: string;
+  sessionId?: string;
+  sessionIdAfter?: string;
+  status?: string;
+  tokens?: AgentTokens;
+  usage?: Record<string, AgentModelUsage>;
+};
+
+/** 调度元数据（user 消息 metadata 顶层） */
+type DispatchMetadata = {
+  dispatchAttempts?: number;
+  dispatchKind?: string;
+  dispatchLastAt?: string;
+  dispatchMessageId?: string;
+  dispatchSessionId?: string;
+  dispatchStatus?: string;
+  dispatchStream?: boolean;
+  gatewayStatus?: string;
+};
+
+/** 消息元数据 */
+type AgentMessageMetadata = DispatchMetadata & {
+  backendResponse?: BackendResponseMetadata;
+  adapterType?: string;
+  agentName?: string;
+  command?: string;
+  content?: string;
+  cwd?: string;
+  elapsedMs?: number;
+  finishReason?: string;
+  mode?: string;
+  modelId?: string;
+  providerId?: string;
+  rootPath?: string;
+  sessionId?: string;
+  status?: string;
+  tokens?: AgentTokens;
+  usage?: Record<string, AgentModelUsage>;
+};
 
 /** 消息块（对应后端 entity.AgentMessagePart） */
 type AgentMessagePart = {
@@ -19,15 +88,18 @@ type AgentMessagePart = {
   messageId?: string;
   sessionId?: string;
   role?: string;
-  type: string;                         // "text" | "thinking" | "tool_use" | "tool_result" | "error"
-  content?: string;                     // 文本内容
-  tool?: string;                        // 工具名称
-  input?: any;                          // 工具输入
-  output?: string;                      // 工具输出
-  payload?: Record<string, any>;        // 扩展负载
+  type: string;                         // "text" | "reasoning" | "tool-call" | "tool_result" | "error"
+  text?: string;                        // 文本内容（原来叫 content）
+  toolName?: string;                    // 工具名称（原来叫 tool）
+  toolCallId?: string;                  // 工具调用 ID
+  args?: any;                           // 工具输入（原来叫 input）
+  argsText?: string;                    // 工具输入的字符串形式
+  result?: any;                         // 工具输出（原来叫 output）
+  state?: { status?: string };          // 工具状态
+  payload?: Record<string, any>;
   metadata?: Record<string, any>;
-  seq?: number;                         // 同一 message 下的过程序号
-  sourcePartId?: string;                // 触发该过程 part 的用户 part ID
+  seq?: number;
+  sourcePartId?: string;
   createdBy?: string;
   createdAt?: string;
   agentId?: string;
@@ -37,12 +109,39 @@ type AgentMessagePart = {
 type AgentSessionMessage = {
   id: string;
   agentId?: string;
+  sessionId?: string;
   role: string;                         // "user" | "assistant"
   status?: string;
   source?: string;
+  requestedBy?: string;
+
+  // === assistant 消息特有 ===
+  parentId?: string;
+  agentName?: string;
+  modelId?: string;
+  providerId?: string;
+  mode?: string;
+  finishReason?: string;
+  tokens?: AgentTokens;
+  usage?: Record<string, AgentModelUsage>;
+  cwd?: string;
+  rootPath?: string;
+
+  // === 通用 ===
+  wakeupId?: string;
+  remoteMessageId?: string;
+  closeReason?: string;
+  processLossRetryCount?: number;
+  continuationAttempt?: number;
+  scheduledRetryAt?: string;
+  scheduledRetryAttempt?: number;
+  scheduledRetryReason?: string;
+  lastHeartbeatAt?: string;
+  startedAt?: string;
+  endedAt?: string;
   createdAt?: string;
   updatedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: AgentMessageMetadata;
   parts?: AgentMessagePart[];
 };
 
@@ -119,58 +218,50 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
   if (parts.length === 0) return null;
 
   const content: ThreadAssistantMessagePart[] = [];
-  // 记录 tool_use part.id → content 索引，用于 tool_result 匹配
-  const toolUseById = new Map<string, number>();
 
   for (const part of parts) {
     switch (part.type) {
       case 'text':
-        content.push({ type: 'text', text: part.content ?? '' });
+        content.push({ type: 'text', text: part.text ?? '' });
         break;
 
-      case 'thinking':
-        content.push({ type: 'reasoning', text: part.content ?? '' });
+      case 'reasoning':
+        content.push({ type: 'reasoning', text: part.text ?? '' });
         break;
 
-      case 'tool_use': {
-        const callId = part.id ?? genId();
-        toolUseById.set(callId, content.length);
-        content.push({
+      case 'tool-call': {
+        const callId = part.toolCallId ?? part.id ?? genId();
+        const tcPart: ThreadAssistantMessagePart & { result?: any } = {
           type: 'tool-call',
           toolCallId: callId,
-          toolName: part.tool ?? '',
-          args: (part.input ?? {}) as any,
-          argsText: typeof part.input === 'string' ? part.input : JSON.stringify(part.input ?? {}),
-        });
+          toolName: part.toolName ?? '',
+          args: (part.args ?? {}) as any,
+          argsText: part.argsText ?? (typeof part.args === 'string' ? part.args : JSON.stringify(part.args ?? {})),
+        };
+        // tool-call part 自带 result（后端已合并）
+        if (part.result != null) {
+          tcPart.result = part.result;
+        }
+        content.push(tcPart as ThreadAssistantMessagePart);
         break;
       }
 
       case 'tool_result': {
-        // 优先通过 sourcePartId 匹配对应的 tool-call
-        const matchKey = part.sourcePartId;
-        const targetIdx = matchKey ? toolUseById.get(matchKey) : undefined;
-
-        if (targetIdx !== undefined) {
-          // 合并 result 到已有的 tool-call part
-          const existing = content[targetIdx] as any;
-          content[targetIdx] = { ...existing, result: part.output ?? part.content ?? '' } as ThreadAssistantMessagePart;
-        } else {
-          // 没有匹配的 tool-call，兜底为 data part
-          content.push({
-            type: 'data',
-            name: `tool_result:${part.tool ?? ''}`,
-            data: {
-              toolCallId: part.sourcePartId ?? genId(),
-              toolName: part.tool ?? '',
-              output: part.output ?? part.content ?? '',
-            },
-          });
-        }
+        // 兜底：没有匹配 tool-call 时用 data part
+        content.push({
+          type: 'data',
+          name: `tool_result:${part.toolName ?? ''}`,
+          data: {
+            toolCallId: part.sourcePartId ?? genId(),
+            toolName: part.toolName ?? '',
+            output: part.result ?? part.text ?? '',
+          },
+        });
         break;
       }
 
       case 'error':
-        content.push({ type: 'text', text: `[Error] ${part.content ?? ''}` });
+        content.push({ type: 'text', text: `[Error] ${part.text ?? ''}` });
         break;
     }
   }
@@ -273,7 +364,7 @@ async function streamRunInSession(params: {
           const parsed = JSON.parse(dataStr);
           const payload = parsed.data?.payload ?? {};
 
-          if (eventType === 'message:thinking') {
+          if (eventType === 'reasoning') {
             const chunk = payload.text;
             if (chunk) {
               const lastPart = parts[parts.length - 1];
@@ -284,31 +375,31 @@ async function streamRunInSession(params: {
               }
               emit();
             }
-          } else if (eventType === 'message:tool_use') {
-            const { tool, callId, input } = payload;
-            console.log('[streamRunInSession] tool use', { tool, callId, input });
-            if (!callId) continue;
+          } else if (eventType === 'tool-call') {
+            const { toolCallId, toolName, args, argsText } = payload;
+            console.log('[streamRunInSession] tool use', { toolCallId, toolName, args });
+            if (!toolCallId) continue;
             const toolPart: ThreadAssistantMessagePart = {
               type: 'tool-call',
-              toolCallId: callId,
-              toolName: tool ?? '',
-              args: (input ?? {}) as any,
-              argsText: typeof input === 'string' ? input : JSON.stringify(input ?? {}),
+              toolCallId,
+              toolName: toolName ?? '',
+              args: (args ?? {}) as any,
+              argsText: argsText ?? (typeof args === 'string' ? args : JSON.stringify(args ?? {})),
             };
-            toolIdxMap.set(callId, parts.length);
+            toolIdxMap.set(toolCallId, parts.length);
             parts.push(toolPart);
             emit();
-          } else if (eventType === 'message:tool_result') {
-            const { tool, callId, output } = payload;
-            console.log('[streamRunInSession] tool result', { tool, callId, output });
-            if (!callId) continue;
-            const i = toolIdxMap.get(callId);
+          } else if (eventType === 'tool-result') {
+            const { toolCallId, result } = payload;
+            console.log('[streamRunInSession] tool result', { toolCallId });
+            if (!toolCallId) continue;
+            const i = toolIdxMap.get(toolCallId);
             if (i !== undefined) {
               const p = parts[i] as any;
-              parts[i] = { ...p, result: output } as ThreadAssistantMessagePart;
+              parts[i] = { ...p, result } as ThreadAssistantMessagePart;
               emit();
             }
-          } else if (eventType === 'message:partial') {
+          } else if (eventType === 'text') {
             const { deltaType, text } = payload;
             if (deltaType === 'text_delta' && text) {
               const lastPart = parts[parts.length - 1];
@@ -319,8 +410,17 @@ async function streamRunInSession(params: {
               }
               emit();
             }
-          } else if (eventType === 'message:completed') {
-            // 流结束，final 状态已通过增量更新发出
+          } else if (eventType === 'completed') {
+            // 流结束，用 metadata.backendResponse.content 覆盖最后一个 text part（完整文本）
+            const data = parsed.data;
+            if (data?.status === 'succeeded' && data?.metadata?.backendResponse?.content) {
+              const fullText = data.metadata.backendResponse.content;
+              const lastTextIdx = parts.map(p => p.type).lastIndexOf('text');
+              if (lastTextIdx >= 0) {
+                parts[lastTextIdx] = { type: 'text', text: fullText };
+                emit();
+              }
+            }
             break;
           }
         } catch {
@@ -394,33 +494,34 @@ export const useAgentRuntime = (agentId: string) => {
       return;
     }
 
-      // session 是持久会话：已有 threadId 直接复用，否则创建新会话
-      const sessionId = currentThreadId ?? await (async () => {
-        console.log('[onNew] creating new session...', { agentId });
+    // session 是持久会话：已有 threadId 直接复用，否则创建新会话
+    const sessionId = currentThreadId ?? await (async () => {
+      console.log('[onNew] creating new session...', { agentId });
 
-        const { json } = await agentApi.fetch(`/${agentId}/sessions`, {
-          method: 'POST',
-          body: JSON.stringify({
-            // initialMessage: userText,
-            title: userText.slice(0, 30),
-            metadata: {},
-            requestedBy,
-          }),
-        });
-        const newId = (json.sessionId ?? json.id) as string;
-        console.log('[onNew] session created', { newId, json });
-
-        if (!newId) throw new Error("Failed to create session");
-
-        setCurrentThreadId(newId);
-        setThreads(prev => [...prev, {
-          status: 'regular' as const,
-          id: newId,
-          remoteId: newId,
+      const { json } = await agentApi.fetch(`/${agentId}/sessions`, {
+        method: 'POST',
+        body: JSON.stringify({
+          // initialMessage: userText,
           title: userText.slice(0, 30),
-        }]);
-        return newId;
-      })();
+          metadata: {},
+          requestedBy,
+        }),
+      });
+      const newId = (json.sessionId ?? json.id) as string;
+      console.log('[onNew] session created', { newId, json });
+
+      if (!newId) throw new Error("Failed to create session");
+
+      setThreads(prev => [...prev, {
+        status: 'regular' as const,
+        id: newId,
+        remoteId: newId,
+        title: userText.slice(0, 30),
+      }]);
+      setCurrentThreadId(newId);
+      
+      return newId;
+    })();
 
     console.log('[onNew] resolved sessionId', {
       sessionId,
@@ -454,13 +555,6 @@ export const useAgentRuntime = (agentId: string) => {
     abortRef.current = ac;
 
     try {
-      // 新创建的 session 已在 initialMessage 中发送，无需重复 trigger
-      // if (currentThreadId) {
-      //   console.log('[onNew] triggering run for existing session', { sessionId, userText });
-      // } else {
-      //   console.log('[onNew] skip trigger — new session already received initialMessage', { sessionId });
-      // }
-
       console.log('[onNew] start SSE stream...', { sessionId });
       await streamRunInSession({
         sessionId,

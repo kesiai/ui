@@ -301,8 +301,8 @@ const addWatermark = (
           : opt.contentType === 'user'
             ? user?.username
             : opt.contentType === 'text'
-              ? (opt.content || 'Airiot')
-              : 'Airiot'
+              ? (opt.content || 'kesi')
+              : 'kesi'
 
         const textWidth = ctx.measureText(text)?.width || 0
         const textHeight = opt.fontSize || 100

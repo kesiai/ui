@@ -621,8 +621,8 @@ function DynamicFilterTable() {
 
 | 资源 ID | 说明 | 实际路径 |
 |---------|------|-----------|
-| `'_#$airiot_log'` | 日志表 | `core/log` |
-| `'_#$airiot_warning'` | 告警表 | `warning/warning` |
+| `'_#$kesi_log'` | 日志表 | `core/log` |
+| `'_#$kesi_warning'` | 告警表 | `warning/warning` |
 
 ## 内置字段
 

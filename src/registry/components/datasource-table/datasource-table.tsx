@@ -158,8 +158,8 @@ const INNER_FIELDS = [
 ]
 
 const SPECIAL_RESOURCE_IDS: Record<string, string> = {
-  '_#$airiot_log': 'core/log',
-  '_#$airiot_warning': 'warning/warning'
+  '_#$kesi_log': 'core/log',
+  '_#$kesi_warning': 'warning/warning'
 }
 
 // ==================== Utility Functions ====================

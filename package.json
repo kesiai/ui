@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@assistant-ui/react": "^0.14.23",
+    "@assistant-ui/react": "^0.14.24",
     "@assistant-ui/react-lexical": "^0.2.3",
     "@assistant-ui/react-markdown": "^0.14.4",
     "@assistant-ui/react-opencode": "^0.2.9",

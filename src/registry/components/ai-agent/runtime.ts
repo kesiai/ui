@@ -10,8 +10,9 @@ import {
   type ThreadMessage,
   type AppendMessage,
   type ThreadAssistantMessagePart,
+  type MessageTiming,
 } from "@assistant-ui/react";
-import { createAPI, getConfig } from '@/registry/lib/airiot/client'
+import { createAPI, getConfig } from '@kesi/client'
 
 /** Token 用量 */
 type AgentTokens = {
@@ -268,6 +269,32 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
 
   if (content.length === 0) return null;
 
+  // 对 assistant 消息，从后端数据严格映射 MessageTiming（7 字段）
+  if (m.role === 'assistant') {
+    const startedAtMs = m.startedAt ? new Date(m.startedAt).getTime() : undefined;
+    const endedAtMs = m.endedAt ? new Date(m.endedAt).getTime() : undefined;
+    const firstPartMs = parts.find(p => p.createdAt)?.createdAt;
+    const firstTokenMs = firstPartMs ? new Date(firstPartMs).getTime() : undefined;
+
+    const totalStreamTime: number = (startedAtMs && endedAtMs) ? (endedAtMs - startedAtMs) : 0;
+    const tokenCount: number | undefined = m.tokens?.output ?? m.tokens?.total;
+    const tokensPerSecond: number | undefined = (tokenCount != null && totalStreamTime > 0)
+      ? tokenCount / (totalStreamTime / 1000)
+      : undefined;
+
+    const timing: MessageTiming = {
+      streamStartTime: startedAtMs ?? now.getTime(),
+      firstTokenTime: (startedAtMs && firstTokenMs) ? (firstTokenMs - startedAtMs) : undefined,
+      totalStreamTime,
+      tokenCount,
+      tokensPerSecond,
+      totalChunks: parts.length,
+      toolCallCount: parts.filter(p => p.type === 'tool-call').length,
+    };
+    console.log('[toThreadMessage] assistant message timing', { id, timing });
+    (metadata as any).timing = timing;
+  }
+
   if (m.role === 'user') {
     return {
       ...base,
@@ -297,7 +324,7 @@ async function streamRunInSession(params: {
   requestedBy: string;
   signal: AbortSignal;
   onMessageChange: (content: ThreadAssistantMessagePart[]) => void;
-}): Promise<void> {
+}): Promise<MessageTiming> {
   const { sessionId, userText, requestedBy, signal, onMessageChange } = params;
 
   const sessionApi = createAPI({ name: 'eap/agent-sessions' })
@@ -321,7 +348,11 @@ async function streamRunInSession(params: {
     signal,
   });
 
-  if (!response.ok || !response.body) return;
+  if (!response.ok || !response.body) return {
+    streamStartTime: 0,
+    totalChunks: 0,
+    toolCallCount: 0,
+  } as MessageTiming;
 
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
@@ -331,7 +362,18 @@ async function streamRunInSession(params: {
   const toolIdxMap = new Map<string, number>();
   const parts: ThreadAssistantMessagePart[] = [];
 
+  // timing tracking
+  const streamStartTime = Date.now();
+  let firstTokenTime: number | undefined;
+  let totalChunks = 0;
+  let toolCallCount = 0;
+  let tokenCount: number | undefined;
+
   function emit() {
+    if (firstTokenTime === undefined && parts.length > 0) {
+      firstTokenTime = Date.now();
+    }
+    totalChunks++;
     onMessageChange([...parts]);
   }
 
@@ -379,6 +421,7 @@ async function streamRunInSession(params: {
             const { toolCallId, toolName, args, argsText } = payload;
             console.log('[streamRunInSession] tool use', { toolCallId, toolName, args });
             if (!toolCallId) continue;
+            toolCallCount++;
             const toolPart: ThreadAssistantMessagePart = {
               type: 'tool-call',
               toolCallId,
@@ -401,7 +444,7 @@ async function streamRunInSession(params: {
             }
           } else if (eventType === 'text') {
             const { deltaType, text } = payload;
-            if (deltaType === 'text_delta' && text) {
+            if (text && (deltaType === 'text_delta' || !deltaType)) {
               const lastPart = parts[parts.length - 1];
               if (lastPart?.type === 'text') {
                 (lastPart as { type: 'text'; text: string }).text += text;
@@ -411,9 +454,21 @@ async function streamRunInSession(params: {
               emit();
             }
           } else if (eventType === 'completed') {
-            // 流结束，用 metadata.backendResponse.content 覆盖最后一个 text part（完整文本）
             const data = parsed.data;
-            if (data?.status === 'succeeded' && data?.metadata?.backendResponse?.content) {
+            tokenCount = data?.tokens?.output ?? data?.tokens?.total;
+            if (data?.status === 'failed') {
+              // 错误状态：从 backendResponse 提取错误信息
+              const errReason = data?.metadata?.backendResponse?.finishReason ?? data?.closeReason ?? '未知错误';
+              const errMsg = `[错误] 执行失败：${errReason}`;
+              const lastTextIdx = parts.map(p => p.type).lastIndexOf('text');
+              if (lastTextIdx >= 0) {
+                parts[lastTextIdx] = { type: 'text', text: errMsg };
+              } else {
+                parts.push({ type: 'text', text: errMsg });
+              }
+              emit();
+            } else if (data?.status === 'succeeded' && data?.metadata?.backendResponse?.content) {
+              // 成功：用 backendResponse.content 覆盖最后一个 text part（完整文本）
               const fullText = data.metadata.backendResponse.content;
               const lastTextIdx = parts.map(p => p.type).lastIndexOf('text');
               if (lastTextIdx >= 0) {
@@ -431,6 +486,22 @@ async function streamRunInSession(params: {
   } catch (err: any) {
     if (err.name !== 'AbortError') throw err;
   }
+
+  const totalStreamTime = Date.now() - streamStartTime;
+  const tokensPerSecond: number | undefined = (tokenCount != null && totalStreamTime > 0)
+    ? tokenCount / (totalStreamTime / 1000)
+    : undefined;
+
+  const timing: MessageTiming = {
+    streamStartTime,
+    firstTokenTime,
+    totalStreamTime,
+    tokenCount,
+    tokensPerSecond,
+    totalChunks,
+    toolCallCount,
+  };
+  return timing;
 }
 
 // ==================== useAgentRuntime ====================
@@ -449,6 +520,7 @@ export const useAgentRuntime = (agentId: string) => {
 
   const runIdRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const isNewSessionRef = useRef(false);        // onNew 新建 session 时屏蔽 useEffect 加载
 
   // ---------- 初始加载 thread 列表 ----------
   useEffect(() => {
@@ -466,6 +538,11 @@ export const useAgentRuntime = (agentId: string) => {
   useEffect(() => {
     if (!currentThreadId) {
       setMessages([]);
+      return;
+    }
+    // onNew 刚新建 session，消息由乐观插入 + SSE 驱动，跳过加载
+    if (isNewSessionRef.current) {
+      isNewSessionRef.current = false;
       return;
     }
     sessionApi.fetch(`/${currentThreadId}/messages`, { method: 'GET' })
@@ -518,6 +595,7 @@ export const useAgentRuntime = (agentId: string) => {
         remoteId: newId,
         title: userText.slice(0, 30),
       }]);
+      isNewSessionRef.current = true;
       setCurrentThreadId(newId);
       
       return newId;
@@ -556,7 +634,7 @@ export const useAgentRuntime = (agentId: string) => {
 
     try {
       console.log('[onNew] start SSE stream...', { sessionId });
-      await streamRunInSession({
+      const timing = await streamRunInSession({
         sessionId,
         signal: ac.signal,
         userText,
@@ -571,11 +649,11 @@ export const useAgentRuntime = (agentId: string) => {
         },
       });
 
-      // 标记 complete
+      // 标记 complete，写入 timing 供 MessageTiming 组件显示
       console.log('[onNew] SSE done, marking complete', { assistantId });
       setMessages(prev => prev.map(m =>
         m.id === assistantId
-          ? { ...m, status: { type: 'complete' as const, reason: 'stop' as const } }
+          ? { ...m, status: { type: 'complete' as const, reason: 'stop' as const }, metadata: { ...(m.metadata as any), timing } } as ThreadMessage
           : m,
       ));
     } catch (err) {
@@ -620,7 +698,7 @@ export const useAgentRuntime = (agentId: string) => {
       if (!userText) return;
 
 
-      await streamRunInSession({
+      const timing = await streamRunInSession({
         sessionId: currentThreadId,
         signal: ac.signal,
         userText,
@@ -636,7 +714,7 @@ export const useAgentRuntime = (agentId: string) => {
 
       setMessages(prev => prev.map(m =>
         m.id === assistantId
-          ? { ...m, status: { type: 'complete' as const, reason: 'stop' as const } }
+          ? { ...m, status: { type: 'complete' as const, reason: 'stop' as const }, metadata: { ...(m.metadata as any), timing } } as ThreadMessage
           : m,
       ));
     } finally {
@@ -678,7 +756,7 @@ export const useAgentRuntime = (agentId: string) => {
 
     try {
 
-      await streamRunInSession({
+      const timing = await streamRunInSession({
         sessionId: currentThreadId,
         signal: ac.signal,
         userText: newText,
@@ -694,7 +772,7 @@ export const useAgentRuntime = (agentId: string) => {
 
       setMessages(prev => prev.map(m =>
         m.id === assistantId
-          ? { ...m, status: { type: 'complete' as const, reason: 'stop' as const } }
+          ? { ...m, status: { type: 'complete' as const, reason: 'stop' as const }, metadata: { ...(m.metadata as any), timing } } as ThreadMessage
           : m,
       ));
     } finally {

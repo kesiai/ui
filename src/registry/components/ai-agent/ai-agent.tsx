@@ -7,7 +7,6 @@ import {
 } from "@/components/assistant-ui/attachment";
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { DotMatrix } from "@/components/assistant-ui/dot-matrix";
-import { MessageTiming } from "@/components/assistant-ui/message-timing";
 import { ToolFallback } from "@/components/assistant-ui/tool-fallback";
 import {
   ToolGroupContent,
@@ -24,6 +23,12 @@ import {
   ReasoningTrigger,
 } from "@/components/assistant-ui/reasoning";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
   ComposerQuotePreview,
@@ -48,7 +53,8 @@ import {
   unstable_useSlashCommandAdapter,
   useAui,
   useAuiState,
-  AssistantRuntimeProvider, type AssistantRuntime, 
+  useMessageTiming,
+  AssistantRuntimeProvider, type AssistantRuntime,
   type Unstable_SlashCommand,
 } from "@assistant-ui/react";
 import {
@@ -699,6 +705,71 @@ export const AssistantMessage: FC = () => {
   );
 };
 
+/** 消息时间统计（内联版，汉化，显示全部 timing 字段） */
+const TimingBadge: FC = () => {
+  const timing = useMessageTiming();
+  if (timing?.totalStreamTime === undefined) return null;
+
+  const fmt = (ms: number | undefined): string => {
+    if (ms === undefined) return "—";
+    if (ms < 1000) return `${Math.round(ms)}ms`;
+    return `${(ms / 1000).toFixed(2)}s`;
+  };
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            data-slot="message-timing-trigger"
+            aria-label="消息耗时"
+            className="text-muted-foreground hover:bg-accent hover:text-accent-foreground flex items-center rounded-md p-1 font-mono text-xs tabular-nums transition-colors"
+          >
+            {fmt(timing.totalStreamTime)}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent
+          side="right"
+          sideOffset={8}
+          className="px-3 py-2 min-w-42"
+        >
+          <div className="grid gap-1.5 text-xs">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted-foreground">首字耗时</span>
+              <span className="font-mono tabular-nums">{fmt(timing.firstTokenTime)}</span>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted-foreground">总耗时</span>
+              <span className="font-mono tabular-nums">{fmt(timing.totalStreamTime)}</span>
+            </div>
+            {timing.tokensPerSecond !== undefined && (
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-muted-foreground">速度</span>
+                <span className="font-mono tabular-nums">{timing.tokensPerSecond.toFixed(1)} tok/s</span>
+              </div>
+            )}
+            {timing.tokenCount !== undefined && (
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-muted-foreground">输出 Token</span>
+                <span className="font-mono tabular-nums">{timing.tokenCount.toLocaleString()}</span>
+              </div>
+            )}
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted-foreground">数据块</span>
+              <span className="font-mono tabular-nums">{timing.totalChunks}</span>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted-foreground">工具调用</span>
+              <span className="font-mono tabular-nums">{timing.toolCallCount}</span>
+            </div>
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
 export const AssistantActionBar: FC = () => {
   return (
     <ActionBarPrimitive.Root
@@ -744,7 +815,7 @@ export const AssistantActionBar: FC = () => {
           </ActionBarPrimitive.ExportMarkdown>
         </ActionBarMorePrimitive.Content>
       </ActionBarMorePrimitive.Root>
-      <MessageTiming />
+      <TimingBadge />
     </ActionBarPrimitive.Root>
   );
 };

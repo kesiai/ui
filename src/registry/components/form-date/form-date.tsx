@@ -14,9 +14,125 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { CalendarIcon, XIcon, ChevronLeft, ChevronRight } from "lucide-react"
+import {
+  CalendarIcon,
+  XIcon,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Check,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TimePicker } from "@/registry/ui/time-picker"
+
+// 年份下拉的可选范围（当前年往前 100 年 ~ 往后 20 年）
+const DROPDOWN_YEAR_PAST = 100
+const DROPDOWN_YEAR_FUTURE = 20
+const YEAR_START = new Date(new Date().getFullYear() - DROPDOWN_YEAR_PAST, 0, 1)
+const YEAR_END = new Date(new Date().getFullYear() + DROPDOWN_YEAR_FUTURE, 11, 31)
+
+function getYearOptions() {
+  const now = new Date()
+  const start = now.getFullYear() - DROPDOWN_YEAR_PAST
+  const end = now.getFullYear() + DROPDOWN_YEAR_FUTURE
+  return Array.from({ length: end - start + 1 }, (_, i) => ({
+    value: start + i,
+    label: `${start + i}年`,
+  }))
+}
+
+// 通用月份/年份下拉（Popover + 限高滚动，替代原生 <select>，避免选项过多时菜单过高）
+const DatePickerDropdown = ({
+  options,
+  value,
+  onChange,
+  disabled,
+}: {
+  options?: { value: number; label: string; disabled?: boolean }[]
+  value?: string | number
+  onChange?: (value: number) => void
+  disabled?: boolean
+}) => {
+  const [open, setOpen] = React.useState(false)
+  const selected = options?.find((o) => String(o.value) === String(value))
+
+  const handleSelect = (v: number) => {
+    onChange?.(v)
+    setOpen(false)
+  }
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          disabled={disabled}
+          data-disabled={disabled}
+          className="inline-flex items-center gap-1 rounded-md h-8 pl-2 pr-1 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring data-[disabled=true]:opacity-50"
+        >
+          {selected?.label}
+          <ChevronDown className="size-3.5 text-muted-foreground" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="p-1 max-h-60 w-28 overflow-auto"
+        align="center"
+        sideOffset={4}
+      >
+        {options?.map((o) => {
+          const isSel = String(o.value) === String(value)
+          return (
+            <button
+              key={o.value}
+              type="button"
+              disabled={o.disabled}
+              onClick={() => handleSelect(o.value)}
+              className={cn(
+                "relative flex w-full select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none",
+                isSel
+                  ? "bg-accent text-accent-foreground"
+                  : "hover:bg-accent hover:text-accent-foreground",
+                o.disabled && "pointer-events-none opacity-50"
+              )}
+            >
+              {isSel && <Check className="absolute left-2 size-4" />}
+              {o.label}
+            </button>
+          )
+        })}
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+// 适配 react-day-picker 的 Dropdown（onChange 收到的是 ChangeEvent，转成数值回调）
+const CalendarDropdown = ({
+  options,
+  value,
+  onChange,
+  disabled,
+}: {
+  options?: { value: number; label: string; disabled?: boolean }[]
+  value?: string | number
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>
+  disabled?: boolean
+}) => (
+  <DatePickerDropdown
+    options={options}
+    value={value}
+    disabled={disabled}
+    onChange={(v) =>
+      onChange?.({
+        target: { value: String(v) },
+      } as React.ChangeEvent<HTMLSelectElement>)
+    }
+  />
+)
+
+// Calendar 复用的下拉组件配置
+const calendarDropdownComponents = {
+  Dropdown: CalendarDropdown,
+} as React.ComponentProps<typeof Calendar>["components"]
 
 export interface FormDateProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children" | "onChange"> {
@@ -100,13 +216,7 @@ const QuarterPicker = React.forwardRef<QuarterPickerRef, {
     setSelectedQuarter(quarter)
   }
 
-  const handlePrevYear = () => {
-    setDisplayYear(displayYear - 1)
-  }
-
-  const handleNextYear = () => {
-    setDisplayYear(displayYear + 1)
-  }
+  const yearOptions = React.useMemo(() => getYearOptions(), [])
 
   const handleConfirm = () => {
     if (selectedQuarter > 0) {
@@ -122,24 +232,13 @@ const QuarterPicker = React.forwardRef<QuarterPickerRef, {
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handlePrevYear}
+      <div className="flex items-center justify-center mb-4">
+        <DatePickerDropdown
+          options={yearOptions}
+          value={displayYear}
+          onChange={setDisplayYear}
           disabled={disabled}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <div className="text-lg font-semibold">{displayYear}年</div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleNextYear}
-          disabled={disabled}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
+        />
       </div>
       <div className="flex gap-2">
         {quarters.map((q) => (
@@ -190,13 +289,7 @@ const MonthPicker = React.forwardRef<MonthPickerRef, {
     setSelectedMonth(month)
   }
 
-  const handlePrevYear = () => {
-    setDisplayYear(displayYear - 1)
-  }
-
-  const handleNextYear = () => {
-    setDisplayYear(displayYear + 1)
-  }
+  const yearOptions = React.useMemo(() => getYearOptions(), [])
 
   const handleConfirm = () => {
     if (selectedMonth >= 0) {
@@ -211,24 +304,13 @@ const MonthPicker = React.forwardRef<MonthPickerRef, {
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handlePrevYear}
+      <div className="flex items-center justify-center mb-4">
+        <DatePickerDropdown
+          options={yearOptions}
+          value={displayYear}
+          onChange={setDisplayYear}
           disabled={disabled}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <div className="text-lg font-semibold">{displayYear}年</div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleNextYear}
-          disabled={disabled}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
+        />
       </div>
       <div className="grid grid-cols-3 gap-2">
         {months.map((month, index) => (
@@ -303,6 +385,10 @@ const WeekPicker = ({
       onMonthChange={onMonthChange}
       onSelect={handleSelect}
       disabled={disabled}
+      captionLayout="dropdown"
+      startMonth={YEAR_START}
+      endMonth={YEAR_END}
+      components={calendarDropdownComponents}
       modifiers={{
         weekSelected: isWeekSelected
       }}
@@ -613,6 +699,10 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
             onMonthChange={setMonth}
             onSelect={handleDateSelect}
             disabled={disabled}
+            captionLayout="dropdown"
+            startMonth={YEAR_START}
+            endMonth={YEAR_END}
+            components={calendarDropdownComponents}
           />
         </div>
       )
@@ -669,6 +759,10 @@ const FormDate = React.forwardRef<HTMLDivElement, FormDateProps>(
               onMonthChange={setMonth}
               onSelect={handleDateSelect}
               disabled={disabled}
+              captionLayout="dropdown"
+              startMonth={YEAR_START}
+              endMonth={YEAR_END}
+              components={calendarDropdownComponents}
             />
           )
       }

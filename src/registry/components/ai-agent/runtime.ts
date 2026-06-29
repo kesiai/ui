@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import {
   useExternalStoreRuntime,
-  CompositeAttachmentAdapter,
-  SimpleImageAttachmentAdapter,
-  SimpleTextAttachmentAdapter,
+  type AttachmentAdapter,
+  type PendingAttachment,
+  type CompleteAttachment,
   type SpeechSynthesisAdapter,
   type FeedbackAdapter,
   type ExternalStoreAdapter,
@@ -11,8 +11,13 @@ import {
   type AppendMessage,
   type ThreadAssistantMessagePart,
   type MessageTiming,
+  unstable_getInteractableSnapshots,
+  unstable_formatInteractableSnapshot,
+  unstable_interactableTool,
+  useAui,
 } from "@assistant-ui/react";
 import { createAPI, getConfig } from '@kesi/client'
+import type { Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ThreadUserMessagePart } from "@assistant-ui/react";
 
 /** Token 用量 */
 type AgentTokens = {
@@ -83,6 +88,13 @@ type AgentMessageMetadata = DispatchMetadata & {
   usage?: Record<string, AgentModelUsage>;
 };
 
+/** 会话附件 */
+type AgentSessionAttachment = {
+  contentType?: string;
+  filename?: string;
+  url: string;
+};
+
 /** 消息块（对应后端 entity.AgentMessagePart） */
 type AgentMessagePart = {
   id?: string;
@@ -104,6 +116,9 @@ type AgentMessagePart = {
   createdBy?: string;
   createdAt?: string;
   agentId?: string;
+  filename?: string;
+  url?: string;
+  mimeType?: string;
 };
 
 /** 后端消息（对应后端 entity.AgentMessage），包含 parts 数组 */
@@ -143,18 +158,97 @@ type AgentSessionMessage = {
   createdAt?: string;
   updatedAt?: string;
   metadata?: AgentMessageMetadata;
+  attachments?: AgentSessionAttachment[];
   parts?: AgentMessagePart[];
 };
 
 const agentApi = createAPI({ name: 'eap/agents' });
 const sessionApi = createAPI({ name: 'eap/agent-sessions' });
 const feedbackApi = createAPI({ name: 'eap/feedbacks' });
+const messageApi = createAPI({ name: 'eap/messages' });
 
 // ==================== Attachment Adapter ====================
-const attachmentAdapter = new CompositeAttachmentAdapter([
-  new SimpleImageAttachmentAdapter(),
-  new SimpleTextAttachmentAdapter(),
-]);
+/**
+ * 通过后端 API 上传/删除附件。sessionId 由外部 setter 更新。
+ */
+class SessionAttachmentAdapter implements AttachmentAdapter {
+  accept = ".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.json,.xml,.md,.yaml,.yml,.log";
+  private _sessionId: string | undefined;
+
+  setSessionId(sessionId: string | undefined) {
+    this._sessionId = sessionId;
+  }
+
+  async add(state: { file: File }): Promise<PendingAttachment> {
+    return {
+      id: state.file.name,
+      type: state.file.type.startsWith("image/") ? "image" : "file",
+      name: state.file.name,
+      contentType: state.file.type,
+      file: state.file,
+      status: { type: "requires-action", reason: "composer-send" },
+    };
+  }
+
+  async send(attachment: PendingAttachment): Promise<CompleteAttachment> {
+    const sid = this._sessionId;
+    if (!sid) throw new Error("SessionAttachmentAdapter: no sessionId set");
+
+    const formData = new FormData();
+    formData.append("file", attachment.file);
+    formData.append("contentType", attachment.contentType ?? "");
+    formData.append("createdBy", "kesi-ui");
+
+    const sessionApi = createAPI({ name: 'eap/agent-sessions' })
+    const host = (sessionApi as any).host ?? getConfig().rest ?? "/rest/";
+    const uploadUrl = `${host}eap/agent-sessions/${sid}/attachments`;
+    const headers = { ...sessionApi.headers };
+    delete headers["Content-Type"];
+
+    const resp = await fetch(uploadUrl, { method: "POST", headers, body: formData });
+    const json = await resp.json();
+
+    const objectKey: string = json.objectKey ?? json.id ?? "";
+    const url: string = json.url ?? `/${objectKey}`;
+
+    const content: ThreadUserMessagePart[] = attachment.type === "image"
+      ? [{ type: "image", image: url, filename: attachment.name }]
+      : [{ type: "file", data: url, mimeType: attachment.contentType ?? "application/octet-stream", filename: attachment.name }];
+
+    return {
+      id: attachment.id,
+      type: attachment.type,
+      name: attachment.name,
+      contentType: attachment.contentType,
+      status: { type: "complete" },
+      content,
+    };
+  }
+
+  async remove(attachment: Attachment): Promise<void> {
+    const sid = this._sessionId;
+    if (!sid) return;
+    const part = (attachment as any).content?.[0];
+    const objectKey = (attachment as any).objectKey ?? (part?.data ? extractObjectKey(part.data) : undefined);
+    if (objectKey) {
+      try {
+        await sessionApi.fetch(`/${sid}/attachments/${objectKey}`, { method: "DELETE" });
+      } catch { /* 删除失败不阻塞 */ }
+    }
+  }
+}
+
+/** 从 URL 中提取 objectKey */
+function extractObjectKey(url: string): string {
+  try {
+    const u = new URL(url);
+    return u.pathname.split("/").pop() ?? url;
+  } catch {
+    return url;
+  }
+}
+
+const attachmentAdapter = new SessionAttachmentAdapter();
 
 // ==================== Speech Adapter ====================
 const speechAdapter: SpeechSynthesisAdapter = {
@@ -219,6 +313,8 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
   if (parts.length === 0) return null;
 
   const content: ThreadAssistantMessagePart[] = [];
+  const host = getConfig().rest ?? '/rest/';
+  const joinUrl = (base: string, path: string) => base.replace(/\/+$/, '') + '/' + path.replace(/^\/+/, '');
 
   for (const part of parts) {
     switch (part.type) {
@@ -261,10 +357,48 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
         break;
       }
 
+      case 'image': {
+        const img = part;
+        content.push({ type: 'image', image: joinUrl(host, img.url ?? ''), filename: img.filename } as ImageMessagePart);
+        break;
+      }
+
+      case 'file': {
+        const f = part;
+        content.push({ type: 'file', data: joinUrl(host, f.url ?? ''), mimeType: f.mimeType ?? 'application/octet-stream', filename: f.filename } as FileMessagePart);
+        break;
+      }
+
+      case 'data': {
+        const d = part;
+        content.push({ type: 'data', data: d.url, name: d.filename ?? 'data' } as DataMessagePart);
+        break;
+      }
+
       case 'error':
         content.push({ type: 'text', text: `[Error] ${part.text ?? ''}` });
         break;
     }
+  }
+  
+  // 转换后端 attachments → ThreadMessage.attachments（CompleteAttachment[]）
+  let msgAttachments: readonly CompleteAttachment[] | undefined;
+  if (m.attachments) {
+    const host = getConfig().rest ?? '/rest/';
+    msgAttachments = m.attachments.map((att) => {
+      const isImage = att.contentType?.startsWith('image/');
+      const fullUrl = joinUrl(host, att.url);
+      return {
+        id: att.url,
+        type: isImage ? 'image' as const : 'file' as const,
+        name: att.filename ?? 'file',
+        contentType: att.contentType,
+        status: { type: 'complete' as const },
+        content: isImage
+          ? [{ type: 'image' as const, image: fullUrl, filename: att.filename }]
+          : [{ type: 'file' as const, data: fullUrl, mimeType: att.contentType ?? 'application/octet-stream', filename: att.filename }],
+      } as CompleteAttachment;
+    });
   }
 
   if (content.length === 0) return null;
@@ -295,12 +429,27 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
     (metadata as any).timing = timing;
   }
 
+  // AgentSessionMessage.status → MessageStatus
+  const msgStatus: ThreadMessage['status'] | undefined = (() => {
+    switch (m.status) {
+      case 'queued':
+      case 'scheduled_retry':
+      case 'running': return { type: 'running' as const };
+      case 'succeeded': return { type: 'complete' as const, reason: 'stop' as const };
+      case 'failed': return { type: 'incomplete' as const, reason: 'error' as const };
+      case 'cancelled': return { type: 'incomplete' as const, reason: 'cancelled' as const };
+      case 'timed_out': return { type: 'incomplete' as const, reason: 'cancelled' as const };
+      default: return undefined;
+    }
+  })();
+
   if (m.role === 'user') {
     return {
       ...base,
       role: 'user',
       content,
-      attachments: [],
+      attachments: msgAttachments ?? [],
+      ...(msgStatus ? { status: msgStatus } : {}),
     } as unknown as ThreadMessage;
   }
 
@@ -308,7 +457,8 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
     ...base,
     role: 'assistant',
     content,
-    status: { type: 'complete' as const, reason: 'stop' as const },
+    attachments: msgAttachments,
+    status: msgStatus ?? { type: 'complete' as const, reason: 'stop' as const },
   } as unknown as ThreadMessage;
 }
 
@@ -320,12 +470,22 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
  */
 async function streamRunInSession(params: {
   sessionId: string;
-  userText: string;
+  message: AppendMessage;
+  messages: ThreadMessage[];
   requestedBy: string;
   signal: AbortSignal;
   onMessageChange: (content: ThreadAssistantMessagePart[]) => void;
 }): Promise<MessageTiming> {
-  const { sessionId, userText, requestedBy, signal, onMessageChange } = params;
+  const { sessionId, message, messages, requestedBy, signal, onMessageChange } = params;
+
+  // 从 AppendMessage 中提取文本，enrich，提取附件
+  const contentParts = Array.isArray(message.content) ? message.content : [];
+  const textPart = contentParts.find((p: any) => p.type === 'text') as { type: 'text'; text: string } | undefined;
+  const rawText = textPart?.text ?? (typeof message.content === 'string' ? message.content : '');
+  const userText = enrichWithInteractables(messages, rawText);
+  const attachments = [ ...(message.attachments ?? []).map((att: CompleteAttachment) => {
+      return att.content?.[0]
+  }), ...contentParts.filter((p: any) => p.type !== 'text') as ThreadUserMessagePart[]].filter(Boolean) as ThreadUserMessagePart[];
 
   const sessionApi = createAPI({ name: 'eap/agent-sessions' })
   const host = (sessionApi as any).host ?? getConfig().rest ?? '/rest/';
@@ -334,6 +494,13 @@ async function streamRunInSession(params: {
   headers['Accept'] = 'text/event-stream';
 
   console.log('[StreamRunInSession] start fetching SSE stream...', { url, sessionId, userText });
+
+  // 转换 attachments 为后端格式
+  const attachmentItems: AgentSessionAttachment[] = attachments.map((a: any) => {
+    if (a.type === 'image') return { contentType: a.filename?.endsWith('.png') ? 'image/png' : 'image/jpeg', filename: a.filename ?? 'image', url: a.image };
+    if (a.type === 'file') return { contentType: a.mimeType ?? 'application/octet-stream', filename: a.filename ?? 'file', url: a.data };
+    return { contentType: 'application/octet-stream', filename: a.filename ?? 'file', url: a.data ?? a.image ?? '' };
+  })
 
   const response = await fetch(url, {
     method: 'POST',
@@ -344,6 +511,7 @@ async function streamRunInSession(params: {
       content: userText,
       metadata: {},
       requestedBy,
+      attachments: attachmentItems,
     }),
     signal,
   });
@@ -504,6 +672,31 @@ async function streamRunInSession(params: {
   return timing;
 }
 
+/** 从已有消息中提取可交互工具快照，拼接到 userText 前让模型感知当前状态 */
+function enrichWithInteractables(messages: ThreadMessage[], userText: string): string {
+  const snapshots: string[] = [];
+  console.log('[enrichWithInteractables] scanning', messages.length, 'messages');
+  for (const msg of messages) {
+    if (msg.role !== 'user') continue;
+    console.log('[enrichWithInteractables] checking user msg', msg.id, 'metadata:', JSON.stringify(msg.metadata));
+    const items = unstable_getInteractableSnapshots(msg as any);
+    console.log('[enrichWithInteractables] snapshots found:', items?.length ?? 0);
+    if (!items?.length) continue;
+    for (const item of items) {
+      const formatted = unstable_formatInteractableSnapshot(item);
+      console.log('[enrichWithInteractables] snapshot', item.name, ':', formatted.slice(0, 120));
+      snapshots.push(formatted);
+    }
+  }
+  if (snapshots.length === 0) {
+    console.log('[enrichWithInteractables] no snapshots, returning original text');
+    return userText;
+  }
+  const result = snapshots.join('\n') + '\n\n' + userText;
+  console.log('[enrichWithInteractables] enriched text length:', result.length);
+  return result;
+}
+
 // ==================== useAgentRuntime ====================
 
 export const useAgentRuntime = (agentId: string) => {
@@ -521,6 +714,7 @@ export const useAgentRuntime = (agentId: string) => {
   const runIdRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const isNewSessionRef = useRef(false);        // onNew 新建 session 时屏蔽 useEffect 加载
+  const pollingRef = useRef<{ messageId: string; timer: ReturnType<typeof setInterval> } | null>(null);
 
   // ---------- 初始加载 thread 列表 ----------
   useEffect(() => {
@@ -534,8 +728,15 @@ export const useAgentRuntime = (agentId: string) => {
     });
   }, [agentId]);
 
-  // ---------- thread 切换时加载消息 ----------
+  // ---------- thread 切换时加载消息，并轮询 running 的 assistant message ----------
   useEffect(() => {
+    // 清除旧轮询
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current.timer);
+      pollingRef.current = null;
+    }
+
+    attachmentAdapter.setSessionId(currentThreadId);
     if (!currentThreadId) {
       setMessages([]);
       return;
@@ -546,10 +747,40 @@ export const useAgentRuntime = (agentId: string) => {
       return;
     }
     sessionApi.fetch(`/${currentThreadId}/messages`, { method: 'GET' })
-      .then(({ json }) => setMessages(
-        (json as AgentSessionMessage[]).map(toThreadMessage).filter((m): m is ThreadMessage => m != null),
-      ))
+      .then(({ json }) => {
+        const raw = json as AgentSessionMessage[];
+        const msgs = raw.map(toThreadMessage).filter((m): m is ThreadMessage => m != null);
+        setMessages(msgs);
+
+        // 检查最后一个 assistant message 是否 running → 启动轮询
+        const lastAssistant = raw.filter(m => m.role === 'assistant').at(-1);
+        if (lastAssistant && lastAssistant.id && (lastAssistant.status === 'running' || lastAssistant.status === 'queued')) {
+          const timer = setInterval(async () => {
+            try {
+              const { json: updated } = await messageApi.fetch(`/${lastAssistant.id}`, { method: 'GET' });
+              const msg = toThreadMessage(updated as AgentSessionMessage);
+              if (msg) {
+                setMessages(prev => prev.map(m => m.id === msg.id ? msg : m));
+                // 如果消息已完成，停止轮询
+                const status = (updated as AgentSessionMessage).status;
+                if (status && !['running', 'queued'].includes(status)) {
+                  clearInterval(timer);
+                  if (pollingRef.current?.timer === timer) pollingRef.current = null;
+                }
+              }
+            } catch { /* 静默失败 */ }
+          }, 2000);
+          pollingRef.current = { messageId: lastAssistant.id, timer };
+        }
+      })
       .catch(() => setMessages([]));
+
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current.timer);
+        pollingRef.current = null;
+      }
+    };
   }, [currentThreadId]);
 
   // ---------- onNew ----------
@@ -559,7 +790,7 @@ export const useAgentRuntime = (agentId: string) => {
       userText: message.content?.[0]?.type === 'text' ? message.content[0].text : '(empty)',
       timestamp: new Date().toISOString(),
     });
-
+    console.log('[onNew] message', message);
     // 取消旧任务
     abortRef.current?.abort();
 
@@ -570,7 +801,7 @@ export const useAgentRuntime = (agentId: string) => {
       console.log('[onNew] userText empty, return');
       return;
     }
-
+    
     // session 是持久会话：已有 threadId 直接复用，否则创建新会话
     const sessionId = currentThreadId ?? await (async () => {
       console.log('[onNew] creating new session...', { agentId });
@@ -614,11 +845,8 @@ export const useAgentRuntime = (agentId: string) => {
 
     console.log('[onNew] optimistic messages', { userId, assistantId, runId, userText });
 
-    const userMsg: ThreadMessage = {
-      id: userId, role: 'user',
-      content: [{ type: 'text', text: userText }],
-      attachments: [], metadata: {},
-    } as unknown as ThreadMessage;
+    // userMsg = AppendMessage + userId
+    const userMsg: ThreadMessage = { id: userId, ...message } as unknown as ThreadMessage;
     const assistantMsg: ThreadMessage = {
       id: assistantId, role: 'assistant',
       content: [{ type: 'text', text: '' }],
@@ -637,7 +865,8 @@ export const useAgentRuntime = (agentId: string) => {
       const timing = await streamRunInSession({
         sessionId,
         signal: ac.signal,
-        userText,
+        message: message,
+        messages,
         requestedBy,
         onMessageChange(content) {
           console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
@@ -697,11 +926,11 @@ export const useAgentRuntime = (agentId: string) => {
 
       if (!userText) return;
 
-
       const timing = await streamRunInSession({
         sessionId: currentThreadId,
         signal: ac.signal,
-        userText,
+        message: { content: [{ type: 'text' as const, text: userText }], parentId: null, sourceId: null, runConfig: undefined } as unknown as AppendMessage,
+        messages,
         requestedBy,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
@@ -756,10 +985,12 @@ export const useAgentRuntime = (agentId: string) => {
 
     try {
 
+      const editMsg = { content: [{ type: 'text' as const, text: newText }], parentId: null, sourceId: null, runConfig: undefined } as unknown as AppendMessage;
       const timing = await streamRunInSession({
         sessionId: currentThreadId,
         signal: ac.signal,
-        userText: newText,
+        message: editMsg,
+        messages,
         requestedBy,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
@@ -833,6 +1064,7 @@ export const useAgentRuntime = (agentId: string) => {
       speech: speechAdapter,
       feedback: feedbackAdapter,
     },
+    
   };
 
   return useExternalStoreRuntime(store);

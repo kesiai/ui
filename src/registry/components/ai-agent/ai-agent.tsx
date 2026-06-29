@@ -8,27 +8,20 @@ import {
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { DotMatrix } from "@/components/assistant-ui/dot-matrix";
 import { ToolFallback } from "@/components/assistant-ui/tool-fallback";
-import {
-  ToolGroupContent,
-  ToolGroupRoot,
-  ToolGroupTrigger,
-} from "@/components/assistant-ui/tool-group";
-import { ThreadList } from "@/components/assistant-ui/thread-list";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
-import {
-  Reasoning,
-  ReasoningContent,
-  ReasoningRoot,
-  ReasoningText,
-  ReasoningTrigger,
-} from "@/components/assistant-ui/reasoning";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipProvider,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import {
   ComposerQuotePreview,
@@ -37,60 +30,66 @@ import {
 } from "@/components/assistant-ui/quote";
 import { ComposerTriggerPopover } from "@/components/assistant-ui/composer-trigger-popover";
 import { DirectiveText } from "@/components/assistant-ui/directive-text";
+import { Source, Sources } from "@/components/assistant-ui/sources";
+import { File } from "@/components/assistant-ui/file";
+import { Image } from "@/components/assistant-ui/image";
 import {
   ActionBarMorePrimitive,
   ActionBarPrimitive,
-  AuiIf,
   type AssistantState,
   BranchPickerPrimitive,
   ComposerPrimitive,
   ErrorPrimitive,
   groupPartByType,
   MessagePrimitive,
-  ThreadListPrimitive,
+  SuggestionPrimitive,
   ThreadPrimitive,
   unstable_useMentionAdapter,
   unstable_useSlashCommandAdapter,
-  useAui,
   useAuiState,
   useMessageTiming,
   AssistantRuntimeProvider, type AssistantRuntime,
+  Unstable_AudioMessagePart,
   type Unstable_SlashCommand,
+  AuiIf,
+  ThreadListItemMorePrimitive,
+  ThreadListItemPrimitive,
+  ThreadListPrimitive,
 } from "@assistant-ui/react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  ChartColumnIcon,
+  BrainIcon,
   CheckIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  CloudSunIcon,
-  CodeXmlIcon,
   CopyIcon,
   DownloadIcon,
   FileTextIcon,
   GlobeIcon,
   HelpCircleIcon,
   LanguagesIcon,
-  LightbulbIcon,
+  LoaderIcon,
   MenuIcon,
   MicIcon,
   MoreHorizontalIcon,
   PanelLeftIcon,
   PencilIcon,
-  PencilLineIcon,
   PlusIcon,
   RefreshCwIcon,
   ShareIcon,
   SlashIcon,
   SquareIcon,
   WrenchIcon,
+  ArchiveIcon,
+  TrashIcon,
 } from "lucide-react";
 import {
   LexicalComposerInput,
   type DirectiveChipProps,
 } from "@assistant-ui/react-lexical";
-import { useState, type FC, type ReactNode } from "react";
+import { useState, type FC } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Logo: FC = () => {
@@ -169,6 +168,102 @@ export const MobileSidebar: FC = () => {
         </div>
       </SheetContent>
     </Sheet>
+  );
+};
+
+
+export const ThreadList: FC = () => {
+  return (
+    <ThreadListPrimitive.Root className="aui-root aui-thread-list-root flex flex-col gap-1">
+      <ThreadListNew />
+      <AuiIf condition={(s) => s.threads.isLoading}>
+        <ThreadListSkeleton />
+      </AuiIf>
+      <AuiIf condition={(s) => !s.threads.isLoading}>
+        <ThreadListPrimitive.Items>
+          {() => <ThreadListItem />}
+        </ThreadListPrimitive.Items>
+      </AuiIf>
+    </ThreadListPrimitive.Root>
+  );
+};
+
+const ThreadListNew: FC = () => {
+  return (
+    <ThreadListPrimitive.New asChild>
+      <Button
+        variant="outline"
+        className="aui-thread-list-new h-9 justify-start gap-2 rounded-lg px-3 text-sm hover:bg-muted data-active:bg-muted"
+      >
+        <PlusIcon className="size-4" />
+        新对话
+      </Button>
+    </ThreadListPrimitive.New>
+  );
+};
+
+const ThreadListSkeleton: FC = () => {
+  return (
+    <div className="flex flex-col gap-1">
+      {Array.from({ length: 5 }, (_, i) => (
+        <div
+          key={i}
+          role="status"
+          aria-label="Loading threads"
+          className="aui-thread-list-skeleton-wrapper flex h-9 items-center px-3"
+        >
+          <Skeleton className="aui-thread-list-skeleton h-4 w-full" />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const ThreadListItem: FC = () => {
+  return (
+    <ThreadListItemPrimitive.Root className="aui-thread-list-item group flex h-9 items-center gap-2 rounded-lg transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none data-active:bg-muted">
+      <ThreadListItemPrimitive.Trigger className="aui-thread-list-item-trigger flex h-full min-w-0 flex-1 items-center px-3 text-start text-sm">
+        <span className="aui-thread-list-item-title min-w-0 flex-1 truncate">
+          <ThreadListItemPrimitive.Title fallback="New Chat" />
+        </span>
+      </ThreadListItemPrimitive.Trigger>
+      <ThreadListItemMore />
+    </ThreadListItemPrimitive.Root>
+  );
+};
+
+const ThreadListItemMore: FC = () => {
+  return (
+    <ThreadListItemMorePrimitive.Root>
+      <ThreadListItemMorePrimitive.Trigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="aui-thread-list-item-more me-2 size-7 p-0 opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:bg-accent data-[state=open]:opacity-100 group-data-active:opacity-100"
+        >
+          <MoreHorizontalIcon className="size-4" />
+          <span className="sr-only">更多选项</span>
+        </Button>
+      </ThreadListItemMorePrimitive.Trigger>
+      <ThreadListItemMorePrimitive.Content
+        side="bottom"
+        align="start"
+        className="aui-thread-list-item-more-content z-50 min-w-32 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
+      >
+        <ThreadListItemPrimitive.Archive asChild>
+          <ThreadListItemMorePrimitive.Item className="aui-thread-list-item-more-item flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+            <ArchiveIcon className="size-4" />
+            归档
+          </ThreadListItemMorePrimitive.Item>
+        </ThreadListItemPrimitive.Archive>
+        <ThreadListItemPrimitive.Delete asChild>
+          <ThreadListItemMorePrimitive.Item className="aui-thread-list-item-more-item flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-destructive text-sm outline-none hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive">
+            <TrashIcon className="size-4" />
+            删除
+          </ThreadListItemMorePrimitive.Item>
+        </ThreadListItemPrimitive.Delete>
+      </ThreadListItemMorePrimitive.Content>
+    </ThreadListItemMorePrimitive.Root>
   );
 };
 
@@ -309,122 +404,28 @@ export const ThreadWelcome: FC = () => {
   );
 };
 
-type SuggestionGroup = {
-  label: string;
-  icon: ReactNode;
-  options: { label: string; prompt: string }[];
+export const ThreadSuggestions: FC = () => {
+  return (
+    <div className="aui-thread-welcome-suggestions grid w-full @md:grid-cols-3 gap-2 pb-4">
+      <ThreadPrimitive.Suggestions>
+        {() => <ThreadSuggestionItem />}
+      </ThreadPrimitive.Suggestions>
+    </div>
+  );
 };
 
-const SUGGESTION_GROUPS: SuggestionGroup[] = [
-  {
-    label: "天气",
-    icon: <CloudSunIcon />,
-    options: [
-      { label: "旧金山", prompt: "旧金山天气怎么样？" },
-      { label: "新加坡", prompt: "新加坡天气怎么样？" },
-      { label: "东京", prompt: "东京天气怎么样？" },
-      { label: "伦敦", prompt: "伦敦天气怎么样？" },
-    ],
-  },
-  {
-    label: "代码",
-    icon: <CodeXmlIcon />,
-    options: [
-      { label: "解释 React hooks", prompt: "解释 React hooks，如 useState 和 useEffect" },
-      { label: "写防抖函数", prompt: "用 TypeScript 写一个防抖函数" },
-      { label: "检查 useEffect 清理", prompt: "展示 useEffect 中正确清理订阅的方法" },
-    ],
-  },
-  {
-    label: "写作",
-    icon: <PencilLineIcon />,
-    options: [
-      { label: "产品公告", prompt: "为深色模式新功能起草一份简短的产品公告" },
-      { label: "发布说明", prompt: "为 React 组件库的 bug 修复版本写发布说明" },
-      { label: "PR 描述", prompt: "为新增键盘快捷键的变更写一段 PR 描述" },
-    ],
-  },
-  {
-    label: "分析",
-    icon: <ChartColumnIcon />,
-    options: [
-      { label: "React vs Vue vs Svelte", prompt: "用表格对比 React、Vue 和 Svelte" },
-      { label: "中美日 GDP", prompt: "用表格对比美国、中国和日本的 GDP" },
-      { label: "SSR 的优缺点", prompt: "服务端渲染的优缺点是什么？" },
-    ],
-  },
-  {
-    label: "头脑风暴",
-    icon: <LightbulbIcon />,
-    options: [
-      { label: "副业想法", prompt: "为 React 开发者 brainstorm 五个副业项目想法" },
-      { label: "工具命名", prompt: "为开发者工具创业公司 brainstorm 几个名字" },
-      { label: "演讲话题", prompt: "为 React meetup brainstorm 演讲话题" },
-    ],
-  },
-];
-
-const suggestionChipClass =
-  "aui-thread-welcome-suggestion text-foreground hover:bg-muted border-border/60 h-auto gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-normal whitespace-nowrap transition-colors [&_svg]:size-4";
-
-export const ThreadSuggestions: FC = () => {
-  const aui = useAui();
-  const [expandedLabel, setExpandedLabel] = useState<string | null>(null);
-  const expandedGroup = SUGGESTION_GROUPS.find(
-    (group) => group.label === expandedLabel,
-  );
-
-  const sendPrompt = (prompt: string) => {
-    if (aui.thread().getState().isRunning) return;
-    aui.thread().append({
-      content: [{ type: "text", text: prompt }],
-      runConfig: aui.composer().getState().runConfig,
-    });
-  };
-
+const ThreadSuggestionItem: FC = () => {
   return (
-    <div className="aui-thread-welcome-suggestions flex w-full flex-col gap-2 px-4">
-      <div className="w-full scrollbar-none overflow-x-auto">
-        <div className="mx-auto flex w-max items-center gap-2">
-          {SUGGESTION_GROUPS.map((group) => (
-            <Button
-              key={group.label}
-              variant="ghost"
-              className={cn(
-                suggestionChipClass,
-                group.label === expandedLabel && "bg-muted",
-              )}
-              onClick={() =>
-                setExpandedLabel(
-                  group.label === expandedLabel ? null : group.label,
-                )
-              }
-            >
-              {group.icon}
-              {group.label}
-            </Button>
-          ))}
-        </div>
-      </div>
-      {expandedGroup && (
-        <div
-          key={expandedGroup.label}
-          className="fade-in slide-in-from-top-1 animate-in w-full scrollbar-none overflow-x-auto duration-200"
+    <div className="aui-thread-welcome-suggestion-display fade-in slide-in-from-bottom-2 @md:nth-[n+3]:block nth-[n+3]:hidden animate-in fill-mode-both duration-200">
+      <SuggestionPrimitive.Trigger send asChild>
+        <Button
+          variant="ghost"
+          className="aui-thread-welcome-suggestion h-auto w-full @md:flex-col flex-wrap items-start justify-start gap-1 rounded-xl border bg-background px-4 py-3 text-start text-sm transition-colors hover:bg-muted"
         >
-          <div className="mx-auto flex w-max items-center gap-2">
-            {expandedGroup.options.map((option) => (
-              <Button
-                key={option.label}
-                variant="ghost"
-                className={suggestionChipClass}
-                onClick={() => sendPrompt(option.prompt)}
-              >
-                {option.label}
-              </Button>
-            ))}
-          </div>
-        </div>
-      )}
+          <SuggestionPrimitive.Title className="aui-thread-welcome-suggestion-text-1 font-medium" />
+          <SuggestionPrimitive.Description className="aui-thread-welcome-suggestion-text-2 text-muted-foreground empty:hidden" />
+        </Button>
+      </SuggestionPrimitive.Trigger>
     </div>
   );
 };
@@ -657,35 +658,64 @@ export const AssistantMessage: FC = () => {
                 return <div data-slot="aui_chain-of-thought">{children}</div>;
               case "group-tool":
                 return (
-                  <ToolGroupRoot variant="ghost">
-                    <ToolGroupTrigger
+                  <InlineToolGroupRoot>
+                    <InlineToolGroupTrigger
                       count={part.indices.length}
                       active={part.status.type === "running"}
                     />
-                    <ToolGroupContent>{children}</ToolGroupContent>
-                  </ToolGroupRoot>
+                    <InlineToolGroupContent>{children}</InlineToolGroupContent>
+                  </InlineToolGroupRoot>
                 );
               case "group-reasoning": {
                 const running = part.status.type === "running";
                 return (
-                  <ReasoningRoot streaming={running}>
-                    <ReasoningTrigger active={running} />
-                    <ReasoningContent aria-busy={running}>
-                      <ReasoningText>{children}</ReasoningText>
-                    </ReasoningContent>
-                  </ReasoningRoot>
+                  <InlineReasoningRoot streaming={running}>
+                    <InlineReasoningTrigger active={running} />
+                    <InlineReasoningContent aria-busy={running}>
+                      <InlineReasoningText>{children}</InlineReasoningText>
+                    </InlineReasoningContent>
+                  </InlineReasoningRoot>
                 );
               }
               case "text":
                 return <MarkdownText />;
               case "reasoning":
-                return <Reasoning {...part} />;
+                return <InlineReasoningText className="ps-0">
+                  <MarkdownText />
+                </InlineReasoningText>;
               case "tool-call":
                 return part.toolUI ?? <ToolFallback {...part} />;
               case "indicator":
                 return <AssistantWorkingIndicator />;
               case "data":
                 return part.dataRendererUI;
+              case "image": {
+                return <Image {...part} />;
+              }
+              case "file": {
+                return <File {...part} />;
+              }
+              case "audio": {
+                const audio = part as Unstable_AudioMessagePart;
+                const audioData = audio.audio?.data;
+                const audioFormat = audio.audio?.format ?? "mp3";
+                const audioUrl = audioData?.startsWith("data:") ? audioData : `data:audio/${audioFormat};base64,${audioData}`;
+                return audioData ? (
+                  <div className="my-2">
+                    <audio controls className="w-full h-10">
+                      <source src={audioUrl} type={`audio/${audioFormat}`} />
+                    </audio>
+                  </div>
+                ) : <span className="text-muted-foreground italic text-sm">[音频]</span>;
+              }
+              case "source": {
+                return <Sources {...part} />
+              }
+              case "generative-ui": {
+                return <MessagePrimitive.GenerativeUI components={{
+                  Button,
+                }} {...part} />;              
+              }
               default:
                 return null;
             }
@@ -705,7 +735,92 @@ export const AssistantMessage: FC = () => {
   );
 };
 
-/** 消息时间统计（内联版，汉化，显示全部 timing 字段） */
+// ==================== 内联 ToolGroup（汉化版） ====================
+const InlineToolGroupRoot: FC<{
+  variant?: "ghost" | "outline" | "muted";
+  children?: React.ReactNode;
+}> = ({ variant = "ghost", children }) => (
+  <Collapsible
+    data-slot="tool-group-root"
+    data-variant={variant}
+    className="group/tool-group-root my-2"
+  >
+    {children}
+  </Collapsible>
+);
+
+const InlineToolGroupTrigger: FC<{
+  count: number;
+  active?: boolean;
+}> = ({ count, active }) => (
+  <CollapsibleTrigger className="group/trigger flex w-full items-center gap-2 py-1 text-sm transition-colors">
+    {active && (
+      <LoaderIcon className="size-4 shrink-0 animate-spin" />
+    )}
+    <WrenchIcon className="size-4 shrink-0" />
+    <span className="text-start font-medium leading-none">
+      {count} 次工具调用
+    </span>
+    <ChevronDownIcon className="size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
+  </CollapsibleTrigger>
+);
+
+const InlineToolGroupContent: FC<{ children?: React.ReactNode }> = ({ children }) => (
+  <CollapsibleContent className="group/collapsible-content overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+    <div className="flex flex-col gap-2 pt-3">
+      {children}
+    </div>
+  </CollapsibleContent>
+);
+
+// ==================== 内联 Reasoning（汉化版） ====================
+const InlineReasoningRoot: FC<{
+  streaming?: boolean;
+  children?: React.ReactNode;
+}> = ({ streaming, children }) => (
+  <Collapsible
+    data-slot="reasoning-root"
+    //defaultOpen={streaming}
+    className="group/reasoning-root my-2"
+  >
+    {children}
+  </Collapsible>
+);
+
+const InlineReasoningTrigger: FC<{
+  active?: boolean;
+}> = ({ active }) => (
+  <CollapsibleTrigger className="group/trigger text-muted-foreground hover:text-foreground flex max-w-[75%] items-center gap-2 py-1 text-sm transition-colors">
+    <BrainIcon className="size-4 shrink-0" />
+    <span className="leading-none">思考{active ? " 中" : ""}</span>
+    <ChevronDownIcon className="mt-0.5 size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
+  </CollapsibleTrigger>
+);
+
+const InlineReasoningContent: FC<{
+  "aria-busy"?: boolean;
+  children?: React.ReactNode;
+}> = ({ "aria-busy": ariaBusy, children }) => (
+  <CollapsibleContent
+    aria-busy={ariaBusy}
+    className="group/collapsible-content text-muted-foreground relative overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down"
+  >
+    {children}
+  </CollapsibleContent>
+);
+
+const InlineReasoningText: FC<{
+  className?: string;
+  children?: React.ReactNode;
+}> = ({ className, children }) => (
+  <div
+    className={`relative z-0 max-h-64 overflow-y-auto leading-relaxed ${className ?? ""}`}
+  >
+    {children}
+  </div>
+);
+
+// ==================== 消息时间统计 ====================
 const TimingBadge: FC = () => {
   const timing = useMessageTiming();
   if (timing?.totalStreamTime === undefined) return null;
@@ -830,11 +945,11 @@ export const UserMessage: FC = () => {
       <UserMessageAttachments />
 
       <div className="aui-user-message-content-wrapper relative col-start-2 min-w-0">
-        <div className="aui-user-message-content peer bg-muted text-foreground rounded-xl px-4 py-2 wrap-break-word empty:hidden">
+        <div className="aui-user-message-content peer bg-muted text-foreground rounded-xl px-4 py-2 wrap-break-word empty:hidden flex flex-col gap-2">
           <MessagePrimitive.Quote>
             {(quote) => <QuoteBlock {...quote} />}
           </MessagePrimitive.Quote>
-          <MessagePrimitive.Parts components={{ Text: DirectiveText }} />
+          <MessagePrimitive.Parts components={{ Text: DirectiveText, Image: Image, File: File, Source: Source }} />
         </div>
         <div className="aui-user-action-bar-wrapper absolute top-1/2 left-0 -translate-x-full -translate-y-1/2 pr-2 peer-empty:hidden">
           <UserActionBar />

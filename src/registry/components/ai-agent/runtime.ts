@@ -12,9 +12,7 @@ import {
   type ThreadAssistantMessagePart,
   type MessageTiming,
   unstable_getInteractableSnapshots,
-  unstable_formatInteractableSnapshot,
-  unstable_interactableTool,
-  useAui,
+  unstable_formatInteractableSnapshot
 } from "@assistant-ui/react";
 import { createAPI, getConfig } from '@kesi/client'
 import type { Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ThreadUserMessagePart } from "@assistant-ui/react";
@@ -959,10 +957,6 @@ export const useAgentRuntime = (agentId: string) => {
 
     abortRef.current?.abort();
 
-    const newText = editMessage.content?.[0]?.type === 'text'
-      ? editMessage.content[0].text
-      : '';
-
     setIsRunning(true);
     const assistantId = genId();
     const runId = `run_${Date.now()}`;
@@ -971,9 +965,8 @@ export const useAgentRuntime = (agentId: string) => {
     // 追加一条编辑后的 user + 新 assistant running
     const editUserId = genId();
     setMessages(prev => [...prev, {
-      id: editUserId, role: 'user',
-      content: [{ type: 'text', text: newText }],
-      attachments: [], metadata: {},
+      id: editUserId,
+      ...editMessage
     } as unknown as ThreadMessage, {
       id: assistantId, role: 'assistant',
       content: [{ type: 'text', text: '' }],
@@ -984,12 +977,10 @@ export const useAgentRuntime = (agentId: string) => {
     abortRef.current = ac;
 
     try {
-
-      const editMsg = { content: [{ type: 'text' as const, text: newText }], parentId: null, sourceId: null, runConfig: undefined } as unknown as AppendMessage;
       const timing = await streamRunInSession({
         sessionId: currentThreadId,
         signal: ac.signal,
-        message: editMsg,
+        message: editMessage,
         messages,
         requestedBy,
         onMessageChange(content) {
@@ -1033,7 +1024,7 @@ export const useAgentRuntime = (agentId: string) => {
     onEdit,
     onReload,
     onCancel,
-
+    
     adapters: {
       threadList: {
         threadId: currentThreadId,

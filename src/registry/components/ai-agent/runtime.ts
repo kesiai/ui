@@ -16,7 +16,8 @@ import {
 } from "@assistant-ui/react";
 import { toToolsJSONSchema } from "assistant-stream";
 import { createAPI, getConfig } from '@kesi/client'
-import type { AssistantRuntime, Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ModelContext, ThreadUserMessagePart } from "@assistant-ui/react";
+import type { AssistantRuntime, Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ModelContext, ThreadUserMessagePart, ToolExecutionStatus } from "@assistant-ui/react";
+import { cacheToolResult } from "./tools";
 
 /** Token 用量 */
 type AgentTokens = {
@@ -611,6 +612,7 @@ async function streamRunInSession(params: {
             const { toolCallId, result } = payload;
             console.log('[streamRunInSession] tool result', { toolCallId });
             if (!toolCallId) continue;
+            cacheToolResult({ toolCallId, result } as any);
             const i = toolIdxMap.get(toolCallId);
             if (i !== undefined) {
               const p = parts[i] as any;
@@ -717,6 +719,7 @@ export const useAgentRuntime = (agentId: string) => {
   }>>([]);
   const [currentThreadId, setCurrentThreadId] = useState<string | undefined>(undefined);
   const [requestedBy] = useState('kesi-ui');
+  const [toolStatuses, setToolStatuses] = useState<Record<string, ToolExecutionStatus>>({});
 
   const runIdRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -791,6 +794,21 @@ export const useAgentRuntime = (agentId: string) => {
       }
     };
   }, [currentThreadId]);
+
+  // ---------- 同步 toolStatuses → messages 中 tool-call part 的状态 ----------
+  useEffect(() => {
+    if (Object.keys(toolStatuses).length === 0) return;
+    setMessages(prev => prev.map(msg => {
+      if (msg.role !== 'assistant') return msg;
+      const content = msg.content.map(part => {
+        if (part.type !== 'tool-call') return part;
+        const status = toolStatuses[(part as any).toolCallId];
+        if (!status) return part;
+        return { ...part, status: { type: 'running' as const } } as ThreadAssistantMessagePart;
+      });
+      return { ...msg, content } as ThreadMessage;
+    }));
+  }, [toolStatuses]);
 
   // ---------- onNew ----------
   const onNew = useCallback(async (message: AppendMessage) => {
@@ -1038,7 +1056,10 @@ export const useAgentRuntime = (agentId: string) => {
     onEdit,
     onReload,
     onCancel,
-    
+    unstable_enableToolInvocations: true,
+    onAddToolResult: (options) => { cacheToolResult(options); },
+    setToolStatuses: (statuses) => { setToolStatuses(statuses); },
+
     adapters: {
       threadList: {
         threadId: currentThreadId,

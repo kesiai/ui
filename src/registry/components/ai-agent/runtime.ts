@@ -14,8 +14,9 @@ import {
   unstable_getInteractableSnapshots,
   unstable_formatInteractableSnapshot
 } from "@assistant-ui/react";
+import { toToolsJSONSchema } from "assistant-stream";
 import { createAPI, getConfig } from '@kesi/client'
-import type { Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ThreadUserMessagePart } from "@assistant-ui/react";
+import type { AssistantRuntime, Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ModelContext, ThreadUserMessagePart } from "@assistant-ui/react";
 
 /** Token 用量 */
 type AgentTokens = {
@@ -470,11 +471,12 @@ async function streamRunInSession(params: {
   sessionId: string;
   message: AppendMessage;
   messages: ThreadMessage[];
+  context: ModelContext;
   requestedBy: string;
   signal: AbortSignal;
   onMessageChange: (content: ThreadAssistantMessagePart[]) => void;
 }): Promise<MessageTiming> {
-  const { sessionId, message, messages, requestedBy, signal, onMessageChange } = params;
+  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange } = params;
 
   // 从 AppendMessage 中提取文本，enrich，提取附件
   const contentParts = Array.isArray(message.content) ? message.content : [];
@@ -500,13 +502,20 @@ async function streamRunInSession(params: {
     return { contentType: 'application/octet-stream', filename: a.filename ?? 'file', url: a.data ?? a.image ?? '' };
   })
 
+  // tools → 转为文字附在 userText 前（API 不支持 tools 参数）
+  const toolsSchema = context.tools ? toToolsJSONSchema(context.tools) : undefined;
+  const toolsPrefix = toolsSchema
+    ? `以下是用户侧可用的工具列表。你可以使用这些工具，使用方法：直接返回一段文本描述你想使用的工具及其参数，用特殊标记[[front-toolcall: <toolName> <args>]]包裹。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)}`
+    : '';
+  const finalText = toolsPrefix ? `${toolsPrefix}\n\n${userText}` : userText;
+
   const response = await fetch(url, {
     method: 'POST',
     headers,
     body: JSON.stringify({
       role: 'user',
       type: 'text',
-      content: userText,
+      content: finalText,
       metadata: {},
       requestedBy,
       attachments: attachmentItems,
@@ -714,6 +723,8 @@ export const useAgentRuntime = (agentId: string) => {
   const isNewSessionRef = useRef(false);        // onNew 新建 session 时屏蔽 useEffect 加载
   const pollingRef = useRef<{ messageId: string; timer: ReturnType<typeof setInterval> } | null>(null);
 
+  const runtime = useRef<AssistantRuntime>(null as any);
+
   // ---------- 初始加载 thread 列表 ----------
   useEffect(() => {
     agentApi.fetch(`/${agentId}/sessions`, { method: 'GET' }).then(({ json }) => {
@@ -865,9 +876,10 @@ export const useAgentRuntime = (agentId: string) => {
         signal: ac.signal,
         message: message,
         messages,
+        context: runtime.current?.thread.getModelContext(),
         requestedBy,
         onMessageChange(content) {
-          console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
+          // console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
           setMessages(prev => prev.map(m =>
             m.id === assistantId
               ? { ...m, content } as ThreadMessage
@@ -929,6 +941,7 @@ export const useAgentRuntime = (agentId: string) => {
         signal: ac.signal,
         message: { content: [{ type: 'text' as const, text: userText }], parentId: null, sourceId: null, runConfig: undefined } as unknown as AppendMessage,
         messages,
+        context: runtime.current?.thread.getModelContext(),
         requestedBy,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
@@ -982,6 +995,7 @@ export const useAgentRuntime = (agentId: string) => {
         signal: ac.signal,
         message: editMessage,
         messages,
+        context: runtime.current?.thread.getModelContext(),
         requestedBy,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
@@ -1058,5 +1072,6 @@ export const useAgentRuntime = (agentId: string) => {
     
   };
 
-  return useExternalStoreRuntime(store);
+  runtime.current = useExternalStoreRuntime(store);
+  return runtime.current;
 };

@@ -70,6 +70,7 @@ type DispatchMetadata = {
 
 /** 消息元数据 */
 type AgentMessageMetadata = DispatchMetadata & {
+  custom?: Record<string, unknown>;
   backendResponse?: BackendResponseMetadata;
   adapterType?: string;
   agentName?: string;
@@ -306,7 +307,7 @@ function genId() {
 function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
   const id = m.id ?? genId();
   const now = new Date(m.createdAt ?? Date.now());
-  const metadata = { custom: {} as Record<string, unknown> };
+  const metadata = m.metadata ?? { custom: {} as Record<string, unknown> };
   const base = { id, createdAt: now, metadata };
 
   const parts = m.parts ?? [];
@@ -318,9 +319,42 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
 
   for (const part of parts) {
     switch (part.type) {
-      case 'text':
-        content.push({ type: 'text', text: part.text ?? '' });
+      case 'text': {
+        let txt = part.text ?? '';
+
+        if (m.role === 'user') {
+          // user 消息：去掉 {## ... ##} 包裹的系统拼装内容，只保留用户真实输入
+          txt = txt.replace(/\{##.*?##\}/gs, '').trim();
+          content.push({ type: 'text', text: txt });
+          break;
+        }
+
+        // assistant 消息：解析 front-toolcall 标记，按位置分割为 text / tool-call 交替片段
+        const tcRegex = /\[\[front-toolcall:\s*(\S+)\s*(\{.*?\})\s*\]\]/g;
+        let lastIdx = 0;
+        let tcMatch: RegExpExecArray | null;
+        let hasMatch = false;
+        while ((tcMatch = tcRegex.exec(txt)) !== null) {
+          hasMatch = true;
+          const before = txt.slice(lastIdx, tcMatch.index);
+          if (before) content.push({ type: 'text', text: before });
+          try {
+            const args = JSON.parse(tcMatch[2]);
+            const callId = `front_${tcMatch[1]}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+            content.push({ type: 'tool-call', toolCallId: callId, toolName: tcMatch[1], args, argsText: tcMatch[2] } as any);
+          } catch {
+            content.push({ type: 'text', text: tcMatch[0] });
+          }
+          lastIdx = tcMatch.index + tcMatch[0].length;
+        }
+        if (hasMatch) {
+          const after = txt.slice(lastIdx);
+          if (after) content.push({ type: 'text', text: after });
+        } else {
+          content.push({ type: 'text', text: txt });
+        }
         break;
+      }
 
       case 'reasoning':
         content.push({ type: 'reasoning', text: part.text ?? '' });
@@ -463,6 +497,29 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
 }
 
 /**
+ * 解析 `[[front-toolcall: toolName {...}]]` 标记，返回解析结果和清理后的文本。
+ */
+function parseFrontToolcall(text: string): {
+  cleaned: string;
+  calls: { toolName: string; args: any; argsText: string; raw: string }[];
+} {
+  const calls: { toolName: string; args: any; argsText: string; raw: string }[] = [];
+  const regex = /\[\[front-toolcall:\s*(\S+)\s*(\{.*?\})\s*\]\]/g;
+  let cleaned = text;
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(text)) !== null) {
+    try {
+      const args = JSON.parse(match[2]);
+      calls.push({ toolName: match[1], args, argsText: match[2], raw: match[0] });
+      cleaned = cleaned.replace(match[0], '');
+    } catch {
+      // JSON 解析失败，跳过
+    }
+  }
+  return { cleaned, calls };
+}
+
+/**
  * POST .../messages?stream=true 读取 SSE 流，逐步构建 assistant 消息的 content parts。
  *
  * 每次内容变化时通过 onMessageChange 回调最新的 parts 数组，
@@ -483,7 +540,7 @@ async function streamRunInSession(params: {
   const contentParts = Array.isArray(message.content) ? message.content : [];
   const textPart = contentParts.find((p: any) => p.type === 'text') as { type: 'text'; text: string } | undefined;
   const rawText = textPart?.text ?? (typeof message.content === 'string' ? message.content : '');
-  const userText = enrichWithInteractables(messages, rawText);
+  let userText = enrichWithInteractables([ ...messages, message as unknown as ThreadMessage ], rawText);
   const attachments = [ ...(message.attachments ?? []).map((att: CompleteAttachment) => {
       return att.content?.[0]
   }), ...contentParts.filter((p: any) => p.type !== 'text') as ThreadUserMessagePart[]].filter(Boolean) as ThreadUserMessagePart[];
@@ -503,12 +560,14 @@ async function streamRunInSession(params: {
     return { contentType: 'application/octet-stream', filename: a.filename ?? 'file', url: a.data ?? a.image ?? '' };
   })
 
-  // tools → 转为文字附在 userText 前（API 不支持 tools 参数）
-  const toolsSchema = context.tools ? toToolsJSONSchema(context.tools) : undefined;
-  const toolsPrefix = toolsSchema
-    ? `以下是用户侧可用的工具列表。你可以使用这些工具，使用方法：直接返回一段文本描述你想使用的工具及其参数，用特殊标记[[front-toolcall: <toolName> <args>]]包裹。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)}`
-    : '';
-  const finalText = toolsPrefix ? `${toolsPrefix}\n\n${userText}` : userText;
+  if(messages.length == 0) {
+    // tools → 转为文字附在 userText 前（API 不支持 tools 参数）
+    const toolsSchema = context.tools ? toToolsJSONSchema(context.tools) : undefined;
+    const toolsPrefix = toolsSchema
+      ? `{## 以下是用户侧可用的工具列表。你可以使用这些工具，使用方法：直接返回一段文本描述你想使用的工具及其参数，用特殊标记[[front-toolcall: <toolName> <args>]]包裹。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)} ##}`
+      : '';
+    userText = toolsPrefix ? `${toolsPrefix}${userText}` : userText;
+  }
 
   const response = await fetch(url, {
     method: 'POST',
@@ -516,8 +575,8 @@ async function streamRunInSession(params: {
     body: JSON.stringify({
       role: 'user',
       type: 'text',
-      content: finalText,
-      metadata: {},
+      content: userText,
+      metadata: message.metadata ?? {},
       requestedBy,
       attachments: attachmentItems,
     }),
@@ -628,6 +687,29 @@ async function streamRunInSession(params: {
               } else {
                 parts.push({ type: 'text', text });
               }
+              // 检查文本中是否包含 front-toolcall 标记
+              const fullText = (parts[parts.length - 1] as any)?.text ?? '';
+              const { cleaned, calls } = parseFrontToolcall(fullText);
+              if (calls.length > 0) {
+                // 更新 text part 为清理后的文本
+                const textIdx = parts.length - 1;
+                if (cleaned) {
+                  (parts[textIdx] as any).text = cleaned;
+                } else {
+                  parts.splice(textIdx, 1); // 纯标记，移除 text part
+                }
+                // 追加 tool-call parts
+                for (const call of calls) {
+                  const callId = `front_${call.toolName}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+                  parts.push({
+                    type: 'tool-call',
+                    toolCallId: callId,
+                    toolName: call.toolName,
+                    args: call.args,
+                    argsText: call.argsText,
+                  });
+                }
+              }
               emit();
             }
           } else if (eventType === 'completed') {
@@ -646,12 +728,12 @@ async function streamRunInSession(params: {
               emit();
             } else if (data?.status === 'succeeded' && data?.metadata?.backendResponse?.content) {
               // 成功：用 backendResponse.content 覆盖最后一个 text part（完整文本）
-              const fullText = data.metadata.backendResponse.content;
-              const lastTextIdx = parts.map(p => p.type).lastIndexOf('text');
-              if (lastTextIdx >= 0) {
-                parts[lastTextIdx] = { type: 'text', text: fullText };
-                emit();
-              }
+              // const fullText = data.metadata.backendResponse.content;
+              // const lastTextIdx = parts.map(p => p.type).lastIndexOf('text');
+              // if (lastTextIdx >= 0) {
+              //   parts[lastTextIdx] = { type: 'text', text: fullText };
+              //   emit();
+              // }
             }
             break;
           }
@@ -701,7 +783,7 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
     console.log('[enrichWithInteractables] no snapshots, returning original text');
     return userText;
   }
-  const result = snapshots.join('\n') + '\n\n' + userText;
+  const result = '{##' + snapshots.join('\n') + '##}\n\n' + userText;
   console.log('[enrichWithInteractables] enriched text length:', result.length);
   return result;
 }
@@ -1057,7 +1139,22 @@ export const useAgentRuntime = (agentId: string) => {
     onReload,
     onCancel,
     unstable_enableToolInvocations: true,
-    onAddToolResult: (options) => { cacheToolResult(options); },
+    onAddToolResult: (options) => {
+      cacheToolResult(options);
+      // 更新最后一条 assistant 消息中匹配的 tool-call part 的 result 和状态
+      // setMessages(prev => {
+      //   const lastAssistantIdx = prev.map(m => m.role).lastIndexOf('assistant');
+      //   if (lastAssistantIdx < 0) return prev;
+      //   const msg = prev[lastAssistantIdx];
+      //   const content = msg.content.map(part => {
+      //     if (part.type !== 'tool-call' || (part as any).toolCallId !== options.toolCallId) return part;
+      //     return { ...part, status: { type: 'complete' as const, reason: 'stop' as const }, result: options.result } as ThreadAssistantMessagePart;
+      //   });
+      //   const updated = [...prev];
+      //   updated[lastAssistantIdx] = { ...msg, content } as ThreadMessage;
+      //   return updated;
+      // });
+    },
     setToolStatuses: (statuses) => { setToolStatuses(statuses); },
 
     adapters: {

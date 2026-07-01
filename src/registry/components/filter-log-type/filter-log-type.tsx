@@ -5,7 +5,6 @@ import isString from 'lodash/isString'
 
 import { ChevronDown, Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import {
   Command,
@@ -173,7 +172,7 @@ const FilterLogType = ({ value, onChange, multiple = true }: FilterLogTypeProps)
           role="combobox"
           aria-expanded={open}
           className={cn(
-            'w-full justify-between min-w-43.75',
+            'w-full justify-between min-w-43.75 h-auto min-h-9',
             selectedValues.length === 0 && 'text-muted-foreground'
           )}
         >
@@ -182,16 +181,19 @@ const FilterLogType = ({ value, onChange, multiple = true }: FilterLogTypeProps)
               selectedLabels.map((label, index) => {
                 const val = selectedValues[index]
                 return (
-                  <Badge key={val} variant="secondary" className="text-xs pl-1 pr-1 py-0">
+                  <span
+                    key={val}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-secondary text-secondary-foreground text-xs rounded"
+                  >
                     {label}
                     <X
-                      className="h-3 w-3 ml-1 cursor-pointer opacity-70 hover:opacity-100"
+                      className="size-3 cursor-pointer hover:text-destructive"
                       onClick={e => {
                         e.stopPropagation()
                         handleToggle(val)
                       }}
                     />
-                  </Badge>
+                  </span>
                 )
               })
             ) : (

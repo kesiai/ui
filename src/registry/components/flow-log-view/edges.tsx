@@ -2,12 +2,38 @@ import React from 'react'
 import { X } from 'lucide-react'
 import {
   getBezierPath,
-  getSmoothStepPath,
   getEdgeCenter,
-  getMarkerEnd,
   EdgeProps,
   MarkerType,
-} from 'react-flow-renderer'
+  Position,
+} from '@xyflow/react'
+
+// Helper function to calculate smooth step path (replaces getSmoothStepPath)
+const getSmoothStepPathString = (
+  sourceX: number,
+  sourceY: number,
+  targetX: number,
+  targetY: number,
+  sourcePosition: Position = Position.Bottom,
+  targetPosition: Position = Position.Top,
+  _borderRadius = 0
+): string => {
+  const [width, height] = [Math.abs(targetX - sourceX), Math.abs(targetY - sourceY)]
+  const sourceGoto = sourcePosition === Position.Bottom || sourcePosition === Position.Top ? [0, height / 2] : [width / 2, 0]
+  const targetGoto = targetPosition === Position.Bottom || targetPosition === Position.Top ? [0, -height / 2] : [-width / 2, 0]
+
+  const [sourceControlX, sourceControlY] = [sourceX + sourceGoto[0], sourceY + sourceGoto[1]]
+  const [targetControlX, targetControlY] = [targetX + targetGoto[0], targetY + targetGoto[1]]
+
+  const d = [
+    `M${sourceX},${sourceY}`,
+    `L${sourceControlX},${sourceControlY}`,
+    `L${targetControlX},${targetControlY}`,
+    `L${targetX},${targetY}`
+  ]
+
+  return d.join(' ')
+}
 
 const foreignObjectSize = 100
 
@@ -89,38 +115,22 @@ const GatewayEdge: React.FC<GatewayEdgeProps> = (props) => {
     isLoop
   } = props
 
-  const pathParams = {
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  }
-
   const offsetX = sourceX + 260
-  const p1 = {
-    ...pathParams,
-    targetX: offsetX,
-    targetY: sourceY,
-  }
-  const p2 = {
-    ...pathParams,
-    sourceX: offsetX,
-    targetX: offsetX,
-  }
-  const p3 = {
-    ...pathParams,
-    sourceX: offsetX,
-    sourceY: targetY,
-  }
 
-  const edgePath = pathType == 'smoothStep' ? getSmoothStepPath(pathParams) : getBezierPath(pathParams)
-  const edgePath1 = pathType == 'smoothStep' ? getSmoothStepPath(p1) : getBezierPath(p1)
-  const edgePath2 = pathType == 'smoothStep' ? getSmoothStepPath(p2) : getBezierPath(p2)
-  const edgePath3 = pathType == 'smoothStep' ? getSmoothStepPath(p3) : getBezierPath(p3)
+  const edgePath = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition })[0]
+  const edgePath1 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sourceX, sourceY, offsetX, sourceY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX, sourceY, sourcePosition, targetX: offsetX, targetY: sourceY, targetPosition })[0]
+  const edgePath2 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(offsetX, sourceY, offsetX, targetY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX: offsetX, sourceY, sourcePosition, targetX: offsetX, targetY, targetPosition })[0]
+  const edgePath3 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(offsetX, targetY, targetX, targetY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX: offsetX, sourceY: targetY, sourcePosition, targetX, targetY, targetPosition })[0]
 
-  const markerEnd = getMarkerEnd(arrowHeadType, markerEndId)
+  const markerEnd = arrowHeadType ? (markerEndId ? `url(#${markerEndId})` : `url(#${arrowHeadType})`) : undefined
   const [edgeCenterX, edgeCenterY] = getEdgeCenter({
     sourceX: isLoop ? offsetX : sourceX,
     sourceY,
@@ -176,43 +186,19 @@ const IteratorEdgeLoop: React.FC<IteratorEdgeLoopProps> = (props) => {
     markerEnd
   } = props
 
-  const pathParams = {
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  }
-
   const sY = sourceY - 30
   const sx = sourceX - 240
   const tY = targetY + 60
-  const p4 = {
-    ...pathParams,
-    sourceX: sourceX - 50,
-    sourceY: sY,
-    targetX: sx,
-    targetY: sY,
-  }
-  const p5 = {
-    ...pathParams,
-    sourceX: sx,
-    sourceY: sY,
-    targetX: sx,
-    targetY: tY,
-  }
-  const p6 = {
-    ...pathParams,
-    sourceX: sx,
-    sourceY: tY,
-    targetX: targetX - 105,
-    targetY: tY,
-  }
 
-  const edgePath4 = pathType == 'smoothStep' ? getSmoothStepPath(p4) : getBezierPath(p4)
-  const edgePath5 = pathType == 'smoothStep' ? getSmoothStepPath(p5) : getBezierPath(p5)
-  const edgePath6 = pathType == 'smoothStep' ? getSmoothStepPath(p6) : getBezierPath(p6)
+  const edgePath4 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sourceX - 50, sY, sx, sY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX, sourceY: sY, sourcePosition, targetX: sx, targetY: sY, targetPosition })[0]
+  const edgePath5 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sx, sY, sx, tY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX: sx, sourceY: sY, sourcePosition, targetX: sx, targetY: tY, targetPosition })[0]
+  const edgePath6 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sx, tY, targetX - 105, tY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX: sx, sourceY: tY, sourcePosition, targetX: targetX - 105, targetY: tY, targetPosition })[0]
 
   const d = edgePath4 + edgePath5.replace('M', 'L') + edgePath6.replace('M', 'L')
 
@@ -251,46 +237,22 @@ const GatewayDefaultEdge: React.FC<GatewayDefaultEdgeProps> = (props) => {
     logic,
   } = props
 
-  const pathParams = {
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  }
-
   const sY = sourceY - 42
   const sx = sourceX - 240
   const tY = targetY + 35
-  const p4 = {
-    ...pathParams,
-    sourceX: sourceX - 28,
-    sourceY: sY,
-    targetX: sx,
-    targetY: sY,
-  }
-  const p5 = {
-    ...pathParams,
-    sourceX: sx,
-    sourceY: sY,
-    targetX: sx,
-    targetY: tY,
-  }
-  const p6 = {
-    ...pathParams,
-    sourceX: sx,
-    sourceY: tY,
-    targetX: targetX - 50,
-    targetY: tY,
-  }
 
-  const edgePath4 = pathType == 'smoothStep' ? getSmoothStepPath(p4) : getBezierPath(p4)
-  const edgePath5 = pathType == 'smoothStep' ? getSmoothStepPath(p5) : getBezierPath(p5)
-  const edgePath6 = pathType == 'smoothStep' ? getSmoothStepPath(p6) : getBezierPath(p6)
+  const edgePath4 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sourceX - 28, sY, sx, sY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX: sourceX - 28, sourceY: sY, sourcePosition, targetX: sx, targetY: sY, targetPosition })[0]
+  const edgePath5 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sx, sY, sx, tY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX: sx, sourceY: sY, sourcePosition, targetX: sx, targetY: tY, targetPosition })[0]
+  const edgePath6 = pathType == 'smoothStep'
+    ? getSmoothStepPathString(sx, tY, targetX - 50, tY, sourcePosition, targetPosition)
+    : getBezierPath({ sourceX: sx, sourceY: tY, sourcePosition, targetX: targetX - 50, targetY: tY, targetPosition })[0]
 
   const d = edgePath4 + edgePath5.replace('M', 'L') + edgePath6.replace('M', 'L')
-  const markerEnd = getMarkerEnd(arrowHeadType, markerEndId)
+  const markerEnd = arrowHeadType ? (markerEndId ? `url(#${markerEndId})` : `url(#${arrowHeadType})`) : undefined
   const [edgeCenterX, edgeCenterY] = getEdgeCenter({
     sourceX: sx,
     sourceY,

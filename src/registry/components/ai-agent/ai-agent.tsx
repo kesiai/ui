@@ -1060,7 +1060,9 @@ export const Base: FC<{ className?: string; title?: string }> = ({ className, ti
             onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
           />
           <main className="flex-1 overflow-hidden">
-            <Thread />
+            <TooltipProvider>
+              <Thread />
+            </TooltipProvider>
           </main>
         </div>
       </div>

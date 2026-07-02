@@ -209,6 +209,10 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
     const resp = await fetch(uploadUrl, { method: "POST", headers, body: formData });
     const json = await resp.json();
 
+    if(resp.status !== 200) {
+      throw new Error(`Failed to upload attachment: ${json.message ?? resp.statusText}`);
+    }
+
     const objectKey: string = json.objectKey ?? json.id ?? "";
     const url: string = json.url ?? `/${objectKey}`;
 
@@ -341,7 +345,7 @@ function toThreadMessage(m: AgentSessionMessage): ThreadMessage | null {
           try {
             const args = JSON.parse(tcMatch[2]);
             const callId = `front_${tcMatch[1]}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-            content.push({ type: 'tool-call', toolCallId: callId, toolName: tcMatch[1], args, argsText: tcMatch[2] } as any);
+            content.push({ type: 'tool-call', toolCallId: callId, toolName: tcMatch[1], args, argsText: tcMatch[2], result: {}, } as any);
           } catch {
             content.push({ type: 'text', text: tcMatch[0] });
           }
@@ -559,12 +563,12 @@ async function streamRunInSession(params: {
     if (a.type === 'file') return { contentType: a.mimeType ?? 'application/octet-stream', filename: a.filename ?? 'file', url: a.data };
     return { contentType: 'application/octet-stream', filename: a.filename ?? 'file', url: a.data ?? a.image ?? '' };
   })
-
+  console.log('[StreamRunInSession] messages', messages);
   if(messages.length == 0) {
     // tools → 转为文字附在 userText 前（API 不支持 tools 参数）
     const toolsSchema = context.tools ? toToolsJSONSchema(context.tools) : undefined;
     const toolsPrefix = toolsSchema
-      ? `{## 以下是用户侧可用的工具列表。你可以使用这些工具，使用方法：直接返回一段文本描述你想使用的工具及其参数，用特殊标记[[front-toolcall: <toolName> <args>]]包裹。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)} ##}`
+      ? `{## 以下是用户侧可用的工具列表。你可以使用这些工具，注意！！这些工具调用不需要你真正去执行，只要给用户侧返回 tool-call 类型的信息即可，不用去关心返回结果。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)} ##}`
       : '';
     userText = toolsPrefix ? `${toolsPrefix}${userText}` : userText;
   }
@@ -941,9 +945,10 @@ export const useAgentRuntime = (agentId: string) => {
       return newId;
     })();
 
+    const isNewThread = !currentThreadId; // 创建时的 currentThreadId 值
     console.log('[onNew] resolved sessionId', {
       sessionId,
-      isNewThread: !currentThreadId, // 创建时的 currentThreadId 值
+      isNewThread,
     });
 
     // 乐观插入 user + assistant
@@ -975,7 +980,7 @@ export const useAgentRuntime = (agentId: string) => {
         sessionId,
         signal: ac.signal,
         message: message,
-        messages,
+        messages: isNewThread ? [] : messages,
         context: runtime.current?.thread.getModelContext(),
         requestedBy,
         onMessageChange(content) {

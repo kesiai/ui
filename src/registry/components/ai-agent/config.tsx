@@ -1,6 +1,6 @@
 import React from 'react'
 import { Assistant } from '@/registry/components/ai-agent/ai-agent'
-import { TaskBoard } from '@/registry/components/ai-agent/task-board'
+import { TaskBoard, DocumentEditor, DocumentCtx, toolkit } from '@/registry/components/ai-agent/task-board'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-agent.md?raw'
 import {
@@ -9,6 +9,7 @@ import {
   unstable_Interactables,
   type AssistantRuntime,
   Suggestions,
+  Tools,
 } from "@assistant-ui/react";
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
 import { useAgentRuntime } from "./runtime";
@@ -165,36 +166,40 @@ const InteractableAssistantShell: React.FC<{
 }> = ({ runtime, title }) => {
   const aui = useAui({
     unstable_interactables: unstable_Interactables() ,
+    tools: Tools({ toolkit }),
     suggestions: Suggestions([
       {
-        title: "Add 3 tasks",
-        label: "for a grocery run",
-        prompt: "Add 3 tasks for a grocery run",
+        title: "添加 3 个任务",
+        label: "例如买菜清单",
+        prompt: "帮我添加 3 个买菜任务",
       },
       {
-        title: "Create 2 notes",
-        label: "and set different colors",
-        prompt:
-          "Create 2 sticky notes: one blue note about meeting prep, and one green note about project ideas",
+        title: "新建 2 条笔记",
+        label: "设置不同颜色",
+        prompt: "帮我新建 2 条便签：一条蓝色关于会议准备，一条绿色关于项目想法",
       },
       {
-        title: "Change selected note",
-        label: "to pink color",
-        prompt: "Change the selected note's color to pink",
+        title: "修改选中笔记",
+        label: "改为粉色",
+        prompt: "把选中的笔记颜色改为粉色",
       },
     ]),
   });
+  const [ documentId, setDocumentId ] = React.useState<string | undefined>();
   return (
-    <AssistantRuntimeProvider aui={aui} runtime={runtime}>
-      <div className="flex h-full gap-2">
-        <div className="flex-1 min-w-0">
-          <Assistant title={title} />
+    <DocumentCtx.Provider value={{ documentId, setDocumentId }}>
+      <AssistantRuntimeProvider aui={aui} runtime={runtime}>
+        <div className="flex h-full gap-2">
+          <div className="flex-1 min-w-0">
+            <Assistant title={title} />
+          </div>
+          <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
+            <TaskBoard />
+            { documentId && <DocumentEditor id={documentId} /> }
+          </div>
         </div>
-        <div className="w-56 shrink-0 overflow-y-auto pt-4 pr-2">
-          <TaskBoard />
-        </div>
-      </div>
-    </AssistantRuntimeProvider>
+      </AssistantRuntimeProvider>
+    </DocumentCtx.Provider>
   );
 };
 

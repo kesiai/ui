@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AIModal } from '@/registry/components/ai-modal/ai-modal'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-modal.md?raw'
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
+import type { AssistantRuntime } from "@assistant-ui/react"
+import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
 
 // Runtime 预设类型定义
-export type RuntimePreset = 'opencode' | 'openai' | 'vercel' | 'custom'
+export type RuntimePreset = 'opencode' | 'agent' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
 
 // Runtime 预设代码模板
 export const runtimePresetCodes: Record<RuntimePreset, string> = {
@@ -61,7 +63,13 @@ const runtime = createCustomRuntime({
     })
     return response.body
   }
-})`
+})`,
+  agent: `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+
+const runtime = useAgentRuntime("your-agent-id")`,
+  "agent-interactable": `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+
+const runtime = useAgentRuntime("your-agent-id")`
 }
 
 export const aiModalPropsConfig = [
@@ -74,10 +82,20 @@ export const aiModalPropsConfig = [
     description: '选择 AI 助手运行时类型',
     options: [
       { value: 'opencode', label: 'OpenCode Runtime' },
+      { value: 'agent', label: 'Agent Runtime' },
+      { value: 'agent-interactable', label: 'Agent + 可交互工具' },
       { value: 'openai', label: 'OpenAI Runtime' },
       { value: 'vercel', label: 'Vercel AI SDK' },
       { value: 'custom', label: '自定义 Runtime' }
     ]
+  },
+  {
+    name: 'agentId',
+    label: 'Agent',
+    type: 'agent-id' as const,
+    default: '6a3a22aeecf2e81476c84246',
+    placeholder: 'your-agent-id',
+    description: 'Agent Runtime 的 agent ID'
   },
   {
     name: 'title',
@@ -115,15 +133,11 @@ export const aiModalPropsConfig = [
     description: '是否在弹窗标题栏显示放大按钮'
   },
   {
-    name: 'expandPosition',
-    label: '放大模式',
-    type: 'select' as const,
-    default: 'fullscreen' as const,
-    description: '点击放大按钮后的显示模式',
-    options: [
-      { value: 'fullscreen', label: '全屏' },
-      { value: 'large', label: '大窗口 (90vw x 90vh)' }
-    ]
+    name: 'showAgents',
+    label: '显示 Agent 选择器',
+    type: 'boolean' as const,
+    default: false,
+    description: '在弹窗标题栏显示 Agent 切换下拉列表'
   }
 ]
 
@@ -133,25 +147,29 @@ export const aiModalDefaultProps = {
   modalSize: { width: '500px', height: '600px' },
   triggerPosition: 'bottom-right' as const,
   showExpandButton: true,
-  expandPosition: 'fullscreen' as const
+  showAgents: false
 }
 
 const renderAIModalPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'opencode'
+  const [agentId, setAgentId] = useState(props.agentId || 'your-agent-id')
 
-  // 为不同 preset 创建对应的 runtime
-  const getRuntime = () => {
-    switch (runtimePreset) {
-      case 'opencode':
-        return useOpenCodeRuntime({
-          baseUrl: 'http://localhost:4096',
-        })
-      default:
-        return null
-    }
+  // 始终无条件调用所有 hooks
+  const opencodeRuntime = useOpenCodeRuntime({
+    baseUrl: props.baseUrl || 'http://localhost:4096',
+  })
+  const agentRuntime = useAgentRuntime(agentId)
+
+  let runtime: AssistantRuntime | null = null
+  switch (runtimePreset) {
+    case 'opencode':
+      runtime = opencodeRuntime
+      break
+    case 'agent':
+    case 'agent-interactable':
+      runtime = agentRuntime
+      break
   }
-
-  const runtime = getRuntime()
 
   // 解析 modalSize JSON
   let modalSize = { width: '400px', height: '500px' }
@@ -174,7 +192,7 @@ const renderAIModalPreview = (props: Record<string, any>) => {
           modalSize={modalSize}
           triggerPosition={props.triggerPosition || 'bottom-right'}
           showExpandButton={props.showExpandButton !== false}
-          expandPosition={props.expandPosition || 'fullscreen'}
+          onChangeAgent={props.showAgents ? setAgentId : undefined}
         />
       ) : (
         <div className="h-full flex items-center justify-center p-8">
@@ -287,8 +305,8 @@ const runtime = createCustomRuntime({
   if (!props.showExpandButton) {
     additionalProps.push(`showExpandButton={false}`)
   }
-  if (props.expandPosition !== 'fullscreen') {
-    additionalProps.push(`expandPosition="${props.expandPosition}"`)
+  if (props.showAgents) {
+    additionalProps.push(`onChangeAgent={setAgentId}`)
   }
 
   const propsStr = additionalProps.length > 0

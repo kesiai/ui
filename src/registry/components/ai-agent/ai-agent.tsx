@@ -89,8 +89,51 @@ import {
   LexicalComposerInput,
   type DirectiveChipProps,
 } from "@assistant-ui/react-lexical";
-import { useState, type FC } from "react";
+import { useState, useEffect, type FC } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { createAPI } from '@kesi/client'
+
+/** Agent 选择下拉列表 */
+export const AgentSelect: FC<{ onChangeAgent: (agentId: string) => void }> = ({ onChangeAgent }) => {
+  const [agents, setAgents] = useState<Array<{ value: string; label: string }>>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentAgent, setCurrentAgent] = useState<string>('');
+
+  useEffect(() => {
+    const api = createAPI({ name: 'eap/agents' });
+    api.fetch('').then(({ json }: any) => {
+      const items = Array.isArray(json) ? json : [];
+      setAgents(items.map((a: any) => ({ value: a.id, label: a.title || a.name || a.id })));
+    }).catch(() => {
+      setAgents([]);
+    }).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div className="text-muted-foreground px-3 py-1.5 text-xs">加载...</div>;
+
+  return (
+    <Select value={currentAgent} onValueChange={(value) => { setCurrentAgent(value); onChangeAgent(value); }}>
+      <SelectTrigger className="aui-agent-select h-8 w-full border-0 bg-transparent px-3 text-sm shadow-none hover:bg-accent">
+        <SelectValue placeholder="选择 Agent" />
+      </SelectTrigger>
+      <SelectContent>
+        {agents.length === 0 && (
+          <SelectItem value="__empty__" disabled>无可用 Agent</SelectItem>
+        )}
+        {agents.map((a) => (
+          <SelectItem key={a.value} value={a.value}>{a.label}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
 
 const Logo: FC = () => {
   return (
@@ -100,7 +143,7 @@ const Logo: FC = () => {
   );
 };
 
-export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed, title }) => {
+export const Sidebar: FC<{ collapsed?: boolean; title?: string; onChangeAgent?: (agentId: string) => void }> = ({ collapsed, title, onChangeAgent }) => {
   return (
     <aside
       className={cn(
@@ -126,19 +169,26 @@ export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed
         </div>
       )}
       {collapsed ? (
-        <ThreadListPrimitive.New asChild>
-          <TooltipIconButton
-            tooltip="新对话"
-            side="right"
-            variant="ghost"
-            size="icon"
-            className="mt-1 ml-2 size-8"
-          >
-            <PlusIcon className="size-4" />
-          </TooltipIconButton>
-        </ThreadListPrimitive.New>
+        <>
+          <ThreadListPrimitive.New asChild>
+            <TooltipIconButton
+              tooltip="新对话"
+              side="right"
+              variant="ghost"
+              size="icon"
+              className="mt-1 ml-2 size-8"
+            >
+              <PlusIcon className="size-4" />
+            </TooltipIconButton>
+          </ThreadListPrimitive.New>
+        </>
       ) : (
         <div className="relative w-65 flex-1 overflow-y-auto p-3">
+          {onChangeAgent && (
+            <div className="mb-2">
+              <AgentSelect onChangeAgent={onChangeAgent} />
+            </div>
+          )}
           <ThreadList />
         </div>
       )}
@@ -1045,13 +1095,13 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string }> = ({ className, title }) => {
+export const Base: FC<{ className?: string; title?: string; onChangeAgent?: (agentId: string) => void }> = ({ className, title, onChangeAgent }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <div className={cn("bg-muted/30 flex h-full w-full", className)}>
       <div className="hidden md:block">
-        <Sidebar collapsed={sidebarCollapsed} title={title} />
+        <Sidebar collapsed={sidebarCollapsed} title={title} onChangeAgent={onChangeAgent} />
       </div>
       <div className="flex flex-1 flex-col overflow-hidden p-2 md:pl-0">
         <div className="bg-background flex flex-1 flex-col overflow-hidden rounded-lg">
@@ -1070,10 +1120,10 @@ export const Base: FC<{ className?: string; title?: string }> = ({ className, ti
   );
 };
 
-export const Assistant = ({ runtime, className, title }: { runtime?: AssistantRuntime; className?: string; title?: string }) => {
+export const Assistant = ({ runtime, className, title, onChangeAgent }: { runtime?: AssistantRuntime; className?: string; title?: string; onChangeAgent?: (agentId: string) => void }) => {
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
-      <Base className={className} title={title} />
+      <Base className={className} title={title} onChangeAgent={onChangeAgent} />
     </AssistantRuntimeProvider>
-  ) : <Base className={className} title={title} />;
+  ) : <Base className={className} title={title} onChangeAgent={onChangeAgent} />;
 };

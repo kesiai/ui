@@ -18,6 +18,7 @@ import { toToolsJSONSchema } from "assistant-stream";
 import { createAPI, getConfig } from '@kesi/client'
 import type { AssistantRuntime, Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ModelContext, ThreadUserMessagePart, ToolExecutionStatus } from "@assistant-ui/react";
 import { cacheToolResult } from "./tools";
+import { set } from "lodash";
 
 /** Token 用量 */
 type AgentTokens = {
@@ -824,6 +825,7 @@ export const useAgentRuntime = (agentId: string) => {
         title: s.title,
       })));
     });
+    setCurrentThreadId(undefined);
   }, [agentId]);
 
   // ---------- thread 切换时加载消息，并轮询 running 的 assistant message ----------

@@ -142,6 +142,13 @@ export const aiAgentPropsConfig = [
     description: '侧边栏顶部的标题（留空则不显示）'
   },
   {
+    name: 'showAgents',
+    label: '显示 Agent 选择器',
+    type: 'boolean' as const,
+    default: false,
+    description: '在侧边栏顶部显示 Agent 切换下拉列表'
+  },
+  {
     name: 'showCodePreview',
     label: '显示代码预览',
     type: 'boolean' as const,
@@ -156,6 +163,7 @@ export const aiAgentDefaultProps = {
   agentId: '6a3a22aeecf2e81476c84246',
   systemPrompt: 'You are a helpful AI assistant.',
   title: '',
+  showAgents: false,
   showCodePreview: true
 }
 
@@ -163,7 +171,8 @@ export const aiAgentDefaultProps = {
 const InteractableAssistantShell: React.FC<{
   runtime: AssistantRuntime;
   title?: string;
-}> = ({ runtime, title }) => {
+  onChangeAgent?: (agentId: string) => void;
+}> = ({ runtime, title, onChangeAgent }) => {
   const aui = useAui({
     unstable_interactables: unstable_Interactables() ,
     tools: Tools({ toolkit }),
@@ -191,7 +200,7 @@ const InteractableAssistantShell: React.FC<{
       <AssistantRuntimeProvider aui={aui} runtime={runtime}>
         <div className="flex h-full gap-2">
           <div className="flex-1 min-w-0">
-            <Assistant title={title} />
+            <Assistant title={title} onChangeAgent={onChangeAgent} />
           </div>
           <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
             <TaskBoard />
@@ -205,13 +214,14 @@ const InteractableAssistantShell: React.FC<{
 
 const renderAiAgentPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'agent'
+  const [ agentId, setAgentId ] = React.useState(props.agentId || 'your-agent-id')
 
   // 始终无条件调用所有 hooks 以遵守 Rules of Hooks，
   // 然后根据 runtimePreset 选择使用哪个 runtime
   const opencodeRuntime = useOpenCodeRuntime({
     baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
   })
-  const agentRuntime = useAgentRuntime(props.agentId || 'your-agent-id')
+  const agentRuntime = useAgentRuntime(agentId)
 
   let runtime: AssistantRuntime | null = null
   switch (runtimePreset) {
@@ -229,9 +239,9 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
       <div className="w-full h-250 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
         {runtime ? (
           runtimePreset === 'agent-interactable' ? (
-            <InteractableAssistantShell runtime={runtime} title={props.title} />
+            <InteractableAssistantShell runtime={runtime} title={props.title} onChangeAgent={props.showAgents ? setAgentId : undefined} />
           ) : (
-            <Assistant runtime={runtime} title={props.title} />
+            <Assistant runtime={runtime} title={props.title} onChangeAgent={props.showAgents ? setAgentId : undefined} />
           )
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center overflow-auto">

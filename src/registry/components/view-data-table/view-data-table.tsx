@@ -345,9 +345,9 @@ export function ViewDataTable({
   const onSortingChange = (handler: (state: SortingState) => SortingState) => {
     const newSorting = handler(sorting)
     // 转换为 order 格式
-    const newOrder: Record<string, 'asc' | 'desc'> = {}
+    const newOrder: Record<string, 'DESC' | 'DESC'> = {}
     newSorting.forEach(sort => {
-      newOrder[sort.id] = sort.desc ? 'desc' : 'asc'
+      newOrder[sort.id] = sort.desc ? 'DESC' : 'ASC'
     })
     // 更新模型状态
     setOrder(newOrder)

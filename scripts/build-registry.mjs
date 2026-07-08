@@ -449,6 +449,13 @@ async function buildRegistry() {
                 type: type,
                 content: fileContent,
               });
+
+              // 兄弟文件(未被主文件直接 import,如 runtime/tools)作为附加文件一起发布,
+              // 其三方依赖同样需要声明,否则安装方缺依赖(如 runtime.ts 的 @kesi/client、assistant-stream)。
+              // 带 SKIP 过滤,与主文件依赖提取逻辑一致。
+              const siblingDeps = extractThirdPartyDepsFromContent(fileContent, thirdPartyDeps)
+                .filter(dep => !SKIP_DEPENDENCIES.includes(dep));
+              siblingDeps.forEach(dep => { if (!filteredDeps.includes(dep)) filteredDeps.push(dep); });
             } catch (err) {
               console.warn(`  ⚠️  无法读取文件: ${absFilePath}`);
             }

@@ -6,8 +6,8 @@
   "dependencies": [
     "ol",
     "lodash",
-    "react",
-    "proj4"
+    "proj4",
+    "react"
   ],
   "registryDependencies": [],
   "files": [

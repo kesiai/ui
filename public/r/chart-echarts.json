@@ -7,9 +7,9 @@
     "lodash",
     "echarts",
     "echarts-stat",
-    "react",
     "element-resize-event",
-    "echarts-gl"
+    "echarts-gl",
+    "react"
   ],
   "registryDependencies": [],
   "files": [

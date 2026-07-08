@@ -5,9 +5,9 @@
   "description": "Video Widget - 组件",
   "dependencies": [
     "@kesi/client",
-    "react",
+    "ezuikit-js",
     "lodash",
-    "ezuikit-js"
+    "react"
   ],
   "registryDependencies": [],
   "files": [

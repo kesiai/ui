@@ -18,20 +18,24 @@ export default defineConfig({
     open: true,
     proxy: {
       '/rest/core/': {
-        target: 'https://demo.airiot.link',
+        target: 'http://192.168.99.103:3030/',
         changeOrigin: true
       },
       '/rest/flow/': {
-        target: 'https://demo.airiot.link',
+        target: 'http://192.168.99.103:3030/',
         changeOrigin: true
       },
       '/rest/engine/': {
-        target: 'https://demo.airiot.link',
+        target: 'http://192.168.99.103:3030/',
+        changeOrigin: true
+      },
+      '/rest/eap/': {
+        target: 'http://192.168.99.103:3030/',
         changeOrigin: true
       },
       // 匹配 /rest/core/fileServer 开头的请求
       '/rest/core/fileServer': {
-        target: 'https://demo.airiot.link',
+        target: 'http://192.168.99.103:3030/',
         changeOrigin: true
       }
     }

@@ -1,10 +1,14 @@
 import React, { useState, useRef } from 'react'
 import { CheckCircle, PlayCircle, AlertCircle, MinusCircle, Clock } from 'lucide-react'
-import ReactFlow, {
+import {
+  ReactFlow,
   ReactFlowProvider,
   Background,
   Controls,
-} from 'react-flow-renderer'
+  NodeTypes,
+  EdgeTypes,
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
 import { createAPI } from '@kesi/client'
 import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
@@ -166,6 +170,8 @@ interface RecordViewProps {
   job?: JobData
   logs?: FlowRecord[]
   logNodeRenderMap?: LogNodeRenderMap
+  onElementsRemove?: (elements: any[]) => void
+  onElementsCopy?: (props: any, updateSelectedElements: any) => void
 }
 
 interface GatewayPanelProps {
@@ -325,7 +331,7 @@ const FlowData: React.FC<FlowDataProps> = ({ record, items = [], logRender }) =>
   )
 }
 
-const RecordView: React.FC<RecordViewProps> = ({ taskId, task, job, logs, logNodeRenderMap }) => {
+const RecordView: React.FC<RecordViewProps> = ({ taskId, task, job, logs, logNodeRenderMap, onElementsRemove, onElementsCopy }) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const [elements, setElements] = useState<FlowElement[]>([])
   const [logData, setLogData] = useState<FlowRecord[]>([])
@@ -475,7 +481,17 @@ interface LogCardProps {
         if (useLogCard) {
           return React.createElement(
             (RenderNode || LogCard) as React.ComponentType<any>,
-            { ...props, node, editable: false, paramSchema, layout: 'horizontal', record, extraChildren }
+            {
+              ...props,
+              node,
+              editable: false,
+              paramSchema,
+              layout: 'horizontal',
+              record,
+              extraChildren,
+              onElementsRemove,
+              onElementsCopy
+            }
           )
         }
 
@@ -491,14 +507,16 @@ interface LogCardProps {
             titleIcon: nodeConfig?.title,
             cardProps: { headStyle },
             extraChildren,
-            icon: <Icon className='w-5 h-5' />
+            icon: <Icon className='w-5 h-5' />,
+            onElementsRemove,
+            onElementsCopy
           }
         )
       }
     })
 
     return types
-  }, [logData])
+  }, [logData, onElementsRemove, onElementsCopy])
 
   const edgeTypes = {
     gatewayEdge: (props: React.ComponentProps<typeof GatewayEdge>) => {
@@ -524,8 +542,22 @@ interface LogCardProps {
   }
 
   // 将 elements 分离为 nodes 和 edges
-  const nodes = elements.filter((el) => !el.source && !el.target) as any
-  const edges = elements.filter((el) => el.source && el.target).map(el => el.type == 'iteratorEdgeLoop' ? { ...el, markerEnd: { type: 'arrowclosed' } } : { ...el, animated: true }) as any
+  const nodes = elements.filter((el) => !el.source && !el.target).map(node => ({
+    ...node,
+    draggable: false,
+    connectable: false,
+    selectable: true,
+  })) as any
+  const edges = elements.filter((el) => el.source && el.target).map(el => {
+    const baseEdge = {
+      ...el,
+      animated: true,
+    }
+    if (el.type == 'iteratorEdgeLoop') {
+      return { ...baseEdge, markerEnd: { type: 'arrowclosed' } }
+    }
+    return baseEdge
+  }) as any
 
   return (
     <ReactFlowProvider>
@@ -538,16 +570,18 @@ interface LogCardProps {
               </div>
             ) : (
               <ReactFlow
-                defaultZoom={defaultZoom}
+                defaultViewport={{ x: 0, y: 0, zoom: defaultZoom }}
                 fitView={true}
+                fitViewOptions={{ padding: 0.2 }}
                 nodes={nodes}
                 edges={edges}
-                snapToGrid
-                nodesDraggable={false}
-                nodesConnectable={false}
-                nodeTypes={nodeTypes}
-                edgeTypes={edgeTypes}
+                nodeTypes={nodeTypes as NodeTypes}
+                edgeTypes={edgeTypes as EdgeTypes}
                 deleteKeyCode={null}
+                panOnDrag={true}
+                zoomOnScroll={true}
+                zoomOnPinch={true}
+                panOnScroll={false}
               >
                 <div className="translate-x-[10px]">
                   <Controls />

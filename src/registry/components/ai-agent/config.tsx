@@ -1,11 +1,21 @@
 import React from 'react'
 import { Assistant } from '@/registry/components/ai-agent/ai-agent'
+import { TaskBoard, DocumentEditor, DocumentCtx, toolkit } from '@/registry/components/ai-agent/task-board'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-agent.md?raw'
+import {
+  AssistantRuntimeProvider,
+  useAui,
+  unstable_Interactables,
+  type AssistantRuntime,
+  Suggestions,
+  Tools,
+} from "@assistant-ui/react";
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
+import { useAgentRuntime } from "./runtime";
 
 // Runtime 预设类型定义
-export type RuntimePreset = 'opencode' | 'openai' | 'vercel' | 'custom'
+export type RuntimePreset = 'opencode' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
 
 // Runtime 预设代码模板
 export const runtimePresetCodes: Record<RuntimePreset, string> = {
@@ -61,7 +71,26 @@ const runtime = createCustomRuntime({
     })
     return response.body
   }
-})`
+})`,
+  "agent-interactable": `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+import { TaskBoard } from "@/registry/components/ai-agent/task-board"
+import {
+  AssistantRuntimeProvider,
+  useAui,
+  unstable_Interactables,
+} from "@assistant-ui/react"
+
+function MyApp() {
+  const runtime = useAgentRuntime("your-agent-id")
+  const aui = useAui({ unstable_interactables: unstable_Interactables() })
+
+  return (
+    <AssistantRuntimeProvider aui={aui} runtime={runtime}>
+      <TaskBoard />
+      <Assistant />
+    </AssistantRuntimeProvider>
+  )
+}`
 }
 
 export const aiAgentPropsConfig = [
@@ -74,6 +103,8 @@ export const aiAgentPropsConfig = [
     description: '选择 AI 助手运行时类型',
     options: [
       { value: 'opencode', label: 'OpenCode Runtime' },
+      { value: 'agent', label: 'Agent Runtime' },
+      { value: 'agent-interactable', label: 'Agent + 可交互工具' },
       { value: 'openai', label: 'OpenAI Runtime' },
       { value: 'vercel', label: 'Vercel AI SDK' },
       { value: 'custom', label: '自定义 Runtime' }
@@ -86,6 +117,14 @@ export const aiAgentPropsConfig = [
     default: 'http://localhost:4096',
     placeholder: 'http://localhost:4096',
     description: 'OpenCode Runtime 的服务地址'
+  },
+  {
+    name: 'agentId',
+    label: 'Agent',
+    type: 'agent-id' as const,
+    default: '6a3a22aeecf2e81476c84246',
+    placeholder: 'your-agent-id',
+    description: 'Agent Runtime 的 agent ID'
   },
   {
     name: 'systemPrompt',
@@ -127,6 +166,13 @@ export const aiAgentPropsConfig = [
     description: '首次发送消息时注入的内容（与自定义显示组件同路径），用于给 AI 预设上下文'
   },
   {
+    name: 'showAgents',
+    label: '显示 Agent 选择器',
+    type: 'boolean' as const,
+    default: false,
+    description: '在侧边栏顶部显示 Agent 切换下拉列表'
+  },
+  {
     name: 'showCodePreview',
     label: '显示代码预览',
     type: 'boolean' as const,
@@ -136,43 +182,96 @@ export const aiAgentPropsConfig = [
 ]
 
 export const aiAgentDefaultProps = {
-  runtimePreset: 'opencode' as RuntimePreset,
+  runtimePreset: 'agent-interactable' as RuntimePreset,
   baseUrl: 'http://127.0.0.1:4096',
+  agentId: '6a3a22aeecf2e81476c84246',
   systemPrompt: 'You are a helpful AI assistant.',
   title: '',
   userAvatar: '',
   agentAvatar: '',
   preamble: '',
+  showAgents: false,
   showCodePreview: true
 }
 
-const renderAiAgentPreview = (props: Record<string, any>) => {
-  const runtimePreset = props.runtimePreset || 'opencode'
+/** 可交互工具包装器（在 config 预览中使用，无需修改 ai-agent.tsx） */
+const InteractableAssistantShell: React.FC<{
+  runtime: AssistantRuntime;
+  title?: string;
+  avatar?: { user?: string; agent?: string };
+  preamble?: string;
+  onChangeAgent?: (agentId: string) => void;
+}> = ({ runtime, title, avatar, preamble, onChangeAgent }) => {
+  const aui = useAui({
+    unstable_interactables: unstable_Interactables() ,
+    tools: Tools({ toolkit }),
+    suggestions: Suggestions([
+      {
+        title: "添加 3 个任务",
+        label: "例如买菜清单",
+        prompt: "帮我添加 3 个买菜任务",
+      },
+      {
+        title: "新建 2 条笔记",
+        label: "设置不同颜色",
+        prompt: "帮我新建 2 条便签：一条蓝色关于会议准备，一条绿色关于项目想法",
+      },
+      {
+        title: "修改选中笔记",
+        label: "改为粉色",
+        prompt: "把选中的笔记颜色改为粉色",
+      },
+    ]),
+  });
+  const [ documentId, setDocumentId ] = React.useState<string | undefined>();
+  return (
+    <DocumentCtx.Provider value={{ documentId, setDocumentId }}>
+      <AssistantRuntimeProvider aui={aui} runtime={runtime}>
+        <div className="flex h-full gap-2">
+          <div className="flex-1 min-w-0">
+            <Assistant title={title} avatar={avatar} preamble={preamble} onChangeAgent={onChangeAgent} />
+          </div>
+          <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
+            <TaskBoard />
+            { documentId && <DocumentEditor id={documentId} /> }
+          </div>
+        </div>
+      </AssistantRuntimeProvider>
+    </DocumentCtx.Provider>
+  );
+};
 
-  // 为不同 preset 创建对应的 runtime
-  const getRuntime = () => {
-    switch (runtimePreset) {
-      case 'opencode':
-        return useOpenCodeRuntime({
-          baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
-        })
-      default:
-        return null
-    }
+const renderAiAgentPreview = (props: Record<string, any>) => {
+  const runtimePreset = props.runtimePreset || 'agent'
+  const [ agentId, setAgentId ] = React.useState(props.agentId || 'your-agent-id')
+
+  // 始终无条件调用所有 hooks 以遵守 Rules of Hooks，
+  // 然后根据 runtimePreset 选择使用哪个 runtime
+  const opencodeRuntime = useOpenCodeRuntime({
+    baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
+  })
+  const agentRuntime = useAgentRuntime(agentId)
+
+  let runtime: AssistantRuntime | null = null
+  switch (runtimePreset) {
+    case 'opencode':
+      runtime = opencodeRuntime
+      break
+    case 'agent':
+    case 'agent-interactable':
+      runtime = agentRuntime
+      break
   }
 
-  const runtime = getRuntime()
-
   return (
-    <div className="h-full flex items-center justify-center p-4 bg-slate-50">
-      <div className="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
+    <div className="flex h-250 items-center justify-center p-4 bg-slate-50">
+      <div className="w-full h-250 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
         {runtime ? (
-          <Assistant
-            runtime={runtime}
-            title={props.title || ''}
-            avatar={(props.userAvatar || props.agentAvatar) ? { user: props.userAvatar || undefined, agent: props.agentAvatar || undefined } : undefined}
-            preamble={props.preamble || undefined}
-          />
+          runtimePreset === 'agent-interactable' ? (
+            <InteractableAssistantShell runtime={runtime} title={props.title} avatar={(props.userAvatar || props.agentAvatar) ? { user: props.userAvatar || undefined, agent: props.agentAvatar || undefined } : undefined} preamble={props.preamble || undefined} onChangeAgent={props.showAgents ? setAgentId : undefined} />
+          ) : (
+            <Assistant runtime={runtime} title={props.title} avatar={(props.userAvatar || props.agentAvatar) ? { user: props.userAvatar || undefined, agent: props.agentAvatar || undefined } : undefined} preamble={props.preamble || undefined} />
+          )
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center overflow-auto">
             <div className="w-16 h-16 mb-4 rounded-full bg-blue-100 flex items-center justify-center">
@@ -265,6 +364,33 @@ const runtime = createCustomRuntime({
   }
 })`
       break
+    case 'agent-interactable':
+      runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+import { TaskBoard } from "@/registry/components/ai-agent/task-board"
+import {
+  AssistantRuntimeProvider,
+  useAui,
+  unstable_Interactables,
+} from "@assistant-ui/react"
+
+const runtime = useAgentRuntime("${props.agentId || 'your-agent-id'}")
+const aui = useAui({ unstable_interactables: unstable_Interactables() })`
+      break
+  }
+
+  if (runtimePreset === 'agent-interactable') {
+    return `import { Assistant } from '@/registry/components/ai-agent/ai-agent'
+
+${runtimeCode}
+
+export default function MyApp() {
+  return (
+    <AssistantRuntimeProvider aui={aui} runtime={runtime}>
+      <TaskBoard />
+      <Assistant />
+    </AssistantRuntimeProvider>
+  )
+}`
   }
 
   // 组装 <Assistant> 的 props 字符串

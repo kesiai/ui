@@ -82,7 +82,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
         </div>
       ) : (
         <ScrollArea className="max-h-[70vh] pr-3">
-          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} />
+          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} isValid={false} />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}
@@ -222,7 +222,7 @@ const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, clas
         <DialogTitle>新建 {model.title}</DialogTitle>
       </DialogHeader>
       <ScrollArea className="max-h-[70vh] pr-3">
-        <SchemaForm formId={formId} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} />
+        <SchemaForm formId={formId} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} isValid={false} />
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 

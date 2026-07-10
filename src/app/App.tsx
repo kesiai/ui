@@ -12,7 +12,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { toast } from 'sonner'
 // 配置 @kesi/client
 const apiHost = 'http://localhost:3000' //'https://demo.airiot.link'
-const projectId = '695dbf22d8887e7ae129c4e9'
+const projectId = 'kesi'
 
 // console.log('🔧 配置 @kesi/client:', { apiHost, projectId })
 // console.log('🔧 配置 @kesi/client:', { componentCategories })

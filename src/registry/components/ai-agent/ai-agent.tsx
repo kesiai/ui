@@ -88,8 +88,16 @@ import {
   LexicalComposerInput,
   type DirectiveChipProps,
 } from "@assistant-ui/react-lexical";
-import { createContext, useContext, useState, type FC } from "react";
+import { createContext, useContext, useState, useEffect, type FC } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { createAPI } from '@kesi/client'
 import { ToolResultCard } from "./render/tool-result-card";
 import { KesiTextRenderer } from "./render/rich-text";
 import type { RenderRegistry } from "./render/registry";
@@ -196,7 +204,42 @@ const Logo: FC = () => {
   );
 };
 
-export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed, title }) => {
+/** Agent 选择下拉列表 */
+export const AgentSelect: FC<{ onChangeAgent: (agentId: string) => void }> = ({ onChangeAgent }) => {
+  const [agents, setAgents] = useState<Array<{ value: string; label: string }>>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentAgent, setCurrentAgent] = useState<string>('');
+
+  useEffect(() => {
+    const api = createAPI({ name: 'eap/agents' });
+    api.fetch('').then(({ json }: any) => {
+      const items = Array.isArray(json) ? json : [];
+      setAgents(items.map((a: any) => ({ value: a.id, label: a.title || a.name || a.id })));
+    }).catch(() => {
+      setAgents([]);
+    }).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div className="text-muted-foreground px-3 py-1.5 text-xs">加载...</div>;
+
+  return (
+    <Select value={currentAgent} onValueChange={(value) => { setCurrentAgent(value); onChangeAgent(value); }}>
+      <SelectTrigger className="aui-agent-select h-8 w-full border-0 bg-transparent px-3 text-sm shadow-none hover:bg-accent">
+        <SelectValue placeholder="选择 Agent" />
+      </SelectTrigger>
+      <SelectContent>
+        {agents.length === 0 && (
+          <SelectItem value="__empty__" disabled>无可用 Agent</SelectItem>
+        )}
+        {agents.map((a) => (
+          <SelectItem key={a.value} value={a.value}>{a.label}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
+export const Sidebar: FC<{ collapsed?: boolean; title?: string; onChangeAgent?: (agentId: string) => void }> = ({ collapsed, title, onChangeAgent }) => {
   return (
     <aside
       className={cn(
@@ -235,6 +278,11 @@ export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed
         </ThreadListPrimitive.New>
       ) : (
         <div className="relative w-65 flex-1 overflow-y-auto p-3">
+          {onChangeAgent && (
+            <div className="mb-2">
+              <AgentSelect onChangeAgent={onChangeAgent} />
+            </div>
+          )}
           <ThreadList />
         </div>
       )}
@@ -913,7 +961,7 @@ const InlineToolGroupContent: FC<{ children?: React.ReactNode }> = ({ children }
 const InlineReasoningRoot: FC<{
   streaming?: boolean;
   children?: React.ReactNode;
-}> = ({ streaming, children }) => (
+}> = ({ streaming: _streaming, children }) => (
   <Collapsible
     data-slot="reasoning-root"
     //defaultOpen={streaming}
@@ -1216,14 +1264,14 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string }> = ({ className, title, readOnly, renderRegistry, avatar, preamble }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string; onChangeAgent?: (agentId: string) => void }> = ({ className, title, readOnly, renderRegistry, avatar, preamble, onChangeAgent }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <div className={cn("bg-muted/30 flex h-full w-full", className)}>
       {!readOnly && (
       <div className="hidden md:block">
-        <Sidebar collapsed={sidebarCollapsed} title={title} />
+        <Sidebar collapsed={sidebarCollapsed} title={title} onChangeAgent={onChangeAgent} />
       </div>
       )}
       <div className={cn("flex flex-1 flex-col overflow-hidden", readOnly ? "p-0" : "p-2 md:pl-0")}>
@@ -1249,10 +1297,10 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, renderRegistry, avatar, preamble }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string }) => {
+export const Assistant = ({ runtime, className, title, readOnly, renderRegistry, avatar, preamble, onChangeAgent }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string; onChangeAgent?: (agentId: string) => void }) => {
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
-      <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} />
+      <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} onChangeAgent={onChangeAgent} />
     </AssistantRuntimeProvider>
-  ) : <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} />;
-};
+  ) : <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} onChangeAgent={onChangeAgent} />;
+	};

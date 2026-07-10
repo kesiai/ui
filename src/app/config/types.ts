@@ -6,7 +6,7 @@ export interface PropConfigOption {
 }
 
 export type PropConfigType =
-  'number' | 'color' | 'select' | 'boolean' | 'text' | 'input' | 'range' | 'code' | 'array' | 'json' | 'object' | 'model-name' | 'table-id' | 'table-data' | 'table-tags'
+  'number' | 'color' | 'select' | 'boolean' | 'text' | 'input' | 'range' | 'code' | 'array' | 'json' | 'object' | 'model-name' | 'table-id' | 'table-data' | 'table-tags' | 'agent-id'
 
 export interface PropConfig {
   name: string

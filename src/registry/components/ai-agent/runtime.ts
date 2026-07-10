@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
   useExternalStoreRuntime,
@@ -169,7 +170,7 @@ const sessionApi = createAPI({ name: 'eap/agent-sessions' });
 const feedbackApi = createAPI({ name: 'eap/feedbacks' });
 const messageApi = createAPI({ name: 'eap/messages' });
 
-// ==================== Attachment Adapter ====================
+// ====== Attachment Adapter ======
 /**
  * 通过后端 API 上传/删除附件。sessionId 由外部 setter 更新。
  */
@@ -252,7 +253,7 @@ function extractObjectKey(url: string): string {
 
 const attachmentAdapter = new SessionAttachmentAdapter();
 
-// ==================== Speech Adapter ====================
+// ====== Speech Adapter ======
 const speechAdapter: SpeechSynthesisAdapter = {
   speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -289,7 +290,7 @@ const speechAdapter: SpeechSynthesisAdapter = {
   },
 };
 
-// ==================== Feedback Adapter ====================
+// ====== Feedback Adapter ======
 const feedbackAdapter: FeedbackAdapter = {
   async submit({ type, message }) {
     await feedbackApi.fetch('', {
@@ -299,7 +300,7 @@ const feedbackAdapter: FeedbackAdapter = {
   },
 };
 
-// ==================== Helpers ====================
+// ====== Helpers ======
 function genId() {
   return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 }
@@ -804,7 +805,7 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
   return result;
 }
 
-// ==================== useAgentRuntime ====================
+// ====== useAgentRuntime ======
 
 export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: RenderRegistry; preamble?: string }) => {
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
@@ -844,6 +845,7 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
         title: s.title,
       })));
     });
+    setCurrentThreadId(undefined);
   }, [agentId]);
 
   // ---------- thread 切换时加载消息，并轮询 running 的 assistant message ----------
@@ -918,7 +920,7 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
 
   // ---------- onNew ----------
   const onNew = useCallback(async (message: AppendMessage) => {
-    console.log('[onNew] ========== START ==========', {
+    console.log('[onNew] === START ===', {
       currentThreadId,
       userText: message.content?.[0]?.type === 'text' ? message.content[0].text : '(empty)',
       timestamp: new Date().toISOString(),
@@ -1026,7 +1028,7 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
       console.log('[onNew] error during SSE stream', { err, sessionId });
       throw err;
     } finally {
-      console.log('[onNew] ========== END ==========', { isRunning: false, sessionId });
+      console.log('[onNew] === END ===', { isRunning: false, sessionId });
       setIsRunning(false);
       runIdRef.current = null;
       abortRef.current = null;
@@ -1225,7 +1227,7 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
   return runtime.current;
 };
 
-// ==================== useReadOnlyRuntime ====================
+// ====== useReadOnlyRuntime ======
 
 /**
  * 只读模式 Runtime — 将后端消息转为只读 AssistantRuntime
@@ -1268,3 +1270,4 @@ export function useReadOnlyRuntime(messages: AgentSessionMessage[]): AssistantRu
 
   return useExternalStoreRuntime(store);
 }
+

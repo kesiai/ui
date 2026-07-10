@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
-import { Handle, Position } from 'react-flow-renderer'
+import React, { useEffect, useState } from 'react'
+import { Handle, Position } from '@xyflow/react'
 import { Card } from '@/components/ui/card'
+import { Trash2, Copy } from 'lucide-react'
 import flowNodes from '@/registry/lib/flow-nodes'
 
 type NodeType = 'default' | 'input' | 'output'
@@ -100,11 +101,30 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
     cardProps,
     type,
     extraChildren,
-    icon
+    icon,
+    onElementsRemove,
+    onElementsCopy,
+    flowContext
   } = props
+
+  const [isHovered, setIsHovered] = useState(false)
 
   const category = flowNodes[type || '']?.category
   const headStyle = cardProps?.headStyle || {}
+
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onElementsRemove) {
+      onElementsRemove([{ id }])
+    }
+  }
+
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onElementsCopy && flowContext) {
+      onElementsCopy(props, flowContext.updateSelectedElements)
+    }
+  }
 
   const titleRender = (
     <div className="flex items-center gap-2 react-flow-card-title">
@@ -125,33 +145,60 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
   }, [id])
 
   return (
-    <Card
-      className={`react-flow-card react-flow-card-${getClassName(category)} hover:shadow-md rounded max-w-78 py-0 gap-0 rounded-t-lg`}
-      style={{
-        ...(cardProps?.style || {}),
-        ...(selected ? { boxShadow: `0 0 3px 3px ${headStyle?.background || '#4971E0'}` } : {}),
-      }}
+    <div
+      className="react-flow-card-wrapper"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Card Header */}
-      <div
-        className="px-3 py-2 flex justify-between items-center rounded-t-lg border-0"
-        style={headStyle}
+      <Card
+        className={`react-flow-card react-flow-card-${getClassName(category)} hover:shadow-md rounded max-w-78 py-0 gap-0 rounded-t-lg`}
+        style={{
+          ...(cardProps?.style || {}),
+          ...(selected ? { boxShadow: `0 0 3px 3px ${headStyle?.background || '#4971E0'}` } : {}),
+        }}
       >
-        <div className="text-sm font-medium">{titleRender}</div>
-      </div>
+        {/* Card Header */}
+        <div
+          className="px-3 py-2 flex justify-between items-center rounded-t-lg border-0 relative"
+          style={headStyle}
+        >
+          <div className="text-sm font-medium">{titleRender}</div>
+          {(isHovered || selected) && (
+            <div className="flex gap-1 pointer-events-none">
+              {onElementsCopy && (
+                <button
+                  onClick={handleCopy}
+                  className="p-1 hover:bg-white/20 rounded transition-colors pointer-events-auto"
+                  title="复制节点"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              )}
+              {onElementsRemove && (
+                <button
+                  onClick={handleRemove}
+                  className="p-1 hover:bg-white/20 rounded transition-colors pointer-events-auto"
+                  title="删除节点"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
 
-      {/* Card Body */}
-      <div
-        className={`react-flow-card-content card-content-${id} max-w-78 min-w-50 min-h-12 max-h-30 overflow-auto p-3`}
-      >
-        {extraChildren ? (
-          <>
-            {extraChildren}
-            <br />
-          </>
-        ) : null}
-        {props.children}
-      </div>
+        {/* Card Body */}
+        <div
+          className={`react-flow-card-content card-content-${id} max-w-78 min-w-50 min-h-12 max-h-30 overflow-auto p-3`}
+        >
+          {extraChildren ? (
+            <>
+              {extraChildren}
+              <br />
+            </>
+          ) : null}
+          {props.children}
+        </div>
 
       {/* Handles */}
       <div className="flow-gateway-rhombus">
@@ -164,6 +211,7 @@ const NodeTemplate: React.FC<NodeTemplateComponentProps> = (props) => {
         ) : null}
       </div>
     </Card>
+    </div>
   )
 }
 

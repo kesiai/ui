@@ -1,0 +1,984 @@
+event: accepted
+data: {"messageId":"6a3bb015f9902cd93050e80b"}
+
+event: message:started
+data: {"data":{"id":"6a3bb015f9902cd93050e80b","agentId":"6a3a22aeecf2e81476c84246","wakeupId":"","status":"running","source":"message_part","requestedBy":"kesi-ui","remoteMessageId":"","closeReason":"","processLossRetryCount":0,"continuationAttempt":0,"metadata":{"dispatchAttempts":1,"dispatchKind":"message_part","dispatchLastAt":"2026-06-24T18:23:17.228275741+08:00","dispatchMessageId":"6a3bb015f9902cd93050e80c","dispatchSessionId":"6a3ba9fff9902cd93050e7c5","dispatchStatus":"pending","dispatchStream":true},"lastHeartbeatAt":"2026-06-24T10:23:17.232310485Z","startedAt":"2026-06-24T18:23:17.222827+08:00","createdAt":"2026-06-24T18:23:17.222827+08:00","updatedAt":"2026-06-24T10:23:17.232310485Z","parts":[{"id":"6a3bb015f9902cd93050e80c","sessionId":"6a3ba9fff9902cd93050e7c5","agentId":"6a3a22aeecf2e81476c84246","messageId":"6a3bb015f9902cd93050e80b","seq":1,"role":"user","type":"text","content":"再查一下当地的天气对比赛的影响，最后再一首诗总结一下。","input":{},"metadata":{"messageId":"6a3bb015f9902cd93050e80b"},"createdBy":"kesi-ui","createdAt":"2026-06-24T18:23:17.222827+08:00"}]},"eventType":"message:started"}
+
+event: message:status
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"agents":["claude","Explore","general-purpose","Plan","statusline-setup"],"analytics_disabled":false,"apiKeySource":"ANTHROPIC_API_KEY","claude_code_version":"2.1.163","cwd":"/workspace/test/claudetest","fast_mode_state":"off","mcp_servers":[],"memory_paths":{"auto":"/home/agent/.claude/projects/-workspace-test-claudetest/memory/"},"model":"deepseek-v4-flash","native":"init","output_style":"default","permissionMode":"bypassPermissions","phase":"init","plugins":[],"product_feedback_disabled":false,"session_id":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","skills":["deep-research","update-config","verify","debug","code-review","simplify","batch","fewer-permission-prompts","loop","claude-api","run","run-skill-generator"],"slash_commands":["test-skill","6a1fa368153c1b068caa84ba","6a225553662f2e5cce4babb0","deep-research","update-config","verify","debug","code-review","simplify","batch","fewer-permission-prompts","loop","claude-api","run","run-skill-generator","clear","compact","context","heapdump","init","reload-skills","review","security-review","usage","insights","goal","team-onboarding"],"subtype":"init","tools":["Task","Bash","CronCreate","CronDelete","CronList","Edit","EnterPlanMode","EnterWorktree","ExitPlanMode","ExitWorktree","NotebookEdit","Read","ScheduleWakeup","Skill","TaskCreate","TaskGet","TaskList","TaskOutput","TaskStop","TaskUpdate","WebFetch","WebSearch","Workflow","Write"],"type":"system","uuid":"01e64268-24e4-48c0-83f6-9744208d52fb"}},"eventType":"message:status"}
+
+event: message:status
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"native":"requesting","phase":"requesting","session_id":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","status":"requesting","subtype":"status","type":"system","uuid":"0ce48c82-280e-4533-b313-11a6e3c990e1"}},"eventType":"message:status"}
+
+event: message:status
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"estimated_tokens":1,"estimated_tokens_delta":1,"native":"thinking_tokens","phase":"thinking","session_id":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","subtype":"thinking_tokens","type":"system","uuid":"c262240b-3450-46e8-ab2b-a95a9daa2f03"}},"eventType":"message:status"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"The","uuid":"b6c794c2-1051-4acc-90ce-a7b82950b7e2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" user","uuid":"07e71d5d-9199-46a4-ac2f-580f482e153a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" wants","uuid":"746fc474-392a-4826-b233-61664fa88e40"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" me","uuid":"b5ccdc3a-3060-4b8c-8bba-3f6ba6aebd7d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" to","uuid":"4af24969-0861-4f86-8eca-f3ee03c4b0e8"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":":\n","uuid":"974bcad0-d67b-420a-bafa-46954398c7d3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"1","uuid":"a4ff8dea-7328-4b77-9653-a324e5b1df86"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"b3110e85-d851-4d15-8e2f-c3a12a897c17"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Look","uuid":"560f9ec4-fe6d-4763-8f25-4140d52a0195"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" up","uuid":"008c54b3-86cb-4011-abd6-ce3e4ae84e92"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" the","uuid":"913ed565-ae36-4bd5-a3fd-d98e3331f88e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" weather","uuid":"492ba1ea-6841-41ad-ab29-51b399c8629d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" in","uuid":"a19bb163-ed46-4f62-8f49-b9059a0ee4bc"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" the","uuid":"c49bccb2-98dd-409c-8147-761fe3ed2b48"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" host","uuid":"e81b6608-4aca-42f6-96bb-e81c2001a2e8"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" cities","uuid":"29236ee3-0493-4d1b-bd01-ce33697bb2b1"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" for","uuid":"635c52a9-38de-4004-a60e-ebd76c5a1b26"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" today","uuid":"7b8ce97e-6fa0-4bc5-9eb8-5b1c8e2d1c2c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"'s","uuid":"09f59326-03d9-4021-bb07-0d942718c43d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" matches","uuid":"f2a53327-8335-48da-8e81-713e62366b1a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"\n","uuid":"5f419905-f757-4c50-bef4-4d447f3359b6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"2","uuid":"8ac021df-f369-4d4f-a971-78a10a96e94e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"0abacb8c-a282-4f2f-a681-e7401aad1624"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Analyze","uuid":"a89a7654-ad60-45b9-9006-63806285a70d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" how","uuid":"24cb38c9-1ad7-46b8-95cb-1f9aade0d7b3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" the","uuid":"0c80d265-d786-4a64-a8e1-011c0b1f3be8"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" weather","uuid":"01cf679d-086a-4328-b157-ed546ee9b8cf"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" might","uuid":"c72d2949-015f-4cc5-822c-7a05488e0290"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" affect","uuid":"4016090c-e5a3-4a5c-8d4b-4130bf316abe"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" the","uuid":"83f191e0-f129-4a7c-9b57-93febd04545d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" games","uuid":"9e81cc49-affe-40e2-bfdc-4c3e2a0e3f53"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"\n","uuid":"9ad632e1-0feb-4acd-b063-1d05b3a5d354"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"3","uuid":"43c309c9-4b4e-411f-8e67-f047cf3c4469"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"301be346-c402-4d49-8f48-40d0381899fc"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Write","uuid":"ea98ab07-ceda-4c2b-aa6d-dd4a6964c527"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" a","uuid":"8960b3b0-9a40-4852-b654-8f6dc118475d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" poem","uuid":"d5df28dc-56a4-4f30-a12c-2969847e6761"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" to","uuid":"0a75c8df-0fb8-44e7-ae1f-b24e7d220662"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" summarize","uuid":"21009dbf-1415-4cf6-904e-f10fa1608963"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" everything","uuid":"4b4d5f21-0122-48af-a4a9-253d9f8b51a2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"\n\n","uuid":"abfb68d4-6435-4151-88ef-a0d7492971e3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Let","uuid":"02a6fae1-a726-47af-a533-6947c9b6e4d8"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" me","uuid":"03aacda0-e02f-43e4-a911-dc635ba65487"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" search","uuid":"3f764e01-c70d-4c7e-908b-02553df48945"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" for","uuid":"65d4eb92-c4cf-438c-b355-7518bf4b0914"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" the","uuid":"c0f009f3-ae2e-4902-ac58-8c373dddaf25"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" weather","uuid":"864104ff-65f5-4ed0-87de-a485dcd1224e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" in","uuid":"2cf5f44a-b101-4ea2-8876-f2623ea3e6b2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" the","uuid":"61011413-4569-47f5-be2b-547b23e64f53"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" host","uuid":"ee228c2b-a931-4157-96be-98349e0665c0"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" cities","uuid":"33497a4a-4e8e-473c-8fb1-36781c99b0e2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" for","uuid":"c80fd772-c910-42e6-bd29-a010dba42e9f"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" today","uuid":"1defefce-d927-4505-ab7c-7292d6eb68f2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"'s","uuid":"1ac282c7-22dd-48e7-9bdd-c23a1070402e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" matches","uuid":"ad162cf0-5bde-4fc6-8aa9-4c8ec3af9258"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" (","uuid":"5ed3fa80-a463-4ea9-ba06-c0558c888811"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"June","uuid":"62b950f1-f6e8-4336-8c85-554a64a4dc11"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"7d3f847c-a301-49b4-b428-9f871c520fd1"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"24","uuid":"8bbd621d-4c4a-4296-9d25-b7c865514039"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"be975f1f-ce15-4a84-9015-1701f895cbc6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"01569e6e-0623-4a4a-a763-9322e0fe6793"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"202","uuid":"9b78fe77-3154-438c-b710-e01576344459"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"6","uuid":"4e49fad8-0eeb-43c8-a38e-8bfec5267a78"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":").\n\n","uuid":"7ea91cee-d619-4fa8-9ebf-0fb01bcfe7df"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Today","uuid":"60b9eb14-dbda-4e27-abe4-dff945ba0ac3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"'s","uuid":"0bef721a-951c-44c7-8cfe-5434d08a916e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" host","uuid":"029955c1-512b-4545-abdc-ba2b5a81b2fc"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" cities","uuid":"6448d97f-b22b-439e-b757-d6d306cc35bd"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":":\n","uuid":"4b2ff769-08f0-47b8-9a26-6269a896b6b6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"-","uuid":"017b58c3-2e28-4649-8fd4-9394cc0dfb0f"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" A","uuid":"4b802010-7a2e-4b11-9fd6-de811e26389e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"组","uuid":"32b39d90-1c1e-4edc-bfe7-bc88207fd070"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":":","uuid":"cc2b9b50-3e98-4bfe-8ccc-c1ea1b7f497f"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Guad","uuid":"0c43eb02-7706-41e1-9565-73ca263bb7ab"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"alu","uuid":"79c093dc-6a2a-4992-94b2-cda73944ef3f"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"pe","uuid":"959a9079-2b48-4d2f-85af-e0e26533df3a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"b3829617-c2a5-4b9a-b4f2-e9d5cae38dff"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Mexico","uuid":"c0dadba1-dbf1-4829-b821-bccfe2f0ee47"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" (","uuid":"3cf7c427-6f7e-4880-8d41-a5f56d2354c6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"near","uuid":"1ebb1913-992a-4f6a-89b1-57f14ed30539"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Monter","uuid":"d77e8c32-6395-4a7e-8e02-8d16ce674624"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"rey","uuid":"8bd0f3b4-e39c-4639-8560-08abcaf6a69a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":")","uuid":"df3b899d-583b-4a55-8f43-7ed57bb43ae7"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" and","uuid":"02d2bdc6-ae38-49ce-af6d-8974516154c5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Mexico","uuid":"7a4e0793-35a2-4f4c-9d64-fe04184e9fbd"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" City","uuid":"aff93044-2880-462f-abda-fbf54c7b900e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"6cc7a9fe-67b0-4a8b-b38e-9e868471de1e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Mexico","uuid":"c52cea67-0d25-4a4c-95c7-24996977d7dd"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"\n","uuid":"ddd91300-bba6-4178-bad6-00871f872374"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"-","uuid":"6530927e-cc22-4974-92f2-09ff99715624"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" B","uuid":"7bfb4b2e-7cef-4882-aa82-087d5985d23d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"组","uuid":"ab144dc3-edd5-4936-8de5-306259e7f7d4"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":":","uuid":"62e30176-7fb2-4ae4-9312-c93f77f14f59"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Vancouver","uuid":"2aec16cd-4597-4db5-b6e2-630af866ab51"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"9f5ed5ca-2192-4ebb-9a84-32c2101f75bb"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Canada","uuid":"d6e5532e-8b9a-4aef-b689-a4b3fa5e26e2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" and","uuid":"9abdf187-ee55-4bbc-8ad3-e63b35f94d34"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Seattle","uuid":"75b83141-094f-4ba4-8af7-5f09541e9fab"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"ed7a7016-87d7-4484-a687-b41755a9187e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" USA","uuid":"e6e88193-405e-444c-896b-4eda854542a4"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"\n","uuid":"102f6a34-0a45-42f8-9bf0-f8d92fd3159d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"-","uuid":"a89a0424-db9b-4357-9e92-d1a0b350aaf5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" C","uuid":"55ea0eda-7526-482c-9e2b-e708ac0d4a38"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"组","uuid":"ae55bac4-3b49-4f61-981e-e97cc7e7bd71"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":":","uuid":"60be95b9-bb43-4c39-afaa-352a9ce1472d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Atlanta","uuid":"bbab73f8-cb99-468e-a52e-06650affaea3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"42d1139b-4719-4664-a154-92b472669261"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" USA","uuid":"3981ef17-2a03-4e66-ab7f-373a46e22f3d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" and","uuid":"313a89d9-7767-4dba-9574-18c510274564"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Miami","uuid":"d8306562-459d-4bbf-ba63-107dbfb7be3d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"7a62e630-53be-41e1-ba05-ae1ad3fc441d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" USA","uuid":"55332e86-b5d6-448a-92e8-8385e2584995"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"\n\n","uuid":"94392e4c-3b51-4c52-94e0-5b0afdd10d61"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Let","uuid":"85f2def1-4161-48d0-acf8-d779a97679a8"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" me","uuid":"989f8e56-0c02-440e-8627-70f4148654e6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" search","uuid":"29357e54-30f3-4c8d-bea7-b6fa495c89ac"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" for","uuid":"41bc8cbf-b0fc-49b8-a3b3-4da93ca4fa35"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" weather","uuid":"d6376df6-ee68-4607-822d-566df42c5ca8"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" conditions","uuid":"ad264317-9879-4da1-adb7-f48fc3a7a480"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"972411b1-694e-41c2-90f6-e2aba74692de"}},"eventType":"message:thinking"}
+
+event: message:tool_use
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"callId":"call_00_lotSFSIlwyGoaKfYFED64168","input":{"query":"World Cup 2026 host cities weather forecast June 24 2026"},"tool":"WebSearch"}},"eventType":"message:tool_use"}
+
+event: message:tool_use
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"callId":"call_01_KJa7NrmVlGf1lqdRjoWh4820","input":{"query":"Mexico City weather June 24 2026"},"tool":"WebSearch"}},"eventType":"message:tool_use"}
+
+event: message:tool_use
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"callId":"call_02_oKL2OfHrtMKibkDAksN42677","input":{"query":"Seattle Vancouver weather June 24 2026"},"tool":"WebSearch"}},"eventType":"message:tool_use"}
+
+event: message:tool_result
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"callId":"call_01_KJa7NrmVlGf1lqdRjoWh4820","output":"\"Web search results for query: \\\"Mexico City weather June 24 2026\\\"\\n\\nLinks: [{\\\"title\\\":\\\"【墨西哥城天气】墨西哥城天气预报,天气预报一周,天气预报15天查询\\\",\\\"url\\\":\\\"https://www.weather.com.cn/weather/411010100.shtml\\\"},{\\\"title\\\":\\\"【墨西哥城天气】墨西哥城今天天气预报,今天,今天天气,7天,15天天气预报,天气预报一周,天气预报15天查询\\\",\\\"url\\\":\\\"https://www.weather.com.cn/weather1d/411010100.shtml\\\"},{\\\"title\\\":\\\"墨西哥城7天天气\\\",\\\"url\\\":\\\"https://www.yzqxj.com/guoji/mexico/mexico-city/7day.html\\\"},{\\\"title\\\":\\\"Lluvias intensas y calor extremo marcarán el clima este 24 de junio en México: alertan por inundaciones, granizo y fuertes vientos\\\",\\\"url\\\":\\\"https://www.infobae.com/mexico/2026/06/24/lluvias-intensas-y-calor-extremo-marcaran-el-clima-este-24-de-junio-en-mexico-alertan-por-inundaciones-granizo-y-fuertes-vientos/\\\"},{\\\"title\\\":\\\"Así estará el clima hoy en CDMX\\\",\\\"url\\\":\\\"https://www.eluniversal.com.mx/metropoli/asi-estara-el-clima-hoy-en-cdmx-habra-lluvias-fuertes-en-la-mayor-parte-de-la-ciudad/\\\"},{\\\"title\\\":\\\"Clima extremista en México; lluvias en más de la mitad del país y 7 estados arriba de los 40° C\\\",\\\"url\\\":\\\"https://www.tvazteca.com/aztecanoticias/clima-en-mexico-24-junio-estados-lluvias-intensas-granizo-calor-extremo-y-fuertes-vientos/\\\"},{\\\"title\\\":\\\"¿Lloverá durante el partido México vs República Checa? Esto dice el Meteorológico\\\",\\\"url\\\":\\\"https://www.proceso.com.mx/nacional/2026/6/24/llovera-durante-el-partido-mexico-vs-republica-checa-esto-dice-el-meteorologico-374675.html\\\"},{\\\"title\\\":\\\"Diluvios en el México vs. Chequia: lloverá con intensidad en estos estados\\\",\\\"url\\\":\\\"https://www.radioformula.com.mx/nacional/diluvios-en-el-mexico-vs.-chequia-llovera-con-intensidad-en-estos-estados-20260623-0074.html\\\"},{\\\"title\\\":\\\"Desde granizo hasta los 45 °C: Los extremos climáticos que tienen en alerta máxima a México\\\",\\\"url\\\":\\\"https://www.debate.com.mx/clima/desde-granizo-hasta-los-45-c-los-extremos-climaticos-que-tienen-en-alerta-maxima-a-mexico-20260623-0233.html\\\"},{\\\"title\\\":\\\"Weather in Mexico — Weather forecast in Mexico, Federal district, Mexico\\\",\\\"url\\\":\\\"https://meteum.ai/weather/en?via=lnav\u0026bounds=-28.711505000000002%2C43.456003%3B116.288495%2C73.45600300000001\u0026mapTypeRoute=nowcast\u0026lat=19.432605\u0026lon=-99.133296\\\"}]\\n\\nHere are the weather details for **Mexico City on June 24, 2026**, based on forecasts from the Mexican National Meteorological Service (SMN/Conagua) and other weather sources:\\n\\n## 🌦️ Weather Overview\\n\\n| Detail | Forecast |\\n|---|---|\\n| **Condition** | Heavy rain (*lluvias fuertes*) turning to light rain later |\\n| **High Temp** | 23–25 °C |\\n| **Low Temp** | 12–15 °C |\\n| **Wind** | 20–30 km/h, gusts up to **30–50 km/h** |\\n| **Rain Probability** | High — thunderstorms and possible **hail** expected |\\n| **Sunrise** | 04:47 |\\n| **Sunset** | 18:04 |\\n\\n## 📋 Detailed Forecast\\n\\n- **Morning:** Cool and fresh, with temperatures around 13–15 °C. Cloudy with possible fog banks in higher elevations.\\n- **Afternoon:** Cloud cover increases with **heavy rain and thunderstorms** expected from mid-afternoon onward. Risk of hail and localized flooding.\\n- **Evening/Night:** Rain persists as showers (*chubascos*), with temperatures dropping back to around 12–15 °C.\\n\\n## 🌧️ Key Notes\\n\\n- Multiple tropical waves (No. 9, 10, and 11) and low-pressure channels are influencing the weather, bringing widespread rain across central Mexico.\\n- A major soccer match (Mexico vs. Czech Republic) was scheduled that evening at Estadio Ciudad de México, with a **60% chance of thunderstorms** during match hours (7–9 PM).\\n- Authorities advised caution due to risks of flooding, lightning, and fallen branches from strong winds.\\n\\n\u003e **Bottom line:** June 24, 2026, in Mexico City was a rainy day — plan for wet conditions, thunderstorms, and cool temperatures if visiting around that time of year.\\n\\n\\nREMINDER: You MUST include the sources above in your response to the user using markdown hyperlinks.\"","tool":""}},"eventType":"message:tool_result"}
+
+event: message:tool_result
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"callId":"call_02_oKL2OfHrtMKibkDAksN42677","output":"\"Web search results for query: \\\"Seattle Vancouver weather June 24 2026\\\"\\n\\nLinks: [{\\\"title\\\":\\\"【西雅图天气预报15天_西雅图天气预报15天查询】-中国天气网\\\",\\\"url\\\":\\\"https://baidu.weather.com.cn/mweather15d/401100101.shtml\\\"},{\\\"title\\\":\\\"西雅图天气预报24小时\\\",\\\"url\\\":\\\"https://www.tianqi24.com/as_seattle-wa/\\\"},{\\\"title\\\":\\\"【温哥华国际机场天气】温哥华国际机场天气预报,天气预报一周,天气预报15天查询\\\",\\\"url\\\":\\\"https://www.weather.com.cn/weather/404254800.shtml\\\"},{\\\"title\\\":\\\"Weather in Vancouver. Daily temperature and precipitation. June 2026.\\\",\\\"url\\\":\\\"https://www.weatherandclimate.info/sp/sp/monitor/71892\\\"},{\\\"title\\\":\\\"Weather Forecast for Pacific Northwest – June 24, 2026 | Outdoor Radio Network\\\",\\\"url\\\":\\\"https://onair.outdoorradionetwork.com/weather-forecast-for-pacific-northwest-june-24-2026-outdoor-radio-network/\\\"},{\\\"title\\\":\\\"【西雅图天气】西雅图今天天气预报,今天,今天天气,7天,15天天气预报,天气预报一周,天气预报15天查询\\\",\\\"url\\\":\\\"https://www.weather.com.cn/weather1d/401100101.shtml\\\"},{\\\"title\\\":\\\"June Weather in Vancouver Washington, United States\\\",\\\"url\\\":\\\"https://deploy.weatherspark.com/m/720/6/Average-Weather-in-June-in-Vancouver-Washington-United-States#Figures-ColorTemperature\\\"},{\\\"title\\\":\\\"June 24 Weather in Vancouver Washington, United States\\\",\\\"url\\\":\\\"https://deploy.weatherspark.com/d/720/6/24/Average-Weather-on-June-24-in-Vancouver-Washington-United-States#Sections-Moon\\\"}]\\n\\nHere are the weather forecasts for **Seattle** and **Vancouver** on **Wednesday, June 24, 2026**:\\n\\n---\\n\\n## 🌤️ Seattle, WA\\n\\n| Source | Conditions | High / Low |\\n|---|---|---|\\n| China Weather (weather.com.cn) | Cloudy (多云) | 30°C / 11°C (86°F / 52°F) |\\n| Outdoor Radio Network | Overcast \u0026 Breezy | 89°F / 61°F (32°C / 16°C) |\\n| Tianqi24 | Cloudy (多云) | 26°C / 17°C (79°F / 63°F) |\\n\\n**Summary:** Mostly cloudy to overcast, breezy, warm daytime temperatures in the mid-to-upper 80s°F (~26–32°C). Cooler overnight lows around 50–60°F (~11–16°C). Winds light from the north/northwest.\\n\\n---\\n\\n## 🌤️ Vancouver, Canada\\n\\n| Source | Conditions | High / Low |\\n|---|---|---|\\n| China Weather (weather.com.cn) | Cloudy turning overcast (多云转阴) | 24°C / 13°C (75°F / 55°F) |\\n| Historical June normals | Mild | Avg June mean: ~16.4°C (61.5°F) |\\n\\n**Summary:** A mix of clouds and sun, turning overcast later. High around 24°C (75°F), low ~13°C (55°F). Lighter winds, typical Pacific Northwest spring conditions.\\n\\n---\\n\\n\u003e **Note:** June 24, 2026 is still well in the future, so these are **long-range model forecasts** (not final). They should be rechecked closer to the date. Both cities should expect typical June weather: mild, partly to mostly cloudy, and generally pleasant with only a small chance of rain (~19% in Vancouver, WA area).\\n\\n\\nREMINDER: You MUST include the sources above in your response to the user using markdown hyperlinks.\"","tool":""}},"eventType":"message:tool_result"}
+
+event: message:tool_result
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"callId":"call_00_lotSFSIlwyGoaKfYFED64168","output":"\"Web search results for query: \\\"World Cup 2026 host cities weather forecast June 24 2026\\\"\\n\\nLinks: [{\\\"title\\\":\\\"Pronóstico del clima CdMx HOY 24 de junio 2026\\\",\\\"url\\\":\\\"https://www.telediario.mx/comunidad/pronostico-del-clima-cdmx-hoy-24-de-junio-2026\\\"},{\\\"title\\\":\\\"¿Cómo estará el clima en la CDMX durante el partido México-Chequia del Mundial 2026?\\\",\\\"url\\\":\\\"https://www.informador.mx/mexico/como-estara-el-clima-en-la-cdmx-durante-el-partido-mexico-chequia-del-mundial-2026-20260623-0200.html\\\"},{\\\"title\\\":\\\"[날씨] 내일 곳곳 소나기...월드컵 몬테레이 '찜통더위' 변수\\\",\\\"url\\\":\\\"https://app1.ytn.co.kr/news_view.php?key=202606241443469643\u0026s_mcd=0108\\\"},{\\\"title\\\":\\\"How World Cup fans attending Miami games should brace for summer heat\\\",\\\"url\\\":\\\"https://www.palmbeachpost.com/story/sports/soccer/worldcup/2026/06/02/florida-world-cup-high-summer-temperatures-safety-miami/90366443007/\\\"},{\\\"title\\\":\\\"México vs Chequia, Mundial 2026: ¿Lloverá el día del partido de la selección mexicana en el Azteca?\\\",\\\"url\\\":\\\"https://www.clarosports.com/futbol/mundial-2026/mexico-vs-chequia-mundial-2026-llovera-el-dia-del-partido-de-la-seleccion-mexicana-en-el-azteca/\\\"},{\\\"title\\\":\\\"¿Lloverá en el partido México vs. Chequia? Así estará el clima en CDMX y Edomex el miércoles 24 de junio\\\",\\\"url\\\":\\\"https://www.elfinanciero.com.mx/cdmx/2026/06/23/llovera-en-el-partido-mexico-vs-chequia-asi-estara-el-clima-en-cdmx-y-edomex-el-miercoles-24-de-junio-source-ia/\\\"},{\\\"title\\\":\\\"[날씨] 오늘 서쪽 더위·동쪽 선선...월드컵 몬테레이 날씨는?\\\",\\\"url\\\":\\\"https://www.ytn.co.kr/_ln/0108_202606240907570864\\\"},{\\\"title\\\":\\\"[날씨] 서쪽 낮 더위, 해안 중심 비...월드컵 몬테레이 날씨는?\\\",\\\"url\\\":\\\"https://app1.ytn.co.kr/news_view.php?key=202606241309588856\u0026s_mcd=0108\\\"},{\\\"title\\\":\\\"¿Lluvia, granizo y viento? Así podría ‘ARRUINAR’ el clima el resultado de México vs Chequia, mañana de 24 de junio\\\",\\\"url\\\":\\\"https://www.aztecabajio.com/clima/mexico-vs-chequia-pronostican-lluvias-y-tormentas-el-partido-la-copa-mundial-la-fifa-2026/\\\"},{\\\"title\\\":\\\"¿A Qué Hora Lloverá en CDMX, Mañana 24 de Junio? Así Será el Clima en Partido México vs Chequia\\\",\\\"url\\\":\\\"https://www.nmas.com.mx/clima/pronostico-del-tiempo/a-que-hora-empieza-llover-cdmx-hoy-24-de-junio-2026-clima-partido-mexico-vs-chequia/\\\"}]\\n\\nHere is a summary of the weather forecasts for World Cup 2026 host cities on **June 24, 2026**, based on the search results:\\n\\n---\\n\\n### 🇲🇽 Mexico City (Estadio Azteca) — Mexico vs. Czech Republic (7 PM local)\\n- **Morning:** Partly cloudy, cool, 13–15°C (55–59°F)\\n- **Afternoon:** Warm, max 24–26°C (75–79°F); high humidity\\n- **Match time (7–9 PM):** **80% chance of thunderstorms** with heavy rain, lightning, possible hail, and wind gusts up to **40–60 km/h (25–37 mph)**\\n- **Post-match:** Rain continues, temps drop to 14–16°C (57–61°F)\\n- **Bottom line:** Expect wet conditions — fans advised to bring impermeable rain gear (umbrellas may not be allowed in the stadium).\\n\\n### 🇲🇽 Monterrey — South Korea vs. [Opponent] (10 AM local)\\n- **Daytime:** Temperatures **above 30°C (86°F)** with very high humidity\\n- **Feels-like temperature:** Approaching **40°C (104°F)** — described as \\\"steaming hot\\\" (찜통더위)\\n- **Bottom line:** Extreme heat and humidity will be a major factor for players and fans alike. Hydration is critical.\\n\\n### 🇺🇸 Miami (Hard Rock Stadium) — Brazil vs. Scotland (6 PM local)\\n- **High:** 88°F (31°C)\\n- **Low:** 80°F (27°C)\\n- **Bottom line:** Typical hot, humid South Florida summer evening. Fans should prepare for heat and humidity.\\n\\n---\\n\\n### 🔍 Note on Other Host Cities\\nThe search results did not provide specific June 24 forecasts for the remaining 13 host cities (including **Guadalajara, Toronto, Vancouver, Los Angeles, San Francisco, Seattle, Houston, Dallas, Kansas City, Atlanta, Boston, Philadelphia, and East Rutherford**). However, based on seasonal norms for late June:\\n\\n| City | Expected Conditions (June 24) |\\n|------|------------------------------|\\n| **Guadalajara, MX** | Pleasant spring-like, 15–28°C, potential afternoon rain |\\n| **Toronto/Vancouver, CA** | Mild, 15–25°C, possible rain |\\n| **Seattle/SF/LA** | Mild to warm, 18–28°C, typically dry |\\n| **Dallas/Houston** | Very hot, 30–38°C, high humidity |\\n| **KC/Atlanta/Philly/Boston/NY** | Warm to hot, 25–35°C, possible thunderstorms |\\n\\n---\\n\\n**Key Takeaway:** June 24, 2026, will feature significant weather contrasts — **cool, rainy conditions in Mexico City**, **extreme heat in Monterrey**, and **hot, humid weather in Miami**.\\n\\n\\nREMINDER: You MUST include the sources above in your response to the user using markdown hyperlinks.\"","tool":""}},"eventType":"message:tool_result"}
+
+event: message:status
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"native":"requesting","phase":"requesting","session_id":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","status":"requesting","subtype":"status","type":"system","uuid":"d03ab7f3-00b1-4c1a-8b63-922544036727"}},"eventType":"message:status"}
+
+event: message:status
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"estimated_tokens":1,"estimated_tokens_delta":1,"native":"thinking_tokens","phase":"thinking","session_id":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","subtype":"thinking_tokens","type":"system","uuid":"4ecbebd3-1dd8-413f-b66d-f74926eac1fc"}},"eventType":"message:status"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Now","uuid":"5d188dde-fac3-48ae-81b3-2ce6f2c3e4a5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" let","uuid":"47e4a673-bd22-456e-ae48-5afd5431ec46"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" me","uuid":"8a49570b-5b6c-4853-b689-f8656b448a54"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" compile","uuid":"e9f0902e-2d48-47c1-930b-d29c5ed56c99"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" all","uuid":"82e9f618-efbd-46d6-927a-a9d2e1d20b16"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" this","uuid":"8776d4c9-de22-4971-aed0-17609b5deda5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" information","uuid":"de53fc10-50c1-477a-843f-9f4c085380f2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" and","uuid":"27cb3849-5a27-4998-86c6-a922c15caec2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" write","uuid":"6b601aaa-9450-483c-b0dc-dc8e89a45fe2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" a","uuid":"69342e1d-50cc-46a3-94e0-d91ed846be85"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" poem","uuid":"0d15897a-d4b4-4120-956f-4407e4d0cc31"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" to","uuid":"a5a19d73-66fb-4b25-8a0a-f6a3a0ae5525"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" summarize","uuid":"b6f7cdaa-b405-4d50-9e5a-bc2c7fc4c5d1"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" everything","uuid":"688dc2b3-c354-4ab1-bd15-81cdecf82b3d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"5a9a765c-d6c3-4228-b2f7-f9c8beda0a39"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Let","uuid":"b9a0fa5b-2d07-47ef-a3ae-b67d82f7647c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" me","uuid":"2adad75f-475b-4161-b40c-bbb2ac73454b"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" organize","uuid":"13697a3f-f764-4d26-8a41-c492df633089"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" the","uuid":"8a768e80-0a96-4fec-8e13-fede0e4ebe17"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" weather","uuid":"1383d7f2-5a15-46b0-98a0-6ddb67bc2081"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" impact","uuid":"3638997c-5159-4783-85de-7d223c3e939c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" analysis","uuid":"a967bf8d-f5d4-4ff4-be10-87c38600b1b5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" first","uuid":"c16dee90-62e9-4b19-8b02-7d887d45c40e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".\n\n","uuid":"34da55d5-a63f-40fc-b2f9-d3cce6178a16"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Today","uuid":"988bd969-49c5-4023-909b-d2b3e3b0f3f6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"'s","uuid":"1c52f3c8-acc8-4ee0-ac26-289b83261814"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" matches","uuid":"7c201b5b-23fb-49f1-8b1f-cf8c6d7e7b44"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" and","uuid":"87d9078c-2ad8-4b24-9c2d-67a9ff8aa743"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" weather","uuid":"7b312486-65e0-43b8-9918-43a5c6da8c9d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" impact","uuid":"f8ddf74e-b039-4512-a0b9-28e7870c9e60"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":":\n\n","uuid":"ac70d12d-647d-48aa-bb3c-392b5f0a0fc2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"1","uuid":"8029ed0a-0642-4f39-9c28-98c1ea688392"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"4081b29f-81de-4d51-b86f-67c756862d0a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" **","uuid":"e9ac6bcf-f4c6-4c2e-aefa-2b42f9d6a3ea"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Mexico","uuid":"7f9bfff4-de6a-4bd3-8bcf-6f19bc64cb19"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" City","uuid":"f74da180-dca3-49f2-8a9f-8fd68781e181"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" —","uuid":"6079832a-a836-4057-8071-28cb17ed5281"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Czech","uuid":"c7cb07ec-7c8f-4778-83c1-7eee703c2f0e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Republic","uuid":"a5277c57-6a58-4126-bf17-cecc68dcaa6a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" vs","uuid":"34116dab-c5ef-4567-8493-907af330b8ac"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Mexico","uuid":"c5c486ef-2a0a-46a6-b9e4-40f92db34251"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" (","uuid":"b8ca6875-1d9c-4a6d-807f-31dedca8de81"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"7","uuid":"72599905-a172-4ad9-abfc-9f1f41c91234"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" PM","uuid":"2634ad8e-2524-47df-b60d-33342e60738b"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":")","uuid":"e3e1e2d0-93de-4c32-ad8b-8585facd33a9"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"**:","uuid":"32d6482e-943f-41c1-9722-b21ff0c17ab4"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Heavy","uuid":"1240a0fe-150f-494a-b47a-c803bb40d360"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" thunderstorms","uuid":"0cea50e3-32d1-4475-bd13-6eafe94692a5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"db086dd9-8c5f-4c23-a4aa-5e4c25679198"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" hail","uuid":"3f01bcb8-3b4c-4784-8d78-f4c4cb8a10a5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"a23034f0-91e0-404f-a4f6-063aae92b189"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" strong","uuid":"54796c5a-dff0-4c72-9144-69463eed4878"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" winds","uuid":"e6f91104-12c3-488a-b17d-ff9747250829"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"c2adf4b0-030e-4c2e-8413-20de5e7a5177"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" This","uuid":"ae7ef0ed-7f84-4095-9bdf-b5bc69c36e84"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" will","uuid":"4e34e18e-b604-4f1d-8e2d-7d9ad81c6d31"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" heavily","uuid":"005d3eb9-f03c-4da0-a7c9-edac702e73ba"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" affect","uuid":"02b0dc5c-b6b7-406e-ba6c-836118bab7b4"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" gameplay","uuid":"40999e4b-91c8-441a-9a71-e54f10781473"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" -","uuid":"3dc7cadb-d7ba-4b53-a244-8cb334471626"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" wet","uuid":"61e8214e-754e-46ad-b50f-e459ce752690"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" pitch","uuid":"c57cc81c-9903-47a6-8f24-044cf3a09050"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" means","uuid":"7f469cb3-2bc2-49d8-9dbd-d073de1e76cb"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" faster","uuid":"22b00d84-9521-4b00-a634-7cec6cfa485e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ball","uuid":"746affa7-0956-4bcf-8187-028d5569dba9"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" movement","uuid":"4e109dc3-bfe5-4737-84bd-1c6676a31a67"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"688f79e0-0271-43a0-a7d8-c65b9aa90788"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" possible","uuid":"2ad5d89c-c055-4bb2-b0d3-ce5ba2ae65f2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" p","uuid":"fbef2cab-d3ad-43b6-9eeb-57ed71d2e06d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"udd","uuid":"a8294902-0a9c-48ae-962b-a8d0e5f0a7df"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"les","uuid":"18e3da79-0315-4a27-867a-0f18e00d1d80"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"1950f58f-6a09-48d9-a7fd-5e3f98113172"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" lightning","uuid":"0abf5403-7eac-4dbc-be92-dfba0b86722d"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" delays","uuid":"acfc43be-78d4-4fcc-9563-fa2711365770"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" possible","uuid":"405a4d6c-1845-439b-a1c7-5b87684509ef"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"459a5b9c-4862-4306-aea6-1e15d3424a4c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Home","uuid":"641d8f12-8c1d-4adb-8b58-03d525e03c09"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" advantage","uuid":"a5ce84c3-83bf-4f43-9b40-ecffdcf74efd"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" for","uuid":"1932e91f-7ef1-47de-8f63-386108ee8e45"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Mexico","uuid":"1b7bd608-6877-4819-97c6-7911d7061928"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" as","uuid":"138a2e7b-7a2d-47ac-a125-60ed65258344"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" they","uuid":"38984bdf-16eb-4d07-aebe-5308600d5b17"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"'re","uuid":"b5e0bc1d-cce7-4f4b-88c0-6f07a871d014"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" used","uuid":"6490ca24-2c8e-451f-b591-4049c1fbd2a0"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" to","uuid":"cd033ede-dbdb-480c-baaa-9d71ea4158ef"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" high","uuid":"b284a938-e1ce-4dec-b1f2-7e749230ed04"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" altitude","uuid":"f67785a7-7bdf-4d9f-9a95-17500ba896e7"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" (","uuid":"768b19ae-6689-4cf2-b604-732f37cd6d1b"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"2","uuid":"9860b727-dbd3-42cc-b78c-f3c819e468dd"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"594781e6-a1fa-4614-9137-1f3abb50c07e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"200","uuid":"669092d3-7db9-4b87-bfd4-d2175c60d61a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"m","uuid":"a4a2a28b-207e-4fba-b64f-de7d2a20e1e3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":")","uuid":"bb12da31-94b1-4803-95cc-7c24aa6d67c0"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" too","uuid":"6cfc928b-8942-4cf1-902b-8803f675f26a"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".\n\n","uuid":"bf99f80c-1b86-4ff3-83ba-8fb9404a07c6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"2","uuid":"b0d9837d-2217-4ca4-b808-b59d531da491"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"b4ee1ef2-481f-4879-96da-ad1f9cfcb23c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" **","uuid":"e8d5c336-0ceb-4161-b94f-068d7e29e1c3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Mon","uuid":"4aeafc85-ede0-4995-b7ee-0c97796bdee3"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"ter","uuid":"1fcf1240-1487-48e0-8377-74587df5cce9"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"rey","uuid":"755971b1-507e-4ae6-955d-0fee4aa8b52e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" (","uuid":"b3625539-ab30-4591-83be-dc4b45fbd4ac"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"Gu","uuid":"91def7a6-9699-4f9a-a783-90fa3b3f9d4e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"ad","uuid":"9ef9cdb1-f1e5-45f5-b7b2-b39beb735fcd"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"alu","uuid":"8a4dce1c-cdcf-4d27-9735-5b90253c479e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"pe","uuid":"fcae0ace-d58e-4d92-b022-b42e07484dc6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":")","uuid":"d9167e62-fe62-41ce-a011-a8f135b639a7"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" —","uuid":"64ec2379-1efe-45cf-9cc7-d85113971d0b"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" South","uuid":"4cc16dbf-bf1a-4fca-8a8e-f86bdf972183"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Africa","uuid":"b4fe2e18-cce5-41c5-a1b8-ecb98b1d708c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" vs","uuid":"72c1fe5f-e892-4698-a98a-3b19d4c31db2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" South","uuid":"5686bcbb-b520-454f-b89d-8fe41149b4cd"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Korea","uuid":"b87ac928-98d9-4056-b2d5-19f6c07d8737"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"**:","uuid":"416f1377-39b7-4df0-ae06-f5cd06a801f1"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Extreme","uuid":"c72511e8-18b6-4925-a6b8-2def224cc06b"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" heat","uuid":"3361692f-6d17-42e2-9d4c-f096349824e4"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ~","uuid":"96d4d04f-0a9b-4c74-b549-26e1d1e2a0fb"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"30","uuid":"2e1fb272-b454-4667-8f8d-7c7111256600"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"°","uuid":"5854867b-96ef-4584-b811-8d0aead969c5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"C","uuid":"e81fb33c-08d7-45d2-9ccd-5e9adadbedec"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" feels","uuid":"1998cfe8-b7ad-4428-871e-e26cd68cf5d9"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" like","uuid":"a2500b41-fb6a-4552-addd-2c81ccf71dae"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"e0c75a10-a696-4411-8b49-69c35f2270ed"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"40","uuid":"04e8f17c-d2c1-4ad0-b010-b88a5ac1232b"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"°","uuid":"61550c77-ebd2-4a1c-b36e-6dd86b059342"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"C","uuid":"8afb4971-0851-4dc6-bbf0-2a1d1aeed52c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".","uuid":"0b0c7736-033d-48f4-aeb5-1a31499d989e"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Very","uuid":"bc19aeef-8a03-48b6-8454-2464ebc6fdb9"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" demanding","uuid":"d87d5be7-f653-4f95-8844-120b47b6d3a4"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" physically","uuid":"e3e031f3-ff5b-40f8-97d2-0217bfe2fcb2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"fcfb84e3-dfef-45e4-bd92-d2e36fc29954"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" especially","uuid":"6f5fc1f9-3746-4aec-9748-2a26e9991687"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" for","uuid":"93e60498-7492-48f4-9cb7-def8b9895d54"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" South","uuid":"9437bf94-d88c-44d0-a465-ca1bfa11da6f"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Korea","uuid":"6cb5c861-dd47-4eba-aafd-0655bf21377c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" who","uuid":"ff1c208d-87ee-4f80-ae1a-8d398f97da22"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" may","uuid":"3884e54c-4de8-4829-9783-234b25faba8f"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" not","uuid":"6979f593-a2f9-4882-a78d-9be06e88d840"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" be","uuid":"499fb162-11a8-4ba2-9e05-07498d659dd6"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" accustomed","uuid":"0c9ab7cf-1b01-4f89-a548-1086b9a4212c"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" to","uuid":"96b759d6-2b0b-42ea-9326-bbd99630b9ad"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" with","uuid":"81f0f6a3-dc70-41a4-8a1d-8e3751087fe5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" Qatar","uuid":"08ac20cb-1880-4b5d-8a9c-49d3b9201baa"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":".\n\n","uuid":"c9fd2cb5-8295-4ca8-919b-73d02f0952ff"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":",","uuid":"9023784b-2f93-4b8a-bdf2-872645ca58f5"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" —","uuid":"ead51703-6494-4e57-9f1a-6e3d6f65ed40"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"°","uuid":"69ca683b-b556-49a2-91df-2524b3e633d1"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" may","uuid":"2c9d97ba-4c9b-49c4-83bd-7b03031b98a0"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"**:","uuid":"007fdc46-27e1-4303-a6b1-15afe2bbf5f2"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" write","uuid":"62ee8b09-fc49-41cc-8970-5bac4b2869ae"}},"eventType":"message:thinking"}
+
+event: message:thinking
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"thinking_delta","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" a","uuid":"10ccc5c2-ee8e-4ac1-9061-b884f463d241"}},"eventType":"message:thinking"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" |","uuid":"5d70539c-de60-49cd-bd83-03a5b9a54781"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"227120b4-bcf1-4c14-8934-cddca6e2ade2"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"🇲","uuid":"d059ea86-2721-4825-bc5a-a31906aafb05"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"🇽","uuid":"920772d7-a8a1-4e49-ae7c-28eaba4182a3"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"雷","uuid":"779ea650-7309-43d3-97f3-5c63a26ac84b"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"暴","uuid":"cce0ca06-cab1-4aa4-8808-4e7137629060"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"滑","uuid":"4f310427-33ea-46ae-b889-39f570478fd2"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"草","uuid":"d825b52a-374e-4b98-ad1b-02cb78b55abb"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"fc36d871-680e-41db-81b2-a59e7f9977f9"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"2","uuid":"02e01c2d-7f84-496e-8c0f-5541442b9bb2"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"094ce342-f366-4a8f-bb2d-176d4fb10838"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"南非","uuid":"b52b37a7-ba5a-4638-9668-0cb10e3fd86e"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" |","uuid":"fc0d2799-649e-4101-8a2f-a6435fc49e2c"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"8446e697-210f-4e36-b9c3-86d277e79042"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"感","uuid":"5ad74307-94cf-44da-ae5b-c9afd33f32d8"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"近","uuid":"113e2f94-5efc-4fd1-b907-c2b4a1b1e94e"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"高温","uuid":"8cae8618-7ece-4b9a-b0de-b1f4b2daefad"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"；","uuid":"aae69b6c-6d1c-4b43-8db9-2f2fb5ecdd8a"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"对此","uuid":"12329d11-c078-42d4-97ee-e59c27a148fb"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"更","uuid":"c1d3c7a2-2609-429f-a659-c8a0af4a203b"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"迈","uuid":"b2782afd-c350-42bb-97c9-6faa16826fe5"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"阿","uuid":"4a728858-7dba-498d-b802-e87f180872b3"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"31","uuid":"8b7c8015-9cbb-486a-bd94-9411eb04d17d"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"°","uuid":"b256b67e-46f9-4a15-9eea-83047aa2b5e4"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"出身","uuid":"ecd23aa2-2951-4b3a-9f37-82e7f491381e"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"——","uuid":"361be0be-1d78-4801-8b95-e1b2802f60c1"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"哥","uuid":"3357a4b6-3dae-45a8-889f-207d7ed28a1c"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" vs","uuid":"a2acdd43-987b-4b38-8160-4c059a24f0bb"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"C","uuid":"74b56d9b-99ea-4e09-8df4-3a7e0656e923"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"1cd2f0e3-1852-4549-a05f-f21ccfe56b95"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"给","uuid":"cf9e30d1-f2f4-41eb-9664-395c27e830de"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"南非","uuid":"abe27d76-27c8-48d3-9dd5-2d4386d38cc8"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"茵","uuid":"c6364b0d-2c67-4a58-8bea-bb77082562f7"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"烽","uuid":"1cbb83cb-dc4d-4044-946b-195655509e4c"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"翔","uuid":"444e1a2d-b2f9-4163-993a-a006608956d8"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"。\n","uuid":"522fc77d-e4fc-4729-a858-5b12dcfcd318"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"\u003e","uuid":"24d9a47b-3937-4c38-9b94-4bcac1f9d0e5"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":" ","uuid":"526d46b8-78f5-4df5-be0d-2ceb06ed0430"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"/","uuid":"c7ffacf0-b9ea-4ecb-80b5-69327958e553"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"24","uuid":"56e84fea-b860-4f8d-ba78-76ec6110de5c"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"雷","uuid":"120a3acb-92e1-4b07-90c6-9fd37f380561"}},"eventType":"message:partial"}
+
+event: message:partial
+data: {"data":{"messageId":"6a3bb015f9902cd93050e80b","payload":{"delta":true,"deltaType":"text_delta","index":1,"sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","streamEvent":"content_block_delta","text":"酷","uuid":"860a7874-61b6-44ee-b997-a577ab446ab7"}},"eventType":"message:partial"}
+
+event: message:completed
+data: {"data":{"id":"6a3bb015f9902cd93050e80b","agentId":"6a3a22aeecf2e81476c84246","wakeupId":"","status":"succeeded","source":"message_part","requestedBy":"kesi-ui","remoteMessageId":"","closeReason":"","processLossRetryCount":0,"continuationAttempt":0,"metadata":{"backendResponse":{"adapterType":"claude_local","command":"claude","content":"## 🌦️ 天气对今日比赛的影响分析\n\n| 比赛 | 城市 | 天气状况 | 影响分析 |\n|------|------|---------|---------|\n| **🇲🇽 墨西哥 vs 捷克** | 墨西哥城 (Estadio Azteca) | 🌩️ **雷暴！** 冰雹、强风，60%概率比赛时段降雨 | 湿滑草皮、低能见度、闪电可能中断比赛；但墨西哥队**海拔 2,200m** 早已适应，天时地利优势拉满 |\n| **🇿🇦 南非 vs 🇰🇷 韩国** | 蒙特雷 (Guadalupe) | 🔥 **酷热！** \u003e30°C，体感近 40°C | 体能极限考验，补水关键。韩国队可能不适应高温；南非对此更熟悉 |\n| **🏴󠁧󠁢󠁳󠁣󠁴󠁿 苏格兰 vs 🇧🇷 巴西** | 迈阿密 | 🌡️ 湿热 31°C，体感更高 | 巴西队习惯热带气候，苏格兰冷湿地区出身——**湿热冲击大** |\n| **🇲🇦 摩洛哥 vs 🇭🇹 海地** | 亚特兰大 | 🌤️ 暖热 25-35°C，可能雷雨 | 双方均需适应，天气相对中立 |\n| **🇨🇭 瑞士 vs 🇨🇦 加拿大** | 温哥华 | ⛅ 多云，24°C 温和 | ✅ 理想比赛条件，零影响 |\n| **🇧🇦 波黑 vs 🇶🇦 卡塔尔** | 西雅图 | ☁️ 多云有风，26°C | ✅ 基本无影响 |\n\n**小结：** 墨西哥城和蒙特雷的极端天气可能是今天最大的\"第12人\"——暴雨帮墨西哥守主场，酷热给南非添筹码；而苏格兰要硬扛迈阿密的蒸笼考验。\n\n---\n\n## 🌍 诗 · 世界杯风云\n\n\u003e **绿茵烽火六月天**\n\u003e\n\u003e 蒙特雷烈日炙胸膛，南非铁骑卷尘扬；\n\u003e 阿兹特克闪电裂长空，暴雨难掩雄鹰翔。\n\u003e\n\u003e 迈阿密湿热蒸笼里，桑巴舞者对寒风；\n\u003e 温哥华畔风和顺，瑞士钟表待交锋。\n\u003e\n\u003e 四十八国逐鹿忙，百四战鼓震八荒；\n\u003e 谁将捧起金杯去？七月十九见真章！\n\n---\n\n*资料来源：* [FIFA 官方赛程](https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums) | [墨西哥城天气](https://www.infobae.com/mexico/2026/06/24/lluvias-intensas-y-calor-extremo-marcaran-el-clima-este-24-de-junio-en-mexico-alertan-por-inundaciones-granizo-y-fuertes-vientos/) | [蒙特雷酷热](https://app1.ytn.co.kr/news_view.php?key=202606241443469643\u0026s_mcd=0108) | [迈阿密湿热](https://www.palmbeachpost.com/story/sports/soccer/worldcup/2026/06/02/florida-world-cup-high-summer-temperatures-safety-miami/90366443007/) | [西雅图/温哥华天气](https://onair.outdoorradionetwork.com/weather-forecast-for-pacific-northwest-june-24-2026-outdoor-radio-network/)","cwd":"/workspace/test/claudetest","elapsedMs":33280,"mode":"local","sessionId":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","sessionIdAfter":"d0bc98b2-a852-4a60-8a1d-35cef85c4e9b","status":"ok","usage":{"deepseek-v4-flash":{"cacheReadTokens":42496,"inputTokens":21462,"outputTokens":3852}}},"dispatchAttempts":1,"dispatchKind":"message_part","dispatchLastAt":"2026-06-24T18:23:17.228275741+08:00","dispatchMessageId":"6a3bb015f9902cd93050e80c","dispatchSessionId":"6a3ba9fff9902cd93050e7c5","dispatchStatus":"pending","dispatchStream":true,"gatewayStatus":"ok"},"lastHeartbeatAt":"2026-06-24T10:23:17.232310485Z","startedAt":"2026-06-24T18:23:17.222827+08:00","endedAt":"2026-06-24T10:23:50.521697294Z","createdAt":"2026-06-24T18:23:17.222827+08:00","updatedAt":"2026-06-24T10:23:50.521697294Z","parts":[{"id":"6a3bb015f9902cd93050e80c","sessionId":"6a3ba9fff9902cd93050e7c5","agentId":"6a3a22aeecf2e81476c84246","messageId":"6a3bb015f9902cd93050e80b","seq":1,"role":"user","type":"text","content":"再查一下当地的天气对比赛的影响，最后再一首诗总结一下。","input":{},"metadata":{"messageId":"6a3bb015f9902cd93050e80b"},"createdBy":"kesi-ui","createdAt":"2026-06-24T18:23:17.222827+08:00"}]},"eventType":"message:completed"}
+
+event: done
+data: [DONE]
+

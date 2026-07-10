@@ -535,8 +535,10 @@ async function streamRunInSession(params: {
   signal: AbortSignal;
   onMessageChange: (content: ThreadAssistantMessagePart[]) => void;
   renderRegistry?: RenderRegistry;
+  /** 预计输入内容（前言）：首条消息发送时注入到 userText 前 */
+  preamble?: string;
 }): Promise<MessageTiming> {
-  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry } = params;
+  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble } = params;
 
   // 从 AppendMessage 中提取文本，enrich，提取附件
   const contentParts = Array.isArray(message.content) ? message.content : [];
@@ -574,6 +576,11 @@ async function streamRunInSession(params: {
     if (renderRegistry && Object.keys(renderRegistry).length > 0) {
       const renderPrefix = `\n{## ${buildRenderPrompt(renderRegistry)} ##}\n`;
       userText = `${renderPrefix}${userText}`;
+    }
+
+    // 注入预计输入内容(前言) —— 与 renderRegistry 同路径,首条消息带上
+    if (preamble && preamble.trim()) {
+      userText = `{## ${preamble.trim()} ##}\n${userText}`;
     }
   }
 
@@ -799,7 +806,7 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
 
 // ==================== useAgentRuntime ====================
 
-export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: RenderRegistry }) => {
+export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: RenderRegistry; preamble?: string }) => {
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [threads, setThreads] = useState<Array<{
@@ -815,6 +822,10 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
   // renderRegistry 用 ref 存,onNew 闭包读取,避免依赖变化导致重建
   const renderRegistryRef = useRef<RenderRegistry | undefined>(options?.renderRegistry);
   renderRegistryRef.current = options?.renderRegistry;
+
+  // preamble 同样用 ref 存,首条消息注入时读取
+  const preambleRef = useRef<string | undefined>(options?.preamble);
+  preambleRef.current = options?.preamble;
 
   const runIdRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -993,6 +1004,7 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
         context: runtime.current?.thread.getModelContext(),
         requestedBy,
         renderRegistry: renderRegistryRef.current,
+        preamble: preambleRef.current,
         onMessageChange(content) {
           // console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
           setMessages(prev => prev.map(m =>
@@ -1059,6 +1071,7 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
         context: runtime.current?.thread.getModelContext(),
         requestedBy,
         renderRegistry: renderRegistryRef.current,
+        preamble: preambleRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId
@@ -1114,6 +1127,7 @@ export const useAgentRuntime = (agentId: string, options?: { renderRegistry?: Re
         context: runtime.current?.thread.getModelContext(),
         requestedBy,
         renderRegistry: renderRegistryRef.current,
+        preamble: preambleRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId

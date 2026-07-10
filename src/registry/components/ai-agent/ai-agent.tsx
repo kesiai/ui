@@ -96,6 +96,98 @@ import type { RenderRegistry } from "./render/registry";
 
 const RenderRegistryContext = createContext<RenderRegistry | undefined>(undefined);
 
+// ==================== 头像 / 预计输入内容 配置 ====================
+/**
+ * 头像配置：
+ * - 字符串：自动识别 —— 图片 URL（http/data/相对路径/常见图片后缀）渲染为图片，否则渲染为文字
+ * - 对象：{ type: "image", src, alt? } 或 { type: "text", text }
+ */
+export type AvatarConfig =
+  | string
+  | { type: "text"; text: string }
+  | { type: "image"; src: string; alt?: string };
+
+interface NormalizedAvatar {
+  kind: "image" | "text";
+  value: string;
+  alt?: string;
+}
+
+function normalizeAvatar(a: AvatarConfig | undefined | null): NormalizedAvatar | undefined {
+  if (!a) return undefined;
+  if (typeof a === "string") {
+    if (!a) return undefined;
+    const looksLikeImage =
+      /^(https?:\/\/|data:|\/|\.\/|\.\.\/|blob:)/i.test(a) ||
+      /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i.test(a);
+    return looksLikeImage ? { kind: "image", value: a } : { kind: "text", value: a };
+  }
+  return a.type === "image"
+    ? { kind: "image", value: a.src, alt: a.alt }
+    : { kind: "text", value: a.text };
+}
+
+/** 头像设置：配置 user 或 agent 任意一个即开启头像模式 */
+export interface AvatarSettings {
+  /** 用户头像 */
+  user?: AvatarConfig;
+  /** 助手头像 */
+  agent?: AvatarConfig;
+}
+
+/** 组件级配置，通过 Context 下发到各消息子组件 */
+export interface AiAgentConfig {
+  /**
+   * 头像设置。配置 user / agent 任一个即开启头像模式：
+   * - 开启后，助手回复也会像用户输入一样放进气泡框
+   * - 开启后未配置的一方回退为默认文字头像（用户 U，助手 A）
+   */
+  avatar?: AvatarSettings;
+  /**
+   * 预计输入内容（前言）—— 首条消息发送时注入到 userText 前。
+   * 注意：仅 display 用途的透传；真正的注入发生在 useAgentRuntime({ preamble }) 里，
+   * 与 renderRegistry 同样的双路径模式。
+   */
+  preamble?: string;
+}
+
+const AiAgentConfigContext = createContext<AiAgentConfig | undefined>(undefined);
+const useAiAgentConfig = () => useContext(AiAgentConfigContext);
+const useAvatarMode = () => {
+  const cfg = useAiAgentConfig();
+  return !!(cfg?.avatar && (cfg.avatar.user || cfg.avatar.agent));
+};
+
+/** 头像渲染：avatar 模式下未配置的一方回退为默认文字头像（用户 U / 助手 A） */
+const MessageAvatar: FC<{ kind: "user" | "agent"; className?: string }> = ({
+  kind,
+  className,
+}) => {
+  const cfg = useAiAgentConfig();
+  const raw = kind === "user" ? cfg?.avatar?.user : cfg?.avatar?.agent;
+  const avatar =
+    normalizeAvatar(raw) ??
+    { kind: "text" as const, value: kind === "user" ? "U" : "A" };
+  return (
+    <div
+      className={cn(
+        "bg-muted text-foreground/70 flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full text-xs font-medium",
+        className,
+      )}
+    >
+      {avatar.kind === "image" ? (
+        <img
+          src={avatar.value}
+          alt={avatar.alt ?? (kind === "user" ? "用户头像" : "助手头像")}
+          className="size-full object-cover"
+        />
+      ) : (
+        <span className="truncate px-1">{avatar.value}</span>
+      )}
+    </div>
+  );
+};
+
 const Logo: FC = () => {
   return (
     <div className="flex items-center gap-2 px-2 text-sm font-medium">
@@ -639,12 +731,128 @@ const AssistantWorkingIndicator: FC = () => {
   );
 };
 
+/** 助手消息正文（GroupedParts + Error），头像 / 非头像模式共用 */
+const AssistantMessageBody: FC = () => (
+  <>
+    <MessagePrimitive.GroupedParts
+      groupBy={groupPartByType({
+        reasoning: ["group-chainOfThought", "group-reasoning"],
+        "tool-call": ["group-chainOfThought", "group-tool"],
+        "standalone-tool-call": [],
+      })}
+    >
+      {({ part, children }) => {
+        switch (part.type) {
+          case "group-chainOfThought":
+            return <div data-slot="aui_chain-of-thought">{children}</div>;
+          case "group-tool":
+            return (
+              <InlineToolGroupRoot>
+                <InlineToolGroupTrigger
+                  count={part.indices.length}
+                  active={part.status.type === "running"}
+                />
+                <InlineToolGroupContent>{children}</InlineToolGroupContent>
+              </InlineToolGroupRoot>
+            );
+          case "group-reasoning": {
+            const running = part.status.type === "running";
+            return (
+              <InlineReasoningRoot streaming={running}>
+                <InlineReasoningTrigger active={running} />
+                <InlineReasoningContent aria-busy={running}>
+                  <InlineReasoningText>{children}</InlineReasoningText>
+                </InlineReasoningContent>
+              </InlineReasoningRoot>
+            );
+          }
+          case "text":
+            return <TextPart text={(part as { text?: string }).text} />;
+          case "reasoning":
+            return <InlineReasoningText className="ps-0">
+              <MarkdownText />
+            </InlineReasoningText>;
+          case "tool-call":
+            return <ToolResultCard {...part} />;
+          case "indicator":
+            return <AssistantWorkingIndicator />;
+          case "data":
+            return part.dataRendererUI;
+          case "image": {
+            return <Image {...part} />;
+          }
+          case "file": {
+            return <File {...part} />;
+          }
+          case "audio": {
+            const audio = part as Unstable_AudioMessagePart;
+            const audioData = audio.audio?.data;
+            const audioFormat = audio.audio?.format ?? "mp3";
+            const audioUrl = audioData?.startsWith("data:") ? audioData : `data:audio/${audioFormat};base64,${audioData}`;
+            return audioData ? (
+              <div className="my-2">
+                <audio controls className="w-full h-10">
+                  <source src={audioUrl} type={`audio/${audioFormat}`} />
+                </audio>
+              </div>
+            ) : <span className="text-muted-foreground italic text-sm">[音频]</span>;
+          }
+          case "source": {
+            return <Sources {...part} />
+          }
+          case "generative-ui": {
+            return <MessagePrimitive.GenerativeUI components={{
+              Button,
+            }} {...part} />;
+          }
+          default:
+            return null;
+        }
+      }}
+    </MessagePrimitive.GroupedParts>
+    <MessageError />
+  </>
+);
+
 export const AssistantMessage: FC = () => {
   // reserves space for action bar and compensates with `-mb` for consistent msg spacing
   // keeps hovered action bar from shifting layout (autohide doesn't support absolute positioning well)
   // for pt-[n] use -mb-[n + 6] & min-h-[n + 6] to preserve compensation
   const ACTION_BAR_PT = "pt-1.5";
   const ACTION_BAR_HEIGHT = `-mb-7.5 min-h-7.5 ${ACTION_BAR_PT}`;
+  const avatarMode = useAvatarMode();
+
+  const footer = (
+    <div
+      data-slot="aui_assistant-message-footer"
+      className={cn("ml-2 flex items-center", ACTION_BAR_HEIGHT)}
+    >
+      <BranchPicker />
+      <AssistantActionBar />
+    </div>
+  );
+
+  // 头像模式：头像在左，正文套气泡框（与用户消息一致的 bubble 样式）
+  if (avatarMode) {
+    return (
+      <MessagePrimitive.Root
+        data-slot="aui_assistant-message-root"
+        data-role="assistant"
+        data-avatar="true"
+        className="fade-in slide-in-from-bottom-1 animate-in mx-auto w-full max-w-(--thread-max-width) duration-150"
+      >
+        <div className="flex gap-3 px-2">
+          <MessageAvatar kind="agent" className="mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <div className="bg-muted text-foreground rounded-2xl px-4 py-2 leading-relaxed wrap-break-word">
+              <AssistantMessageBody />
+            </div>
+            {footer}
+          </div>
+        </div>
+      </MessagePrimitive.Root>
+    );
+  }
 
   return (
     <MessagePrimitive.Root
@@ -656,92 +864,9 @@ export const AssistantMessage: FC = () => {
         data-slot="aui_assistant-message-content"
         className="text-foreground px-2 leading-relaxed wrap-break-word"
       >
-        <MessagePrimitive.GroupedParts
-          groupBy={groupPartByType({
-            reasoning: ["group-chainOfThought", "group-reasoning"],
-            "tool-call": ["group-chainOfThought", "group-tool"],
-            "standalone-tool-call": [],
-          })}
-        >
-          {({ part, children }) => {
-            switch (part.type) {
-              case "group-chainOfThought":
-                return <div data-slot="aui_chain-of-thought">{children}</div>;
-              case "group-tool":
-                return (
-                  <InlineToolGroupRoot>
-                    <InlineToolGroupTrigger
-                      count={part.indices.length}
-                      active={part.status.type === "running"}
-                    />
-                    <InlineToolGroupContent>{children}</InlineToolGroupContent>
-                  </InlineToolGroupRoot>
-                );
-              case "group-reasoning": {
-                const running = part.status.type === "running";
-                return (
-                  <InlineReasoningRoot streaming={running}>
-                    <InlineReasoningTrigger active={running} />
-                    <InlineReasoningContent aria-busy={running}>
-                      <InlineReasoningText>{children}</InlineReasoningText>
-                    </InlineReasoningContent>
-                  </InlineReasoningRoot>
-                );
-              }
-              case "text":
-                return <TextPart text={(part as { text?: string }).text} />;
-              case "reasoning":
-                return <InlineReasoningText className="ps-0">
-                  <MarkdownText />
-                </InlineReasoningText>;
-              case "tool-call":
-                return <ToolResultCard {...part} />;
-              case "indicator":
-                return <AssistantWorkingIndicator />;
-              case "data":
-                return part.dataRendererUI;
-              case "image": {
-                return <Image {...part} />;
-              }
-              case "file": {
-                return <File {...part} />;
-              }
-              case "audio": {
-                const audio = part as Unstable_AudioMessagePart;
-                const audioData = audio.audio?.data;
-                const audioFormat = audio.audio?.format ?? "mp3";
-                const audioUrl = audioData?.startsWith("data:") ? audioData : `data:audio/${audioFormat};base64,${audioData}`;
-                return audioData ? (
-                  <div className="my-2">
-                    <audio controls className="w-full h-10">
-                      <source src={audioUrl} type={`audio/${audioFormat}`} />
-                    </audio>
-                  </div>
-                ) : <span className="text-muted-foreground italic text-sm">[音频]</span>;
-              }
-              case "source": {
-                return <Sources {...part} />
-              }
-              case "generative-ui": {
-                return <MessagePrimitive.GenerativeUI components={{
-                  Button,
-                }} {...part} />;              
-              }
-              default:
-                return null;
-            }
-          }}
-        </MessagePrimitive.GroupedParts>
-        <MessageError />
+        <AssistantMessageBody />
       </div>
-
-      <div
-        data-slot="aui_assistant-message-footer"
-        className={cn("ml-2 flex items-center", ACTION_BAR_HEIGHT)}
-      >
-        <BranchPicker />
-        <AssistantActionBar />
-      </div>
+      {footer}
     </MessagePrimitive.Root>
   );
 };
@@ -947,6 +1072,41 @@ export const AssistantActionBar: FC = () => {
 };
 
 export const UserMessage: FC = () => {
+  const avatarMode = useAvatarMode();
+
+  // 头像模式：头像在右，气泡 + 头像的行式布局
+  if (avatarMode) {
+    return (
+      <MessagePrimitive.Root
+        data-slot="aui_user-message-root"
+        data-role="user"
+        data-avatar="true"
+        className="fade-in slide-in-from-bottom-1 animate-in mx-auto w-full max-w-(--thread-max-width) duration-150"
+      >
+        <div className="flex items-start justify-end gap-3 px-2">
+          <div className="aui-user-message-content-wrapper relative flex min-w-0 flex-col items-end">
+            <UserMessageAttachments />
+            <div className="aui-user-message-content peer bg-muted text-foreground rounded-2xl px-4 py-2 wrap-break-word empty:hidden flex flex-col gap-2">
+              <MessagePrimitive.Quote>
+                {(quote) => <QuoteBlock {...quote} />}
+              </MessagePrimitive.Quote>
+              <MessagePrimitive.Parts components={{ Text: DirectiveText, Image: Image, File: File, Source: Source }} />
+            </div>
+            <div className="aui-user-action-bar-wrapper absolute top-1/2 left-0 -translate-x-full -translate-y-1/2 pr-2 peer-empty:hidden">
+              <UserActionBar />
+            </div>
+          </div>
+          <MessageAvatar kind="user" className="mt-0.5" />
+        </div>
+
+        <BranchPicker
+          data-slot="aui_user-branch-picker"
+          className="mt-2 -mr-1 justify-end"
+        />
+      </MessagePrimitive.Root>
+    );
+  }
+
   return (
     <MessagePrimitive.Root
       data-slot="aui_user-message-root"
@@ -1056,7 +1216,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry }> = ({ className, title, readOnly, renderRegistry }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string }> = ({ className, title, readOnly, renderRegistry, avatar, preamble }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
@@ -1077,7 +1237,9 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
           <main className="flex-1 overflow-hidden">
             <TooltipProvider>
               <RenderRegistryContext.Provider value={renderRegistry}>
-                <Thread readOnly={readOnly} />
+                <AiAgentConfigContext.Provider value={{ avatar, preamble }}>
+                  <Thread readOnly={readOnly} />
+                </AiAgentConfigContext.Provider>
               </RenderRegistryContext.Provider>
             </TooltipProvider>
           </main>
@@ -1087,10 +1249,10 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, renderRegistry }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry }) => {
+export const Assistant = ({ runtime, className, title, readOnly, renderRegistry, avatar, preamble }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string }) => {
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
-      <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} />
+      <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} />
     </AssistantRuntimeProvider>
-  ) : <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} />;
+  ) : <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} />;
 };

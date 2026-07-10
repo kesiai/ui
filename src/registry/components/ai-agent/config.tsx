@@ -103,6 +103,30 @@ export const aiAgentPropsConfig = [
     description: '侧边栏顶部的标题（留空则不显示）'
   },
   {
+    name: 'userAvatar',
+    label: '头像 - 用户 (avatar.user)',
+    type: 'text' as const,
+    default: '',
+    placeholder: '图片 URL 或文字（如 我）',
+    description: 'avatar.user。填图片 URL 显示图片，填其他文字显示文字；配置 user 或 agent 任一个即开启头像模式'
+  },
+  {
+    name: 'agentAvatar',
+    label: '头像 - 助手 (avatar.agent)',
+    type: 'text' as const,
+    default: '',
+    placeholder: '图片 URL 或文字（如 AI）',
+    description: 'avatar.agent。开启头像模式后，助手回复也会像用户输入一样放进气泡框；未配置的一方显示默认 U/A'
+  },
+  {
+    name: 'preamble',
+    label: '预计输入内容',
+    type: 'text' as const,
+    default: '',
+    placeholder: '首次发消息时附带的预设上下文',
+    description: '首次发送消息时注入的内容（与自定义显示组件同路径），用于给 AI 预设上下文'
+  },
+  {
     name: 'showCodePreview',
     label: '显示代码预览',
     type: 'boolean' as const,
@@ -116,6 +140,9 @@ export const aiAgentDefaultProps = {
   baseUrl: 'http://127.0.0.1:4096',
   systemPrompt: 'You are a helpful AI assistant.',
   title: '',
+  userAvatar: '',
+  agentAvatar: '',
+  preamble: '',
   showCodePreview: true
 }
 
@@ -140,7 +167,12 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-4 bg-slate-50">
       <div className="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
         {runtime ? (
-          <Assistant runtime={runtime} title={props.title || ''} />
+          <Assistant
+            runtime={runtime}
+            title={props.title || ''}
+            avatar={(props.userAvatar || props.agentAvatar) ? { user: props.userAvatar || undefined, agent: props.agentAvatar || undefined } : undefined}
+            preamble={props.preamble || undefined}
+          />
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center overflow-auto">
             <div className="w-16 h-16 mb-4 rounded-full bg-blue-100 flex items-center justify-center">
@@ -235,12 +267,29 @@ const runtime = createCustomRuntime({
       break
   }
 
+  // 组装 <Assistant> 的 props 字符串
+  const propParts: string[] = []
+  if (props.title) propParts.push(`title="${props.title}"`)
+  if (props.userAvatar || props.agentAvatar) {
+    const avatarEntries: string[] = []
+    if (props.userAvatar) avatarEntries.push(`user: "${props.userAvatar}"`)
+    if (props.agentAvatar) avatarEntries.push(`agent: "${props.agentAvatar}"`)
+    propParts.push(`avatar={{ ${avatarEntries.join(', ')} }}`)
+  }
+  if (props.preamble) propParts.push(`preamble={\`${props.preamble}\`}`)
+  const propsStr = propParts.length ? ' ' + propParts.join(' ') : ''
+
+  // preamble 注入说明（仅 useAgentRuntime 支持首条消息注入）
+  const preambleHint = props.preamble
+    ? `\n// 注意：preamble 的首条消息注入需同时传入 useAgentRuntime(agentId, { preamble })\n`
+    : ''
+
   return `import { Assistant } from '@/registry/components/ai-agent/ai-agent'
 
 ${runtimeCode}
-
+${preambleHint}
 const MyAIAssistant = () => {
-  return <Assistant runtime={runtime} ${props.title ? `title="${props.title}"` : ''} />
+  return <Assistant runtime={runtime}${propsStr} />
 }`
 }
 

@@ -101,69 +101,16 @@ import { createAPI } from '@kesi/client'
 import { ToolResultCard } from "./render/tool-result-card";
 import { KesiTextRenderer } from "./render/rich-text";
 import type { RenderRegistry } from "./render/registry";
+import { useAgentUI, type AvatarSettings, type AvatarConfig, normalizeAvatar } from "./runtime";
 
 const RenderRegistryContext = createContext<RenderRegistry | undefined>(undefined);
 
-// ==================== 头像 / 预计输入内容 配置 ====================
-/**
- * 头像配置：
- * - 字符串：自动识别 —— 图片 URL（http/data/相对路径/常见图片后缀）渲染为图片，否则渲染为文字
- * - 对象：{ type: "image", src, alt? } 或 { type: "text", text }
- */
-export type AvatarConfig =
-  | string
-  | { type: "text"; text: string }
-  | { type: "image"; src: string; alt?: string };
+// ==================== 头像渲染辅助 ====================
 
-interface NormalizedAvatar {
-  kind: "image" | "text";
-  value: string;
-  alt?: string;
-}
-
-function normalizeAvatar(a: AvatarConfig | undefined | null): NormalizedAvatar | undefined {
-  if (!a) return undefined;
-  if (typeof a === "string") {
-    if (!a) return undefined;
-    const looksLikeImage =
-      /^(https?:\/\/|data:|\/|\.\/|\.\.\/|blob:)/i.test(a) ||
-      /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i.test(a);
-    return looksLikeImage ? { kind: "image", value: a } : { kind: "text", value: a };
-  }
-  return a.type === "image"
-    ? { kind: "image", value: a.src, alt: a.alt }
-    : { kind: "text", value: a.text };
-}
-
-/** 头像设置：配置 user 或 agent 任意一个即开启头像模式 */
-export interface AvatarSettings {
-  /** 用户头像 */
-  user?: AvatarConfig;
-  /** 助手头像 */
-  agent?: AvatarConfig;
-}
-
-/** 组件级配置，通过 Context 下发到各消息子组件 */
-export interface AiAgentConfig {
-  /**
-   * 头像设置。配置 user / agent 任一个即开启头像模式：
-   * - 开启后，助手回复也会像用户输入一样放进气泡框
-   * - 开启后未配置的一方回退为默认文字头像（用户 U，助手 A）
-   */
-  avatar?: AvatarSettings;
-  /**
-   * 预计输入内容（前言）—— 首条消息发送时注入到 userText 前。
-   * 注意：仅 display 用途的透传；真正的注入发生在 useAgentRuntime({ preamble }) 里，
-   * 与 renderRegistry 同样的双路径模式。
-   */
-  preamble?: string;
-}
-
-const AiAgentConfigContext = createContext<AiAgentConfig | undefined>(undefined);
-const useAiAgentConfig = () => useContext(AiAgentConfigContext);
+/** 检查是否启用头像模式 */
 const useAvatarMode = () => {
-  const cfg = useAiAgentConfig();
-  return !!(cfg?.avatar && (cfg.avatar.user || cfg.avatar.agent));
+  const { avatar } = useAgentUI();
+  return !!(avatar && (avatar.user || avatar.agent));
 };
 
 /** 头像渲染：avatar 模式下未配置的一方回退为默认文字头像（用户 U / 助手 A） */
@@ -171,9 +118,9 @@ const MessageAvatar: FC<{ kind: "user" | "agent"; className?: string }> = ({
   kind,
   className,
 }) => {
-  const cfg = useAiAgentConfig();
-  const raw = kind === "user" ? cfg?.avatar?.user : cfg?.avatar?.agent;
-  const avatar =
+  const { avatar } = useAgentUI();
+  const raw = kind === "user" ? avatar?.user : avatar?.agent;
+  const avatarConfig =
     normalizeAvatar(raw) ??
     { kind: "text" as const, value: kind === "user" ? "U" : "A" };
   return (
@@ -183,14 +130,14 @@ const MessageAvatar: FC<{ kind: "user" | "agent"; className?: string }> = ({
         className,
       )}
     >
-      {avatar.kind === "image" ? (
+      {avatarConfig.kind === "image" ? (
         <img
-          src={avatar.value}
-          alt={avatar.alt ?? (kind === "user" ? "用户头像" : "助手头像")}
+          src={avatarConfig.value}
+          alt={avatarConfig.alt ?? (kind === "user" ? "用户头像" : "助手头像")}
           className="size-full object-cover"
         />
       ) : (
-        <span className="truncate px-1">{avatar.value}</span>
+        <span className="truncate px-1">{avatarConfig.value}</span>
       )}
     </div>
   );
@@ -205,10 +152,10 @@ const Logo: FC = () => {
 };
 
 /** Agent 选择下拉列表 */
-export const AgentSelect: FC<{ onChangeAgent: (agentId: string) => void }> = ({ onChangeAgent }) => {
+export const AgentSelect: FC = () => {
+  const { agentId, setAgentId } = useAgentUI();
   const [agents, setAgents] = useState<Array<{ value: string; label: string }>>([]);
   const [loading, setLoading] = useState(true);
-  const [currentAgent, setCurrentAgent] = useState<string>('');
 
   useEffect(() => {
     const api = createAPI({ name: 'eap/agents' });
@@ -223,7 +170,7 @@ export const AgentSelect: FC<{ onChangeAgent: (agentId: string) => void }> = ({ 
   if (loading) return <div className="text-muted-foreground px-3 py-1.5 text-xs">加载...</div>;
 
   return (
-    <Select value={currentAgent} onValueChange={(value) => { setCurrentAgent(value); onChangeAgent(value); }}>
+    <Select value={agentId} onValueChange={setAgentId}>
       <SelectTrigger className="aui-agent-select h-8 w-full border-0 bg-transparent px-3 text-sm shadow-none hover:bg-accent">
         <SelectValue placeholder="选择 Agent" />
       </SelectTrigger>
@@ -239,7 +186,7 @@ export const AgentSelect: FC<{ onChangeAgent: (agentId: string) => void }> = ({ 
   );
 };
 
-export const Sidebar: FC<{ collapsed?: boolean; title?: string; onChangeAgent?: (agentId: string) => void }> = ({ collapsed, title, onChangeAgent }) => {
+export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed, title }) => {
   return (
     <aside
       className={cn(
@@ -278,11 +225,7 @@ export const Sidebar: FC<{ collapsed?: boolean; title?: string; onChangeAgent?: 
         </ThreadListPrimitive.New>
       ) : (
         <div className="relative w-65 flex-1 overflow-y-auto p-3">
-          {onChangeAgent && (
-            <div className="mb-2">
-              <AgentSelect onChangeAgent={onChangeAgent} />
-            </div>
-          )}
+          <AgentSelect />
           <ThreadList />
         </div>
       )}
@@ -1264,14 +1207,14 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string; onChangeAgent?: (agentId: string) => void }> = ({ className, title, readOnly, renderRegistry, avatar, preamble, onChangeAgent }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry }> = ({ className, title, readOnly, renderRegistry }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <div className={cn("bg-muted/30 flex h-full w-full", className)}>
       {!readOnly && (
       <div className="hidden md:block">
-        <Sidebar collapsed={sidebarCollapsed} title={title} onChangeAgent={onChangeAgent} />
+        <Sidebar collapsed={sidebarCollapsed} title={title} />
       </div>
       )}
       <div className={cn("flex flex-1 flex-col overflow-hidden", readOnly ? "p-0" : "p-2 md:pl-0")}>
@@ -1285,9 +1228,7 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
           <main className="flex-1 overflow-hidden">
             <TooltipProvider>
               <RenderRegistryContext.Provider value={renderRegistry}>
-                <AiAgentConfigContext.Provider value={{ avatar, preamble }}>
-                  <Thread readOnly={readOnly} />
-                </AiAgentConfigContext.Provider>
+                <Thread readOnly={readOnly} />
               </RenderRegistryContext.Provider>
             </TooltipProvider>
           </main>
@@ -1297,10 +1238,10 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, renderRegistry, avatar, preamble, onChangeAgent }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry; avatar?: AvatarSettings; preamble?: string; onChangeAgent?: (agentId: string) => void }) => {
+export const Assistant = ({ runtime, className, title, readOnly, renderRegistry }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry }) => {
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
-      <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} onChangeAgent={onChangeAgent} />
+      <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} />
     </AssistantRuntimeProvider>
-  ) : <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} avatar={avatar} preamble={preamble} onChangeAgent={onChangeAgent} />;
+  ) : <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} />;
 	};

@@ -36,7 +36,6 @@ interface AIModalProps {
   modalSize?: { width: string; height: string };
   modalClassName?: string;
   showExpandButton?: boolean;
-  onChangeAgent?: (agentId: string) => void;
 }
 
 const positionClasses = {
@@ -176,7 +175,6 @@ export const AIModal = ({
   modalSize = { width: "500px", height: "600px" },
   modalClassName = "",
   showExpandButton = true,
-  onChangeAgent,
 }: AIModalProps) => {
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -222,7 +220,7 @@ export const AIModal = ({
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div className="flex items-center gap-2">
             <BotIcon className="size-4 text-primary shrink-0" />
-            {onChangeAgent && <AgentSelect onChangeAgent={onChangeAgent} />}
+            <AgentSelect />
             <ThreadListSelect />
           </div>
           <div className="flex items-center gap-1">

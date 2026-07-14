@@ -12,7 +12,7 @@ import {
   Tools,
 } from "@assistant-ui/react";
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
-import { useAgentRuntime } from "./runtime";
+import { useAgentRuntime, AgentUIProvider } from "./runtime";
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
@@ -198,10 +198,7 @@ export const aiAgentDefaultProps = {
 const InteractableAssistantShell: React.FC<{
   runtime: AssistantRuntime;
   title?: string;
-  avatar?: { user?: string; agent?: string };
-  preamble?: string;
-  onChangeAgent?: (agentId: string) => void;
-}> = ({ runtime, title, avatar, preamble, onChangeAgent }) => {
+}> = ({ runtime, title }) => {
   const aui = useAui({
     unstable_interactables: unstable_Interactables() ,
     tools: Tools({ toolkit }),
@@ -229,7 +226,7 @@ const InteractableAssistantShell: React.FC<{
       <AssistantRuntimeProvider aui={aui} runtime={runtime}>
         <div className="flex h-full gap-2">
           <div className="flex-1 min-w-0">
-            <Assistant title={title} avatar={avatar} preamble={preamble} onChangeAgent={onChangeAgent} />
+            <Assistant title={title} renderRegistry={undefined} />
           </div>
           <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
             <TaskBoard />
@@ -245,52 +242,72 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'agent'
   const [ agentId, setAgentId ] = React.useState(props.agentId || 'your-agent-id')
 
-  // 始终无条件调用所有 hooks 以遵守 Rules of Hooks，
-  // 然后根据 runtimePreset 选择使用哪个 runtime
-  const opencodeRuntime = useOpenCodeRuntime({
-    baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
-  })
-  const agentRuntime = useAgentRuntime(agentId)
+  // 准备 avatar 配置
+  const avatar = (props.userAvatar || props.agentAvatar) ? {
+    user: props.userAvatar || undefined,
+    agent: props.agentAvatar || undefined
+  } : undefined
 
-  let runtime: AssistantRuntime | null = null
-  switch (runtimePreset) {
-    case 'opencode':
-      runtime = opencodeRuntime
-      break
-    case 'agent':
-    case 'agent-interactable':
-      runtime = agentRuntime
-      break
+  // 内部组件：在 AgentUIProvider 内调用 hooks
+  const AgentPreviewContent: React.FC = () => {
+    // 始终无条件调用所有 hooks 以遵守 Rules of Hooks，
+    // 然后根据 runtimePreset 选择使用哪个 runtime
+    const opencodeRuntime = useOpenCodeRuntime({
+      baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
+    })
+    // useAgentRuntime 从 AgentUIContext 读取 agentId
+    const agentRuntime = useAgentRuntime()
+
+    let runtime: AssistantRuntime | null = null
+    switch (runtimePreset) {
+      case 'opencode':
+        runtime = opencodeRuntime
+        break
+      case 'agent':
+      case 'agent-interactable':
+        runtime = agentRuntime
+        break
+    }
+
+    if (!runtime) {
+      return (
+        <div className="h-full flex flex-col items-center justify-center p-8 text-center overflow-auto">
+          <div className="w-16 h-16 mb-4 rounded-full bg-blue-100 flex items-center justify-center">
+            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-slate-800 mb-2">AI Assistant 预览</h3>
+          <p className="text-sm text-slate-600 mb-4 max-w-md">
+            当前选择的 Runtime 类型: <strong>{runtimePreset}</strong>
+          </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-2xl">
+            <p className="text-sm font-medium text-blue-800 mb-2">📋 Runtime 配置代码：</p>
+            <pre className="text-xs text-blue-700 bg-white p-3 rounded overflow-x-auto">
+              {runtimePresetCodes[runtimePreset as RuntimePreset] || 'Unknown preset'}
+            </pre>
+          </div>
+        </div>
+      )
+    }
+
+    return runtimePreset === 'agent-interactable' ? (
+      <InteractableAssistantShell runtime={runtime} title={props.title} />
+    ) : (
+      <Assistant runtime={runtime} title={props.title} renderRegistry={undefined} />
+    )
   }
 
   return (
     <div className="flex h-250 items-center justify-center p-4 bg-slate-50">
       <div className="w-full h-250 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
-        {runtime ? (
-          runtimePreset === 'agent-interactable' ? (
-            <InteractableAssistantShell runtime={runtime} title={props.title} avatar={(props.userAvatar || props.agentAvatar) ? { user: props.userAvatar || undefined, agent: props.agentAvatar || undefined } : undefined} preamble={props.preamble || undefined} onChangeAgent={props.showAgents ? setAgentId : undefined} />
-          ) : (
-            <Assistant runtime={runtime} title={props.title} avatar={(props.userAvatar || props.agentAvatar) ? { user: props.userAvatar || undefined, agent: props.agentAvatar || undefined } : undefined} preamble={props.preamble || undefined} />
-          )
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center p-8 text-center overflow-auto">
-            <div className="w-16 h-16 mb-4 rounded-full bg-blue-100 flex items-center justify-center">
-              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-slate-800 mb-2">AI Assistant 预览</h3>
-            <p className="text-sm text-slate-600 mb-4 max-w-md">
-              当前选择的 Runtime 类型: <strong>{runtimePreset}</strong>
-            </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-2xl">
-              <p className="text-sm font-medium text-blue-800 mb-2">📋 Runtime 配置代码：</p>
-              <pre className="text-xs text-blue-700 bg-white p-3 rounded overflow-x-auto">
-                {runtimePresetCodes[runtimePreset as RuntimePreset] || 'Unknown preset'}
-              </pre>
-            </div>
-          </div>
-        )}
+        <AgentUIProvider
+          initialAgentId={agentId}
+          preamble={props.preamble || undefined}
+          avatar={avatar}
+        >
+          <AgentPreviewContent />
+        </AgentUIProvider>
       </div>
     </div>
   )
@@ -365,7 +382,7 @@ const runtime = createCustomRuntime({
 })`
       break
     case 'agent-interactable':
-      runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+      runtimeCode = `import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
 import { TaskBoard } from "@/registry/components/ai-agent/task-board"
 import {
   AssistantRuntimeProvider,
@@ -373,7 +390,7 @@ import {
   unstable_Interactables,
 } from "@assistant-ui/react"
 
-const runtime = useAgentRuntime("${props.agentId || 'your-agent-id'}")
+const runtime = useAgentRuntime()
 const aui = useAui({ unstable_interactables: unstable_Interactables() })`
       break
   }
@@ -385,10 +402,12 @@ ${runtimeCode}
 
 export default function MyApp() {
   return (
-    <AssistantRuntimeProvider aui={aui} runtime={runtime}>
-      <TaskBoard />
-      <Assistant />
-    </AssistantRuntimeProvider>
+    <AgentUIProvider initialAgentId="your-agent-id">
+      <AssistantRuntimeProvider aui={aui} runtime={runtime}>
+        <TaskBoard />
+        <Assistant />
+      </AssistantRuntimeProvider>
+    </AgentUIProvider>
   )
 }`
   }

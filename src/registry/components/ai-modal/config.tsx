@@ -4,7 +4,7 @@ import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-modal.md?raw'
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
 import type { AssistantRuntime } from "@assistant-ui/react"
-import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'agent' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
@@ -64,12 +64,13 @@ const runtime = createCustomRuntime({
     return response.body
   }
 })`,
-  agent: `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+  agent: `import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
 
-const runtime = useAgentRuntime("your-agent-id")`,
-  "agent-interactable": `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+const runtime = useAgentRuntime()`,
+  "agent-interactable": `import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
 
-const runtime = useAgentRuntime("your-agent-id")`
+const runtime = useAgentRuntime()`
+
 }
 
 export const aiModalPropsConfig = [
@@ -154,47 +155,40 @@ const renderAIModalPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'opencode'
   const [agentId, setAgentId] = useState(props.agentId || 'your-agent-id')
 
-  // 始终无条件调用所有 hooks
-  const opencodeRuntime = useOpenCodeRuntime({
-    baseUrl: props.baseUrl || 'http://localhost:4096',
-  })
-  const agentRuntime = useAgentRuntime(agentId)
+  // 内部组件：在 AgentUIProvider 内调用 hooks
+  const AIModalContent: React.FC = () => {
+    // 始终无条件调用所有 hooks
+    const opencodeRuntime = useOpenCodeRuntime({
+      baseUrl: props.baseUrl || 'http://localhost:4096',
+    })
+    // useAgentRuntime 从 AgentUIContext 读取 agentId
+    const agentRuntime = useAgentRuntime()
 
-  let runtime: AssistantRuntime | null = null
-  switch (runtimePreset) {
-    case 'opencode':
-      runtime = opencodeRuntime
-      break
-    case 'agent':
-    case 'agent-interactable':
-      runtime = agentRuntime
-      break
-  }
-
-  // 解析 modalSize JSON
-  let modalSize = { width: '400px', height: '500px' }
-  if (props.modalSize) {
-    try {
-      modalSize = typeof props.modalSize === 'string'
-        ? JSON.parse(props.modalSize)
-        : props.modalSize
-    } catch (e) {
-      modalSize = { width: '400px', height: '500px' }
+    let runtime: AssistantRuntime | null = null
+    switch (runtimePreset) {
+      case 'opencode':
+        runtime = opencodeRuntime
+        break
+      case 'agent':
+      case 'agent-interactable':
+        runtime = agentRuntime
+        break
     }
-  }
 
-  return (
-    <div>
-      {runtime ? (
-        <AIModal
-          runtime={runtime}
-          title={props.title || 'AI Assistant'}
-          modalSize={modalSize}
-          triggerPosition={props.triggerPosition || 'bottom-right'}
-          showExpandButton={props.showExpandButton !== false}
-          onChangeAgent={props.showAgents ? setAgentId : undefined}
-        />
-      ) : (
+    // 解析 modalSize JSON
+    let modalSize = { width: '400px', height: '500px' }
+    if (props.modalSize) {
+      try {
+        modalSize = typeof props.modalSize === 'string'
+          ? JSON.parse(props.modalSize)
+          : props.modalSize
+      } catch (e) {
+        modalSize = { width: '400px', height: '500px' }
+      }
+    }
+
+    if (!runtime) {
+      return (
         <div className="h-full flex items-center justify-center p-8">
           <div className="max-w-md bg-white rounded-lg shadow-lg p-6 text-center">
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-amber-100 flex items-center justify-center">
@@ -212,8 +206,24 @@ const renderAIModalPreview = (props: Record<string, any>) => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      )
+    }
+
+    return (
+      <AIModal
+        runtime={runtime}
+        title={props.title || 'AI Assistant'}
+        modalSize={modalSize}
+        triggerPosition={props.triggerPosition || 'bottom-right'}
+        showExpandButton={props.showExpandButton !== false}
+      />
+    )
+  }
+
+  return (
+    <AgentUIProvider initialAgentId={agentId}>
+      <AIModalContent />
+    </AgentUIProvider>
   )
 }
 
@@ -305,21 +315,31 @@ const runtime = createCustomRuntime({
   if (!props.showExpandButton) {
     additionalProps.push(`showExpandButton={false}`)
   }
-  if (props.showAgents) {
-    additionalProps.push(`onChangeAgent={setAgentId}`)
-  }
 
   const propsStr = additionalProps.length > 0
     ? '\n  ' + additionalProps.join('\n  ')
     : ''
 
-  return `import { AIModal } from '@/registry/components/ai-modal/ai-modal'
+  // 对于 agent preset，添加 AgentUIProvider 包装
+  const wrapperCode = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')
+    ? `\nimport { AgentUIProvider } from "@/registry/components/ai-agent/runtime"\n\n`
+    : ''
 
-${runtimeCode}
+  const providerWrap = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')
+    ? `<AgentUIProvider initialAgentId="your-agent-id">\n  `
+    : ''
+
+  const providerClose = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')
+    ? `\n</AgentUIProvider>`
+    : ''
+
+  return `import { AIModal } from '@/registry/components/ai-modal/ai-modal'
+${wrapperCode}${runtimeCode}
 
 const MyAIModal = () => {
   return (
-    <AIModal runtime={runtime}${propsStr}${modalSizeCode} />
+${providerWrap}<AIModal runtime={runtime}${propsStr}${modalSizeCode} />
+${providerClose}
   )
 }`
 }

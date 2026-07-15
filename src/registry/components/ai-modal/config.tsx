@@ -4,7 +4,8 @@ import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-modal.md?raw'
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
 import type { AssistantRuntime } from "@assistant-ui/react"
-import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
+import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'agent' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
@@ -64,10 +65,12 @@ const runtime = createCustomRuntime({
     return response.body
   }
 })`,
-  agent: `import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
+  agent: `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
 
 const runtime = useAgentRuntime()`,
-  "agent-interactable": `import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
+  "agent-interactable": `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
 
 const runtime = useAgentRuntime()`
 
@@ -322,7 +325,7 @@ const runtime = createCustomRuntime({
 
   // 对于 agent preset，添加 AgentUIProvider 包装
   const wrapperCode = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')
-    ? `\nimport { AgentUIProvider } from "@/registry/components/ai-agent/runtime"\n\n`
+    ? `\nimport { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"\n\n`
     : ''
 
   const providerWrap = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')

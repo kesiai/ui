@@ -88,7 +88,7 @@ import {
   LexicalComposerInput,
   type DirectiveChipProps,
 } from "@assistant-ui/react-lexical";
-import { createContext, useContext, useState, useEffect, type FC } from "react";
+import { createContext, useContext, useState, useEffect, type FC, type ReactNode } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Select,
@@ -101,9 +101,97 @@ import { createAPI } from '@kesi/client'
 import { ToolResultCard } from "./render/tool-result-card";
 import { KesiTextRenderer } from "./render/rich-text";
 import type { RenderRegistry } from "./render/registry";
-import { useAgentUI, type AvatarSettings, type AvatarConfig, normalizeAvatar } from "./runtime";
 
 const RenderRegistryContext = createContext<RenderRegistry | undefined>(undefined);
+
+// ==================== Agent UI Context ====================
+// 头像配置类型（从 runtime.tsx 迁移）
+export type AvatarConfig =
+  | string
+  | { type: "text"; text: string }
+  | { type: "image"; src: string; alt?: string };
+
+export interface AvatarSettings {
+  /** 用户头像 */
+  user?: AvatarConfig;
+  /** 助手头像 */
+  agent?: AvatarConfig;
+}
+
+/** 标准化头像格式 */
+interface NormalizedAvatar {
+  kind: "image" | "text";
+  value: string;
+  alt?: string;
+}
+
+/**
+ * 标准化头像配置
+ * @param a 头像配置
+ * @returns 标准化后的头像，或 undefined
+ */
+export function normalizeAvatar(a: AvatarConfig | undefined | null): NormalizedAvatar | undefined {
+  if (!a) return undefined;
+  if (typeof a === "string") {
+    if (!a) return undefined;
+    const looksLikeImage =
+      /^(https?:\/\/|data:|\/|\.\/|\.\.\/|blob:)/i.test(a) ||
+      /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i.test(a);
+    return looksLikeImage ? { kind: "image", value: a } : { kind: "text", value: a };
+  }
+  return a.type === "image"
+    ? { kind: "image", value: a.src, alt: a.alt }
+    : { kind: "text", value: a.text };
+}
+
+/** Agent UI 上下文 - 存储需要在 UI 组件中访问的业务参数 */
+interface AgentUIContextValue {
+  /** 当前 Agent ID */
+  agentId: string;
+  /** 设置 Agent ID */
+  setAgentId: (id: string) => void;
+  /** 预计输入内容（前言） */
+  preamble?: string;
+  /** 头像设置 */
+  avatar?: AvatarSettings;
+}
+
+export const AgentUIContext = createContext<AgentUIContextValue | null>(null);
+
+/**
+ * Agent UI Hook - 在 UI 组件中访问业务参数
+ * @throws 如果在 AgentUIProvider 外部使用
+ */
+export const useAgentUI = (): AgentUIContextValue => {
+  const ctx = useContext(AgentUIContext);
+  if (!ctx) {
+    throw new Error('useAgentUI must be used within AgentUIProvider');
+  }
+  return ctx;
+};
+
+/**
+ * Agent UI Provider - 提供业务参数给整个组件树
+ */
+export const AgentUIProvider: FC<{
+  children: ReactNode;
+  initialAgentId: string;
+  preamble?: string;
+  avatar?: AvatarSettings;
+}> = ({ children, initialAgentId, preamble, avatar }) => {
+  const [agentId, setAgentId] = useState(initialAgentId);
+
+  // 当 initialAgentId 变化时同步更新内部 state
+  useEffect(() => {
+    setAgentId(initialAgentId);
+  }, [initialAgentId]);
+
+  return (
+    <AgentUIContext.Provider value={{ agentId, setAgentId, preamble, avatar }}>
+      {children}
+    </AgentUIContext.Provider>
+  );
+};
 
 // ==================== 头像渲染辅助 ====================
 

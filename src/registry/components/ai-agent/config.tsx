@@ -1,5 +1,5 @@
 import React from 'react'
-import { Assistant } from '@/registry/components/ai-agent/ai-agent'
+import { Assistant, AgentUIProvider } from '@/registry/components/ai-agent/ai-agent'
 import { TaskBoard, DocumentEditor, DocumentCtx, toolkit } from '@/registry/components/ai-agent/task-board'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-agent.md?raw'
@@ -12,7 +12,7 @@ import {
   Tools,
 } from "@assistant-ui/react";
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
-import { useAgentRuntime, AgentUIProvider } from "./runtime";
+import { useAgentRuntime } from "./runtime";
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
@@ -382,7 +382,8 @@ const runtime = createCustomRuntime({
 })`
       break
     case 'agent-interactable':
-      runtimeCode = `import { useAgentRuntime, AgentUIProvider } from "@/registry/components/ai-agent/runtime"
+      runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
 import { TaskBoard } from "@/registry/components/ai-agent/task-board"
 import {
   AssistantRuntimeProvider,

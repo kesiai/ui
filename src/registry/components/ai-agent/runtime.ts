@@ -807,9 +807,9 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
 
 // ====== useAgentRuntime ======
 
-export const useAgentRuntime = (options?: { renderRegistry?: RenderRegistry }) => {
-  // 从 context 读取 agentId 和 preamble
-  const { agentId, preamble } = useAgentUI();
+export const useAgentRuntime = () => {
+  // 从 context 读取 agentId、preamble 和 renderRegistry
+  const { agentId, preamble, renderRegistry } = useAgentUI();
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
   const [isRunning, setIsRunning] = useState(false);
@@ -824,8 +824,8 @@ export const useAgentRuntime = (options?: { renderRegistry?: RenderRegistry }) =
   const [toolStatuses, setToolStatuses] = useState<Record<string, ToolExecutionStatus>>({});
 
   // renderRegistry 用 ref 存,onNew 闭包读取,避免依赖变化导致重建
-  const renderRegistryRef = useRef<RenderRegistry | undefined>(options?.renderRegistry);
-  renderRegistryRef.current = options?.renderRegistry;
+  const renderRegistryRef = useRef<RenderRegistry | undefined>(renderRegistry);
+  renderRegistryRef.current = renderRegistry;
 
   // preamble 从 context 读取，用 ref 存以保持闭包中的稳定性
   const preambleRef = useRef<string | undefined>(preamble);

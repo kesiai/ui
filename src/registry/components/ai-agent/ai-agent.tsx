@@ -102,7 +102,6 @@ import { ToolResultCard } from "./render/tool-result-card";
 import { KesiTextRenderer } from "./render/rich-text";
 import type { RenderRegistry } from "./render/registry";
 
-const RenderRegistryContext = createContext<RenderRegistry | undefined>(undefined);
 
 // ==================== Agent UI Context ====================
 // 头像配置类型（从 runtime.tsx 迁移）
@@ -154,6 +153,8 @@ interface AgentUIContextValue {
   preamble?: string;
   /** 头像设置 */
   avatar?: AvatarSettings;
+  /** 自定义渲染组件注册表 */
+  renderRegistry?: RenderRegistry;
 }
 
 export const AgentUIContext = createContext<AgentUIContextValue | null>(null);
@@ -178,7 +179,8 @@ export const AgentUIProvider: FC<{
   initialAgentId: string;
   preamble?: string;
   avatar?: AvatarSettings;
-}> = ({ children, initialAgentId, preamble, avatar }) => {
+  renderRegistry?: RenderRegistry;
+}> = ({ children, initialAgentId, preamble, avatar, renderRegistry }) => {
   const [agentId, setAgentId] = useState(initialAgentId);
 
   // 当 initialAgentId 变化时同步更新内部 state
@@ -187,7 +189,7 @@ export const AgentUIProvider: FC<{
   }, [initialAgentId]);
 
   return (
-    <AgentUIContext.Provider value={{ agentId, setAgentId, preamble, avatar }}>
+    <AgentUIContext.Provider value={{ agentId, setAgentId, preamble, avatar, renderRegistry }}>
       {children}
     </AgentUIContext.Provider>
   );
@@ -772,8 +774,8 @@ const ComposerAction: FC = () => {
 };
 
 const TextPart: FC<{ text?: string }> = ({ text }) => {
-  const registry = useContext(RenderRegistryContext);
-  return <KesiTextRenderer text={text} registry={registry} />;
+  const { renderRegistry } = useAgentUI();
+  return <KesiTextRenderer text={text} registry={renderRegistry} />;
 };
 
 const MessageError: FC = () => {
@@ -1295,7 +1297,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry }> = ({ className, title, readOnly, renderRegistry }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean }> = ({ className, title, readOnly }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
@@ -1315,9 +1317,7 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
           )}
           <main className="flex-1 overflow-hidden">
             <TooltipProvider>
-              <RenderRegistryContext.Provider value={renderRegistry}>
-                <Thread readOnly={readOnly} />
-              </RenderRegistryContext.Provider>
+              <Thread readOnly={readOnly} />
             </TooltipProvider>
           </main>
         </div>
@@ -1326,10 +1326,10 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, renderRegistry }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; renderRegistry?: RenderRegistry }) => {
+export const Assistant = ({ runtime, className, title, readOnly }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean }) => {
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
-      <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} />
+      <Base className={className} title={title} readOnly={readOnly} />
     </AssistantRuntimeProvider>
-  ) : <Base className={className} title={title} readOnly={readOnly} renderRegistry={renderRegistry} />;
+  ) : <Base className={className} title={title} readOnly={readOnly} />;
 	};

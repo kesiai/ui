@@ -226,7 +226,7 @@ const InteractableAssistantShell: React.FC<{
       <AssistantRuntimeProvider aui={aui} runtime={runtime}>
         <div className="flex h-full gap-2">
           <div className="flex-1 min-w-0">
-            <Assistant title={title} renderRegistry={undefined} />
+            <Assistant title={title}  />
           </div>
           <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
             <TaskBoard />
@@ -294,7 +294,7 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
     return runtimePreset === 'agent-interactable' ? (
       <InteractableAssistantShell runtime={runtime} title={props.title} />
     ) : (
-      <Assistant runtime={runtime} title={props.title} renderRegistry={undefined} />
+      <Assistant runtime={runtime} title={props.title}  />
     )
   }
 

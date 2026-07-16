@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { AIModal } from '@/registry/components/ai-modal/ai-modal'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-modal.md?raw'
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
 import type { AssistantRuntime } from "@assistant-ui/react"
 import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
-import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
+
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'agent' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
@@ -66,11 +66,11 @@ const runtime = createCustomRuntime({
   }
 })`,
   agent: `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
-import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
+
 
 const runtime = useAgentRuntime()`,
   "agent-interactable": `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
-import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
+
 
 const runtime = useAgentRuntime()`
 
@@ -156,7 +156,7 @@ export const aiModalDefaultProps = {
 
 const renderAIModalPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'opencode'
-  const [agentId, setAgentId] = useState(props.agentId || 'your-agent-id')
+  
 
   // 内部组件：在 AgentUIProvider 内调用 hooks
   const AIModalContent: React.FC = () => {
@@ -224,9 +224,9 @@ const renderAIModalPreview = (props: Record<string, any>) => {
   }
 
   return (
-    <AgentUIProvider initialAgentId={agentId}>
+    
       <AIModalContent />
-    </AgentUIProvider>
+    
   )
 }
 
@@ -325,15 +325,15 @@ const runtime = createCustomRuntime({
 
   // 对于 agent preset，添加 AgentUIProvider 包装
   const wrapperCode = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')
-    ? `\nimport { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"\n\n`
+    ? `\n\n\n`
     : ''
 
   const providerWrap = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')
-    ? `<AgentUIProvider initialAgentId="your-agent-id">\n  `
+    ? `\n  `
     : ''
 
   const providerClose = (runtimePreset === 'agent' || runtimePreset === 'agent-interactable')
-    ? `\n</AgentUIProvider>`
+    ? `\n`
     : ''
 
   return `import { AIModal } from '@/registry/components/ai-modal/ai-modal'

@@ -128,7 +128,7 @@ export function DocumentationViewer({ content }: DocumentationViewerProps) {
             </th>
           ),
           td: ({ children }) => (
-            <td className="px-4 py-2 whitespace-nowrap text-sm text-slate-700">
+            <td className="px-4 py-2 text-sm text-slate-700">
               {children}
             </td>
           ),

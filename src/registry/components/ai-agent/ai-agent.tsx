@@ -143,53 +143,46 @@ export function normalizeAvatar(a: AvatarConfig | undefined | null): NormalizedA
     : { kind: "text", value: a.text };
 }
 
-/** Agent UI 上下文 - 存储需要在 UI 组件中访问的业务参数 */
+/** Agent UI 上下文 - 仅存储 UI 专属配置（头像） */
 interface AgentUIContextValue {
-  /** 当前 Agent ID */
-  agentId: string;
-  /** 设置 Agent ID */
-  setAgentId: (id: string) => void;
-  /** 预计输入内容（前言） */
-  preamble?: string;
   /** 头像设置 */
   avatar?: AvatarSettings;
-  /** 自定义渲染组件注册表 */
-  renderRegistry?: RenderRegistry;
 }
 
-export const AgentUIContext = createContext<AgentUIContextValue | null>(null);
+const AgentUIContext = createContext<AgentUIContextValue>({});
 
-/**
- * Agent UI Hook - 在 UI 组件中访问业务参数
- * @throws 如果在 AgentUIProvider 外部使用
- */
-export const useAgentUI = (): AgentUIContextValue => {
-  const ctx = useContext(AgentUIContext);
-  if (!ctx) {
-    throw new Error('useAgentUI must be used within AgentUIProvider');
-  }
-  return ctx;
+/** Store extras 中的业务参数类型 */
+type AgentExtras = {
+  agentId: string;
+  setAgentId: (id: string) => void;
+  preamble?: string;
+  renderRegistry?: RenderRegistry;
 };
 
 /**
- * Agent UI Provider - 提供业务参数给整个组件树
+ * Agent UI Hook - 从 store extras 和 context 中合并读取业务参数
  */
-export const AgentUIProvider: FC<{
+const useAgentUI = (): AgentUIContextValue & AgentExtras => {
+  const { avatar } = useContext(AgentUIContext);
+  const extras = useAuiState(s => s.thread.extras) as AgentExtras | undefined;
+  return {
+    avatar,
+    agentId: extras?.agentId ?? '',
+    setAgentId: extras?.setAgentId ?? (() => {}),
+    preamble: extras?.preamble,
+    renderRegistry: extras?.renderRegistry
+  };
+};
+
+/**
+ * Agent UI Provider - 提供 UI 专属配置（头像）
+ */
+const AgentUIProvider: FC<{
   children: ReactNode;
-  initialAgentId: string;
-  preamble?: string;
   avatar?: AvatarSettings;
-  renderRegistry?: RenderRegistry;
-}> = ({ children, initialAgentId, preamble, avatar, renderRegistry }) => {
-  const [agentId, setAgentId] = useState(initialAgentId);
-
-  // 当 initialAgentId 变化时同步更新内部 state
-  useEffect(() => {
-    setAgentId(initialAgentId);
-  }, [initialAgentId]);
-
+}> = ({ children, avatar }) => {
   return (
-    <AgentUIContext.Provider value={{ agentId, setAgentId, preamble, avatar, renderRegistry }}>
+    <AgentUIContext.Provider value={{ avatar }}>
       {children}
     </AgentUIContext.Provider>
   );
@@ -1326,10 +1319,17 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean }
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean }) => {
+export const Assistant = ({ runtime, className, title, readOnly, avatar }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings }) => {
+  const content = <Base className={className} title={title} readOnly={readOnly} />;
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
-      <Base className={className} title={title} readOnly={readOnly} />
+      <AgentUIProvider avatar={avatar}>
+        {content}
+      </AgentUIProvider>
     </AssistantRuntimeProvider>
-  ) : <Base className={className} title={title} readOnly={readOnly} />;
-	};
+  ) : (
+    <AgentUIProvider avatar={avatar}>
+      {content}
+    </AgentUIProvider>
+  );
+};

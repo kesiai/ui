@@ -14,11 +14,10 @@ import {
   unstable_getInteractableSnapshots,
   unstable_formatInteractableSnapshot
 } from "@assistant-ui/react";
-import { toToolsJSONSchema } from "assistant-stream";
+import { toToolsJSONSchema, type Tool } from "assistant-stream";
 import { createAPI, getConfig } from '@kesi/client'
 import type { AssistantRuntime, Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ModelContext, ThreadUserMessagePart, ToolExecutionStatus } from "@assistant-ui/react";
 import { buildRenderPrompt, type RenderRegistry } from "./render/registry";
-import { useAgentUI } from "./ai-agent";
 import { cacheToolResult } from "./tools";
 
 /** Token 用量 */
@@ -567,7 +566,9 @@ async function streamRunInSession(params: {
   console.log('[StreamRunInSession] messages', messages);
   if(messages.length == 0) {
     // tools → 转为文字附在 userText 前（API 不支持 tools 参数）
-    const toolsSchema = context.tools ? toToolsJSONSchema(context.tools) : undefined;
+    const toolsSchema = context.tools
+      ? toToolsJSONSchema(context.tools as unknown as Record<string, Tool>)
+      : undefined;
     const toolsPrefix = toolsSchema
       ? `{## 以下是用户侧可用的工具列表。你可以使用这些工具，注意！！这些工具调用不需要你真正去执行，只要给用户侧返回 tool-call 类型的信息即可，不用去关心返回结果。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)} ##}`
       : '';
@@ -807,9 +808,13 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
 
 // ====== useAgentRuntime ======
 
-export const useAgentRuntime = () => {
-  // 从 context 读取 agentId、preamble 和 renderRegistry
-  const { agentId, preamble, renderRegistry } = useAgentUI();
+export const useAgentRuntime = (options?: {
+  agentId?: string;
+  preamble?: string;
+  renderRegistry?: RenderRegistry;
+}) => {
+  const { preamble, renderRegistry } = options ?? {};
+  const [agentId, setAgentId] = useState(options?.agentId ?? '');
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
   const [isRunning, setIsRunning] = useState(false);
@@ -822,6 +827,8 @@ export const useAgentRuntime = () => {
   const [currentThreadId, setCurrentThreadId] = useState<string | undefined>(undefined);
   const [requestedBy] = useState('kesi-ui');
   const [toolStatuses, setToolStatuses] = useState<Record<string, ToolExecutionStatus>>({});
+  const [loading, setLoading] = useState(false);
+  const [threadsLoading, setThreadsLoading] = useState(false);
 
   // renderRegistry 用 ref 存,onNew 闭包读取,避免依赖变化导致重建
   const renderRegistryRef = useRef<RenderRegistry | undefined>(renderRegistry);
@@ -840,6 +847,7 @@ export const useAgentRuntime = () => {
 
   // ---------- 初始加载 thread 列表 ----------
   useEffect(() => {
+    setThreadsLoading(true);
     agentApi.fetch(`/${agentId}/sessions`, { method: 'GET' }).then(({ json }) => {
       setThreads((json as any[]).map((s: any) => ({
         status: 'regular' as const,
@@ -847,7 +855,8 @@ export const useAgentRuntime = () => {
         remoteId: s.id,
         title: s.title,
       })));
-    });
+      setThreadsLoading(false);
+    }).catch(() => setThreadsLoading(false));
     setCurrentThreadId(undefined);
   }, [agentId]);
 
@@ -869,11 +878,13 @@ export const useAgentRuntime = () => {
       isNewSessionRef.current = false;
       return;
     }
+    setLoading(true);
     sessionApi.fetch(`/${currentThreadId}/messages`, { method: 'GET' })
       .then(({ json }) => {
         const raw = json as AgentSessionMessage[];
         const msgs = raw.map(toThreadMessage).filter((m): m is ThreadMessage => m != null);
         setMessages(msgs);
+        setLoading(false);
 
         // 检查最后一个 assistant message 是否 running → 启动轮询
         const lastAssistant = raw.filter(m => m.role === 'assistant').at(-1);
@@ -896,7 +907,7 @@ export const useAgentRuntime = () => {
           pollingRef.current = { messageId: lastAssistant.id, timer };
         }
       })
-      .catch(() => setMessages([]));
+      .catch(() => { setMessages([]); setLoading(false); });
 
     return () => {
       if (pollingRef.current) {
@@ -1174,28 +1185,18 @@ export const useAgentRuntime = () => {
     onEdit,
     onReload,
     onCancel,
+    isLoading: loading,
+    extras: { agentId, setAgentId, preamble, renderRegistry },
     unstable_enableToolInvocations: true,
     onAddToolResult: (options) => {
       cacheToolResult(options);
-      // 更新最后一条 assistant 消息中匹配的 tool-call part 的 result 和状态
-      // setMessages(prev => {
-      //   const lastAssistantIdx = prev.map(m => m.role).lastIndexOf('assistant');
-      //   if (lastAssistantIdx < 0) return prev;
-      //   const msg = prev[lastAssistantIdx];
-      //   const content = msg.content.map(part => {
-      //     if (part.type !== 'tool-call' || (part as any).toolCallId !== options.toolCallId) return part;
-      //     return { ...part, status: { type: 'complete' as const, reason: 'stop' as const }, result: options.result } as ThreadAssistantMessagePart;
-      //   });
-      //   const updated = [...prev];
-      //   updated[lastAssistantIdx] = { ...msg, content } as ThreadMessage;
-      //   return updated;
-      // });
     },
     setToolStatuses: (statuses) => { setToolStatuses(statuses); },
 
     adapters: {
       threadList: {
         threadId: currentThreadId,
+        isLoading: threadsLoading,
         threads,
         onSwitchToThread: async (id) => { setCurrentThreadId(id); },
         onSwitchToNewThread: async () => { setCurrentThreadId(undefined); },
@@ -1223,8 +1224,7 @@ export const useAgentRuntime = () => {
       speech: speechAdapter,
       feedback: feedbackAdapter,
     },
-
-  };
+  } as ExternalStoreAdapter;
 
   runtime.current = useExternalStoreRuntime(store);
   return runtime.current;

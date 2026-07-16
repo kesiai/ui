@@ -1,5 +1,5 @@
 import React from 'react'
-import { Assistant, AgentUIProvider } from '@/registry/components/ai-agent/ai-agent'
+import { Assistant } from '@/registry/components/ai-agent/ai-agent'
 import { TaskBoard, DocumentEditor, DocumentCtx, toolkit } from '@/registry/components/ai-agent/task-board'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-agent.md?raw'
@@ -198,7 +198,8 @@ export const aiAgentDefaultProps = {
 const InteractableAssistantShell: React.FC<{
   runtime: AssistantRuntime;
   title?: string;
-}> = ({ runtime, title }) => {
+  avatar?: any;
+}> = ({ runtime, title, avatar }) => {
   const aui = useAui({
     unstable_interactables: unstable_Interactables() ,
     tools: Tools({ toolkit }),
@@ -226,7 +227,7 @@ const InteractableAssistantShell: React.FC<{
       <AssistantRuntimeProvider aui={aui} runtime={runtime}>
         <div className="flex h-full gap-2">
           <div className="flex-1 min-w-0">
-            <Assistant title={title}  />
+            <Assistant title={title} avatar={avatar} />
           </div>
           <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
             <TaskBoard />
@@ -240,12 +241,10 @@ const InteractableAssistantShell: React.FC<{
 
 const renderAiAgentPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'agent'
-  const [ agentId, setAgentId ] = React.useState(props.agentId || 'your-agent-id')
-
-  // 准备 avatar 配置
+  const agentId = props.agentId || 'your-agent-id'
   const avatar = (props.userAvatar || props.agentAvatar) ? {
     user: props.userAvatar || undefined,
-    agent: props.agentAvatar || undefined
+    agent: props.agentAvatar || undefined,
   } : undefined
 
   // 内部组件：在 AgentUIProvider 内调用 hooks
@@ -256,7 +255,7 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
       baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
     })
     // useAgentRuntime 从 AgentUIContext 读取 agentId
-    const agentRuntime = useAgentRuntime()
+    const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble })
 
     let runtime: AssistantRuntime | null = null
     switch (runtimePreset) {
@@ -292,22 +291,16 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
     }
 
     return runtimePreset === 'agent-interactable' ? (
-      <InteractableAssistantShell runtime={runtime} title={props.title} />
+      <InteractableAssistantShell runtime={runtime} title={props.title} avatar={avatar} />
     ) : (
-      <Assistant runtime={runtime} title={props.title}  />
+      <Assistant runtime={runtime} title={props.title} avatar={avatar} />
     )
   }
 
   return (
     <div className="flex h-250 items-center justify-center p-4 bg-slate-50">
       <div className="w-full h-250 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
-        <AgentUIProvider
-          initialAgentId={agentId}
-          preamble={props.preamble || undefined}
-          avatar={avatar}
-        >
-          <AgentPreviewContent />
-        </AgentUIProvider>
+        <AgentPreviewContent />
       </div>
     </div>
   )
@@ -383,7 +376,7 @@ const runtime = createCustomRuntime({
       break
     case 'agent-interactable':
       runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
-import { AgentUIProvider } from "@/registry/components/ai-agent/ai-agent"
+
 import { TaskBoard } from "@/registry/components/ai-agent/task-board"
 import {
   AssistantRuntimeProvider,
@@ -403,8 +396,7 @@ ${runtimeCode}
 
 export default function MyApp() {
   return (
-    <AgentUIProvider initialAgentId="your-agent-id">
-      <AssistantRuntimeProvider aui={aui} runtime={runtime}>
+        <AssistantRuntimeProvider aui={aui} runtime={runtime}>
         <TaskBoard />
         <Assistant />
       </AssistantRuntimeProvider>

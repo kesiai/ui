@@ -564,6 +564,7 @@ async function streamRunInSession(params: {
     return { contentType: 'application/octet-stream', filename: a.filename ?? 'file', url: a.data ?? a.image ?? '' };
   })
   console.log('[StreamRunInSession] messages', messages);
+  let systemPrompt = '';
   if(messages.length == 0) {
     // tools → 转为文字附在 userText 前（API 不支持 tools 参数）
     const toolsSchema = context.tools
@@ -572,17 +573,17 @@ async function streamRunInSession(params: {
     const toolsPrefix = toolsSchema
       ? `{## 以下是用户侧可用的工具列表。你可以使用这些工具，注意！！这些工具调用不需要你真正去执行，只要给用户侧返回 tool-call 类型的信息即可，不用去关心返回结果。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)} ##}`
       : '';
-    userText = toolsPrefix ? `${toolsPrefix}${userText}` : userText;
+    systemPrompt = toolsPrefix ? `${toolsPrefix}${systemPrompt}` : systemPrompt;
 
     // 注入渲染协议提示词(替代 CLAUDE.md,首条对话带上,agent 后续记得)
     if (renderRegistry && Object.keys(renderRegistry).length > 0) {
       const renderPrefix = `\n{## ${buildRenderPrompt(renderRegistry)} ##}\n`;
-      userText = `${renderPrefix}${userText}`;
+      systemPrompt = `${renderPrefix}${systemPrompt}`;
     }
 
     // 注入预计输入内容(前言) —— 与 renderRegistry 同路径,首条消息带上
     if (preamble && preamble.trim()) {
-      userText = `{## ${preamble.trim()} ##}\n${userText}`;
+      systemPrompt = `{## ${preamble.trim()} ##}\n${systemPrompt}`;
     }
   }
 
@@ -594,6 +595,7 @@ async function streamRunInSession(params: {
       role: 'user',
       type: 'text',
       content: userText,
+      systemPrompt,
       metadata: message.metadata ?? {},
       requestedBy,
       attachments: attachmentItems,

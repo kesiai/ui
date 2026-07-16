@@ -1049,7 +1049,7 @@ export const useAgentRuntime = (options?: {
       runIdRef.current = null;
       abortRef.current = null;
     }
-  }, [agentId, requestedBy, currentThreadId]);
+  }, [agentId, requestedBy, currentThreadId, messages]);
 
   // ---------- onReload ----------
   const onReload = useCallback(async (_parentId: string | null, _config: any) => {
@@ -1165,7 +1165,7 @@ export const useAgentRuntime = (options?: {
       runIdRef.current = null;
       abortRef.current = null;
     }
-  }, [currentThreadId, requestedBy]);
+  }, [currentThreadId, requestedBy, messages]);
 
   // ---------- onCancel ----------
   const onCancel = useCallback(async () => {

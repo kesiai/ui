@@ -166,8 +166,8 @@ export const aiAgentPropsConfig = [
     description: '首次发送消息时注入的内容（与自定义显示组件同路径），用于给 AI 预设上下文'
   },
   {
-    name: 'showAgents',
-    label: '显示 Agent 选择器',
+    name: 'showAgentSelect',
+    label: '侧边栏 Agent 选择器',
     type: 'boolean' as const,
     default: false,
     description: '在侧边栏顶部显示 Agent 切换下拉列表'
@@ -190,7 +190,7 @@ export const aiAgentDefaultProps = {
   userAvatar: '',
   agentAvatar: '',
   preamble: '',
-  showAgents: false,
+  showAgentSelect: false,
   showCodePreview: true
 }
 
@@ -199,7 +199,8 @@ const InteractableAssistantShell: React.FC<{
   runtime: AssistantRuntime;
   title?: string;
   avatar?: any;
-}> = ({ runtime, title, avatar }) => {
+  showAgentSelect?: boolean;
+}> = ({ runtime, title, avatar, showAgentSelect }) => {
   const aui = useAui({
     unstable_interactables: unstable_Interactables() ,
     tools: Tools({ toolkit }),
@@ -227,7 +228,7 @@ const InteractableAssistantShell: React.FC<{
       <AssistantRuntimeProvider aui={aui} runtime={runtime}>
         <div className="flex h-full gap-2">
           <div className="flex-1 min-w-0">
-            <Assistant title={title} avatar={avatar} />
+            <Assistant title={title} avatar={avatar} showAgentSelect={showAgentSelect} />
           </div>
           <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
             <TaskBoard />
@@ -291,9 +292,9 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
     }
 
     return runtimePreset === 'agent-interactable' ? (
-      <InteractableAssistantShell runtime={runtime} title={props.title} avatar={avatar} />
+      <InteractableAssistantShell runtime={runtime} title={props.title} avatar={avatar} showAgentSelect={props.showAgentSelect} />
     ) : (
-      <Assistant runtime={runtime} title={props.title} avatar={avatar} />
+      <Assistant runtime={runtime} title={props.title} avatar={avatar} showAgentSelect={props.showAgentSelect} />
     )
   }
 
@@ -415,6 +416,7 @@ export default function MyApp() {
     propParts.push(`avatar={{ ${avatarEntries.join(', ')} }}`)
   }
   if (props.preamble) propParts.push(`preamble={\`${props.preamble}\`}`)
+  if (props.showAgentSelect) propParts.push(`showAgentSelect={true}`)
   const propsStr = propParts.length ? ' ' + propParts.join(' ') : ''
 
   // preamble 注入说明（仅 useAgentRuntime 支持首条消息注入）

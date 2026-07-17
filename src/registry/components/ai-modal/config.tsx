@@ -137,7 +137,7 @@ export const aiModalPropsConfig = [
     description: '是否在弹窗标题栏显示放大按钮'
   },
   {
-    name: 'showAgents',
+    name: 'showAgentSelect',
     label: '显示 Agent 选择器',
     type: 'boolean' as const,
     default: false,
@@ -151,7 +151,7 @@ export const aiModalDefaultProps = {
   modalSize: { width: '500px', height: '600px' },
   triggerPosition: 'bottom-right' as const,
   showExpandButton: true,
-  showAgents: false
+  showAgentSelect: false
 }
 
 const renderAIModalPreview = (props: Record<string, any>) => {
@@ -215,6 +215,7 @@ const renderAIModalPreview = (props: Record<string, any>) => {
     return (
       <AIModal
         runtime={runtime}
+        showAgentSelect={props.showAgentSelect}
         title={props.title || 'AI Assistant'}
         modalSize={modalSize}
         triggerPosition={props.triggerPosition || 'bottom-right'}

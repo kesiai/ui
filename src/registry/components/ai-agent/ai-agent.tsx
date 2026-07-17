@@ -269,7 +269,7 @@ export const AgentSelect: FC = () => {
   );
 };
 
-export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed, title }) => {
+export const Sidebar: FC<{ collapsed?: boolean; title?: string; showAgentSelect?: boolean }> = ({ collapsed, title, showAgentSelect }) => {
   return (
     <aside
       className={cn(
@@ -308,7 +308,7 @@ export const Sidebar: FC<{ collapsed?: boolean; title?: string }> = ({ collapsed
         </ThreadListPrimitive.New>
       ) : (
         <div className="relative w-65 flex-1 overflow-y-auto p-3">
-          <AgentSelect />
+          {showAgentSelect && <AgentSelect />}
           <ThreadList />
         </div>
       )}
@@ -1290,14 +1290,14 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean }> = ({ className, title, readOnly }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; showAgentSelect?: boolean }> = ({ className, title, readOnly, showAgentSelect }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <div className={cn("bg-muted/30 flex h-full w-full", className)}>
       {!readOnly && (
       <div className="hidden md:block">
-        <Sidebar collapsed={sidebarCollapsed} title={title} />
+        <Sidebar collapsed={sidebarCollapsed} title={title} showAgentSelect={showAgentSelect} />
       </div>
       )}
       <div className={cn("flex flex-1 flex-col overflow-hidden", readOnly ? "p-0" : "p-2 md:pl-0")}>
@@ -1319,8 +1319,8 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean }
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, avatar }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings }) => {
-  const content = <Base className={className} title={title} readOnly={readOnly} />;
+export const Assistant = ({ runtime, className, title, readOnly, avatar, showAgentSelect }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings; showAgentSelect?: boolean }) => {
+  const content = <Base className={className} title={title} readOnly={readOnly} showAgentSelect={showAgentSelect} />;
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
       <AgentUIProvider avatar={avatar}>

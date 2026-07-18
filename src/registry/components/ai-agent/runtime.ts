@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
   useExternalStoreRuntime,
+  WebSpeechDictationAdapter,
   type AttachmentAdapter,
   type PendingAttachment,
   type CompleteAttachment,
@@ -251,6 +252,10 @@ function extractObjectKey(url: string): string {
 }
 
 const attachmentAdapter = new SessionAttachmentAdapter();
+const dictationAdapter = /*#__PURE__*/ new WebSpeechDictationAdapter({
+  language: 'zh-CN',
+  interimResults: true,
+});
 
 // ====== Speech Adapter ======
 const speechAdapter: SpeechSynthesisAdapter = {
@@ -814,8 +819,9 @@ export const useAgentRuntime = (options?: {
   agentId?: string;
   preamble?: string;
   renderRegistry?: RenderRegistry;
+  onShareThread?: (messages: readonly ThreadMessage[]) => void;
 }) => {
-  const { preamble, renderRegistry } = options ?? {};
+  const { preamble, renderRegistry, onShareThread } = options ?? {};
   const [agentId, setAgentId] = useState(options?.agentId ?? '');
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
@@ -1188,7 +1194,7 @@ export const useAgentRuntime = (options?: {
     onReload,
     onCancel,
     isLoading: loading,
-    extras: { agentId, setAgentId, preamble, renderRegistry },
+    extras: { agentId, setAgentId, preamble, renderRegistry, onShareThread },
     unstable_enableToolInvocations: true,
     onAddToolResult: (options) => {
       cacheToolResult(options);
@@ -1223,6 +1229,7 @@ export const useAgentRuntime = (options?: {
         },
       },
       attachments: attachmentAdapter,
+      dictation: dictationAdapter,
       speech: speechAdapter,
       feedback: feedbackAdapter,
     },

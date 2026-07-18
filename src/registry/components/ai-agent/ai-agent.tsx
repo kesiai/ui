@@ -48,6 +48,7 @@ import {
   useAuiState,
   useMessageTiming,
   AssistantRuntimeProvider, type AssistantRuntime,
+  type ThreadMessage,
   Unstable_AudioMessagePart,
   type Unstable_SlashCommand,
   AuiIf,
@@ -80,6 +81,10 @@ import {
   ShareIcon,
   SlashIcon,
   SquareIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
+  Volume2Icon,
+  VolumeXIcon,
   WrenchIcon,
   ArchiveIcon,
   TrashIcon,
@@ -157,6 +162,7 @@ type AgentExtras = {
   setAgentId: (id: string) => void;
   preamble?: string;
   renderRegistry?: RenderRegistry;
+  onShareThread?: (messages: readonly ThreadMessage[]) => void;
 };
 
 /**
@@ -170,7 +176,8 @@ const useAgentUI = (): AgentUIContextValue & AgentExtras => {
     agentId: extras?.agentId ?? '',
     setAgentId: extras?.setAgentId ?? (() => {}),
     preamble: extras?.preamble,
-    renderRegistry: extras?.renderRegistry
+    renderRegistry: extras?.renderRegistry,
+    onShareThread: extras?.onShareThread,
   };
 };
 
@@ -454,6 +461,9 @@ export const Header: FC<{
   sidebarCollapsed: boolean;
   onToggleSidebar: () => void;
 }> = ({ sidebarCollapsed, onToggleSidebar }) => {
+  const { onShareThread } = useAgentUI();
+  const messages = useAuiState((s) => s.thread.messages);
+
   return (
     <header className="flex h-12 shrink-0 items-center gap-2 px-4">
       <MobileSidebar />
@@ -468,16 +478,18 @@ export const Header: FC<{
         <PanelLeftIcon className="size-4" />
       </TooltipIconButton>
       <ThreadTitle />
-      <TooltipIconButton
-        variant="ghost"
-        size="icon"
-        tooltip="分享"
-        side="bottom"
-        disabled
-        className="ml-auto size-8"
-      >
-        <ShareIcon className="size-4" />
-      </TooltipIconButton>
+      {onShareThread && (
+        <TooltipIconButton
+          variant="ghost"
+          size="icon"
+          tooltip="分享"
+          side="bottom"
+          onClick={() => onShareThread(messages)}
+          className="ml-auto size-8"
+        >
+          <ShareIcon className="size-4" />
+        </TooltipIconButton>
+      )}
     </header>
   );
 };
@@ -1112,11 +1124,35 @@ export const AssistantActionBar: FC = () => {
           </AuiIf>
         </TooltipIconButton>
       </ActionBarPrimitive.Copy>
+      <AuiIf condition={(s) => !s.thread.speech}>
+        <ActionBarPrimitive.Speak asChild>
+          <TooltipIconButton tooltip="朗读">
+            <Volume2Icon className="size-4" />
+          </TooltipIconButton>
+        </ActionBarPrimitive.Speak>
+      </AuiIf>
+      <AuiIf condition={(s) => !!s.thread.speech}>
+        <ActionBarPrimitive.StopSpeaking asChild>
+          <TooltipIconButton tooltip="停止朗读">
+            <VolumeXIcon className="size-4" />
+          </TooltipIconButton>
+        </ActionBarPrimitive.StopSpeaking>
+      </AuiIf>
       <ActionBarPrimitive.Reload asChild>
         <TooltipIconButton tooltip="重新生成">
           <RefreshCwIcon />
         </TooltipIconButton>
       </ActionBarPrimitive.Reload>
+      <ActionBarPrimitive.FeedbackNegative asChild>
+        <TooltipIconButton tooltip="反馈负面">
+          <ThumbsDownIcon className="size-4" />
+        </TooltipIconButton>
+      </ActionBarPrimitive.FeedbackNegative>
+      <ActionBarPrimitive.FeedbackPositive asChild>
+        <TooltipIconButton tooltip="反馈正面">
+          <ThumbsUpIcon className="size-4" />
+        </TooltipIconButton>
+      </ActionBarPrimitive.FeedbackPositive>
       <ActionBarMorePrimitive.Root>
         <ActionBarMorePrimitive.Trigger asChild>
           <TooltipIconButton

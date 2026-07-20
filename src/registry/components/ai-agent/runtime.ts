@@ -576,19 +576,19 @@ async function streamRunInSession(params: {
       ? toToolsJSONSchema(context.tools as unknown as Record<string, Tool>)
       : undefined;
     const toolsPrefix = toolsSchema
-      ? `{## 以下是用户侧可用的工具列表。你可以使用这些工具，注意！！这些工具调用不需要你真正去执行，只要给用户侧返回 tool-call 类型的信息即可，不用去关心返回结果。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)} ##}`
+      ? `以下是用户侧可用的工具列表。你可以使用这些工具，注意！！这些工具调用不需要你真正去执行，只要给用户侧返回 tool-call 类型的信息即可，不用去关心返回结果。\n\n可用工具：\n${JSON.stringify(toolsSchema, null, 2)}`
       : '';
     systemPrompt = toolsPrefix ? `${toolsPrefix}${systemPrompt}` : systemPrompt;
 
     // 注入渲染协议提示词(替代 CLAUDE.md,首条对话带上,agent 后续记得)
     if (renderRegistry && Object.keys(renderRegistry).length > 0) {
-      const renderPrefix = `\n{## ${buildRenderPrompt(renderRegistry)} ##}\n`;
+      const renderPrefix = `\n${buildRenderPrompt(renderRegistry)}\n`;
       systemPrompt = `${renderPrefix}${systemPrompt}`;
     }
 
     // 注入预计输入内容(前言) —— 与 renderRegistry 同路径,首条消息带上
     if (preamble && preamble.trim()) {
-      systemPrompt = `{## ${preamble.trim()} ##}\n${systemPrompt}`;
+      systemPrompt = `${preamble.trim()}\n${systemPrompt}`;
     }
   }
 

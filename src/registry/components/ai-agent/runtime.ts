@@ -820,8 +820,11 @@ export const useAgentRuntime = (options?: {
   preamble?: string;
   renderRegistry?: RenderRegistry;
   onShareThread?: (messages: readonly ThreadMessage[]) => void;
+  initialThreadId?: string;
+  onThreadChange?: (threadId: string | undefined) => void;
+  onAgentChange?: (agentId: string) => void;
 }) => {
-  const { preamble, renderRegistry, onShareThread } = options ?? {};
+  const { preamble, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange } = options ?? {};
   const [agentId, setAgentId] = useState(options?.agentId ?? '');
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
@@ -832,7 +835,11 @@ export const useAgentRuntime = (options?: {
     remoteId?: string;
     title?: string;
   }>>([]);
-  const [currentThreadId, setCurrentThreadId] = useState<string | undefined>(undefined);
+  const [currentThreadId, setCurrentThreadIdState] = useState<string | undefined>(initialThreadId);
+  const setCurrentThreadId = useCallback((id: string | undefined) => {
+    setCurrentThreadIdState(id);
+    onThreadChange?.(id);
+  }, [onThreadChange]);
   const [requestedBy] = useState('kesi-ui');
   const [toolStatuses, setToolStatuses] = useState<Record<string, ToolExecutionStatus>>({});
   const [loading, setLoading] = useState(false);
@@ -1194,7 +1201,18 @@ export const useAgentRuntime = (options?: {
     onReload,
     onCancel,
     isLoading: loading,
-    extras: { agentId, setAgentId, preamble, renderRegistry, onShareThread },
+    extras: {
+      agentId,
+      setAgentId: (id: string) => {
+        setAgentId(id);
+        onAgentChange?.(id);
+      },
+      preamble,
+      renderRegistry,
+      onShareThread,
+      loading,
+      threadsLoading,
+    },
     unstable_enableToolInvocations: true,
     onAddToolResult: (options) => {
       cacheToolResult(options);

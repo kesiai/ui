@@ -1,43 +1,57 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import path from "path"
 import tailwindcss from "@tailwindcss/vite"
+import react from "@vitejs/plugin-react"
+import { defineConfig, loadEnv } from "vite"
 
-import path from 'path'
+// https://vite.dev/config/
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '.', '');
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@svgedit/svgcanvas': path.resolve(__dirname, './node_modules/@svgedit/svgcanvas/svgcanvas.js'),
+  return {
+    plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+        '@svgedit/svgcanvas': path.resolve(__dirname, './node_modules/@svgedit/svgcanvas/svgcanvas.js'),
+      },
+      dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-router', 'react-router-dom'],
     },
-  },
-  server: {
-    port: 3000,
-    open: true,
-    proxy: {
-      '/rest/core/': {
-        target: 'http://192.168.99.103:3030/',
-        changeOrigin: true
+    define: {
+      'process.env': {},
+      'global': 'globalThis',
+      ...(mode === 'development' && {
+        'process.env.NODE_ENV': JSON.stringify('development'),
+      }),
+      ...(mode === 'production' && {
+        'process.env.NODE_ENV': JSON.stringify('production'),
+      }),
+      'import.meta.env.KESI_PROJECT_ID': JSON.stringify(env.KESI_PROJECT_ID || ''),
+    },
+    server: {
+      host: '0.0.0.0',
+      port: 3000,
+      strictPort: false,
+      open: false,
+      proxy: {
+        ...(env.KESI_API_TARGET ? {
+          '/rest': {
+            target: env.KESI_API_TARGET,
+            changeOrigin: true,
+            secure: false,
+          },
+          '/core': {
+            target: env.KESI_API_TARGET,
+            changeOrigin: true,
+            secure: false,
+          },
+          '/ws': {
+            target: env.KESI_API_TARGET.replace(/^http/, 'ws'),
+            changeOrigin: true,
+            secure: false,
+            ws: true,
+          },
+        } : {})
       },
-      '/rest/flow/': {
-        target: 'http://192.168.99.103:3030/',
-        changeOrigin: true
-      },
-      '/rest/engine/': {
-        target: 'http://192.168.99.103:3030/',
-        changeOrigin: true
-      },
-      '/rest/eap/': {
-        target: 'http://192.168.99.103:3030/',
-        changeOrigin: true
-      },
-      // 匹配 /rest/core/fileServer 开头的请求
-      '/rest/core/fileServer': {
-        target: 'http://192.168.99.103:3030/',
-        changeOrigin: true
-      }
-    }
-  },
+    },
+  }
 })

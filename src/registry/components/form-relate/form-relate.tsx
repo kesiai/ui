@@ -28,7 +28,7 @@ export interface FormRelateProps {
  * filterObj 由父组件传入
  */
 const FormRelate: React.FC<FormRelateProps> = (props) => {
-  const { onChange, value, meta, record, disabled: propsDisabled, filterObj, displayField = 'name', schema, internalTable = true } = props
+  const { onChange, value, meta, record, disabled: propsDisabled, filterObj, displayField = 'name', schema } = props
 
   const disabled = propsDisabled || meta?.data?.disabled || false
 
@@ -85,7 +85,7 @@ const FormRelate: React.FC<FormRelateProps> = (props) => {
       schema={schema}
       label={`请选择${(schema as any)?.title || '关联字段'}`}
       disabled={disabled}
-      mode={internalTable ? undefined : 'multiple'}
+      mode={schema?.controlType === 'relate-multiple' ? 'multiple' : 'single'}
       meta={meta}
       record={record}
       filterObj={filterObj}

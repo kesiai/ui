@@ -1017,7 +1017,7 @@ const ChainOfThoughtGroup: FC<{
         )}
         <span className="font-medium leading-none">思维链</span>
         <span className="text-xs text-muted-foreground/60">{count} 步</span>
-        <ChevronDownIcon className="ml-auto size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
+        <ChevronDownIcon className="size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
       </CollapsibleTrigger>
       <CollapsibleContent className="group/collapsible-content relative overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
         <div className="pl-4 pt-2 border-l-2 border-muted ml-px">

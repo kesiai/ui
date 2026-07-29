@@ -542,8 +542,10 @@ async function streamRunInSession(params: {
   renderRegistry?: RenderRegistry;
   /** 预计输入内容（前言）：首条消息发送时注入到 userText 前 */
   preamble?: string;
+  /** 环境变量：首条消息发送时注入 */
+  environmentVars?: Array<{ key: string; value: any }>;
 }): Promise<MessageTiming> {
-  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble } = params;
+  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars } = params;
 
   // 从 AppendMessage 中提取文本，enrich，提取附件
   const contentParts = Array.isArray(message.content) ? message.content : [];
@@ -601,6 +603,7 @@ async function streamRunInSession(params: {
       type: 'text',
       content: userText,
       systemPrompt,
+      environmentVars: environmentVars ?? [],
       metadata: message.metadata ?? {},
       requestedBy,
       attachments: attachmentItems,
@@ -818,13 +821,14 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
 export const useAgentRuntime = (options?: {
   agentId?: string;
   preamble?: string;
+  environmentVars?: Array<{ key: string; value: any }>;
   renderRegistry?: RenderRegistry;
   onShareThread?: (messages: readonly ThreadMessage[]) => void;
   initialThreadId?: string;
   onThreadChange?: (threadId: string | undefined) => void;
   onAgentChange?: (agentId: string) => void;
 }) => {
-  const { preamble, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange } = options ?? {};
+  const { preamble, environmentVars, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange } = options ?? {};
   const [agentId, setAgentId] = useState(options?.agentId ?? '');
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
@@ -852,6 +856,10 @@ export const useAgentRuntime = (options?: {
   // preamble 从 context 读取，用 ref 存以保持闭包中的稳定性
   const preambleRef = useRef<string | undefined>(preamble);
   preambleRef.current = preamble;
+
+  // environmentVars 从 context 读取，用 ref 存以保持闭包中的稳定性
+  const environmentVarsRef = useRef<Array<{ key: string; value: any }> | undefined>(environmentVars);
+  environmentVarsRef.current = environmentVars;
 
   const runIdRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -1036,6 +1044,7 @@ export const useAgentRuntime = (options?: {
         requestedBy,
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
+        environmentVars: environmentVarsRef.current,
         onMessageChange(content) {
           // console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
           setMessages(prev => prev.map(m =>
@@ -1103,6 +1112,7 @@ export const useAgentRuntime = (options?: {
         requestedBy,
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
+        environmentVars: environmentVarsRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId
@@ -1159,6 +1169,7 @@ export const useAgentRuntime = (options?: {
         requestedBy,
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
+        environmentVars: environmentVarsRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId

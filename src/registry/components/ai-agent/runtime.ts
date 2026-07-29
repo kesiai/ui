@@ -544,8 +544,10 @@ async function streamRunInSession(params: {
   preamble?: string;
   /** 环境变量：首条消息发送时注入 */
   environmentVars?: Array<{ key: string; value: any }>;
+  /** 发送消息前回调，可修改请求 body */
+  onSendMessageBody?: (body: Record<string, any>, info: { sessionId: string; userText: string; url: string; headers: Record<string, string> }) => Record<string, any> | Promise<Record<string, any>>;
 }): Promise<MessageTiming> {
-  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars } = params;
+  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars, onSendMessageBody } = params;
 
   // 从 AppendMessage 中提取文本，enrich，提取附件
   const contentParts = Array.isArray(message.content) ? message.content : [];
@@ -595,19 +597,29 @@ async function streamRunInSession(params: {
   }
 
   console.log("[streamRunInSession] messages.length:", messages.length, "hasRegistry:", !!renderRegistry, "最终 userText:", userText);
+  
+  // 构建请求 body
+  let body: Record<string, any> = {
+    role: 'user',
+    type: 'text',
+    content: userText,
+    systemPrompt,
+    environmentVars: environmentVars ?? [],
+    metadata: message.metadata ?? {},
+    requestedBy,
+    attachments: attachmentItems,
+  };
+
+  // 如果设置了 onSendMessageBody 回调，允许外部修改 body
+  if (onSendMessageBody) {
+    const modified = await onSendMessageBody(body, { sessionId, userText, url, headers });
+    if (modified) body = modified;
+  }
+
   const response = await fetch(url, {
     method: 'POST',
     headers,
-    body: JSON.stringify({
-      role: 'user',
-      type: 'text',
-      content: userText,
-      systemPrompt,
-      environmentVars: environmentVars ?? [],
-      metadata: message.metadata ?? {},
-      requestedBy,
-      attachments: attachmentItems,
-    }),
+    body: JSON.stringify(body),
     signal,
   });
 
@@ -827,8 +839,9 @@ export const useAgentRuntime = (options?: {
   initialThreadId?: string;
   onThreadChange?: (threadId: string | undefined) => void;
   onAgentChange?: (agentId: string) => void;
+  onSendMessageBody?: (body: Record<string, any>, info: { sessionId: string; userText: string; url: string; headers: Record<string, string> }) => Record<string, any> | Promise<Record<string, any>>;
 }) => {
-  const { preamble, environmentVars, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange } = options ?? {};
+  const { preamble, environmentVars, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange, onSendMessageBody } = options ?? {};
   const [agentId, setAgentId] = useState(options?.agentId ?? '');
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
@@ -860,6 +873,9 @@ export const useAgentRuntime = (options?: {
   // environmentVars 从 context 读取，用 ref 存以保持闭包中的稳定性
   const environmentVarsRef = useRef<Array<{ key: string; value: any }> | undefined>(environmentVars);
   environmentVarsRef.current = environmentVars;
+  
+  const onSendMessageBodyRef = useRef<typeof onSendMessageBody>(onSendMessageBody);
+  onSendMessageBodyRef.current = onSendMessageBody;
 
   const runIdRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -1045,6 +1061,7 @@ export const useAgentRuntime = (options?: {
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
         environmentVars: environmentVarsRef.current,
+        onSendMessageBody: onSendMessageBodyRef.current,
         onMessageChange(content) {
           // console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
           setMessages(prev => prev.map(m =>
@@ -1113,6 +1130,7 @@ export const useAgentRuntime = (options?: {
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
         environmentVars: environmentVarsRef.current,
+        onSendMessageBody: onSendMessageBodyRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId
@@ -1170,6 +1188,7 @@ export const useAgentRuntime = (options?: {
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
         environmentVars: environmentVarsRef.current,
+        onSendMessageBody: onSendMessageBodyRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId

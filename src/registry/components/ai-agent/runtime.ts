@@ -543,8 +543,12 @@ async function streamRunInSession(params: {
   renderRegistry?: RenderRegistry;
   /** 预计输入内容（前言）：首条消息发送时注入到 userText 前 */
   preamble?: string;
+  /** 环境变量：首条消息发送时注入 */
+  environmentVars?: Array<{ key: string; value: any }>;
+  /** 发送消息前回调，可修改请求 body */
+  onSendMessageBody?: (body: Record<string, any>, info: { sessionId: string; userText: string; url: string; headers: Record<string, string> }) => Record<string, any> | Promise<Record<string, any>>;
 }): Promise<MessageTiming> {
-  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble } = params;
+  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars, onSendMessageBody } = params;
 
   // 从 AppendMessage 中提取文本，enrich，提取附件
   const contentParts = Array.isArray(message.content) ? message.content : [];
@@ -582,25 +586,8 @@ async function streamRunInSession(params: {
     systemPrompt = toolsPrefix ? `${toolsPrefix}${systemPrompt}` : systemPrompt;
 
     // 注入渲染协议提示词(替代 CLAUDE.md,首条对话带上,agent 后续记得)
-    // 内置 FileDownloadCard 到 renderRegistry，统一走 render 标签协议
-    const mergedRegistry: RenderRegistry = {
-      FileDownloadCard: {
-        component: FileDownloadCard,
-        description:
-          "文件下载卡片。创建/生成文件后必须用它返回，禁止纯文本给路径。" +
-          "filePath 是工作区根目录下的相对路径（如 users/admin/deliver/hello.txt），不要带前缀。" +
-          "agentId 无需填写（前端自动注入）。唯一例外：批量工程文件（如搭建项目）。",
-        schema: '{"filePath": "users/admin/deliver/hello.txt", "fileName": "hello.txt", "fileSize": "1 KB"}',
-        rules: [
-          "生成文件后必须使用此组件，禁止纯文本给出文件路径",
-          "filePath 必须是工作区相对路径，不要带 /workspace/ 前缀",
-          "批量工程文件（搭建项目等）不需要此组件",
-        ],
-      },
-      ...(renderRegistry ?? {}),
-    };
-    if (mergedRegistry && Object.keys(mergedRegistry).length > 0) {
-      const renderPrefix = `\n${buildRenderPrompt(mergedRegistry)}\n`;
+    if (renderRegistry && Object.keys(renderRegistry).length > 0) {
+      const renderPrefix = `\n${buildRenderPrompt(renderRegistry)}\n`;
       systemPrompt = `${renderPrefix}${systemPrompt}`;
     }
 
@@ -611,18 +598,29 @@ async function streamRunInSession(params: {
   }
 
   console.log("[streamRunInSession] messages.length:", messages.length, "hasRegistry:", !!renderRegistry, "最终 userText:", userText);
+  
+  // 构建请求 body
+  let body: Record<string, any> = {
+    role: 'user',
+    type: 'text',
+    content: userText,
+    systemPrompt,
+    environmentVars: environmentVars ?? [],
+    metadata: message.metadata ?? {},
+    requestedBy,
+    attachments: attachmentItems,
+  };
+
+  // 如果设置了 onSendMessageBody 回调，允许外部修改 body
+  if (onSendMessageBody) {
+    const modified = await onSendMessageBody(body, { sessionId, userText, url, headers });
+    if (modified) body = modified;
+  }
+
   const response = await fetch(url, {
     method: 'POST',
     headers,
-    body: JSON.stringify({
-      role: 'user',
-      type: 'text',
-      content: userText,
-      systemPrompt,
-      metadata: message.metadata ?? {},
-      requestedBy,
-      attachments: attachmentItems,
-    }),
+    body: JSON.stringify(body),
     signal,
   });
 
@@ -836,13 +834,15 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
 export const useAgentRuntime = (options?: {
   agentId?: string;
   preamble?: string;
+  environmentVars?: Array<{ key: string; value: any }>;
   renderRegistry?: RenderRegistry;
   onShareThread?: (messages: readonly ThreadMessage[]) => void;
   initialThreadId?: string;
   onThreadChange?: (threadId: string | undefined) => void;
   onAgentChange?: (agentId: string) => void;
+  onSendMessageBody?: (body: Record<string, any>, info: { sessionId: string; userText: string; url: string; headers: Record<string, string> }) => Record<string, any> | Promise<Record<string, any>>;
 }) => {
-  const { preamble, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange } = options ?? {};
+  const { preamble, environmentVars, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange, onSendMessageBody } = options ?? {};
   const [agentId, setAgentId] = useState(options?.agentId ?? '');
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
@@ -887,6 +887,13 @@ export const useAgentRuntime = (options?: {
   // preamble 从 context 读取，用 ref 存以保持闭包中的稳定性
   const preambleRef = useRef<string | undefined>(preamble);
   preambleRef.current = preamble;
+
+  // environmentVars 从 context 读取，用 ref 存以保持闭包中的稳定性
+  const environmentVarsRef = useRef<Array<{ key: string; value: any }> | undefined>(environmentVars);
+  environmentVarsRef.current = environmentVars;
+  
+  const onSendMessageBodyRef = useRef<typeof onSendMessageBody>(onSendMessageBody);
+  onSendMessageBodyRef.current = onSendMessageBody;
 
   const runIdRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -1071,6 +1078,8 @@ export const useAgentRuntime = (options?: {
         requestedBy,
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
+        environmentVars: environmentVarsRef.current,
+        onSendMessageBody: onSendMessageBodyRef.current,
         onMessageChange(content) {
           // console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
           setMessages(prev => prev.map(m =>
@@ -1138,6 +1147,8 @@ export const useAgentRuntime = (options?: {
         requestedBy,
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
+        environmentVars: environmentVarsRef.current,
+        onSendMessageBody: onSendMessageBodyRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId
@@ -1194,6 +1205,8 @@ export const useAgentRuntime = (options?: {
         requestedBy,
         renderRegistry: renderRegistryRef.current,
         preamble: preambleRef.current,
+        environmentVars: environmentVarsRef.current,
+        onSendMessageBody: onSendMessageBodyRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId

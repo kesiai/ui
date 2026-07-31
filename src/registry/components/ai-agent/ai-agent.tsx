@@ -779,8 +779,8 @@ const ComposerAction: FC = () => {
 };
 
 const TextPart: FC<{ text?: string }> = ({ text }) => {
-  const { renderRegistry, agentId } = useAgentUI();
-  return <KesiTextRenderer text={text} registry={renderRegistry} agentId={agentId} />;
+  const { renderRegistry } = useAgentUI();
+  return <KesiTextRenderer text={text} registry={renderRegistry} />;
 };
 
 const MessageError: FC = () => {
@@ -830,7 +830,7 @@ const AssistantMessageBody: FC = () => (
       {({ part, children }) => {
         switch (part.type) {
           case "group-chainOfThought":
-            return <div data-slot="aui_chain-of-thought">{children}</div>;
+            return <ChainOfThoughtGroup part={part}>{children}</ChainOfThoughtGroup>;
           case "group-tool":
             return (
               <InlineToolGroupRoot>
@@ -852,17 +852,14 @@ const AssistantMessageBody: FC = () => (
               </InlineReasoningRoot>
             );
           }
-          case "text": {
-              const text = (part as { text?: string }).text || "";
-              return <TextPart text={text} />;
-            }
+          case "text":
+            return <TextPart text={(part as { text?: string }).text} />;
           case "reasoning":
             return <InlineReasoningText className="ps-0">
               <MarkdownText />
             </InlineReasoningText>;
-          case "tool-call": {
-              return <ToolResultCard {...part} />;
-            }
+          case "tool-call":
+            return <ToolResultCard {...part} />;
           case "indicator":
             return <AssistantWorkingIndicator />;
           case "data":
@@ -992,6 +989,39 @@ const InlineToolGroupContent: FC<{ children?: React.ReactNode }> = ({ children }
     </div>
   </CollapsibleContent>
 );
+
+// ==================== 思维链 Group（chain-of-thought，可折叠） ====================
+const ChainOfThoughtGroup: FC<{
+  part: any;
+  children?: React.ReactNode;
+}> = ({ part, children }) => {
+  const running = part.status?.type === "running";
+  const count = part.indices?.length ?? 0;
+
+  return (
+    <Collapsible
+      data-slot="chain-of-thought-root"
+      defaultOpen={false}
+      className="group/chain-of-thought-root my-1.5"
+    >
+      <CollapsibleTrigger className="group/trigger text-muted-foreground hover:text-foreground flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent/50">
+        {running ? (
+          <LoaderIcon className="size-4 shrink-0 animate-spin text-blue-500" />
+        ) : (
+          <BrainIcon className="size-4 shrink-0 text-purple-500" />
+        )}
+        <span className="font-medium leading-none">思维链</span>
+        <span className="text-xs text-muted-foreground/60">{count} 步</span>
+        <ChevronDownIcon className="size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="group/collapsible-content relative overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+        <div className="pl-4 pt-2 border-l-2 border-muted ml-px">
+          {children}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+};
 
 // ==================== 内联 Reasoning（汉化版） ====================
 const InlineReasoningRoot: FC<{

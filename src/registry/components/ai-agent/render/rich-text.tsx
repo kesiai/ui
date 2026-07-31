@@ -38,7 +38,7 @@ function extractJson(raw: string): string | null {
   return raw.slice(start, end + 1);
 }
 
-const UiBlock: FC<{ name: string; raw: string; registry: RenderRegistry }> = ({ name, raw, registry }) => {
+const UiBlock: FC<{ name: string; raw: string; registry: RenderRegistry; agentId?: string }> = ({ name, raw, registry, agentId }) => {
   const Comp = registry[name]?.component;
   if (!Comp) {
     return (
@@ -57,6 +57,10 @@ const UiBlock: FC<{ name: string; raw: string; registry: RenderRegistry }> = ({ 
   }
   try {
     const props = JSON.parse(jsonStr) as Record<string, unknown>;
+    // 自动注入 agentId：AI 无需在 JSON 里填此字段
+    if (agentId && name === 'FileDownloadCard') {
+      return <Comp agentId={agentId} {...props} />;
+    }
     return <Comp {...props} />;
   } catch {
     return (
@@ -116,7 +120,7 @@ const MarkdownSegment: FC<{ content: string }> = ({ content }) => {
  * - 含 ```kesi-ui:xxx 代码块 → 分段渲染(UI 块用专用组件,其余走 markdown)
  * - 不含 → 回落到原 MarkdownText,保持原有体验
  */
-export const KesiTextRenderer: FC<{ text?: string; registry?: RenderRegistry }> = ({ text, registry }) => {
+export const KesiTextRenderer: FC<{ text?: string; registry?: RenderRegistry; agentId?: string }> = ({ text, registry, agentId }) => {
   const content = typeof text === "string" ? text : "";
   if (!/render:[a-zA-Z0-9]/.test(content)) return <MarkdownText />;
   if (!registry || Object.keys(registry).length === 0) return <MarkdownText />;
@@ -125,7 +129,7 @@ export const KesiTextRenderer: FC<{ text?: string; registry?: RenderRegistry }> 
     <>
       {segs.map((seg, i) =>
         seg.type === "ui" ? (
-          <UiBlock key={i} name={seg.name} raw={seg.raw} registry={registry} />
+          <UiBlock key={i} name={seg.name} raw={seg.raw} registry={registry} agentId={agentId} />
         ) : (
           <MarkdownSegment key={i} content={seg.content} />
         ),

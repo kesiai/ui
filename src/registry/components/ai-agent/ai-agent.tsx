@@ -779,8 +779,8 @@ const ComposerAction: FC = () => {
 };
 
 const TextPart: FC<{ text?: string }> = ({ text }) => {
-  const { renderRegistry } = useAgentUI();
-  return <KesiTextRenderer text={text} registry={renderRegistry} />;
+  const { renderRegistry, agentId } = useAgentUI();
+  return <KesiTextRenderer text={text} registry={renderRegistry} agentId={agentId} />;
 };
 
 const MessageError: FC = () => {
@@ -852,14 +852,17 @@ const AssistantMessageBody: FC = () => (
               </InlineReasoningRoot>
             );
           }
-          case "text":
-            return <TextPart text={(part as { text?: string }).text} />;
+          case "text": {
+              const text = (part as { text?: string }).text || "";
+              return <TextPart text={text} />;
+            }
           case "reasoning":
             return <InlineReasoningText className="ps-0">
               <MarkdownText />
             </InlineReasoningText>;
-          case "tool-call":
-            return <ToolResultCard {...part} />;
+          case "tool-call": {
+              return <ToolResultCard {...part} />;
+            }
           case "indicator":
             return <AssistantWorkingIndicator />;
           case "data":
@@ -885,11 +888,6 @@ const AssistantMessageBody: FC = () => (
           }
           case "source": {
             return <Sources {...part} />
-          }
-          case "generative-ui": {
-            return <MessagePrimitive.GenerativeUI components={{
-              Button,
-            }} {...part} />;
           }
           default:
             return null;

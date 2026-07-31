@@ -62,8 +62,15 @@ const deleteDir = async (agentId: string, path: string, recursive = false): Prom
 
 /** 下载文件 — 触发浏览器下载 */
 const downloadFile = async (agentId: string, path: string, filename?: string): Promise<void> => {
-  const q = `?path=${encodeURIComponent(path)}`;
-  const url = `/rest/eap/agents/${agentId}/workspace/file/download${q}`;
+  // 清洗 path：去掉可能误传的绝对路径前缀
+  const cleanPath = path.replace(/^\/?(workspace\/)?[a-f0-9]{24}\/?/, "");
+  const base = `/rest/eap/agents/${agentId}/workspace/file/download`;
+  const params = new URLSearchParams({ path: cleanPath });
+  const authHeader = agentsAPI.headers?.['Authorization'] || agentsAPI.headers?.authorization || '';
+  const projectId = agentsAPI.headers?.['x-request-project'] || '';
+  if (authHeader) params.set('token', authHeader.replace(/^Bearer\s+/i, ''));
+  if (projectId) params.set('x-request-project', projectId);
+  const url = `${base}?${params.toString()}`;
   const a = document.createElement('a');
   a.href = url;
   a.download = filename || path.split('/').pop() || 'download';

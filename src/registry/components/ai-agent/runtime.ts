@@ -19,6 +19,7 @@ import { toToolsJSONSchema, type Tool } from "assistant-stream";
 import { createAPI, getConfig } from '@kesi/client'
 import type { AssistantRuntime, Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ModelContext, ThreadUserMessagePart, ToolExecutionStatus } from "@assistant-ui/react";
 import { buildRenderPrompt, type RenderRegistry } from "./render/registry";
+import { FileDownloadCard } from "./render/file-download-card";
 import { cacheToolResult } from "./tools";
 
 /** Token 用量 */
@@ -581,8 +582,25 @@ async function streamRunInSession(params: {
     systemPrompt = toolsPrefix ? `${toolsPrefix}${systemPrompt}` : systemPrompt;
 
     // 注入渲染协议提示词(替代 CLAUDE.md,首条对话带上,agent 后续记得)
-    if (renderRegistry && Object.keys(renderRegistry).length > 0) {
-      const renderPrefix = `\n${buildRenderPrompt(renderRegistry)}\n`;
+    // 内置 FileDownloadCard 到 renderRegistry，统一走 render 标签协议
+    const mergedRegistry: RenderRegistry = {
+      FileDownloadCard: {
+        component: FileDownloadCard,
+        description:
+          "文件下载卡片。创建/生成文件后必须用它返回，禁止纯文本给路径。" +
+          "filePath 是工作区根目录下的相对路径（如 users/admin/deliver/hello.txt），不要带前缀。" +
+          "agentId 无需填写（前端自动注入）。唯一例外：批量工程文件（如搭建项目）。",
+        schema: '{"filePath": "users/admin/deliver/hello.txt", "fileName": "hello.txt", "fileSize": "1 KB"}',
+        rules: [
+          "生成文件后必须使用此组件，禁止纯文本给出文件路径",
+          "filePath 必须是工作区相对路径，不要带 /workspace/ 前缀",
+          "批量工程文件（搭建项目等）不需要此组件",
+        ],
+      },
+      ...(renderRegistry ?? {}),
+    };
+    if (mergedRegistry && Object.keys(mergedRegistry).length > 0) {
+      const renderPrefix = `\n${buildRenderPrompt(mergedRegistry)}\n`;
       systemPrompt = `${renderPrefix}${systemPrompt}`;
     }
 
@@ -846,8 +864,25 @@ export const useAgentRuntime = (options?: {
   const [threadsLoading, setThreadsLoading] = useState(false);
 
   // renderRegistry 用 ref 存,onNew 闭包读取,避免依赖变化导致重建
-  const renderRegistryRef = useRef<RenderRegistry | undefined>(renderRegistry);
-  renderRegistryRef.current = renderRegistry;
+  // 始终内置 FileDownloadCard，与 streamRunInSession 里 mergedRegistry 保持一致
+  const renderRegistryWithBuiltin = useMemo<RenderRegistry>(() => ({
+    FileDownloadCard: {
+      component: FileDownloadCard,
+      description:
+        "文件下载卡片。创建/生成文件后必须用它返回，禁止纯文本给路径。" +
+        "filePath 是工作区根目录下的相对路径（如 users/admin/deliver/hello.txt），不要带前缀。" +
+        "agentId 无需填写（前端自动注入）。唯一例外：批量工程文件（如搭建项目）。",
+      schema: '{"filePath": "users/admin/deliver/hello.txt", "fileName": "hello.txt", "fileSize": "1 KB"}',
+      rules: [
+        "生成文件后必须使用此组件，禁止纯文本给出文件路径",
+        "filePath 必须是工作区相对路径，不要带 /workspace/ 前缀",
+        "批量工程文件（搭建项目等）不需要此组件",
+      ],
+    },
+    ...(renderRegistry ?? {}),
+  }), [renderRegistry]);
+  const renderRegistryRef = useRef<RenderRegistry | undefined>(renderRegistryWithBuiltin);
+  renderRegistryRef.current = renderRegistryWithBuiltin;
 
   // preamble 从 context 读取，用 ref 存以保持闭包中的稳定性
   const preambleRef = useRef<string | undefined>(preamble);
@@ -1208,7 +1243,7 @@ export const useAgentRuntime = (options?: {
         onAgentChange?.(id);
       },
       preamble,
-      renderRegistry,
+      renderRegistry: renderRegistryWithBuiltin,
       onShareThread,
       loading,
       threadsLoading,

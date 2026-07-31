@@ -779,8 +779,8 @@ const ComposerAction: FC = () => {
 };
 
 const TextPart: FC<{ text?: string }> = ({ text }) => {
-  const { renderRegistry } = useAgentUI();
-  return <KesiTextRenderer text={text} registry={renderRegistry} />;
+  const { renderRegistry, agentId } = useAgentUI();
+  return <KesiTextRenderer text={text} registry={renderRegistry} agentId={agentId} />;
 };
 
 const MessageError: FC = () => {

@@ -127,6 +127,13 @@ export const aiAgentPropsConfig = [
     description: 'Agent Runtime 的 agent ID'
   },
   {
+    name: 'taskRuntime',
+    label: 'Task 运行时',
+    type: 'boolean' as const,
+    default: false,
+    description: '使用 Task 作为会话线程，请求走 /eap/tasks 接口；开启后新建会话将创建 Task（assigneeId 即 agentId）'
+  },
+  {
     name: 'systemPrompt',
     label: '系统提示词',
     type: 'text' as const,
@@ -185,6 +192,7 @@ export const aiAgentDefaultProps = {
   runtimePreset: 'agent-interactable' as RuntimePreset,
   baseUrl: 'http://127.0.0.1:4096',
   agentId: '6a3a22aeecf2e81476c84246',
+  taskRuntime: false,
   systemPrompt: 'You are a helpful AI assistant.',
   title: '',
   userAvatar: '',
@@ -256,7 +264,7 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
       baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
     })
     // useAgentRuntime 从 AgentUIContext 读取 agentId
-    const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble })
+    const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble, isTaskRuntime: props.taskRuntime })
 
     let runtime: AssistantRuntime | null = null
     switch (runtimePreset) {
@@ -375,6 +383,11 @@ const runtime = createCustomRuntime({
   }
 })`
       break
+    case 'agent':
+      runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
+
+const runtime = useAgentRuntime(${props.taskRuntime ? '{ isTaskRuntime: true }' : ''})`
+      break
     case 'agent-interactable':
       runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
 
@@ -385,7 +398,7 @@ import {
   unstable_Interactables,
 } from "@assistant-ui/react"
 
-const runtime = useAgentRuntime()
+const runtime = useAgentRuntime(${props.taskRuntime ? '{ isTaskRuntime: true }' : ''})
 const aui = useAui({ unstable_interactables: unstable_Interactables() })`
       break
   }

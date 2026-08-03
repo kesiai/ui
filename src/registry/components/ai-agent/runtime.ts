@@ -166,10 +166,7 @@ type AgentSessionMessage = {
   parts?: AgentMessagePart[];
 };
 
-const agentApi = createAPI({ name: 'eap/agents' });
-const sessionApi = createAPI({ name: 'eap/agent-sessions' });
 const feedbackApi = createAPI({ name: 'eap/feedbacks' });
-const messageApi = createAPI({ name: 'eap/messages' });
 
 // ====== Attachment Adapter ======
 /**
@@ -178,9 +175,19 @@ const messageApi = createAPI({ name: 'eap/messages' });
 class SessionAttachmentAdapter implements AttachmentAdapter {
   accept = ".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.json,.xml,.md,.yaml,.yml,.log";
   private _sessionId: string | undefined;
+  private _isTaskRuntime: boolean;
+
+  constructor(isTaskRuntime: boolean = false) {
+    this._isTaskRuntime = isTaskRuntime;
+  }
 
   setSessionId(sessionId: string | undefined) {
     this._sessionId = sessionId;
+  }
+
+  /** API 资源基名：task 模式走 eap/tasks，agent 模式走 eap/agent-sessions */
+  private get resourceBase() {
+    return this._isTaskRuntime ? 'eap/tasks' : 'eap/agent-sessions';
   }
 
   async add(state: { file: File }): Promise<PendingAttachment> {
@@ -203,9 +210,9 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
     formData.append("contentType", attachment.contentType ?? "");
     formData.append("createdBy", "kesi-ui");
 
-    const sessionApi = createAPI({ name: 'eap/agent-sessions' })
+    const sessionApi = createAPI({ name: this.resourceBase })
     const host = (sessionApi as any).host ?? getConfig().rest ?? "/rest/";
-    const uploadUrl = `${host}eap/agent-sessions/${sid}/attachments`;
+    const uploadUrl = `${host}${this.resourceBase}/${sid}/attachments`;
     const headers = { ...sessionApi.headers };
     delete headers["Content-Type"];
 
@@ -236,7 +243,8 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
     const objectKey = (attachment as any).objectKey ?? (part?.data ? extractObjectKey(part.data) : undefined);
     if (objectKey) {
       try {
-        await sessionApi.fetch(`/${sid}/attachments/${objectKey}`, { method: "DELETE" });
+        const deleteApi = createAPI({ name: this.resourceBase });
+        await deleteApi.fetch(`/${sid}/attachments/${objectKey}`, { method: "DELETE" });
       } catch { /* 删除失败不阻塞 */ }
     }
   }
@@ -252,7 +260,6 @@ function extractObjectKey(url: string): string {
   }
 }
 
-const attachmentAdapter = new SessionAttachmentAdapter();
 const dictationAdapter = /*#__PURE__*/ new WebSpeechDictationAdapter({
   language: 'zh-CN',
   interimResults: true,
@@ -547,8 +554,10 @@ async function streamRunInSession(params: {
   environmentVars?: Array<{ key: string; value: any }>;
   /** 发送消息前回调，可修改请求 body */
   onSendMessageBody?: (body: Record<string, any>, info: { sessionId: string; userText: string; url: string; headers: Record<string, string> }) => Record<string, any> | Promise<Record<string, any>>;
+  /** 是否为 task runtime（默认为 agent runtime） */
+  isTaskRuntime?: boolean;
 }): Promise<MessageTiming> {
-  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars, onSendMessageBody } = params;
+  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars, onSendMessageBody, isTaskRuntime } = params;
 
   // 从 AppendMessage 中提取文本，enrich，提取附件
   const contentParts = Array.isArray(message.content) ? message.content : [];
@@ -559,9 +568,11 @@ async function streamRunInSession(params: {
       return att.content?.[0]
   }), ...contentParts.filter((p: any) => p.type !== 'text') as ThreadUserMessagePart[]].filter(Boolean) as ThreadUserMessagePart[];
 
-  const sessionApi = createAPI({ name: 'eap/agent-sessions' })
+  // task 模式走 POST /eap/tasks/{id}/messages?stream=true，agent 模式走 eap/agent-sessions
+  const resourceBase = isTaskRuntime ? 'eap/tasks' : 'eap/agent-sessions';
+  const sessionApi = createAPI({ name: resourceBase })
   const host = (sessionApi as any).host ?? getConfig().rest ?? '/rest/';
-  const url = `${host}eap/agent-sessions/${sessionId}/messages?stream=true`;
+  const url = `${host}${resourceBase}/${sessionId}/messages?stream=true`;
   const headers: Record<string, string> = sessionApi.headers;
   headers['Accept'] = 'text/event-stream';
 
@@ -841,8 +852,10 @@ export const useAgentRuntime = (options?: {
   onThreadChange?: (threadId: string | undefined) => void;
   onAgentChange?: (agentId: string) => void;
   onSendMessageBody?: (body: Record<string, any>, info: { sessionId: string; userText: string; url: string; headers: Record<string, string> }) => Record<string, any> | Promise<Record<string, any>>;
+  /** 是否为 task runtime（默认 agent runtime），会改变所有请求地址 */
+  isTaskRuntime?: boolean;
 }) => {
-  const { preamble, environmentVars, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange, onSendMessageBody } = options ?? {};
+  const { preamble, environmentVars, renderRegistry, onShareThread, initialThreadId, onThreadChange, onAgentChange, onSendMessageBody, isTaskRuntime } = options ?? {};
   const [agentId, setAgentId] = useState(options?.agentId ?? '');
 
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
@@ -900,22 +913,42 @@ export const useAgentRuntime = (options?: {
   const isNewSessionRef = useRef(false);        // onNew 新建 session 时屏蔽 useEffect 加载
   const pollingRef = useRef<{ messageId: string; timer: ReturnType<typeof setInterval> } | null>(null);
 
+  // isTaskRuntime 用 ref 存，闭包中读取最新值
+  const isTaskRuntimeRef = useRef<boolean | undefined>(isTaskRuntime);
+  isTaskRuntimeRef.current = isTaskRuntime;
+
+  // 根据 isTaskRuntime 选择 API 前缀和对应的 API 实例
+  // task 模式下没有 agent-sessions / agent-messages 这些资源：Task 本身就是会话线程，
+  // 统一走 eap/tasks，消息接口为 /eap/tasks/{id}/messages、/eap/tasks/{id}/messages/{messageId}
+  const apiPrefix = isTaskRuntime ? 'task' : 'agent';
+  const agentApi = useMemo(() => createAPI({ name: isTaskRuntime ? 'eap/tasks' : `eap/${apiPrefix}s` }), [apiPrefix, isTaskRuntime]);
+  const sessionApi = useMemo(() => createAPI({ name: isTaskRuntime ? 'eap/tasks' : `eap/${apiPrefix}-sessions` }), [apiPrefix, isTaskRuntime]);
+  const messageApi = useMemo(() => createAPI({ name: isTaskRuntime ? 'eap/tasks' : `eap/${apiPrefix}-messages` }), [apiPrefix, isTaskRuntime]);
+
+  // attachmentAdapter 在 hook 内实例化，根据 isTaskRuntime 选择 API 前缀
+  const attachmentAdapterRef = useRef<SessionAttachmentAdapter>(new SessionAttachmentAdapter(isTaskRuntime));
+  const attachmentAdapter = attachmentAdapterRef.current;
+
   const runtime = useRef<AssistantRuntime>(null as any);
 
   // ---------- 初始加载 thread 列表 ----------
   useEffect(() => {
     setThreadsLoading(true);
-    agentApi.fetch(`/${agentId}/sessions`, { method: 'GET' }).then(({ json }) => {
+    // task 模式：Task 即会话线程，通过 GET /eap/tasks 查任务列表；agent 模式：查某 agent 的会话列表
+    const listPromise = isTaskRuntime
+      ? sessionApi.fetch('', { method: 'GET' })
+      : agentApi.fetch(`/${agentId}/sessions`, { method: 'GET' });
+    listPromise.then(({ json }) => {
       setThreads((json as any[]).map((s: any) => ({
         status: 'regular' as const,
         id: s.id,
         remoteId: s.id,
-        title: s.title,
+        title: s.title ?? s.name,
       })));
       setThreadsLoading(false);
     }).catch(() => setThreadsLoading(false));
     setCurrentThreadId(undefined);
-  }, [agentId]);
+  }, [agentId, isTaskRuntime, sessionApi, agentApi]);
 
   // ---------- thread 切换时加载消息，并轮询 running 的 assistant message ----------
   useEffect(() => {
@@ -948,7 +981,11 @@ export const useAgentRuntime = (options?: {
         if (lastAssistant && lastAssistant.id && (lastAssistant.status === 'running' || lastAssistant.status === 'queued')) {
           const timer = setInterval(async () => {
             try {
-              const { json: updated } = await messageApi.fetch(`/${lastAssistant.id}`, { method: 'GET' });
+              // task 模式：消息详情接口为 GET /eap/tasks/{id}/messages/{messageId}
+              const { json: updated } = await messageApi.fetch(
+                isTaskRuntime ? `/${currentThreadId}/messages/${lastAssistant.id}` : `/${lastAssistant.id}`,
+                { method: 'GET' },
+              );
               const msg = toThreadMessage(updated as AgentSessionMessage);
               if (msg) {
                 setMessages(prev => prev.map(m => m.id === msg.id ? msg : m));
@@ -1012,16 +1049,26 @@ export const useAgentRuntime = (options?: {
     const sessionId = currentThreadId ?? await (async () => {
       console.log('[onNew] creating new session...', { agentId });
 
-      const { json } = await agentApi.fetch(`/${agentId}/sessions`, {
-        method: 'POST',
-        body: JSON.stringify({
-          // initialMessage: userText,
-          title: userText.slice(0, 30),
-          metadata: {},
-          requestedBy,
-        }),
-      });
-      const newId = (json.sessionId ?? json.id) as string;
+      const createBody = {
+        title: userText.slice(0, 30),
+        metadata: {},
+        requestedBy,
+      };
+      // task 模式：Task 即会话线程，通过 POST /eap/tasks 创建。
+      // 请求体为 entity.CreateTaskRequest（必填：assigneeId、assigneeType、data、title），
+      // assigneeId 即 agentId，首条消息随后通过 messages 接口发送
+      const { json } = isTaskRuntime
+        ? await sessionApi.fetch('', {
+            method: 'POST',
+            body: JSON.stringify({
+              title: userText.slice(0, 30),
+              assigneeId: agentId || '',
+              assigneeType: 'agent', // agent 或 squad；assigneeId 传的是 agentId，故为 agent
+              data: { test: "abc" }, // 先传个空对象，后续消息里再传实际数据
+            }),
+          })
+        : await agentApi.fetch(`/${agentId}/sessions`, { method: 'POST', body: JSON.stringify(createBody) });
+      const newId = (json.sessionId ?? json.id ?? json.taskId) as string;
       console.log('[onNew] session created', { newId, json });
 
       if (!newId) throw new Error("Failed to create session");
@@ -1080,6 +1127,7 @@ export const useAgentRuntime = (options?: {
         preamble: preambleRef.current,
         environmentVars: environmentVarsRef.current,
         onSendMessageBody: onSendMessageBodyRef.current,
+        isTaskRuntime: isTaskRuntimeRef.current,
         onMessageChange(content) {
           // console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
           setMessages(prev => prev.map(m =>
@@ -1149,6 +1197,7 @@ export const useAgentRuntime = (options?: {
         preamble: preambleRef.current,
         environmentVars: environmentVarsRef.current,
         onSendMessageBody: onSendMessageBodyRef.current,
+        isTaskRuntime: isTaskRuntimeRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId
@@ -1207,6 +1256,7 @@ export const useAgentRuntime = (options?: {
         preamble: preambleRef.current,
         environmentVars: environmentVarsRef.current,
         onSendMessageBody: onSendMessageBodyRef.current,
+        isTaskRuntime: isTaskRuntimeRef.current,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId

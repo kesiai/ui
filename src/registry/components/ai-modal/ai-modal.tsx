@@ -7,7 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Thread, AgentSelect } from "@/registry/components/ai-agent/ai-agent";
+import { AgentUIProvider, Thread, ThreadList, AgentSelect, type AvatarSettings } from "@/registry/components/ai-agent/ai-agent";
 import { AssistantModalPrimitive, AssistantRuntimeProvider, useAuiState, useAui, type AssistantRuntime } from "@assistant-ui/react";
 import { BotIcon, ChevronDownIcon, Maximize2Icon, Minimize2Icon, XIcon, TrashIcon, MoreHorizontalIcon, ArchiveIcon, PlusIcon } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -37,6 +37,8 @@ interface AIModalProps {
   modalClassName?: string;
   showExpandButton?: boolean;
   showAgentSelect?: boolean;
+  /** 头像配置，透传给 AgentUIProvider（参考 ai-agent 的 Assistant 组件） */
+  avatar?: AvatarSettings;
 }
 
 const positionClasses = {
@@ -48,8 +50,15 @@ const positionClasses = {
 
 /** 下拉列表形式的 Thread 选择器 */
 const ThreadListSelect: React.FC = () => {
-  const { threadItems, mainThreadId, isLoading } = useAuiState((s) => s.threads);
+  const { threadIds, mainThreadId, isLoading } = useAuiState((s) => s.threads);
   const threadsApi = useAui().threads();
+
+  // assistant-ui 在未选择会话时会把 threadId 兜底为哨兵值 "DEFAULT_THREAD_ID"，
+  // 该值不在 threadIds 中。若直接传给 Select，Radix 找不到匹配的 SelectItem，
+  // SelectValue 会渲染成空白而不是 placeholder。因此仅当 mainThreadId 是真实线程时才作为选中值。
+  const selectValue = mainThreadId !== undefined && threadIds.includes(mainThreadId)
+    ? mainThreadId
+    : undefined;
 
   const handleValueChange = (value: string) => {
     if (value === '__new__') {
@@ -60,7 +69,7 @@ const ThreadListSelect: React.FC = () => {
   };
 
   return (
-    <Select value={mainThreadId } onValueChange={handleValueChange}>
+    <Select value={selectValue} onValueChange={handleValueChange}>
       <SelectTrigger className="min-w-24 max-w-60 h-7 border-0 bg-transparent px-1 shadow-none text-sm font-semibold focus:ring-2 focus:ring-blue-500">
         <SelectValue placeholder="选择对话" />
       </SelectTrigger>
@@ -74,7 +83,7 @@ const ThreadListSelect: React.FC = () => {
             加载中...
           </SelectItem>
         )}
-        {!isLoading && threadItems.length === 0 && (
+        {!isLoading && threadIds.length === 0 && (
           <SelectItem value="__empty__" disabled>
             无对话
           </SelectItem>
@@ -177,6 +186,7 @@ export const AIModal = ({
   modalClassName = "",
   showExpandButton = true,
   showAgentSelect,
+  avatar,
 }: AIModalProps) => {
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -253,19 +263,38 @@ export const AIModal = ({
           </div>
         </div>
 
-        {/* Thread 内容 */}
-        <div className="h-[calc(100%-52px)] overflow-hidden">
-          <Thread />
-        </div>
+        {/* Thread 内容：放大时左侧显示 ThreadList 侧边栏，布局同 ai-agent 的 Sidebar */}
+        {expanded ? (
+          <div className="flex h-[calc(100%-52px)] overflow-hidden">
+            <aside className="flex h-full w-65 flex-col overflow-hidden">
+              <div className="relative w-65 flex-1 overflow-y-auto p-3">
+                <ThreadList />
+              </div>
+            </aside>
+            <div className="flex flex-1 flex-col overflow-hidden p-2 md:pl-0">
+              <div className="bg-background flex flex-1 flex-col overflow-hidden rounded-lg">
+                <Thread />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="h-[calc(100%-52px)] overflow-hidden">
+            <Thread />
+          </div>
+        )}
       </AssistantModalPrimitive.Content>
     </AssistantModalPrimitive.Root>
   );
 
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
-      {modalContent}
+      <AgentUIProvider avatar={avatar}>
+        {modalContent}
+      </AgentUIProvider>
     </AssistantRuntimeProvider>
   ) : (
-    modalContent
+    <AgentUIProvider avatar={avatar}>
+      {modalContent}
+    </AgentUIProvider>
   );
 };

@@ -109,6 +109,22 @@ export const aiModalPropsConfig = [
     description: '使用 Task 作为会话线程，请求走 /eap/tasks 接口；开启后新建会话将创建 Task（assigneeId 即 agentId）'
   },
   {
+    name: 'userAvatar',
+    label: '头像 - 用户 (avatar.user)',
+    type: 'text' as const,
+    default: '',
+    placeholder: '图片 URL 或文字（如 我）',
+    description: 'avatar.user。填图片 URL 显示图片，填其他文字显示文字；配置 user 或 agent 任一个即开启头像模式'
+  },
+  {
+    name: 'agentAvatar',
+    label: '头像 - 助手 (avatar.agent)',
+    type: 'text' as const,
+    default: '',
+    placeholder: '图片 URL 或文字（如 AI）',
+    description: 'avatar.agent。开启头像模式后，助手回复也会像用户输入一样放进气泡框；未配置的一方显示默认 U/A'
+  },
+  {
     name: 'title',
     label: '标题',
     type: 'text' as const,
@@ -156,6 +172,8 @@ export const aiModalDefaultProps = {
   runtimePreset: 'opencode' as RuntimePreset,
   agentId: '6a3a22aeecf2e81476c84246',
   taskRuntime: false,
+  userAvatar: '',
+  agentAvatar: '',
   title: 'AI Assistant',
   modalSize: { width: '500px', height: '600px' },
   triggerPosition: 'bottom-right' as const,
@@ -165,7 +183,12 @@ export const aiModalDefaultProps = {
 
 const renderAIModalPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'opencode'
-  
+
+  // 头像配置（参考 ai-agent config）
+  const avatar = (props.userAvatar || props.agentAvatar) ? {
+    user: props.userAvatar || undefined,
+    agent: props.agentAvatar || undefined,
+  } : undefined
 
   // 内部组件：在 AgentUIProvider 内调用 hooks
   const AIModalContent: React.FC = () => {
@@ -224,6 +247,7 @@ const renderAIModalPreview = (props: Record<string, any>) => {
     return (
       <AIModal
         runtime={runtime}
+        avatar={avatar}
         showAgentSelect={props.showAgentSelect}
         title={props.title || 'AI Assistant'}
         modalSize={modalSize}
@@ -327,6 +351,12 @@ const runtime = useAgentRuntime(${props.taskRuntime ? '{ isTaskRuntime: true }' 
   const additionalProps = []
   if (props.title && props.title !== 'AI Assistant') {
     additionalProps.push(`title="${props.title}"`)
+  }
+  if (props.userAvatar || props.agentAvatar) {
+    const avatarEntries: string[] = []
+    if (props.userAvatar) avatarEntries.push(`user: "${props.userAvatar}"`)
+    if (props.agentAvatar) avatarEntries.push(`agent: "${props.agentAvatar}"`)
+    additionalProps.push(`avatar={{ ${avatarEntries.join(', ')} }}`)
   }
   if (props.triggerPosition !== 'bottom-right') {
     additionalProps.push(`triggerPosition="${props.triggerPosition}"`)

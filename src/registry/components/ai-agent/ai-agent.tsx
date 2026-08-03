@@ -184,7 +184,7 @@ const useAgentUI = (): AgentUIContextValue & AgentExtras => {
 /**
  * Agent UI Provider - 提供 UI 专属配置（头像）
  */
-const AgentUIProvider: FC<{
+export const AgentUIProvider: FC<{
   children: ReactNode;
   avatar?: AvatarSettings;
 }> = ({ children, avatar }) => {
@@ -257,15 +257,21 @@ export const AgentSelect: FC = () => {
     }).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="text-muted-foreground px-3 py-1.5 text-xs">加载...</div>;
+  // 与 ThreadListSelect 同理：agentId 若不在当前可选项中（空字符串、列表尚未加载完成、
+  // 或已配置的 agent 不在返回列表里），直接传给 Radix 会找不到匹配的 SelectItem 而显示空白。
+  // 归为 undefined 让 SelectValue 正常显示 placeholder。
+  const selectValue = agentId && agents.some((a) => a.value === agentId) ? agentId : undefined;
 
   return (
-    <Select value={agentId} onValueChange={setAgentId}>
+    <Select value={selectValue} onValueChange={setAgentId}>
       <SelectTrigger className="aui-agent-select h-8 w-full border-0 bg-transparent px-3 text-sm shadow-none hover:bg-accent">
         <SelectValue placeholder="选择 Agent" />
       </SelectTrigger>
       <SelectContent>
-        {agents.length === 0 && (
+        {loading && (
+          <SelectItem value="__loading__" disabled>加载中...</SelectItem>
+        )}
+        {!loading && agents.length === 0 && (
           <SelectItem value="__empty__" disabled>无可用 Agent</SelectItem>
         )}
         {agents.map((a) => (

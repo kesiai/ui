@@ -3,20 +3,41 @@ import { ComponentConfig } from '@/app/config/types'
 
 export const aiWorkspacePropsConfig = [
   {
+    name: 'mode',
+    label: '模式',
+    type: 'select' as const,
+    default: 'agent',
+    options: [
+      { label: '智能体工作区', value: 'agent' },
+      { label: '任务工作区', value: 'task' },
+    ],
+    description: 'agent 走 /eap/agents，task 走 /eap/tasks'
+  },
+  {
     name: 'agentId',
-    label: 'Agent ID',
+    label: '智能体',
     type: 'agent-id' as const,
     default: '',
-    description: '智能体 ID，用于加载对应的工作区文件'
+    description: '选择智能体（模式为"智能体工作区"时生效）'
+  },
+  {
+    name: 'taskId',
+    label: '任务',
+    type: 'task-id' as const,
+    default: '',
+    description: '选择任务（模式为"任务工作区"时生效）'
   },
 ]
 
 export const aiWorkspaceDefaultProps = {
+  mode: 'agent' as const,
   agentId: '',
+  taskId: '',
 }
 
 const renderPreview = (props: Record<string, any>) => {
-  if (!props.agentId) {
+  const id = props.mode === 'task' ? props.taskId : props.agentId
+  if (!id) {
     return (
       <div className="h-full flex flex-col items-center justify-center p-8 text-center gap-2">
         <div className="w-16 h-16 mb-4 rounded-full bg-blue-100 flex items-center justify-center">
@@ -24,9 +45,9 @@ const renderPreview = (props: Record<string, any>) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-slate-800 mb-2">Agent Workspace</h3>
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">AI 工作区</h3>
         <p className="text-sm text-slate-600 mb-4 max-w-md">
-          请在属性配置中填入有效的 <strong>Agent ID</strong> 以查看工作区文件。
+          请选择<strong>模式</strong>并<strong>{props.mode === 'task' ? '选择任务' : '选择智能体'}</strong>以查看工作区文件。
         </p>
       </div>
     )
@@ -34,17 +55,21 @@ const renderPreview = (props: Record<string, any>) => {
 
   return (
     <div className="h-120 w-full">
-      <AgentWorkspace agentId={props.agentId} className="h-full" />
+      <AgentWorkspace id={id} mode={props.mode || 'agent'} className="h-full" />
     </div>
   )
 }
 
 const renderCodePreview = (props: Record<string, any>) => {
+  const id = props.mode === 'task' ? props.taskId : props.agentId
   return `import { AgentWorkspace } from '@/registry/components/ai-workspace/ai-workspace'
 
 const MyWorkspace = () => {
   return (
-    <AgentWorkspace agentId="${props.agentId || 'your-agent-id'}" />
+    <AgentWorkspace
+      id="${id || 'your-id'}"
+      mode="${props.mode || 'agent'}"
+    />
   )
 }`
 }

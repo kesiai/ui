@@ -19,6 +19,8 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
   const [loadingTableTags, setLoadingTableTags] = useState(false)
   const [agentOptions, setAgentOptions] = useState<Array<{ value: string; label: string }>>([])
   const [loadingAgents, setLoadingAgents] = useState(false)
+  const [taskOptions, setTaskOptions] = useState<Array<{ value: string; label: string }>>([])
+  const [loadingTasks, setLoadingTasks] = useState(false)
 
   // 获取设备表列表
   useEffect(() => {
@@ -170,6 +172,35 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
       }
 
       fetchAgents()
+    }
+  }, [config.type])
+
+  // 获取 Task 列表（用于 task-id 类型）
+  useEffect(() => {
+    if (config.type === 'task-id') {
+      const fetchTasks = async () => {
+        try {
+          setLoadingTasks(true)
+          const response = await api({ name: 'eap/tasks' }).fetch('')
+          const items = response?.json || response || []
+          if (!Array.isArray(items)) {
+            console.error('Task 数据格式错误:', response)
+            setTaskOptions([])
+            return
+          }
+          const options = items.map((item: any) => ({
+            value: item.id,
+            label: item.title || item.name || item.id
+          }))
+          setTaskOptions(options)
+        } catch (error) {
+          console.error('获取 Task 列表失败:', error)
+          setTaskOptions([])
+        } finally {
+          setLoadingTasks(false)
+        }
+      }
+      fetchTasks()
     }
   }, [config.type])
 
@@ -598,6 +629,31 @@ export const FormControl: React.FC<FormControlProps> = ({ config, value, onChang
             请选择 Agent
           </option>
           {agentOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      )
+
+    case 'task-id':
+      if (loadingTasks) {
+        return (
+          <div className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-500 text-sm">
+            加载任务...
+          </div>
+        )
+      }
+      return (
+        <select
+          value={value as string || ''}
+          onChange={(e) => handleChange(e.target.value)}
+          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
+        >
+          <option value="">
+            请选择任务
+          </option>
+          {taskOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>

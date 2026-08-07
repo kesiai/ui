@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,30 +20,39 @@ import {
   ChevronRight,
   Trash2,
 } from "lucide-react";
-import { workspaceApi } from "./workspace-api";
 import { renderMarkdown } from "./markdown";
-import type { AgentWorkspaceFileEntry, AgentWorkspaceFileDetail } from "./types";
+import { createWorkspaceApi } from "./workspace-api";
+import type { WorkspaceMode, WorkspaceNode, WorkspaceApi } from "./types";
 
 export interface AgentWorkspaceProps {
-  /** 智能体 ID */
-  agentId: string;
+  /** @deprecated 使用 id + mode="agent" */
+  agentId?: string;
+  /** 工作区所属 ID（agent ID 或 task ID） */
+  id?: string;
+  /** 工作区模式：agent（默认） | task */
+  mode?: WorkspaceMode;
   /** 自定义类名 */
   className?: string;
 }
 
-export function AgentWorkspace({ agentId, className }: AgentWorkspaceProps) {
+export function AgentWorkspace({ agentId, id, mode = 'agent', className }: AgentWorkspaceProps) {
+  const targetId = id || agentId || '';
+
+  // 统一 API
+  const api: WorkspaceApi = useMemo(() => createWorkspaceApi(mode), [mode]);
+
   // 文件树状态
-  const [treeMap, setTreeMap] = useState<Record<string, AgentWorkspaceFileEntry[]>>({});
+  const [treeMap, setTreeMap] = useState<Record<string, WorkspaceNode[]>>({});
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [selected, setSelected] = useState<string | null>(null);
-  const [file, setFile] = useState<AgentWorkspaceFileDetail | null>(null);
+  const [file, setFile] = useState<{ path: string; content?: string; size?: number } | null>(null);
   const [content, setContent] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [preview, setPreview] = useState(true);
   const [loadingDir, setLoadingDir] = useState<Set<string>>(new Set());
 
-  // 新建弹窗状态
+  // 新建弹窗
   const [showNewFile, setShowNewFile] = useState(false);
   const [showNewDir, setShowNewDir] = useState(false);
   const [newPath, setNewPath] = useState("");
@@ -52,20 +61,20 @@ export function AgentWorkspace({ agentId, className }: AgentWorkspaceProps) {
 
   // 初始化加载根目录
   useEffect(() => {
-    if (agentId) loadDir("");
-  }, [agentId]);
+    if (targetId) loadDir("");
+  }, [targetId, mode]);
 
   /** 加载目录子节点 */
   const loadDir = useCallback(async (dirPath: string) => {
-    if (!agentId) return;
+    if (!targetId) return;
     setLoadingDir(prev => new Set([...prev, dirPath]));
     try {
-      const entries = await workspaceApi.getTree(agentId, dirPath);
+      const entries = await api.getTree(targetId, dirPath);
       setTreeMap(prev => ({ ...prev, [dirPath]: entries }));
     } catch { /* ignore */ } finally {
       setLoadingDir(prev => { const n = new Set(prev); n.delete(dirPath); return n; });
     }
-  }, [agentId]);
+  }, [targetId, api]);
 
   /** 展开/折叠目录 */
   const toggleDir = useCallback((path: string) => {
@@ -80,33 +89,33 @@ export function AgentWorkspace({ agentId, className }: AgentWorkspaceProps) {
 
   /** 选择文件 */
   const selectFile = useCallback(async (path: string) => {
-    if (!agentId) return;
+    if (!targetId) return;
     setSelected(path);
     setPreview(path.toLowerCase().endsWith(".md"));
     setFileLoading(true);
     try {
-      const detail = await workspaceApi.getFile(agentId, path);
+      const detail = await api.getFile(targetId, path);
       setFile(detail);
       setContent(detail.content || "");
     } catch { setFile(null); } finally { setFileLoading(false); }
-  }, [agentId]);
+  }, [targetId, api]);
 
   /** 保存文件 */
   const saveCurrentFile = useCallback(async () => {
-    if (!agentId || !selected) return;
+    if (!targetId || !selected) return;
     setSaving(true);
     try {
-      await workspaceApi.saveFile(agentId, { path: selected, content });
+      await api.saveFile(targetId, selected, content);
       setFile(p => p ? { ...p, content } : null);
     } finally { setSaving(false); }
-  }, [agentId, selected, content]);
+  }, [targetId, selected, content, api]);
 
   /** 下载文件 */
   const downloadCurrentFile = useCallback(async () => {
-    if (!agentId || !selected) return;
+    if (!targetId || !selected) return;
     const name = selected.split("/").pop() || "download";
-    await workspaceApi.downloadFile(agentId, selected, name);
-  }, [agentId, selected]);
+    await api.downloadFile(targetId, selected, name);
+  }, [targetId, selected, api]);
 
   /** 父目录路径 */
   const parentDir = (childPath: string) => {
@@ -124,49 +133,49 @@ export function AgentWorkspace({ agentId, className }: AgentWorkspaceProps) {
 
   /** 新建文件 */
   const createFile = useCallback(async () => {
-    if (!agentId || !newPath.trim()) return;
+    if (!targetId || !newPath.trim()) return;
     setOpError("");
     const name = newPath.trim().replace(/^\/+/, "");
     const fullPath = getParentPath() + name;
     try {
-      await workspaceApi.saveFile(agentId, { path: fullPath, content: "" });
+      await api.saveFile(targetId, fullPath, "");
       setShowNewFile(false); setNewPath("");
       loadDir(parentDir(fullPath));
     } catch (e: any) { setOpError(e?.message || "创建失败"); }
-  }, [agentId, newPath, loadDir, selected]);
+  }, [targetId, newPath, api, loadDir, selected]);
 
   /** 新建目录 */
   const createDirectory = useCallback(async () => {
-    if (!agentId || !newDirPath.trim()) return;
+    if (!targetId || !newDirPath.trim()) return;
     setOpError("");
     const name = newDirPath.trim().replace(/^\/+|\/+$/g, "");
     const fullPath = getParentPath() + name + "/";
     try {
-      await workspaceApi.createDir(agentId, { path: fullPath });
+      await api.createDir(targetId, fullPath);
       setShowNewDir(false); setNewDirPath("");
       loadDir(parentDir(fullPath));
     } catch (e: any) { setOpError(e?.message || "创建失败"); }
-  }, [agentId, newDirPath, loadDir, selected]);
+  }, [targetId, newDirPath, api, loadDir, selected]);
 
   /** 删除节点 */
-  const deleteNode = useCallback(async (entry: AgentWorkspaceFileEntry) => {
-    if (!agentId) return;
+  const deleteNode = useCallback(async (entry: WorkspaceNode) => {
+    if (!targetId) return;
     const label = entry.path || entry.name || "";
     if (!confirm(`确定删除「${label}」？不可撤销。`)) return;
     const p = entry.path || "";
     try {
-      if (entry.type === "dir") await workspaceApi.deleteDir(agentId, p, true);
-      else await workspaceApi.deleteFile(agentId, p);
+      if (entry.type === "dir") await api.deleteDir(targetId, p, true);
+      else await api.deleteFile(targetId, p);
       if (selected === p) { setSelected(null); setFile(null); setContent(""); }
       setTreeMap(prev => { const n = { ...prev }; delete n[p]; return n; });
       loadDir(parentDir(p));
     } catch { /* ignore */ }
-  }, [agentId, selected, loadDir]);
+  }, [targetId, selected, api, loadDir]);
 
   const isMd = selected?.toLowerCase().endsWith(".md");
 
   /** 递归渲染树节点 */
-  const renderNode = (entry: AgentWorkspaceFileEntry, depth: number): React.ReactNode => {
+  const renderNode = (entry: WorkspaceNode, depth: number): React.ReactNode => {
     const p = entry.path || "";
     const isDir = entry.type === "dir";
     const isExpanded = expanded.has(p);

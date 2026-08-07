@@ -1,90 +1,108 @@
 /**
- * 智能体工作区 API 客户端
- * 后端: /agents/{id}/workspace/*
+ * 工作区 API 客户端
+ * agent 模式: /eap/agents/{id}/workspace/*  (type: 'file'/'dir')
+ * task  模式: /eap/tasks/{id}/workspace/*   (isDir: boolean)
+ * 两者接口结构完全一致，仅 base path 和返回字段名不同。
  */
 
 import { createAPI } from '@kesi/client';
-import type {
-  AgentWorkspaceFileEntry,
-  AgentWorkspaceFileDetail,
-  CreateAgentWorkspaceDirRequest,
-  SaveAgentWorkspaceFileRequest,
-} from './types';
+import type { WorkspaceMode, WorkspaceNode, WorkspaceFileDetail, WorkspaceApi } from './types';
 
-const agentsAPI = createAPI({ name: 'eap/agents' });
-
-const asJson = <T>(r: any): T => r?.json ?? r;
-
-/** 获取文件树 */
-const getTree = async (agentId: string, path = ''): Promise<AgentWorkspaceFileEntry[]> => {
-  const q = path ? `?path=${encodeURIComponent(path)}` : '';
-  const result = await agentsAPI.fetch(`/${agentId}/workspace/tree${q}`) as any;
-  return asJson<AgentWorkspaceFileEntry[]>(result);
+const apis = {
+  agent: createAPI({ name: 'eap/agents' }),
+  task:  createAPI({ name: 'eap/tasks' }),
 };
 
-/** 读取文件 */
-const getFile = async (agentId: string, path: string): Promise<AgentWorkspaceFileDetail> => {
-  const q = `?path=${encodeURIComponent(path)}`;
-  const result = await agentsAPI.fetch(`/${agentId}/workspace/file${q}`) as any;
-  return asJson<AgentWorkspaceFileDetail>(result);
-};
+/** 归一化：{type:'dir'} 或 {isDir:true} → WorkspaceNode */
+function normalizeEntry(raw: any): WorkspaceNode {
+  return {
+    name: raw.name || '',
+    path: raw.path || '',
+    type: (raw.type === 'dir' || raw.isDir) ? 'dir' : 'file',
+    size: raw.size,
+    updatedAt: raw.updatedAt,
+  };
+}
 
-/** 保存文件 */
-const saveFile = async (agentId: string, req: SaveAgentWorkspaceFileRequest): Promise<AgentWorkspaceFileDetail> => {
-  const result = await agentsAPI.fetch(`/${agentId}/workspace/file`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(req),
-  }) as any;
-  return asJson<AgentWorkspaceFileDetail>(result);
-};
+/** 归一化文件详情 */
+function normalizeFile(raw: any): WorkspaceFileDetail {
+  return {
+    path: raw.path || '',
+    content: raw.content,
+    size: raw.size,
+    contentType: raw.contentType,
+    updatedAt: raw.updatedAt,
+  };
+}
 
-/** 删除文件 */
-const deleteFile = async (agentId: string, path: string): Promise<void> => {
-  const q = `?path=${encodeURIComponent(path)}`;
-  await agentsAPI.fetch(`/${agentId}/workspace/file${q}`, { method: 'DELETE' });
-};
+/**
+ * 创建统一工作区 API
+ * @param mode - 'agent' | 'task'
+ */
+export function createWorkspaceApi(mode: WorkspaceMode): WorkspaceApi {
+  const api = apis[mode];
+  const base = mode === 'agent' ? 'agents' : 'tasks';
 
-/** 创建目录 */
-const createDir = async (agentId: string, req: CreateAgentWorkspaceDirRequest): Promise<void> => {
-  await agentsAPI.fetch(`/${agentId}/workspace/dirs`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(req),
-  });
-};
+  const asJson = <T>(r: any): T => r?.json ?? r;
 
-/** 删除目录 */
-const deleteDir = async (agentId: string, path: string, recursive = false): Promise<void> => {
-  const q = `?path=${encodeURIComponent(path)}&recursive=${recursive}`;
-  await agentsAPI.fetch(`/${agentId}/workspace/dirs${q}`, { method: 'DELETE' });
-};
+  return {
+    /** GET /{id}/workspace/tree[?path=...] */
+    async getTree(id: string, path = '') {
+      const q = path ? `?path=${encodeURIComponent(path)}` : '';
+      const data = asJson<any>(await api.fetch(`/${id}/workspace/tree${q}`));
+      const entries = Array.isArray(data) ? data : (data?.entries || []);
+      return entries.map(normalizeEntry);
+    },
 
-/** 下载文件 — 触发浏览器下载 */
-const downloadFile = async (agentId: string, path: string, filename?: string): Promise<void> => {
-  // 清洗 path：去掉可能误传的绝对路径前缀
-  const cleanPath = path.replace(/^\/?(workspace\/)?[a-f0-9]{24}\/?/, "");
-  const base = `/rest/eap/agents/${agentId}/workspace/file/download`;
-  const params = new URLSearchParams({ path: cleanPath });
-  const authHeader = agentsAPI.headers?.['Authorization'] || agentsAPI.headers?.authorization || '';
-  const projectId = agentsAPI.headers?.['x-request-project'] || '';
-  if (authHeader) params.set('token', authHeader.replace(/^Bearer\s+/i, ''));
-  if (projectId) params.set('x-request-project', projectId);
-  const url = `${base}?${params.toString()}`;
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename || path.split('/').pop() || 'download';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-};
+    /** GET /{id}/workspace/file?path=... */
+    async getFile(id: string, path: string) {
+      const q = `?path=${encodeURIComponent(path)}`;
+      return normalizeFile(asJson<any>(await api.fetch(`/${id}/workspace/file${q}`)));
+    },
 
-export const workspaceApi = {
-  getTree,
-  getFile,
-  saveFile,
-  deleteFile,
-  createDir,
-  deleteDir,
-  downloadFile,
-};
+    /** PUT /{id}/workspace/file */
+    async saveFile(id: string, path: string, content: string) {
+      await api.fetch(`/${id}/workspace/file`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path, content }),
+      });
+    },
+
+    /** DELETE /{id}/workspace/file?path=... */
+    async deleteFile(id: string, path: string) {
+      await api.fetch(`/${id}/workspace/file?path=${encodeURIComponent(path)}`, { method: 'DELETE' });
+    },
+
+    /** POST /{id}/workspace/dirs */
+    async createDir(id: string, path: string) {
+      await api.fetch(`/${id}/workspace/dirs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path }),
+      });
+    },
+
+    /** DELETE /{id}/workspace/dirs?path=...&recursive=... */
+    async deleteDir(id: string, path: string, recursive = false) {
+      await api.fetch(`/${id}/workspace/dirs?path=${encodeURIComponent(path)}&recursive=${recursive}`, { method: 'DELETE' });
+    },
+
+    /** 下载文件 */
+    async downloadFile(id: string, path: string, filename?: string) {
+      const cleanPath = path.replace(/^\/?(workspace\/)?[a-f0-9]{24}\/?/, '');
+      const params = new URLSearchParams({ path: cleanPath });
+      const authHeader = api.headers?.['Authorization'] || api.headers?.authorization || '';
+      const projectId = api.headers?.['x-request-project'] || '';
+      if (authHeader) params.set('token', authHeader.replace(/^Bearer\s+/i, ''));
+      if (projectId) params.set('x-request-project', projectId);
+      const url = `/rest/eap/${base}/${id}/workspace/file/download?${params.toString()}`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename || path.split('/').pop() || 'download';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    },
+  };
+}

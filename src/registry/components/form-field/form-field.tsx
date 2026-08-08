@@ -43,7 +43,7 @@ const FormField =
     const ui = useFieldUIStateValue(name)
     const fieldId = `form-rhf-${name}` + (Math.random().toString(36).substring(2, 9))
     const formClassNames = methods?.classNames
-    const fieldDescription = description || schema.description
+    const fieldDescription = description || schema?.description
     const fieldProps = React.useMemo(() => {
       return formFieldConverter(schema)
     }, [schema])
@@ -58,20 +58,20 @@ const FormField =
         render={({ field, fieldState }) => (
           <Field orientation={(formClassNames?.orientation as 'vertical' | 'horizontal' | 'responsive') || 'vertical'} data-invalid={fieldState.invalid} className={cn(className, formClassNames?.field, classNames?.field, schema?.classNames?.field)} style={schema?.colSpan ? { gridColumn: `span ${schema.colSpan}` } : undefined}>
             {label && <FieldLabel htmlFor={fieldId} className={cn(formClassNames?.label, classNames?.label, schema?.classNames?.label)}>
-              {label} : {isRequired && <span className="text-red-500">*</span>}
+              {label}{isRequired && <span className="text-red-500">*</span>}
             </FieldLabel>}
             {
               children ? (typeof children === 'function' ? children({
                 id: fieldId,
                 ...field,
                 ...fieldProps,
-                className: cn(formClassNames?.input, classNames?.input, schema.classNames?.input),
+                className: cn(formClassNames?.input, classNames?.input, schema?.classNames?.input),
                 'aria-invalid': fieldState.invalid
               }) : cloneElement(children as React.ReactElement<any>, {
                 id: fieldId,
                 ...field,
                 ...fieldProps,
-                className: cn(formClassNames?.input, classNames?.input, schema.classNames?.input),
+                className: cn(formClassNames?.input, classNames?.input, schema?.classNames?.input),
                 'aria-invalid': fieldState.invalid
               })) : <Input className={cn(formClassNames?.input, classNames?.input, schema?.classNames?.input)} />
             }

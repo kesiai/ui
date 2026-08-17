@@ -16,7 +16,7 @@ import {
   unstable_formatInteractableSnapshot
 } from "@assistant-ui/react";
 import { toToolsJSONSchema, type Tool } from "assistant-stream";
-import { createAPI, getConfig } from '@kesi/client'
+import { createAPI, getConfig, getHeaders } from '@kesi/client'
 import type { AssistantRuntime, Attachment, DataMessagePart, FileMessagePart, ImageMessagePart, ModelContext, ThreadUserMessagePart, ToolExecutionStatus } from "@assistant-ui/react";
 import { buildRenderPrompt, type RenderRegistry } from "./render/registry";
 import { FileDownloadCard } from "./render/file-download-card";
@@ -213,7 +213,7 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
     const sessionApi = createAPI({ name: this.resourceBase })
     const host = (sessionApi as any).host ?? getConfig().rest ?? "/rest/";
     const uploadUrl = `${host}${this.resourceBase}/${sid}/attachments`;
-    const headers = { ...sessionApi.headers };
+    const headers = { ...getHeaders() };
     delete headers["Content-Type"];
 
     const resp = await fetch(uploadUrl, { method: "POST", headers, body: formData });
@@ -573,8 +573,7 @@ async function streamRunInSession(params: {
   const sessionApi = createAPI({ name: resourceBase })
   const host = (sessionApi as any).host ?? getConfig().rest ?? '/rest/';
   const url = `${host}${resourceBase}/${sessionId}/messages?stream=true`;
-  const headers: Record<string, string> = sessionApi.headers;
-  headers['Accept'] = 'text/event-stream';
+  const headers: Record<string, string> = { ...getHeaders(), Accept: 'text/event-stream' };
 
   console.log('[StreamRunInSession] start fetching SSE stream...', { url, sessionId, userText });
 

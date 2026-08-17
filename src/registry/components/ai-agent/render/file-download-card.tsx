@@ -4,7 +4,7 @@ import { type FC } from "react";
 import { FileDownIcon, FileIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { createAPI } from "@kesi/client";
+import { getHeaders } from "@kesi/client";
 
 // ==================== FileDownloadCard ====================
 
@@ -37,9 +37,9 @@ export const FileDownloadCard: FC<{
     const cleanPath = filePath.replace(/^\/?(workspace\/)?[a-f0-9]{24}\/?/, "");
     const base = `/rest/eap/agents/${agentId}/workspace/file/download`;
     const params = new URLSearchParams({ path: cleanPath });
-    const api = createAPI({ name: "eap/agents" });
-    const authHeader = api.headers?.["Authorization"] || api.headers?.authorization || "";
-    const projectId = api.headers?.["x-request-project"] || "";
+    const headers = getHeaders();
+    const authHeader = headers["Authorization"] || "";
+    const projectId = headers["x-request-project"] || "";
     if (authHeader) params.set("token", authHeader.replace(/^Bearer\s+/i, ""));
     if (projectId) params.set("x-request-project", projectId);
     const url = `${base}?${params.toString()}`;

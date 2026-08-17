@@ -5,7 +5,7 @@
  * 两者接口结构完全一致，仅 base path 和返回字段名不同。
  */
 
-import { createAPI } from '@kesi/client';
+import { createAPI, getHeaders } from '@kesi/client';
 import type { WorkspaceMode, WorkspaceNode, WorkspaceFileDetail, WorkspaceApi } from './types';
 
 const apis = {
@@ -92,8 +92,9 @@ export function createWorkspaceApi(mode: WorkspaceMode): WorkspaceApi {
     async downloadFile(id: string, path: string, filename?: string) {
       const cleanPath = path.replace(/^\/?(workspace\/)?[a-f0-9]{24}\/?/, '');
       const params = new URLSearchParams({ path: cleanPath });
-      const authHeader = api.headers?.['Authorization'] || api.headers?.authorization || '';
-      const projectId = api.headers?.['x-request-project'] || '';
+      const headers = getHeaders();
+      const authHeader = headers['Authorization'] || '';
+      const projectId = headers['x-request-project'] || '';
       if (authHeader) params.set('token', authHeader.replace(/^Bearer\s+/i, ''));
       if (projectId) params.set('x-request-project', projectId);
       const url = `/rest/eap/${base}/${id}/workspace/file/download?${params.toString()}`;

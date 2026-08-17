@@ -176,6 +176,10 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
   accept = ".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.json,.xml,.md,.yaml,.yml,.log";
   private _sessionId: string | undefined;
   private _isTaskRuntime: boolean;
+  /** 实时 sessionId 读取器：切换会话后优先于本地缓存，消除 useEffect 同步窗口 */
+  private _sessionGetter: (() => string | undefined) | undefined;
+  /** 会话创建器：无 sessionId 时自动创建（新会话 + 附件场景） */
+  private _sessionCreator: (() => Promise<string>) | undefined;
 
   constructor(isTaskRuntime: boolean = false) {
     this._isTaskRuntime = isTaskRuntime;
@@ -183,6 +187,34 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
 
   setSessionId(sessionId: string | undefined) {
     this._sessionId = sessionId;
+  }
+
+  setSessionGetter(getter: () => string | undefined) {
+    this._sessionGetter = getter;
+  }
+
+  setSessionCreator(creator: () => Promise<string>) {
+    this._sessionCreator = creator;
+  }
+
+  /**
+   * 解析当前可用的 sessionId：本地缓存 → 实时读取 → 自动创建。
+   * assistant-ui 的 send() 流程是「先上传附件、再 handleSend → onNew 建会话」，
+   * 因此新会话场景下附件上传时还没有 sessionId，必须在这里兜底创建。
+   */
+  private async resolveSessionId(): Promise<string> {
+    if (this._sessionId) return this._sessionId;
+    const latest = this._sessionGetter?.();
+    if (latest) {
+      this._sessionId = latest;
+      return latest;
+    }
+    if (this._sessionCreator) {
+      const created = await this._sessionCreator();
+      this._sessionId = created;
+      return created;
+    }
+    throw new Error("SessionAttachmentAdapter: no sessionId set");
   }
 
   /** API 资源基名：task 模式走 eap/tasks，agent 模式走 eap/agent-sessions */
@@ -202,8 +234,7 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
   }
 
   async send(attachment: PendingAttachment): Promise<CompleteAttachment> {
-    const sid = this._sessionId;
-    if (!sid) throw new Error("SessionAttachmentAdapter: no sessionId set");
+    const sid = await this.resolveSessionId();
 
     const formData = new FormData();
     formData.append("file", attachment.file);
@@ -866,8 +897,11 @@ export const useAgentRuntime = (options?: {
     title?: string;
   }>>([]);
   const [currentThreadId, setCurrentThreadIdState] = useState<string | undefined>(initialThreadId);
+  // 权威 sessionId：与 currentThreadId 同步，供 attachmentAdapter 实时读取（effect 之前即可用）
+  const sessionIdRef = useRef<string | undefined>(currentThreadId);
   const setCurrentThreadId = useCallback((id: string | undefined) => {
     setCurrentThreadIdState(id);
+    sessionIdRef.current = id;
     onThreadChange?.(id);
   }, [onThreadChange]);
   const [requestedBy] = useState('kesi-ui');
@@ -1031,6 +1065,63 @@ export const useAgentRuntime = (options?: {
     }));
   }, [toolStatuses]);
 
+  // ---------- 会话创建（onNew 与 attachmentAdapter 共用，避免重复创建） ----------
+  const pendingSessionRef = useRef<Promise<string> | null>(null);
+
+  const createSession = useCallback(async (title: string): Promise<string> => {
+    console.log('[createSession] creating new session...', { agentId, title });
+
+    const createBody = {
+      title: title.slice(0, 30),
+      metadata: {},
+      requestedBy,
+    };
+    // task 模式：Task 即会话线程，通过 POST /eap/tasks 创建。
+    // 请求体为 entity.CreateTaskRequest（必填：assigneeId、assigneeType、data、title），
+    // assigneeId 即 agentId，首条消息随后通过 messages 接口发送
+    const { json } = isTaskRuntime
+      ? await sessionApi.fetch('', {
+          method: 'POST',
+          body: JSON.stringify({
+            title: title.slice(0, 30),
+            assigneeId: agentId || '',
+            assigneeType: 'agent', // agent 或 squad；assigneeId 传的是 agentId，故为 agent
+            data: { test: "abc" }, // 先传个空对象，后续消息里再传实际数据
+          }),
+        })
+      : await agentApi.fetch(`/${agentId}/sessions`, { method: 'POST', body: JSON.stringify(createBody) });
+    const newId = (json.sessionId ?? json.id ?? json.taskId) as string;
+    console.log('[createSession] session created', { newId, json });
+
+    if (!newId) throw new Error("Failed to create session");
+
+    setThreads(prev => [{
+      status: 'regular' as const,
+      id: newId,
+      remoteId: newId,
+      title: title.slice(0, 30),
+    }, ...prev]);
+    isNewSessionRef.current = true;
+    setCurrentThreadId(newId);
+
+    return newId;
+  }, [agentId, isTaskRuntime, requestedBy, sessionApi, agentApi]);
+
+  // 已有会话直接复用；无会话时创建（并发去重：多个附件同时上传只创建一个会话）
+  const ensureSessionCreated = useCallback(async (title: string): Promise<string> => {
+    if (sessionIdRef.current) return sessionIdRef.current;
+    if (!pendingSessionRef.current) {
+      pendingSessionRef.current = createSession(title).finally(() => {
+        pendingSessionRef.current = null;
+      });
+    }
+    return pendingSessionRef.current;
+  }, [createSession]);
+
+  // attachmentAdapter 会话来源：实时读取最新 sessionId；新会话发附件时自动创建
+  attachmentAdapter.setSessionGetter(() => sessionIdRef.current);
+  attachmentAdapter.setSessionCreator(() => ensureSessionCreated('新会话'));
+
   // ---------- onNew ----------
   const onNew = useCallback(async (message: AppendMessage) => {
     console.log('[onNew] === START ===', {
@@ -1050,45 +1141,9 @@ export const useAgentRuntime = (options?: {
       return;
     }
 
-    // session 是持久会话：已有 threadId 直接复用，否则创建新会话
-    const sessionId = currentThreadId ?? await (async () => {
-      console.log('[onNew] creating new session...', { agentId });
-
-      const createBody = {
-        title: userText.slice(0, 30),
-        metadata: {},
-        requestedBy,
-      };
-      // task 模式：Task 即会话线程，通过 POST /eap/tasks 创建。
-      // 请求体为 entity.CreateTaskRequest（必填：assigneeId、assigneeType、data、title），
-      // assigneeId 即 agentId，首条消息随后通过 messages 接口发送
-      const { json } = isTaskRuntime
-        ? await sessionApi.fetch('', {
-            method: 'POST',
-            body: JSON.stringify({
-              title: userText.slice(0, 30),
-              assigneeId: agentId || '',
-              assigneeType: 'agent', // agent 或 squad；assigneeId 传的是 agentId，故为 agent
-              data: { test: "abc" }, // 先传个空对象，后续消息里再传实际数据
-            }),
-          })
-        : await agentApi.fetch(`/${agentId}/sessions`, { method: 'POST', body: JSON.stringify(createBody) });
-      const newId = (json.sessionId ?? json.id ?? json.taskId) as string;
-      console.log('[onNew] session created', { newId, json });
-
-      if (!newId) throw new Error("Failed to create session");
-
-      setThreads(prev => [{
-        status: 'regular' as const,
-        id: newId,
-        remoteId: newId,
-        title: userText.slice(0, 30),
-      }, ...prev]);
-      isNewSessionRef.current = true;
-      setCurrentThreadId(newId);
-
-      return newId;
-    })();
+    // session 是持久会话：已有 threadId 直接复用，否则创建新会话。
+    // 与附件上传共用 ensureSessionCreated，避免「先传附件后建会话」时重复创建
+    const sessionId = await ensureSessionCreated(userText);
 
     const isNewThread = !currentThreadId; // 创建时的 currentThreadId 值
     console.log('[onNew] resolved sessionId', {
@@ -1159,7 +1214,7 @@ export const useAgentRuntime = (options?: {
       runIdRef.current = null;
       abortRef.current = null;
     }
-  }, [agentId, requestedBy, currentThreadId, messages]);
+  }, [agentId, requestedBy, currentThreadId, messages, ensureSessionCreated]);
 
   // ---------- onReload ----------
   const onReload = useCallback(async (_parentId: string | null, _config: any) => {

@@ -1,20 +1,22 @@
 import { FormProvider, useForm, type UseFormPropsExtended } from '@kesi/client'
 import { type ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 type FormProps = UseFormPropsExtended & {
   formId: string
-  children: ReactNode
+  children: ReactNode | ((methods: any) => ReactNode)
   onSubmit: (data: any) => void
   onEffect?: (formData: any, setFormData: (data: any) => void) => void
-  classNames?: Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error', string>
+  className?: string
+  classNames?: Partial<Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error', string>>
 }
 
-const Form = ({ formId, children, onSubmit, onEffect, classNames, ...props } : FormProps ) => {
+const Form = ({ formId, children, onSubmit, onEffect, classNames, className, ...props } : FormProps ) => {
   const methods = useForm({ ...props, onEffect })
   return (
     <FormProvider {...methods} classNames={classNames}>
-      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)} className={classNames?.form}>
-        {children}
+      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)} className={cn('space-y-6', classNames?.form, className)}>
+        {typeof children === 'function' ? children(methods) : children}
       </form>
     </FormProvider>
   )

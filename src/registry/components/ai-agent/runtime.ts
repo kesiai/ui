@@ -939,7 +939,11 @@ export const useAgentRuntime = (options?: {
       ? sessionApi.fetch('', { method: 'GET' })
       : agentApi.fetch(`/${agentId}/sessions`, { method: 'GET' });
     listPromise.then(({ json }) => {
-      setThreads((json as any[]).map((s: any) => ({
+      const list = (json as any[]).slice().sort((a, b) =>
+        new Date(b.createdAt ?? b.updatedAt ?? 0).getTime() -
+        new Date(a.createdAt ?? a.updatedAt ?? 0).getTime()
+      );
+      setThreads(list.map((s: any) => ({
         status: 'regular' as const,
         id: s.id,
         remoteId: s.id,
@@ -947,8 +951,10 @@ export const useAgentRuntime = (options?: {
       })));
       setThreadsLoading(false);
     }).catch(() => setThreadsLoading(false));
-    setCurrentThreadId(undefined);
-  }, [agentId, isTaskRuntime, sessionApi, agentApi]);
+    if (!initialThreadId) {
+      setCurrentThreadId(undefined);
+    }
+  }, [agentId, isTaskRuntime, initialThreadId, sessionApi, agentApi]);
 
   // ---------- thread 切换时加载消息，并轮询 running 的 assistant message ----------
   useEffect(() => {
@@ -1073,12 +1079,12 @@ export const useAgentRuntime = (options?: {
 
       if (!newId) throw new Error("Failed to create session");
 
-      setThreads(prev => [...prev, {
+      setThreads(prev => [{
         status: 'regular' as const,
         id: newId,
         remoteId: newId,
         title: userText.slice(0, 30),
-      }]);
+      }, ...prev]);
       isNewSessionRef.current = true;
       setCurrentThreadId(newId);
 
@@ -1308,6 +1314,7 @@ export const useAgentRuntime = (options?: {
       preamble,
       renderRegistry: renderRegistryWithBuiltin,
       onShareThread,
+      isTaskRuntime,
       loading,
       threadsLoading,
     },

@@ -131,7 +131,14 @@ export const aiAgentPropsConfig = [
     label: 'Task 运行时',
     type: 'boolean' as const,
     default: false,
-    description: '使用 Task 作为会话线程，请求走 /eap/tasks 接口；开启后新建会话将创建 Task（assigneeId 即 agentId）'
+    description: '使用 Task 作为会话线程，请求走 /eap/tasks 接口；开启后在对话右侧展示任务详情面板（基本信息/运行记录/工作目录）'
+  },
+  {
+    name: 'taskId',
+    label: '任务',
+    type: 'task-id' as const,
+    default: '',
+    description: '选择任务（Task 运行时开启时生效），右侧详情面板将展示该任务'
   },
   {
     name: 'systemPrompt',
@@ -180,6 +187,20 @@ export const aiAgentPropsConfig = [
     description: '在侧边栏顶部显示 Agent 切换下拉列表'
   },
   {
+    name: 'hideSidebar',
+    label: '隐藏侧边栏',
+    type: 'boolean' as const,
+    default: false,
+    description: '隐藏左侧的会话线程侧边栏（用于任务对话等嵌入式场景）'
+  },
+  {
+    name: 'readOnly',
+    label: '只读模式',
+    type: 'boolean' as const,
+    default: false,
+    description: '隐藏侧边栏和顶部栏，采用紧凑布局，Thread 进入只读'
+  },
+  {
     name: 'showCodePreview',
     label: '显示代码预览',
     type: 'boolean' as const,
@@ -193,12 +214,15 @@ export const aiAgentDefaultProps = {
   baseUrl: 'http://127.0.0.1:4096',
   agentId: '6a3a22aeecf2e81476c84246',
   taskRuntime: false,
+  taskId: '',
   systemPrompt: 'You are a helpful AI assistant.',
   title: '',
   userAvatar: '',
   agentAvatar: '',
   preamble: '',
   showAgentSelect: false,
+  hideSidebar: false,
+  readOnly: false,
   showCodePreview: true
 }
 
@@ -208,7 +232,9 @@ const InteractableAssistantShell: React.FC<{
   title?: string;
   avatar?: any;
   showAgentSelect?: boolean;
-}> = ({ runtime, title, avatar, showAgentSelect }) => {
+  hideSidebar?: boolean;
+  readOnly?: boolean;
+}> = ({ runtime, title, avatar, showAgentSelect, hideSidebar, readOnly }) => {
   const aui = useAui({
     unstable_interactables: unstable_Interactables() ,
     tools: Tools({ toolkit }),
@@ -236,7 +262,7 @@ const InteractableAssistantShell: React.FC<{
       <AssistantRuntimeProvider aui={aui} runtime={runtime}>
         <div className="flex h-full gap-2">
           <div className="flex-1 min-w-0">
-            <Assistant title={title} avatar={avatar} showAgentSelect={showAgentSelect} />
+            <Assistant title={title} avatar={avatar} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} readOnly={readOnly} />
           </div>
           <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
             <TaskBoard />
@@ -264,7 +290,7 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
       baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
     })
     // useAgentRuntime 从 AgentUIContext 读取 agentId
-    const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble, isTaskRuntime: props.taskRuntime })
+    const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble, isTaskRuntime: props.taskRuntime, initialThreadId: props.taskRuntime ? (props.taskId || undefined) : undefined })
 
     let runtime: AssistantRuntime | null = null
     switch (runtimePreset) {
@@ -300,9 +326,9 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
     }
 
     return runtimePreset === 'agent-interactable' ? (
-      <InteractableAssistantShell runtime={runtime} title={props.title} avatar={avatar} showAgentSelect={props.showAgentSelect} />
+      <InteractableAssistantShell runtime={runtime} title={props.title} avatar={avatar} showAgentSelect={props.showAgentSelect} hideSidebar={props.hideSidebar} readOnly={props.readOnly} />
     ) : (
-      <Assistant runtime={runtime} title={props.title} avatar={avatar} showAgentSelect={props.showAgentSelect} />
+      <Assistant runtime={runtime} title={props.title} avatar={avatar} showAgentSelect={props.showAgentSelect} hideSidebar={props.hideSidebar} readOnly={props.readOnly} />
     )
   }
 
@@ -430,6 +456,8 @@ export default function MyApp() {
   }
   if (props.preamble) propParts.push(`preamble={\`${props.preamble}\`}`)
   if (props.showAgentSelect) propParts.push(`showAgentSelect={true}`)
+  if (props.hideSidebar) propParts.push(`hideSidebar={true}`)
+  if (props.readOnly) propParts.push(`readOnly={true}`)
   const propsStr = propParts.length ? ' ' + propParts.join(' ') : ''
 
   // preamble 注入说明（仅 useAgentRuntime 支持首条消息注入）

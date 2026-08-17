@@ -106,6 +106,7 @@ import { createAPI } from '@kesi/client'
 import { ToolResultCard } from "./render/tool-result-card";
 import { KesiTextRenderer } from "./render/rich-text";
 import type { RenderRegistry } from "./render/registry";
+import { TaskDetailPanel } from "./task-detail-panel";
 
 
 // ==================== Agent UI Context ====================
@@ -163,6 +164,7 @@ type AgentExtras = {
   preamble?: string;
   renderRegistry?: RenderRegistry;
   onShareThread?: (messages: readonly ThreadMessage[]) => void;
+  isTaskRuntime?: boolean;
 };
 
 /**
@@ -178,6 +180,7 @@ const useAgentUI = (): AgentUIContextValue & AgentExtras => {
     preamble: extras?.preamble,
     renderRegistry: extras?.renderRegistry,
     onShareThread: extras?.onShareThread,
+    isTaskRuntime: extras?.isTaskRuntime,
   };
 };
 
@@ -1360,37 +1363,46 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; showAgentSelect?: boolean }> = ({ className, title, readOnly, showAgentSelect }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; showAgentSelect?: boolean; hideSidebar?: boolean }> = ({ className, title, readOnly, showAgentSelect, hideSidebar }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { isTaskRuntime } = useAgentUI();
+  const taskId = useAuiState((s) => s.threads.mainThreadId);
 
   return (
     <div className={cn("bg-muted/30 flex h-full w-full", className)}>
-      {!readOnly && (
+      {!readOnly && !hideSidebar && (
       <div className="hidden md:block">
         <Sidebar collapsed={sidebarCollapsed} title={title} showAgentSelect={showAgentSelect} />
       </div>
       )}
       <div className={cn("flex flex-1 flex-col overflow-hidden", readOnly ? "p-0" : "p-2 md:pl-0")}>
         <div className="bg-background flex flex-1 flex-col overflow-hidden rounded-lg">
-          {!readOnly && (
+          {!readOnly && !hideSidebar && (
           <Header
             sidebarCollapsed={sidebarCollapsed}
             onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
           />
           )}
-          <main className="flex-1 overflow-hidden">
-            <TooltipProvider>
-              <Thread readOnly={readOnly} />
-            </TooltipProvider>
-          </main>
+          <div className="flex flex-1 overflow-hidden">
+            <main className={cn("min-w-0 overflow-hidden", isTaskRuntime ? "basis-[44rem] max-w-[44rem]" : "flex-1")}>
+              <TooltipProvider>
+                <Thread readOnly={readOnly} />
+              </TooltipProvider>
+            </main>
+            {isTaskRuntime && (
+              <aside className="min-w-[24rem] flex-1 border-l bg-background overflow-hidden">
+                <TaskDetailPanel taskId={taskId ?? ''} />
+              </aside>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, avatar, showAgentSelect }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings; showAgentSelect?: boolean }) => {
-  const content = <Base className={className} title={title} readOnly={readOnly} showAgentSelect={showAgentSelect} />;
+export const Assistant = ({ runtime, className, title, readOnly, avatar, showAgentSelect, hideSidebar }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings; showAgentSelect?: boolean; hideSidebar?: boolean }) => {
+  const content = <Base className={className} title={title} readOnly={readOnly} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} />;
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
       <AgentUIProvider avatar={avatar}>

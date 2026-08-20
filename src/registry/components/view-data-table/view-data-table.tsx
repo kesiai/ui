@@ -3,14 +3,19 @@ import { useModelList, useModel, useModelState, useSubscribeContext, useTableDat
 import type { FieldProperty, ModelSchema } from '@/registry/lib/model-types'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
+import { DataGridColumnVisibility } from '@/components/reui/data-grid/data-grid-column-visibility';
 import {
   DataGridTable,
   DataGridTableRowSelect,
   DataGridTableRowSelectAll,
 } from '@/components/reui/data-grid/data-grid-table';
+import { Button } from '@/components/ui/button';
+import { Columns3 } from 'lucide-react';
+import { getUiStateAtom, mergeRestoredFields, mergeRestoredUiState, normalizeColumnWidth, useViewState } from '@/registry/lib/view-state';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
   type ColumnDef, type TableOptions, type CellContext, type SortingState, type RowSelectionState,
+  type ColumnSizingState, type VisibilityState, type Table, type Updater,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
@@ -143,6 +148,7 @@ export const DataTable = ({
   tableLayout = {},
   tableOptions = {},
   gridOptions = {},
+  toolbar,
   children
 }: {
   data: IData[],
@@ -151,6 +157,8 @@ export const DataTable = ({
   tableOptions?: Omit<TableOptions<IData>, 'data' | 'columns' | 'getCoreRowModel'>,
   columns?: ColumnDef<IData>[]
   gridOptions: Omit<React.ComponentProps<typeof DataGrid>, 'table' | 'recordCount' | 'tableLayout'>
+  /** 表格上方工具栏（在 DataGrid 上下文内渲染，可访问 table 实例） */
+  toolbar?: (table: Table<IData>) => React.ReactNode,
   children?: React.ReactElement[] | React.ReactElement | undefined
 }) => {
   const { withColumns, getColumns } = useTableContainer(children);
@@ -197,6 +205,7 @@ export const DataTable = ({
     <DataGrid table={table} recordCount={data?.length || 0}
       tableLayout={mergedTableLayout}
       {...gridOptions}>
+      {toolbar?.(table)}
       <div data-slot="data-grid" className={cn('w-full', mergedTableLayout.border && 'border border-border rounded-lg', className)}>
         <ScrollArea>
           <DataGridTable />
@@ -213,6 +222,7 @@ export function ViewDataTable({
   tableOptions = {},
   gridOptions = {},
   showCheckbox = true,
+  showColumnSettings = false,
   children
 }: {
   className?: string,
@@ -221,11 +231,20 @@ export function ViewDataTable({
   columns?: ColumnDef<IData>[]
   gridOptions?: Omit<React.ComponentProps<typeof DataGrid>, 'table' | 'recordCount' | 'tableLayout'>
   showCheckbox?: boolean
+  /** 显示列设置下拉（列显隐），开启后变更写入视图状态持久化管道 */
+  showColumnSettings?: boolean
   children?: React.ReactElement[] | React.ReactElement | undefined
 }) {
   const { items, loading, fields } = useModelList()
   const { model, atoms } = useModel()
   const { subscribeData } = useSubscribeContext()
+  const viewStateCtx = useViewState()
+
+  // 列显隐/列宽 桥接 model uiState atom（持久化层单点订阅）
+  const [uiState, setUiState] = useModelState<{
+    columnVisibility: VisibilityState,
+    columnSizing: ColumnSizingState
+  }>(getUiStateAtom(atoms))
 
   const tableId = model?.key || model?.name
 
@@ -254,8 +273,9 @@ export function ViewDataTable({
       const tagConfig = tableSchema as any
       const column: ColumnDef<IData> = columnHelper.accessor(fieldName, {
         id: fieldName,
-        size: tagConfig.width || undefined,
+        size: normalizeColumnWidth(tagConfig.width),
         enableSorting: false,
+        meta: { headerTitle: tagConfig.title || tagConfig.tagId || fieldName },
         header: ({ column }) => (
           <DataGridColumnHeader title={tagConfig.title || tagConfig.tagId} column={column} />
         ),
@@ -279,9 +299,10 @@ export function ViewDataTable({
     const column: ColumnDef<IData> = columnHelper.accessor(fieldName, {
       id: fieldName,
       field,
-      size: field.width || undefined,
+      size: normalizeColumnWidth(field.width),
       fixed: field.tableFixed,
       enableSorting: Boolean(field.canOrder),
+      meta: { headerTitle: field.title || fieldName },
       header: ({ column }) => {
         return <DataGridColumnHeader title={field.title || fieldName} column={column} />
       },
@@ -333,6 +354,7 @@ export function ViewDataTable({
       cell: ({ row }) => <DataGridTableRowSelect row={row} />,
       enableSorting: false,
       enableResizing: false,
+      enableHiding: false,
       size: 35,
       meta: {
         headerClassName: '',
@@ -361,6 +383,42 @@ export function ViewDataTable({
     })));
   }, [order]);
 
+  // 恢复持久化的列状态（挂载时一次性，按实际列集合过滤 schema 演进产生的脏 key）
+  const uiStateInitialized = React.useRef(false)
+  const [, setFields] = useModelState<any[]>('fields')
+  useEffect(() => {
+    if (uiStateInitialized.current) return
+    uiStateInitialized.current = true
+    if (viewStateCtx?.restored?.columns) {
+      const columnIds = fields
+        .map((f: any) => (typeof f === 'string' ? f : f?.key))
+        .filter(Boolean) as string[]
+      if (Object.keys(uiState.columnVisibility || {}).length === 0
+        && Object.keys(uiState.columnSizing || {}).length === 0) {
+        setUiState(mergeRestoredUiState(viewStateCtx.restored, columnIds))
+      }
+      // fields 通道（Tools/ColumnsTool 列显隐）：映射回 tableSchema 项保留 width/canOrder 配置
+      const mergedFields = mergeRestoredFields(viewStateCtx.restored, fields as any[])
+      if (mergedFields) setFields(mergedFields)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // 列显隐/列宽受控：变更写入 uiState atom（ViewStateSaver 防抖持久化）
+  const onColumnVisibilityChange = (updater: Updater<VisibilityState>) => {
+    const next = typeof updater === 'function'
+      ? (updater as (old: VisibilityState) => VisibilityState)(uiState.columnVisibility)
+      : updater
+    setUiState({ ...uiState, columnVisibility: next })
+  }
+
+  const onColumnSizingChange = (updater: Updater<ColumnSizingState>) => {
+    const next = typeof updater === 'function'
+      ? (updater as (old: ColumnSizingState) => ColumnSizingState)(uiState.columnSizing)
+      : updater
+    setUiState({ ...uiState, columnSizing: next })
+  }
+
   const tableProps = model.dataTableProps ? (
     typeof model.dataTableProps == 'function' ?
       model.dataTableProps(columns, items) : model.dataTableProps
@@ -371,6 +429,20 @@ export function ViewDataTable({
     columns={columns}
     className={className}
     tableLayout={tableLayout}
+    toolbar={showColumnSettings ? (table) => (
+      <div className="mb-2 flex items-center justify-end gap-2">
+        <DataGridColumnVisibility
+          table={table}
+          label="列显示"
+          trigger={
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <Columns3 className="size-4" />
+              列显示
+            </Button>
+          }
+        />
+      </div>
+    ) : undefined}
     gridOptions={{
       loadingMode: 'spinner',
       loadingMessage: '数据加载中...',
@@ -392,10 +464,14 @@ export function ViewDataTable({
       state: {
         ...(tableOptions.state || {}),
         sorting,
+        columnVisibility: uiState.columnVisibility,
+        columnSizing: uiState.columnSizing,
         ...(showCheckbox ? { rowSelection } : {}),
       },
       ...(showCheckbox ? { onRowSelectionChange, enableRowSelection: true } : {}),
-      onSortingChange
+      onSortingChange,
+      onColumnVisibilityChange,
+      onColumnSizingChange
     }}
   >{children}</DataTable>;
 }

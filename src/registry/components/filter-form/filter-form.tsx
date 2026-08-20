@@ -8,6 +8,8 @@ type SchemaFormProps = {
   formId: string
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
   onSubmit: (data: any) => void,
+  /** 表单初始值（如持久化恢复的筛选值），与 schema 默认值合并后生效 */
+  defaultValues?: Record<string, any>
   children?: ReactNode | ((props: any) => ReactNode)
 }
 

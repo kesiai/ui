@@ -25,6 +25,7 @@
 | `tableFilters` | `TableFilter[]` | 否 | - | 表格筛选条件数组 |
 | `fieldOrder` | `Record<string, 'asc' \| 'desc'>[]` | 否 | - | 字段排序规则 |
 | `interval` | `number` | 否 | `0` | 数据自动刷新间隔（毫秒），0 表示不刷新 |
+| `statePersistence` | `ViewStatePersistenceConfig` | 否 | - | 视图状态持久化配置（过滤器/分页/排序/列显示/列宽缓存） |
 | `loadingComponent` | `ReactNode` | 否 | - | 加载时显示的组件 |
 | `children` | `ReactNode` | 是 | - | 子组件 |
 
@@ -453,6 +454,81 @@ function NestedDataView() {
 }
 ```
 
+## 视图状态持久化（statePersistence）
+
+缓存用户的视图状态：**过滤器值、分页（每页条数+页码）、排序、列显示、列宽**。
+快照为 delta 语义——未调整过的段落不写入，回退到建表配置默认值（`tableSchema` 数组顺序 / `tableSchema[].width`）。
+存储通道 `local`（浏览器）与 `remote`（数据库）**二选一**。
+
+### 配置项
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `channel` | `'local' \| 'remote'` | `'local'` | 存储通道，二选一 |
+| `viewKey` | `string` | `tableId \| modelName` | 视图标识（同表多视图时区分用） |
+| `storage` | `ViewStateStorage` | 内置适配器 | 完全自定义适配器（最高优先级） |
+| `remote` | `RemoteViewStorageOptions` | - | channel='remote' 时的适配器配置 |
+| `persist` | `('filter'\|'pagination'\|'order'\|'columns')[]` | 全部 | 持久化白名单 |
+| `debounce` | `number` | `500` | 保存防抖（毫秒） |
+| `userId` | `string` | 当前登录用户 | 存储 key 的用户段（区分同浏览器多账号） |
+| `restoreTimeout` | `number` | `2000` | remote 加载超时，超时降级到默认值 |
+| `onRestored` | `(state) => void` | - | 恢复完成回调 |
+
+### 用法 1：缓存到浏览器（localStorage）
+
+```tsx
+<ViewModel tableId="device" statePersistence={{ channel: 'local' }}>
+  <ViewFilter />
+  <ViewDataTable showColumnSettings />
+  <ViewPagination />
+</ViewModel>
+```
+
+实际存储 key：`kesi.view-state.<viewKey>.<userId>`。
+
+### 用法 2：缓存到数据库
+
+**方式 A（推荐）：自定义读写回调**
+
+```tsx
+<ViewModel
+  tableId="device"
+  statePersistence={{
+    channel: 'remote',
+    remote: {
+      loader: async (key) => (await fetch(`/api/view-state/${key}`)).json(),
+      saver: async (key, state) => {
+        await fetch(`/api/view-state/${key}`, {
+          method: 'PUT',
+          body: JSON.stringify(state)
+        })
+      }
+    }
+  }}
+>
+```
+
+**方式 B：指定一张 KESI 配置表自动读写**（表由 kesi-cli 建表阶段规划或宿主指定，
+期望记录结构 `{ user, viewKey, state: JSON字符串 }`）：
+
+```tsx
+<ViewModel
+  tableId="device"
+  statePersistence={{
+    channel: 'remote',
+    remote: { tableId: 'user_view_config' }
+  }}
+>
+```
+
+### 工作机制
+
+- **恢复**：ViewModel 挂载时从存储加载快照，经校验（列 key 必须存在于当前 schema、宽度 clamp）后合入 initialValues；恢复的筛选值会回填 ViewFilter 表单
+- **保存**：ViewStateSaver 订阅 model atoms（wheres/order/limit/skip/uiState），变更防抖 500ms 后写入存储
+- **列宽/列显隐**：ViewDataTable 通过受控的 `columnSizing`/`columnVisibility` 桥接到 model 扩展 atom `uiState`（经 `modelRegistry.addModelAtoms` 注册，kesi-client 零改动）；开启 `showColumnSettings` 显示列显隐下拉
+- **降级**：remote 读失败/超时回退建表默认值；写失败静默（下次变更重试）
+- **优先级**：建表配置默认 < props（queryFields/limit/fieldOrder 等）< 用户缓存快照
+
 ## 注意事项
 
 1. **上下文必需**：所有 view-* 组件（Actions、BatchActions、Tools 等）都必须在 ViewModel 内部使用
@@ -474,3 +550,7 @@ function NestedDataView() {
 9. **性能考虑**：大数据量场景下，合理使用 limit 和 queryFields 优化性能
 
 10. **Schema 访问**：子组件可以通过 useModel hook 访问当前 ViewModel 的 schema 信息
+
+11. **持久化配置稳定性**：statePersistence 建议定义为模块级常量（内联对象也可，存储实例按配置签名缓存，不会随渲染重建）
+
+12. **session 恢复优先**：从编辑/新增页返回时（table.tsx 内置 sessionStorage 机制），会话内的页码/筛选优先于跨会话的持久化快照

@@ -1,5 +1,5 @@
 import React, { cloneElement, useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelState, useSubscribeContext, useTableDataValue } from '@kesi/client'
+import { useModelList, useModel, useModelState, useSubscribeContext, useTableDataValue, Subscribe } from '@kesi/client'
 import type { FieldProperty, ModelSchema } from '@/registry/lib/model-types'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
@@ -216,7 +216,7 @@ export const DataTable = ({
   );
 }
 
-export function ViewDataTable({
+export function ViewDataTableContent({
   className,
   tableLayout = {},
   tableOptions = {},
@@ -349,7 +349,7 @@ export function ViewDataTable({
 
   if (showCheckbox) {
     columns.unshift({
-      accessorKey: 'id',
+      id: '__select__',
       header: () => <DataGridTableRowSelectAll />,
       cell: ({ row }) => <DataGridTableRowSelect row={row} />,
       enableSorting: false,
@@ -367,7 +367,7 @@ export function ViewDataTable({
   const onSortingChange = (handler: (state: SortingState) => SortingState) => {
     const newSorting = handler(sorting)
     // 转换为 order 格式
-    const newOrder: Record<string, 'DESC' | 'DESC'> = {}
+    const newOrder: Record<string, 'ASC' | 'DESC'> = {}
     newSorting.forEach(sort => {
       newOrder[sort.id] = sort.desc ? 'DESC' : 'ASC'
     })
@@ -456,7 +456,7 @@ export function ViewDataTable({
       initialState: {
         ...tableOptions.initialState,
         columnPinning: {
-          left: showCheckbox ? ['id'] : [],
+          left: showCheckbox ? ['__select__'] : [],
           right: ['__actions__'],
         },
       },
@@ -572,3 +572,52 @@ export const TableColumn: React.FC<TableColumnProps> = ({
 
   return null;
 };
+
+// 包装器：已有 Subscribe 上下文时直接渲染；否则自动补一层 Subscribe（支持脱离 ViewModel 单独使用）
+export const ViewDataTable = ({
+  className,
+  tableLayout = {},
+  tableOptions = {},
+  gridOptions = {},
+  showCheckbox = true,
+  showColumnSettings = false,
+  children
+}: {
+  className?: string,
+  tableLayout?: TableLayoutProps,
+  tableOptions?: Omit<TableOptions<IData>, 'data' | 'columns' | 'getCoreRowModel'>,
+  columns?: ColumnDef<IData>[]
+  gridOptions?: Omit<React.ComponentProps<typeof DataGrid>, 'table' | 'recordCount' | 'tableLayout'>
+  showCheckbox?: boolean
+  showColumnSettings?: boolean
+  children?: React.ReactElement[] | React.ReactElement | undefined
+}) => {
+  try {
+    useSubscribeContext()
+    return <ViewDataTableContent
+      className={className}
+      tableLayout={tableLayout}
+      tableOptions={tableOptions}
+      gridOptions={gridOptions}
+      showCheckbox={showCheckbox}
+      showColumnSettings={showColumnSettings}
+    >
+      {children}
+    </ViewDataTableContent>
+  } catch (e) {
+    return (
+      <Subscribe>
+        <ViewDataTableContent
+          className={className}
+          tableLayout={tableLayout}
+          tableOptions={tableOptions}
+          gridOptions={gridOptions}
+          showCheckbox={showCheckbox}
+          showColumnSettings={showColumnSettings}
+        >
+          {children}
+        </ViewDataTableContent>
+      </Subscribe>
+    )
+  }
+}

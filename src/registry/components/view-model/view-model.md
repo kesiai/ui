@@ -24,6 +24,7 @@
 | `limit` | `number` | 否 | `10` | 限制返回的数据条数 |
 | `tableFilters` | `TableFilter[]` | 否 | - | 表格筛选条件数组 |
 | `fieldOrder` | `Record<string, 'asc' \| 'desc'>[]` | 否 | - | 字段排序规则 |
+| `sort` | `Record<string, 1 \| -1>` | 否 | - | mongo 风格排序（1 升 / -1 降），与 fieldOrder 等价，后设置者生效 |
 | `interval` | `number` | 否 | `0` | 数据自动刷新间隔（毫秒），0 表示不刷新 |
 | `statePersistence` | `ViewStatePersistenceConfig` | 否 | - | 视图状态持久化配置（过滤器/分页/排序/列显示/列宽缓存） |
 | `loadingComponent` | `ReactNode` | 否 | - | 加载时显示的组件 |

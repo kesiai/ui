@@ -37,6 +37,8 @@ type ViewModelProps = {
   queryFields?: string[]
   projectAll?: boolean
   limit?: number
+  /** mongo 风格排序（1 升 / -1 降），与 fieldOrder 等价，后设置者生效 */
+  sort?: Record<string, 1 | -1>
   tableFilters?: TableFilter
   fieldOrder?: Record<string, 'asc' | 'desc'>[]
   interval?: number
@@ -50,7 +52,7 @@ type ViewModelProps = {
 
 const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
   queryFields, projectAll,
-  limit,
+  limit, sort,
   tableFilters,
   fieldOrder,
   interval,
@@ -100,6 +102,13 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
       }
       if (limit) {
         values['limit'] = limit
+      }
+      if (sort) {
+        const orderObj: Record<string, 'ASC' | 'DESC'> = {}
+        Object.entries(sort).forEach(([key, val]) => {
+          orderObj[key] = val === -1 ? 'DESC' : 'ASC'
+        })
+        values['order'] = orderObj
       }
       if (tableFilters) {
         values['wheres'] = { tableFilters }
@@ -155,7 +164,7 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
     })
 
     return () => { cancelled = true }
-  }, [queryFields, projectAll, limit, tableFilters, fieldOrder, interval, storage, viewKey, persistKey])
+  }, [queryFields, projectAll, limit, sort, tableFilters, fieldOrder, interval, storage, viewKey, persistKey])
 
   const schemaTransform = (model: ModelSchema) => {
     const { schema, formSchema, tableSchema, filterSchema } = trans(model as any)

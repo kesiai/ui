@@ -575,6 +575,8 @@ export const ViewStateSaver: React.FC = () => {
   )
 
   const skipFirst = React.useRef(true)
+  const dirtyRef = React.useRef(false)
+  const flushRef = React.useRef<() => void>(() => {})
 
   React.useEffect(() => {
     const storage = ctx?.storage
@@ -585,15 +587,29 @@ export const ViewStateSaver: React.FC = () => {
       skipFirst.current = false
       return
     }
-    const timer = setTimeout(() => {
+    const write = () => {
+      dirtyRef.current = false
       const persist = config?.persist ?? DEFAULT_PERSIST_SEGMENTS
       const snapshot = buildViewStateSnapshot(wheres, option, uiState, persist, defaultFieldKeys)
       Promise.resolve(storage.save(viewKey, snapshot)).catch(() => {
         // remote 写失败静默（下次变更重试），不阻断交互
       })
-    }, config?.debounce ?? 500)
+    }
+    flushRef.current = write
+    dirtyRef.current = true
+    const timer = setTimeout(write, config?.debounce ?? 500)
     return () => clearTimeout(timer)
   }, [ctx?.storage, ctx?.viewKey, wheres, option, uiState, defaultFieldKeys])
+
+  // 卸载 / 页面刷新（pagehide）时冲刷未落盘的防抖任务，避免最后防抖窗口内的变更丢失
+  React.useEffect(() => {
+    const flushIfDirty = () => { if (dirtyRef.current) flushRef.current() }
+    window.addEventListener('pagehide', flushIfDirty)
+    return () => {
+      window.removeEventListener('pagehide', flushIfDirty)
+      flushIfDirty()
+    }
+  }, [])
 
   return null
 }

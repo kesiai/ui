@@ -475,6 +475,20 @@ function NestedDataView() {
 | `restoreTimeout` | `number` | `2000` | remote 加载超时，超时降级到默认值 |
 | `onRestored` | `(state) => void` | - | 恢复完成回调 |
 
+### 用法 0：全局默认开启（免逐处配置）
+
+应用启动时设置一次全局默认，所有未显式传 `statePersistence` 的 ViewModel 自动启用：
+
+```tsx
+// main.tsx / 应用初始化
+import { setDefaultViewStatePersistence } from '@/lib/view-state'
+
+setDefaultViewStatePersistence({ channel: 'local' })
+```
+
+优先级：**单点显式 prop（含 `enabled: false` 单点关闭）> 全局默认 > 不启用**。
+单点覆盖示例：`<ViewModel statePersistence={{ channel: 'remote', remote: { tableId: 'user_view_config' } }}>`；单点关闭：`<ViewModel statePersistence={{ enabled: false }}>`。
+
 ### 用法 1：缓存到浏览器（localStorage）
 
 ```tsx

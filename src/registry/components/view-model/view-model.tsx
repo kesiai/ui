@@ -4,6 +4,7 @@ import trans from '@/registry/lib/schema-trans'
 import type { ModelSchema } from '@/registry/lib/model-types'
 import {
   DEFAULT_PERSIST_SEGMENTS,
+  getDefaultViewStatePersistence,
   ViewStateProvider,
   ViewStateSaver,
   composeViewStateKey,
@@ -63,7 +64,10 @@ const ViewModel = ({ tableId, modelName, children, initQuery, loadingComponent,
   const [restored, setRestored] = React.useState<ViewStateSnapshot | null>(null)
   const restoredRef = React.useRef<string | null>(null)
 
-  const persistenceConfig = statePersistence && statePersistence.enabled !== false ? statePersistence : null
+  // 优先级：显式 prop（enabled:false 为单点关闭）> 全局默认 > 不启用
+  const persistenceConfig = statePersistence
+    ? (statePersistence.enabled === false ? null : statePersistence)
+    : getDefaultViewStatePersistence()
 
   // 存储适配器：按稳定签名解析，避免内联配置对象导致的重建
   const storageSignature = persistenceConfig

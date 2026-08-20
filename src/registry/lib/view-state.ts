@@ -399,6 +399,20 @@ export const createRemoteViewStorage = (options: RemoteViewStorageOptions = {}):
 
 let uiStateRegistered = false
 
+// 全局默认持久化配置：应用启动时设置一次，所有未显式传 statePersistence 的 ViewModel 生效；
+// 单点显式传入 statePersistence（含 enabled:false 关闭）优先于全局默认
+let globalPersistenceConfig: ViewStatePersistenceConfig | null = null
+
+/** 设置全局默认视图状态持久化配置（传 null 清除） */
+export const setDefaultViewStatePersistence = (config: ViewStatePersistenceConfig | null): void => {
+  globalPersistenceConfig = config
+}
+
+/** 读取全局默认配置（内部供 ViewModel 回落使用） */
+export const getDefaultViewStatePersistence = (): ViewStatePersistenceConfig | null => {
+  return globalPersistenceConfig
+}
+
 /** 注册扩展 atom（模块导入即执行；重复调用幂等） */
 export const registerUiStateAtom = () => {
   if (uiStateRegistered) return

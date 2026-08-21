@@ -11,8 +11,8 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "./src"),
-        '@svgedit/svgcanvas': path.resolve(__dirname, './node_modules/@svgedit/svgcanvas/svgcanvas.js'),
+        "@": path.resolve(import.meta.dirname, "./src"),
+        '@svgedit/svgcanvas': path.resolve(import.meta.dirname, './node_modules/@svgedit/svgcanvas/svgcanvas.js'),
       },
       dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-router', 'react-router-dom'],
     },

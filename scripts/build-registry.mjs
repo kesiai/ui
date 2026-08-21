@@ -258,6 +258,21 @@ function generateComponentTitle(name) {
     .join(' ');
 }
 
+// 读取组件目录下的 schema.json（编辑器面板元数据 + 属性 schema，字段与 config.tsx 的 propsConfig 同构）。
+// 无 schema.json 的组件照常发布，仅缺编辑器属性配置（编辑器侧会走源码推断兜底）。
+async function readEditorSchema(componentDir) {
+  const schemaPath = path.join(componentDir, 'schema.json');
+  try {
+    const schema = JSON.parse(await fs.readFile(schemaPath, 'utf-8'));
+    return schema && typeof schema === 'object' ? schema : null;
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
+      console.warn(`  ⚠️  schema.json 解析失败: ${schemaPath} (${err.message})`);
+    }
+    return null;
+  }
+}
+
 // 查找组件的主文件
 function findMainFile(folder, files, componentName) {
   if (folder === 'components') {
@@ -548,14 +563,33 @@ async function buildRegistry() {
             ...standardDeps,
           ];
 
+          // 合并组件目录下的 schema.json 到 kesi 扩展字段（编辑器面板元数据 + 属性 schema）
+          const editorSchema = await readEditorSchema(path.join(absFolder, componentName));
+          if (editorSchema) {
+            console.log(`  📋 ${componentName}: 合并 schema.json（${(editorSchema.props || []).length} 个属性）`);
+          }
+
           const item = {
             name: componentName,
             type,
-            title: generateComponentTitle(componentName),
-            description: `${generateComponentTitle(componentName)} - 组件`,
+            title: editorSchema?.displayName || generateComponentTitle(componentName),
+            description: editorSchema?.description || `${generateComponentTitle(componentName)} - 组件`,
             dependencies: mergedDeps,
             registryDependencies: processedRegistryDeps,
             files: fileList,
+            ...(editorSchema
+              ? {
+                  kesi: {
+                    displayName: editorSchema.displayName || '',
+                    category: editorSchema.category || '',
+                    icon: editorSchema.icon || '',
+                    jsxName: editorSchema.jsxName || '',
+                    defaultCode: editorSchema.defaultCode || '',
+                    importCode: editorSchema.importCode || '',
+                    props: editorSchema.props || [],
+                  },
+                }
+              : {}),
           };
 
           items.push(item);

@@ -32,6 +32,9 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       strictPort: false,
       open: false,
+      // 允许跨域读取：KESI 编辑器（localhost:5173）直接 fetch 本地 registry（public/r/*.json），
+      // 否则浏览器 CORS 拦截报 "Failed to fetch"（vite 默认不对静态资源发 ACAO 头）
+      cors: true,
       proxy: {
         ...(env.KESI_API_TARGET ? {
           '/rest': {

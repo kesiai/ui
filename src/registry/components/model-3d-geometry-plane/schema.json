@@ -1,0 +1,40 @@
+{
+  "displayName": "平面",
+  "category": "3d",
+  "defaultCode": "<Model3dGeometryPlane />",
+  "importCode": "import { Model3dGeometryPlane } from '@/components/kesi/model-3d-geometry-plane/model-3d-geometry-plane';",
+  "props": [
+    {
+      "name": "meshConfig",
+      "label": "网格配置",
+      "type": "text",
+      "default": "{\"visible\":true,\"position\":{\"x\":0,\"y\":0,\"z\":0},\"scale\":{\"x\":1,\"y\":1,\"z\":1},\"rotation\":{\"x\":0,\"y\":0,\"z\":0},\"opacity\":1,\"color\":\"#FFFFFF\"}"
+    },
+    {
+      "name": "materialsConfig",
+      "label": "材质配置",
+      "type": "text",
+      "default": "{\"materials\":[]}"
+    },
+    {
+      "name": "editMode",
+      "label": "编辑模式",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "name",
+      "label": "名称",
+      "type": "text",
+      "default": "",
+      "placeholder": "请输入几何体名称"
+    },
+    {
+      "name": "args",
+      "label": "尺寸参数",
+      "type": "text",
+      "default": "[100,100,1,1]",
+      "description": "参数格式: [宽度, 高度, 宽度分段, 高度分段]"
+    }
+  ]
+}

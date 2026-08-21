@@ -1,0 +1,71 @@
+{
+  "displayName": "进度条",
+  "description": "可配置方向/颜色映射的进度条",
+  "category": "basic",
+  "icon": "bar",
+  "defaultCode": "<Bar />",
+  "importCode": "import { Bar } from '@/components/kesi/bar/bar';",
+  "props": [
+    {
+      "name": "value",
+      "label": "当前值",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "group": "基础"
+    },
+    {
+      "name": "maxValue",
+      "label": "最大值",
+      "type": "number",
+      "default": 100,
+      "min": 1,
+      "group": "基础"
+    },
+    {
+      "name": "color",
+      "label": "填充颜色",
+      "type": "color",
+      "default": "#3b82f6",
+      "group": "样式"
+    },
+    {
+      "name": "borderColor",
+      "label": "边框颜色",
+      "type": "color",
+      "default": "",
+      "group": "样式"
+    },
+    {
+      "name": "direction",
+      "label": "方向",
+      "type": "select",
+      "default": "horizontal",
+      "options": [
+        { "value": "horizontal", "label": "水平" },
+        { "value": "vertical", "label": "垂直" }
+      ],
+      "group": "样式"
+    },
+    {
+      "name": "position",
+      "label": "起始位置",
+      "type": "select",
+      "default": "start",
+      "options": [
+        { "value": "start", "label": "起始位置" },
+        { "value": "end", "label": "末端位置" }
+      ],
+      "group": "样式"
+    },
+    {
+      "name": "visualMap",
+      "label": "启用颜色映射",
+      "type": "boolean",
+      "default": false,
+      "description": "开启后按值区间映射颜色（≥30 绿 / ≥60 黄 / ≥90 红）",
+      "group": "数据"
+    }
+  ]
+}

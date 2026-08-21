@@ -1,0 +1,27 @@
+{
+  "displayName": "流程日志",
+  "category": "flow",
+  "defaultCode": "<FlowLog />",
+  "importCode": "import { FlowLog } from '@/components/kesi/flow-log/flow-log';",
+  "props": [
+    {
+      "name": "task",
+      "label": "任务对象",
+      "type": "object",
+      "description": "包含 jobKey、bpmnProcessId 和 variables 的任务对象"
+    },
+    {
+      "name": "taskId",
+      "label": "任务ID",
+      "type": "text",
+      "default": "69bd19c3bf3253cef853b366",
+      "description": "流程任务ID，用于自动获取任务数据"
+    },
+    {
+      "name": "jobs",
+      "label": "日志数据",
+      "type": "array",
+      "description": "流程执行日志数组"
+    }
+  ]
+}

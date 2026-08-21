@@ -1,7 +1,7 @@
 {
   "name": "container-card",
   "type": "registry:component",
-  "title": "Container Card",
+  "title": "卡片",
   "description": "Container Card - 组件",
   "dependencies": [],
   "registryDependencies": [
@@ -13,5 +13,22 @@
       "type": "registry:component",
       "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Card as ShadcnCard, CardHeader, CardTitle } from \"@/components/ui/card\"\n\nexport interface CardProps extends React.HTMLAttributes<HTMLDivElement> {\n  cardTitle?: string\n  children?: React.ReactNode\n  className?: string\n}\n\nconst Card = React.forwardRef<HTMLDivElement, CardProps>(\n  (\n    {\n      className,\n      cardTitle = '',\n      children,\n      ...props\n    },\n    ref\n  ) => {\n    // 处理标题\n    const title = React.useMemo(() => {\n      if (typeof cardTitle === 'string') {\n        return cardTitle\n      }\n      try {\n        return JSON.stringify(cardTitle)\n      } catch {\n        return '标题'\n      }\n    }, [cardTitle])\n\n    return (\n      <ShadcnCard\n        ref={ref}\n        className={cn(\"dashboard-container-card w-full max-w-sm\", className)}\n        {...props}\n      >\n        {title && <CardHeader><CardTitle>{title}</CardTitle></CardHeader>}\n        {children}\n      </ShadcnCard>\n    )\n  }\n)\n\nCard.displayName = \"Card\"\n\nexport { Card }\n"
     }
-  ]
+  ],
+  "kesi": {
+    "displayName": "卡片",
+    "category": "containers",
+    "icon": "",
+    "jsxName": "",
+    "defaultCode": "<Card />",
+    "importCode": "import { Card } from '@/components/kesi/container-card/container-card';",
+    "props": [
+      {
+        "name": "cardTitle",
+        "label": "标题",
+        "type": "text",
+        "default": "卡片标题",
+        "placeholder": "请输入标题"
+      }
+    ]
+  }
 }

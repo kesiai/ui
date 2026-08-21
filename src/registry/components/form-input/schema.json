@@ -1,0 +1,180 @@
+{
+  "displayName": "输入框",
+  "category": "form",
+  "defaultCode": "<FormInput />",
+  "importCode": "import { FormInput } from '@/components/kesi/form-input/form-input';",
+  "props": [
+    {
+      "name": "inputType",
+      "label": "输入类型",
+      "type": "select",
+      "default": "input",
+      "options": [
+        {
+          "value": "input",
+          "label": "单行输入框"
+        },
+        {
+          "value": "textarea",
+          "label": "多行文本框"
+        }
+      ]
+    },
+    {
+      "name": "textContent",
+      "label": "内容类型",
+      "type": "select",
+      "default": "text",
+      "description": "输入框的 HTML type 属性",
+      "options": [
+        {
+          "value": "text",
+          "label": "文本"
+        },
+        {
+          "value": "password",
+          "label": "密码"
+        },
+        {
+          "value": "email",
+          "label": "邮箱"
+        },
+        {
+          "value": "url",
+          "label": "网址"
+        },
+        {
+          "value": "tel",
+          "label": "电话"
+        }
+      ]
+    },
+    {
+      "name": "placeholder",
+      "label": "占位符",
+      "type": "text",
+      "default": "请输入内容"
+    },
+    {
+      "name": "variant",
+      "label": "样式变体",
+      "type": "select",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "默认"
+        },
+        {
+          "value": "outline",
+          "label": "边框"
+        },
+        {
+          "value": "filled",
+          "label": "填充"
+        },
+        {
+          "value": "ghost",
+          "label": "幽灵"
+        }
+      ]
+    },
+    {
+      "name": "size",
+      "label": "尺寸",
+      "type": "select",
+      "default": "md",
+      "options": [
+        {
+          "value": "sm",
+          "label": "小"
+        },
+        {
+          "value": "md",
+          "label": "中"
+        },
+        {
+          "value": "lg",
+          "label": "大"
+        }
+      ]
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "readOnly",
+      "label": "只读",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "allowClear",
+      "label": "显示清除按钮",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "showCount",
+      "label": "显示字数统计",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "delBlank",
+      "label": "去除空格",
+      "type": "boolean",
+      "default": false,
+      "description": "失焦时自动去除首尾空格"
+    },
+    {
+      "name": "defaultVal",
+      "label": "默认值",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "prefix",
+      "label": "前缀",
+      "type": "text",
+      "default": "",
+      "description": "显示在输入框左侧的内容"
+    },
+    {
+      "name": "suffix",
+      "label": "后缀",
+      "type": "text",
+      "default": "",
+      "description": "显示在输入框右侧的内容"
+    },
+    {
+      "name": "addonBefore",
+      "label": "前置标签",
+      "type": "text",
+      "default": "",
+      "description": "显示在输入框左侧的标签"
+    },
+    {
+      "name": "addonAfter",
+      "label": "后置标签",
+      "type": "text",
+      "default": "",
+      "description": "显示在输入框右侧的标签"
+    },
+    {
+      "name": "maxLength",
+      "label": "最大长度",
+      "type": "number",
+      "min": 1
+    },
+    {
+      "name": "bordered",
+      "label": "显示边框",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}

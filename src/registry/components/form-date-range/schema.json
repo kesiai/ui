@@ -1,0 +1,77 @@
+{
+  "displayName": "日期范围",
+  "category": "form",
+  "defaultCode": "<DateRange />",
+  "importCode": "import { DateRange } from '@/components/kesi/form-date-range/form-date-range.tsx';",
+  "props": [
+    {
+      "name": "format",
+      "label": "格式",
+      "type": "select",
+      "default": "date",
+      "options": [
+        {
+          "value": "date",
+          "label": "日期"
+        },
+        {
+          "value": "datetime",
+          "label": "日期时间"
+        },
+        {
+          "value": "time",
+          "label": "时间"
+        }
+      ]
+    },
+    {
+      "name": "defaultVal",
+      "label": "默认值",
+      "type": "text",
+      "default": "",
+      "description": "格式：开始时间 - 结束时间，例如：2024-01-01 - 2024-12-31（兼容 table-field）"
+    },
+    {
+      "name": "size",
+      "label": "尺寸",
+      "type": "select",
+      "default": "middle",
+      "description": "兼容 table-field 配置",
+      "options": [
+        {
+          "value": "small",
+          "label": "小"
+        },
+        {
+          "value": "middle",
+          "label": "中"
+        },
+        {
+          "value": "large",
+          "label": "大"
+        }
+      ]
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "placeholder",
+      "label": "占位符",
+      "type": "text",
+      "default": "请选择日期范围",
+      "placeholder": "请输入占位符"
+    },
+    {
+      "name": "width",
+      "label": "宽度",
+      "type": "range",
+      "default": 100,
+      "min": 50,
+      "max": 100
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "displayName": "视图分页",
+  "category": "view",
+  "defaultCode": "<ViewPagination />",
+  "importCode": "import { ViewPagination } from '@/components/kesi/view-pagination/view-pagination';",
+  "props": [
+    {
+      "name": "modelName",
+      "label": "内置模型",
+      "type": "model-name",
+      "default": null,
+      "description": "内置模型的选择"
+    },
+    {
+      "name": "tableId",
+      "label": "表格ID",
+      "type": "table-id",
+      "default": "task_def",
+      "description": "数据表格的唯一标识符"
+    },
+    {
+      "name": "showSizeChanger",
+      "label": "显示每页条数选择器",
+      "type": "boolean",
+      "default": true,
+      "description": "是否显示每页条数选择器"
+    },
+    {
+      "name": "showQuickJumper",
+      "label": "显示快速跳转",
+      "type": "boolean",
+      "default": false,
+      "description": "是否显示快速跳转到指定页"
+    },
+    {
+      "name": "showTotal",
+      "label": "显示总数",
+      "type": "boolean",
+      "default": true,
+      "description": "是否显示数据总数"
+    },
+    {
+      "name": "pageSizeOptions",
+      "label": "每页条数选项",
+      "type": "json",
+      "default": "[10, 20, 50, 100]",
+      "description": "每页条数选择器的选项（JSON 数组格式）"
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false,
+      "description": "是否禁用分页组件"
+    },
+    {
+      "name": "showExample",
+      "label": "显示示例",
+      "type": "boolean",
+      "default": true,
+      "description": "是否在预览中显示示例"
+    }
+  ]
+}

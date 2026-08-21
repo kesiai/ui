@@ -1,0 +1,49 @@
+{
+  "displayName": "筛选",
+  "category": "view",
+  "defaultCode": "<ViewModel />",
+  "importCode": "import { ViewModel } from '@/components/kesi/view-model/view-model';",
+  "props": [
+    {
+      "name": "modelName",
+      "label": "内置模型",
+      "type": "model-name",
+      "default": null,
+      "description": "内置模型的选择"
+    },
+    {
+      "name": "tableId",
+      "label": "表格ID",
+      "type": "table-id",
+      "default": "user",
+      "description": "数据表格的唯一标识符"
+    },
+    {
+      "name": "filters",
+      "label": "筛选字段",
+      "type": "json",
+      "default": "[]",
+      "description": "筛选字段配置（JSON 数组格式）"
+    },
+    {
+      "name": "layout",
+      "label": "布局样式",
+      "type": "select",
+      "default": "default",
+      "description": "选择表单的布局样式"
+    },
+    {
+      "name": "classNames",
+      "label": "自定义样式类",
+      "type": "json",
+      "description": "自定义表单各元素的 className (JSON格式)"
+    },
+    {
+      "name": "showExample",
+      "label": "显示示例",
+      "type": "boolean",
+      "default": true,
+      "description": "是否在预览中显示示例"
+    }
+  ]
+}

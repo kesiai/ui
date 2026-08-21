@@ -1,0 +1,15 @@
+{
+  "displayName": "序列号",
+  "category": "form",
+  "defaultCode": "<FormSerialNumber />",
+  "importCode": "import { FormSerialNumber } from '@/components/kesi/form-serial-number/form-serial-number';",
+  "props": [
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": true,
+      "description": "序列号字段默认禁用，自动生成"
+    }
+  ]
+}

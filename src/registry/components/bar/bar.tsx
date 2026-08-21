@@ -110,7 +110,9 @@ const Bar = React.forwardRef<HTMLDivElement, BarProps>(
         <div
           ref={ref}
           className={cn(
-            "bar-component relative w-full h-full overflow-hidden",
+            // 垂直模式：默认 8px 宽轨道（w-full 会被撑满父级导致过宽）；高度仍取父级，
+            // 垂直条语义上需要父容器给定高度；均可用 className 覆盖
+            "bar-component relative w-2 h-full overflow-hidden",
             barVariants({ variant }),
             className
           )}
@@ -141,7 +143,9 @@ const Bar = React.forwardRef<HTMLDivElement, BarProps>(
       <div
         ref={ref}
         className={cn(
-          "bar-component relative w-full h-full overflow-hidden",
+          // 水平模式：默认 8px 高轨道（h-full 依赖父级高度，父级 auto 时组件高度为 0 完全不可见）；
+          // 需要撑满时显式传 className="h-full"
+          "bar-component relative w-full h-2 overflow-hidden",
           barVariants({ variant }),
           className
         )}

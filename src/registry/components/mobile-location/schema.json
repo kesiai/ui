@@ -1,0 +1,47 @@
+{
+  "displayName": "定位",
+  "category": "mobile",
+  "defaultCode": "<MobileLocation />",
+  "importCode": "import { MobileLocation } from '@/components/kesi/mobile-location/mobile-location';",
+  "props": [
+    {
+      "name": "ak",
+      "label": "百度地图 API Key",
+      "type": "text",
+      "default": "",
+      "description": "用于调用百度地图定位服务"
+    },
+    {
+      "name": "placeholder",
+      "label": "占位符",
+      "type": "text",
+      "default": "定位中..."
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "size",
+      "label": "尺寸",
+      "type": "select",
+      "default": "md",
+      "options": [
+        {
+          "value": "sm",
+          "label": "小"
+        },
+        {
+          "value": "md",
+          "label": "中"
+        },
+        {
+          "value": "lg",
+          "label": "大"
+        }
+      ]
+    }
+  ]
+}

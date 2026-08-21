@@ -1,0 +1,51 @@
+{
+  "displayName": "多行文本",
+  "category": "basic",
+  "defaultCode": "<TextArea />",
+  "importCode": "import { TextArea } from '@/components/kesi/textarea/textarea';",
+  "props": [
+    {
+      "name": "content",
+      "label": "文字内容",
+      "type": "text",
+      "default": "这是一段多行文本示例。\n可以输入多行内容。",
+      "placeholder": "请输入文本内容"
+    },
+    {
+      "name": "textIndent",
+      "label": "首行缩进（像素）",
+      "type": "number",
+      "default": 0,
+      "description": "设置文本首行缩进的像素数",
+      "min": 0,
+      "max": 100
+    },
+    {
+      "name": "placeholder",
+      "label": "占位提示",
+      "type": "text",
+      "default": "请输入文本信息",
+      "placeholder": "请输入占位文本"
+    },
+    {
+      "name": "rows",
+      "label": "行数",
+      "type": "number",
+      "default": 4,
+      "min": 2,
+      "max": 20
+    },
+    {
+      "name": "disabled",
+      "label": "禁用状态",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "readOnly",
+      "label": "只读状态",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

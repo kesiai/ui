@@ -1,0 +1,36 @@
+{
+  "displayName": "表选择器",
+  "category": "business",
+  "defaultCode": "<TableSelect />",
+  "importCode": "import { TableSelect } from '@/components/kesi/table-select/table-select';",
+  "props": [
+    {
+      "name": "multiple",
+      "label": "多选",
+      "type": "boolean",
+      "default": false,
+      "description": "选中“是”后，每次可选择多个数据表，默认为否"
+    },
+    {
+      "name": "placeholder",
+      "label": "提示文字",
+      "type": "text",
+      "default": "请选择表",
+      "description": "选择器中的提示文本信息"
+    },
+    {
+      "name": "tree",
+      "label": "树形展示",
+      "type": "boolean",
+      "default": false,
+      "description": "选中后，选择器中的表按照层级树形展示"
+    },
+    {
+      "name": "excludeDevice",
+      "label": "排除设备表",
+      "type": "boolean",
+      "default": false,
+      "description": "选中后，选择器中不显示设备表"
+    }
+  ]
+}

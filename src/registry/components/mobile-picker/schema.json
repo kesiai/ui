@@ -1,0 +1,62 @@
+{
+  "displayName": "选择器",
+  "category": "mobile",
+  "defaultCode": "<MobilePicker />",
+  "importCode": "import { MobilePicker } from '@/components/kesi/mobile-picker/mobile-picker';",
+  "props": [
+    {
+      "name": "selectModel",
+      "label": "选择模式",
+      "type": "select",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "普通选择"
+        },
+        {
+          "value": "table",
+          "label": "表格选择"
+        },
+        {
+          "value": "tableData",
+          "label": "表记录级联选择"
+        }
+      ]
+    },
+    {
+      "name": "multiple",
+      "label": "多选",
+      "type": "boolean",
+      "default": false,
+      "description": "启用多选模式"
+    },
+    {
+      "name": "placeholder",
+      "label": "占位符",
+      "type": "text",
+      "default": "请选择",
+      "placeholder": "请输入占位符"
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "loading",
+      "label": "加载中",
+      "type": "boolean",
+      "default": false,
+      "description": "显示加载状态"
+    },
+    {
+      "name": "dashboardMode",
+      "label": "仪表盘模式",
+      "type": "boolean",
+      "default": false,
+      "description": "禁用点击事件"
+    }
+  ]
+}

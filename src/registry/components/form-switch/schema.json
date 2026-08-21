@@ -1,0 +1,42 @@
+{
+  "displayName": "开关",
+  "category": "form",
+  "defaultCode": "<FormSwitch />",
+  "importCode": "import { FormSwitch } from '@/components/kesi/form-switch/form-switch';",
+  "props": [
+    {
+      "name": "defaultChecked",
+      "label": "默认值",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "disabled",
+      "label": "禁用状态",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "autoFocus",
+      "label": "自动获取焦点",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "size",
+      "label": "尺寸",
+      "type": "select",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "标准"
+        },
+        {
+          "value": "small",
+          "label": "小"
+        }
+      ]
+    }
+  ]
+}

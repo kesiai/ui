@@ -1,0 +1,39 @@
+{
+  "displayName": "标题栏",
+  "category": "mobile",
+  "defaultCode": "<MobileNavBar />",
+  "importCode": "import { MobileNavBar } from '@/components/kesi/mobile-nav-bar/mobile-nav-bar';",
+  "props": [
+    {
+      "name": "title",
+      "label": "标题",
+      "type": "text",
+      "default": "标题栏"
+    },
+    {
+      "name": "back",
+      "label": "返回区域文字",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "backArrow",
+      "label": "显示返回箭头",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "icon",
+      "label": "左侧图标 URL",
+      "type": "text",
+      "default": "",
+      "placeholder": "https://example.com/icon.png"
+    },
+    {
+      "name": "disableBack",
+      "label": "禁用返回功能",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

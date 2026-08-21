@@ -1,0 +1,43 @@
+{
+  "displayName": "二维码",
+  "category": "business",
+  "defaultCode": "<QRCodeComp />",
+  "importCode": "import { QRCodeComp } from '@/components/kesi/qrcode/qrcode';",
+  "props": [
+    {
+      "name": "content",
+      "label": "二维码内容",
+      "type": "text",
+      "default": "https://example.com",
+      "placeholder": "请输入要生成的二维码内容"
+    },
+    {
+      "name": "width",
+      "label": "宽度",
+      "type": "range",
+      "default": 200,
+      "min": 50,
+      "max": 500
+    },
+    {
+      "name": "margin",
+      "label": "边距",
+      "type": "range",
+      "default": 1,
+      "min": 0,
+      "max": 10
+    },
+    {
+      "name": "darkColor",
+      "label": "前景色",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "lightColor",
+      "label": "背景色",
+      "type": "color",
+      "default": "#ffffff"
+    }
+  ]
+}

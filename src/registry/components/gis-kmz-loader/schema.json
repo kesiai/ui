@@ -1,0 +1,60 @@
+{
+  "displayName": "KMZ层",
+  "category": "gis",
+  "defaultCode": "<GisKmzLoader />",
+  "importCode": "import { GisKmzLoader } from '@/components/kesi/gis-kmz-loader/gis-kmz-loader';",
+  "props": [
+    {
+      "name": "source",
+      "label": "KMZ URL",
+      "type": "text",
+      "default": "",
+      "description": "远程 KMZ 文件地址",
+      "placeholder": "KMZ 数据地址"
+    },
+    {
+      "name": "coordinateType",
+      "label": "坐标系",
+      "type": "select",
+      "default": "EPSG:4326",
+      "options": [
+        {
+          "value": "EPSG:4326",
+          "label": "EPSG:4326 (WGS84)"
+        },
+        {
+          "value": "EPSG:3857",
+          "label": "EPSG:3857 (WebMercator)"
+        },
+        {
+          "value": "GCJ02",
+          "label": "GCJ02 (火星坐标)"
+        },
+        {
+          "value": "BD09",
+          "label": "BD09 (百度坐标)"
+        }
+      ]
+    },
+    {
+      "name": "display",
+      "label": "是否显示",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "opacity",
+      "label": "透明度",
+      "type": "number",
+      "default": 1,
+      "min": 0,
+      "max": 1
+    },
+    {
+      "name": "zIndex",
+      "label": "层级",
+      "type": "number",
+      "default": 0
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "name": "view-data-table",
   "type": "registry:component",
-  "title": "View Data Table",
+  "title": "数据表格",
   "description": "View Data Table - 组件",
   "dependencies": [
     "@kesi/client",
@@ -59,5 +59,189 @@
       "type": "registry:lib",
       "content": "import { Text } from '@/components/kesi/view-field-text/view-field-text'\nimport { Textarea } from '@/components/kesi/view-field-textarea/view-field-textarea'\nimport { Number } from '@/components/kesi/view-field-number/view-field-number'\nimport { Password } from '@/components/kesi/view-field-password/view-field-password'\nimport { Select } from '@/components/kesi/view-field-select/view-field-select'\nimport { BooleanIcon } from '@/components/kesi/view-field-boolean/view-field-boolean'\nimport { Slider } from '@/components/kesi/view-field-slider/view-field-slider'\nimport { DateField } from '@/components/kesi/view-field-date/view-field-date'\nimport { DateRange } from '@/components/kesi/view-field-date-range/view-field-date-range'\nimport { TimeField } from '@/components/kesi/view-field-time/view-field-time'\nimport { Rate } from '@/components/kesi/view-field-rate/view-field-rate'\nimport { RichText } from '@/components/kesi/view-field-rich-text/view-field-rich-text'\nimport { Map } from '@/components/kesi/view-field-map/view-field-map'\nimport { Link } from '@/components/kesi/view-field-link/view-field-link'\nimport { SerialNumber } from '@/components/kesi/view-field-serial-number/view-field-serial-number'\nimport { UserRole } from '@/components/kesi/view-field-user-role/view-field-user-role'\nimport { BytesArray } from '@/components/kesi/view-field-bytes-array/view-field-bytes-array'\nimport { FormInfo } from '@/components/kesi/view-field-form-info/view-field-form-info'\nimport { EditableTable } from '@/components/kesi/view-field-editable-table/view-field-editable-table'\nimport { Formula } from '@/components/kesi/view-field-formula/view-field-formula'\nimport { Reference } from '@/components/kesi/view-field-reference/view-field-reference'\nimport { Attachment } from '@/components/kesi/view-field-attachment/view-field-attachment'\nimport { Relate } from '@/components/kesi/view-field-relate/view-field-relate'\n\nconst tableConverter = (schema: any, tableSchame: any) => {\n  const controlType = tableSchame?.controlType || schema?.controlType\n\n  switch (controlType) {\n    case 'text':\n      return Text\n    case 'textarea':\n      return Textarea\n    case 'number':\n      return Number\n    case 'password':\n      return Password\n    case 'radio':\n    case 'select-string':\n    case 'select-number':\n    case 'select-array-string':\n    case 'select-array-number':\n      return Select\n    case 'checkbox':\n    case 'switch':\n    case 'boolean':\n      return BooleanIcon\n    case 'slider':\n      return Slider\n    case 'date':\n      return DateField\n    case 'date-range':\n      return DateRange\n    case 'time':\n      return TimeField\n    case 'rate':\n      return Rate\n    case 'rich-text':\n      return RichText\n    case 'map':\n      return Map\n    case 'upload':\n    case 'upload-group':\n      return Attachment\n    case 'link':\n      return Link\n    case 'serial-number':\n      return SerialNumber\n    case 'user-role':\n      return UserRole\n    case 'bytes-array':\n      return BytesArray\n    case 'form-info':\n      return FormInfo\n    case 'editable-table':\n      return EditableTable\n    case 'formula':\n      return Formula\n    case 'reference':\n      return Reference\n    case 'relate':\n      return Relate\n    case 'relate-multiple':\n      return Relate\n    default:\n      return Text\n  }\n}\n\nexport { tableConverter }\n"
     }
-  ]
+  ],
+  "kesi": {
+    "displayName": "数据表格",
+    "category": "view",
+    "icon": "",
+    "jsxName": "",
+    "defaultCode": "<ViewDataTable />",
+    "importCode": "import { ViewDataTable } from '@/components/kesi/view-data-table/view-data-table';",
+    "props": [
+      {
+        "name": "modelName",
+        "label": "内置模型",
+        "type": "model-name",
+        "default": null,
+        "description": "内置模型的选择"
+      },
+      {
+        "name": "tableId",
+        "label": "表格ID",
+        "type": "table-id",
+        "default": "task_def",
+        "description": "数据表格的唯一标识符"
+      },
+      {
+        "name": "enableSort",
+        "label": "启用排序",
+        "type": "boolean",
+        "default": true,
+        "description": "是否启用列排序功能"
+      },
+      {
+        "name": "enableFilter",
+        "label": "启用筛选",
+        "type": "boolean",
+        "default": true,
+        "description": "是否启用数据筛选功能"
+      },
+      {
+        "name": "showDemoData",
+        "label": "显示演示数据",
+        "type": "boolean",
+        "default": true,
+        "description": "是否使用内置演示数据（用于展示）"
+      },
+      {
+        "name": "dense",
+        "label": "密集模式",
+        "type": "boolean",
+        "default": false,
+        "description": "表格是否使用密集（更紧凑）的布局"
+      },
+      {
+        "name": "border",
+        "label": "表格框",
+        "type": "boolean",
+        "default": true,
+        "description": "是否显示表格边框"
+      },
+      {
+        "name": "cellBorder",
+        "label": "单元格边框",
+        "type": "boolean",
+        "default": false,
+        "description": "是否显示单元格边框"
+      },
+      {
+        "name": "rowBorder",
+        "label": "行边框",
+        "type": "boolean",
+        "default": true,
+        "description": "是否显示行边框"
+      },
+      {
+        "name": "rowRounded",
+        "label": "行圆角",
+        "type": "boolean",
+        "default": false,
+        "description": "是否使用圆角行"
+      },
+      {
+        "name": "stripped",
+        "label": "斑马纹",
+        "type": "boolean",
+        "default": false,
+        "description": "是否使用斑马纹样式"
+      },
+      {
+        "name": "headerBackground",
+        "label": "表头背景",
+        "type": "boolean",
+        "default": true,
+        "description": "是否显示表头背景色"
+      },
+      {
+        "name": "headerBorder",
+        "label": "表头边框",
+        "type": "boolean",
+        "default": true,
+        "description": "是否显示表头边框"
+      },
+      {
+        "name": "headerSticky",
+        "label": "表头固定",
+        "type": "boolean",
+        "default": true,
+        "description": "是否固定表头（滚动时保持可见）"
+      },
+      {
+        "name": "width",
+        "label": "列宽模式",
+        "type": "select",
+        "default": "fixed",
+        "description": "列宽的调整模式",
+        "options": [
+          {
+            "value": "auto",
+            "label": "自动"
+          },
+          {
+            "value": "fixed",
+            "label": "固定"
+          }
+        ]
+      },
+      {
+        "name": "layout",
+        "label": "表格布局",
+        "type": "select",
+        "default": "fixed",
+        "description": "表格布局算法",
+        "options": [
+          {
+            "value": "auto",
+            "label": "自动"
+          },
+          {
+            "value": "fixed",
+            "label": "固定"
+          }
+        ]
+      },
+      {
+        "name": "columnsVisibility",
+        "label": "列可见性",
+        "type": "boolean",
+        "default": false,
+        "description": "是否启用列显示/隐藏功能"
+      },
+      {
+        "name": "columnsResizable",
+        "label": "列可调整大小",
+        "type": "boolean",
+        "default": true,
+        "description": "是否允许调整列宽"
+      },
+      {
+        "name": "columnsPinnable",
+        "label": "列可固定",
+        "type": "boolean",
+        "default": true,
+        "description": "是否允许固定列到左侧或右侧"
+      },
+      {
+        "name": "columnsMovable",
+        "label": "列可移动",
+        "type": "boolean",
+        "default": false,
+        "description": "是否允许拖动移动列"
+      },
+      {
+        "name": "columnsDraggable",
+        "label": "列可拖拽",
+        "type": "boolean",
+        "default": false,
+        "description": "是否允许拖拽列（拖拽到其他位置）"
+      },
+      {
+        "name": "rowsDraggable",
+        "label": "行可拖拽",
+        "type": "boolean",
+        "default": false,
+        "description": "是否允许拖拽行进行重新排序"
+      }
+    ]
+  }
 }

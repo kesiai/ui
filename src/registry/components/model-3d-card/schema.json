@@ -1,0 +1,51 @@
+{
+  "displayName": "3D卡片",
+  "category": "3d",
+  "defaultCode": "<Model3dCard />",
+  "importCode": "import { Model3dCard } from '@/components/kesi/model-3d-card/model-3d-card';",
+  "props": [
+    {
+      "name": "meshConfig",
+      "label": "网格配置",
+      "type": "text",
+      "default": "{\"visible\":true,\"position\":{\"x\":0,\"y\":0,\"z\":0},\"scale\":{\"x\":1,\"y\":1,\"z\":1},\"rotation\":{\"x\":0,\"y\":0,\"z\":0},\"opacity\":1,\"color\":\"#FFFFFF\"}"
+    },
+    {
+      "name": "isSprite",
+      "label": "精灵图模式",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "isFixd",
+      "label": "固定位置",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "cardConfig",
+      "label": "卡片配置",
+      "type": "text",
+      "default": "{\"cardWidth\":\"200px\",\"lineWidth\":\"100px\",\"lineHeight\":\"100px\"}"
+    },
+    {
+      "name": "dataConfig",
+      "label": "数据配置",
+      "type": "text",
+      "default": "{\"lineCount\":1,\"dataList\":[{\"label\":\"标签1\",\"value\":\"值1\"},{\"label\":\"标签2\",\"value\":\"值2\"}]}"
+    },
+    {
+      "name": "editMode",
+      "label": "编辑模式",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "className",
+      "label": "CSS类名",
+      "type": "text",
+      "default": "",
+      "placeholder": "请输入CSS类名"
+    }
+  ]
+}

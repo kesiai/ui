@@ -1,0 +1,83 @@
+{
+  "displayName": "气泡卡片",
+  "category": "containers",
+  "defaultCode": "<Popover />",
+  "importCode": "import { Popover } from '@/components/kesi/container-popover/container-popover';",
+  "props": [
+    {
+      "name": "buttonName",
+      "label": "按钮文字",
+      "type": "text",
+      "default": "气泡卡片",
+      "placeholder": "请输入按钮文字"
+    },
+    {
+      "name": "hiddenBtn",
+      "label": "隐藏按钮",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "disable",
+      "label": "禁用状态",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "trigger",
+      "label": "触发方式",
+      "type": "select",
+      "default": "click",
+      "description": "定义鼠标触发气泡卡片显示时的交互方式",
+      "options": [
+        {
+          "value": "hover",
+          "label": "鼠标经过"
+        },
+        {
+          "value": "click",
+          "label": "鼠标点击"
+        }
+      ]
+    },
+    {
+      "name": "placement",
+      "label": "位置",
+      "type": "select",
+      "default": "top",
+      "description": "以按钮为参考，气泡卡片显示的位置",
+      "options": [
+        {
+          "value": "top",
+          "label": "上"
+        },
+        {
+          "value": "bottom",
+          "label": "下"
+        },
+        {
+          "value": "left",
+          "label": "左"
+        },
+        {
+          "value": "right",
+          "label": "右"
+        }
+      ]
+    },
+    {
+      "name": "width",
+      "label": "宽度",
+      "type": "text",
+      "default": "200",
+      "placeholder": "200 或 200px"
+    },
+    {
+      "name": "height",
+      "label": "高度",
+      "type": "text",
+      "default": "200",
+      "placeholder": "200 或 200px"
+    }
+  ]
+}

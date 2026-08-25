@@ -107,6 +107,8 @@ import { ToolResultCard } from "./render/tool-result-card";
 import { KesiTextRenderer } from "./render/rich-text";
 import type { RenderRegistry } from "./render/registry";
 import { TaskDetailPanel } from "./task-detail-panel";
+import { InteractionRequestCard } from "./render/interaction-request-card";
+import type { AgentInteractionRequest, InteractionReplyAction } from "./runtime";
 
 
 // ==================== Agent UI Context ====================
@@ -165,6 +167,14 @@ type AgentExtras = {
   renderRegistry?: RenderRegistry;
   onShareThread?: (messages: readonly ThreadMessage[]) => void;
   isTaskRuntime?: boolean;
+  /** 询问模式：待答复的交互请求 */
+  interactionRequests?: AgentInteractionRequest[];
+  /** 回复后端（POST /messages/{id}/permission-reply） */
+  replyInteraction?: (
+    request: AgentInteractionRequest,
+    action: InteractionReplyAction,
+    updatedInput?: Record<string, unknown>,
+  ) => Promise<void>;
 };
 
 /**
@@ -181,6 +191,8 @@ const useAgentUI = (): AgentUIContextValue & AgentExtras => {
     renderRegistry: extras?.renderRegistry,
     onShareThread: extras?.onShareThread,
     isTaskRuntime: extras?.isTaskRuntime,
+    interactionRequests: extras?.interactionRequests,
+    replyInteraction: extras?.replyInteraction,
   };
 };
 
@@ -509,6 +521,37 @@ const isNewChatView = (s: AssistantState) =>
   s.thread.messages.length === 0 &&
   (!s.thread.isLoading || s.threads.isLoading);
 
+/** 询问模式：渲染所有待答复的交互请求卡片（permission-request / elicitation-request） */
+export const InteractionRequests: FC = () => {
+  const { interactionRequests, replyInteraction } = useAgentUI();
+  const requests = interactionRequests ?? [];
+
+  if (requests.length === 0) return null;
+
+  const handleReply: (r: AgentInteractionRequest) => (action: InteractionReplyAction, updatedInput?: Record<string, unknown>) => void =
+    (r) => (action, updatedInput) => {
+      if (replyInteraction) {
+        replyInteraction(r, action, updatedInput).catch((err) =>
+          console.error('[InteractionRequests] reply failed', err),
+        );
+      } else {
+        console.warn('[InteractionRequests] replyInteraction not available');
+      }
+    };
+
+  return (
+    <div data-slot="aui_interaction-requests" className="mx-auto flex w-full max-w-(--thread-max-width) flex-col gap-2 px-2">
+      {requests.map((r) => (
+        <InteractionRequestCard
+          key={`${r.messageId}-${r.requestId}`}
+          request={r}
+          onReply={handleReply(r)}
+        />
+      ))}
+    </div>
+  );
+};
+
 export const Thread: FC<{ readOnly?: boolean }> = ({ readOnly }) => {
   const isEmpty = useAuiState(isNewChatView);
 
@@ -547,6 +590,9 @@ export const Thread: FC<{ readOnly?: boolean }> = ({ readOnly }) => {
             }}
           </ThreadPrimitive.Messages>
         </div>
+
+        {/* 询问模式：待答复的交互请求卡片 */}
+        <InteractionRequests />
 
         {!readOnly && (
         <ThreadPrimitive.ViewportFooter
@@ -1363,10 +1409,12 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; showAgentSelect?: boolean; hideSidebar?: boolean }> = ({ className, title, readOnly, showAgentSelect, hideSidebar }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; showAgentSelect?: boolean; hideSidebar?: boolean; hideTaskPanel?: boolean }> = ({ className, title, readOnly, showAgentSelect, hideSidebar, hideTaskPanel }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { isTaskRuntime } = useAgentUI();
   const taskId = useAuiState((s) => s.threads.mainThreadId);
+
+  const showTaskDetail = isTaskRuntime && !hideTaskPanel;
 
   return (
     <div className={cn("bg-muted/30 flex h-full w-full", className)}>
@@ -1384,12 +1432,12 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
           />
           )}
           <div className="flex flex-1 overflow-hidden">
-            <main className={cn("min-w-0 overflow-hidden", isTaskRuntime ? "basis-[44rem] max-w-[44rem]" : "flex-1")}>
+            <main className={cn("min-w-0 overflow-hidden", showTaskDetail ? "basis-[44rem] max-w-[44rem]" : "flex-1")}>
               <TooltipProvider>
                 <Thread readOnly={readOnly} />
               </TooltipProvider>
             </main>
-            {isTaskRuntime && (
+            {showTaskDetail && (
               <aside className="min-w-[24rem] flex-1 border-l bg-background overflow-hidden">
                 <TaskDetailPanel taskId={taskId ?? ''} />
               </aside>
@@ -1401,8 +1449,8 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, avatar, showAgentSelect, hideSidebar }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings; showAgentSelect?: boolean; hideSidebar?: boolean }) => {
-  const content = <Base className={className} title={title} readOnly={readOnly} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} />;
+export const Assistant = ({ runtime, className, title, readOnly, avatar, showAgentSelect, hideSidebar, hideTaskPanel }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings; showAgentSelect?: boolean; hideSidebar?: boolean; hideTaskPanel?: boolean }) => {
+  const content = <Base className={className} title={title} readOnly={readOnly} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} hideTaskPanel={hideTaskPanel} />;
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
       <AgentUIProvider avatar={avatar}>

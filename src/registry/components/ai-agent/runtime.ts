@@ -282,6 +282,44 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
 }
 
 /** 从 URL 中提取 objectKey */
+// ====== 交互请求（询问模式） ======
+
+/** 运行时交互请求的公共字段（permission-request / elicitation-request） */
+export interface AgentInteractionRequest {
+  /** 请求类型：工具批准 (approval) 或 表单补充输入 (input) */
+  kind: 'approval' | 'input';
+  /** 对应 SSE 事件名：permission-request / elicitation-request */
+  eventType: 'permission-request' | 'elicitation-request';
+  /** 回传给 POST /messages/{id}/permission-reply 的 requestId（必取 payload.requestId） */
+  requestId: string;
+  /** 事件所属消息 id，用于构造 reply 请求地址 */
+  messageId: string;
+  /** 交互标题（payload.title） */
+  title?: string;
+  /** 交互提示语（payload.message） */
+  message?: string;
+  /** 需要用户补充信息的表单结构（elicitation-request 可选） */
+  schema?: unknown;
+  /** 已有表单值（elicitation-request 可选） */
+  input?: Record<string, unknown>;
+  /** 待批准的工具信息（permission-request 可选） */
+  tool?: string;
+  /** 工具输入参数（permission-request 可选） */
+  toolInput?: unknown;
+  /** opencode 权限标识（permission-request 可选） */
+  opencodePermissionId?: string;
+  /** 交互接收时间（用于自动超时/去重） */
+  receivedAt?: number;
+}
+
+/** permission-reply 的 action 枚举 */
+export type InteractionReplyAction =
+  | 'approve_once'
+  | 'approve_always'
+  | 'deny'
+  | 'submit'
+  | 'cancel';
+
 function extractObjectKey(url: string): string {
   try {
     const u = new URL(url);
@@ -587,8 +625,10 @@ async function streamRunInSession(params: {
   onSendMessageBody?: (body: Record<string, any>, info: { sessionId: string; userText: string; url: string; headers: Record<string, string> }) => Record<string, any> | Promise<Record<string, any>>;
   /** 是否为 task runtime（默认为 agent runtime） */
   isTaskRuntime?: boolean;
+  /** 收到 permission-request / elicitation-request 交互事件时回调 */
+  onInteractionRequest?: (req: AgentInteractionRequest) => void;
 }): Promise<MessageTiming> {
-  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars, onSendMessageBody, isTaskRuntime } = params;
+  const { sessionId, message, messages, context, requestedBy, signal, onMessageChange, renderRegistry, preamble, environmentVars, onSendMessageBody, isTaskRuntime, onInteractionRequest } = params;
 
   // 从 AppendMessage 中提取文本，enrich，提取附件
   const contentParts = Array.isArray(message.content) ? message.content : [];
@@ -794,6 +834,28 @@ async function streamRunInSession(params: {
               }
               emit();
             }
+          } else if (eventType === 'permission-request' || eventType === 'elicitation-request') {
+            // 询问模式：permission-request = 工具执行等待批准；elicitation-request = 等用户补充输入。
+            // 仅实时交互，不入库。交给上层渲染交互卡片，由用户作答后调 permission-reply。
+            console.log('[streamRunInSession] interaction request', eventType, payload);
+            if (onInteractionRequest) {
+              const msgId = parsed.data?.messageId ?? payload?.messageId ?? '';
+              const isApproval = eventType === 'permission-request';
+              onInteractionRequest({
+                kind: isApproval ? 'approval' : 'input',
+                eventType,
+                requestId: payload?.requestId ?? '',
+                messageId: msgId,
+                title: payload?.title ?? (isApproval ? '工具执行需要您批准' : '请补充信息'),
+                message: payload?.message ?? '',
+                schema: payload?.schema,
+                input: payload?.input,
+                tool: payload?.tool,
+                toolInput: payload?.input,
+                opencodePermissionId: payload?.opencodePermissionId,
+                receivedAt: Date.now(),
+              });
+            }
           } else if (eventType === 'completed') {
             const data = parsed.data;
             tokenCount = data?.tokens?.output ?? data?.tokens?.total;
@@ -908,6 +970,9 @@ export const useAgentRuntime = (options?: {
   const [toolStatuses, setToolStatuses] = useState<Record<string, ToolExecutionStatus>>({});
   const [loading, setLoading] = useState(false);
   const [threadsLoading, setThreadsLoading] = useState(false);
+
+  // 询问模式：待答复的交互请求（permission-request / elicitation-request）
+  const [interactionRequests, setInteractionRequests] = useState<AgentInteractionRequest[]>([]);
 
   // renderRegistry 用 ref 存,onNew 闭包读取,避免依赖变化导致重建
   // 始终内置 FileDownloadCard，与 streamRunInSession 里 mergedRegistry 保持一致
@@ -1122,6 +1187,46 @@ export const useAgentRuntime = (options?: {
   attachmentAdapter.setSessionGetter(() => sessionIdRef.current);
   attachmentAdapter.setSessionCreator(() => ensureSessionCreated('新会话'));
 
+  // ---------- 询问模式：交互请求处理与回复 ----------
+  // 收到交互事件 → 入 state（同 requestId 去重）；供 UI 渲染卡片
+  const handleInteractionRequest = useCallback((req: AgentInteractionRequest) => {
+    setInteractionRequests(prev => {
+      const exists = prev.some(r => r.messageId === req.messageId && r.requestId === req.requestId);
+      if (exists) return prev;
+      return [...prev, req];
+    });
+  }, []);
+
+  // 用户作答后回复后端：POST /messages/{messageId}/permission-reply
+  const replyInteraction = useCallback(async (
+    request: AgentInteractionRequest,
+    action: InteractionReplyAction,
+    updatedInput?: Record<string, unknown>,
+  ): Promise<void> => {
+    if (!request.messageId || !request.requestId) {
+      console.warn('[replyInteraction] missing messageId/requestId', request);
+      return;
+    }
+    try {
+      const replyApi = createAPI({ name: 'eap/messages' });
+      const body: Record<string, unknown> = { requestId: request.requestId, action };
+      if (updatedInput) body['updatedInput'] = updatedInput;
+      // permission-reply：POST /eap/messages/{id}/permission-reply
+      const resp = await replyApi.fetch(`/${request.messageId}/permission-reply`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+      console.log('[replyInteraction] replied', { requestId: request.requestId, action, resp });
+      // 成功后从待答复列表移除
+      setInteractionRequests(prev =>
+        prev.filter(r => !(r.messageId === request.messageId && r.requestId === request.requestId)),
+      );
+    } catch (err) {
+      console.error('[replyInteraction] failed', err);
+      throw err;
+    }
+  }, []);
+
   // ---------- onNew ----------
   const onNew = useCallback(async (message: AppendMessage) => {
     console.log('[onNew] === START ===', {
@@ -1188,6 +1293,7 @@ export const useAgentRuntime = (options?: {
         environmentVars: environmentVarsRef.current,
         onSendMessageBody: onSendMessageBodyRef.current,
         isTaskRuntime: isTaskRuntimeRef.current,
+        onInteractionRequest: handleInteractionRequest,
         onMessageChange(content) {
           // console.log('[onNew] SSE: content updated', { assistantId, parts: content.map(p => p.type) });
           setMessages(prev => prev.map(m =>
@@ -1214,7 +1320,7 @@ export const useAgentRuntime = (options?: {
       runIdRef.current = null;
       abortRef.current = null;
     }
-  }, [agentId, requestedBy, currentThreadId, messages, ensureSessionCreated]);
+  }, [agentId, requestedBy, currentThreadId, messages, ensureSessionCreated, handleInteractionRequest]);
 
   // ---------- onReload ----------
   const onReload = useCallback(async (_parentId: string | null, _config: any) => {
@@ -1258,6 +1364,7 @@ export const useAgentRuntime = (options?: {
         environmentVars: environmentVarsRef.current,
         onSendMessageBody: onSendMessageBodyRef.current,
         isTaskRuntime: isTaskRuntimeRef.current,
+        onInteractionRequest: handleInteractionRequest,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId
@@ -1277,7 +1384,7 @@ export const useAgentRuntime = (options?: {
       runIdRef.current = null;
       abortRef.current = null;
     }
-  }, [currentThreadId, messages, requestedBy]);
+  }, [currentThreadId, messages, requestedBy, handleInteractionRequest]);
 
   // ---------- onEdit ----------
   const onEdit = useCallback(async (editMessage: AppendMessage) => {
@@ -1317,6 +1424,7 @@ export const useAgentRuntime = (options?: {
         environmentVars: environmentVarsRef.current,
         onSendMessageBody: onSendMessageBodyRef.current,
         isTaskRuntime: isTaskRuntimeRef.current,
+        onInteractionRequest: handleInteractionRequest,
         onMessageChange(content) {
           setMessages(prev => prev.map(m =>
             m.id === assistantId
@@ -1336,7 +1444,7 @@ export const useAgentRuntime = (options?: {
       runIdRef.current = null;
       abortRef.current = null;
     }
-  }, [currentThreadId, requestedBy, messages]);
+  }, [currentThreadId, requestedBy, messages, handleInteractionRequest]);
 
   // ---------- onCancel ----------
   const onCancel = useCallback(async () => {
@@ -1371,6 +1479,8 @@ export const useAgentRuntime = (options?: {
       isTaskRuntime,
       loading,
       threadsLoading,
+      interactionRequests,
+      replyInteraction,
     },
     unstable_enableToolInvocations: true,
     onAddToolResult: (options) => {

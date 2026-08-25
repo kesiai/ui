@@ -103,11 +103,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createAPI } from '@kesi/client'
-import { ToolResultCard } from "./render/tool-result-card";
-import { KesiTextRenderer } from "./render/rich-text";
-import type { RenderRegistry } from "./render/registry";
+import { ToolResultCard } from "./tool-result-card";
+import { KesiTextRenderer } from "./rich-text";
+import type { RenderRegistry } from "./registry";
 import { TaskDetailPanel } from "./task-detail-panel";
-import { InteractionRequestCard } from "./render/interaction-request-card";
+import { InteractionRequestCard } from "./interaction-request-card";
 import type { AgentInteractionRequest, InteractionReplyAction } from "./runtime";
 
 

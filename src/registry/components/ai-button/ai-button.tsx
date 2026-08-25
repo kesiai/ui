@@ -17,7 +17,7 @@ import {
   type AvatarSettings,
 } from "@/registry/components/ai-agent/ai-agent";
 import { useAgentRuntime } from "@/registry/components/ai-agent/runtime";
-import type { RenderRegistry } from "@/registry/components/ai-agent/render/registry";
+import type { RenderRegistry } from "@/registry/components/ai-agent/registry";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 
 /**

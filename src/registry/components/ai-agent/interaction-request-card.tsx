@@ -15,16 +15,17 @@ import {
 import type {
   AgentInteractionRequest,
   InteractionReplyAction,
-} from "../runtime";
+} from "./ai-interaction";
 
 /**
- * 询问模式交互卡片。
+ * 询问模式交互卡片（ai-agent 内部组件）。
  *
  * - permission-request（kind=approval）：工具执行等待用户批准，提供 批准一次 / 始终批准 / 拒绝。
  * - elicitation-request（kind=input）：运行时等用户补充表单输入，用 shadcn 官方 Questionnaire 渲染。
  *
  * 用户作答后调用 reply(action, updatedInput)，由上层 POST /messages/{id}/permission-reply。
  * 表单使用官方 @shadcn/react 的 questionnaire（已移植为本地组件 src/components/ui/questionnaire）。
+ * 类型定义在 ai-agent 内部（./ai-interaction）。
  */
 
 type ReplyFn = (

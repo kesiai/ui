@@ -126,3 +126,5 @@ function truncate(s: string, n = 48): string {
   const t = s.trim().replace(/\s+/g, " ");
   return t.length > n ? `${t.slice(0, n)}…` : t;
 }
+
+export default ToolResultCard;

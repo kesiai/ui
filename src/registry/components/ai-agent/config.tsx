@@ -13,6 +13,8 @@ import {
 } from "@assistant-ui/react";
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
 import { useAgentRuntime } from "./runtime";
+import { RenderRegistry as FileDownloadCardRegistry } from "@/registry/components/render-file-download-card/render-file-download-card";
+import { RenderRegistry as DevicePointsChartRegistry } from "@/registry/components/render-device-points-chart/render-device-points-chart";
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
@@ -206,6 +208,20 @@ export const aiAgentPropsConfig = [
     type: 'boolean' as const,
     default: true,
     description: '是否在配置中显示 runtime 代码预览'
+  },
+  {
+    name: 'enableFileDownloadCard',
+    label: '注册 FileDownloadCard',
+    type: 'boolean' as const,
+    default: false,
+    description: '勾选后按需注册文件下载卡片组件（render-file-download-card）。ai-agent 不强依赖，通过 renderRegistry 在使用时注册'
+  },
+  {
+    name: 'enableDevicePointsChart',
+    label: '注册 DevicePointsChart',
+    type: 'boolean' as const,
+    default: false,
+    description: '勾选后按需注册设备点位趋势图组件（render-device-points-chart）。通过 renderRegistry 在使用时注册'
   }
 ]
 
@@ -223,7 +239,9 @@ export const aiAgentDefaultProps = {
   showAgentSelect: false,
   hideSidebar: false,
   readOnly: false,
-  showCodePreview: true
+  showCodePreview: true,
+  enableFileDownloadCard: false,
+  enableDevicePointsChart: false
 }
 
 /** 可交互工具包装器（在 config 预览中使用，无需修改 ai-agent.tsx） */
@@ -274,6 +292,19 @@ const InteractableAssistantShell: React.FC<{
   );
 };
 
+/** 根据配置面板勾选的 render 组件，组装 RenderRegistry（按需注册） */
+function buildSelectedRegistry(props: Record<string, any>): Record<string, any> | undefined {
+  const registry: Record<string, any> = {}
+  // 勾选了才注册，未勾选不注入
+  if (props.enableFileDownloadCard) {
+    registry.FileDownloadCard = FileDownloadCardRegistry
+  }
+  if (props.enableDevicePointsChart) {
+    registry['device-points-chart'] = DevicePointsChartRegistry
+  }
+  return Object.keys(registry).length ? registry : undefined
+}
+
 const renderAiAgentPreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'agent'
   const agentId = props.agentId || 'your-agent-id'
@@ -290,7 +321,9 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
       baseUrl: props.baseUrl || 'http://127.0.0.1:4096',
     })
     // useAgentRuntime 从 AgentUIContext 读取 agentId
-    const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble, isTaskRuntime: props.taskRuntime, initialThreadId: props.taskRuntime ? (props.taskId || undefined) : undefined })
+    // 按需注册 render 组件：检查勾选的组件，组装 renderRegistry 传入
+    const selectedRenderRegistry = buildSelectedRegistry(props)
+    const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble, isTaskRuntime: props.taskRuntime, initialThreadId: props.taskRuntime ? (props.taskId || undefined) : undefined, renderRegistry: selectedRenderRegistry })
 
     let runtime: AssistantRuntime | null = null
     switch (runtimePreset) {
@@ -341,9 +374,38 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
   )
 }
 
+/** 生成 render 组件按需注册的代码片段（import + renderRegistry 参数） */
+function buildRegistryCode(props: Record<string, any>): { imports: string; registryEntries: string[] } {
+  const imports: string[] = []
+  const registryEntries: string[] = []
+  if (props.enableFileDownloadCard) {
+    imports.push(`import { RenderRegistry as FileDownloadCardRegistry } from "@/registry/components/render-file-download-card/render-file-download-card"`)
+    registryEntries.push(`FileDownloadCard: FileDownloadCardRegistry`)
+  }
+  if (props.enableDevicePointsChart) {
+    imports.push(`import { RenderRegistry as DevicePointsChartRegistry } from "@/registry/components/render-device-points-chart/render-device-points-chart"`)
+    registryEntries.push(`'device-points-chart': DevicePointsChartRegistry`)
+  }
+  return { imports: imports.join('\n'), registryEntries }
+}
+
+/** 构造 useAgentRuntime 的对象参数（含 taskRuntime + 按需注册的 renderRegistry） */
+function buildAgentRuntimeArgs(props: Record<string, any>, registryCode: { registryEntries: string[] }): string {
+  const lines: string[] = []
+  if (props.taskRuntime) lines.push('    isTaskRuntime: true')
+  if (registryCode.registryEntries.length) {
+    lines.push(`    renderRegistry: {\n      ${registryCode.registryEntries.join(',\n      ')},\n    }`)
+  }
+  return lines.length ? `{\n${lines.join(',\n')},\n  }` : ''
+}
+
 const renderAiAgentCodePreview = (props: Record<string, any>) => {
   const runtimePreset = props.runtimePreset || 'opencode'
   const baseUrl = props.baseUrl || 'http://localhost:4096'
+
+  const registryCode = buildRegistryCode(props)
+  // useAgentRuntime 对象参数（agent / agent-interactable 运行时使用，含按需注册的 renderRegistry）
+  const agentRuntimeArgs = buildAgentRuntimeArgs(props, registryCode)
 
   let runtimeCode = ''
 
@@ -411,8 +473,8 @@ const runtime = createCustomRuntime({
       break
     case 'agent':
       runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
-
-const runtime = useAgentRuntime(${props.taskRuntime ? '{ isTaskRuntime: true }' : ''})`
+${registryCode.imports ? `\n${registryCode.imports}\n` : ''}
+const runtime = useAgentRuntime(${agentRuntimeArgs})`
       break
     case 'agent-interactable':
       runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
@@ -423,8 +485,9 @@ import {
   useAui,
   unstable_Interactables,
 } from "@assistant-ui/react"
+${registryCode.imports ? `\n${registryCode.imports}\n` : ''}
 
-const runtime = useAgentRuntime(${props.taskRuntime ? '{ isTaskRuntime: true }' : ''})
+const runtime = useAgentRuntime(${agentRuntimeArgs})
 const aui = useAui({ unstable_interactables: unstable_Interactables() })`
       break
   }

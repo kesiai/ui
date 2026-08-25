@@ -85,3 +85,23 @@ export const FileDownloadCard: FC<{
     </div>
   );
 };
+
+/**
+ * RenderRegistry 条目：向 ai-agent 注册该组件，供 render 标签协议渲染。
+ * 独立组件自含注册信息（component + description + schema + rules），与 ai-agent 解耦。
+ */
+export const RenderRegistry = {
+  component: FileDownloadCard,
+  description:
+    "文件下载卡片。创建/生成文件后必须用它返回，禁止纯文本给路径。" +
+    "filePath 是工作区根目录下的相对路径（如 users/admin/deliver/hello.txt），不要带前缀。" +
+    "agentId 无需填写（前端自动注入）。唯一例外：批量工程文件（如搭建项目）。",
+  schema: '{"filePath": "users/admin/deliver/hello.txt", "fileName": "hello.txt", "fileSize": "1 KB"}',
+  rules: [
+    "生成文件后必须使用此组件，禁止纯文本给出文件路径",
+    "filePath 必须是工作区相对路径，不要带前缀",
+    "批量工程文件（搭建项目等）不需要此组件",
+  ],
+};
+
+export default FileDownloadCard;

@@ -1,0 +1,81 @@
+{
+  "displayName": "上下文",
+  "category": "containers",
+  "defaultCode": "<ContextProvider />",
+  "importCode": "import { ContextProvider } from '@/components/kesi/container-context-provider/context-provider';",
+  "props": [
+    {
+      "name": "table.id",
+      "label": "📋 Table",
+      "type": "select",
+      "default": "table-001",
+      "description": "选择表格",
+      "options": [
+        {
+          "value": "table-001",
+          "label": "用户表"
+        },
+        {
+          "value": "table-002",
+          "label": "订单表"
+        },
+        {
+          "value": "table-003",
+          "label": "产品表"
+        },
+        {
+          "value": "table-004",
+          "label": "部门表"
+        }
+      ]
+    },
+    {
+      "name": "tableData.id",
+      "label": "📊 TableData",
+      "type": "select",
+      "default": "data-001",
+      "description": "选择表格数据",
+      "options": [
+        {
+          "value": "data-001",
+          "label": "第一条数据"
+        },
+        {
+          "value": "data-002",
+          "label": "第二条数据"
+        },
+        {
+          "value": "data-003",
+          "label": "第三条数据"
+        },
+        {
+          "value": "data-004",
+          "label": "第四条数据"
+        }
+      ]
+    },
+    {
+      "name": "data",
+      "label": "📦 Data 数组",
+      "type": "array",
+      "default": [
+        {
+          "id": 1,
+          "name": "项目1",
+          "status": "active"
+        },
+        {
+          "id": 2,
+          "name": "项目2",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "name": "项目3",
+          "status": "completed"
+        }
+      ],
+      "description": "上下文中传递的数据数组（JSON格式）"
+    }
+  ]
+}

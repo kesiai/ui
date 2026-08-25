@@ -1,7 +1,7 @@
 {
   "name": "view-actions",
   "type": "registry:component",
-  "title": "View Actions",
+  "title": "操作集合",
   "description": "View Actions - 组件",
   "dependencies": [
     "@kesi/client"
@@ -32,5 +32,100 @@
       "type": "registry:lib",
       "content": "export interface FormLayout {\n  cols: number\n  labelLayout: 'vertical' | 'horizontal'\n  maxWidth?: 'sm' | 'md' | 'lg' | 'full'\n}\n\nconst MAX_WIDTH_MAP: Record<string, { form: string; dialog: string }> = {\n  sm: { form: 'max-w-[480px]', dialog: 'sm:max-w-lg' },\n  md: { form: 'max-w-[640px]', dialog: 'sm:max-w-2xl' },\n  lg: { form: 'max-w-[960px]', dialog: 'sm:max-w-4xl' },\n}\n\nexport type FormLayoutClassNames = {\n  form?: string\n  group?: string\n  field?: string\n  label?: string\n  input?: string\n  description?: string\n  error?: string\n  orientation?: string\n  groupStyle?: React.CSSProperties\n}\n\nexport type FormLayoutResult = {\n  classNames: FormLayoutClassNames | undefined\n  dialog: string\n}\n\nexport function formLayoutToClassNames(layout?: FormLayout | null): FormLayoutResult {\n  const defaultDialog = 'sm:max-w-4xl'\n  if (!layout) return { classNames: undefined, dialog: defaultDialog }\n  const isHorizontal = layout.labelLayout === 'horizontal'\n  const groupStyle = layout.cols > 1\n    ? { display: 'grid' as const, gridTemplateColumns: `repeat(${layout.cols}, minmax(0, 1fr))`, gap: 16 }\n    : undefined\n  const widthCfg = layout.maxWidth && layout.maxWidth !== 'full' ? MAX_WIDTH_MAP[layout.maxWidth] : undefined\n  return {\n    classNames: {\n      orientation: isHorizontal ? 'horizontal' : undefined,\n      form: widthCfg ? `mx-auto w-full ${widthCfg.form}` : undefined,\n      group: layout.cols > 1 ? 'grid' : undefined,\n      groupStyle,\n      field: isHorizontal ? 'flex flex-row items-center gap-2 min-w-0' : undefined,\n      label: isHorizontal ? '!w-20 flex-shrink-0 text-right' : undefined,\n      input: isHorizontal ? 'flex-1 min-w-0' : undefined,\n    },\n    dialog: widthCfg ? widthCfg.dialog : defaultDialog,\n  }\n}\n"
     }
-  ]
+  ],
+  "kesi": {
+    "displayName": "操作集合",
+    "category": "view",
+    "icon": "",
+    "jsxName": "",
+    "defaultCode": "<Actions />",
+    "importCode": "import { Actions } from '@/components/kesi/view-actions/view-actions';",
+    "props": [
+      {
+        "name": "modelName",
+        "label": "内置模型",
+        "type": "model-name",
+        "default": null,
+        "description": "内置模型的选择"
+      },
+      {
+        "name": "tableId",
+        "label": "表格ID",
+        "type": "table-id",
+        "default": "user",
+        "description": "数据表格的唯一标识符"
+      },
+      {
+        "name": "itemId",
+        "label": "数据ID",
+        "type": "text",
+        "default": "692004b03b11710131077e40",
+        "description": "要操作的数据ID（view/edit/delete/export/copy 需要）"
+      },
+      {
+        "name": "actions",
+        "label": "操作项",
+        "type": "array",
+        "default": [
+          "create",
+          "view",
+          "edit",
+          "delete",
+          "export",
+          "copy"
+        ],
+        "description": "启用的操作（可多选）",
+        "options": [
+          {
+            "value": "create",
+            "label": "新建"
+          },
+          {
+            "value": "view",
+            "label": "查看"
+          },
+          {
+            "value": "edit",
+            "label": "编辑"
+          },
+          {
+            "value": "delete",
+            "label": "删除"
+          },
+          {
+            "value": "export",
+            "label": "导出"
+          },
+          {
+            "value": "copy",
+            "label": "复制"
+          }
+        ]
+      },
+      {
+        "name": "variant",
+        "label": "显示形式",
+        "type": "select",
+        "default": "dropdown",
+        "description": "操作按钮的展示方式",
+        "options": [
+          {
+            "value": "buttons",
+            "label": "按钮组"
+          },
+          {
+            "value": "dropdown",
+            "label": "下拉菜单"
+          }
+        ]
+      },
+      {
+        "name": "showExample",
+        "label": "显示示例",
+        "type": "boolean",
+        "default": true,
+        "description": "是否在预览中显示示例"
+      }
+    ]
+  }
 }

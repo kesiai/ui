@@ -1,0 +1,73 @@
+{
+  "displayName": "批量操作",
+  "category": "view",
+  "defaultCode": "<BatchActions />",
+  "importCode": "import { BatchActions } from '@/components/kesi/view-batch/view-batch';",
+  "props": [
+    {
+      "name": "modelName",
+      "label": "内置模型",
+      "type": "model-name",
+      "default": null,
+      "description": "内置模型的选择"
+    },
+    {
+      "name": "tableId",
+      "label": "表格ID",
+      "type": "table-id",
+      "default": "device",
+      "description": "数据表格的唯一标识符"
+    },
+    {
+      "name": "actions",
+      "label": "操作项",
+      "type": "array",
+      "default": [
+        "batch-delete",
+        "batch-change"
+      ],
+      "description": "启用的批量操作（可多选）",
+      "options": [
+        {
+          "value": "batch-delete",
+          "label": "批量删除"
+        },
+        {
+          "value": "batch-change",
+          "label": "批量修改"
+        }
+      ]
+    },
+    {
+      "name": "variant",
+      "label": "显示形式",
+      "type": "select",
+      "default": "dropdown",
+      "description": "操作按钮的展示方式",
+      "options": [
+        {
+          "value": "buttons",
+          "label": "按钮组"
+        },
+        {
+          "value": "dropdown",
+          "label": "下拉菜单"
+        }
+      ]
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false,
+      "description": "是否禁用所有操作"
+    },
+    {
+      "name": "showExample",
+      "label": "显示示例",
+      "type": "boolean",
+      "default": true,
+      "description": "是否在预览中显示示例"
+    }
+  ]
+}

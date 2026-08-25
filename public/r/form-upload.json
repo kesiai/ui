@@ -1,7 +1,7 @@
 {
   "name": "form-upload",
   "type": "registry:component",
-  "title": "Form Upload",
+  "title": "附件",
   "description": "Form Upload - 组件",
   "dependencies": [
     "@kesi/client",
@@ -29,5 +29,91 @@
       "type": "registry:style",
       "content": "/* 上传项容器：限定尺寸 + 相对定位 */\n.upload-item-container {\n  position: relative;\n  border-radius: 4px;\n  overflow: hidden;\n  width: 104px;\n  height: 104px; /* 容器和图片同尺寸，保证蒙版全屏覆盖 */\n}\n\n/* 图片容器：仅负责显示图片 */\n.upload-item-img-wrapper {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  overflow: hidden;\n  border: 1px solid #eee; /* 可选，不需要可删除 */\n}\n\n/* 图片样式：等比例缩放完整显示 */\n.upload-item-img {\n  width: 100%;\n  height: 100%;\n  object-fit: contain;\n}\n\n/* 全屏蒙版容器：默认隐藏，悬浮显示 */\n.upload-item-mask {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: rgba(0, 0, 0, 0.6); /* 整体蒙版背景（透明度可调） */\n  opacity: 0; /* 默认隐藏 */\n  transition: opacity 0.2s ease; /* 渐变过渡 */\n  pointer-events: none; /* 默认不响应鼠标事件 */\n  z-index: 1;\n}\n\n/* 悬浮时显示整个蒙版 */\n.upload-item-container:hover .upload-item-mask {\n  opacity: 1;\n  pointer-events: auto;\n}\n\n/* 文本容器：包裹名称和大小，避免重叠 */\n.upload-item-text-wrap {\n  position: absolute;\n  top: 8px;\n  left: 8px;\n  right: 4px;\n  z-index: 2; /* 层级高于蒙版背景 */\n}\n\n/* 图片名称：加粗、放大 */\n.upload-item-name {\n  color: white;\n  font-size: 14px; /* 文字放大（原12px） */\n  font-weight: 700; /* 加粗 */\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  line-height: 1.2;\n}\n\n/* 文件大小：小号、灰色、不加粗 */\n.upload-item-size {\n  color: #cccccc; /* 灰色 */\n  font-size: 11px; /* 小号文字 */\n  font-weight: 400; /* 不加粗 */\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  margin-top: 2px; /* 和名称拉开间距 */\n  line-height: 1.2;\n}\n\n/* 操作按钮容器：在蒙版内底部居中 */\n.upload-item-actions {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  display: flex;\n  justify-content: center;\n  gap: 22px;\n  padding: 8px 0;\n  z-index: 2; /* 层级高于蒙版背景 */\n}\n\n/* 按钮样式：圆角方形（替换原圆形） */\n.upload-item-btn {\n  width: 32px;\n  height: 24px;\n  border-radius: 6px; /* 圆角方形（数值可调，如4px/8px） */\n  background-color: white;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  padding: 0;\n}\n\n/* 图标样式 + 悬浮变红 */\n.upload-item-icon {\n  font-size: 16px;\n  color: #666;\n  transition: color 0.2s ease;\n}\n\n.upload-item-btn:hover .upload-item-icon {\n  color: #1890ff;\n}\n\n/* 隐藏 AntD 原生操作栏（可选） */\n.upload-item-container .ant-upload-list-item-actions {\n  display: none !important;\n}\n\n/* 图片卡片样式容器 */\n.upload-picture-card {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 8px;\n}\n\n.upload-item-add-btn {\n  border: 1px dashed #d9d9d9;\n  background: #fafafa;\n  border-radius: 4px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.upload-item-add-btn:hover {\n  border-color: #1890ff;\n}\n\n/* 文本样式容器 */\n.upload-text {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}"
     }
-  ]
+  ],
+  "kesi": {
+    "displayName": "附件",
+    "category": "form",
+    "icon": "",
+    "jsxName": "",
+    "defaultCode": "<FormUpload />",
+    "importCode": "import { FormUpload } from '@/components/kesi/form-upload/form-upload';",
+    "props": [
+      {
+        "name": "styleType",
+        "label": "展示样式",
+        "type": "select",
+        "default": "picture-card",
+        "options": [
+          {
+            "value": "picture-card",
+            "label": "图片卡片"
+          },
+          {
+            "value": "text",
+            "label": "文本列表"
+          },
+          {
+            "value": "video",
+            "label": "视频"
+          },
+          {
+            "value": "audio",
+            "label": "音频"
+          }
+        ]
+      },
+      {
+        "name": "accept",
+        "label": "接受文件类型",
+        "type": "text",
+        "default": "",
+        "description": "例如：.jpg,.png,.pdf 或留空使用默认类型"
+      },
+      {
+        "name": "size",
+        "label": "文件大小限制(MB)",
+        "type": "number"
+      },
+      {
+        "name": "width",
+        "label": "宽度(px)",
+        "type": "number",
+        "default": 104,
+        "description": "图片卡片模式下的宽度"
+      },
+      {
+        "name": "height",
+        "label": "高度(px)",
+        "type": "number",
+        "default": 104,
+        "description": "图片卡片模式下的高度"
+      },
+      {
+        "name": "maxUploadNum",
+        "label": "最大上传数量",
+        "type": "number",
+        "description": "为空则不限制"
+      },
+      {
+        "name": "disabled",
+        "label": "禁用",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "name": "autoZip",
+        "label": "自动压缩",
+        "type": "boolean",
+        "default": false,
+        "description": "自动压缩图片"
+      },
+      {
+        "name": "autoName",
+        "label": "自动重命名",
+        "type": "boolean",
+        "default": false,
+        "description": "上传时自动重命名文件"
+      }
+    ]
+  }
 }

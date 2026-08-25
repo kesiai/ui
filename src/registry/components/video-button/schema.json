@@ -1,0 +1,80 @@
+{
+  "displayName": "云台控制",
+  "category": "video",
+  "defaultCode": "<ButtonWidget />",
+  "importCode": "import { ButtonWidget } from '@/components/kesi/video-button/video-button';",
+  "props": [
+    {
+      "name": "tableData",
+      "label": "设备",
+      "type": "json",
+      "default": "{}",
+      "description": "选择设备表数据"
+    },
+    {
+      "name": "table",
+      "label": "设备表",
+      "type": "json",
+      "default": "{}",
+      "description": "设备表信息"
+    },
+    {
+      "name": "buttonType",
+      "label": "云台类型",
+      "type": "select",
+      "default": "hk",
+      "options": [
+        {
+          "value": "hk",
+          "label": "海康"
+        },
+        {
+          "value": "ez",
+          "label": "萤石"
+        }
+      ]
+    },
+    {
+      "name": "size",
+      "label": "尺寸",
+      "type": "number",
+      "default": 220,
+      "min": 120,
+      "max": 600
+    },
+    {
+      "name": "bg",
+      "label": "背景色",
+      "type": "color",
+      "default": "#222641"
+    },
+    {
+      "name": "btnColor",
+      "label": "按钮颜色",
+      "type": "color",
+      "default": "#757c99"
+    },
+    {
+      "name": "controlMode",
+      "label": "控制模式",
+      "type": "select",
+      "default": "hold",
+      "options": [
+        {
+          "value": "hold",
+          "label": "按住"
+        },
+        {
+          "value": "click",
+          "label": "点击"
+        }
+      ]
+    },
+    {
+      "name": "disable",
+      "label": "禁用状态",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

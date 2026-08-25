@@ -11,8 +11,8 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "./src"),
-        '@svgedit/svgcanvas': path.resolve(__dirname, './node_modules/@svgedit/svgcanvas/svgcanvas.js'),
+        "@": path.resolve(import.meta.dirname, "./src"),
+        '@svgedit/svgcanvas': path.resolve(import.meta.dirname, './node_modules/@svgedit/svgcanvas/svgcanvas.js'),
       },
       dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-router', 'react-router-dom'],
     },
@@ -32,6 +32,9 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       strictPort: false,
       open: false,
+      // 允许跨域读取：KESI 编辑器（localhost:5173）直接 fetch 本地 registry（public/r/*.json），
+      // 否则浏览器 CORS 拦截报 "Failed to fetch"（vite 默认不对静态资源发 ACAO 头）
+      cors: true,
       proxy: {
         ...(env.KESI_API_TARGET ? {
           '/rest': {

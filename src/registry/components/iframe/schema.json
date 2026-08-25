@@ -1,0 +1,23 @@
+{
+  "displayName": "Iframe嵌入",
+  "category": "basic",
+  "defaultCode": "<Iframe />",
+  "importCode": "import { Iframe } from '@/components/kesi/iframe/iframe';",
+  "props": [
+    {
+      "name": "iframeSrc",
+      "label": "iframe 地址",
+      "type": "text",
+      "default": "",
+      "description": "手动输入地址需要写 http:// 或 https://",
+      "placeholder": "https://example.com"
+    },
+    {
+      "name": "hasToken",
+      "label": "携带 token",
+      "type": "boolean",
+      "default": false,
+      "description": "点击是，会进行权限认证，非 admin 用户进行验证"
+    }
+  ]
+}

@@ -24,30 +24,69 @@ export const viewDemoPropsConfig = [
     type: 'table-id' as const,
     default: 'task_def',
     description: '数据表格的唯一标识符'
+  },
+  {
+    name: 'persistEnabled',
+    label: '状态持久化',
+    type: 'boolean' as const,
+    default: true,
+    description: '缓存筛选/分页/排序/列显示/列宽（关掉即恢复即弃模式）'
+  },
+  {
+    name: 'persistChannel',
+    label: '缓存通道',
+    type: 'select' as const,
+    default: 'local',
+    options: [
+      { label: '浏览器 localStorage', value: 'local' },
+      { label: '数据库（KESI 配置表）', value: 'remote' }
+    ],
+    description: 'local 存浏览器；remote 需下方配置表名'
+  },
+  {
+    name: 'persistRemoteTableId',
+    label: '远端配置表ID',
+    type: 'text' as const,
+    default: '',
+    description: 'channel=remote 时使用；期望记录结构 { user, viewKey, state }，表需先在平台建好'
   }
 ]
 
 export const viewDemoDefaultProps = {
   modelName: null,
-  tableId: 'asset_lifecycle_log'
+  tableId: 'asset_lifecycle_log',
+  persistEnabled: true,
+  persistChannel: 'local',
+  persistRemoteTableId: ''
 }
 
 const renderViewDemoPreview = (props: Record<string, any>) => {
+  const statePersistence = props.persistEnabled === false ? undefined : {
+    channel: (props.persistChannel || 'local') as 'local' | 'remote',
+    ...(props.persistChannel === 'remote' && props.persistRemoteTableId
+      ? { remote: { tableId: props.persistRemoteTableId } }
+      : {})
+  }
 
   return (
     <div className="h-full flex items-center justify-center p-6 overflow-auto">
       <div className="w-full max-w-5xl">
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
         <Subscribe>
-          <ViewModel tableId={props.tableId} modelName={props.modelName} isSchemaTransform={true}>
+          <ViewModel
+            key={`view-demo-${props.tableId}-${props.persistChannel}-${props.persistRemoteTableId || ''}`}
+            tableId={props.tableId}
+            modelName={props.modelName}
+            isSchemaTransform={true}
+            statePersistence={statePersistence}
+          >
             <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
               <ViewFilter />
               <div className="flex items-center justify-between">
                 <CreateAction />
-                <Tools tools={['count', 'pageSize', 'columns']} />
+                <Tools tools={['count', 'pageSize']} />
               </div>
-              <ViewDataTable>
-                <TableColumn name="first" title='我给改名字了' />
+              <ViewDataTable showColumnSettings>
                 <TableColumn name="__actions__" title=" " width={65} enableSorting={false} enableHiding={false} enableResizing={false}>
                   <Actions actions={props.actions || ['view', 'edit', 'delete']} />
                 </TableColumn>

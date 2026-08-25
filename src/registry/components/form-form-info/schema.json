@@ -1,0 +1,15 @@
+{
+  "displayName": "表单信息",
+  "category": "form",
+  "defaultCode": "<FormFormInfo />",
+  "importCode": "import { FormFormInfo } from '@/components/kesi/form-form-info/form-form-info';",
+  "props": [
+    {
+      "name": "widgetContent",
+      "label": "组件代码",
+      "type": "text",
+      "default": "",
+      "description": "动态组件代码（待实现 Babel 转换）"
+    }
+  ]
+}

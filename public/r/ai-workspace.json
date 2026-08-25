@@ -1,7 +1,7 @@
 {
   "name": "ai-workspace",
   "type": "registry:component",
-  "title": "Ai Workspace",
+  "title": "AI 工作区",
   "description": "Ai Workspace - 组件",
   "dependencies": [
     "@kesi/client"
@@ -32,7 +32,48 @@
     {
       "path": "registry/components/kesi/ai-workspace/workspace-api.ts",
       "type": "registry:component",
-      "content": "/**\n * 工作区 API 客户端\n * agent 模式: /eap/agents/{id}/workspace/*  (type: 'file'/'dir')\n * task  模式: /eap/tasks/{id}/workspace/*   (isDir: boolean)\n * 两者接口结构完全一致，仅 base path 和返回字段名不同。\n */\n\nimport { createAPI } from '@kesi/client';\nimport type { WorkspaceMode, WorkspaceNode, WorkspaceFileDetail, WorkspaceApi } from './types';\n\nconst apis = {\n  agent: createAPI({ name: 'eap/agents' }),\n  task:  createAPI({ name: 'eap/tasks' }),\n};\n\n/** 归一化：{type:'dir'} 或 {isDir:true} → WorkspaceNode */\nfunction normalizeEntry(raw: any): WorkspaceNode {\n  return {\n    name: raw.name || '',\n    path: raw.path || '',\n    type: (raw.type === 'dir' || raw.isDir) ? 'dir' : 'file',\n    size: raw.size,\n    updatedAt: raw.updatedAt,\n  };\n}\n\n/** 归一化文件详情 */\nfunction normalizeFile(raw: any): WorkspaceFileDetail {\n  return {\n    path: raw.path || '',\n    content: raw.content,\n    size: raw.size,\n    contentType: raw.contentType,\n    updatedAt: raw.updatedAt,\n  };\n}\n\n/**\n * 创建统一工作区 API\n * @param mode - 'agent' | 'task'\n */\nexport function createWorkspaceApi(mode: WorkspaceMode): WorkspaceApi {\n  const api = apis[mode];\n  const base = mode === 'agent' ? 'agents' : 'tasks';\n\n  const asJson = <T>(r: any): T => r?.json ?? r;\n\n  return {\n    /** GET /{id}/workspace/tree[?path=...] */\n    async getTree(id: string, path = '') {\n      const q = path ? `?path=${encodeURIComponent(path)}` : '';\n      const data = asJson<any>(await api.fetch(`/${id}/workspace/tree${q}`));\n      const entries = Array.isArray(data) ? data : (data?.entries || []);\n      return entries.map(normalizeEntry);\n    },\n\n    /** GET /{id}/workspace/file?path=... */\n    async getFile(id: string, path: string) {\n      const q = `?path=${encodeURIComponent(path)}`;\n      return normalizeFile(asJson<any>(await api.fetch(`/${id}/workspace/file${q}`)));\n    },\n\n    /** PUT /{id}/workspace/file */\n    async saveFile(id: string, path: string, content: string) {\n      await api.fetch(`/${id}/workspace/file`, {\n        method: 'PUT',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({ path, content }),\n      });\n    },\n\n    /** DELETE /{id}/workspace/file?path=... */\n    async deleteFile(id: string, path: string) {\n      await api.fetch(`/${id}/workspace/file?path=${encodeURIComponent(path)}`, { method: 'DELETE' });\n    },\n\n    /** POST /{id}/workspace/dirs */\n    async createDir(id: string, path: string) {\n      await api.fetch(`/${id}/workspace/dirs`, {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({ path }),\n      });\n    },\n\n    /** DELETE /{id}/workspace/dirs?path=...&recursive=... */\n    async deleteDir(id: string, path: string, recursive = false) {\n      await api.fetch(`/${id}/workspace/dirs?path=${encodeURIComponent(path)}&recursive=${recursive}`, { method: 'DELETE' });\n    },\n\n    /** 下载文件 */\n    async downloadFile(id: string, path: string, filename?: string) {\n      const cleanPath = path.replace(/^\\/?(workspace\\/)?[a-f0-9]{24}\\/?/, '');\n      const params = new URLSearchParams({ path: cleanPath });\n      const authHeader = api.headers?.['Authorization'] || api.headers?.authorization || '';\n      const projectId = api.headers?.['x-request-project'] || '';\n      if (authHeader) params.set('token', authHeader.replace(/^Bearer\\s+/i, ''));\n      if (projectId) params.set('x-request-project', projectId);\n      const url = `/rest/eap/${base}/${id}/workspace/file/download?${params.toString()}`;\n      const a = document.createElement('a');\n      a.href = url;\n      a.download = filename || path.split('/').pop() || 'download';\n      document.body.appendChild(a);\n      a.click();\n      document.body.removeChild(a);\n    },\n  };\n}\n"
+      "content": "/**\n * 工作区 API 客户端\n * agent 模式: /eap/agents/{id}/workspace/*  (type: 'file'/'dir')\n * task  模式: /eap/tasks/{id}/workspace/*   (isDir: boolean)\n * 两者接口结构完全一致，仅 base path 和返回字段名不同。\n */\n\nimport { createAPI, getHeaders } from '@kesi/client';\nimport type { WorkspaceMode, WorkspaceNode, WorkspaceFileDetail, WorkspaceApi } from './types';\n\nconst apis = {\n  agent: createAPI({ name: 'eap/agents' }),\n  task:  createAPI({ name: 'eap/tasks' }),\n};\n\n/** 归一化：{type:'dir'} 或 {isDir:true} → WorkspaceNode */\nfunction normalizeEntry(raw: any): WorkspaceNode {\n  return {\n    name: raw.name || '',\n    path: raw.path || '',\n    type: (raw.type === 'dir' || raw.isDir) ? 'dir' : 'file',\n    size: raw.size,\n    updatedAt: raw.updatedAt,\n  };\n}\n\n/** 归一化文件详情 */\nfunction normalizeFile(raw: any): WorkspaceFileDetail {\n  return {\n    path: raw.path || '',\n    content: raw.content,\n    size: raw.size,\n    contentType: raw.contentType,\n    updatedAt: raw.updatedAt,\n  };\n}\n\n/**\n * 创建统一工作区 API\n * @param mode - 'agent' | 'task'\n */\nexport function createWorkspaceApi(mode: WorkspaceMode): WorkspaceApi {\n  const api = apis[mode];\n  const base = mode === 'agent' ? 'agents' : 'tasks';\n\n  const asJson = <T>(r: any): T => r?.json ?? r;\n\n  return {\n    /** GET /{id}/workspace/tree[?path=...] */\n    async getTree(id: string, path = '') {\n      const q = path ? `?path=${encodeURIComponent(path)}` : '';\n      const data = asJson<any>(await api.fetch(`/${id}/workspace/tree${q}`));\n      const entries = Array.isArray(data) ? data : (data?.entries || []);\n      return entries.map(normalizeEntry);\n    },\n\n    /** GET /{id}/workspace/file?path=... */\n    async getFile(id: string, path: string) {\n      const q = `?path=${encodeURIComponent(path)}`;\n      return normalizeFile(asJson<any>(await api.fetch(`/${id}/workspace/file${q}`)));\n    },\n\n    /** PUT /{id}/workspace/file */\n    async saveFile(id: string, path: string, content: string) {\n      await api.fetch(`/${id}/workspace/file`, {\n        method: 'PUT',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({ path, content }),\n      });\n    },\n\n    /** DELETE /{id}/workspace/file?path=... */\n    async deleteFile(id: string, path: string) {\n      await api.fetch(`/${id}/workspace/file?path=${encodeURIComponent(path)}`, { method: 'DELETE' });\n    },\n\n    /** POST /{id}/workspace/dirs */\n    async createDir(id: string, path: string) {\n      await api.fetch(`/${id}/workspace/dirs`, {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({ path }),\n      });\n    },\n\n    /** DELETE /{id}/workspace/dirs?path=...&recursive=... */\n    async deleteDir(id: string, path: string, recursive = false) {\n      await api.fetch(`/${id}/workspace/dirs?path=${encodeURIComponent(path)}&recursive=${recursive}`, { method: 'DELETE' });\n    },\n\n    /** 下载文件 */\n    async downloadFile(id: string, path: string, filename?: string) {\n      const cleanPath = path.replace(/^\\/?(workspace\\/)?[a-f0-9]{24}\\/?/, '');\n      const params = new URLSearchParams({ path: cleanPath });\n      const headers = getHeaders();\n      const authHeader = headers['Authorization'] || '';\n      const projectId = headers['x-request-project'] || '';\n      if (authHeader) params.set('token', authHeader.replace(/^Bearer\\s+/i, ''));\n      if (projectId) params.set('x-request-project', projectId);\n      const url = `/rest/eap/${base}/${id}/workspace/file/download?${params.toString()}`;\n      const a = document.createElement('a');\n      a.href = url;\n      a.download = filename || path.split('/').pop() || 'download';\n      document.body.appendChild(a);\n      a.click();\n      document.body.removeChild(a);\n    },\n  };\n}\n"
     }
-  ]
+  ],
+  "kesi": {
+    "displayName": "AI 工作区",
+    "category": "business",
+    "icon": "",
+    "jsxName": "",
+    "defaultCode": "<AgentWorkspace />",
+    "importCode": "import { AgentWorkspace } from '@/components/kesi/ai-workspace/ai-workspace';",
+    "props": [
+      {
+        "name": "mode",
+        "label": "模式",
+        "type": "select",
+        "default": "agent",
+        "description": "agent 走 /eap/agents，task 走 /eap/tasks",
+        "options": [
+          {
+            "value": "agent",
+            "label": "智能体工作区"
+          },
+          {
+            "value": "task",
+            "label": "任务工作区"
+          }
+        ]
+      },
+      {
+        "name": "agentId",
+        "label": "智能体",
+        "type": "agent-id",
+        "default": "",
+        "description": "选择智能体（模式为\"智能体工作区\"时生效）"
+      },
+      {
+        "name": "taskId",
+        "label": "任务",
+        "type": "task-id",
+        "default": "",
+        "description": "选择任务（模式为\"任务工作区\"时生效）"
+      }
+    ]
+  }
 }

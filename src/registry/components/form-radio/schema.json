@@ -1,0 +1,42 @@
+{
+  "displayName": "单选框",
+  "category": "form",
+  "defaultCode": "<FormRadio />",
+  "importCode": "import { FormRadio } from '@/components/kesi/form-radio/form-radio';",
+  "props": [
+    {
+      "name": "options",
+      "label": "选项列表",
+      "type": "array",
+      "default": [
+        {
+          "label": "选项A",
+          "value": "1"
+        },
+        {
+          "label": "选项B",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "name": "value",
+      "label": "选中值",
+      "type": "text",
+      "default": "",
+      "description": "当前选中的值"
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "readOnly",
+      "label": "只读",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

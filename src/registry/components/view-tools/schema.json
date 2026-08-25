@@ -1,0 +1,54 @@
+{
+  "displayName": "工具集合",
+  "category": "view",
+  "defaultCode": "<Tools />",
+  "importCode": "import { Tools } from '@/components/kesi/view-tools/view-tools';",
+  "props": [
+    {
+      "name": "modelName",
+      "label": "内置模型",
+      "type": "model-name",
+      "default": null,
+      "description": "内置模型的选择"
+    },
+    {
+      "name": "tableId",
+      "label": "表格ID",
+      "type": "table-id",
+      "default": "user",
+      "description": "数据表格的唯一标识符"
+    },
+    {
+      "name": "tools",
+      "label": "工具项",
+      "type": "array",
+      "default": [
+        "count",
+        "pageSize",
+        "columns"
+      ],
+      "description": "启用的工具（可多选）",
+      "options": [
+        {
+          "value": "count",
+          "label": "记录数"
+        },
+        {
+          "value": "pageSize",
+          "label": "每页条数"
+        },
+        {
+          "value": "columns",
+          "label": "列显示"
+        }
+      ]
+    },
+    {
+      "name": "showExample",
+      "label": "显示示例",
+      "type": "boolean",
+      "default": true,
+      "description": "是否在预览中显示示例"
+    }
+  ]
+}

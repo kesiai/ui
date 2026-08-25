@@ -1,0 +1,182 @@
+{
+  "displayName": "数据表格",
+  "category": "view",
+  "defaultCode": "<ViewDataTable />",
+  "importCode": "import { ViewDataTable } from '@/components/kesi/view-data-table/view-data-table';",
+  "props": [
+    {
+      "name": "modelName",
+      "label": "内置模型",
+      "type": "model-name",
+      "default": null,
+      "description": "内置模型的选择"
+    },
+    {
+      "name": "tableId",
+      "label": "表格ID",
+      "type": "table-id",
+      "default": "task_def",
+      "description": "数据表格的唯一标识符"
+    },
+    {
+      "name": "enableSort",
+      "label": "启用排序",
+      "type": "boolean",
+      "default": true,
+      "description": "是否启用列排序功能"
+    },
+    {
+      "name": "enableFilter",
+      "label": "启用筛选",
+      "type": "boolean",
+      "default": true,
+      "description": "是否启用数据筛选功能"
+    },
+    {
+      "name": "showDemoData",
+      "label": "显示演示数据",
+      "type": "boolean",
+      "default": true,
+      "description": "是否使用内置演示数据（用于展示）"
+    },
+    {
+      "name": "dense",
+      "label": "密集模式",
+      "type": "boolean",
+      "default": false,
+      "description": "表格是否使用密集（更紧凑）的布局"
+    },
+    {
+      "name": "border",
+      "label": "表格框",
+      "type": "boolean",
+      "default": true,
+      "description": "是否显示表格边框"
+    },
+    {
+      "name": "cellBorder",
+      "label": "单元格边框",
+      "type": "boolean",
+      "default": false,
+      "description": "是否显示单元格边框"
+    },
+    {
+      "name": "rowBorder",
+      "label": "行边框",
+      "type": "boolean",
+      "default": true,
+      "description": "是否显示行边框"
+    },
+    {
+      "name": "rowRounded",
+      "label": "行圆角",
+      "type": "boolean",
+      "default": false,
+      "description": "是否使用圆角行"
+    },
+    {
+      "name": "stripped",
+      "label": "斑马纹",
+      "type": "boolean",
+      "default": false,
+      "description": "是否使用斑马纹样式"
+    },
+    {
+      "name": "headerBackground",
+      "label": "表头背景",
+      "type": "boolean",
+      "default": true,
+      "description": "是否显示表头背景色"
+    },
+    {
+      "name": "headerBorder",
+      "label": "表头边框",
+      "type": "boolean",
+      "default": true,
+      "description": "是否显示表头边框"
+    },
+    {
+      "name": "headerSticky",
+      "label": "表头固定",
+      "type": "boolean",
+      "default": true,
+      "description": "是否固定表头（滚动时保持可见）"
+    },
+    {
+      "name": "width",
+      "label": "列宽模式",
+      "type": "select",
+      "default": "fixed",
+      "description": "列宽的调整模式",
+      "options": [
+        {
+          "value": "auto",
+          "label": "自动"
+        },
+        {
+          "value": "fixed",
+          "label": "固定"
+        }
+      ]
+    },
+    {
+      "name": "layout",
+      "label": "表格布局",
+      "type": "select",
+      "default": "fixed",
+      "description": "表格布局算法",
+      "options": [
+        {
+          "value": "auto",
+          "label": "自动"
+        },
+        {
+          "value": "fixed",
+          "label": "固定"
+        }
+      ]
+    },
+    {
+      "name": "columnsVisibility",
+      "label": "列可见性",
+      "type": "boolean",
+      "default": false,
+      "description": "是否启用列显示/隐藏功能"
+    },
+    {
+      "name": "columnsResizable",
+      "label": "列可调整大小",
+      "type": "boolean",
+      "default": true,
+      "description": "是否允许调整列宽"
+    },
+    {
+      "name": "columnsPinnable",
+      "label": "列可固定",
+      "type": "boolean",
+      "default": true,
+      "description": "是否允许固定列到左侧或右侧"
+    },
+    {
+      "name": "columnsMovable",
+      "label": "列可移动",
+      "type": "boolean",
+      "default": false,
+      "description": "是否允许拖动移动列"
+    },
+    {
+      "name": "columnsDraggable",
+      "label": "列可拖拽",
+      "type": "boolean",
+      "default": false,
+      "description": "是否允许拖拽列（拖拽到其他位置）"
+    },
+    {
+      "name": "rowsDraggable",
+      "label": "行可拖拽",
+      "type": "boolean",
+      "default": false,
+      "description": "是否允许拖拽行进行重新排序"
+    }
+  ]
+}

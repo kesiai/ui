@@ -1,0 +1,115 @@
+{
+  "displayName": "报警层",
+  "category": "gis",
+  "defaultCode": "<GisWarnLayer />",
+  "importCode": "import { GisWarnLayer } from '@/components/kesi/gis-warn-layer/gis-warn-layer';",
+  "props": [
+    {
+      "name": "table",
+      "label": "数据表",
+      "type": "text",
+      "default": "[]",
+      "description": "过滤报警的数据表，格式: [{id: \"表ID\", title: \"表名\"}]"
+    },
+    {
+      "name": "tableData",
+      "label": "表记录",
+      "type": "text",
+      "default": "[]",
+      "description": "过滤报警的表记录，格式: [{id: \"记录ID\", _table: \"表ID\"}]"
+    },
+    {
+      "name": "department",
+      "label": "部门",
+      "type": "text",
+      "default": "[]",
+      "description": "过滤报警的部门，格式: [{id: \"部门ID\"}]"
+    },
+    {
+      "name": "type",
+      "label": "报警类别",
+      "type": "text",
+      "default": "",
+      "description": "过滤报警类别"
+    },
+    {
+      "name": "level",
+      "label": "报警级别",
+      "type": "select",
+      "default": "",
+      "description": "过滤报警级别",
+      "options": [
+        {
+          "value": "",
+          "label": "全部"
+        },
+        {
+          "value": "低",
+          "label": "低"
+        },
+        {
+          "value": "中",
+          "label": "中"
+        },
+        {
+          "value": "高",
+          "label": "高"
+        }
+      ]
+    },
+    {
+      "name": "dataType",
+      "label": "初始显示历史数据",
+      "type": "boolean",
+      "default": false,
+      "description": "勾选后，初始打开地图会将满足条件的数据中，未处理的报警查询回来并显示"
+    },
+    {
+      "name": "background",
+      "label": "颜色",
+      "type": "text",
+      "default": "rgba(255, 0, 0, 0.5)",
+      "description": "闪烁动画颜色"
+    },
+    {
+      "name": "duration",
+      "label": "动画速度",
+      "type": "number",
+      "default": 0.4,
+      "description": "闪烁动画速度（数值越大越快）",
+      "min": 0.1,
+      "max": 2
+    },
+    {
+      "name": "radius",
+      "label": "闪烁半径",
+      "type": "number",
+      "default": 20,
+      "description": "闪烁动画的最大半径",
+      "min": 10,
+      "max": 100
+    },
+    {
+      "name": "overrunHideOvermax",
+      "label": "层级隐藏-大于等于",
+      "type": "number",
+      "description": "当地图层级大于等于该值时隐藏报警层",
+      "min": 3,
+      "max": 18
+    },
+    {
+      "name": "overrunHideOvermin",
+      "label": "层级隐藏-小于等于",
+      "type": "number",
+      "description": "当地图层级小于等于该值时隐藏报警层",
+      "min": 3,
+      "max": 18
+    },
+    {
+      "name": "display",
+      "label": "显示",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}

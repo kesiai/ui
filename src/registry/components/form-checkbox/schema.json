@@ -1,0 +1,43 @@
+{
+  "displayName": "多选框",
+  "category": "form",
+  "defaultCode": "<FormCheckbox />",
+  "importCode": "import { FormCheckbox } from '@/components/kesi/form-checkbox/form-checkbox';",
+  "props": [
+    {
+      "name": "options",
+      "label": "数据项",
+      "type": "array",
+      "default": [
+        {
+          "label": "A",
+          "value": "1",
+          "isDefault": false
+        },
+        {
+          "label": "B",
+          "value": "2",
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "name": "disabled",
+      "label": "禁用状态",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "isCheckAll",
+      "label": "全选",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "checkAllSeparate",
+      "label": "全选单独一行",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

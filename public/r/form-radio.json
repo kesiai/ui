@@ -1,7 +1,7 @@
 {
   "name": "form-radio",
   "type": "registry:component",
-  "title": "Form Radio",
+  "title": "单选框",
   "description": "Form Radio - 组件",
   "dependencies": [],
   "registryDependencies": [
@@ -18,5 +18,49 @@
       "type": "registry:lib",
       "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
     }
-  ]
+  ],
+  "kesi": {
+    "displayName": "单选框",
+    "category": "form",
+    "icon": "",
+    "jsxName": "",
+    "defaultCode": "<FormRadio />",
+    "importCode": "import { FormRadio } from '@/components/kesi/form-radio/form-radio';",
+    "props": [
+      {
+        "name": "options",
+        "label": "选项列表",
+        "type": "array",
+        "default": [
+          {
+            "label": "选项A",
+            "value": "1"
+          },
+          {
+            "label": "选项B",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "value",
+        "label": "选中值",
+        "type": "text",
+        "default": "",
+        "description": "当前选中的值"
+      },
+      {
+        "name": "disabled",
+        "label": "禁用",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "name": "readOnly",
+        "label": "只读",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  }
 }

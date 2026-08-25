@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useModelCount, useModelPageSize, useModelFields } from '@kesi/client'
+import { useModelCount, useModelPageSize, useModelFields, useModel, useModelState } from '@kesi/client'
 import {
   Popover,
   PopoverContent,
@@ -95,21 +95,36 @@ export const PageSizeTool: React.FC<PageSizeToolProps> = ({ className }) => {
 // ==================== ColumnsToolContent Component ====================
 
 const ColumnsToolContent: React.FC = () => {
-  const { selected, fields, changeFieldDisplay } = useModelFields()
+  const { model } = useModel()
+  const { fields } = useModelFields()
+  // fields atom 兼容两种形态：字符串（旧 schema）| 对象（新 schema tableSchema 项 {key, width...}）
+  const [selectedFields, setFields] = useModelState<any[]>('fields')
 
   const showFields = Object.keys(fields).filter(
     (name) => fields[name].showInList !== false
   )
   const menuShow = showFields.length <= 10
 
+  const keyOf = (f: any) => (typeof f === 'string' ? f : f?.key)
+  const selectedKeys = (selectedFields || []).map(keyOf).filter(Boolean)
+
   const handleToggle = (fieldName: string, checked: boolean) => {
-    changeFieldDisplay([fieldName, checked])
+    const next = [...(selectedFields || [])]
+    const index = next.findIndex((f: any) => keyOf(f) === fieldName)
+    if (checked && index === -1) {
+      // 补回完整 tableSchema 项（保留 width/canOrder 配置），找不到才落字符串
+      const item = (model?.tableSchema || []).find((f: any) => keyOf(f) === fieldName) ?? fieldName
+      next.push(item)
+    } else if (!checked && index !== -1) {
+      next.splice(index, 1)
+    }
+    setFields(next)
   }
 
   const items = showFields.map((name) => {
     const field = fields[name]
     const title = field.title || field.label || name
-    const fieldSelected = selected.includes(name)
+    const fieldSelected = selectedKeys.includes(name)
 
     return (
       <div key={name} className="flex items-center space-x-2">

@@ -1,0 +1,44 @@
+{
+  "displayName": "三维空间容器",
+  "category": "3d",
+  "defaultCode": "<Model3d />",
+  "importCode": "import { Model3d } from '@/components/kesi/model-3d/model-3d';",
+  "props": [
+    {
+      "name": "sceneConfig",
+      "label": "场景配置",
+      "type": "text",
+      "default": "{\"fog\":{\"enable\":false,\"near\":1,\"far\":10000,\"color\":\"#FFFFFF\"},\"ground\":{\"enable\":true,\"width\":1000,\"height\":1000,\"color\":\"#748FA5\"}}"
+    },
+    {
+      "name": "cameraConfig",
+      "label": "相机配置",
+      "type": "text",
+      "default": "{\"fov\":45,\"near\":1,\"far\":10000,\"position\":{\"x\":0,\"y\":200,\"z\":500},\"lookAt\":{\"x\":0,\"y\":0,\"z\":0}}"
+    },
+    {
+      "name": "controlConfig",
+      "label": "控制配置",
+      "type": "text",
+      "default": "{\"controlType\":\"orbit\",\"orbitConfig\":{\"enabled\":true,\"enableRotate\":true,\"rotateSpeed\":1,\"maxPolarAngle\":3.14,\"minPolarAngle\":0,\"enableZoom\":true,\"zoomSpeed\":1,\"minDistance\":0,\"enablePan\":true,\"panSpeed\":1,\"enableDamping\":false,\"dampingFactor\":0.05,\"autoRotate\":false,\"autoRotateSpeed\":2},\"pointerLockConfig\":{\"enabled\":true,\"eyeHeight\":170,\"moveSpeed\":1000,\"fallSpeed\":100,\"jumpHeight\":100},\"flyConfig\":{\"enabled\":true}}"
+    },
+    {
+      "name": "environmentConfig",
+      "label": "环境配置",
+      "type": "text",
+      "default": "{\"type\":\"sky\"}"
+    },
+    {
+      "name": "lightConfig",
+      "label": "光照配置",
+      "type": "text",
+      "default": "{\"ambientLight\":[{\"enable\":true,\"color\":\"#FFFFFF\"}],\"directionalLight\":[{\"enable\":true,\"color\":\"#FFFFFF\",\"castShadow\":true,\"position\":{\"x\":0,\"y\":300,\"z\":300}}]}"
+    },
+    {
+      "name": "helperConfig",
+      "label": "辅助器配置",
+      "type": "text",
+      "default": "{\"gridConfig\":{\"enable\":true,\"size\":1000,\"divisions\":20,\"colorCenterLine\":\"#FFFFFF\",\"colorGrid\":\"#FFFFFF\"},\"axesConfig\":{\"enable\":true,\"size\":500}}"
+    }
+  ]
+}

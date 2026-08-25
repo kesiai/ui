@@ -1,0 +1,78 @@
+{
+  "displayName": "弹窗",
+  "category": "containers",
+  "defaultCode": "<Modal />",
+  "importCode": "import { Modal } from '@/components/kesi/container-modal/container-modal';",
+  "props": [
+    {
+      "name": "title",
+      "label": "弹窗标题",
+      "type": "text",
+      "default": "弹窗标题",
+      "placeholder": "请输入标题"
+    },
+    {
+      "name": "description",
+      "label": "弹窗描述",
+      "type": "text",
+      "default": "",
+      "placeholder": "请输入描述"
+    },
+    {
+      "name": "modalWidth",
+      "label": "弹窗宽度",
+      "type": "text",
+      "default": "500px",
+      "placeholder": "500px 或 80%"
+    },
+    {
+      "name": "modalHeight",
+      "label": "弹窗高度",
+      "type": "text",
+      "default": "",
+      "placeholder": "400px"
+    },
+    {
+      "name": "showTrigger",
+      "label": "显示触发按钮",
+      "type": "boolean",
+      "default": false,
+      "description": "是否显示触发弹窗的按钮"
+    },
+    {
+      "name": "triggerText",
+      "label": "触发按钮文字",
+      "type": "text",
+      "default": "打开弹窗",
+      "placeholder": "请输入按钮文字"
+    },
+    {
+      "name": "hiddenMask",
+      "label": "隐藏遮罩",
+      "type": "boolean",
+      "default": false,
+      "description": "配置弹窗打开时页面是否有遮罩效果"
+    },
+    {
+      "name": "destroyOnClose",
+      "label": "关闭时销毁数据",
+      "type": "boolean",
+      "default": false,
+      "description": "勾选后每次打开弹窗，弹窗内的数据会重新加载"
+    },
+    {
+      "name": "showSubmitButton",
+      "label": "显示保存按钮",
+      "type": "boolean",
+      "default": false,
+      "description": "在弹窗底部显示保存按钮"
+    },
+    {
+      "name": "showCancelButton",
+      "label": "显示取消按钮",
+      "type": "boolean",
+      "default": false,
+      "description": "在弹窗底部显示取消按钮"
+    }
+  ]
+}

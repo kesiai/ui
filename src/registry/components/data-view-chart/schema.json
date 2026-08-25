@@ -1,0 +1,20 @@
+{
+  "displayName": "数据视图图表组件",
+  "category": "business",
+  "defaultCode": "<ChartEcharts />",
+  "importCode": "import { ChartEcharts } from '@/components/kesi/data-view-chart/data-view-chart';",
+  "props": [
+    {
+      "name": "view",
+      "label": "数据视图",
+      "type": "object",
+      "description": "数据视图配置，包含 id、name、datasetId、config 等属性"
+    },
+    {
+      "name": "echartOption",
+      "label": "ECharts 配置",
+      "type": "object",
+      "description": "ECharts 图表配置"
+    }
+  ]
+}

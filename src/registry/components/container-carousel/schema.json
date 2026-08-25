@@ -1,0 +1,105 @@
+{
+  "displayName": "轮播",
+  "category": "containers",
+  "defaultCode": "<Carousel />",
+  "importCode": "import { Carousel } from '@/components/kesi/container-carousel/container-carousel';",
+  "props": [
+    {
+      "name": "autoplay",
+      "label": "自动滚动",
+      "type": "boolean",
+      "default": false,
+      "description": "开启滚动，轮播容器内容会自动滚动"
+    },
+    {
+      "name": "autoplaySpeed",
+      "label": "停留时间（秒）",
+      "type": "number",
+      "default": 3,
+      "description": "轮播容器开启自动滚动后，每一个轮播页面的停留时长",
+      "min": 1,
+      "max": 10
+    },
+    {
+      "name": "speed",
+      "label": "切换速度（秒）",
+      "type": "number",
+      "default": 0.5,
+      "description": "轮播容器内内容轮播切换的时长",
+      "min": 0.1,
+      "max": 2
+    },
+    {
+      "name": "hideDots",
+      "label": "隐藏导航点",
+      "type": "boolean",
+      "default": false,
+      "description": "隐藏轮播容器播放时的导航点"
+    },
+    {
+      "name": "arrows",
+      "label": "隐藏箭头",
+      "type": "boolean",
+      "default": false,
+      "description": "隐藏轮播容器左右两侧的箭头"
+    },
+    {
+      "name": "draggable",
+      "label": "允许拖拽翻页",
+      "type": "boolean",
+      "default": true,
+      "description": "允许通过鼠标在轮播容器上方拖拽的形式翻页"
+    },
+    {
+      "name": "vertical",
+      "label": "轮播方向",
+      "type": "select",
+      "default": "horizontal",
+      "description": "轮播容器轮播页滚动的方向",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "水平"
+        },
+        {
+          "value": "vertical",
+          "label": "垂直"
+        }
+      ]
+    },
+    {
+      "name": "rtl",
+      "label": "轮播顺序",
+      "type": "select",
+      "default": "sequence",
+      "description": "轮播容器轮播页滚动的顺序",
+      "options": [
+        {
+          "value": "sequence",
+          "label": "正序"
+        },
+        {
+          "value": "flashback",
+          "label": "倒序"
+        }
+      ]
+    },
+    {
+      "name": "cssEase",
+      "label": "轮播过渡",
+      "type": "select",
+      "default": "ease",
+      "description": "设置轮播容器内组件轮播的过渡方式",
+      "options": [
+        {
+          "value": "ease",
+          "label": "渐变"
+        },
+        {
+          "value": "linear",
+          "label": "线性"
+        }
+      ]
+    }
+  ]
+}

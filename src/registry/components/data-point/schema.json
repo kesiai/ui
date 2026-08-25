@@ -1,0 +1,56 @@
+{
+  "displayName": "数据点",
+  "category": "business",
+  "defaultCode": "<DataPoint />",
+  "importCode": "import { DataPoint } from '@/components/kesi/data-point/data-point';",
+  "props": [
+    {
+      "name": "tableId",
+      "label": "数据表ID",
+      "type": "text",
+      "default": "device",
+      "placeholder": "例如: device, sensor"
+    },
+    {
+      "name": "tableDataId",
+      "label": "数据行ID",
+      "type": "text",
+      "default": "device-001",
+      "placeholder": "例如: device-001"
+    },
+    {
+      "name": "tableDataName",
+      "label": "显示名称",
+      "type": "text",
+      "default": "温度传感器",
+      "placeholder": "请输入显示名称"
+    },
+    {
+      "name": "tagId",
+      "label": "标签ID",
+      "type": "text",
+      "default": "temperature",
+      "placeholder": "例如: temperature, humidity"
+    },
+    {
+      "name": "animated",
+      "label": "数字动画",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "initVisible",
+      "label": "初始显示详情",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "config.fixed",
+      "label": "小数位数",
+      "type": "number",
+      "default": 2,
+      "min": 0,
+      "max": 6
+    }
+  ]
+}

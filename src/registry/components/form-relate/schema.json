@@ -1,0 +1,22 @@
+{
+  "displayName": "关联字段（纯组件）",
+  "category": "form",
+  "defaultCode": "<FormRelate />",
+  "importCode": "import { FormRelate } from '@/components/kesi/form-relate/form-relate';",
+  "props": [
+    {
+      "name": "displayField",
+      "label": "显示字段",
+      "type": "text",
+      "default": "name",
+      "description": "用于显示的字段名称"
+    },
+    {
+      "name": "internalTable",
+      "label": "内部表关联",
+      "type": "boolean",
+      "default": true,
+      "description": "是否为内部表关联"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "displayName": "用户角色",
+  "category": "form",
+  "defaultCode": "<FormUserRole />",
+  "importCode": "import { FormUserRole } from '@/components/kesi/form-user-role/form-user-role';",
+  "props": [
+    {
+      "name": "mode",
+      "label": "选择模式",
+      "type": "select",
+      "default": "single",
+      "options": [
+        {
+          "value": "single",
+          "label": "单选"
+        },
+        {
+          "value": "multiple",
+          "label": "多选"
+        }
+      ]
+    },
+    {
+      "name": "disabled",
+      "label": "禁用",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

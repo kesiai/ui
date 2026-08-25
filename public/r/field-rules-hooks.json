@@ -3,7 +3,9 @@
   "type": "registry:lib",
   "title": "Field Rules Hooks",
   "description": "Field Rules Hooks - 工具库",
-  "dependencies": [],
+  "dependencies": [
+    "react-hook-form"
+  ],
   "registryDependencies": [],
   "files": [
     {

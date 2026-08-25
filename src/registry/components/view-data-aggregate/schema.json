@@ -1,0 +1,91 @@
+{
+  "displayName": "数据统计",
+  "category": "view",
+  "defaultCode": "<ViewDataAggregate />",
+  "importCode": "import { ViewDataAggregate } from '@/components/kesi/view-data-aggregate/view-data-aggregate';",
+  "props": [
+    {
+      "name": "modelName",
+      "label": "内置模型",
+      "type": "model-name",
+      "default": null,
+      "description": "内置模型的选择"
+    },
+    {
+      "name": "tableId",
+      "label": "表格ID",
+      "type": "table-id",
+      "default": "device",
+      "description": "数据表格的唯一标识符"
+    },
+    {
+      "name": "aggregateTypes",
+      "label": "聚合类型",
+      "type": "array",
+      "default": [
+        "count",
+        "sum",
+        "avg"
+      ],
+      "description": "启用的聚合类型（count/sum/avg/min/max）"
+    },
+    {
+      "name": "groupBy",
+      "label": "分组字段",
+      "type": "text",
+      "default": "",
+      "description": "分组统计的字段名，为空则不分组"
+    },
+    {
+      "name": "showChange",
+      "label": "显示变化",
+      "type": "boolean",
+      "default": true,
+      "description": "是否显示数值变化趋势"
+    },
+    {
+      "name": "showChart",
+      "label": "显示图表",
+      "type": "boolean",
+      "default": false,
+      "description": "是否显示图表可视化"
+    },
+    {
+      "name": "layout",
+      "label": "布局方式",
+      "type": "select",
+      "default": "grid",
+      "description": "统计卡片的布局方式",
+      "options": [
+        {
+          "value": "grid",
+          "label": "网格"
+        },
+        {
+          "value": "list",
+          "label": "列表"
+        },
+        {
+          "value": "compact",
+          "label": "紧凑"
+        }
+      ]
+    },
+    {
+      "name": "refreshInterval",
+      "label": "刷新间隔",
+      "type": "number",
+      "default": 0,
+      "description": "自动刷新间隔（毫秒），0 表示不刷新",
+      "min": 0,
+      "max": 60000
+    },
+    {
+      "name": "showExample",
+      "label": "显示示例",
+      "type": "boolean",
+      "default": true,
+      "description": "是否在预览中显示示例"
+    }
+  ]
+}

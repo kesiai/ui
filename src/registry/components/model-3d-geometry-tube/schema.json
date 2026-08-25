@@ -1,0 +1,40 @@
+{
+  "displayName": "管状体",
+  "category": "3d",
+  "defaultCode": "<Model3dGeometryTube />",
+  "importCode": "import { Model3dGeometryTube } from '@/components/kesi/model-3d-geometry-tube/model-3d-geometry-tube';",
+  "props": [
+    {
+      "name": "meshConfig",
+      "label": "网格配置",
+      "type": "text",
+      "default": "{\"visible\":true,\"position\":{\"x\":0,\"y\":0,\"z\":0},\"scale\":{\"x\":1,\"y\":1,\"z\":1},\"rotation\":{\"x\":0,\"y\":0,\"z\":0},\"opacity\":1,\"color\":\"#FFFFFF\"}"
+    },
+    {
+      "name": "materialsConfig",
+      "label": "材质配置",
+      "type": "text",
+      "default": "{\"materials\":[]}"
+    },
+    {
+      "name": "editMode",
+      "label": "编辑模式",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "name",
+      "label": "名称",
+      "type": "text",
+      "default": "",
+      "placeholder": "请输入几何体名称"
+    },
+    {
+      "name": "args",
+      "label": "曲线参数",
+      "type": "text",
+      "default": "[]",
+      "description": "参数格式: [曲线, 管状分段, 半径, 径向分段, 是否闭合]。留空使用默认正弦曲线。"
+    }
+  ]
+}

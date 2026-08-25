@@ -20,7 +20,14 @@
 | `tableLayout` | `TableLayoutProps` | 否 | 见下方 | 表格布局配置 |
 | `tableOptions` | `TableOptions` | 否 | - | TanStack Table 配置选项 |
 | `gridOptions` | `DataGridProps` | 否 | - | DataGrid 组件配置选项 |
+| `showCheckbox` | `boolean` | 否 | `true` | 显示行选择复选框列 |
+| `showColumnSettings` | `boolean` | 否 | `false` | 显示列显隐设置下拉（表格右上角）；配合 ViewModel 的 `statePersistence` 使用时，列显隐/列宽变更会自动持久化 |
 | `children` | `ReactElement[]` | 否 | - | TableColumn 子组件 |
+
+### 列宽与持久化
+
+- 列宽默认值来自建表配置 `tableSchema[].width`（px 数字），拖拽调整后的宽度经 ViewModel 的 `statePersistence` 自动缓存
+- 列显隐通过 `showColumnSettings` 开启，隐藏状态同样进入持久化快照（delta：只存隐藏的列）
 
 ### TableLayoutProps
 

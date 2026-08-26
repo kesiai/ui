@@ -19,7 +19,8 @@
 | `schema` | `JSONSchema7` | 是 | - | JSON Schema 定义，描述数据结构和验证规则 |
 | `formSchema` | `FormSchemaConfig` | 否 | - | 表单字段 UI 配置，定义字段的展示方式 |
 | `formId` | `string` | 是 | - | 表单的唯一标识符 |
-| `onSubmit` | `(data: any) => void` | 是 | - | 表单提交回调函数 |
+| `onSubmit` | `(data: any) => void` | 是 | - | 表单提交回调函数，**校验通过才会触发** |
+| `onInvalid` | `(errors: Record<string, any>) => void` | 否 | - | 校验失败回调（提交被拦截时触发）。多 tab 表单可用它切换到出错字段所在 tab 并提示 |
 | `classNames` | `ClassNamesConfig` | 否 | - | 自定义表单各元素的样式类名 |
 | `mode` | `'onSubmit' \| 'onBlur' \| 'onChange' \| 'all'` | 否 | `'onSubmit'` | 表单验证的触发时机 |
 | `reValidateMode` | `'onChange' \| 'onBlur' \| 'onSubmit'` | 否 | `'onChange'` | 错误状态下的重新验证时机 |
@@ -337,8 +338,10 @@ function Example() {
    - `number` → `<input type="number">`
    - `boolean` → `<input type="checkbox">`
    - `enum` → `<select>`
-4. **必填字段**：`required` 数组中的字段会自动添加必填验证。
+4. **必填字段**：`required` 数组中的字段会自动添加必填验证；属性级 `need: true` / `required: true` 还会显示红色星号并追加 `minLength: 1`（数组为 `minItems: 1`）校验。
 5. **格式验证**：`format` 字段支持 `email`、`uri`、`date`、`time` 等常见格式。
 6. **嵌套限制**：深层嵌套的对象和数组可能需要额外的 UI 配置。
 7. **验证规则**：除了 schema 定义的规则，还可以通过 formSchema 添加额外的验证逻辑。
 8. **国际化**：`title` 和 `description` 支持多语言配置。
+9. **校验拦截**：校验失败时提交会被拦截，`onSubmit` 不触发，改触发 `onInvalid`。控件值形态与 schema 声明类型不一致且字段有值时的 `invalid_type` 是假错误（如 `form-upload` 返回 `{url, name, uid}` 对象而 schema 声明 `string`），不会拦截提交。
+10. **多 tab 表单**：表单字段分布在弹窗多个 tab 中时，未激活 tab 内的错误用户不可见——在 `onInvalid` 里切换到出错字段所在 tab 并给出 toast 提示。

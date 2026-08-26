@@ -49,6 +49,8 @@ type SchemaFormProps = UseFormPropsExtended & {
   formSchema: FormSchemaItem[],
   schameConvert?: (schema: any, field: object) => void,
   onSubmit?: (data: any) => void
+  /** 校验失败时的回调（用于外层切换到出错字段所在的 tab 等提示） */
+  onInvalid?: (errors: Record<string, any>) => void
   isValid?: boolean
   showDescribe?: boolean
   children?: ReactNode | ((props: any) => ReactNode)
@@ -56,7 +58,7 @@ type SchemaFormProps = UseFormPropsExtended & {
   fieldRules?: FieldRules
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, fieldRules, ...props }: SchemaFormProps) => {
+const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, fieldRules, ...props }: SchemaFormProps) => {
   // 字段规则转换
   const schemaFieldRules = React.useMemo(() =>
     fieldRules ? convertToSchemaFormRules(fieldRules) : undefined,
@@ -172,10 +174,29 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
     return { fieldKey, mergedSchema: merged }
   }
 
+  // 必填字段集合：顶层 required 数组 + 属性级 need/required。
+  // 用于区分"必填未填"（需拦截）与"控件值形态与 schema 类型不符"（不应拦截，见 resolver 内说明）
+  const requiredKeys = React.useMemo(() => {
+    const keys = new Set<string>(Array.isArray(schema?.required) ? schema.required : [])
+    for (const [key, prop] of Object.entries(schema?.properties || {}) as [string, any][]) {
+      if (prop?.need || prop?.required) keys.add(key)
+    }
+    return keys
+  }, [schema])
+
   const resolver = React.useMemo<Resolver<any, any>>(() => {
     const zodResolverFn = zodResolver(zodSchema as any)
     return async (values, context, options) => {
       const zodResult = await zodResolverFn(values, context, options)
+      // 控件值形态与 schema 声明类型可能不一致（如 upload 返回 {url,name,uid} 对象、schema 声明 string），
+      // 这类"有值但 invalid_type"是假错误，不应阻断提交；其余错误（必填为空、minLength 等）正常拦截
+      const errors: Record<string, unknown> = {}
+      const isFilled = (v: any) => v !== undefined && v !== null && v !== ''
+      for (const [key, error] of Object.entries(zodResult.errors)) {
+        const errType = (error as { type?: string })?.type
+        if (errType === 'invalid_type' && isFilled(get(values, key))) continue
+        errors[key] = error
+      }
       // 始终跑 controlType 校验，合并错误
       for (const field of processedFormSchema) {
           const { fieldKey, mergedSchema } = getMergedSchema(schema, field)
@@ -183,26 +204,31 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
           if (controlValidate) {
             const error = await controlValidate(values[fieldKey])
             if (error) {
-              ;(zodResult.errors as Record<string, unknown>)[fieldKey] = { type: 'validate', message: error }
+              errors[fieldKey] = { type: 'validate', message: error }
             }
           }
         }
       // 动态必填（由字段规则 setRequire 设置）
       for (const field of dynamicRequiredRef.current) {
         if (values[field] == null || values[field] === '') {
-          ;(zodResult.errors as Record<string, unknown>)[field] = { type: 'required', message: '此字段为必填项' }
+          errors[field] = { type: 'required', message: '此字段为必填项' }
         }
       }
       // 字段规则校验（正则 pattern）
       if (schemaFieldRules?.validations?.length) {
         const valErrors = evaluateValidations(schemaFieldRules.validations, values)
         for (const [field, error] of Object.entries(valErrors)) {
-          ;(zodResult.errors as Record<string, unknown>)[field] = error
+          errors[field] = error
         }
       }
-      return zodResult
+      // 校验通过时回传原始 values 而非 zod 解析值：zod object 会丢弃 schema 外的键，
+      // 原始值与控件实际产出的数据一致
+      if (Object.keys(errors).length > 0) {
+        return { values: {}, errors: errors as any }
+      }
+      return { values, errors: {} }
     }
-  }, [zodSchema, processedFormSchema, schema, schemaFieldRules])
+  }, [zodSchema, processedFormSchema, schema, schemaFieldRules, requiredKeys])
 
   // 从 schema 中提取默认值，与 props.defaultValues 合并（props 优先）
   const schemaDefaults = React.useMemo(() => {
@@ -241,7 +267,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, formId, children, showDescri
 
   return (
     <FormProvider {...methods} classNames={classNames}>
-      <form id={formId} noValidate onSubmit={methods.handleSubmit(handleFormSubmit)} className={classNames?.form}>
+      <form id={formId} noValidate onSubmit={methods.handleSubmit(handleFormSubmit, (errors) => onInvalid?.(errors))} className={classNames?.form}>
         <FieldGroup className={classNames?.group} style={classNames?.groupStyle}>
           {processedFormSchema.map(field => {
             const { fieldKey, mergedSchema } = getMergedSchema(schema, field)

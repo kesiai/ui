@@ -1,6 +1,0 @@
-{
-  "displayName": "2D地图",
-  "category": "gis",
-  "defaultCode": "<GisMapCore />",
-  "importCode": "import { GisMapCore } from '@/components/kesi/gis-map-core/gis-map-core';"
-}

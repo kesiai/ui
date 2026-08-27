@@ -1,7 +1,7 @@
 {
   "name": "form-slider",
   "type": "registry:component",
-  "title": "滑动输入条",
+  "title": "Form Slider",
   "description": "Form Slider - 组件",
   "dependencies": [],
   "registryDependencies": [
@@ -18,83 +18,5 @@
       "type": "registry:lib",
       "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
     }
-  ],
-  "kesi": {
-    "displayName": "滑动输入条",
-    "category": "form",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<FormSlider />",
-    "importCode": "import { FormSlider } from '@/components/kesi/form-slider/form-slider';",
-    "props": [
-      {
-        "name": "value",
-        "label": "初始值",
-        "type": "text",
-        "default": "0",
-        "description": "单个值或数组值，用逗号分隔多个值"
-      },
-      {
-        "name": "disabled",
-        "label": "禁用",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "readOnly",
-        "label": "只读",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "min",
-        "label": "最小值",
-        "type": "number",
-        "default": 0
-      },
-      {
-        "name": "max",
-        "label": "最大值",
-        "type": "number",
-        "default": 100
-      },
-      {
-        "name": "step",
-        "label": "步长",
-        "type": "number",
-        "default": 1,
-        "min": 0
-      },
-      {
-        "name": "range",
-        "label": "双滑块模式",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "dots",
-        "label": "拖拽到刻度上",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "vertical",
-        "label": "垂直方向",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "reverse",
-        "label": "反向坐标轴",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "marks",
-        "label": "刻度标记",
-        "type": "array",
-        "default": []
-      }
-    ]
-  }
+  ]
 }

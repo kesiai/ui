@@ -1,7 +1,7 @@
 {
   "name": "form-map",
   "type": "registry:component",
-  "title": "地图定位",
+  "title": "Form Map",
   "description": "Form Map - 组件",
   "dependencies": [
     "lodash",
@@ -27,81 +27,5 @@
       "type": "registry:lib",
       "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
     }
-  ],
-  "kesi": {
-    "displayName": "地图定位",
-    "category": "form",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<FormMap />",
-    "importCode": "import { FormMap } from '@/components/kesi/form-map/form-map';",
-    "props": [
-      {
-        "name": "placeholder",
-        "label": "占位符",
-        "type": "text",
-        "default": "请选择位置"
-      },
-      {
-        "name": "lngLat",
-        "label": "显示经纬度",
-        "type": "boolean",
-        "default": true
-      },
-      {
-        "name": "positionName",
-        "label": "显示位置名称",
-        "type": "boolean",
-        "default": true
-      },
-      {
-        "name": "canEdit",
-        "label": "可编辑",
-        "type": "boolean",
-        "default": true
-      },
-      {
-        "name": "canHand",
-        "label": "可手动输入",
-        "type": "boolean",
-        "default": true
-      },
-      {
-        "name": "showType",
-        "label": "展示方式",
-        "type": "select",
-        "default": "modal",
-        "options": [
-          {
-            "value": "modal",
-            "label": "弹窗"
-          },
-          {
-            "value": "map",
-            "label": "直接显示地图"
-          }
-        ]
-      },
-      {
-        "name": "size",
-        "label": "尺寸",
-        "type": "select",
-        "default": "middle",
-        "options": [
-          {
-            "value": "small",
-            "label": "小"
-          },
-          {
-            "value": "middle",
-            "label": "中"
-          },
-          {
-            "value": "large",
-            "label": "大"
-          }
-        ]
-      }
-    ]
-  }
+  ]
 }

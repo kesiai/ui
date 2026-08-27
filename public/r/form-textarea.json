@@ -1,7 +1,7 @@
 {
   "name": "form-textarea",
   "type": "registry:component",
-  "title": "多行文本框",
+  "title": "Form Textarea",
   "description": "Form Textarea - 组件",
   "dependencies": [],
   "registryDependencies": [
@@ -18,94 +18,5 @@
       "type": "registry:lib",
       "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
     }
-  ],
-  "kesi": {
-    "displayName": "多行文本框",
-    "category": "form",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<FormTextarea />",
-    "importCode": "import { FormTextarea } from '@/components/kesi/form-textarea/form-textarea';",
-    "props": [
-      {
-        "name": "placeholder",
-        "label": "占位符",
-        "type": "text",
-        "default": "请输入内容"
-      },
-      {
-        "name": "variant",
-        "label": "样式变体",
-        "type": "select",
-        "default": "default",
-        "options": [
-          {
-            "value": "default",
-            "label": "默认"
-          },
-          {
-            "value": "outline",
-            "label": "边框"
-          },
-          {
-            "value": "filled",
-            "label": "填充"
-          },
-          {
-            "value": "ghost",
-            "label": "幽灵"
-          }
-        ]
-      },
-      {
-        "name": "disabled",
-        "label": "禁用",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "readOnly",
-        "label": "只读",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "allowClear",
-        "label": "显示清除按钮",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "showCount",
-        "label": "显示字数统计",
-        "type": "boolean",
-        "default": false
-      },
-      {
-        "name": "delBlank",
-        "label": "去除空格",
-        "type": "boolean",
-        "default": false,
-        "description": "失焦时自动去除首尾空格"
-      },
-      {
-        "name": "defaultVal",
-        "label": "默认值",
-        "type": "text",
-        "default": ""
-      },
-      {
-        "name": "maxLength",
-        "label": "最大长度",
-        "type": "number",
-        "min": 1
-      },
-      {
-        "name": "bordered",
-        "label": "显示边框",
-        "type": "boolean",
-        "default": true
-      }
-    ]
-  }
+  ]
 }

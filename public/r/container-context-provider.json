@@ -1,7 +1,7 @@
 {
   "name": "container-context-provider",
   "type": "registry:component",
-  "title": "上下文",
+  "title": "Container Context Provider",
   "description": "Container Context Provider - 组件",
   "dependencies": [],
   "registryDependencies": [],
@@ -11,88 +11,5 @@
       "type": "registry:component",
       "content": "'use client'\n\nimport { createContext, useContext, ReactNode, useMemo } from 'react'\n\n// Types\nexport interface Table {\n  id: string\n  name: string\n}\n\nexport interface TableData {\n  id: string\n  name: string\n  table: Table\n}\n\nexport interface ContextProviderContextValue {\n  table: Table\n  tableData: TableData\n  data: Array<any>\n}\n\nconst ContextProviderContext = createContext<ContextProviderContextValue | undefined>(\n  undefined\n)\n\n// Props interface\nexport interface ContextProviderProps {\n  children: ReactNode\n  table?: Table\n  tableData?: TableData\n  data?: Array<any>\n}\n\n// Provider Component\nexport function ContextProvider({\n  children,\n  table = { id: '', name: '' },\n  tableData = { id: '', name: '', table: { id: '', name: '' } },\n  data = [],\n}: ContextProviderProps) {\n  // 使用 useMemo 缓存 value 对象，避免不必要的重新渲染\n  const value = useMemo<ContextProviderContextValue>(() => ({\n    table,\n    tableData,\n    data,\n  }), [table, tableData, data])\n\n  return (\n    <ContextProviderContext.Provider value={value}>\n      {children}\n    </ContextProviderContext.Provider>\n  )\n}\n\n// Custom hook to use the context\nexport function useContextProvider(): ContextProviderContextValue {\n  const context = useContext(ContextProviderContext)\n  if (context === undefined) {\n    throw new Error('useContextProvider must be used within a ContextProvider')\n  }\n  return context\n}\n"
     }
-  ],
-  "kesi": {
-    "displayName": "上下文",
-    "category": "containers",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<ContextProvider />",
-    "importCode": "import { ContextProvider } from '@/components/kesi/container-context-provider/context-provider';",
-    "props": [
-      {
-        "name": "table.id",
-        "label": "📋 Table",
-        "type": "select",
-        "default": "table-001",
-        "description": "选择表格",
-        "options": [
-          {
-            "value": "table-001",
-            "label": "用户表"
-          },
-          {
-            "value": "table-002",
-            "label": "订单表"
-          },
-          {
-            "value": "table-003",
-            "label": "产品表"
-          },
-          {
-            "value": "table-004",
-            "label": "部门表"
-          }
-        ]
-      },
-      {
-        "name": "tableData.id",
-        "label": "📊 TableData",
-        "type": "select",
-        "default": "data-001",
-        "description": "选择表格数据",
-        "options": [
-          {
-            "value": "data-001",
-            "label": "第一条数据"
-          },
-          {
-            "value": "data-002",
-            "label": "第二条数据"
-          },
-          {
-            "value": "data-003",
-            "label": "第三条数据"
-          },
-          {
-            "value": "data-004",
-            "label": "第四条数据"
-          }
-        ]
-      },
-      {
-        "name": "data",
-        "label": "📦 Data 数组",
-        "type": "array",
-        "default": [
-          {
-            "id": 1,
-            "name": "项目1",
-            "status": "active"
-          },
-          {
-            "id": 2,
-            "name": "项目2",
-            "status": "pending"
-          },
-          {
-            "id": 3,
-            "name": "项目3",
-            "status": "completed"
-          }
-        ],
-        "description": "上下文中传递的数据数组（JSON格式）"
-      }
-    ]
-  }
+  ]
 }

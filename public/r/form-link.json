@@ -1,7 +1,7 @@
 {
   "name": "form-link",
   "type": "registry:component",
-  "title": "链接",
+  "title": "Form Link",
   "description": "Form Link - 组件",
   "dependencies": [],
   "registryDependencies": [
@@ -18,49 +18,5 @@
       "type": "registry:lib",
       "content": "import type { Ref } from 'react'\n\n/** 所有通过 FormField 使用的组件共享的 props */\nexport interface BaseFormFieldProps {\n  /** 当前值（react-hook-form） */\n  value?: any\n  /** 值变更回调（react-hook-form） */\n  onChange?: (value: any) => void\n  /** 失焦回调（react-hook-form） */\n  onBlur?: () => void\n  /** 字段名（react-hook-form） */\n  name?: string\n  /** ref（react-hook-form） */\n  ref?: Ref<any>\n  /** 字段 ID（FormField 生成） */\n  id?: string\n  /** 表单 schema */\n  schema?: Record<string, any>\n  /** 表单记录数据 */\n  record?: any\n}\n\n/** 选项类型 */\nexport interface FormOption {\n  value: string | number\n  label?: string\n  disabled?: boolean\n}\n"
     }
-  ],
-  "kesi": {
-    "displayName": "链接",
-    "category": "form",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<FormLink />",
-    "importCode": "import { FormLink } from '@/components/kesi/form-link/form-link';",
-    "props": [
-      {
-        "name": "linkType",
-        "label": "链接类型",
-        "type": "select",
-        "default": "out",
-        "options": [
-          {
-            "value": "in",
-            "label": "内部链接"
-          },
-          {
-            "value": "out",
-            "label": "外部链接"
-          }
-        ]
-      },
-      {
-        "name": "placeholder",
-        "label": "占位符",
-        "type": "text",
-        "default": "请输入链接"
-      },
-      {
-        "name": "defaultVal",
-        "label": "默认值",
-        "type": "text",
-        "default": ""
-      },
-      {
-        "name": "disabled",
-        "label": "禁用",
-        "type": "boolean",
-        "default": false
-      }
-    ]
-  }
+  ]
 }

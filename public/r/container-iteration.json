@@ -1,7 +1,7 @@
 {
   "name": "container-iteration",
   "type": "registry:component",
-  "title": "迭代",
+  "title": "Container Iteration",
   "description": "Container Iteration - 组件",
   "dependencies": [
     "@kesi/client"
@@ -13,38 +13,5 @@
       "type": "registry:component",
       "content": "'use client'\n\nimport { ReactNode } from 'react'\nimport { IterationContext } from '@kesi/client'\n\n// Props interface\nexport interface IterationProps {\n  children: ReactNode\n  iterationList: any[]\n}\n\n// Iteration Container Component\nexport function Iteration({\n  children,\n  iterationList = [],\n}: IterationProps) {\n  return (\n    <>\n      {iterationList.map((item, index) => (\n        <IterationContext.Provider key={index} value={{ value: item, index } as any}>\n          {children}\n        </IterationContext.Provider>\n      ))}\n    </>\n  )\n}\n"
     }
-  ],
-  "kesi": {
-    "displayName": "迭代",
-    "category": "containers",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<Iteration />",
-    "importCode": "import { Iteration } from '@/components/kesi/container-iteration/container-iteration';",
-    "props": [
-      {
-        "name": "iterationList",
-        "label": "迭代数据列表",
-        "type": "array",
-        "default": [
-          {
-            "id": 1,
-            "name": "项目 1",
-            "value": 100
-          },
-          {
-            "id": 2,
-            "name": "项目 2",
-            "value": 200
-          },
-          {
-            "id": 3,
-            "name": "项目 3",
-            "value": 300
-          }
-        ],
-        "description": "需要迭代的数据数组"
-      }
-    ]
-  }
+  ]
 }

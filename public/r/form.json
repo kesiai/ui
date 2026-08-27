@@ -1,7 +1,7 @@
 {
   "name": "form",
   "type": "registry:component",
-  "title": "表单容器",
+  "title": "Form",
   "description": "Form - 组件",
   "dependencies": [
     "@kesi/client"
@@ -13,126 +13,5 @@
       "type": "registry:component",
       "content": "import { FormProvider, useForm, type UseFormPropsExtended } from '@kesi/client'\nimport { type ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype FormProps = UseFormPropsExtended & {\n  formId: string\n  children: ReactNode | ((methods: any) => ReactNode)\n  onSubmit: (data: any) => void\n  onEffect?: (formData: any, setFormData: (data: any) => void) => void\n  className?: string\n  classNames?: Partial<Record<'form' | 'field' | 'label' | 'input' | 'description' | 'error', string>>\n}\n\nconst Form = ({ formId, children, onSubmit, onEffect, classNames, className, ...props } : FormProps ) => {\n  const methods = useForm({ ...props, onEffect })\n  return (\n    <FormProvider {...methods} classNames={classNames}>\n      <form id={formId} onSubmit={methods.handleSubmit(onSubmit)} className={cn('space-y-6', classNames?.form, className)}>\n        {typeof children === 'function' ? children(methods) : children}\n      </form>\n    </FormProvider>\n  )\n}\n\nexport { Form }\n"
     }
-  ],
-  "kesi": {
-    "displayName": "表单容器",
-    "category": "business",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<Form />",
-    "importCode": "import { Form } from '@/components/kesi/form/form';",
-    "props": [
-      {
-        "name": "formId",
-        "label": "表单ID",
-        "type": "text",
-        "default": "demo-form",
-        "description": "表单的唯一标识符"
-      },
-      {
-        "name": "layout",
-        "label": "布局样式",
-        "type": "select",
-        "default": "default",
-        "description": "选择表单的布局样式",
-        "options": [
-          {
-            "value": "default",
-            "label": "默认布局"
-          },
-          {
-            "value": "compact",
-            "label": "紧凑布局"
-          },
-          {
-            "value": "spacious",
-            "label": "宽松布局"
-          },
-          {
-            "value": "grid",
-            "label": "网格布局"
-          },
-          {
-            "value": "card",
-            "label": "卡片布局"
-          },
-          {
-            "value": "inline",
-            "label": "水平布局"
-          },
-          {
-            "value": "onlabel",
-            "label": "无Label布局"
-          }
-        ]
-      },
-      {
-        "name": "classNames",
-        "label": "自定义样式类",
-        "type": "json",
-        "default": "{\n  \"name\": \"默认布局\",\n  \"description\": \"标准的表单布局，适中的间距\",\n  \"container\": \"\",\n  \"field\": \"\",\n  \"label\": \"\",\n  \"input\": \"\"\n}",
-        "description": "自定义表单各元素的 className (JSON格式)"
-      },
-      {
-        "name": "mode",
-        "label": "验证模式",
-        "type": "select",
-        "default": "onSubmit",
-        "description": "表单验证的触发时机",
-        "options": [
-          {
-            "value": "onSubmit",
-            "label": "提交时验证"
-          },
-          {
-            "value": "onBlur",
-            "label": "失焦时验证"
-          },
-          {
-            "value": "onChange",
-            "label": "变更时验证"
-          },
-          {
-            "value": "all",
-            "label": "全部触发"
-          }
-        ]
-      },
-      {
-        "name": "reValidateMode",
-        "label": "重新验证模式",
-        "type": "select",
-        "default": "onChange",
-        "description": "错误状态下的重新验证时机",
-        "options": [
-          {
-            "value": "onChange",
-            "label": "变更时"
-          },
-          {
-            "value": "onBlur",
-            "label": "失焦时"
-          },
-          {
-            "value": "onSubmit",
-            "label": "提交时"
-          }
-        ]
-      },
-      {
-        "name": "defaultValues",
-        "label": "默认值",
-        "type": "json",
-        "default": "{\n  \"username\": \"\",\n  \"email\": \"\",\n  \"password\": \"\"\n}",
-        "description": "表单字段的默认值，JSON 格式"
-      },
-      {
-        "name": "showExample",
-        "label": "显示示例表单",
-        "type": "boolean",
-        "default": true,
-        "description": "是否在预览中显示示例表单字段"
-      }
-    ]
-  }
+  ]
 }

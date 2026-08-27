@@ -1,7 +1,7 @@
 {
   "name": "video-widget",
   "type": "registry:component",
-  "title": "视频播放器",
+  "title": "Video Widget",
   "description": "Video Widget - 组件",
   "dependencies": [
     "@kesi/client",
@@ -46,14 +46,5 @@
       "type": "registry:component",
       "content": "declare module 'ezuikit-js' {\n    const EZUIKit: any;\n    export default EZUIKit;\n}\n"
     }
-  ],
-  "kesi": {
-    "displayName": "视频播放器",
-    "category": "video",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<VideoWidget />",
-    "importCode": "import { VideoWidget } from '@/components/kesi/video-widget/video-widget';",
-    "props": []
-  }
+  ]
 }

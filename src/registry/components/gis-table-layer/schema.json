@@ -1,6 +1,0 @@
-{
-  "displayName": "数据表层",
-  "category": "gis",
-  "defaultCode": "<GisTableLayer />",
-  "importCode": "import { GisTableLayer } from '@/components/kesi/gis-table-layer/gis-table-layer';"
-}

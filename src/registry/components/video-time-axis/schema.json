@@ -1,6 +1,0 @@
-{
-  "displayName": "视频时间轴",
-  "category": "video",
-  "defaultCode": "<TimeAxisWidget />",
-  "importCode": "import { TimeAxisWidget } from '@/components/kesi/video-time-axis/time-axis';"
-}

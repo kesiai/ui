@@ -1,6 +1,0 @@
-{
-  "displayName": "连线",
-  "category": "basic",
-  "defaultCode": "<ConnectWidget />",
-  "importCode": "import { ConnectWidget } from '@/components/kesi/connect-widget/connect-widget';"
-}

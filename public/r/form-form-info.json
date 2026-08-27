@@ -1,7 +1,7 @@
 {
   "name": "form-form-info",
   "type": "registry:component",
-  "title": "表单信息",
+  "title": "Form Form Info",
   "description": "Form Form Info - 组件",
   "dependencies": [],
   "registryDependencies": [
@@ -13,22 +13,5 @@
       "type": "registry:component",
       "content": "import * as React from 'react'\nimport { Card, CardContent } from \"@/components/ui/card\";\n\nexport interface FormFormInfoProps {\n  schema?: {\n    widgetContent?: string\n  }\n  args?: Array<{\n    key: string\n    value: any\n  }>\n  outProps?: Record<string, any>\n}\n\nconst FormFormInfo: React.FC<FormFormInfoProps> = ({ schema, args = [] }) => {\n  const code = schema?.widgetContent\n\n  // TODO: LazyBabelTransformedCode 组件待迁移\n  // 原代码: <C is=\"LazyBabelTransformedCode\" code={str} onTransformedCode={onTransformedCode} />\n  // 这个组件负责将代码字符串进行 Babel 转换\n\n  const propsArgs = args.reduce((prev, { key, value }) => {\n    prev[key] = value\n    return prev\n  }, {} as Record<string, any>)\n\n  return (\n    <Card className=\"bg-muted/50\">\n      <CardContent className=\"p-4\">\n        <div className=\"space-y-2\">\n          <p className=\"text-sm font-medium text-muted-foreground\">\n            表单信息组件（待迁移）\n          </p>\n          {code && (\n            <div className=\"text-xs text-muted-foreground\">\n              <p>组件代码长度: {code.length} 字符</p>\n              <p className=\"mt-1\">\n                依赖组件: LazyBabelTransformedCode 待迁移\n              </p>\n            </div>\n          )}\n          {Object.keys(propsArgs).length > 0 && (\n            <div className=\"text-xs text-muted-foreground\">\n              <p>参数: {Object.keys(propsArgs).join(', ')}</p>\n            </div>\n          )}\n        </div>\n      </CardContent>\n    </Card>\n  )\n}\n\nexport { FormFormInfo }\n"
     }
-  ],
-  "kesi": {
-    "displayName": "表单信息",
-    "category": "form",
-    "icon": "",
-    "jsxName": "",
-    "defaultCode": "<FormFormInfo />",
-    "importCode": "import { FormFormInfo } from '@/components/kesi/form-form-info/form-form-info';",
-    "props": [
-      {
-        "name": "widgetContent",
-        "label": "组件代码",
-        "type": "text",
-        "default": "",
-        "description": "动态组件代码（待实现 Babel 转换）"
-      }
-    ]
-  }
+  ]
 }

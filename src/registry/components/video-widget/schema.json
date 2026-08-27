@@ -1,6 +1,0 @@
-{
-  "displayName": "视频播放器",
-  "category": "video",
-  "defaultCode": "<VideoWidget />",
-  "importCode": "import { VideoWidget } from '@/components/kesi/video-widget/video-widget';"
-}

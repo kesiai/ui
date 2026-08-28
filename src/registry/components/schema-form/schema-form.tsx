@@ -121,9 +121,11 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
     if (!schema?.properties) return schema
     const processed = { ...schema, properties: { ...schema.properties } }
     const requiredKeys: string[] = []
+    // 顶层数组与属性级 need/required 都计入必填集合（后端 JSON Schema 常用顶层数组声明必填）
+    const topLevelRequired = new Set<string>(Array.isArray(schema.required) ? schema.required : [])
     for (const [key, prop] of Object.entries(processed.properties) as [string, any][]) {
       // need/required → JSON Schema 标准约束
-      if (prop?.need || prop?.required) {
+      if (prop?.need || prop?.required || topLevelRequired.has(key)) {
         requiredKeys.push(key)
         if (prop?.type === 'string' && prop?.minLength === undefined) {
           processed.properties[key] = { ...prop, minLength: 1 }
@@ -145,7 +147,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
       }
     }
     if (requiredKeys.length > 0) {
-      processed.required = [...(processed.required || []), ...requiredKeys]
+      processed.required = Array.from(new Set([...(processed.required || []), ...requiredKeys]))
     }
     return processed
   }, [])
@@ -279,7 +281,7 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
                   : formConverter(mergedSchema, field)
             ) as React.ComponentType
             return (
-              <FormField name={fieldKey} label={mergedSchema?.title} schema={mergedSchema} required={isValid ? mergedSchema?.need : false} showDescribe={showDescribe}>
+              <FormField name={fieldKey} label={mergedSchema?.title} schema={mergedSchema} required={isValid ? (Boolean(mergedSchema?.need) || requiredKeys.has(fieldKey)) : false} showDescribe={showDescribe}>
                 <FieldController />
               </FormField>
             )

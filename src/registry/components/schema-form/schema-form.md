@@ -337,7 +337,7 @@ function Example() {
    - `number` → `<input type="number">`
    - `boolean` → `<input type="checkbox">`
    - `enum` → `<select>`
-4. **必填字段**：`required` 数组中的字段会自动添加必填验证。
+4. **必填字段**：`required` 数组中的字段会自动添加必填验证，并显示红色星号、追加 `minLength: 1`（数组为 `minItems: 1`）空值拦截；属性级 `need: true` / `required: true` 效果相同。
 5. **格式验证**：`format` 字段支持 `email`、`uri`、`date`、`time` 等常见格式。
 6. **嵌套限制**：深层嵌套的对象和数组可能需要额外的 UI 配置。
 7. **验证规则**：除了 schema 定义的规则，还可以通过 formSchema 添加额外的验证逻辑。

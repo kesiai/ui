@@ -23,7 +23,8 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `checked` | `boolean` | 否 | - | 当前状态（受控模式） |
+| `value` | `boolean \| string \| number \| null` | 否 | - | 当前值（react-hook-form 约定注入；`true/"true"/1` 归一为开，`false/"false"/0` 为关，其余走内部状态） |
+| `checked` | `boolean` | 否 | - | 当前状态（受控模式，优先于 `value`） |
 | `defaultChecked` | `boolean` | 否 | `false` | 默认状态（非受控模式） |
 | `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 | `autoFocus` | `boolean` | 否 | `false` | 自动聚焦 |

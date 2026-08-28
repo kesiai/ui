@@ -23,7 +23,8 @@
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |------|------|------|--------|------|
-| `checked` | `boolean` | 否 | - | 当前状态（受控模式） |
+| `value` | `boolean \| string \| number \| null` | 否 | - | 当前值（react-hook-form 约定注入；`true/"true"/1` 归一为开，`false/"false"/0` 为关，其余走内部状态） |
+| `checked` | `boolean` | 否 | - | 当前状态（受控模式，优先于 `value`） |
 | `defaultChecked` | `boolean` | 否 | `false` | 默认状态（非受控模式） |
 | `disabled` | `boolean` | 否 | `false` | 是否禁用 |
 | `autoFocus` | `boolean` | 否 | `false` | 自动聚焦 |
@@ -483,6 +484,7 @@ function AutoSaveExample() {
 
 1. **受控与非受控模式**：
    - 提供 `checked` 属性时为受控模式，需要通过 `onChange` 更新
+   - 提供 `value`（FormField / react-hook-form 注入）时同样受控：`true/"true"/1` 归一为开、`false/"false"/0` 为关，`checked` 优先级更高
    - 提供 `defaultChecked` 时为非受控模式，组件内部管理状态
 
 2. **状态变化**：

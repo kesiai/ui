@@ -11,7 +11,8 @@
     {
       "path": "registry/components/kesi/view-field-slider/view-field-slider.tsx",
       "type": "registry:component",
-      "content": "import isNil from 'lodash/isNil'\n\nconst Slider = ({ value }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span>{value}</span>\n}\n\nexport { Slider }\n"
+      "content": "import isNil from 'lodash/isNil'\n\nconst Slider = ({ value }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span>{value}</span>\n}\n\nexport { Slider }\n",
+      "target": "src/components/kesi/view-field-slider/view-field-slider.tsx"
     }
   ]
 }

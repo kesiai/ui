@@ -11,7 +11,8 @@
     {
       "path": "registry/components/kesi/filter-area/filter-area.tsx",
       "type": "registry:component",
-      "content": "import { FormArea } from \"@/registry/components/form-area/form-area\";\n\nconst FilterArea = (props: any) => {\n  return <FormArea {...props} defaultValue={undefined} />\n}\n\nexport { FilterArea }"
+      "content": "import { FormArea } from \"@/registry/components/form-area/form-area\";\n\nconst FilterArea = (props: any) => {\n  return <FormArea {...props} defaultValue={undefined} />\n}\n\nexport { FilterArea }",
+      "target": "src/components/kesi/filter-area/filter-area.tsx"
     }
   ]
 }

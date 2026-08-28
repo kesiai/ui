@@ -11,7 +11,8 @@
     {
       "path": "registry/components/kesi/view-field-bytes-array/view-field-bytes-array.tsx",
       "type": "registry:component",
-      "content": "import isNil from 'lodash/isNil'\n\nconst BytesArray = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span className=\"font-mono text-xs\">{value}</span>\n}\n\nexport { BytesArray }\n"
+      "content": "import isNil from 'lodash/isNil'\n\nconst BytesArray = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span className=\"font-mono text-xs\">{value}</span>\n}\n\nexport { BytesArray }\n",
+      "target": "src/components/kesi/view-field-bytes-array/view-field-bytes-array.tsx"
     }
   ]
 }

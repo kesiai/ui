@@ -9,7 +9,8 @@
     {
       "path": "registry/components/kesi/filter-table-select/filter-table-select.tsx",
       "type": "registry:component",
-      "content": ""
+      "content": "",
+      "target": "src/components/kesi/filter-table-select/filter-table-select.tsx"
     }
   ]
 }

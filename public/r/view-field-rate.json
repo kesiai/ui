@@ -11,7 +11,8 @@
     {
       "path": "registry/components/kesi/view-field-rate/view-field-rate.tsx",
       "type": "registry:component",
-      "content": "import isNil from 'lodash/isNil'\nimport { cn } from '@/lib/utils'\n\nconst Rate = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  const max = schema?.max || 5\n  return (\n    <div className=\"flex items-center gap-1\">\n      {Array.from({ length: max }).map((_, i) => (\n        <span\n          key={i}\n          className={cn(\n            \"text-lg\",\n            i < value ? \"text-yellow-400\" : \"text-gray-300\"\n          )}\n        >\n          ★\n        </span>\n      ))}\n      <span className=\"ml-2 text-sm text-muted-foreground\">({value})</span>\n    </div>\n  )\n}\n\nexport { Rate }\n"
+      "content": "import isNil from 'lodash/isNil'\nimport { cn } from '@/lib/utils'\n\nconst Rate = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  const max = schema?.max || 5\n  return (\n    <div className=\"flex items-center gap-1\">\n      {Array.from({ length: max }).map((_, i) => (\n        <span\n          key={i}\n          className={cn(\n            \"text-lg\",\n            i < value ? \"text-yellow-400\" : \"text-gray-300\"\n          )}\n        >\n          ★\n        </span>\n      ))}\n      <span className=\"ml-2 text-sm text-muted-foreground\">({value})</span>\n    </div>\n  )\n}\n\nexport { Rate }\n",
+      "target": "src/components/kesi/view-field-rate/view-field-rate.tsx"
     }
   ]
 }

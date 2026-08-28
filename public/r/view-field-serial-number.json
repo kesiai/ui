@@ -11,7 +11,8 @@
     {
       "path": "registry/components/kesi/view-field-serial-number/view-field-serial-number.tsx",
       "type": "registry:component",
-      "content": "import isNil from 'lodash/isNil'\n\nconst SerialNumber = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span className=\"font-mono\">{value}</span>\n}\n\nexport { SerialNumber }\n"
+      "content": "import isNil from 'lodash/isNil'\n\nconst SerialNumber = ({ value }: { value: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n  return <span className=\"font-mono\">{value}</span>\n}\n\nexport { SerialNumber }\n",
+      "target": "src/components/kesi/view-field-serial-number/view-field-serial-number.tsx"
     }
   ]
 }

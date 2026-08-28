@@ -12,7 +12,8 @@
     {
       "path": "registry/components/kesi/view-field-date/view-field-date.tsx",
       "type": "registry:component",
-      "content": "import isNil from 'lodash/isNil'\nimport dayjs from 'dayjs'\n\nconst DateField = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  let format = 'YYYY-MM-DD'\n\n  // 从 filedFormat 获取格式\n  if (schema?.filedFormat) {\n    format = schema.filedFormat\n  } else if (schema?.format || schema?.format2) {\n    // 兼容旧格式\n    const formatMap: Record<string, string> = {\n      'ym': 'YYYY-MM',\n      'date': 'YYYY-MM-DD',\n      'datetime': 'YYYY-MM-DD HH:mm:ss',\n      'ymdh': 'YYYY-MM-DD HH',\n    }\n    format = formatMap[schema.format || schema.format2] || format\n  }\n\n  return <span>{dayjs(value).format(format)}</span>\n}\n\nexport { DateField }\n"
+      "content": "import isNil from 'lodash/isNil'\nimport dayjs from 'dayjs'\n\nconst DateField = ({ value, schema }: { value: any; schema?: any }) => {\n  if (isNil(value)) return <span className=\"text-muted-foreground\">空</span>\n\n  let format = 'YYYY-MM-DD'\n\n  // 从 filedFormat 获取格式\n  if (schema?.filedFormat) {\n    format = schema.filedFormat\n  } else if (schema?.format || schema?.format2) {\n    // 兼容旧格式\n    const formatMap: Record<string, string> = {\n      'ym': 'YYYY-MM',\n      'date': 'YYYY-MM-DD',\n      'datetime': 'YYYY-MM-DD HH:mm:ss',\n      'ymdh': 'YYYY-MM-DD HH',\n    }\n    format = formatMap[schema.format || schema.format2] || format\n  }\n\n  return <span>{dayjs(value).format(format)}</span>\n}\n\nexport { DateField }\n",
+      "target": "src/components/kesi/view-field-date/view-field-date.tsx"
     }
   ]
 }

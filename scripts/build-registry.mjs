@@ -273,6 +273,25 @@ async function readEditorSchema(componentDir) {
   }
 }
 
+// 为 files 项补充显式 target（安装目标完整路径，相对项目根、正斜杠分隔）。
+// 背景：shadcn CLI 无 target 时按「目标根目录最后一段在 path 中找同名段」推断相对路径，
+// Windows 上 resolvedPaths 是反斜杠路径、按 "/" 切分后整段不匹配，多级目录
+// （components/kesi/x/x.tsx）会被降级为「只取文件名」打平到安装根（src/components/ 下）。
+// 显式 target 在 3.x / 4.x 都直接作为完整目标使用，完全绕过该推断。
+// 映射规则与 kesi 编辑器安装器 registryPathToAppPath 保持一致：
+//   registry/components/kesi/x → src/components/kesi/x
+//   registry/ui/x             → src/components/ui/x
+//   registry/lib/x            → src/lib/x
+//   registry/hooks/x          → src/hooks/x
+// （含可选样式段：registry/{style}/ui/x 同样命中；其余形态不设 target，维持 CLI 默认行为）
+function withTarget(file) {
+  const p = file.path.replace(/\\/g, '/');
+  const m = p.match(/^registry\/(?:[^/]+\/)?(ui|lib|components|hooks)\/(.+)$/);
+  if (!m) return file;
+  file.target = m[1] === 'ui' ? `src/components/ui/${m[2]}` : `src/${m[1]}/${m[2]}`;
+  return file;
+}
+
 // 查找组件的主文件
 function findMainFile(folder, files, componentName) {
   if (folder === 'components') {
@@ -576,7 +595,7 @@ async function buildRegistry() {
             description: editorSchema?.description || `${generateComponentTitle(componentName)} - 组件`,
             dependencies: mergedDeps,
             registryDependencies: processedRegistryDeps,
-            files: fileList,
+            files: fileList.map(withTarget),
             ...(editorSchema
               ? {
                   kesi: {
@@ -726,7 +745,7 @@ async function buildRegistry() {
             description: `${generateComponentTitle(name)} - ${type === 'registry:lib' ? '工具库' : '区块'}`,
             dependencies: mergedDeps,
             registryDependencies: processedRegistryDeps,
-            files: fileList,
+            files: fileList.map(withTarget),
           };
 
           items.push(item);

@@ -375,13 +375,26 @@ export function ViewDataTableContent({
     setOrder(newOrder)
   }
 
+  // order 可能带表格未展示的字段（如仅用于后端排序的 createTime），TanStack 对不存在的
+  // 列 id 会报 "Column with id ... does not exist"（随后静默过滤该排序）。只把实际存在的
+  // 列桥接进 sorting；后端查询的 order 保持原样，排序效果不受影响。
+  const leafColumnIds = new Set(
+    columns.flatMap(c => ('columns' in c && c.columns?.length ? c.columns.map(sub => sub.id) : [c.id]))
+  )
+  const leafColumnIdsKey = [...leafColumnIds].join(',')
+
   useEffect(() => {
-    setSorting(Object.keys(order || {}).map(key => ({
-      id: key,
-      desc: order ? order[key]?.toLowerCase() === 'desc' : false,
-      asc: order ? order[key]?.toLowerCase() === 'asc' : false
-    })));
-  }, [order]);
+    setSorting(
+      Object.keys(order || {})
+        .filter(key => leafColumnIds.has(key))
+        .map(key => ({
+          id: key,
+          desc: order ? order[key]?.toLowerCase() === 'desc' : false,
+          asc: order ? order[key]?.toLowerCase() === 'asc' : false
+        }))
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order, leafColumnIdsKey]);
 
   // 恢复持久化的列状态（挂载时一次性，按实际列集合过滤 schema 演进产生的脏 key）
   const uiStateInitialized = React.useRef(false)

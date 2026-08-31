@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
+import { toast } from 'sonner'
 import { useModelGet, useModelSave, useModelDelete, useModelGetItems, useModel } from '@kesi/client'
 import {
   Dialog,
@@ -44,6 +45,8 @@ import { ViewDetail } from '@/registry/components/view-detail/view-detail'
 import { HasPermission } from '@/registry/components/view-permission/view-permission'
 import type { FormSchemaItem } from '@/registry/lib/model-types'
 import { formLayoutToClassNames } from '@/registry/lib/form-layout'
+import { formConverter } from '@/registry/lib/view-form-converter'
+import { createIdChangeField } from '@/registry/components/id-change-field/id-change-field'
 
 interface EditActionContentProps {
   itemId: string
@@ -56,16 +59,57 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
   const { data, loading, model } = useModelGet({ id: itemId })
   const { getItems } = useModelGetItems()
   const { saveItem } = useModelSave()
+  const { api } = useModel()
   const [saving, setSaving] = useState(false)
+  // 标识经字段内 ✓ 单独改过之后的当前生效 id；底部通用保存一律用它提交
+  const [appliedNewId, setAppliedNewId] = useState<string | null>(null)
+  const [prevItemId, setPrevItemId] = useState(itemId)
+  if (itemId !== prevItemId) {
+    setPrevItemId(itemId)
+    setAppliedNewId(null)
+  }
+  const effectiveItemId = appliedNewId ?? itemId
 
   const formId = `edit-form-${itemId}`
+
+  // 标识的「单独保存」：只调 change 接口（URL=当前生效 id，body 带 getOrigin 全量合并、
+  // 新 id 在 body.id；后端实测 change 只读 body.id，其余字段被忽略、原数据保留）。
+  // 改完刷新列表并记住新 id，后续底部通用保存都用新 id 提交
+  const applyIdRef = React.useRef<(newId: string) => Promise<void>>(async () => {})
+  applyIdRef.current = async (newId: string) => {
+    const origin: any = await api.getOrigin(effectiveItemId)
+    await api.fetch(`/change/${encodeURIComponent(effectiveItemId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ ...(origin?.json ?? origin?.data ?? {}), id: newId }),
+    })
+    setAppliedNewId(newId)
+    await getItems()
+    toast.success('标识修改成功')
+  }
+
+  // 编辑态 id 字段走「✎ 编辑→确认解锁→✓ 保存=change」的 IdChangeField（'*' 通配展开项
+  // 同样经过这里），其余字段回落默认解析器；工厂只建一次，回调经 ref 取最新闭包
+  const EditIdChangeField = useMemo(
+    () => createIdChangeField({ onApplyId: (newId) => applyIdRef.current(newId) }),
+    [],
+  )
+  const editSchameConvert = useCallback(
+    (schema: any, field: any) => ((field?.key ?? schema?.key) === 'id' ? EditIdChangeField : formConverter(schema, field)),
+    [EditIdChangeField],
+  )
 
   const handleSave = async (values: any) => {
     setSaving(true)
     try {
-      await saveItem(values)
+      // 底部通用保存只管整条记录、与 id 无关：始终以当前生效 id 提交（标识经字段内 ✓
+      // 改过之后用新 id，确保落在改名后的记录上；字段里改了但没点 ✓ 的输入不生效）
+      await saveItem({ ...values, id: effectiveItemId })
       await getItems() // 刷新列表数据
       onClose?.()
+    } catch (error: any) {
+      toast.error('保存失败', {
+        description: error?.json?.message || error?.json?._error || error?.message,
+      })
     } finally {
       setSaving(false)
     }
@@ -82,7 +126,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
         </div>
       ) : (
         <ScrollArea className="max-h-[70vh] pr-3">
-          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} isValid={false} />
+          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} schameConvert={editSchameConvert} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} isValid={false} />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}
@@ -201,6 +245,7 @@ interface CreateActionContentProps {
 const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, classNames, formSchema }) => {
   const { getItems, model } = useModelGetItems()
   const { saveItem } = useModelSave()
+  const { api } = useModel()
   const [saving, setSaving] = useState(false)
 
   const formId = `create-form-${model.key}`
@@ -208,9 +253,19 @@ const CreateActionContent: React.FC<CreateActionContentProps> = ({ onClose, clas
   const handleSave = async (values: any) => {
     setSaving(true)
     try {
-      await saveItem(values)
+      // 带 id 新建必须显式 POST：partialSave 模型下 saveItem 对带 id 的数据会发
+      // PATCH /{id}，后端对不存在的 id 静默忽略（200 但不落库）；POST 才会用传入 id 创建
+      if (values?.id) {
+        await api.fetch('', { method: 'POST', body: JSON.stringify(values) })
+      } else {
+        await saveItem(values)
+      }
       await getItems() // 刷新列表数据
       onClose?.()
+    } catch (error: any) {
+      toast.error('创建失败', {
+        description: error?.json?.message || error?.json?._error || error?.message,
+      })
     } finally {
       setSaving(false)
     }

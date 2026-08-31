@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
       ...(mode === 'production' && {
         'process.env.NODE_ENV': JSON.stringify('production'),
       }),
-      'import.meta.env.KESI_PROJECT_ID': JSON.stringify(env.KESI_PROJECT_ID || ''),
+      'import.meta.env.KESI_PROJECT': JSON.stringify(env.KESI_PROJECT || ''),
     },
     server: {
       host: '0.0.0.0',

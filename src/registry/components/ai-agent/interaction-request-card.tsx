@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import {
   Questionnaire,
   type QuestionnaireItemDefinition,
-} from "@/components/ui/questionnaire";
+} from "./questionnaire";
 import {
   ShieldQuestion,
   ClipboardList,

@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -32,6 +33,21 @@ const SKIP_DEPENDENCIES = [
   'clsx',
   'tailwind-merge',
 ];
+
+// registry 组件源码根目录（可发布成 {name}.json 的组件）
+const REGISTRY_COMPONENTS_ROOT = path.join(REGISTRY_ROOT, 'components');
+
+/**
+ * 判断 @/components/{prefix}/xxx 是否为"项目内置、目标项目自备"的组件目录。
+ * 规则：该目录存在于 src/components/{prefix}，但不在 src/registry/components/{prefix}——
+ * 即它是随项目/库分发、由使用方自行维护的源码组件（如 assistant-ui），
+ * 不应生成成 @prefix/path 这种"需从 registry 单独安装"的依赖。
+ */
+function isInternalComponentPrefix(prefix) {
+  // 前缀不在 registry 里（不是可发布组件），且存在于项目 components 目录 → 视为内置
+  if (existsSync(path.join(REGISTRY_COMPONENTS_ROOT, prefix))) return false;
+  return existsSync(path.join(rootDir, 'src', 'components', prefix));
+}
 
 
 // 递归获取目录下所有文件
@@ -147,6 +163,9 @@ function extractRegistryDepsFromContent(content) {
     if (prefix === 'ui') {
       // shadcn/ui 官方组件，直接使用组件名
       standardDeps.add(cleanPath.split('/')[0]);
+    } else if (isInternalComponentPrefix(prefix)) {
+      // 项目内置组件目录（如 assistant-ui）：目标项目自备，不生成 registry 依赖，避免散落
+      continue;
     } else {
       // 第三方组件库（reui、xxxui 等），使用 @prefix/path 格式
       // 只取第一级目录名，例如 data-grid/data-grid-table -> data-grid

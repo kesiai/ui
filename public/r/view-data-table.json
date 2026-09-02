@@ -34,7 +34,6 @@
     "http://localhost:3000/r/view-field-reference.json",
     "http://localhost:3000/r/view-field-attachment.json",
     "http://localhost:3000/r/view-field-relate.json",
-    "@reui/data-grid",
     "button",
     "scroll-area"
   ],

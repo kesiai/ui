@@ -196,7 +196,11 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
       const isFilled = (v: any) => v !== undefined && v !== null && v !== ''
       for (const [key, error] of Object.entries(zodResult.errors)) {
         const errType = (error as { type?: string })?.type
-        if (errType === 'invalid_type' && isFilled(get(values, key))) continue
+        // 非必填字段的 invalid_type 一律放行：空值（null/undefined）与"有值但形态不符"同属假错误——
+        // 可选字段允许不填，且后端对未填字段常以 null 回存（如设备表的 disable/online/off/warnFlag；
+        // 未填 string 回存 "" 能过 zod、未填 boolean 回存 null 过不了 optional），会误报「请填写此项」。
+        // 必填字段的空值 invalid_type 保留（即"必填未填"拦截）
+        if (errType === 'invalid_type' && (isFilled(get(values, key)) || !requiredKeys.has(key))) continue
         errors[key] = error
       }
       // 始终跑 controlType 校验，合并错误

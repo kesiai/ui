@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Info, Play, FolderTree, Clock, Loader2, CheckCircle2, AlertCircle, ListTodo,
 } from "lucide-react";
-import { AgentWorkspace } from "../ai-workspace/ai-workspace";
+import { AgentWorkspace } from "@/registry/components/ai-workspace/ai-workspace";
 import { createAPI } from "@kesi/client";
 import { tasksApi } from "./tasks-api";
 import type { Task, TaskRun } from "./tasks-api";

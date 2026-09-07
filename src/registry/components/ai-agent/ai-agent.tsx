@@ -106,7 +106,6 @@ import { createAPI } from '@kesi/client'
 import { ToolResultCard } from "./tool-result-card";
 import { KesiTextRenderer } from "./rich-text";
 import type { RenderRegistry } from "./registry";
-import { TaskDetailPanel } from "./task-detail-panel";
 import { InteractionRequestCard } from "./interaction-request-card";
 import type { AgentInteractionRequest, InteractionReplyAction } from "./runtime";
 
@@ -1409,12 +1408,8 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; showAgentSelect?: boolean; hideSidebar?: boolean; hideTaskPanel?: boolean }> = ({ className, title, readOnly, showAgentSelect, hideSidebar, hideTaskPanel }) => {
+export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; showAgentSelect?: boolean; hideSidebar?: boolean }> = ({ className, title, readOnly, showAgentSelect, hideSidebar }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { isTaskRuntime } = useAgentUI();
-  const taskId = useAuiState((s) => s.threads.mainThreadId);
-
-  const showTaskDetail = isTaskRuntime && !hideTaskPanel;
 
   return (
     <div className={cn("bg-muted/30 flex h-full w-full", className)}>
@@ -1431,26 +1426,19 @@ export const Base: FC<{ className?: string; title?: string; readOnly?: boolean; 
             onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
           />
           )}
-          <div className="flex flex-1 overflow-hidden">
-            <main className={cn("min-w-0 overflow-hidden", showTaskDetail ? "basis-[44rem] max-w-[44rem]" : "flex-1")}>
-              <TooltipProvider>
-                <Thread readOnly={readOnly} />
-              </TooltipProvider>
-            </main>
-            {showTaskDetail && (
-              <aside className="min-w-[24rem] flex-1 border-l bg-background overflow-hidden">
-                <TaskDetailPanel taskId={taskId ?? ''} />
-              </aside>
-            )}
-          </div>
+          <main className="min-w-0 flex-1 overflow-hidden">
+            <TooltipProvider>
+              <Thread readOnly={readOnly} />
+            </TooltipProvider>
+          </main>
         </div>
       </div>
     </div>
   );
 };
 
-export const Assistant = ({ runtime, className, title, readOnly, avatar, showAgentSelect, hideSidebar, hideTaskPanel }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings; showAgentSelect?: boolean; hideSidebar?: boolean; hideTaskPanel?: boolean }) => {
-  const content = <Base className={className} title={title} readOnly={readOnly} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} hideTaskPanel={hideTaskPanel} />;
+export const Assistant = ({ runtime, className, title, readOnly, avatar, showAgentSelect, hideSidebar }: { runtime?: AssistantRuntime; className?: string; title?: string; readOnly?: boolean; avatar?: AvatarSettings; showAgentSelect?: boolean; hideSidebar?: boolean }) => {
+  const content = <Base className={className} title={title} readOnly={readOnly} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} />;
   return runtime ? (
     <AssistantRuntimeProvider runtime={runtime}>
       <AgentUIProvider avatar={avatar}>

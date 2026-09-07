@@ -5,22 +5,28 @@ const registryModules = import.meta.glob('../../registry/**/config.tsx', { eager
 
 // 分类配置映射 - 根据组件功能分类，而不是目录结构
 const categoryConfig: Record<string, { name: string; icon: string; order: number }> = {
-  'containers': { name: '容器组件', icon: '📦', order: 0 },
-  'data-source': { name: '数据源', icon: '🔌', order: 1 },
-  'basic': { name: '基础组件', icon: '🧩', order: 2 },
-  'form': { name: '表单组件', icon: '📝', order: 3 },
-  'chart': { name: '图表组件', icon: '📊', order: 4 },
-  'business': { name: '业务组件', icon: '💼', order: 5 },
-  'view': { name: '视图组件', icon: '✳️', order: 6 },
-  'gis': { name: 'GIS组件', icon: '🗺️', order: 7 },
-  'video': { name: '视频组件', icon: '📹', order: 8 },
-  'mobile': { name: '移动端组件', icon: '📱', order: 9 },
-  '3d': { name: '三维组件', icon: '🌍', order: 9 },
-  'flow': { name: '流程组件', icon: '⚡', order: 10 }
+  'ai': { name: 'AI 组件', icon: '🤖', order: 0 },
+  'containers': { name: '容器组件', icon: '📦', order: 1 },
+  'data-source': { name: '数据源', icon: '🔌', order: 2 },
+  'basic': { name: '基础组件', icon: '🧩', order: 3 },
+  'form': { name: '表单组件', icon: '📝', order: 4 },
+  'chart': { name: '图表组件', icon: '📊', order: 5 },
+  'business': { name: '业务组件', icon: '💼', order: 6 },
+  'view': { name: '视图组件', icon: '✳️', order: 7 },
+  'gis': { name: 'GIS组件', icon: '🗺️', order: 8 },
+  'video': { name: '视频组件', icon: '📹', order: 9 },
+  'mobile': { name: '移动端组件', icon: '📱', order: 10 },
+  '3d': { name: '三维组件', icon: '🌍', order: 10 },
+  'flow': { name: '流程组件', icon: '⚡', order: 11 }
 }
 
 // 根据组件 ID 判断分类
 function getCategoryByComponentId(componentId: string): string {
+  // AI 组件
+  if (componentId.startsWith('ai-') || componentId.startsWith('render-')) {
+    return 'ai'
+  }
+
   // 容器组件
   if (componentId.startsWith('container-')) {
     return 'containers'

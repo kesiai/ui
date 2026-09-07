@@ -1,6 +1,5 @@
 import React from 'react'
 import { Assistant } from '@/registry/components/ai-agent/ai-agent'
-import { TaskBoard, DocumentEditor, DocumentCtx, toolkit } from '@/registry/components/ai-agent/task-board'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './ai-agent.md?raw'
 import {
@@ -13,8 +12,6 @@ import {
 } from "@assistant-ui/react";
 import { useOpenCodeRuntime } from "@assistant-ui/react-opencode"
 import { useAgentRuntime } from "./runtime";
-import { RenderRegistry as FileDownloadCardRegistry } from "@/registry/components/render-file-download-card/render-file-download-card";
-import { RenderRegistry as DevicePointsChartRegistry } from "@/registry/components/render-device-points-chart/render-device-points-chart";
 
 // Runtime 预设类型定义
 export type RuntimePreset = 'opencode' | 'agent-interactable' | 'openai' | 'vercel' | 'custom'
@@ -75,7 +72,6 @@ const runtime = createCustomRuntime({
   }
 })`,
   "agent-interactable": `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
-import { TaskBoard } from "@/registry/components/ai-agent/task-board"
 import {
   AssistantRuntimeProvider,
   useAui,
@@ -88,7 +84,6 @@ function MyApp() {
 
   return (
     <AssistantRuntimeProvider aui={aui} runtime={runtime}>
-      <TaskBoard />
       <Assistant />
     </AssistantRuntimeProvider>
   )
@@ -255,54 +250,31 @@ const InteractableAssistantShell: React.FC<{
 }> = ({ runtime, title, avatar, showAgentSelect, hideSidebar, readOnly }) => {
   const aui = useAui({
     unstable_interactables: unstable_Interactables() ,
-    tools: Tools({ toolkit }),
+    tools: Tools({}),
     suggestions: Suggestions([
       {
         title: "添加 3 个任务",
         label: "例如买菜清单",
         prompt: "帮我添加 3 个买菜任务",
       },
-      {
-        title: "新建 2 条笔记",
-        label: "设置不同颜色",
-        prompt: "帮我新建 2 条便签：一条蓝色关于会议准备，一条绿色关于项目想法",
-      },
-      {
-        title: "修改选中笔记",
-        label: "改为粉色",
-        prompt: "把选中的笔记颜色改为粉色",
-      },
     ]),
   });
-  const [ documentId, setDocumentId ] = React.useState<string | undefined>();
   return (
-    <DocumentCtx.Provider value={{ documentId, setDocumentId }}>
-      <AssistantRuntimeProvider aui={aui} runtime={runtime}>
-        <div className="flex h-full gap-2">
-          <div className="flex-1 min-w-0">
-            <Assistant title={title} avatar={avatar} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} readOnly={readOnly} />
-          </div>
-          <div className="w-56 shrink-0 space-y-4 overflow-y-auto pt-4 pr-2">
-            <TaskBoard />
-            { documentId && <DocumentEditor id={documentId} /> }
-          </div>
+    <AssistantRuntimeProvider aui={aui} runtime={runtime}>
+      <div className="flex h-full gap-2">
+        <div className="flex-1 min-w-0">
+          <Assistant title={title} avatar={avatar} showAgentSelect={showAgentSelect} hideSidebar={hideSidebar} readOnly={readOnly} />
         </div>
-      </AssistantRuntimeProvider>
-    </DocumentCtx.Provider>
+      </div>
+    </AssistantRuntimeProvider>
   );
 };
 
 /** 根据配置面板勾选的 render 组件，组装 RenderRegistry（按需注册） */
-function buildSelectedRegistry(props: Record<string, any>): Record<string, any> | undefined {
-  const registry: Record<string, any> = {}
-  // 勾选了才注册，未勾选不注入
-  if (props.enableFileDownloadCard) {
-    registry.FileDownloadCard = FileDownloadCardRegistry
-  }
-  if (props.enableDevicePointsChart) {
-    registry['device-points-chart'] = DevicePointsChartRegistry
-  }
-  return Object.keys(registry).length ? registry : undefined
+function buildSelectedRegistry(): Record<string, any> | undefined {
+  // render-file-download-card / render-device-points-chart 为独立组件，仅在示例模板中演示，
+  // 不进入 ai-agent 编译产物依赖，故此处不再按需注册
+  return undefined
 }
 
 const renderAiAgentPreview = (props: Record<string, any>) => {
@@ -322,7 +294,7 @@ const renderAiAgentPreview = (props: Record<string, any>) => {
     })
     // useAgentRuntime 从 AgentUIContext 读取 agentId
     // 按需注册 render 组件：检查勾选的组件，组装 renderRegistry 传入
-    const selectedRenderRegistry = buildSelectedRegistry(props)
+    const selectedRenderRegistry = buildSelectedRegistry()
     const agentRuntime = useAgentRuntime({ agentId, preamble: props.preamble, isTaskRuntime: props.taskRuntime, initialThreadId: props.taskRuntime ? (props.taskId || undefined) : undefined, renderRegistry: selectedRenderRegistry })
 
     let runtime: AssistantRuntime | null = null
@@ -479,7 +451,6 @@ const runtime = useAgentRuntime(${agentRuntimeArgs})`
     case 'agent-interactable':
       runtimeCode = `import { useAgentRuntime } from "@/registry/components/ai-agent/runtime"
 
-import { TaskBoard } from "@/registry/components/ai-agent/task-board"
 import {
   AssistantRuntimeProvider,
   useAui,
@@ -500,7 +471,6 @@ ${runtimeCode}
 export default function MyApp() {
   return (
         <AssistantRuntimeProvider aui={aui} runtime={runtime}>
-        <TaskBoard />
         <Assistant />
       </AssistantRuntimeProvider>
     </AgentUIProvider>

@@ -10,7 +10,8 @@
     "http://localhost:3000/r/ai-agent.json",
     "button",
     "tooltip",
-    "select"
+    "select",
+    "@assistant-ui/tooltip-icon-button"
   ],
   "files": [
     {

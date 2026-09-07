@@ -52,3 +52,6 @@ lerna-debug.log*
 package-lock.json
 yarn.lock
 *_TODO.md
+
+# WorkBuddy（AI 工作笔记，本地留存不入库）
+.workbuddy/

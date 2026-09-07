@@ -9,7 +9,7 @@ import {
   useIsMarkdownCodeBlock,
 } from "@assistant-ui/react-markdown";
 import remarkGfm from "remark-gfm";
-import { type FC, memo, useState } from "react";
+import { type FC, memo, useEffect, useId, useState } from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";
 
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
@@ -74,6 +74,68 @@ const useCopyToClipboard = ({
   };
 
   return { isCopied, copyToClipboard };
+};
+
+// ---- Mermaid 支持：```mermaid 代码块渲染为图表 ----
+let mermaidPromise: Promise<any> | null = null;
+const getMermaid = () => {
+  if (!mermaidPromise) {
+    mermaidPromise = import("mermaid").then((m) => {
+      const mermaid = m.default;
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "loose",
+        theme: "default",
+      });
+      return mermaid;
+    });
+  }
+  return mermaidPromise;
+};
+
+const MermaidDiagram: FC<{ code: string }> = ({ code }) => {
+  const rawId = useId();
+  const id = `mermaid-${rawId.replace(/[^a-zA-Z0-9]/g, "")}`;
+  const [svg, setSvg] = useState<string>("");
+  const [failed, setFailed] = useState<boolean>(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setFailed(false);
+    setSvg("");
+    getMermaid()
+      .then((mermaid) => mermaid.render(id, code.trim()))
+      .then(({ svg }: { svg: string }) => {
+        if (!cancelled) setSvg(svg);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [code, id]);
+
+  if (failed) {
+    return (
+      <pre className="aui-md-pre border-border/50 bg-muted/30 overflow-x-auto my-3 rounded-xl border p-3.5 text-[13px] leading-relaxed">
+        <code>{code}</code>
+      </pre>
+    );
+  }
+
+  if (!svg) {
+    return (
+      <div className="text-muted-foreground my-3 text-sm">图表渲染中…</div>
+    );
+  }
+
+  return (
+    <div
+      className="aui-md-mermaid my-3 overflow-x-auto rounded-xl border p-3 [&_svg]:mx-auto [&_svg]:max-w-full"
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
 };
 
 const defaultComponents = memoizeMarkdownComponents({
@@ -244,6 +306,12 @@ const defaultComponents = memoizeMarkdownComponents({
   ),
   code: function Code({ className, ...props }) {
     const isCodeBlock = useIsMarkdownCodeBlock();
+    const language = /language-(\w+)/.exec(className || "")?.[1];
+
+    if (isCodeBlock && language === "mermaid") {
+      return <MermaidDiagram code={String(props.children ?? "")} />;
+    }
+
     return (
       <code
         className={cn(

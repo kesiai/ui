@@ -234,3 +234,15 @@ Assistant
 4. **响应式设计**：组件已内置响应式支持，在移动设备上会自动调整布局
 
 5. **类型安全**：推荐使用 TypeScript 以获得完整的类型提示
+
+## Thread 扩展点（可选 props，默认关闭）
+
+`Thread` 支持三个 opt-in 扩展 props，不传时行为与基础版完全一致：
+
+| prop | 类型 | 用途 |
+|------|------|------|
+| `footerExtra` | `ReactNode` | 插入到输入框上方的额外内容（kesi 编辑器用于「AI 将编辑 组件名」选中状态条） |
+| `style` | `CSSProperties` | 合并到 Thread 根元素 style，可覆盖 CSS 变量（如 `--composer-radius`，默认 1.5rem 大圆角，编辑器侧覆盖为 0.375rem） |
+| `textComponent` | `TextMessagePartComponent` | 替换消息文本渲染组件（默认 `DirectiveText`；kesi 编辑器用 EditorText 剥离画布上下文前缀后再显示） |
+
+**跨仓契约**：kesi 应用（编辑器）依赖这三个 props。重构 `Thread` 时必须保留，否则下游功能会**静默失效**（props 传了但没人消费，无编译报错）——历史上「从 ui 同步」覆盖掉扩展点，导致编辑器 AI 面板圆角回退、选中状态条与前缀剥离显示全部失效。

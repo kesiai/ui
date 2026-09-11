@@ -55,6 +55,7 @@ import {
   ThreadListItemMorePrimitive,
   ThreadListItemPrimitive,
   ThreadListPrimitive,
+  type TextMessagePartComponent,
 } from "@assistant-ui/react";
 import {
   ArrowDownIcon,
@@ -93,7 +94,7 @@ import {
   LexicalComposerInput,
   type DirectiveChipProps,
 } from "@assistant-ui/react-lexical";
-import { createContext, useContext, useState, useEffect, type FC, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type FC, type ReactNode, type CSSProperties } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Select,
@@ -551,10 +552,21 @@ export const InteractionRequests: FC = () => {
   );
 };
 
-export const Thread: FC<{ readOnly?: boolean }> = ({ readOnly }) => {
+// 消息文本渲染组件可替换（编辑器用 EditorText 剥离画布上下文前缀，默认 DirectiveText）
+const ThreadTextContext = createContext<TextMessagePartComponent>(DirectiveText);
+
+export const Thread: FC<{
+  readOnly?: boolean;
+  footerExtra?: ReactNode;
+  /** 合并到 Thread 根元素的 style（覆盖 CSS 变量等，不传则库默认） */
+  style?: CSSProperties;
+  /** 替换消息文本渲染组件（默认 DirectiveText） */
+  textComponent?: TextMessagePartComponent;
+}> = ({ readOnly, footerExtra, style, textComponent }) => {
   const isEmpty = useAuiState(isNewChatView);
 
   return (
+    <ThreadTextContext.Provider value={textComponent ?? DirectiveText}>
     <ThreadPrimitive.Root
       className="aui-root aui-thread-root bg-background @container flex h-full flex-col"
       style={{
@@ -563,6 +575,7 @@ export const Thread: FC<{ readOnly?: boolean }> = ({ readOnly }) => {
           "color-mix(in oklab, var(--color-muted) 30%, var(--color-background))",
         ["--composer-radius" as string]: "1.5rem",
         ["--composer-padding" as string]: "8px",
+        ...style,
       }}
     >
       <ThreadPrimitive.Viewport
@@ -601,6 +614,7 @@ export const Thread: FC<{ readOnly?: boolean }> = ({ readOnly }) => {
           )}
         >
           <ThreadScrollToBottom />
+          {footerExtra}
           <Composer />
           <AuiIf condition={isNewChatView}>
             <div className="aui-thread-welcome-suggestions-shell min-h-19">
@@ -615,6 +629,7 @@ export const Thread: FC<{ readOnly?: boolean }> = ({ readOnly }) => {
 
       <SelectionToolbar />
     </ThreadPrimitive.Root>
+    </ThreadTextContext.Provider>
   );
 };
 
@@ -1265,6 +1280,7 @@ export const AssistantActionBar: FC = () => {
 
 export const UserMessage: FC = () => {
   const avatarMode = useAvatarMode();
+  const TextPart = useContext(ThreadTextContext);
 
   // 头像模式：头像在右，气泡 + 头像的行式布局
   if (avatarMode) {
@@ -1282,7 +1298,7 @@ export const UserMessage: FC = () => {
               <MessagePrimitive.Quote>
                 {(quote) => <QuoteBlock {...quote} />}
               </MessagePrimitive.Quote>
-              <MessagePrimitive.Parts components={{ Text: DirectiveText, Image: Image, File: File, Source: Source }} />
+              <MessagePrimitive.Parts components={{ Text: TextPart, Image: Image, File: File, Source: Source }} />
             </div>
             <div className="aui-user-action-bar-wrapper absolute top-1/2 left-0 -translate-x-full -translate-y-1/2 pr-2 peer-empty:hidden">
               <UserActionBar />
@@ -1312,7 +1328,7 @@ export const UserMessage: FC = () => {
           <MessagePrimitive.Quote>
             {(quote) => <QuoteBlock {...quote} />}
           </MessagePrimitive.Quote>
-          <MessagePrimitive.Parts components={{ Text: DirectiveText, Image: Image, File: File, Source: Source }} />
+          <MessagePrimitive.Parts components={{ Text: TextPart, Image: Image, File: File, Source: Source }} />
         </div>
         <div className="aui-user-action-bar-wrapper absolute top-1/2 left-0 -translate-x-full -translate-y-1/2 pr-2 peer-empty:hidden">
           <UserActionBar />

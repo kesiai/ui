@@ -24,6 +24,7 @@
 | `mode` | `'onSubmit' \| 'onBlur' \| 'onChange' \| 'all'` | 否 | `'onSubmit'` | 表单验证的触发时机 |
 | `reValidateMode` | `'onChange' \| 'onBlur' \| 'onSubmit'` | 否 | `'onChange'` | 错误状态下的重新验证时机 |
 | `children` | `ReactNode \| ((props: any) => ReactNode)` | 否 | - | 子组件或渲染函数 |
+| `resetKey` | `string \| number` | 否 | - | 值重置键：变化时用最新 defaultValues 重置表单值（只换值不重挂载）。切换编辑对象的场景用它代替换 key 重挂载，避免重跑所有字段的挂载逻辑 |
 
 ### JSON Schema
 

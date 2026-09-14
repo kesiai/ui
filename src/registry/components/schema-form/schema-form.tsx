@@ -56,9 +56,16 @@ type SchemaFormProps = UseFormPropsExtended & {
   children?: ReactNode | ((props: any) => ReactNode)
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string> & { groupStyle?: React.CSSProperties }
   fieldRules?: FieldRules
+  /**
+   * 值重置键：变化时用最新 defaultValues 调 methods.reset 重置表单值。
+   * RHF 的 defaultValues 只在挂载时生效，调用方切换编辑对象（如属性面板切条目）
+   * 以往只能靠换 key 整表单重挂载来载入新值——重挂载会连带重跑所有字段的挂载逻辑
+   * （拉取/注册等），改成 reset 只换值不拆表单。
+   */
+  resetKey?: string | number
 }
 
-const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, fieldRules, ...props }: SchemaFormProps) => {
+const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, fieldRules, resetKey, ...props }: SchemaFormProps) => {
   // 字段规则转换
   const schemaFieldRules = React.useMemo(() =>
     fieldRules ? convertToSchemaFormRules(fieldRules) : undefined,
@@ -264,6 +271,23 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
     defaultValues: isValid ? { ...schemaDefaults, ...props.defaultValues } : {},
     ...props
   } as any)
+
+  // resetKey 变化时重置表单值（只换值不拆表单）。defaultValues 用最新引用：
+  // resetKey 与新 defaultValues 通常在同一次渲染里一起更新（如切换编辑对象），effect 闭包
+  // 捕获的正是当次渲染的值。挂载首跑跳过——useForm 初始化已应用过同一份 defaultValues。
+  const resetKeyFirstRunRef = React.useRef(true)
+  const defaultValuesRef = React.useRef(props.defaultValues)
+  defaultValuesRef.current = props.defaultValues
+  React.useEffect(() => {
+    if (resetKeyFirstRunRef.current) {
+      resetKeyFirstRunRef.current = false
+      return
+    }
+    methods.reset(isValid ? { ...schemaDefaults, ...defaultValuesRef.current } : {})
+    // 有意只依赖 resetKey：defaultValues 身份每次渲染都可能在变（内联对象），
+    // 不能作为触发条件，reset 时经 ref 取最新值
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetKey])
 
   // 在表单挂载后手动调用一次 onEffect，用于初始化字段可见性等
   const hasCalledInitOnEffect = React.useRef(false)

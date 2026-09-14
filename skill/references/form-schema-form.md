@@ -338,7 +338,7 @@ function Example() {
    - `number` → `<input type="number">`
    - `boolean` → `<input type="checkbox">`
    - `enum` → `<select>`
-4. **必填字段**：`required` 数组中的字段会自动添加必填验证并显示红色星号，同时追加 `minLength: 1`（数组为 `minItems: 1`）空值拦截；属性级 `need: true` / `required: true` 效果相同。
+4. **必填字段**：`required` 数组中的字段会自动添加必填验证并显示红色星号，同时追加 `minLength: 1`（数组为 `minItems: 1`）空值拦截；属性级 `need: true` / `required: true` 效果相同。formSchema 字段项上的 `required: true` 同样生效（点亮红星 + 提交时空值拦截，适合同一字段在不同表单形态下必填与否不同的场景，如报表 normal 必填 tableInfo 而 free 不必填）。
 5. **格式验证**：`format` 字段支持 `email`、`uri`、`date`、`time` 等常见格式。
 6. **嵌套限制**：深层嵌套的对象和数组可能需要额外的 UI 配置。
 7. **验证规则**：除了 schema 定义的规则，还可以通过 formSchema 添加额外的验证逻辑。

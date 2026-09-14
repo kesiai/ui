@@ -220,6 +220,16 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
           errors[field] = { type: 'required', message: '此字段为必填项' }
         }
       }
+      // 表单项显式必填（formSchema.required）：与动态必填同口径拦截空值。
+      // 此前该标志只点亮红星（getMergedSchema → need → UI），不进 zodSchema/requiredKeys，
+      // 红星亮着却能提交（kesi 应用 BUG-029：报表空名直接 POST，靠后端 400 兜底）
+      for (const field of processedFormSchema) {
+        if (field && typeof field === 'object' && field.required) {
+          if (!isFilled(get(values, field.key))) {
+            errors[field.key] = { type: 'required', message: '此字段为必填项' }
+          }
+        }
+      }
       // 字段规则校验（正则 pattern）
       if (schemaFieldRules?.validations?.length) {
         const valErrors = evaluateValidations(schemaFieldRules.validations, values)

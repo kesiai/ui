@@ -165,7 +165,8 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
     }
   }, [tableIds, fetchRecords])
 
-  // 初始化加载
+  // 初始化加载：单选模式必须把 open 受控接给 Select（onOpenChange），否则 Radix 自管开关、
+  // 这里的 open 永远是 false，记录不会拉取，下拉一直空（kesi 应用上报⑪）
   React.useEffect(() => {
     if (tableIds && tableIds.length > 0) {
       fetchAllTables()
@@ -199,16 +200,24 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
         value={displayValue}
         onValueChange={handleChange}
         disabled={loading}
+        open={open}
+        onOpenChange={setOpen}
       >
         <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
+          {loading ? (
+            <div className="p-2 text-center text-sm text-gray-500">加载中...</div>
+          ) : options.length === 0 ? (
+            <div className="p-2 text-center text-sm text-gray-500">暂无数据</div>
+          ) : (
+            options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))
+          )}
         </SelectContent>
       </Select>
     </div>

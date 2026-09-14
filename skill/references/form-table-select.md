@@ -86,3 +86,4 @@ function Example() {
 3. **过滤条件**：`filter` 对象会被转换为 API 查询条件（如 `{ function: { $jsonContainsAny: ['device'] } }` 只列设备表；经 SchemaForm 使用时写在 formSchema 字段项上即可透传）。
 4. **返回值格式**：返回 `{ id, title, name, isDevice }` 结构的表信息。
 5. **无效选项剔除**：缺 `id` 或 `title`/`name` 全空的表不会出现在下拉里（空 id 进不了 SelectItem 的 value，空标签渲染成空行）。
+6. **列表缓存**：同查询条件的表列表缓存在模块级（页面会话内只拉一次，在途请求去重复用，失败不缓存可重试）——宿主表单若整表单重挂载（如报表属性面板按单元格切换重建），挂载即拉取不会演变成请求风暴。

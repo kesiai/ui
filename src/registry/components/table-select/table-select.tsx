@@ -74,6 +74,20 @@ export interface TableInfo {
   isDevice?: boolean
 }
 
+interface TableOption {
+  label: string
+  value: string
+  table?: TableInfo
+}
+
+// 表列表缓存（按查询条件）：宿主表单若整表单重挂载（如报表属性面板按单元格切换重建），
+// 本组件「挂载即拉取」会演变成点击风暴；同条件的列表页面内只拉一次，在途请求也去重复用
+interface TableListCacheEntry {
+  promise: Promise<void>
+  resolved?: TableOption[]
+}
+const tableListCache = new Map<string, TableListCacheEntry>()
+
 /**
  * 表选择器组件
  * 支持单选和多选
@@ -95,7 +109,7 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
 
   const { value, onChange } = input
 
-  const [options, setOptions] = React.useState<Array<{ label: string; value: string; table?: TableInfo }>>([])
+  const [options, setOptions] = React.useState<TableOption[]>([])
   const [loading, setLoading] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   const hasFetchedRef = React.useRef(false)
@@ -107,55 +121,77 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
       return
     }
 
-    try {
-      setLoading(true)
-
-      // 构建查询条件
-      const where: Record<string, any> = {}
-
-      // 应用过滤条件
-      if (filter) {
-        Object.assign(where, filter)
-      }
-
-      // 功能过滤
-      if (field?.func) {
-        where.function = { '$regex': field.func }
-      }
-
-      // 查询表列表
-      const { items } = await api({ name: 'core/t/schema' }).query(
-        { fields: ['title', 'name', 'isDevice'] },
-        { where }
-      )
-
-      // 过滤设备表
-      // 同时剔除无效选项：缺 id 的表进不了 SelectItem（Radix 要求 value 非空，含空 id
-      // 的选项会让下拉渲染异常/点击无反应），title 与 name 全空的表渲染成空行（kesi 应用上报⑥）
-      const filteredItems = (excludeDevice
-        ? items.filter((item: any) => !item.isDevice)
-        : items).filter((item: any) => item?.id && (item.title || item.name))
-
-      // 转换为选项格式
-      const newOptions = filteredItems.map((item: any) => ({
-        label: item.title || item.name,
-        value: item.id,
-        table: {
-          id: item.id,
-          title: item.title || item.name,
-          name: item.name,
-          isDevice: item.isDevice
-        }
-      }))
-
-      setOptions(newOptions)
+    const cacheKey = JSON.stringify([filter, excludeDevice, field?.func])
+    const entry = tableListCache.get(cacheKey)
+    // 已完成的缓存同步回填：重挂载场景零请求零闪烁
+    if (entry?.resolved) {
+      setOptions(entry.resolved)
       hasFetchedRef.current = true
-
-    } catch (error) {
-      console.error('获取表列表失败:', error)
-    } finally {
-      setLoading(false)
+      return
     }
+    // 在途请求等待复用，同条件并发挂载只发一次
+    if (entry) {
+      await entry.promise
+      return
+    }
+
+    const cachedEntry: TableListCacheEntry = { promise: Promise.resolve() }
+    cachedEntry.promise = (async () => {
+      try {
+        setLoading(true)
+
+        // 构建查询条件
+        const where: Record<string, any> = {}
+
+        // 应用过滤条件
+        if (filter) {
+          Object.assign(where, filter)
+        }
+
+        // 功能过滤
+        if (field?.func) {
+          where.function = { '$regex': field.func }
+        }
+
+        // 查询表列表
+        const { items } = await api({ name: 'core/t/schema' }).query(
+          { fields: ['title', 'name', 'isDevice'] },
+          { where }
+        )
+
+        // 过滤设备表
+        // 同时剔除无效选项：缺 id 的表进不了 SelectItem（Radix 要求 value 非空，含空 id
+        // 的选项会让下拉渲染异常/点击无反应），title 与 name 全空的表渲染成空行（kesi 应用上报⑥）
+        const filteredItems = (excludeDevice
+          ? items.filter((item: any) => !item.isDevice)
+          : items).filter((item: any) => item?.id && (item.title || item.name))
+
+        // 转换为选项格式
+        const newOptions = filteredItems.map((item: any) => ({
+          label: item.title || item.name,
+          value: item.id,
+          table: {
+            id: item.id,
+            title: item.title || item.name,
+            name: item.name,
+            isDevice: item.isDevice
+          }
+        }))
+
+        setOptions(newOptions)
+        hasFetchedRef.current = true
+        cachedEntry.resolved = newOptions
+
+      } catch (error) {
+        // 失败不进缓存，下次挂载/打开可重试
+        tableListCache.delete(cacheKey)
+        console.error('获取表列表失败:', error)
+      } finally {
+        setLoading(false)
+      }
+    })()
+    tableListCache.set(cacheKey, cachedEntry)
+    await cachedEntry.promise
   }, [filter, excludeDevice, field?.func, options.length])
 
   // 初始化加载和打开下拉时加载数据

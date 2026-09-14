@@ -130,9 +130,11 @@ export const TableSelect: React.FC<TableSelectProps> = (props) => {
       )
 
       // 过滤设备表
-      const filteredItems = excludeDevice
+      // 同时剔除无效选项：缺 id 的表进不了 SelectItem（Radix 要求 value 非空，含空 id
+      // 的选项会让下拉渲染异常/点击无反应），title 与 name 全空的表渲染成空行（kesi 应用上报⑥）
+      const filteredItems = (excludeDevice
         ? items.filter((item: any) => !item.isDevice)
-        : items
+        : items).filter((item: any) => item?.id && (item.title || item.name))
 
       // 转换为选项格式
       const newOptions = filteredItems.map((item: any) => ({

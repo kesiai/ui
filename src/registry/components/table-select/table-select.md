@@ -83,5 +83,6 @@ function Example() {
 
 1. **多选功能**：当前多选功能为简化实现，完全功能需要额外开发。
 2. **树形展示**：`tree=true` 时，表按层级关系展示。
-3. **过滤条件**：`filter` 对象会被转换为 API 查询条件。
+3. **过滤条件**：`filter` 对象会被转换为 API 查询条件（如 `tableFunctionFilter('device')` 形态的 `{ function: { $jsonContainsAny: ['device'] } }` 只列设备表；经 SchemaForm 使用时写在 formSchema 字段项上即可透传）。
 4. **返回值格式**：返回 `{ id, title, name, isDevice }` 结构的表信息。
+5. **无效选项剔除**：缺 `id` 或 `title`/`name` 全空的表不会出现在下拉里（空 id 进不了 SelectItem 的 value，空标签渲染成空行）。

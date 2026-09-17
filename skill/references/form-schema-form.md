@@ -342,7 +342,7 @@ function Example() {
 4. **必填字段**：`required` 数组中的字段会自动添加必填验证并显示红色星号，同时追加 `minLength: 1`（数组为 `minItems: 1`）空值拦截；属性级 `need: true` / `required: true` 效果相同。formSchema 字段项上的 `required: true` 同样生效（点亮红星 + 提交时空值拦截，适合同一字段在不同表单形态下必填与否不同的场景，如报表 normal 必填 tableInfo 而 free 不必填）。
 5. **格式验证**：`format` 字段支持 `email`、`uri`、`date`、`time` 等常见格式。
 6. **嵌套限制**：深层嵌套的对象和数组可能需要额外的 UI 配置。
-7. **验证规则**：除了 schema 定义的规则，还可以通过 formSchema 添加额外的验证逻辑。
+7. **验证规则**：除了 schema 定义的规则，formSchema 字段项可挂 `validate: (value, values) => string | null`（返回错误文案或 null/undefined/true 表示通过），提交时逐字段执行并拦截（如 oauthapp 的 http/https 前缀、数据字典 uid 白名单）。
 8. **国际化**：`title` 和 `description` 支持多语言配置。
 9. **校验拦截**：校验失败时提交会被拦截，`onSubmit` 不触发，改触发 `onInvalid`。控件值形态与 schema 声明类型不一致且字段有值时的 `invalid_type` 是假错误（如 `form-upload` 返回 `{url, name, uid}` 对象而 schema 声明 `string`），不会拦截提交。
 10. **多 tab 表单**：表单字段分布在弹窗多个 tab 中时，未激活 tab 内的错误用户不可见——在 `onInvalid` 里切换到出错字段所在 tab 并给出 toast 提示。

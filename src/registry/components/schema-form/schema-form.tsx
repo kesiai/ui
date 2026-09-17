@@ -220,6 +220,15 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
               errors[fieldKey] = { type: 'validate', message: error }
             }
           }
+          // formSchema 项自定义 validate：返回字符串=错误文案（null/undefined/true=通过）。
+          // 此前该函数从未被执行（oauthapp 的 http/https 前缀校验、BUG-057 的 uid 白名单均被架空）
+          const fieldValidate = typeof (field as any).validate === 'function' ? (field as any).validate : undefined
+          if (fieldValidate) {
+            const error = await fieldValidate(get(values, fieldKey), values)
+            if (error && error !== true) {
+              errors[fieldKey] = { type: 'validate', message: error as string }
+            }
+          }
         }
       // 动态必填（由字段规则 setRequire 设置）
       for (const field of dynamicRequiredRef.current) {

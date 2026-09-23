@@ -1,6 +1,4 @@
 import { ViewModel } from '../view-model/view-model'
-import React from 'react'
-import { Subscribe } from '@kesi/client'
 import { ComponentConfig } from '@/app/config/types'
 import { ViewDataTable, TableColumn } from '../view-data-table/view-data-table'
 import { ViewPagination } from '../view-pagination/view-pagination'
@@ -72,32 +70,30 @@ const renderViewDemoPreview = (props: Record<string, any>) => {
     <div className="h-full flex items-center justify-center p-6 overflow-auto">
       <div className="w-full max-w-5xl">
         <h3 className="text-lg font-semibold mb-4 text-center">viewDemo 综合演示</h3>
-        <Subscribe>
-          <ViewModel
-            key={`view-demo-${props.tableId}-${props.persistChannel}-${props.persistRemoteTableId || ''}`}
-            tableId={props.tableId}
-            modelName={props.modelName}
-            isSchemaTransform={true}
-            statePersistence={statePersistence}
-          >
-            <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
-              <ViewFilter />
-              <div className="flex items-center justify-between">
-                <CreateAction />
-                <Tools tools={['count', 'pageSize']} />
-              </div>
-              <ViewDataTable showColumnSettings>
-                <TableColumn name="__actions__" title=" " width={65} enableSorting={false} enableHiding={false} enableResizing={false}>
-                  <Actions actions={props.actions || ['view', 'edit', 'delete']} />
-                </TableColumn>
-              </ViewDataTable>
-              <div className="flex items-center justify-between">
-                <BatchActions actions={['batch-change', 'batch-delete']} />
-                <ViewPagination />
-              </div>
+        <ViewModel
+          key={`view-demo-${props.tableId}-${props.persistChannel}-${props.persistRemoteTableId || ''}`}
+          tableId={props.tableId}
+          modelName={props.modelName}
+          isSchemaTransform={true}
+          statePersistence={statePersistence}
+        >
+          <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 space-y-6">
+            <ViewFilter />
+            <div className="flex items-center justify-between">
+              <CreateAction />
+              <Tools tools={['count', 'pageSize']} />
             </div>
-          </ViewModel>
-        </Subscribe>
+            <ViewDataTable showColumnSettings>
+              <TableColumn name="__actions__" title=" " width={65} enableSorting={false} enableHiding={false} enableResizing={false}>
+                <Actions actions={props.actions || ['view', 'edit', 'delete']} />
+              </TableColumn>
+            </ViewDataTable>
+            <div className="flex items-center justify-between">
+              <BatchActions actions={['batch-change', 'batch-delete']} />
+              <ViewPagination />
+            </div>
+          </div>
+        </ViewModel>
       </div>
     </div>
   )

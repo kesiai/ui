@@ -1,5 +1,5 @@
 import React, { cloneElement, useEffect, useMemo, useState } from 'react';
-import { useModelList, useModel, useModelState, useSubscribeContext, useTableDataValue, Subscribe } from '@kesi/client'
+import { useModelList, useModel, useModelState, useSubscribeContext, useTableDataValue } from '@kesi/client'
 import type { FieldProperty, ModelSchema } from '@/registry/lib/model-types'
 import { DataGrid } from '@/components/reui/data-grid/data-grid';
 import { DataGridColumnHeader } from '@/components/reui/data-grid/data-grid-column-header';
@@ -586,7 +586,8 @@ export const TableColumn: React.FC<TableColumnProps> = ({
   return null;
 };
 
-// 包装器：已有 Subscribe 上下文时直接渲染；否则自动补一层 Subscribe（支持脱离 ViewModel 单独使用）
+// 订阅由 ViewDataTableContent 内部的 useTableDataValue / subscribeData 自行建立，
+// 无需外层 Provider，可脱离 ViewModel 单独使用。
 export const ViewDataTable = ({
   className,
   tableLayout = {},
@@ -605,32 +606,14 @@ export const ViewDataTable = ({
   showColumnSettings?: boolean
   children?: React.ReactElement[] | React.ReactElement | undefined
 }) => {
-  try {
-    useSubscribeContext()
-    return <ViewDataTableContent
-      className={className}
-      tableLayout={tableLayout}
-      tableOptions={tableOptions}
-      gridOptions={gridOptions}
-      showCheckbox={showCheckbox}
-      showColumnSettings={showColumnSettings}
-    >
-      {children}
-    </ViewDataTableContent>
-  } catch (e) {
-    return (
-      <Subscribe>
-        <ViewDataTableContent
-          className={className}
-          tableLayout={tableLayout}
-          tableOptions={tableOptions}
-          gridOptions={gridOptions}
-          showCheckbox={showCheckbox}
-          showColumnSettings={showColumnSettings}
-        >
-          {children}
-        </ViewDataTableContent>
-      </Subscribe>
-    )
-  }
+  return <ViewDataTableContent
+    className={className}
+    tableLayout={tableLayout}
+    tableOptions={tableOptions}
+    gridOptions={gridOptions}
+    showCheckbox={showCheckbox}
+    showColumnSettings={showColumnSettings}
+  >
+    {children}
+  </ViewDataTableContent>
 }

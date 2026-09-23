@@ -1,5 +1,4 @@
 import { DataPoint } from '@/registry/components/data-point/data-point'
-import { Subscribe } from '@kesi/client'
 import { ComponentConfig } from '@/app/config/types'
 import documentationMd from './data-point.md?raw'
 
@@ -71,17 +70,15 @@ const renderDataPointPreview = (props: Record<string, any>) => {
   return (
     <div className="h-full flex items-center justify-center p-8">
       <div className="w-full bg-slate-50 rounded-lg border-2 border-dashed border-slate-300 p-8">
-        <Subscribe>
-          <DataPoint
-            tableId={props.tableId}
-            tableDataId={props.tableDataId}
-            tableDataName={props.tableDataName}
-            tagId={props.tagId}
-            animated={props.animated}
-            initVisible={props.initVisible}
-            config={props.config}
-          />
-        </Subscribe>
+        <DataPoint
+          tableId={props.tableId}
+          tableDataId={props.tableDataId}
+          tableDataName={props.tableDataName}
+          tagId={props.tagId}
+          animated={props.animated}
+          initVisible={props.initVisible}
+          config={props.config}
+        />
         <div className="mt-4 text-xs text-slate-500">
           <p>💡 提示: 配置有效的 tableId、tableDataId 和 tagId 来显示实际数据</p>
         </div>

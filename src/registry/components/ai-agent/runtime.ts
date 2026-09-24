@@ -249,7 +249,14 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
     const headers = { ...getHeaders() };
     delete headers["Content-Type"];
 
-    const resp = await fetch(uploadUrl, { method: "POST", headers, body: formData });
+    let resp: Response;
+    try {
+      resp = await fetch(uploadUrl, { method: "POST", headers, body: formData });
+      if (!resp.ok) throw new Error(`上传附件失败 (HTTP ${resp.status})`);
+    } catch (err) {
+      console.error("上传附件失败", err);
+      throw err;
+    }
     const json = await resp.json();
 
     const objectKey: string = json.objectKey ?? json.id ?? "";
@@ -278,7 +285,10 @@ class SessionAttachmentAdapter implements AttachmentAdapter {
       try {
         const deleteApi = createAPI({ name: this.resourceBase });
         await deleteApi.fetch(`/${sid}/attachments/${objectKey}`, { method: "DELETE" });
-      } catch { /* 删除失败不阻塞 */ }
+      } catch (err) {
+        // 删除失败不阻塞，但不再静默
+        console.error("删除附件失败", err);
+      }
     }
   }
 }
@@ -338,10 +348,14 @@ const speechAdapter: SpeechSynthesisAdapter = {
 // ====== Feedback Adapter ======
 const feedbackAdapter: FeedbackAdapter = {
   async submit({ type, message }) {
-    await feedbackApi.fetch('', {
-      method: "POST",
-      body: JSON.stringify({ messageId: message.id, rating: type }),
-    });
+    try {
+      await feedbackApi.fetch('', {
+        method: "POST",
+        body: JSON.stringify({ messageId: message.id, rating: type }),
+      });
+    } catch (err) {
+      console.error("提交消息反馈失败", err);
+    }
   },
 };
 
@@ -898,6 +912,47 @@ function enrichWithInteractables(messages: ThreadMessage[], userText: string): s
 
 // ====== useAgentRuntime ======
 
+/**
+ * 当前智能体的**运行时技能**（`GET /eap/agents/{id}/runtime/skills`）。
+ *
+ * 用运行时接口而不是 `Agent.skills`：后者是 AI 中台配置里挂了什么，前者是这台机器上
+ * 真的能调什么（内置技能由网关额外注入，只在运行时接口里出现）。
+ *
+ * 失败一律按「没有技能」处理，不弹错、不阻塞输入——技能列表是锦上添花，
+ * 拿不到不该影响用户发消息。
+ */
+export interface AgentRuntimeSkill {
+  name: string;
+  description?: string;
+}
+
+function useRuntimeSkills(agentId: string): AgentRuntimeSkill[] {
+  const [skills, setSkills] = useState<AgentRuntimeSkill[]>([]);
+  useEffect(() => {
+    if (!agentId) {
+      setSkills([]);
+      return;
+    }
+    let cancelled = false;
+    // 技能只存在于 agent 模式（task 模式的资源是 eap/tasks），故固定走 eap/agents
+    const api = createAPI({ name: 'eap/agents' });
+    api
+      .fetch(`/${agentId}/runtime/skills`, { method: 'GET' })
+      .then(({ json }) => {
+        if (cancelled) return;
+        const list = Array.isArray(json) ? (json as AgentRuntimeSkill[]) : [];
+        setSkills(list.filter((s) => s && typeof s.name === 'string' && s.name));
+      })
+      .catch(() => {
+        if (!cancelled) setSkills([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [agentId]);
+  return skills;
+}
+
 export const useAgentRuntime = (options?: {
   agentId?: string;
   preamble?: string;
@@ -934,6 +989,8 @@ export const useAgentRuntime = (options?: {
   const [toolStatuses, setToolStatuses] = useState<Record<string, ToolExecutionStatus>>({});
   const [loading, setLoading] = useState(false);
   const [threadsLoading, setThreadsLoading] = useState(false);
+  // 运行时技能：放进 extras 供「/」菜单用（组件从 store 读，不 import 本文件）
+  const skills = useRuntimeSkills(agentId);
 
   // 询问模式：待答复的交互请求（permission-request / elicitation-request）
   const [interactionRequests, setInteractionRequests] = useState<AgentInteractionRequest[]>([]);
@@ -982,9 +1039,12 @@ export const useAgentRuntime = (options?: {
   useEffect(() => {
     setThreadsLoading(true);
     // task 模式：Task 即会话线程，通过 GET /eap/tasks 查任务列表；agent 模式：查某 agent 的会话列表
+    // agent 模式下 agentId 未选择时跳过请求——否则拼出 /eap/agents//sessions 双斜杠 400
     const listPromise = isTaskRuntime
       ? sessionApi.fetch('', { method: 'GET' })
-      : agentApi.fetch(`/${agentId}/sessions`, { method: 'GET' });
+      : agentId
+        ? agentApi.fetch(`/${agentId}/sessions`, { method: 'GET' })
+        : Promise.resolve({ json: [] as any[] });
     listPromise.then(({ json }) => {
       const list = (json as any[]).slice().sort((a, b) =>
         new Date(b.createdAt ?? b.updatedAt ?? 0).getTime() -
@@ -998,10 +1058,23 @@ export const useAgentRuntime = (options?: {
       })));
       setThreadsLoading(false);
     }).catch(() => setThreadsLoading(false));
+    // ⚠️ 依赖里**不能**放 initialThreadId：选中某个 Thread 时 setCurrentThreadId 会回调
+    // onThreadChange，调用方把新 id 存进 state 后又作为 initialThreadId 传回来 ——
+    // 依赖一变就整表重拉，threadsLoading 翻 true → ThreadList 骨架闪现（列表在加载态与
+    // 内容态之间切换 = 整个列表重建），同时 threads 换成新数组，assistant-ui 的
+    // __internal_setAdapter 又会按新数组重建整份 _threadData。表现就是「点一项，整个
+    // ThreadList 重新 render」。列表只在切换智能体/模式时才需要重拉。
+  }, [agentId, isTaskRuntime, sessionApi, agentApi]);
+
+  // 调用方把 threadId 清空（切换智能体、切新会话）时，同步清掉当前选中。
+  // 单独一个 effect：它只做状态同步，不牵动列表请求（见上一条注释）。
+  const setCurrentThreadIdRef = useRef(setCurrentThreadId);
+  setCurrentThreadIdRef.current = setCurrentThreadId;
+  useEffect(() => {
     if (!initialThreadId) {
-      setCurrentThreadId(undefined);
+      setCurrentThreadIdRef.current(undefined);
     }
-  }, [agentId, isTaskRuntime, initialThreadId, sessionApi, agentApi]);
+  }, [initialThreadId]);
 
   // ---------- thread 切换时加载消息，并轮询 running 的 assistant message ----------
   useEffect(() => {
@@ -1090,6 +1163,8 @@ export const useAgentRuntime = (options?: {
       metadata: {},
       requestedBy,
     };
+    // agent 模式下必须已选智能体，否则 POST /eap/agents//sessions 双斜杠 400
+    if (!isTaskRuntime && !agentId) throw new Error('请先选择智能体');
     // task 模式：Task 即会话线程，通过 POST /eap/tasks 创建。
     // 请求体为 entity.CreateTaskRequest（必填：assigneeId、assigneeType、data、title），
     // assigneeId 即 agentId，首条消息随后通过 messages 接口发送
@@ -1430,6 +1505,7 @@ export const useAgentRuntime = (options?: {
       threadsLoading,
       interactionRequests,
       replyInteraction,
+      skills,
     },
     unstable_enableToolInvocations: true,
     onAddToolResult: (options) => {
@@ -1445,21 +1521,46 @@ export const useAgentRuntime = (options?: {
         onSwitchToThread: async (id) => { setCurrentThreadId(id); },
         onSwitchToNewThread: async () => { setCurrentThreadId(undefined); },
         onRename: async (id, title) => {
-          await sessionApi.fetch(`/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ title }),
-          });
+          try {
+            await sessionApi.fetch(`/${id}`, {
+              method: 'PATCH',
+              body: JSON.stringify({ title }),
+            });
+          } catch (err) {
+            console.error('重命名会话失败', err);
+            return;
+          }
           setThreads(prev => prev.map(t => t.id === id ? { ...t, title } : t));
         },
         onArchive: async (id) => {
-          await sessionApi.fetch(`/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ status: 'archived' }),
-          });
+          try {
+            await sessionApi.fetch(`/${id}`, {
+              method: 'PATCH',
+              body: JSON.stringify({ status: 'archived' }),
+            });
+          } catch (err) {
+            console.error('归档会话失败', err);
+            return;
+          }
           setThreads(prev => prev.filter(t => t.id !== id));
         },
         onDelete: async (id) => {
-          await sessionApi.fetch(`/${id}`, { method: 'DELETE' });
+          try {
+            // 后端契约：会话只有归档态才允许删除（regular 直接 DELETE 返回 400「请先归档」）。
+            // 先幂等归档再删，用户侧一步完成（与会话管理页 handleDelete 同策略）。
+            // 本地 threads 状态不保真（status 恒为 regular），归档一律执行不判断。
+            // task 模式资源是 eap/tasks，无归档契约，保持裸删
+            if (!isTaskRuntime) {
+              await sessionApi.fetch(`/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ status: 'archived' }),
+              });
+            }
+            await sessionApi.fetch(`/${id}`, { method: 'DELETE' });
+          } catch (err) {
+            console.error('删除会话失败', err);
+            return;
+          }
           if (currentThreadId === id) setCurrentThreadId(undefined);
           setThreads(prev => prev.filter(t => t.id !== id));
         },

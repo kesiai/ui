@@ -45,12 +45,13 @@ import {
   ThreadPrimitive,
   unstable_useMentionAdapter,
   unstable_useSlashCommandAdapter,
+  type Unstable_SlashCommand,
+  useAui,
   useAuiState,
   useMessageTiming,
   AssistantRuntimeProvider, type AssistantRuntime,
   type ThreadMessage,
   Unstable_AudioMessagePart,
-  type Unstable_SlashCommand,
   AuiIf,
   ThreadListItemMorePrimitive,
   ThreadListItemPrimitive,
@@ -59,18 +60,15 @@ import {
 } from "@assistant-ui/react";
 import {
   ArrowDownIcon,
-  ArrowUpIcon,
   BrainIcon,
+  ListChecksIcon,
+  ArrowUpIcon,
   CheckIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   CopyIcon,
   DownloadIcon,
-  FileTextIcon,
-  GlobeIcon,
-  HelpCircleIcon,
-  LanguagesIcon,
   LoaderIcon,
   MenuIcon,
   MicIcon,
@@ -94,7 +92,7 @@ import {
   LexicalComposerInput,
   type DirectiveChipProps,
 } from "@assistant-ui/react-lexical";
-import { createContext, useContext, useState, useEffect, type FC, type ReactNode, type CSSProperties } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, type FC, type ReactNode, type CSSProperties } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Select,
@@ -105,11 +103,21 @@ import {
 } from "@/components/ui/select";
 import { createAPI } from '@kesi/client'
 import { ToolResultCard } from "./tool-result-card";
+import { ACTIVITY_ROW_CLASS, LoadingText } from "./activity-ui";
 import { KesiTextRenderer } from "./rich-text";
 import type { RenderRegistry } from "./registry";
 import { InteractionRequestCard } from "./interaction-request-card";
-import type { AgentInteractionRequest, InteractionReplyAction } from "./runtime";
+import type { AgentInteractionRequest, InteractionReplyAction, AgentRuntimeSkill } from "./runtime";
 
+
+/**
+ * 对话内容的宽度上限（消息 / 输入框 / 欢迎区 / 工具调用明细共用同一个 CSS 变量）
+ *
+ * 原来的 44rem 在宽屏上太窄：表格、JSON、命令与参数全被压在中间一小条里。
+ * 放宽到 72rem（≈1152px）；需要某个入口更宽/更窄时，在该入口的 Thread 根节点上
+ * 覆盖 `--thread-max-width` 即可（样式表里所有位置都读这个变量）。
+ */
+const THREAD_MAX_WIDTH = '72rem';
 
 // ==================== Agent UI Context ====================
 // 头像配置类型（从 runtime.tsx 迁移）
@@ -175,6 +183,8 @@ type AgentExtras = {
     action: InteractionReplyAction,
     updatedInput?: Record<string, unknown>,
   ) => Promise<void>;
+  /** 当前智能体的运行时技能（由 runtime 放进 extras，「/」菜单用） */
+  skills: AgentRuntimeSkill[];
 };
 
 /**
@@ -193,6 +203,7 @@ const useAgentUI = (): AgentUIContextValue & AgentExtras => {
     isTaskRuntime: extras?.isTaskRuntime,
     interactionRequests: extras?.interactionRequests,
     replyInteraction: extras?.replyInteraction,
+    skills: extras?.skills ?? [],
   };
 };
 
@@ -570,7 +581,7 @@ export const Thread: FC<{
     <ThreadPrimitive.Root
       className="aui-root aui-thread-root bg-background @container flex h-full flex-col"
       style={{
-        ["--thread-max-width" as string]: "44rem",
+        ["--thread-max-width" as string]: THREAD_MAX_WIDTH,
         ["--composer-bg" as string]:
           "color-mix(in oklab, var(--color-muted) 30%, var(--color-background))",
         ["--composer-radius" as string]: "1.5rem",
@@ -683,39 +694,11 @@ const ThreadSuggestionItem: FC = () => {
   );
 };
 
-const slashCommands: readonly Unstable_SlashCommand[] = [
-  {
-    id: "summarize",
-    description: "总结对话",
-    icon: "FileText",
-    execute: () => console.log("[base example] /summarize invoked"),
-  },
-  {
-    id: "translate",
-    description: "翻译文本到其他语言",
-    icon: "Languages",
-    execute: () => console.log("[base example] /translate invoked"),
-  },
-  {
-    id: "search",
-    description: "搜索网络信息",
-    icon: "Globe",
-    execute: () => console.log("[base example] /search invoked"),
-  },
-  {
-    id: "help",
-    description: "列出可用命令",
-    icon: "HelpCircle",
-    execute: () => console.log("[base example] /help invoked"),
-  },
-];
-
-const slashIconMap: Record<string, FC<{ className?: string }>> = {
-  FileText: FileTextIcon,
-  Languages: LanguagesIcon,
-  Globe: GlobeIcon,
-  HelpCircle: HelpCircleIcon,
-};
+// 2026-09-20（P1-14）：删除 4 个只有 console.log 的示例「/ 命令」——它们没有任何真实行为，
+// 属于「选了没反应」的静默失效。
+// 2026-09-2x（P1-14 的后半程）：用 `unstable_useSlashCommandAdapter` **重建**「/」菜单，
+// 但内容换成真能力：会话类真命令 + 当前智能体的**运行时技能**（`/runtime/skills` 实时接口）。
+// 判断「真不真」的判据只有一条：选中后要么真的发生了一件事，要么真的往输入框里写了东西。
 
 function DirectiveChip(props: DirectiveChipProps) {
   const { directiveId, directiveType, label } = props;
@@ -738,10 +721,68 @@ function DirectiveChip(props: DirectiveChipProps) {
 
 export const Composer: FC = () => {
   const mention = unstable_useMentionAdapter({ fallbackIcon: WrenchIcon });
+  const aui = useAui();
+  const { skills } = useAgentUI();
+
+  /**
+   * 「/」菜单的条目。
+   *
+   * 两类都是**真的有行为**的（`execute` 里必须做事，否则就是「选了没反应」的假命令）：
+   * - 会话类真命令：新建会话（`threads().switchToNewThread()`，与顶部会话选择器同一个 API）；
+   * - 运行时技能：把「使用 xxx 技能：」写进输入框，用户接着描述要做什么。
+   *
+   * 技能一律**写成纯文本**而不是留 directive chip：chip 落进消息里是 `:command[kesi-cli]`
+   * 这种结构化 token（见 DirectiveNode.getTextContent），模型读起来是噪音；写成人话才真的有用。
+   *
+   * `removeOnExecute: true`（见下方 popover）：剥离 `/xxx` 触发文本，避免残留被当正文发出去。
+   */
+  const slashCommands = useMemo<Unstable_SlashCommand[]>(() => {
+    const cmds: Unstable_SlashCommand[] = [
+      {
+        id: "new-thread",
+        label: "新建会话",
+        icon: "command",
+        execute: () => aui.threads().switchToNewThread(),
+      },
+    ];
+    for (const s of skills) {
+      cmds.push({
+        id: `skill:${s.name}`,
+        label: s.name,
+        description: s.description,
+        icon: "skill",
+        execute: () => {
+          // 追加而不是覆盖：技能指令拼在用户已输入的内容后面。
+          //
+          // ⚠️ 别改成「先读 getState().text 再拼」然后指望它已剥离触发文本：trigger 的剥离
+          // 虽然在 onExecute 之前调用，但同一 tick 内 getState() 返回的仍是**剥离前**的快照
+          // （实测读到 `/kesi-mem`），直接拼会把 `/kesi-mem` 写进消息里。所以自己摘掉末尾的
+          // 触发片段（`/` + 查询词）——`/` 只在词首触发（输入框中间打 `/` 不开菜单），
+          // 「触发片段在末尾」这个假设成立。
+          const base = aui.composer.getState().text.replace(/\/[^\s/]*$/, '');
+          aui.composer.setText(`${base}使用 ${s.name} 技能：`);
+        },
+      });
+    }
+    return cmds;
+  }, [skills, aui]);
+
+  /**
+   * 图标：`iconMap` 按 `metadata.icon` 取值（见 ComposerTriggerPopover 的 resolveIcon）。
+   * 命令用斜杠、技能用扳手（与 `@` 提及运行时工具同一个扳手语义——都是「能力」），
+   * 让两类条目一眼可分：官方 slash 适配器只支持扁平列表（无分组），图标是最省事的区分手段。
+   */
+  const slashIconMap = useMemo(
+    () => ({ command: SlashIcon, skill: WrenchIcon }),
+    [],
+  );
+
   const slash = unstable_useSlashCommandAdapter({
     commands: slashCommands,
     iconMap: slashIconMap,
     fallbackIcon: SlashIcon,
+    // 命令与技能都不该把 `/xxx` 留在正文里（技能自己写文本、命令自己执行）
+    removeOnExecute: true,
   });
 
   return (
@@ -756,7 +797,7 @@ export const Composer: FC = () => {
             <ComposerAttachments />
             <LexicalComposerInput
               directiveChip={DirectiveChip}
-              placeholder="发送消息...（@ 提及，/ 命令）"
+              placeholder="发送消息...（@ 提及，/ 技能）"
               className="aui-composer-input [&_.aui-lexical-placeholder]:text-muted-foreground/80 relative max-h-32 min-h-10 w-full resize-none bg-transparent px-2.5 py-1 text-base outline-none [&_.aui-directive-chip]:inline-flex [&_.aui-directive-chip]:items-baseline [&_.aui-directive-chip]:gap-1 [&_.aui-directive-chip]:rounded-md [&_.aui-directive-chip]:bg-blue-100 [&_.aui-directive-chip]:px-1.5 [&_.aui-directive-chip]:py-0.5 [&_.aui-directive-chip]:text-[13px] [&_.aui-directive-chip]:leading-none [&_.aui-directive-chip]:font-medium [&_.aui-directive-chip]:text-blue-700 dark:[&_.aui-directive-chip]:bg-blue-900/50 dark:[&_.aui-directive-chip]:text-blue-300 [&_.aui-directive-chip-icon]:self-center [&_.aui-lexical-input]:min-h-lh [&_.aui-lexical-input]:outline-none [&_.aui-lexical-placeholder]:pointer-events-none [&_.aui-lexical-placeholder]:absolute [&_.aui-lexical-placeholder]:top-0 [&_.aui-lexical-placeholder]:right-0 [&_.aui-lexical-placeholder]:left-0 [&_.aui-lexical-placeholder]:truncate [&_.aui-lexical-placeholder]:px-2.5 [&_.aui-lexical-placeholder]:py-1"
             />
             <ComposerAction />
@@ -765,10 +806,20 @@ export const Composer: FC = () => {
 
         <ComposerTriggerPopover char="@" {...mention} />
 
+        {/* 「/」= 会话命令 + 当前智能体的运行时技能。
+            空态分两种：没匹配到（输入了 `/xxx`）用 emptyItemsLabel；
+            智能体一个技能都没有时给一句更具体的说明（比笼统的「无匹配」有用）。
+
+            宽度铺满输入框：技能描述是整句（「KESI 数据层工具 — 查询和操作平台数据…」），
+            共享组件默认的 w-64 会把描述挤成两三行还把条目撑高。`className` 经 cn/twMerge 覆盖掉 w-64，
+            相对定位的父级就是 ComposerPrimitive.Root（输入框本体），所以 w-full 即输入框宽度。 */}
         <ComposerTriggerPopover
           char="/"
           {...slash}
-          emptyItemsLabel="无匹配命令"
+          className="w-full"
+          emptyItemsLabel={
+            skills.length === 0 ? "当前智能体未挂载技能" : "无匹配命令"
+          }
         />
       </ComposerPrimitive.Root>
     </ComposerPrimitive.Unstable_TriggerPopoverRoot>
@@ -901,24 +952,14 @@ const AssistantMessageBody: FC = () => (
           case "group-chainOfThought":
             return <ChainOfThoughtGroup part={part}>{children}</ChainOfThoughtGroup>;
           case "group-tool":
-            return (
-              <InlineToolGroupRoot>
-                <InlineToolGroupTrigger
-                  count={part.indices.length}
-                  active={part.status.type === "running"}
-                />
-                <InlineToolGroupContent>{children}</InlineToolGroupContent>
-              </InlineToolGroupRoot>
-            );
+            // 工具调用明细直接铺在思维链里（每张卡片自己折叠，默认收起）
+            return <div className="flex flex-col gap-2">{children}</div>;
           case "group-reasoning": {
             const running = part.status.type === "running";
             return (
-              <InlineReasoningRoot streaming={running}>
-                <InlineReasoningTrigger active={running} />
-                <InlineReasoningContent aria-busy={running}>
-                  <InlineReasoningText>{children}</InlineReasoningText>
-                </InlineReasoningContent>
-              </InlineReasoningRoot>
+              <InlineReasoningGroup indices={part.indices ?? []} running={running}>
+                {children}
+              </InlineReasoningGroup>
             );
           }
           case "text":
@@ -1021,45 +1062,24 @@ export const AssistantMessage: FC = () => {
   );
 };
 
-// ==================== 内联 ToolGroup（汉化版） ====================
-const InlineToolGroupRoot: FC<{
-  variant?: "ghost" | "outline" | "muted";
-  children?: React.ReactNode;
-}> = ({ variant = "ghost", children }) => (
-  <Collapsible
-    data-slot="tool-group-root"
-    data-variant={variant}
-    className="group/tool-group-root my-2"
-  >
-    {children}
-  </Collapsible>
-);
+// ==================== 思维链（思考 + 工具调用） ====================
 
-const InlineToolGroupTrigger: FC<{
-  count: number;
-  active?: boolean;
-}> = ({ count, active }) => (
-  <CollapsibleTrigger className="group/trigger flex w-full items-center gap-2 py-1 text-sm transition-colors">
-    {active && (
-      <LoaderIcon className="size-4 shrink-0 animate-spin" />
-    )}
-    <WrenchIcon className="size-4 shrink-0" />
-    <span className="text-start font-medium leading-none">
-      {count} 次工具调用
-    </span>
-    <ChevronDownIcon className="size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
-  </CollapsibleTrigger>
-);
+/** 思考文本的最后一行：流式输出时它一直在增长，思考行收起时只露这一行 */
+function lastMeaningfulLine(text?: string, max = 90): string {
+  if (!text) return '';
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+  const last = lines[lines.length - 1] ?? '';
+  return last.length > max ? `${last.slice(0, max)}…` : last;
+}
 
-const InlineToolGroupContent: FC<{ children?: React.ReactNode }> = ({ children }) => (
-  <CollapsibleContent className="group/collapsible-content overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-    <div className="flex flex-col gap-2 pt-3">
-      {children}
-    </div>
-  </CollapsibleContent>
-);
-
-// ==================== 思维链 Group（chain-of-thought，可折叠） ====================
+/**
+ * 执行过程分组：把连续的「思考 + 工具调用」收在一个可折叠块里。
+ *
+ * 初始展开与否**取决于是否还在跑**：
+ * - 正在跑（流式进行中）→ 默认展开，过程看得见
+ * - 已经跑完的（历史消息、刷新后重开的消息）→ 默认收起，别把一大段过程铺在回答前面
+ * 用非受控的 `defaultOpen`：跑完之后不自动收起，免得读到一半被抽走（用户可手动开合）。
+ */
 const ChainOfThoughtGroup: FC<{
   part: any;
   children?: React.ReactNode;
@@ -1070,16 +1090,18 @@ const ChainOfThoughtGroup: FC<{
   return (
     <Collapsible
       data-slot="chain-of-thought-root"
-      defaultOpen={false}
+      defaultOpen={running}
       className="group/chain-of-thought-root my-1.5"
     >
       <CollapsibleTrigger className="group/trigger text-muted-foreground hover:text-foreground flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent/50">
         {running ? (
           <LoaderIcon className="size-4 shrink-0 animate-spin text-blue-500" />
         ) : (
-          <BrainIcon className="size-4 shrink-0 text-purple-500" />
+          <ListChecksIcon className="size-4 shrink-0 text-purple-500" />
         )}
-        <span className="font-medium leading-none">思维链</span>
+        <span className="font-medium leading-none">
+          {running ? <LoadingText text="正在执行中" /> : "执行过程"}
+        </span>
         <span className="text-xs text-muted-foreground/60">{count} 步</span>
         <ChevronDownIcon className="size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
       </CollapsibleTrigger>
@@ -1092,41 +1114,44 @@ const ChainOfThoughtGroup: FC<{
   );
 };
 
-// ==================== 内联 Reasoning（汉化版） ====================
-const InlineReasoningRoot: FC<{
-  streaming?: boolean;
+// ==================== 思考行（汉化版：样式不变，收起时露最新一行） ====================
+const InlineReasoningGroup: FC<{
+  indices: readonly number[];
+  running: boolean;
   children?: React.ReactNode;
-}> = ({ streaming: _streaming, children }) => (
-  <Collapsible
-    data-slot="reasoning-root"
-    //defaultOpen={streaming}
-    className="group/reasoning-root my-2"
-  >
-    {children}
-  </Collapsible>
-);
+}> = ({ indices, running, children }) => {
+  const content = useAuiState((s) => s.message.content);
+  const latest = useMemo(() => {
+    const texts = indices
+      .map((i) => (content[i] as { text?: string } | undefined)?.text)
+      .filter((v): v is string => !!v);
+    return lastMeaningfulLine(texts[texts.length - 1]);
+  }, [indices, content]);
 
-const InlineReasoningTrigger: FC<{
-  active?: boolean;
-}> = ({ active }) => (
-  <CollapsibleTrigger className="group/trigger text-muted-foreground hover:text-foreground flex max-w-[75%] items-center gap-2 py-1 text-sm transition-colors">
-    <BrainIcon className="size-4 shrink-0" />
-    <span className="leading-none">思考{active ? " 中" : ""}</span>
-    <ChevronDownIcon className="mt-0.5 size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
-  </CollapsibleTrigger>
-);
-
-const InlineReasoningContent: FC<{
-  "aria-busy"?: boolean;
-  children?: React.ReactNode;
-}> = ({ "aria-busy": ariaBusy, children }) => (
-  <CollapsibleContent
-    aria-busy={ariaBusy}
-    className="group/collapsible-content text-muted-foreground relative overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down"
-  >
-    {children}
-  </CollapsibleContent>
-);
+  return (
+    <Collapsible data-slot="reasoning-root" className="group/reasoning-root my-2">
+      <CollapsibleTrigger className={ACTIVITY_ROW_CLASS}>
+        <BrainIcon className="size-4 shrink-0" />
+        <span className="shrink-0 leading-none">
+          {running ? <LoadingText text="思考中" /> : "思考"}
+        </span>
+        {/* 默认只显示最新一行：思考很长时不必把整段铺开，也能看出在推进什么 */}
+        {latest && (
+          <span className="text-muted-foreground/70 min-w-0 flex-1 truncate text-xs">
+            {latest}
+          </span>
+        )}
+        <ChevronDownIcon className="mt-0.5 size-4 shrink-0 transition-transform group-data-[state=closed]/trigger:-rotate-90" />
+      </CollapsibleTrigger>
+      <CollapsibleContent
+        aria-busy={running}
+        className="group/collapsible-content text-muted-foreground relative overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down"
+      >
+        <InlineReasoningText>{children}</InlineReasoningText>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+};
 
 const InlineReasoningText: FC<{
   className?: string;

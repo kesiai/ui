@@ -340,7 +340,7 @@ function Example() {
    - `boolean` → `<input type="checkbox">`
    - `enum` → `<select>`
 4. **必填字段**：`required` 数组中的字段会自动添加必填验证并显示红色星号，同时追加 `minLength: 1`（数组为 `minItems: 1`）空值拦截；属性级 `need: true` / `required: true` 效果相同。formSchema 字段项上的 `required: true` 同样生效（点亮红星 + 提交时空值拦截，适合同一字段在不同表单形态下必填与否不同的场景，如报表 normal 必填 tableInfo 而 free 不必填）。
-5. **格式验证**：`format` 字段支持 `email`、`uri`、`date`、`time` 等常见格式。
+5. **格式验证**：`format` 字段支持 `email`、`uri` 等常见格式。**日期族 format（`date`/`date-time`/`datetime`/`time`/`month`/`year`）不参与校验**（构建 zodSchema 前被递归剥掉，含对象子字段）：日期/时间控件发出的值是 ISO 带本地时区偏移（`2026-09-24T00:00:00+08:00`）或 `HH:mm:ss`，过不了 `z.fromJSONSchema` 生成的 `z.iso.*` 严格校验（`z.iso.datetime` 不认 `+08:00` 偏移），会以 `invalid_format` →「请检查填写内容」拦死新增/编辑；这些 format 只约束展示形态，值合法性由控件自身保证。
 6. **嵌套限制**：深层嵌套的对象和数组可能需要额外的 UI 配置。
 7. **验证规则**：除了 schema 定义的规则，formSchema 字段项可挂 `validate: (value, values) => string | null`（返回错误文案或 null/undefined/true 表示通过），提交时逐字段执行并拦截（如 oauthapp 的 http/https 前缀、数据字典 uid 白名单）。
 8. **国际化**：`title` 和 `description` 支持多语言配置。

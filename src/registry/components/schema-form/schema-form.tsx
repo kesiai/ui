@@ -65,6 +65,33 @@ type SchemaFormProps = UseFormPropsExtended & {
   resetKey?: string | number
 }
 
+/**
+ * 日期族 format 词表。z.fromJSONSchema 会把 JSON Schema 的 format 转成严格校验
+ * （'date'→z.iso.date、'date-time'→z.iso.datetime、'time'→z.iso.time），而日期/时间控件
+ * 实际发出的值是 ISO 带本地时区偏移（2026-09-24T00:00:00+08:00）或 HH:mm:ss——都过不了
+ * z.iso.*（z.iso.datetime 不认 +08:00 偏移、z.iso.date 不认带时间的 ISO 串）→ zod 报
+ * invalid_format → 兜底文案「请检查填写内容」拦死新增/编辑。format 只该约束展示形态
+ * （formConverter / 控件 props 读的是原始 schema），校验侧统一剥掉；email/uuid 等其它 format 保留。
+ */
+const DATE_FORMAT_KEYS = new Set(['date', 'date-time', 'datetime', 'time', 'month', 'year'])
+
+/** 递归剥掉 properties/items/prefixItems 里日期族的 format 键（只作用于喂给 zodSchema 的副本） */
+function stripDateFormats(node: any): any {
+  if (!node || typeof node !== 'object') return node
+  const next: any = { ...node }
+  if (typeof node.format === 'string' && DATE_FORMAT_KEYS.has(node.format)) delete next.format
+  if (next.properties) {
+    next.properties = Object.fromEntries(
+      Object.entries(next.properties).map(([k, v]) => [k, stripDateFormats(v)])
+    )
+  }
+  if (next.items) next.items = stripDateFormats(next.items)
+  if (Array.isArray(next.prefixItems)) {
+    next.prefixItems = next.prefixItems.map((it: any) => stripDateFormats(it))
+  }
+  return next
+}
+
 const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children, showDescribe = true, isValid = true, classNames, schameConvert, onEffect, fieldRules, resetKey, ...props }: SchemaFormProps) => {
   // 字段规则转换
   const schemaFieldRules = React.useMemo(() =>
@@ -156,7 +183,8 @@ const SchemaForm = ({ schema, formSchema, onSubmit, onInvalid, formId, children,
     if (requiredKeys.length > 0) {
       processed.required = Array.from(new Set([...(processed.required || []), ...requiredKeys]))
     }
-    return processed
+    // 剥掉日期族 format（含嵌套对象子字段），避免 z.iso.* 严格校验拦掉控件发出的 ISO±偏移值
+    return stripDateFormats(processed)
   }, [])
 
   const zodSchema = React.useMemo(() => {

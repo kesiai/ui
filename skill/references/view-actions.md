@@ -46,6 +46,8 @@
 | `itemId` | `string` | 是 | - | 要编辑的数据ID |
 | `children` | `ReactNode` | 否 | 默认按钮 | 自定义触发元素 |
 
+**编辑装载的日期归一**：SDK `api.get` 返回的记录经过显示格式化（`convert_format`：`format='datetime'` → `YYYY-MM-DD HH:mm:ss`、`format='date'` → `YYYY-MM-DD`，递归进对象子字段与数组元素）。EditAction 装载 defaultValues 前会按 schema 逆向归一回存储态（ISO 带本地时区偏移）——否则未改动字段的显示串会随 RHF 提交整条回写，库中同一字段并存两种形态。只转换「恰好是显示态形态」的字符串，已是 ISO / 空值 / 非字符串原样保留。
+
 ### DeleteAction 组件
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |

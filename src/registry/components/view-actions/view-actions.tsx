@@ -55,6 +55,52 @@ interface EditActionContentProps {
   classNames?: Record<'form' | 'group' | 'field' | 'label' | 'input' | 'description' | 'error', string>
 }
 
+/**
+ * SDK api.get / api.query 返回记录前会做显示格式化（kesi-client convert_format：
+ * schema format='datetime' → 'YYYY-MM-DD HH:mm:ss'、format='date' → 'YYYY-MM-DD'，
+ * 且递归进对象 properties 与数组 items）。编辑表单把 GET 回来的整条记录当
+ * defaultValues 装进 RHF 后，未改动的字段也会随提交整条回写——显示态串被 PATCH
+ * 回库，与平台存储格式（ISO 带本地时区偏移）分叉。装载前做逆向归一：只把「恰好是
+ * 显示态形态」的字符串转回存储态，其余（已是 ISO、空值、非字符串）原样保留；
+ * 纯字符串手术不做 Date 解析，不可能损坏数据。
+ */
+const DATE_DISPLAY_RE = /^\d{4}-\d{2}-\d{2}$/
+const DATETIME_DISPLAY_RE = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
+
+function localTzOffset(): string {
+  const minutes = -new Date().getTimezoneOffset()
+  const sign = minutes >= 0 ? '+' : '-'
+  const abs = Math.abs(minutes)
+  return `${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`
+}
+
+/** 递归 schema：按 format 逆向归一显示态日期值（与 SDK convert_format 的遍历面对称） */
+function normalizeDisplayDates(value: any, schema: any): any {
+  if (!value || !schema) return value
+  if (typeof value === 'string') {
+    if (schema.format === 'date' && DATE_DISPLAY_RE.test(value)) {
+      return `${value}T00:00:00${localTzOffset()}`
+    }
+    if (schema.format === 'datetime' && DATETIME_DISPLAY_RE.test(value)) {
+      return `${value.replace(' ', 'T')}${localTzOffset()}`
+    }
+    return value
+  }
+  if (Array.isArray(value)) {
+    return schema.items ? value.map((item) => normalizeDisplayDates(item, schema.items)) : value
+  }
+  if (typeof value === 'object' && schema.properties) {
+    const out: any = { ...value }
+    for (const key of Object.keys(schema.properties)) {
+      const prop = schema.properties[key]
+      if (prop && out[key] != null) out[key] = normalizeDisplayDates(out[key], prop)
+    }
+    return out
+  }
+  return value
+}
+
+
 const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, formSchema, classNames }) => {
   const { data, loading, model } = useModelGet({ id: itemId })
   const { getItems } = useModelGetItems()
@@ -71,6 +117,9 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
   const effectiveItemId = appliedNewId ?? itemId
 
   const formId = `edit-form-${itemId}`
+  // SDK api.get 返回的是显示格式化后的记录（日期族 format → 显示串，含对象子字段），
+  // 未改动字段的显示串会随 RHF 提交整条回写污染库——装载前归一回存储态（ISO+偏移）
+  const editDefaultValues = useMemo(() => normalizeDisplayDates(data, model), [data, model])
 
   // 标识的「单独保存」：只调 change 接口（URL=当前生效 id，body 带 getOrigin 全量合并、
   // 新 id 在 body.id；后端实测 change 只读 body.id，其余字段被忽略、原数据保留）。
@@ -126,7 +175,7 @@ const EditActionContent: React.FC<EditActionContentProps> = ({ itemId, onClose, 
         </div>
       ) : (
         <ScrollArea className="max-h-[70vh] pr-3">
-          <SchemaForm formId={formId} defaultValues={data} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} schameConvert={editSchameConvert} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} isValid={false} />
+          <SchemaForm formId={formId} defaultValues={editDefaultValues} schema={model} classNames={classNames} formSchema={formSchema || model.formSchema || model.form} schameConvert={editSchameConvert} onSubmit={handleSave} fieldRules={(model as any)?.fieldRules} isValid={false} />
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}
